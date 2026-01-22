@@ -8,7 +8,7 @@ import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.TintMethod;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.message.MayContainTrKey;
-import org.allaymc.server.utils.molang.MolangConditionBuilder;
+import org.allaymc.server.utils.MolangUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
@@ -29,71 +29,25 @@ import java.util.Set;
  * Physical properties like collision shape, light emission, and friction are still
  * read from {@link BlockStateData} and are not part of this definition.
  *
- * @param geometry       the geometry component with identifier and advanced properties, null for default
- * @param materials      material instances for rendering, null for default
- * @param transformation transformation applied to the block model, null for none
- * @param displayName    display name shown in inventory/tooltips, null to use block identifier
+ * @param geometry         the geometry component with identifier and advanced properties, {@code null} for default
+ * @param materials        material instances for rendering, {@code null} for default
+ * @param transformation   transformation applied to the block model, {@code null} for none
+ * @param displayName      display name shown in inventory/tooltips, {@code null} to use block identifier
+ * @param customComponents custom components used for this block state
  * @author daoge_cmd
- * @see CustomBlockDefinitionGenerator
  */
 @Builder(toBuilder = true)
 public record BlockStateDefinition(
         Geometry geometry,
         Materials materials,
         Transformation transformation,
-        @MayContainTrKey String displayName
+        @MayContainTrKey String displayName,
+        Map<String, NbtMap> customComponents
 ) {
     /**
      * Default definition with no custom properties.
      */
     public static final BlockStateDefinition DEFAULT = BlockStateDefinition.builder().build();
-
-    /**
-     * Computes the difference between this definition and a base definition.
-     * Returns a new definition containing only the properties that differ.
-     *
-     * @param base the base definition to compare against
-     * @return a definition containing only the differing properties, or null if identical
-     */
-    public BlockStateDefinition diff(BlockStateDefinition base) {
-        if (base == null || this.equals(base)) {
-            return null;
-        }
-
-        var builder = BlockStateDefinition.builder();
-        boolean hasDiff = false;
-
-        if (!Objects.equals(geometry, base.geometry)) {
-            builder.geometry(geometry);
-            hasDiff = true;
-        }
-        if (!Objects.equals(materials, base.materials)) {
-            builder.materials(materials);
-            hasDiff = true;
-        }
-        if (!Objects.equals(transformation, base.transformation)) {
-            builder.transformation(transformation);
-            hasDiff = true;
-        }
-        if (!Objects.equals(displayName, base.displayName)) {
-            builder.displayName(displayName);
-            hasDiff = true;
-        }
-
-        return hasDiff ? builder.build() : null;
-    }
-
-    /**
-     * Checks if this definition has any non-null properties.
-     *
-     * @return true if at least one property is set
-     */
-    public boolean hasAnyProperty() {
-        return geometry != null
-                || (materials != null && !materials.isEmpty())
-                || transformation != null
-                || displayName != null;
-    }
 
     /**
      * Converts this definition to NBT format for permutation components.
@@ -120,6 +74,7 @@ public record BlockStateDefinition(
                 materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT(tintMethod));
             }
             builder.putCompound("minecraft:material_instances", NbtMap.builder()
+                    // This is required, otherwise the client will crash
                     .putCompound("mappings", NbtMap.EMPTY)
                     .putCompound("materials", materialsNbt.build())
                     .build());
@@ -129,7 +84,68 @@ public record BlockStateDefinition(
             builder.putCompound("minecraft:transformation", transformation.toNBT());
         }
 
+        if (customComponents != null) {
+            builder.putAll(this.customComponents);
+        }
+
         return builder.build();
+    }
+
+    /**
+     * Render methods for material instances.
+     * <p>
+     * Each method controls transparency handling, back-face culling, and distance-based rendering.
+     *
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#render-methods">Render Methods</a>
+     */
+    @Getter
+    public enum RenderMethod {
+        /**
+         * Fully opaque rendering with back-face culling. No distance culling.
+         * Use for solid blocks like dirt, stone, and planks.
+         */
+        OPAQUE("opaque"),
+        /**
+         * Supports full transparency and translucency with back-face culling.
+         * Use for semi-transparent blocks like glass, ice, and stained glass.
+         */
+        BLEND("blend"),
+        /**
+         * Fully opaque rendering without back-face culling (renders both sides).
+         * Use for blocks visible from inside like powder snow.
+         */
+        DOUBLE_SIDED("double_sided"),
+        /**
+         * Binary transparency (fully transparent or fully opaque pixels) without back-face culling.
+         * Has distance culling. Use for cross-model blocks like flowers, tall grass, and vines.
+         */
+        ALPHA_TEST("alpha_test"),
+        /**
+         * Binary transparency with back-face culling. Has distance culling.
+         * Use for flat blocks like doors, trapdoors, and saplings.
+         */
+        ALPHA_TEST_SINGLE_SIDED("alpha_test_single_sided"),
+        /**
+         * Like {@link #ALPHA_TEST} but switches to opaque rendering at distance.
+         * Improves performance while maintaining appearance up close.
+         */
+        ALPHA_TEST_TO_OPAQUE("alpha_test_to_opaque"),
+        /**
+         * Like {@link #ALPHA_TEST_SINGLE_SIDED} but switches to opaque rendering at distance.
+         * Improves performance while maintaining appearance up close.
+         */
+        ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE("alpha_test_single_sided_to_opaque"),
+        /**
+         * Like {@link #BLEND} but switches to opaque rendering at distance.
+         * Improves performance while maintaining appearance up close.
+         */
+        BLEND_TO_OPAQUE("blend_to_opaque");
+
+        private final String id;
+
+        RenderMethod(String id) {
+            this.id = id;
+        }
     }
 
     /**
@@ -251,7 +267,6 @@ public record BlockStateDefinition(
      *     .any("default_texture")                           // all faces (wildcard)
      *     .face(BlockFace.UP, "top_texture")                // override top face
      *     .face(BlockFace.DOWN, MaterialInstance.blend("bottom_texture"))
-     *     .build();
      * }</pre>
      *
      * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
@@ -264,7 +279,8 @@ public record BlockStateDefinition(
 
         private final Map<String, MaterialInstance> materials = new HashMap<>();
 
-        private Materials() {}
+        private Materials() {
+        }
 
         public static Materials builder() {
             return new Materials();
@@ -331,85 +347,22 @@ public record BlockStateDefinition(
             return sides(MaterialInstance.of(texture));
         }
 
+        /**
+         * Gets the entry set of all the material instances.
+         *
+         * @return the entry set of all the material instances
+         */
         public Set<Map.Entry<String, MaterialInstance>> entrySet() {
             return materials.entrySet();
         }
 
+        /**
+         * Checks if this object is empty.
+         *
+         * @return {@code true} if this object is empty, {@code false} otherwise
+         */
         public boolean isEmpty() {
             return materials.isEmpty();
-        }
-
-        public Materials build() {
-            return this;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Materials other)) return false;
-            return materials.equals(other.materials);
-        }
-
-        @Override
-        public int hashCode() {
-            return materials.hashCode();
-        }
-    }
-
-    /**
-     * Render methods for material instances.
-     * <p>
-     * Each method controls transparency handling, back-face culling, and distance-based rendering.
-     *
-     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#render-methods">Render Methods</a>
-     */
-    @Getter
-    public enum RenderMethod {
-        /**
-         * Fully opaque rendering with back-face culling. No distance culling.
-         * Use for solid blocks like dirt, stone, and planks.
-         */
-        OPAQUE("opaque"),
-        /**
-         * Supports full transparency and translucency with back-face culling.
-         * Use for semi-transparent blocks like glass, ice, and stained glass.
-         */
-        BLEND("blend"),
-        /**
-         * Fully opaque rendering without back-face culling (renders both sides).
-         * Use for blocks visible from inside like powder snow.
-         */
-        DOUBLE_SIDED("double_sided"),
-        /**
-         * Binary transparency (fully transparent or fully opaque pixels) without back-face culling.
-         * Has distance culling. Use for cross-model blocks like flowers, tall grass, and vines.
-         */
-        ALPHA_TEST("alpha_test"),
-        /**
-         * Binary transparency with back-face culling. Has distance culling.
-         * Use for flat blocks like doors, trapdoors, and saplings.
-         */
-        ALPHA_TEST_SINGLE_SIDED("alpha_test_single_sided"),
-        /**
-         * Like {@link #ALPHA_TEST} but switches to opaque rendering at distance.
-         * Improves performance while maintaining appearance up close.
-         */
-        ALPHA_TEST_TO_OPAQUE("alpha_test_to_opaque"),
-        /**
-         * Like {@link #ALPHA_TEST_SINGLE_SIDED} but switches to opaque rendering at distance.
-         * Improves performance while maintaining appearance up close.
-         */
-        ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE("alpha_test_single_sided_to_opaque"),
-        /**
-         * Like {@link #BLEND} but switches to opaque rendering at distance.
-         * Improves performance while maintaining appearance up close.
-         */
-        BLEND_TO_OPAQUE("blend_to_opaque");
-
-        private final String id;
-
-        RenderMethod(String id) {
-            this.id = id;
         }
     }
 
@@ -562,7 +515,7 @@ public record BlockStateDefinition(
                 for (var entry : boneVisibility.entrySet()) {
                     boneVisNbt.putCompound(entry.getKey(), NbtMap.builder()
                             .putString("expression", entry.getValue().toMolang())
-                            .putShort("version", (short) MolangConditionBuilder.MOLANG_VERSION)
+                            .putShort("version", (short) MolangUtils.MOLANG_VERSION)
                             .build()
                     );
                 }
@@ -589,70 +542,6 @@ public record BlockStateDefinition(
          * Supports static boolean, property-based conditions, and raw Molang expressions.
          */
         public sealed interface BoneVisibility permits BoneVisibility.Bool, BoneVisibility.Property, BoneVisibility.Molang {
-
-            /**
-             * Converts this bone visibility condition to a Molang expression string.
-             *
-             * @return the Molang expression
-             */
-            String toMolang();
-
-            /**
-             * Static boolean visibility.
-             *
-             * @param visible whether the bone is visible
-             */
-            record Bool(boolean visible) implements BoneVisibility {
-                public static final Bool TRUE = new Bool(true);
-                public static final Bool FALSE = new Bool(false);
-
-                @Override
-                public String toMolang() {
-                    return visible ? "true" : "false";
-                }
-            }
-
-            /**
-             * Property-based visibility condition.
-             * The bone is visible when the block property equals the specified value.
-             *
-             * @param property the block property type
-             * @param value    the value to compare against
-             */
-            record Property(BlockPropertyType<?> property, Object value) implements BoneVisibility {
-                public Property {
-                    Objects.requireNonNull(property, "property cannot be null");
-                    Objects.requireNonNull(value, "value cannot be null");
-                }
-
-                /**
-                 * Generates the Molang expression for this property condition.
-                 *
-                 * @return the Molang expression string
-                 */
-                @Override
-                public String toMolang() {
-                    return MolangConditionBuilder.formatPropertyCondition(property, value);
-                }
-            }
-
-            /**
-             * Raw Molang expression visibility (for advanced use cases).
-             *
-             * @param expression the Molang expression (e.g., "q.block_state('open') == 1")
-             */
-            record Molang(String expression) implements BoneVisibility {
-                public Molang {
-                    if (expression == null || expression.isEmpty()) {
-                        throw new IllegalArgumentException("Molang expression cannot be null or empty");
-                    }
-                }
-
-                @Override
-                public String toMolang() {
-                    return expression;
-                }
-            }
 
             /**
              * Creates a static boolean visibility.
@@ -697,6 +586,70 @@ public record BlockStateDefinition(
             static BoneVisibility ofMolang(String molangExpression) {
                 return new Molang(molangExpression);
             }
+
+            /**
+             * Converts this bone visibility condition to a Molang expression string.
+             *
+             * @return the Molang expression
+             */
+            String toMolang();
+
+            /**
+             * Static boolean visibility.
+             *
+             * @param visible whether the bone is visible
+             */
+            record Bool(boolean visible) implements BoneVisibility {
+                public static final Bool TRUE = new Bool(true);
+                public static final Bool FALSE = new Bool(false);
+
+                @Override
+                public String toMolang() {
+                    return visible ? "true" : "false";
+                }
+            }
+
+            /**
+             * Property-based visibility condition.
+             * The bone is visible when the block property equals the specified value.
+             *
+             * @param property the block property type
+             * @param value    the value to compare against
+             */
+            record Property(BlockPropertyType<?> property, Object value) implements BoneVisibility {
+                public Property {
+                    Objects.requireNonNull(property, "property cannot be null");
+                    Objects.requireNonNull(value, "value cannot be null");
+                }
+
+                /**
+                 * Generates the Molang expression for this property condition.
+                 *
+                 * @return the Molang expression string
+                 */
+                @Override
+                public String toMolang() {
+                    return MolangUtils.formatPropertyCondition(property, value);
+                }
+            }
+
+            /**
+             * Raw Molang expression visibility (for advanced use cases).
+             *
+             * @param expression the Molang expression (e.g., "q.block_state('open') == 1")
+             */
+            record Molang(String expression) implements BoneVisibility {
+                public Molang {
+                    if (expression == null || expression.isEmpty()) {
+                        throw new IllegalArgumentException("Molang expression cannot be null or empty");
+                    }
+                }
+
+                @Override
+                public String toMolang() {
+                    return expression;
+                }
+            }
         }
 
         /**
@@ -710,7 +663,8 @@ public record BlockStateDefinition(
             private List<String> uvLockBones;
             private boolean uvLockAll;
 
-            private GeometryBuilder() {}
+            private GeometryBuilder() {
+            }
 
             /**
              * Sets the geometry identifier (required).

@@ -2,12 +2,13 @@ package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.BlockTags;
+import org.allaymc.api.block.data.TintMethod;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.server.utils.molang.MolangConditionBuilder;
+import org.allaymc.server.utils.MolangUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
@@ -15,11 +16,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
-import org.allaymc.server.utils.molang.PermutationOptimizer;
 import org.allaymc.server.block.type.BlockStateDefinition.MaterialInstance;
 import org.allaymc.server.block.type.BlockStateDefinition.Materials;
-import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
 
 /**
  * CustomBlockDefinitionGenerator generates client-side block definitions following the Bedrock protocol.
@@ -43,7 +41,7 @@ import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
  *     boolean isOpen = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
  *     return BlockStateDefinition.builder()
  *         .geometry(Geometry.of(isOpen ? "geometry.door_open" : "geometry.door_closed"))
- *         .materials(Materials.builder().any("door_texture").build())
+ *         .materials(Materials.builder().any("door_texture"))
  *         .build();
  * });
  *
@@ -52,7 +50,7 @@ import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
  *     int age = state.getPropertyValue(BlockPropertyTypes.AGE);
  *     return BlockStateDefinition.builder()
  *         .geometry(Geometry.of("geometry.crop"))
- *         .materials(Materials.builder().any("crop_age_" + age).build())
+ *         .materials(Materials.builder().any("crop_age_" + age))
  *         .build();
  * });
  *
@@ -156,145 +154,107 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
      */
     public static CustomBlockDefinitionGenerator ofTexture(String texture) {
         return ofConstant(BlockStateDefinition.builder()
-                .materials(Materials.builder().any(texture).build())
+                .materials(Materials.builder().any(texture))
                 .build());
     }
 
     @Override
     public BlockDefinition generate(BlockType<?> blockType) {
-        // Collect definitions for all states
-        var stateDefinitions = PermutationOptimizer.collectDefinitions(blockType, stateDefinitionFunction);
-
-        // Optimize into global components and permutations
-        var optimized = PermutationOptimizer.optimize(stateDefinitions, blockType);
-
-        // Build the final block definition
-        return buildBlockDefinition(blockType, optimized);
-    }
-
-    /**
-     * Builds the final BlockDefinition from optimized components.
-     */
-    private BlockDefinition buildBlockDefinition(BlockType<?> blockType, PermutationOptimizer.OptimizedDefinition optimized) {
-        var blockStateData = blockType.getDefaultState().getBlockStateData();
-        var tintMethod = blockStateData.tintMethod();
-        var globalDef = optimized.globalComponents();
-
-        // Build base components from global definition and physical properties
-        var components = NbtMap.builder();
-
-        // Display name (from global definition or block identifier)
-        String displayName = globalDef.displayName();
-        components.putCompound("minecraft:display_name", NbtMap.builder()
-                .putString("value", displayName != null ? displayName : blockType.getIdentifier().toString())
-                .build());
-
-        // Geometry (from global definition or default)
-        Geometry geometry = globalDef.geometry();
-        if (geometry != null) {
-            components.putCompound("minecraft:geometry", geometry.toNBT());
-        } else {
-            components.putCompound("minecraft:geometry", NbtMap.builder()
-                    .putString("identifier", DEFAULT_GEOMETRY)
-                    .build());
-        }
-
-        // Materials (from global definition or default)
-        var materialsNbt = NbtMap.builder()
-                .putCompound("*", MaterialInstance.opaque("missing_texture").toNBT(tintMethod));
-        Materials materials = globalDef.materials();
-        if (materials != null) {
-            for (var entry : materials.entrySet()) {
-                materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT(tintMethod));
-            }
-        }
-        components.putCompound("minecraft:material_instances", NbtMap.builder()
-                .putCompound("mappings", NbtMap.EMPTY)
-                .putCompound("materials", materialsNbt.build())
-                .build());
-
-        // Physical properties from BlockStateData
-        components.putCompound("minecraft:collision_box", buildCollisionBoxNBT(blockStateData.collisionShape()));
-
-        components.putCompound("minecraft:selection_box", buildSelectionBoxNBT(blockStateData.shape()));
-
-        components.putCompound("minecraft:light_emission", NbtMap.builder()
-                .putByte("emission", (byte) blockStateData.lightEmission())
-                .build());
-
-        components.putCompound("minecraft:light_dampening", NbtMap.builder()
-                .putByte("lightLevel", (byte) blockStateData.lightDampening())
-                .build());
-
-        components.putCompound("minecraft:friction", NbtMap.builder()
-                .putFloat("value", Math.clamp(1 - blockStateData.friction(), 0.0f, 0.9f))
-                .build());
-
-        // Block breaking is fully server-authoritative
-        components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
-                .putFloat("value", Float.MAX_VALUE)
-                .build());
-
-        // Block tags
-        for (var tag : blockType.getBlockTags()) {
-            components.putCompound("tag:" + tag.name(), NbtMap.EMPTY);
-        }
+        // Init global components will fallback values
+        var globalComponents = NbtMap.builder()
+                // Geometry is default to a unit block
+                .putCompound("minecraft:geometry", NbtMap.builder()
+                        .putString("identifier", DEFAULT_GEOMETRY)
+                        .build())
+                // Texture is default to "missing_texture" in all faces
+                .putCompound("minecraft:material_instances", NbtMap.builder()
+                        .putCompound("mappings", NbtMap.EMPTY)
+                        .putCompound("materials", NbtMap.builder()
+                                .putCompound("*", MaterialInstance.opaque("missing_texture").toNBT(TintMethod.NONE))
+                                .build())
+                        .build());
 
         // Replaceable component (allows block to be replaced when another block is placed)
         if (blockType.hasBlockTag(BlockTags.REPLACEABLE)) {
-            components.putCompound("minecraft:replaceable", NbtMap.EMPTY);
+            globalComponents.putCompound("minecraft:replaceable", NbtMap.EMPTY);
         }
 
         // Flower pottable component (allows block to be placed in a flower pot)
         if (blockType.hasBlockTag(BlockTags.POTTABLE_PLANT)) {
-            components.putCompound("minecraft:flower_pottable", NbtMap.EMPTY);
-        }
-
-        // Transformation from global definition
-        Transformation transformation = globalDef.transformation();
-        if (transformation != null) {
-            components.putCompound("minecraft:transformation", transformation.toNBT());
+            globalComponents.putCompound("minecraft:flower_pottable", NbtMap.EMPTY);
         }
 
         // Custom components
         if (customComponents != null) {
-            components.putAll(customComponents);
+            globalComponents.putAll(customComponents);
         }
 
-        // Build the final block data
         var blockDataBuilder = NbtMap.builder()
-                .putCompound("components", components.build())
+                .putCompound("components", globalComponents.build())
                 .putCompound("menu_category", defaultMenuCategory())
                 .putCompound("vanilla_block_data", NbtMap.builder()
                         .putInt("block_id", CUSTOM_BLOCK_ID.getAndIncrement())
                         .build())
                 .putList("properties", NbtType.COMPOUND, buildPropertyDefinitions(blockType))
-                .putInt("molangVersion", MolangConditionBuilder.MOLANG_VERSION);
+                .putInt("molangVersion", MolangUtils.MOLANG_VERSION);
 
-        // Add permutations if any
-        var permutations = optimized.permutations();
-        if (!permutations.isEmpty()) {
-            var permutationNbtList = permutations.stream()
-                    .map(p -> NbtMap.builder()
-                            .putString("condition", p.condition())
-                            .putCompound("components", p.components().toComponentsNbt(tintMethod))
-                            .build())
-                    .toList();
-            blockDataBuilder.putList("permutations", NbtType.COMPOUND, permutationNbtList);
+        var permutations = new ArrayList<NbtMap>();
+        for (var blockState : blockType.getAllStates()) {
+            var definition = this.stateDefinitionFunction.apply(blockState);
+            if (definition == null) {
+                throw new NullPointerException("Definition function returned null for state: " + blockState);
+            }
+
+            var blockStateData = blockState.getBlockStateData();
+            var components = definition.toComponentsNbt(blockStateData.tintMethod()).toBuilder();
+
+            // Collision and selection box
+            components.putCompound("minecraft:collision_box", buildCollisionBoxNBT(blockStateData.collisionShape()));
+            components.putCompound("minecraft:selection_box", buildSelectionBoxNBT(blockStateData.shape()));
+
+            // Light emission and dampening
+            components.putCompound("minecraft:light_emission", NbtMap.builder()
+                    .putByte("emission", (byte) blockStateData.lightEmission())
+                    .build());
+            components.putCompound("minecraft:light_dampening", NbtMap.builder()
+                    .putByte("lightLevel", (byte) blockStateData.lightDampening())
+                    .build());
+
+            // Friction
+            components.putCompound("minecraft:friction", NbtMap.builder()
+                    .putFloat("value", Math.clamp(1 - blockStateData.friction(), 0.0f, 0.9f))
+                    .build());
+
+            // Block breaking is fully server-authoritative
+            components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
+                    .putFloat("value", Float.MAX_VALUE)
+                    .build());
+
+            // Block tags
+            for (var tag : blockType.getBlockTags()) {
+                components.putCompound("tag:" + tag.name(), NbtMap.EMPTY);
+            }
+
+            permutations.add(NbtMap.builder()
+                    .putString("condition", MolangUtils.buildSingleStateCondition(blockState, blockType))
+                    .putCompound("components", components.build())
+                    .build()
+            );
         }
 
+        blockDataBuilder.putList("permutations", NbtType.COMPOUND, permutations);
         return new BlockDefinition(blockDataBuilder.build());
     }
 
     /**
      * Builds selection box NBT from VoxelShape.
      * <p>
-     * Uses origin/size format where origin is relative to block center
+     * Uses an origin/size format where origin is relative to the block center
      * (range -8 to 8 pixels) and size defines dimensions in pixels (0-16).
      * For VoxelShapes with multiple solids, uses the union AABB.
      *
      * @param voxelShape the selection shape
-     * @return NBT with enabled flag, origin, and size
+     * @return NBT with the enabled flag, origin, and size
      * @see <a href="https://wiki.bedrock.dev/blocks/block-components#selection-box">Selection Box</a>
      */
     private static NbtMap buildSelectionBoxNBT(VoxelShape voxelShape) {

@@ -1,4 +1,4 @@
-package org.allaymc.server.utils.molang;
+package org.allaymc.server.utils;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
@@ -27,11 +27,11 @@ import java.util.stream.Collectors;
  *
  * @author daoge_cmd
  */
-public final class MolangConditionBuilder {
+public final class MolangUtils {
 
     public static final int MOLANG_VERSION = 1;
 
-    private MolangConditionBuilder() {
+    private MolangUtils() {
     }
 
     public static String buildCondition(Set<BlockState> states, BlockType<?> blockType) {
@@ -46,7 +46,7 @@ public final class MolangConditionBuilder {
         return buildMultiStateCondition(states, blockType);
     }
 
-    private static String buildSingleStateCondition(BlockState state, BlockType<?> blockType) {
+    public static String buildSingleStateCondition(BlockState state, BlockType<?> blockType) {
         var properties = blockType.getProperties();
         if (properties.isEmpty()) {
             return "1";

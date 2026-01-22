@@ -1,4 +1,4 @@
-package org.allaymc.server.utils.molang;
+package org.allaymc.server.utils;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BooleanPropertyType;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
-class MolangConditionBuilderTest {
+class MolangUtilsTest {
 
     static BlockPropertyType<Boolean> BOOL_PROP;
     static BlockPropertyType<Integer> INT_PROP;
@@ -65,7 +65,7 @@ class MolangConditionBuilderTest {
         var state = blockTypeWithBoolOnly.getDefaultState();
         var states = Set.of(state);
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithBoolOnly);
 
         assertEquals("!q.block_state('test_bool')", condition);
     }
@@ -75,7 +75,7 @@ class MolangConditionBuilderTest {
         var state = blockTypeWithBoolOnly.getDefaultState().setPropertyValue(BOOL_PROP, true);
         var states = Set.of(state);
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithBoolOnly);
 
         assertEquals("q.block_state('test_bool')", condition);
     }
@@ -88,7 +88,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(ENUM_PROP, TestEnum.B);
         var states = Set.of(state);
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithAllProps);
 
         // Condition should contain all three property checks
         assertTrue(condition.contains("q.block_state('test_bool')"));
@@ -103,7 +103,7 @@ class MolangConditionBuilderTest {
         var state2 = blockTypeWithBoolOnly.getDefaultState().setPropertyValue(BOOL_PROP, true);
         var states = Set.of(state1, state2);
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithBoolOnly);
 
         // Should produce an OR condition
         assertTrue(condition.contains("||"));
@@ -115,7 +115,7 @@ class MolangConditionBuilderTest {
     void testEmptyStatesReturnsAlwaysTrue() {
         var states = Set.<BlockState>of();
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithBoolOnly);
 
         assertEquals("1", condition);
     }
@@ -131,7 +131,7 @@ class MolangConditionBuilderTest {
                     .setPropertyValue(ENUM_PROP, TestEnum.A));  // constant
         }
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithAllProps);
 
         // The constant properties should be factored out
         // and the varying property should use OR
@@ -145,7 +145,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(INT_PROP, 2);
         var states = Set.of(state);
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithAllProps);
 
         assertTrue(condition.contains("q.block_state('test_int') == 2"));
     }
@@ -156,7 +156,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(ENUM_PROP, TestEnum.C);
         var states = Set.of(state);
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithAllProps);
 
         // Enum values should be lowercase
         assertTrue(condition.contains("q.block_state('test_enum') == 'c'"));
@@ -175,7 +175,7 @@ class MolangConditionBuilderTest {
         var state = blockTypeNoProps.getDefaultState();
         var states = Set.of(state);
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeNoProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeNoProps);
 
         // Block with no properties should return "1"
         assertEquals("1", condition);
@@ -194,7 +194,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(INT_PROP, 1)
                 .setPropertyValue(ENUM_PROP, TestEnum.B));
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithAllProps);
 
         // Should contain OR since all properties vary
         assertTrue(condition.contains("||"));
@@ -210,7 +210,7 @@ class MolangConditionBuilderTest {
                     .setPropertyValue(ENUM_PROP, e));   // varies
         }
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithAllProps);
 
         // Should have constant bool and int, with OR for enum values
         assertTrue(condition.contains("q.block_state('test_bool')"));
@@ -231,7 +231,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(INT_PROP, 1)
                 .setPropertyValue(ENUM_PROP, TestEnum.B));
 
-        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangUtils.buildCondition(states, blockTypeWithAllProps);
 
         // BOOL_PROP should be factored out as constant
         assertTrue(condition.contains("q.block_state('test_bool')"));

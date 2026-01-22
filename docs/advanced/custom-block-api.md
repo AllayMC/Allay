@@ -72,7 +72,7 @@ AllayBlockType.builder(MyBlockImpl.class)
         CustomBlockDefinitionGenerator.ofConstant(
             BlockStateDefinition.builder()
                 .geometry(Geometry.of("geometry.custom_lamp"))
-                .materials(Materials.builder().any("lamp_texture").build())
+                .materials(Materials.builder().any("lamp_texture"))
                 .displayName("Custom Lamp")
                 .build()))
     .build();
@@ -94,7 +94,7 @@ AllayBlockType.builder(MyDoorImpl.class)
             boolean isOpen = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
             return BlockStateDefinition.builder()
                 .geometry(Geometry.of(isOpen ? "geometry.door_open" : "geometry.door_closed"))
-                .materials(Materials.builder().any("door_texture").build())
+                .materials(Materials.builder().any("door_texture"))
                 .build();
         }))
     .build();
@@ -123,9 +123,7 @@ CustomBlockDefinitionGenerator.of(state -> {
     // Return different definitions based on state
     return BlockStateDefinition.builder()
         .geometry(Geometry.of("geometry.crop_stage_" + age))
-        .materials(Materials.builder()
-            .any(powered ? "crop_powered" : "crop_normal")
-            .build())
+        .materials(Materials.builder().any(powered ? "crop_powered" : "crop_normal"))
         .build();
 });
 ```
@@ -136,7 +134,7 @@ CustomBlockDefinitionGenerator.of(state -> {
 CustomBlockDefinitionGenerator.ofConstant(
     BlockStateDefinition.builder()
         .geometry(Geometry.of("geometry.my_block"))
-        .materials(Materials.builder().any("my_texture").build())
+        .materials(Materials.builder().any("my_texture"))
         .transformation(Transformation.builder().ry(45).build())
         .build()
 );
@@ -296,7 +294,6 @@ Materials.builder()
     .face(BlockFace.UP, "top_texture")        // Override top face
     .face(BlockFace.DOWN, "bottom_texture")   // Override bottom face
     .sides("side_texture")                    // All horizontal faces
-    .build()
 ```
 
 ### Methods
@@ -317,7 +314,6 @@ Materials.builder()
 ```java linenums="1"
 Materials.builder()
     .any("stone_texture")
-    .build()
 ```
 
 **Different top and bottom:**
@@ -327,7 +323,6 @@ Materials.builder()
     .any("log_side")                    // Default for all faces
     .face(BlockFace.UP, "log_top")      // Override top
     .face(BlockFace.DOWN, "log_top")    // Override bottom
-    .build()
 ```
 
 **Furnace-style (front face different):**
@@ -337,7 +332,6 @@ Materials.builder()
     .any("furnace_side")
     .face(BlockFace.UP, "furnace_top")
     .face(BlockFace.NORTH, "furnace_front")
-    .build()
 ```
 
 ## MaterialInstance
@@ -396,9 +390,7 @@ MaterialInstance.builder()
 ### Example with Transparency
 
 ```java linenums="1"
-Materials.builder()
-    .any(MaterialInstance.alphaTest("leaves_texture"))
-    .build()
+Materials.builder().any(MaterialInstance.alphaTest("leaves_texture"))
 ```
 
 ## Transformation
@@ -465,9 +457,7 @@ AllayBlockType.builder(CustomCropImpl.class)
             int age = state.getPropertyValue(AGE);
             return BlockStateDefinition.builder()
                 .geometry(Geometry.of("geometry.crop"))
-                .materials(Materials.builder()
-                    .any(MaterialInstance.alphaTest("magic_crop_stage_" + age))
-                    .build())
+                .materials(Materials.builder().any(MaterialInstance.alphaTest("magic_crop_stage_" + age)))
                 .build();
         }))
     .build();
@@ -501,7 +491,7 @@ AllayBlockType.builder(MachineBlockImpl.class)
 
             return BlockStateDefinition.builder()
                 .geometry(Geometry.of(geometry))
-                .materials(Materials.builder().any(texture).build())
+                .materials(Materials.builder().any(texture))
                 .displayName("Processing Machine")
                 .build();
         }))
@@ -526,7 +516,7 @@ AllayBlockType.builder(ReinforcedBlockImpl.class)
     .blockDefinitionGenerator(new CustomBlockDefinitionGenerator(
         state -> BlockStateDefinition.builder()
             .geometry(Geometry.of("geometry.reinforced"))
-            .materials(Materials.builder().any("reinforced_texture").build())
+            .materials(Materials.builder().any("reinforced_texture"))
             .build(),
         customComponents))
     .build();
@@ -550,7 +540,7 @@ CustomBlockDefinitionGenerator.of(state -> {
     boolean open = state.getPropertyValue(OPEN_BIT);
     return BlockStateDefinition.builder()
         .geometry(Geometry.of(open ? "geometry.open" : "geometry.closed"))
-        .materials(Materials.builder().any("door_texture").build())  // Same for all
+        .materials(Materials.builder().any("door_texture"))  // Same for all
         .build();
 });
 ```
