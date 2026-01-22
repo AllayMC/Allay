@@ -228,11 +228,8 @@ public record BlockStateDefinition(
                     .putString("texture", texture)
                     .putString("render_method", renderMethod.getId())
                     .putBoolean("ambient_occlusion", ambientOcclusion)
-                    .putByte("packed_bools", packedBools);
-
-            if (tintMethod != null && tintMethod != TintMethod.NONE) {
-                builder.putString("tint_method", tintMethod.name().toLowerCase(Locale.ROOT));
-            }
+                    .putByte("packed_bools", packedBools)
+                    .putString("tint_method", tintMethod.name().toLowerCase(Locale.ROOT));
 
             return builder.build();
         }
@@ -513,6 +510,9 @@ public record BlockStateDefinition(
             List<String> uvLockBones,
             boolean uvLockAll
     ) {
+
+        private static final String DEFAULT_CULLING_LAYER = "minecraft:culling_layer.undefined";
+
         public Geometry {
             if (identifier == null || identifier.isEmpty()) {
                 throw new IllegalArgumentException("Geometry identifier cannot be null or empty");
@@ -552,7 +552,10 @@ public record BlockStateDefinition(
          */
         public NbtMap toNBT() {
             var builder = NbtMap.builder()
-                    .putString("identifier", identifier);
+                    .putString("identifier", identifier)
+                    .putBoolean("ignoreGeometryForIsSolid", true)
+                    .putBoolean("needsLegacyTopRotation", false)
+                    .putBoolean("useBlockTypeLightAbsorption", false);
 
             if (boneVisibility != null && !boneVisibility.isEmpty()) {
                 var boneVisNbt = NbtMap.builder();
@@ -566,19 +569,16 @@ public record BlockStateDefinition(
                 builder.putCompound("bone_visibility", boneVisNbt.build());
             }
 
-            if (culling != null) {
-                builder.putString("culling", culling);
-            }
-
-            if (cullingLayer != null) {
-                builder.putString("culling_layer", cullingLayer);
-            }
+            builder.putString("culling", culling != null ? culling : "");
+            builder.putString("culling_layer", cullingLayer != null ? cullingLayer : DEFAULT_CULLING_LAYER);
 
             // uv_lock can be boolean (all bones) or array (specific bones)
             if (uvLockAll) {
                 builder.putBoolean("uv_lock", true);
             } else if (uvLockBones != null && !uvLockBones.isEmpty()) {
                 builder.putList("uv_lock", NbtType.STRING, uvLockBones);
+            } else {
+                builder.putBoolean("uv_lock", false);
             }
 
             return builder.build();
