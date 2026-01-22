@@ -94,6 +94,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - redstone torch
   - redstone diodes (repeaters/comparators)
 - Fixed TNT not responding to redstone signals - TNT now ignites when receiving redstone power.
+- Fixed ghost block issue on mobile clients where blocks would appear placed client-side but not server-side, caused by mobile clients sometimes skipping `START_ITEM_USE_ON` packet.
+
+### Removed
+
+- (API) Removed `ItemBaseComponent.rightClickItemOnBlock()` method. Its functionality has been merged into `useItemOnBlock()`.
 
 # 0.10.5 (API 0.22.0) - 2026/1/15
 

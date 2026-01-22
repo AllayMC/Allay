@@ -24,22 +24,22 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        super.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
+    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+        super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
 
         var player = interactInfo.player();
         if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SPECTATOR) {
-            return;
+            return false;
         }
 
         var clickedBlock = interactInfo.getClickedBlock();
         if (!clickedBlock.getBlockStateData().isSolid()) {
-            return;
+            return false;
         }
 
         var face = interactInfo.blockFace();
         if (!face.isHorizontal()) {
-            return;
+            return false;
         }
 
         var types = new ArrayList<PaintingType>();
@@ -65,7 +65,7 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
 
         if (types.isEmpty()) {
             // No available painting type found
-            return;
+            return false;
         }
 
         var entity = EntityTypes.PAINTING.createEntity(
@@ -81,5 +81,6 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
         dimension.getEntityManager().addEntity(entity);
         dimension.addSound(MathUtils.center(placeBlockPos), SimpleSound.PAINTING_PLACE);
         player.tryConsumeItemInHand();
+        return true;
     }
 }

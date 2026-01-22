@@ -229,11 +229,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        manager.callEvent(new CItemRightClickOnBlockEvent(dimension, placeBlockPos, interactInfo));
-    }
-
-    @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         var event = new CItemUseOnBlockEvent(dimension, placeBlockPos, interactInfo, false);
         manager.callEvent(event);

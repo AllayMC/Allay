@@ -261,23 +261,17 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * Handles right-click on a block.
+     * Called when a player right-clicks on a block with this item.
+     * <p>
+     * If this method returns {@code true}, the block interaction ({@code BlockBehavior::onInteract})
+     * will be skipped. This is used for items with special block interactions such as flint and steel,
+     * spawn eggs, firework rockets, axes (for stripping logs), or paintings.
      *
      * @param dimension     the {@link Dimension}
      * @param placeBlockPos the block position ({@link Vector3ic})
      * @param interactInfo  the {@link PlayerInteractInfo}
-     */
-    @ApiStatus.OverrideOnly
-    void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
-
-    /**
-     * Attempts to use the item on a block. Different from {@link #rightClickItemOnBlock(Dimension, Vector3ic, PlayerInteractInfo)},
-     * this method will only be called when the client thinks he can use the item on the block.
-     *
-     * @param dimension     the {@link Dimension}
-     * @param placeBlockPos the block position ({@link Vector3ic})
-     * @param interactInfo  the {@link PlayerInteractInfo}
-     * @return {@code true} if used, {@code false} otherwise
+     * @return {@code true} if the item was used and block interaction should be skipped,
+     *         {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
     boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);

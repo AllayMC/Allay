@@ -92,28 +92,25 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
 
                         entity.setUsingItemInAir(false);
-                        itemInHand.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
-                        if (entity.isUsingItemOnBlock()) {
-                            if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
-                                // Using the item on the block successfully, no need to call BlockBehavior::onInteract()
+                        if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
+                            // Using the item on the block successfully, no need to call BlockBehavior::onInteract()
+                            break;
+                        }
+
+                        if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
+                            // Player interaction with the block was unsuccessful, and we need to override the
+                            // client block change by sending a block update
+                            var blockStateClicked = dimension.getBlockState(clickBlockPos);
+                            player.viewBlockUpdate(clickBlockPos, 0, blockStateClicked);
+
+                            // Player places a block
+                            if (itemInHand.getItemType() == AIR) {
                                 break;
                             }
 
-                            if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
-                                // Player interaction with the block was unsuccessful, and we need to override the
-                                // client block change by sending a block update
-                                var blockStateClicked = dimension.getBlockState(clickBlockPos);
-                                player.viewBlockUpdate(clickBlockPos, 0, blockStateClicked);
-
-                                // Player places a block
-                                if (itemInHand.getItemType() == AIR) {
-                                    break;
-                                }
-
-                                if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
-                                    var blockStateReplaced = dimension.getBlockState(placeBlockPos);
-                                    player.viewBlockUpdate(placeBlockPos, 0, blockStateReplaced);
-                                }
+                            if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
+                                var blockStateReplaced = dimension.getBlockState(placeBlockPos);
+                                player.viewBlockUpdate(placeBlockPos, 0, blockStateReplaced);
                             }
                         }
                     }
