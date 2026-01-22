@@ -557,8 +557,11 @@ public record BlockStateDefinition(
             if (boneVisibility != null && !boneVisibility.isEmpty()) {
                 var boneVisNbt = NbtMap.builder();
                 for (var entry : boneVisibility.entrySet()) {
-                    // All bone_visibility values must be strings (Molang expressions)
-                    boneVisNbt.putString(entry.getKey(), entry.getValue().toMolang());
+                    boneVisNbt.putCompound(entry.getKey(), NbtMap.builder()
+                            .putString("expression", entry.getValue().toMolang())
+                            .putShort("version", (short) MolangConditionBuilder.MOLANG_VERSION)
+                            .build()
+                    );
                 }
                 builder.putCompound("bone_visibility", boneVisNbt.build());
             }

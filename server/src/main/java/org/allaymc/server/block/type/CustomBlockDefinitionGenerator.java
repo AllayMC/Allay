@@ -7,6 +7,7 @@ import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.server.utils.molang.MolangConditionBuilder;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
@@ -72,7 +73,6 @@ import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
  */
 public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator {
 
-    private static final int MOLANG_VERSION = 9;
     private static final String DEFAULT_GEOMETRY = "minecraft:geometry.full_block";
     private static final AtomicInteger CUSTOM_BLOCK_ID = new AtomicInteger(10000);
 
@@ -269,7 +269,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                         .putInt("block_id", CUSTOM_BLOCK_ID.getAndIncrement())
                         .build())
                 .putList("properties", NbtType.COMPOUND, buildPropertyDefinitions(blockType))
-                .putInt("molangVersion", MOLANG_VERSION);
+                .putInt("molangVersion", MolangConditionBuilder.MOLANG_VERSION);
 
         // Add permutations if any
         var permutations = optimized.permutations();

@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
  */
 public final class MolangConditionBuilder {
 
+    public static final int MOLANG_VERSION = 1;
+
     private MolangConditionBuilder() {
     }
 
