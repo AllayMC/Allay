@@ -149,6 +149,8 @@ nav:
       - Use i18n: tutorials/use-i18n.md
 
   - Advanced:
+      - Custom Block API: advanced/custom-block-api.md
+      - Custom Item API: advanced/custom-item-api.md
       - Event List: advanced/event-list.md
       - Block and Item Id: advanced/block-and-item-id.md
 

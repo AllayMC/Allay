@@ -1,39 +1,62 @@
 package org.allaymc.server.block.type;
 
-import lombok.Builder;
-import lombok.Getter;
 import org.allaymc.api.block.data.BlockStateData;
-import org.allaymc.api.block.data.TintMethod;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.IntPropertyType;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.api.message.MayContainTrKey;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.joml.primitives.AABBdc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.allaymc.server.block.type.BlockStateDefinition.MaterialInstance;
+import org.allaymc.server.block.type.BlockStateDefinition.Materials;
+import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
 
 /**
- * CustomBlockDefinitionGenerator is the default implementation of {@link BlockDefinitionGenerator}.
+ * CustomBlockDefinitionGenerator generates client-side block definitions following the Bedrock protocol.
  * <p>
- * This class follows the Bedrock custom block protocol and generates client-side block definitions.
- * It only requires client-specific information (geometry, materials, transformation), while
- * physical properties (hardness, friction, light emission, collision shape, etc.) are
- * automatically read from {@link BlockStateData}.
+ * This generator uses a function-based approach where users provide a {@link Function} that maps each
+ * {@link BlockState} to its corresponding {@link BlockStateDefinition}. The generator automatically:
+ * <ul>
+ *   <li>Iterates all possible block state combinations</li>
+ *   <li>Collects rendering properties for each state</li>
+ *   <li>Optimizes by extracting common properties to global components</li>
+ *   <li>Merges states with identical properties into single permutations with combined conditions</li>
+ * </ul>
+ * <p>
+ * Physical properties (collision shape, light emission, friction, etc.) are automatically read from
+ * {@link BlockStateData} and do not need to be specified in the definition function.
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * // Simple door block with different geometry based on open state
+ * CustomBlockDefinitionGenerator.of(state -> {
+ *     boolean isOpen = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
+ *     return BlockStateDefinition.builder()
+ *         .geometry(isOpen ? "geometry.door_open" : "geometry.door_closed")
+ *         .materials(Materials.builder().any("door_texture").build())
+ *         .build();
+ * });
+ *
+ * // Crop with different textures for each growth stage
+ * CustomBlockDefinitionGenerator.of(state -> {
+ *     int age = state.getPropertyValue(BlockPropertyTypes.AGE);
+ *     return BlockStateDefinition.builder()
+ *         .geometry("geometry.crop")
+ *         .materials(Materials.builder().any("crop_age_" + age).build())
+ *         .build();
+ * });
+ * }</pre>
  *
  * @author daoge_cmd
+ * @see BlockStateDefinition
  */
-@Builder
 public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator {
 
     private static final int MOLANG_VERSION = 9;
@@ -41,55 +64,128 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
     private static final AtomicInteger CUSTOM_BLOCK_ID = new AtomicInteger(10000);
 
     /**
-     * The display name shown in the inventory and tooltips.
-     * If {@code null}, the identifier will be used.
+     * Function that generates a BlockStateDefinition for each BlockState.
      */
-    @MayContainTrKey
-    protected final String displayName;
-
-    /**
-     * The geometry identifier (e.g., "geometry.custom_block").
-     * Used to specify a custom geometry model defined in resource packs.
-     */
-    protected final String geometry;
-
-    /**
-     * Material instances for rendering the block.
-     * Use {@link Materials#builder()} to create.
-     */
-    protected final Materials materials;
-
-    /**
-     * Transformation applied to the block model.
-     */
-    protected final Transformation transformation;
+    private final Function<BlockState, BlockStateDefinition> stateDefinitionFunction;
 
     /**
      * Additional custom components to add to the block definition.
+     * These are merged into the global components section.
      */
-    protected final Map<String, NbtMap> customComponents;
+    private final Map<String, NbtMap> customComponents;
 
     /**
-     * List of permutations for conditional component overrides.
-     * Permutations allow changing block appearance/behavior based on block states using Molang conditions.
+     * Creates a new generator with the specified state definition function.
+     *
+     * @param stateDefinitionFunction function that maps each BlockState to its rendering properties
      */
-    protected final List<Permutation> permutations;
+    public CustomBlockDefinitionGenerator(Function<BlockState, BlockStateDefinition> stateDefinitionFunction) {
+        this(stateDefinitionFunction, null);
+    }
+
+    /**
+     * Creates a new generator with the specified state definition function and custom components.
+     *
+     * @param stateDefinitionFunction function that maps each BlockState to its rendering properties
+     * @param customComponents        additional custom NBT components to add to the definition
+     */
+    public CustomBlockDefinitionGenerator(
+            Function<BlockState, BlockStateDefinition> stateDefinitionFunction,
+            Map<String, NbtMap> customComponents
+    ) {
+        this.stateDefinitionFunction = Objects.requireNonNull(stateDefinitionFunction, "stateDefinitionFunction cannot be null");
+        this.customComponents = customComponents;
+    }
+
+    /**
+     * Creates a new generator with the specified state definition function.
+     * <p>
+     * This is a convenience factory method equivalent to the constructor.
+     *
+     * @param stateDefinitionFunction function that maps each BlockState to its rendering properties
+     * @return a new CustomBlockDefinitionGenerator
+     */
+    public static CustomBlockDefinitionGenerator of(Function<BlockState, BlockStateDefinition> stateDefinitionFunction) {
+        return new CustomBlockDefinitionGenerator(stateDefinitionFunction);
+    }
+
+    /**
+     * Creates a new generator with the specified state definition function and custom components.
+     *
+     * @param stateDefinitionFunction function that maps each BlockState to its rendering properties
+     * @param customComponents        additional custom NBT components to add to the definition
+     * @return a new CustomBlockDefinitionGenerator
+     */
+    public static CustomBlockDefinitionGenerator of(
+            Function<BlockState, BlockStateDefinition> stateDefinitionFunction,
+            Map<String, NbtMap> customComponents
+    ) {
+        return new CustomBlockDefinitionGenerator(stateDefinitionFunction, customComponents);
+    }
+
+    /**
+     * Creates a simple generator for blocks without state-dependent rendering.
+     * <p>
+     * Use this when all block states should have the same visual appearance.
+     *
+     * @param definition the definition to use for all states
+     * @return a new CustomBlockDefinitionGenerator
+     */
+    public static CustomBlockDefinitionGenerator ofConstant(BlockStateDefinition definition) {
+        return new CustomBlockDefinitionGenerator(state -> definition);
+    }
+
+    /**
+     * Creates a simple generator for blocks with only a texture.
+     *
+     * @param texture the texture name to use for all faces
+     * @return a new CustomBlockDefinitionGenerator
+     */
+    public static CustomBlockDefinitionGenerator ofTexture(String texture) {
+        return ofConstant(BlockStateDefinition.builder()
+                .materials(Materials.builder().any(texture).build())
+                .build());
+    }
 
     @Override
     public BlockDefinition generate(BlockType<?> blockType) {
+        // Collect definitions for all states
+        var stateDefinitions = PermutationOptimizer.collectDefinitions(blockType, stateDefinitionFunction);
+
+        // Optimize into global components and permutations
+        var optimized = PermutationOptimizer.optimize(stateDefinitions, blockType);
+
+        // Build the final block definition
+        return buildBlockDefinition(blockType, optimized);
+    }
+
+    /**
+     * Builds the final BlockDefinition from optimized components.
+     */
+    private BlockDefinition buildBlockDefinition(BlockType<?> blockType, PermutationOptimizer.OptimizedDefinition optimized) {
         var blockStateData = blockType.getDefaultState().getBlockStateData();
+        var tintMethod = blockStateData.tintMethod();
+        var globalDef = optimized.globalComponents();
+
+        // Build base components from global definition and physical properties
         var components = NbtMap.builder();
 
+        // Display name (from global definition or block identifier)
+        String displayName = globalDef.displayName();
         components.putCompound("minecraft:display_name", NbtMap.builder()
                 .putString("value", displayName != null ? displayName : blockType.getIdentifier().toString())
                 .build());
 
+        // Geometry (from global definition or default)
+        String geometry = globalDef.geometry();
         components.putCompound("minecraft:geometry", NbtMap.builder()
                 .putString("identifier", geometry != null ? geometry : DEFAULT_GEOMETRY)
                 .build());
 
-        var tintMethod = blockStateData.tintMethod();
-        var materialsNbt = NbtMap.builder().putCompound("*", MaterialInstance.opaque("missing_texture").toNBT(tintMethod));
+        // Materials (from global definition or default)
+        var materialsNbt = NbtMap.builder()
+                .putCompound("*", MaterialInstance.opaque("missing_texture").toNBT(tintMethod));
+        Materials materials = globalDef.materials();
         if (materials != null) {
             for (var entry : materials.entrySet()) {
                 materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT(tintMethod));
@@ -100,16 +196,10 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .putCompound("materials", materialsNbt.build())
                 .build());
 
+        // Physical properties from BlockStateData
         components.putCompound("minecraft:collision_box", buildCollisionBoxNBT(blockStateData.collisionShape()));
 
-        var selectionBox = boxFromVoxelShape(blockStateData.shape());
-        if (selectionBox.equals(Box.EMPTY)) {
-            components.putCompound("minecraft:selection_box", NbtMap.builder()
-                    .putBoolean("enabled", false)
-                    .build());
-        } else {
-            components.putCompound("minecraft:selection_box", selectionBox.toSelectionBoxNBT());
-        }
+        components.putCompound("minecraft:selection_box", buildSelectionBoxNBT(blockStateData.shape()));
 
         components.putCompound("minecraft:light_emission", NbtMap.builder()
                 .putByte("emission", (byte) blockStateData.lightEmission())
@@ -119,41 +209,49 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .putByte("lightLevel", (byte) blockStateData.lightDampening())
                 .build());
 
-        // See https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/blockcomponents/minecraftblock_friction
         components.putCompound("minecraft:friction", NbtMap.builder()
                 .putFloat("value", Math.clamp(1 - blockStateData.friction(), 0.0f, 0.9f))
                 .build());
 
-        // Block breaking is fully server authed, so let just set a extra big value here
+        // Block breaking is fully server-authoritative
         components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
                 .putFloat("value", Float.MAX_VALUE)
                 .build());
 
+        // Block tags
         for (var tag : blockType.getBlockTags()) {
             components.putCompound("tag:" + tag.name(), NbtMap.EMPTY);
         }
 
+        // Transformation from global definition
+        Transformation transformation = globalDef.transformation();
         if (transformation != null) {
             components.putCompound("minecraft:transformation", transformation.toNBT());
         }
 
+        // Custom components
         if (customComponents != null) {
             components.putAll(customComponents);
         }
 
+        // Build the final block data
         var blockDataBuilder = NbtMap.builder()
                 .putCompound("components", components.build())
-                // This is required, or the client will crash, although the creative inventory is already server authed xd
                 .putCompound("menu_category", defaultMenuCategory())
-                // Integer block id is also required by the client, let's just send an incremental value to the client
-                .putCompound("vanilla_block_data", NbtMap.builder().putInt("block_id", CUSTOM_BLOCK_ID.getAndIncrement()).build())
+                .putCompound("vanilla_block_data", NbtMap.builder()
+                        .putInt("block_id", CUSTOM_BLOCK_ID.getAndIncrement())
+                        .build())
                 .putList("properties", NbtType.COMPOUND, buildPropertyDefinitions(blockType))
                 .putInt("molangVersion", MOLANG_VERSION);
 
-        // Add permutations if present
-        if (permutations != null && !permutations.isEmpty()) {
+        // Add permutations if any
+        var permutations = optimized.permutations();
+        if (!permutations.isEmpty()) {
             var permutationNbtList = permutations.stream()
-                    .map(p -> p.toNBT(tintMethod))
+                    .map(p -> NbtMap.builder()
+                            .putString("condition", p.condition())
+                            .putCompound("components", p.components().toComponentsNbt(tintMethod))
+                            .build())
                     .toList();
             blockDataBuilder.putList("permutations", NbtType.COMPOUND, permutationNbtList);
         }
@@ -162,19 +260,34 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
     }
 
     /**
-     * Converts VoxelShape to Box for Bedrock protocol.
-     * Uses the union AABB of all solids in the VoxelShape.
+     * Builds selection box NBT from VoxelShape.
      */
-    private Box boxFromVoxelShape(VoxelShape voxelShape) {
+    private static NbtMap buildSelectionBoxNBT(VoxelShape voxelShape) {
         if (voxelShape == null || voxelShape.getSolids().isEmpty()) {
-            return Box.EMPTY;
+            return NbtMap.builder()
+                    .putBoolean("enabled", false)
+                    .build();
         }
 
         var aabb = voxelShape.unionAABB();
-        return Box.fromAABB(aabb);
+        float originX = (float) (aabb.minX() * 16) - 8;
+        float originY = (float) (aabb.minY() * 16);
+        float originZ = (float) (aabb.minZ() * 16) - 8;
+        float sizeX = (float) ((aabb.maxX() - aabb.minX()) * 16);
+        float sizeY = (float) ((aabb.maxY() - aabb.minY()) * 16);
+        float sizeZ = (float) ((aabb.maxZ() - aabb.minZ()) * 16);
+
+        return NbtMap.builder()
+                .putBoolean("enabled", true)
+                .putList("origin", NbtType.FLOAT, List.of(originX, originY, originZ))
+                .putList("size", NbtType.FLOAT, List.of(sizeX, sizeY, sizeZ))
+                .build();
     }
 
-    private static NbtMap buildCollisionBoxNBT(VoxelShape voxelShape) {
+    /**
+     * Builds collision box NBT from VoxelShape.
+     */
+    static NbtMap buildCollisionBoxNBT(VoxelShape voxelShape) {
         if (voxelShape == null || voxelShape.getSolids().isEmpty()) {
             return NbtMap.builder()
                     .putBoolean("enabled", false)
@@ -183,8 +296,6 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
         var boxes = new ArrayList<NbtMap>();
         for (var solid : voxelShape.getSolids()) {
-            // Convert from block units (0-1) to pixel units (0-16)
-            // 1.21.130+ boxes format uses coordinates relative to block corner
             float minX = (float) (solid.minX() * 16);
             float minY = (float) (solid.minY() * 16);
             float minZ = (float) (solid.minZ() * 16);
@@ -234,9 +345,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         builder.putString("name", property.getName());
 
         switch (property.getType()) {
-            case BOOLEAN -> {
-                builder.putList("enum", NbtType.BYTE, List.of((byte) 0, (byte) 1));
-            }
+            case BOOLEAN -> builder.putList("enum", NbtType.BYTE, List.of((byte) 0, (byte) 1));
             case INT -> {
                 var intProp = (IntPropertyType) property;
                 var values = new ArrayList<Integer>();
@@ -257,743 +366,282 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
     }
 
     /**
-     * Represents a material instance for a block face.
-     *
-     * @param texture          the texture name from the resource pack
-     * @param renderMethod     the render method to use (default: OPAQUE)
-     * @param faceDimming      whether face dimming is enabled (default: true)
-     * @param ambientOcclusion whether ambient occlusion is enabled (default: true)
-     * @param randomUVRotation whether random UV rotation is enabled (default: false)
-     * @param textureVariation whether texture variation is enabled (default: false)
-     */
-    @Builder
-    public record MaterialInstance(
-            String texture,
-            RenderMethod renderMethod,
-            boolean faceDimming,
-            boolean ambientOcclusion,
-            boolean randomUVRotation,
-            boolean textureVariation
-    ) {
-        /**
-         * Compact constructor with defaults.
-         */
-        public MaterialInstance {
-            if (renderMethod == null) {
-                renderMethod = RenderMethod.OPAQUE;
-            }
-        }
-
-        /**
-         * Creates a material instance with just texture (OPAQUE render method, default settings).
-         *
-         * @param texture the texture name
-         * @return a new MaterialInstance
-         */
-        public static MaterialInstance of(String texture) {
-            return new MaterialInstance(texture, RenderMethod.OPAQUE, true, true, false, false);
-        }
-
-        /**
-         * Creates a material instance with texture and render method.
-         *
-         * @param texture      the texture name
-         * @param renderMethod the render method
-         * @return a new MaterialInstance
-         */
-        public static MaterialInstance of(String texture, RenderMethod renderMethod) {
-            return new MaterialInstance(texture, renderMethod, true, true, false, false);
-        }
-
-        /**
-         * Creates an opaque material instance (most common for solid blocks).
-         *
-         * @param texture the texture name
-         * @return a new MaterialInstance with OPAQUE render method
-         */
-        public static MaterialInstance opaque(String texture) {
-            return of(texture, RenderMethod.OPAQUE);
-        }
-
-        /**
-         * Creates a transparent material instance with alpha testing (for blocks like leaves, ladders).
-         *
-         * @param texture the texture name
-         * @return a new MaterialInstance with ALPHA_TEST render method
-         */
-        public static MaterialInstance alphaTest(String texture) {
-            return of(texture, RenderMethod.ALPHA_TEST);
-        }
-
-        /**
-         * Creates a transparent material instance with alpha testing, single-sided (for blocks like doors, trapdoors).
-         *
-         * @param texture the texture name
-         * @return a new MaterialInstance with ALPHA_TEST_SINGLE_SIDED render method
-         */
-        public static MaterialInstance alphaTestSingleSided(String texture) {
-            return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED);
-        }
-
-        /**
-         * Creates a translucent material instance with blending (for blocks like glass, ice).
-         *
-         * @param texture the texture name
-         * @return a new MaterialInstance with BLEND render method
-         */
-        public static MaterialInstance blend(String texture) {
-            return of(texture, RenderMethod.BLEND);
-        }
-
-        /**
-         * Creates a double-sided material instance (for blocks like powder snow).
-         *
-         * @param texture the texture name
-         * @return a new MaterialInstance with DOUBLE_SIDED render method
-         */
-        public static MaterialInstance doubleSided(String texture) {
-            return of(texture, RenderMethod.DOUBLE_SIDED);
-        }
-
-        /**
-         * Converts to NBT format.
-         *
-         * @param tintMethod the tint method from BlockStateData (can be null)
-         * @return the NBT representation
-         */
-        public NbtMap toNBT(TintMethod tintMethod) {
-            byte packedBools = 0;
-            if (faceDimming) packedBools |= 0x1;
-            if (randomUVRotation) packedBools |= 0x2;
-            if (textureVariation) packedBools |= 0x4;
-
-            var builder = NbtMap.builder()
-                    .putString("texture", texture)
-                    .putString("render_method", renderMethod.getId())
-                    .putBoolean("ambient_occlusion", ambientOcclusion)
-                    .putByte("packed_bools", packedBools);
-
-            if (tintMethod != null && tintMethod != TintMethod.NONE) {
-                builder.putString("tint_method", tintMethod.name().toLowerCase(Locale.ROOT));
-            }
-
-            return builder.build();
-        }
-    }
-
-    /**
-     * Builder for creating material instances with convenient per-face methods.
+     * Optimizes block state definitions into an efficient permutation structure.
      * <p>
-     * Example usage:
-     * <pre>{@code
-     * CustomBlockDefinitionGenerator.builder()
-     *     .materials(Materials.builder()
-     *         .any(RenderMethod.OPAQUE, "my_texture")
-     *         .up(RenderMethod.OPAQUE, "my_texture_top"))
-     *     .build();
-     * }</pre>
+     * Internal class - not exposed to users, but package-private for testing.
      */
-    public static final class Materials {
-        private final Map<String, MaterialInstance> materials = new HashMap<>();
+    static final class PermutationOptimizer {
 
-        private Materials() {}
-
-        /**
-         * Creates a new Materials builder.
-         *
-         * @return a new Materials builder
-         */
-        public static Materials builder() {
-            return new Materials();
+        private PermutationOptimizer() {
         }
 
-        /**
-         * Sets the material for all faces ("*").
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials any(String texture) {
-            return any(RenderMethod.OPAQUE, texture);
-        }
+        static Map<BlockState, BlockStateDefinition> collectDefinitions(
+                BlockType<?> blockType,
+                Function<BlockState, BlockStateDefinition> definitionFunction
+        ) {
+            var stateDefinitions = new LinkedHashMap<BlockState, BlockStateDefinition>();
 
-        /**
-         * Sets the material for all faces ("*").
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials any(RenderMethod renderMethod, String texture) {
-            materials.put("*", MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Sets the material for all faces ("*") with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials any(MaterialInstance materialInstance) {
-            materials.put("*", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets the material for the up face.
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials up(String texture) {
-            return up(RenderMethod.OPAQUE, texture);
-        }
-
-        /**
-         * Sets the material for the up face.
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials up(RenderMethod renderMethod, String texture) {
-            materials.put("up", MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Sets the material for the up face with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials up(MaterialInstance materialInstance) {
-            materials.put("up", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets the material for the down face.
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials down(String texture) {
-            return down(RenderMethod.OPAQUE, texture);
-        }
-
-        /**
-         * Sets the material for the down face.
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials down(RenderMethod renderMethod, String texture) {
-            materials.put("down", MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Sets the material for the down face with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials down(MaterialInstance materialInstance) {
-            materials.put("down", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets the material for the north face.
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials north(String texture) {
-            return north(RenderMethod.OPAQUE, texture);
-        }
-
-        /**
-         * Sets the material for the north face.
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials north(RenderMethod renderMethod, String texture) {
-            materials.put("north", MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Sets the material for the north face with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials north(MaterialInstance materialInstance) {
-            materials.put("north", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets the material for the south face.
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials south(String texture) {
-            return south(RenderMethod.OPAQUE, texture);
-        }
-
-        /**
-         * Sets the material for the south face.
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials south(RenderMethod renderMethod, String texture) {
-            materials.put("south", MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Sets the material for the south face with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials south(MaterialInstance materialInstance) {
-            materials.put("south", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets the material for the east face.
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials east(String texture) {
-            return east(RenderMethod.OPAQUE, texture);
-        }
-
-        /**
-         * Sets the material for the east face.
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials east(RenderMethod renderMethod, String texture) {
-            materials.put("east", MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Sets the material for the east face with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials east(MaterialInstance materialInstance) {
-            materials.put("east", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets the material for the west face.
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials west(String texture) {
-            return west(RenderMethod.OPAQUE, texture);
-        }
-
-        /**
-         * Sets the material for the west face.
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials west(RenderMethod renderMethod, String texture) {
-            materials.put("west", MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Sets the material for the west face with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials west(MaterialInstance materialInstance) {
-            materials.put("west", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets the same material for all side faces (north, south, east, west).
-         *
-         * @param texture the texture name
-         * @return this builder
-         */
-        public Materials sides(String texture) {
-            return sides(RenderMethod.OPAQUE, texture);
-        }
-
-        /**
-         * Sets the same material for all side faces (north, south, east, west).
-         *
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials sides(RenderMethod renderMethod, String texture) {
-            var material = MaterialInstance.of(texture, renderMethod);
-            materials.put("north", material);
-            materials.put("south", material);
-            materials.put("east", material);
-            materials.put("west", material);
-            return this;
-        }
-
-        /**
-         * Sets the same material for all side faces (north, south, east, west) with full customization.
-         *
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials sides(MaterialInstance materialInstance) {
-            materials.put("north", materialInstance);
-            materials.put("south", materialInstance);
-            materials.put("east", materialInstance);
-            materials.put("west", materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets material for a custom face/material name.
-         *
-         * @param face             the face or material name
-         * @param materialInstance the material instance
-         * @return this builder
-         */
-        public Materials face(String face, MaterialInstance materialInstance) {
-            materials.put(face, materialInstance);
-            return this;
-        }
-
-        /**
-         * Sets material for a custom face/material name.
-         *
-         * @param face         the face or material name
-         * @param renderMethod the render method
-         * @param texture      the texture name
-         * @return this builder
-         */
-        public Materials face(String face, RenderMethod renderMethod, String texture) {
-            materials.put(face, MaterialInstance.of(texture, renderMethod));
-            return this;
-        }
-
-        /**
-         * Returns the entry set of the materials map.
-         *
-         * @return the entry set
-         */
-        public Set<Map.Entry<String, MaterialInstance>> entrySet() {
-            return materials.entrySet();
-        }
-
-        /**
-         * Checks if this materials map is empty.
-         *
-         * @return true if empty
-         */
-        public boolean isEmpty() {
-            return materials.isEmpty();
-        }
-    }
-
-    /**
-     * Render methods for material instances.
-     * <p>
-     * Properties legend: Transparency | Translucency | Backface Culling | Distant Culling
-     * <ul>
-     *   <li>OPAQUE (default) - No | No | Yes | No - Ex: Dirt, Stone, Concrete</li>
-     *   <li>BLEND - Yes | Yes | Yes | No - Ex: Glass, Beacon, Honey Block</li>
-     *   <li>DOUBLE_SIDED - No | No | No | No - Ex: Powder Snow</li>
-     *   <li>ALPHA_TEST - Yes | No | No | Yes - Ex: Ladder, Monster Spawner, Vines</li>
-     *   <li>ALPHA_TEST_SINGLE_SIDED - Yes | No | Yes | Yes - Ex: Doors, Saplings, Trapdoors</li>
-     *   <li>ALPHA_TEST_TO_OPAQUE - Yes | No | No | Yes - Shifts to opaque in the distance</li>
-     *   <li>ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE - Yes | No | Yes | Yes - Shifts to opaque in the distance</li>
-     *   <li>BLEND_TO_OPAQUE - No | No | Yes | No - Shifts to opaque in the distance</li>
-     * </ul>
-     *
-     * @see <a href="https://wiki.bedrock.dev/blocks/blocks-16.html#additional-notes">wiki.bedrock.dev</a>
-     */
-    @Getter
-    public enum RenderMethod {
-        OPAQUE("opaque"),
-        BLEND("blend"),
-        DOUBLE_SIDED("double_sided"),
-        ALPHA_TEST("alpha_test"),
-        ALPHA_TEST_SINGLE_SIDED("alpha_test_single_sided"),
-        ALPHA_TEST_TO_OPAQUE("alpha_test_to_opaque"),
-        ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE("alpha_test_single_sided_to_opaque"),
-        BLEND_TO_OPAQUE("blend_to_opaque");
-
-        private final String id;
-
-        RenderMethod(String id) {
-            this.id = id;
-        }
-    }
-
-    /**
-     * Represents a 3D box for collision or selection.
-     * Uses Bedrock format: origin (relative to block center at -8,-8,-8 offset) and size (in pixels 0-16).
-     *
-     * @param origin the origin of the box (minimum corner), values in pixel units relative to block corner
-     * @param size   the size of the box in pixel units
-     */
-    @Builder
-    public record Box(Vector3fc origin, Vector3fc size) {
-        /**
-         * An empty box that disables collision/selection.
-         */
-        public static final Box EMPTY = new Box(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));
-
-        /**
-         * Creates a full block box (16x16x16).
-         */
-        public static Box fullBlock() {
-            return new Box(new Vector3f(-8, 0, -8), new Vector3f(16, 16, 16));
-        }
-
-        /**
-         * Creates a box from min/max coordinates (in block units 0.0-1.0).
-         */
-        public static Box of(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
-            // Convert from block units (0-1) to pixel units (0-16)
-            float pMinX = minX * 16;
-            float pMinY = minY * 16;
-            float pMinZ = minZ * 16;
-            float pMaxX = maxX * 16;
-            float pMaxY = maxY * 16;
-            float pMaxZ = maxZ * 16;
-
-            // Bedrock origin is relative to block center, so offset by -8 on X and Z
-            return new Box(
-                    new Vector3f(pMinX - 8, pMinY, pMinZ - 8),
-                    new Vector3f(pMaxX - pMinX, pMaxY - pMinY, pMaxZ - pMinZ)
-            );
-        }
-
-        /**
-         * Creates a box from an AABB (in block units 0.0-1.0).
-         */
-        public static Box fromAABB(AABBdc aabb) {
-            return of(
-                    (float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(),
-                    (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()
-            );
-        }
-
-        /**
-         * Converts to NBT for minecraft:selection_box component.
-         * Uses origin/size format.
-         */
-        public NbtMap toSelectionBoxNBT() {
-            return NbtMap.builder()
-                    .putBoolean("enabled", true)
-                    .putList("origin", NbtType.FLOAT, List.of(origin.x(), origin.y(), origin.z()))
-                    .putList("size", NbtType.FLOAT, List.of(size.x(), size.y(), size.z()))
-                    .build();
-        }
-    }
-
-    /**
-     * Transformation applied to the block model.
-     * <p>
-     * Rotation values are in degrees and must be multiples of 90.
-     * They will be converted to quarter-turn units (0-3) internally.
-     *
-     * @param rx rotation around X axis in degrees (must be multiple of 90)
-     * @param ry rotation around Y axis in degrees (must be multiple of 90)
-     * @param rz rotation around Z axis in degrees (must be multiple of 90)
-     * @param sx scale factor on X axis (default: 1.0)
-     * @param sy scale factor on Y axis (default: 1.0)
-     * @param sz scale factor on Z axis (default: 1.0)
-     * @param tx translation on X axis
-     * @param ty translation on Y axis
-     * @param tz translation on Z axis
-     */
-    @Builder
-    public record Transformation(
-            int rx, int ry, int rz,
-            float sx, float sy, float sz,
-            float tx, float ty, float tz
-    ) {
-        public Transformation {
-            // Default scale to 1.0 if not specified (0.0 would make block invisible)
-            if (sx == 0) sx = 1.0f;
-            if (sy == 0) sy = 1.0f;
-            if (sz == 0) sz = 1.0f;
-        }
-
-        public NbtMap toNBT() {
-            return NbtMap.builder()
-                    .putInt("RX", (((rx % 360) + 360) % 360) / 90)
-                    .putInt("RY", (((ry % 360) + 360) % 360) / 90)
-                    .putInt("RZ", (((rz % 360) + 360) % 360) / 90)
-                    .putFloat("SX", sx)
-                    .putFloat("SY", sy)
-                    .putFloat("SZ", sz)
-                    .putFloat("TX", tx)
-                    .putFloat("TY", ty)
-                    .putFloat("TZ", tz)
-                    .build();
-        }
-    }
-
-    /**
-     * Components that can be overridden in a permutation.
-     * Only non-null fields will be serialized.
-     *
-     * @param geometry        the geometry identifier (optional)
-     * @param materials       material instances for rendering (optional)
-     * @param transformation  transformation applied to the block model (optional)
-     * @param collisionBox    collision box shape (optional)
-     * @param selectionBox    selection box (optional)
-     * @param displayName     display name shown in inventory (optional)
-     * @param lightEmission   light emission level 0-15 (optional)
-     * @param lightDampening  light dampening level 0-15 (optional)
-     */
-    @Builder
-    public record PermutationComponents(
-            String geometry,
-            Materials materials,
-            Transformation transformation,
-            VoxelShape collisionBox,
-            Box selectionBox,
-            @MayContainTrKey String displayName,
-            Integer lightEmission,
-            Integer lightDampening
-    ) {
-        /**
-         * Converts to NBT format, only including non-null fields.
-         *
-         * @param tintMethod the tint method from BlockStateData (can be null)
-         * @return the NBT representation
-         */
-        public NbtMap toNBT(TintMethod tintMethod) {
-            var builder = NbtMap.builder();
-
-            if (displayName != null) {
-                builder.putCompound("minecraft:display_name", NbtMap.builder()
-                        .putString("value", displayName)
-                        .build());
-            }
-
-            if (geometry != null) {
-                builder.putCompound("minecraft:geometry", NbtMap.builder()
-                        .putString("identifier", geometry)
-                        .build());
-            }
-
-            if (materials != null && !materials.isEmpty()) {
-                var materialsNbt = NbtMap.builder();
-                for (var entry : materials.entrySet()) {
-                    materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT(tintMethod));
+            for (BlockState state : blockType.getAllStates()) {
+                BlockStateDefinition definition = definitionFunction.apply(state);
+                if (definition == null) {
+                    throw new NullPointerException("Definition function returned null for state: " + state);
                 }
-                builder.putCompound("minecraft:material_instances", NbtMap.builder()
-                        .putCompound("mappings", NbtMap.EMPTY)
-                        .putCompound("materials", materialsNbt.build())
-                        .build());
+                stateDefinitions.put(state, definition);
             }
 
-            if (collisionBox != null) {
-                builder.putCompound("minecraft:collision_box", buildCollisionBoxNBT(collisionBox));
+            return stateDefinitions;
+        }
+
+        static OptimizedDefinition optimize(
+                Map<BlockState, BlockStateDefinition> stateDefinitions,
+                BlockType<?> blockType
+        ) {
+            if (stateDefinitions.isEmpty()) {
+                return new OptimizedDefinition(BlockStateDefinition.DEFAULT, List.of());
             }
 
-            if (selectionBox != null) {
-                if (selectionBox.equals(Box.EMPTY)) {
-                    builder.putCompound("minecraft:selection_box", NbtMap.builder()
-                            .putBoolean("enabled", false)
-                            .build());
+            if (stateDefinitions.size() == 1) {
+                var onlyDefinition = stateDefinitions.values().iterator().next();
+                return new OptimizedDefinition(onlyDefinition, List.of());
+            }
+
+            var globalComponents = extractGlobalComponents(stateDefinitions.values());
+            var groupedStates = groupStatesByDefinition(stateDefinitions, globalComponents);
+            var permutations = generatePermutations(groupedStates, blockType);
+
+            return new OptimizedDefinition(globalComponents, permutations);
+        }
+
+        private static BlockStateDefinition extractGlobalComponents(Collection<BlockStateDefinition> definitions) {
+            if (definitions.isEmpty()) {
+                return BlockStateDefinition.DEFAULT;
+            }
+
+            var iterator = definitions.iterator();
+            var reference = iterator.next();
+
+            String globalGeometry = reference.geometry();
+            Materials globalMaterials = reference.materials();
+            Transformation globalTransformation = reference.transformation();
+            String globalDisplayName = reference.displayName();
+
+            while (iterator.hasNext()) {
+                var def = iterator.next();
+
+                if (!Objects.equals(globalGeometry, def.geometry())) {
+                    globalGeometry = null;
+                }
+                if (!Objects.equals(globalMaterials, def.materials())) {
+                    globalMaterials = null;
+                }
+                if (!Objects.equals(globalTransformation, def.transformation())) {
+                    globalTransformation = null;
+                }
+                if (!Objects.equals(globalDisplayName, def.displayName())) {
+                    globalDisplayName = null;
+                }
+
+                if (globalGeometry == null && globalMaterials == null
+                        && globalTransformation == null && globalDisplayName == null) {
+                    break;
+                }
+            }
+
+            return BlockStateDefinition.builder()
+                    .geometry(globalGeometry)
+                    .materials(globalMaterials)
+                    .transformation(globalTransformation)
+                    .displayName(globalDisplayName)
+                    .build();
+        }
+
+        private static Map<BlockStateDefinition, Set<BlockState>> groupStatesByDefinition(
+                Map<BlockState, BlockStateDefinition> stateDefinitions,
+                BlockStateDefinition globalComponents
+        ) {
+            var groups = new LinkedHashMap<BlockStateDefinition, Set<BlockState>>();
+
+            for (var entry : stateDefinitions.entrySet()) {
+                var state = entry.getKey();
+                var definition = entry.getValue();
+
+                var effectiveDefinition = definition.diff(globalComponents);
+                if (effectiveDefinition == null) {
+                    effectiveDefinition = BlockStateDefinition.DEFAULT;
+                }
+
+                groups.computeIfAbsent(effectiveDefinition, k -> new LinkedHashSet<>()).add(state);
+            }
+
+            return groups;
+        }
+
+        private static List<MergedPermutation> generatePermutations(
+                Map<BlockStateDefinition, Set<BlockState>> groupedStates,
+                BlockType<?> blockType
+        ) {
+            var permutations = new ArrayList<MergedPermutation>();
+
+            for (var entry : groupedStates.entrySet()) {
+                var definition = entry.getKey();
+                var states = entry.getValue();
+
+                if (!definition.hasAnyProperty()) {
+                    continue;
+                }
+
+                var condition = MolangConditionBuilder.buildCondition(states, blockType);
+                permutations.add(new MergedPermutation(condition, definition));
+            }
+
+            return permutations;
+        }
+
+        record OptimizedDefinition(
+                BlockStateDefinition globalComponents,
+                List<MergedPermutation> permutations
+        ) {
+        }
+
+        record MergedPermutation(
+                String condition,
+                BlockStateDefinition components
+        ) {
+        }
+    }
+
+    /**
+     * Utility class for building Molang condition strings from block states.
+     * <p>
+     * Internal class - not exposed to users, but package-private for testing.
+     */
+    static final class MolangConditionBuilder {
+
+        private MolangConditionBuilder() {
+        }
+
+        static String buildCondition(Set<BlockState> states, BlockType<?> blockType) {
+            if (states.isEmpty()) {
+                return "1";
+            }
+
+            if (states.size() == 1) {
+                return buildSingleStateCondition(states.iterator().next(), blockType);
+            }
+
+            return buildMultiStateCondition(states, blockType);
+        }
+
+        private static String buildSingleStateCondition(BlockState state, BlockType<?> blockType) {
+            var properties = blockType.getProperties();
+            if (properties.isEmpty()) {
+                return "1";
+            }
+
+            var propertyValues = state.getPropertyValues();
+            var conditions = new ArrayList<String>(properties.size());
+
+            for (var entry : propertyValues.entrySet()) {
+                conditions.add(formatPropertyCondition(entry.getKey(), entry.getValue().getValue()));
+            }
+
+            return String.join(" && ", conditions);
+        }
+
+        private static String buildMultiStateCondition(Set<BlockState> states, BlockType<?> blockType) {
+            var properties = blockType.getProperties();
+            if (properties.isEmpty()) {
+                return "1";
+            }
+
+            var stateConditions = new ArrayList<String>();
+            for (var state : states) {
+                stateConditions.add(buildSingleStateCondition(state, blockType));
+            }
+
+            var optimized = tryOptimizeConditions(states, blockType);
+            if (optimized != null) {
+                return optimized;
+            }
+
+            return stateConditions.stream()
+                    .map(c -> "(" + c + ")")
+                    .collect(Collectors.joining(" || "));
+        }
+
+        private static String tryOptimizeConditions(Set<BlockState> states, BlockType<?> blockType) {
+            var properties = new ArrayList<>(blockType.getProperties().values());
+            if (properties.isEmpty()) {
+                return null;
+            }
+
+            Map<BlockPropertyType<?>, Set<Object>> propertyValueSets = new LinkedHashMap<>();
+            for (var prop : properties) {
+                propertyValueSets.put(prop, new LinkedHashSet<>());
+            }
+
+            for (var state : states) {
+                for (var entry : state.getPropertyValues().entrySet()) {
+                    var valueSet = propertyValueSets.get(entry.getKey());
+                    if (valueSet != null) {
+                        valueSet.add(entry.getValue().getValue());
+                    }
+                }
+            }
+
+            var constantConditions = new ArrayList<String>();
+            var variableProperties = new ArrayList<BlockPropertyType<?>>();
+
+            for (var entry : propertyValueSets.entrySet()) {
+                if (entry.getValue().size() == 1) {
+                    constantConditions.add(formatPropertyCondition(entry.getKey(), entry.getValue().iterator().next()));
                 } else {
-                    builder.putCompound("minecraft:selection_box", selectionBox.toSelectionBoxNBT());
+                    variableProperties.add(entry.getKey());
                 }
             }
 
-            if (lightEmission != null) {
-                builder.putCompound("minecraft:light_emission", NbtMap.builder()
-                        .putByte("emission", lightEmission.byteValue())
-                        .build());
+            if (variableProperties.isEmpty()) {
+                return String.join(" && ", constantConditions);
             }
 
-            if (lightDampening != null) {
-                builder.putCompound("minecraft:light_dampening", NbtMap.builder()
-                        .putByte("lightLevel", lightDampening.byteValue())
-                        .build());
+            var orParts = new ArrayList<String>();
+            for (var state : states) {
+                var stateParts = new ArrayList<String>();
+                for (var prop : variableProperties) {
+                    var value = state.getPropertyValue(prop);
+                    stateParts.add(formatPropertyCondition(prop, value));
+                }
+                orParts.add(stateParts.size() == 1 ? stateParts.getFirst() : "(" + String.join(" && ", stateParts) + ")");
             }
 
-            if (transformation != null) {
-                builder.putCompound("minecraft:transformation", transformation.toNBT());
+            var orCondition = orParts.size() == 1 ? orParts.getFirst() : "(" + String.join(" || ", orParts) + ")";
+
+            if (constantConditions.isEmpty()) {
+                return orCondition;
             }
 
-            return builder.build();
-        }
-    }
-
-    /**
-     * Represents a permutation that allows conditional component overrides based on Molang conditions.
-     * Permutations enable custom blocks to change their appearance/behavior based on block states.
-     *
-     * @param condition  Molang condition that determines when this permutation is active (e.g., "q.block_property('facing') == 0")
-     * @param components the components to override when the condition is true
-     * @param blockTags  optional block tags to add when this permutation is active
-     */
-    @Builder
-    public record Permutation(
-            String condition,
-            PermutationComponents components,
-            String[] blockTags
-    ) {
-        /**
-         * Creates a permutation without block tags.
-         *
-         * @param condition  the Molang condition
-         * @param components the components to override
-         */
-        public Permutation(String condition, PermutationComponents components) {
-            this(condition, components, null);
+            constantConditions.add(orCondition);
+            return String.join(" && ", constantConditions);
         }
 
-        /**
-         * Converts to NBT format.
-         *
-         * @param tintMethod the tint method from BlockStateData (can be null)
-         * @return the NBT representation
-         */
-        public NbtMap toNBT(TintMethod tintMethod) {
-            var builder = NbtMap.builder()
-                    .putString("condition", condition)
-                    .putCompound("components", components.toNBT(tintMethod));
+        @SuppressWarnings("rawtypes")
+        private static String formatPropertyCondition(BlockPropertyType<?> property, Object value) {
+            String propertyName = property.getName();
 
-            if (blockTags != null && blockTags.length > 0) {
-                builder.putList("blockTags", NbtType.STRING, List.of(blockTags));
-            }
-
-            return builder.build();
+            return switch (property.getType()) {
+                case BOOLEAN -> {
+                    boolean boolValue = (Boolean) value;
+                    yield "q.block_state('" + propertyName + "') == " + (boolValue ? 1 : 0);
+                }
+                case INT -> {
+                    int intValue = (Integer) value;
+                    yield "q.block_state('" + propertyName + "') == " + intValue;
+                }
+                case ENUM -> {
+                    String enumValue = ((Enum) value).name().toLowerCase(Locale.ROOT);
+                    yield "q.block_state('" + propertyName + "') == '" + enumValue + "'";
+                }
+            };
         }
     }
 }
