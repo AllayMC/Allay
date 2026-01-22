@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
  * <p>
  * Example outputs:
  * <ul>
- *   <li>Single state: {@code q.block_state('facing') == 'north' && q.block_state('open') == 1}</li>
- *   <li>Multiple states with constant: {@code q.block_state('facing') == 'north' && (q.block_state('open') == 0 || q.block_state('open') == 1)}</li>
+ *   <li>Single state: {@code q.block_state('facing') == 'north' && q.block_state('open')}</li>
+ *   <li>Multiple states with constant: {@code q.block_state('facing') == 'north' && (!q.block_state('open') || q.block_state('open'))}</li>
  * </ul>
  *
  * @author daoge_cmd
@@ -143,7 +143,9 @@ public final class MolangConditionBuilder {
         return switch (property.getType()) {
             case BOOLEAN -> {
                 boolean boolValue = (Boolean) value;
-                yield "q.block_state('" + propertyName + "') == " + (boolValue ? 1 : 0);
+                yield boolValue
+                        ? "q.block_state('" + propertyName + "')"
+                        : "!q.block_state('" + propertyName + "')";
             }
             case INT -> {
                 int intValue = (Integer) value;

@@ -557,14 +557,8 @@ public record BlockStateDefinition(
             if (boneVisibility != null && !boneVisibility.isEmpty()) {
                 var boneVisNbt = NbtMap.builder();
                 for (var entry : boneVisibility.entrySet()) {
-                    switch (entry.getValue()) {
-                        case BoneVisibility.Bool(boolean visible) ->
-                            boneVisNbt.putBoolean(entry.getKey(), visible);
-                        case BoneVisibility.Property prop ->
-                            boneVisNbt.putString(entry.getKey(), prop.toMolang());
-                        case BoneVisibility.Molang(String expression) ->
-                            boneVisNbt.putString(entry.getKey(), expression);
-                    }
+                    // All bone_visibility values must be strings (Molang expressions)
+                    boneVisNbt.putString(entry.getKey(), entry.getValue().toMolang());
                 }
                 builder.putCompound("bone_visibility", boneVisNbt.build());
             }
@@ -594,6 +588,13 @@ public record BlockStateDefinition(
         public sealed interface BoneVisibility permits BoneVisibility.Bool, BoneVisibility.Property, BoneVisibility.Molang {
 
             /**
+             * Converts this bone visibility condition to a Molang expression string.
+             *
+             * @return the Molang expression
+             */
+            String toMolang();
+
+            /**
              * Static boolean visibility.
              *
              * @param visible whether the bone is visible
@@ -601,6 +602,11 @@ public record BlockStateDefinition(
             record Bool(boolean visible) implements BoneVisibility {
                 public static final Bool TRUE = new Bool(true);
                 public static final Bool FALSE = new Bool(false);
+
+                @Override
+                public String toMolang() {
+                    return visible ? "true" : "false";
+                }
             }
 
             /**
@@ -621,6 +627,7 @@ public record BlockStateDefinition(
                  *
                  * @return the Molang expression string
                  */
+                @Override
                 public String toMolang() {
                     return MolangConditionBuilder.formatPropertyCondition(property, value);
                 }
@@ -636,6 +643,11 @@ public record BlockStateDefinition(
                     if (expression == null || expression.isEmpty()) {
                         throw new IllegalArgumentException("Molang expression cannot be null or empty");
                     }
+                }
+
+                @Override
+                public String toMolang() {
+                    return expression;
                 }
             }
 

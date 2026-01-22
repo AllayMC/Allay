@@ -447,8 +447,8 @@ class PermutationOptimizerTest {
         var nbt = geometry.toNBT();
         assertEquals("geometry.test", nbt.getString("identifier"));
         var boneVis = nbt.getCompound("bone_visibility");
-        assertTrue(boneVis.getBoolean("bone1"));
-        assertFalse(boneVis.getBoolean("bone2"));
+        assertEquals("true", boneVis.getString("bone1"));
+        assertEquals("false", boneVis.getString("bone2"));
     }
 
     @Test
@@ -460,7 +460,7 @@ class PermutationOptimizerTest {
 
         var nbt = geometry.toNBT();
         var boneVis = nbt.getCompound("bone_visibility");
-        assertEquals("q.block_state('perm_test_bool') == 1", boneVis.getString("indicator"));
+        assertEquals("q.block_state('perm_test_bool')", boneVis.getString("indicator"));
     }
 
     @Test
@@ -473,8 +473,8 @@ class PermutationOptimizerTest {
 
         var nbt = geometry.toNBT();
         var boneVis = nbt.getCompound("bone_visibility");
-        assertEquals("q.block_state('perm_test_bool') == 1", boneVis.getString("handle"));
-        assertEquals("q.block_state('perm_test_bool') == 0", boneVis.getString("lock"));
+        assertEquals("q.block_state('perm_test_bool')", boneVis.getString("handle"));
+        assertEquals("!q.block_state('perm_test_bool')", boneVis.getString("lock"));
     }
 
     @Test

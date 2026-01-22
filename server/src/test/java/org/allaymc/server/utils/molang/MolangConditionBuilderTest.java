@@ -67,7 +67,7 @@ class MolangConditionBuilderTest {
 
         var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
 
-        assertEquals("q.block_state('test_bool') == 0", condition);
+        assertEquals("!q.block_state('test_bool')", condition);
     }
 
     @Test
@@ -77,7 +77,7 @@ class MolangConditionBuilderTest {
 
         var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
 
-        assertEquals("q.block_state('test_bool') == 1", condition);
+        assertEquals("q.block_state('test_bool')", condition);
     }
 
     @Test
@@ -91,7 +91,7 @@ class MolangConditionBuilderTest {
         var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // Condition should contain all three property checks
-        assertTrue(condition.contains("q.block_state('test_bool') == 1"));
+        assertTrue(condition.contains("q.block_state('test_bool')"));
         assertTrue(condition.contains("q.block_state('test_int') == 2"));
         assertTrue(condition.contains("q.block_state('test_enum') == 'b'"));
         assertTrue(condition.contains("&&"));
@@ -107,8 +107,8 @@ class MolangConditionBuilderTest {
 
         // Should produce an OR condition
         assertTrue(condition.contains("||"));
-        assertTrue(condition.contains("q.block_state('test_bool') == 0"));
-        assertTrue(condition.contains("q.block_state('test_bool') == 1"));
+        assertTrue(condition.contains("!q.block_state('test_bool')"));
+        assertTrue(condition.contains("q.block_state('test_bool')"));
     }
 
     @Test
@@ -135,7 +135,7 @@ class MolangConditionBuilderTest {
 
         // The constant properties should be factored out
         // and the varying property should use OR
-        assertTrue(condition.contains("q.block_state('test_bool') == 1"));
+        assertTrue(condition.contains("q.block_state('test_bool')"));
         assertTrue(condition.contains("q.block_state('test_enum') == 'a'"));
     }
 
@@ -213,7 +213,7 @@ class MolangConditionBuilderTest {
         var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // Should have constant bool and int, with OR for enum values
-        assertTrue(condition.contains("q.block_state('test_bool') == 1"));
+        assertTrue(condition.contains("q.block_state('test_bool')"));
         assertTrue(condition.contains("q.block_state('test_int') == 0"));
         assertTrue(condition.contains("'a'") || condition.contains("'b'") || condition.contains("'c'"));
     }
@@ -234,7 +234,7 @@ class MolangConditionBuilderTest {
         var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // BOOL_PROP should be factored out as constant
-        assertTrue(condition.contains("q.block_state('test_bool') == 1"));
+        assertTrue(condition.contains("q.block_state('test_bool')"));
         // Should contain OR for the variable properties
         assertTrue(condition.contains("||"));
     }
