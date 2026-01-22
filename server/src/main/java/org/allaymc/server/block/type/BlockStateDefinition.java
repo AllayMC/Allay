@@ -12,12 +12,7 @@ import org.allaymc.server.utils.MolangUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * BlockStateDefinition holds the client-side rendering properties for a single block state.

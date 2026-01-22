@@ -15,6 +15,8 @@ import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.block.component.*;
+import org.allaymc.server.block.component.banner.BlockStandingBannerBaseComponentImpl;
+import org.allaymc.server.block.component.banner.BlockWallBannerBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
 import org.allaymc.server.block.component.campfire.BlockCampfireBaseComponentImpl;
@@ -41,8 +43,6 @@ import org.allaymc.server.block.component.piston.BlockStickyPistonBaseComponentI
 import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
-import org.allaymc.server.block.component.banner.BlockStandingBannerBaseComponentImpl;
-import org.allaymc.server.block.component.banner.BlockWallBannerBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;

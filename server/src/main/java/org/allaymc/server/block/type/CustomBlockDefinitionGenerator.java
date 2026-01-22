@@ -8,6 +8,8 @@ import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.server.block.type.BlockStateDefinition.MaterialInstance;
+import org.allaymc.server.block.type.BlockStateDefinition.Materials;
 import org.allaymc.server.utils.MolangUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -15,9 +17,6 @@ import org.cloudburstmc.nbt.NbtType;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-
-import org.allaymc.server.block.type.BlockStateDefinition.MaterialInstance;
-import org.allaymc.server.block.type.BlockStateDefinition.Materials;
 
 /**
  * CustomBlockDefinitionGenerator generates client-side block definitions following the Bedrock protocol.

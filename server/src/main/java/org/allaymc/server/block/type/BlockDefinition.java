@@ -2,8 +2,6 @@ package org.allaymc.server.block.type;
 
 import org.cloudburstmc.nbt.NbtMap;
 
-import java.util.List;
-
 /**
  * Block definition sent to the client for custom block registration.
  * <p>
