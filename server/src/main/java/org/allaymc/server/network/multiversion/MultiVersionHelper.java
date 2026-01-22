@@ -14,7 +14,6 @@ import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
 import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
@@ -22,6 +21,8 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescripto
 import org.cloudburstmc.protocol.bedrock.packet.BiomeDefinitionListPacket;
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -174,34 +175,44 @@ public final class MultiVersionHelper {
             return;
         }
 
-        boolean needMaterialAdapt = !is1_21_110orHigher(player);
-
         for (int i = 0; i < properties.size(); i++) {
             var property = properties.get(i);
             var nbt = property.getProperties();
-            var components = nbt.getCompound("components");
-            var adaptedComponents = components.toBuilder();
+            var builder = nbt.toBuilder();
 
-            // For clients < 1.21.130, convert collision_box from boxes format to origin/size format
-            var collisionBox = components.getCompound("minecraft:collision_box");
-            if (!collisionBox.isEmpty() && collisionBox.containsKey("boxes")) {
-                adaptedComponents.putCompound("minecraft:collision_box", adaptCollisionBox(collisionBox));
-            }
+            builder.putCompound("components", adaptComponents(player, nbt.getCompound("components")));
 
-            // For clients < 1.21.110, convert packed_bools to face_dimming in material instances
-            if (needMaterialAdapt) {
-                var materialInstances = components.getCompound("minecraft:material_instances");
-                if (!materialInstances.isEmpty()) {
-                    adaptedComponents.putCompound("minecraft:material_instances", adaptMaterialInstances(materialInstances));
-                }
-            }
+            var permutations = new LinkedList<NbtMap>();
+            nbt.getList("permutations", NbtType.COMPOUND).forEach(permutation -> {
+                permutations.add(permutation.toBuilder()
+                        .putCompound("components", adaptComponents(player, permutation.getCompound("components")))
+                        .build()
+                );
+            });
+            builder.putList("permutations", NbtType.COMPOUND, permutations);
 
-            var adaptedNbt = nbt.toBuilder()
-                    .putCompound("components", adaptedComponents.build())
-                    .build();
-
-            properties.set(i, new BlockPropertyData(property.getName(), adaptedNbt));
+            properties.set(i, new BlockPropertyData(property.getName(), builder.build()));
         }
+    }
+
+    private static NbtMap adaptComponents(Player player, NbtMap components) {
+        var adaptedComponents = components.toBuilder();
+
+        // For clients < 1.21.130, convert collision_box from boxes format to origin/size format
+        var collisionBox = components.getCompound("minecraft:collision_box");
+        if (!collisionBox.isEmpty() && collisionBox.containsKey("boxes")) {
+            adaptedComponents.putCompound("minecraft:collision_box", adaptCollisionBox(collisionBox));
+        }
+
+        // For clients < 1.21.110, convert packed_bools to face_dimming in material instances
+        if (!is1_21_110orHigher(player)) {
+            var materialInstances = components.getCompound("minecraft:material_instances");
+            if (!materialInstances.isEmpty()) {
+                adaptedComponents.putCompound("minecraft:material_instances", adaptMaterialInstances(materialInstances));
+            }
+        }
+
+        return adaptedComponents.build();
     }
 
     private static NbtMap adaptCollisionBox(NbtMap collisionBox) {

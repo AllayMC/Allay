@@ -197,7 +197,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .putList("properties", NbtType.COMPOUND, buildPropertyDefinitions(blockType))
                 .putInt("molangVersion", MolangUtils.MOLANG_VERSION);
 
-        var permutations = new ArrayList<NbtMap>();
+        var permutations = new LinkedList<NbtMap>();
         for (var blockState : blockType.getAllStates()) {
             var definition = this.stateDefinitionFunction.apply(blockState);
             if (definition == null) {
