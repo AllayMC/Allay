@@ -19,10 +19,37 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * CustomItemDefinitionGenerator is the default implementation of {@link ItemDefinitionGenerator}, it contains
- * a number of useful methods for defining the behavior of the item type client-side.
+ * Default implementation of {@link ItemDefinitionGenerator} for custom items.
+ * <p>
+ * Generates NBT-based item definitions with the following structure:
+ * <ul>
+ *   <li><b>item_properties</b> - Legacy properties container
+ *     <ul>
+ *       <li>{@code max_stack_size} - Maximum stack size (int)</li>
+ *       <li>{@code allow_off_hand} - Whether item can be held in off-hand (boolean)</li>
+ *       <li>{@code can_destroy_in_creative} - Whether item destroys blocks in creative (boolean)</li>
+ *       <li>{@code minecraft:icon} - Texture configuration with {@code textures.default}</li>
+ *       <li>{@code foil} - Enchantment glint effect (boolean, optional)</li>
+ *       <li>{@code hand_equipped} - Tool-style rendering (boolean, optional)</li>
+ *       <li>{@code damage} - Attack damage bonus (int, optional)</li>
+ *       <li>{@code use_duration} - Use time in ticks (int, optional)</li>
+ *       <li>{@code use_animation} - Animation type: 1=eat, 2=drink (int, optional)</li>
+ *       <li>{@code wearable_slot} - Armor slot (string, optional)</li>
+ *     </ul>
+ *   </li>
+ *   <li><b>minecraft:display_name</b> - Display name with {@code value} field</li>
+ *   <li><b>minecraft:tags</b> - Item tags with {@code tags} array</li>
+ *   <li><b>minecraft:durability</b> - Durability with {@code max_durability}</li>
+ *   <li><b>minecraft:armor</b> - Protection value (for armor items)</li>
+ *   <li><b>minecraft:wearable</b> - Equipment slot (for armor items)</li>
+ *   <li><b>minecraft:food</b> - Food properties with {@code can_always_eat}</li>
+ *   <li><b>minecraft:cooldown</b> - Cooldown with {@code category} and {@code duration}</li>
+ *   <li><b>minecraft:render_offsets</b> - Visual offsets for different viewpoints</li>
+ * </ul>
  *
  * @author daoge_cmd
+ * @see ItemDefinition
+ * @see <a href="https://wiki.bedrock.dev/items/item-components">Bedrock Item Components</a>
  */
 @Builder
 public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
@@ -54,7 +81,12 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
      */
     protected final boolean allowOffHand;
     /**
-     * Cooldown for this item.
+     * Cooldown duration in seconds.
+     * <p>
+     * When set, adds {@code minecraft:cooldown} component with the item's identifier
+     * as the category. Items sharing the same category share the cooldown timer.
+     *
+     * @see <a href="https://wiki.bedrock.dev/items/item-components#cooldown">Cooldown Component</a>
      */
     protected final Integer cooldown;
 
@@ -149,10 +181,18 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
     }
 
     /**
-     * Store the render offsets of custom items.
+     * Render offsets for custom item display at different viewpoints.
+     * <p>
+     * Controls how the item is positioned, rotated, and scaled when held
+     * in first-person view, third-person view, main hand, and off-hand.
+     * <p>
+     * Use {@link #textureSize(int)} or {@link #scale(float)} factory methods
+     * for common scaling configurations based on texture dimensions.
      *
      * @param mainHand the offsets for the main hand, can be {@code null}
-     * @param offHand  the offsets for the offHand, can be {@code null}
+     * @param offHand  the offsets for the off-hand, can be {@code null}
+     *
+     * @see <a href="https://wiki.bedrock.dev/items/item-components#render-offsets">Render Offsets</a>
      */
     @Builder
     public record RenderOffsets(Hand mainHand, Hand offHand) {
@@ -214,7 +254,7 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
         }
 
         /**
-         * The hand that is used for the offset.
+         * Hand-specific render offsets for first and third person views.
          *
          * @param firstPerson the offset for the first person view, can be {@code null}
          * @param thirdPerson the offset for the third person view, can be {@code null}
@@ -239,11 +279,14 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
         }
 
         /**
-         * The offset of the item.
+         * Transform offset for item rendering.
+         * <p>
+         * NBT format uses {@code position}, {@code rotation}, and {@code scale}
+         * as float lists [x, y, z].
          *
-         * @param position the position, can be {@code null}
-         * @param rotation the rotation, can be {@code null}
-         * @param scale    the scale, can be {@code null}
+         * @param position the position offset in blocks, can be {@code null}
+         * @param rotation the rotation in degrees, can be {@code null}
+         * @param scale    the scale factors, can be {@code null}
          */
         @Builder
         public record Offset(Vector3fc position, Vector3fc rotation, Vector3fc scale) {
