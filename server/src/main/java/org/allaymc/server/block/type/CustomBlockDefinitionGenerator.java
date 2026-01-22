@@ -1,6 +1,7 @@
 package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.data.BlockStateData;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockState;
@@ -221,6 +222,16 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         // Block tags
         for (var tag : blockType.getBlockTags()) {
             components.putCompound("tag:" + tag.name(), NbtMap.EMPTY);
+        }
+
+        // Replaceable component (allows block to be replaced when another block is placed)
+        if (blockType.hasBlockTag(BlockTags.REPLACEABLE)) {
+            components.putCompound("minecraft:replaceable", NbtMap.EMPTY);
+        }
+
+        // Flower pottable component (allows block to be placed in a flower pot)
+        if (blockType.hasBlockTag(BlockTags.POTTABLE_PLANT)) {
+            components.putCompound("minecraft:flower_pottable", NbtMap.EMPTY);
         }
 
         // Transformation from global definition
