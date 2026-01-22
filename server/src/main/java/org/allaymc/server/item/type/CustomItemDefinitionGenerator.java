@@ -89,8 +89,10 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
 
         var tags = itemType.getItemTags();
         if (!tags.isEmpty()) {
-            // TODO: Check if we should use `minecraft:tags`
-            components.putList("item_tags", NbtType.STRING, tags.stream().map(ItemTag::name).toArray(String[]::new));
+            components.putCompound("minecraft:tags", NbtMap.builder()
+                    .putList("tags", NbtType.STRING, tags.stream().map(ItemTag::name).toArray(String[]::new))
+                    .build()
+            );
         }
 
         if (itemData.isDamageable()) {
