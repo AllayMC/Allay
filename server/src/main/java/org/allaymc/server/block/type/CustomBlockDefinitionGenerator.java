@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
 import org.allaymc.server.block.type.BlockStateDefinition.MaterialInstance;
 import org.allaymc.server.block.type.BlockStateDefinition.Materials;
 import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
@@ -40,7 +41,7 @@ import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
  * CustomBlockDefinitionGenerator.of(state -> {
  *     boolean isOpen = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
  *     return BlockStateDefinition.builder()
- *         .geometry(isOpen ? "geometry.door_open" : "geometry.door_closed")
+ *         .geometry(Geometry.of(isOpen ? "geometry.door_open" : "geometry.door_closed"))
  *         .materials(Materials.builder().any("door_texture").build())
  *         .build();
  * });
@@ -49,8 +50,20 @@ import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
  * CustomBlockDefinitionGenerator.of(state -> {
  *     int age = state.getPropertyValue(BlockPropertyTypes.AGE);
  *     return BlockStateDefinition.builder()
- *         .geometry("geometry.crop")
+ *         .geometry(Geometry.of("geometry.crop"))
  *         .materials(Materials.builder().any("crop_age_" + age).build())
+ *         .build();
+ * });
+ *
+ * // Block with bone visibility control
+ * CustomBlockDefinitionGenerator.of(state -> {
+ *     boolean isOpen = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
+ *     return BlockStateDefinition.builder()
+ *         .geometry(Geometry.builder()
+ *             .identifier("geometry.door")
+ *             .boneVisibility("hinge", false)
+ *             .boneVisibility("handle", "q.block_state('minecraft:open_bit') == 1")
+ *             .build())
  *         .build();
  * });
  * }</pre>
@@ -178,10 +191,14 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .build());
 
         // Geometry (from global definition or default)
-        String geometry = globalDef.geometry();
-        components.putCompound("minecraft:geometry", NbtMap.builder()
-                .putString("identifier", geometry != null ? geometry : DEFAULT_GEOMETRY)
-                .build());
+        Geometry geometry = globalDef.geometry();
+        if (geometry != null) {
+            components.putCompound("minecraft:geometry", geometry.toNBT());
+        } else {
+            components.putCompound("minecraft:geometry", NbtMap.builder()
+                    .putString("identifier", DEFAULT_GEOMETRY)
+                    .build());
+        }
 
         // Materials (from global definition or default)
         var materialsNbt = NbtMap.builder()
@@ -458,7 +475,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
             var iterator = definitions.iterator();
             var reference = iterator.next();
 
-            String globalGeometry = reference.geometry();
+            Geometry globalGeometry = reference.geometry();
             Materials globalMaterials = reference.materials();
             Transformation globalTransformation = reference.transformation();
             String globalDisplayName = reference.displayName();

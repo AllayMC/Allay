@@ -63,6 +63,7 @@ AllayBlockType.builder(MyBlockImpl.class)
 
 ```java linenums="1"
 import org.allaymc.server.block.type.BlockStateDefinition;
+import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
 import org.allaymc.server.block.type.BlockStateDefinition.Materials;
 
 AllayBlockType.builder(MyBlockImpl.class)
@@ -70,7 +71,7 @@ AllayBlockType.builder(MyBlockImpl.class)
     .blockDefinitionGenerator(
         CustomBlockDefinitionGenerator.ofConstant(
             BlockStateDefinition.builder()
-                .geometry("geometry.custom_lamp")
+                .geometry(Geometry.of("geometry.custom_lamp"))
                 .materials(Materials.builder().any("lamp_texture").build())
                 .displayName("Custom Lamp")
                 .build()))
@@ -83,6 +84,7 @@ The most powerful feature - different appearances based on block state:
 
 ```java linenums="1"
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
 
 AllayBlockType.builder(MyDoorImpl.class)
     .identifier("myplugin:custom_door")
@@ -91,7 +93,7 @@ AllayBlockType.builder(MyDoorImpl.class)
         CustomBlockDefinitionGenerator.of(state -> {
             boolean isOpen = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
             return BlockStateDefinition.builder()
-                .geometry(isOpen ? "geometry.door_open" : "geometry.door_closed")
+                .geometry(Geometry.of(isOpen ? "geometry.door_open" : "geometry.door_closed"))
                 .materials(Materials.builder().any("door_texture").build())
                 .build();
         }))
@@ -120,7 +122,7 @@ CustomBlockDefinitionGenerator.of(state -> {
 
     // Return different definitions based on state
     return BlockStateDefinition.builder()
-        .geometry("geometry.crop_stage_" + age)
+        .geometry(Geometry.of("geometry.crop_stage_" + age))
         .materials(Materials.builder()
             .any(powered ? "crop_powered" : "crop_normal")
             .build())
@@ -133,7 +135,7 @@ CustomBlockDefinitionGenerator.of(state -> {
 ```java linenums="1"
 CustomBlockDefinitionGenerator.ofConstant(
     BlockStateDefinition.builder()
-        .geometry("geometry.my_block")
+        .geometry(Geometry.of("geometry.my_block"))
         .materials(Materials.builder().any("my_texture").build())
         .transformation(Transformation.builder().ry(45).build())
         .build()
@@ -153,7 +155,7 @@ Holds the client-side rendering properties for a block state.
 
 ```java linenums="1"
 BlockStateDefinition.builder()
-    .geometry(String)           // Geometry identifier
+    .geometry(Geometry)         // Geometry configuration
     .materials(Materials)       // Material instances
     .transformation(Transformation)  // Model transformation
     .displayName(String)        // Display name in inventory
@@ -164,10 +166,107 @@ BlockStateDefinition.builder()
 
 | Property         | Type             | Description                                                                  |
 |------------------|------------------|------------------------------------------------------------------------------|
-| `geometry`       | `String`         | Geometry identifier (e.g., `"geometry.custom_block"`), null for default cube |
+| `geometry`       | `Geometry`       | Geometry configuration with identifier and advanced properties, null for default cube |
 | `materials`      | `Materials`      | Material/texture configuration for block faces                               |
 | `transformation` | `Transformation` | Rotation, scale, and translation of the model                                |
 | `displayName`    | `String`         | Name shown in inventory, null uses block identifier                          |
+
+## Geometry
+
+Configure the 3D model (geometry) for block rendering. Supports both simple identifier-only form and
+advanced object form with bone visibility, culling, and UV lock settings.
+
+### Simple Form
+
+For basic geometry with just an identifier:
+
+```java linenums="1"
+import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
+
+// Simple string form - most common usage
+Geometry.of("geometry.custom_block")
+```
+
+### Advanced Form (Object)
+
+For advanced features like bone visibility control and culling optimization:
+
+```java linenums="1"
+// Object form with bone visibility
+Geometry.builder()
+    .identifier("geometry.door")
+    .boneVisibility("hinge", false)                              // Hide bone
+    .boneVisibility("handle", "q.block_state('open_bit') == 1")  // Molang expression
+    .build()
+
+// With culling optimization
+Geometry.builder()
+    .identifier("geometry.leaves")
+    .culling("custom:culling.leaves")
+    .build()
+
+// With UV lock
+Geometry.builder()
+    .identifier("geometry.rotatable")
+    .uvLockAll()  // Lock UVs for all bones when rotating
+    .build()
+```
+
+### Properties
+
+| Property         | Type                      | Description                                                    |
+|------------------|---------------------------|----------------------------------------------------------------|
+| `identifier`     | `String`                  | **Required.** Geometry identifier (e.g., `"geometry.custom_block"`) |
+| `boneVisibility` | `Map<String, BoneVisibility>` | Map of bone names to visibility (Boolean or Molang String)    |
+| `culling`        | `String`                  | Culling rules identifier (format: `namespace:culling.name`)    |
+| `cullingLayer`   | `String`                  | Culling layer for optimization                                 |
+| `uvLockBones`    | `List<String>`            | List of specific bone names to lock UVs                        |
+| `uvLockAll`      | `boolean`                 | Whether to lock UVs for all bones                              |
+
+### Bone Visibility
+
+Control which bones of a geometry are visible. Supports both static boolean values and
+dynamic Molang expressions:
+
+```java linenums="1"
+Geometry.builder()
+    .identifier("geometry.complex_model")
+    // Static visibility - always hidden
+    .boneVisibility("decoration", false)
+    // Dynamic visibility - based on block state
+    .boneVisibility("indicator", "q.block_state('powered') == 1")
+    .build()
+```
+
+### Culling
+
+Configure block culling for performance optimization:
+
+```java linenums="1"
+Geometry.builder()
+    .identifier("geometry.leaves")
+    .culling("myplugin:culling.leaves")      // Custom culling rules
+    .cullingLayer("minecraft:culling_layer.leaves")
+    .build()
+```
+
+### UV Lock
+
+Prevent UV coordinates from rotating when the block model is transformed:
+
+```java linenums="1"
+// Lock all bones
+Geometry.builder()
+    .identifier("geometry.log")
+    .uvLockAll()
+    .build()
+
+// Lock specific bones only
+Geometry.builder()
+    .identifier("geometry.complex")
+    .uvLock("top", "bottom")  // Only lock these bones
+    .build()
+```
 
 ## Materials
 
@@ -329,7 +428,7 @@ CustomBlockDefinitionGenerator.of(state -> {
     };
 
     return BlockStateDefinition.builder()
-        .geometry("geometry.directional_block")
+        .geometry(Geometry.of("geometry.directional_block"))
         .transformation(Transformation.builder().ry(rotation).build())
         .build();
 });
@@ -352,7 +451,7 @@ AllayBlockType.builder(CustomCropImpl.class)
         CustomBlockDefinitionGenerator.of(state -> {
             int age = state.getPropertyValue(AGE);
             return BlockStateDefinition.builder()
-                .geometry("geometry.crop")
+                .geometry(Geometry.of("geometry.crop"))
                 .materials(Materials.builder()
                     .any(MaterialInstance.alphaTest("magic_crop_stage_" + age))
                     .build())
@@ -388,7 +487,7 @@ AllayBlockType.builder(MachineBlockImpl.class)
             };
 
             return BlockStateDefinition.builder()
-                .geometry(geometry)
+                .geometry(Geometry.of(geometry))
                 .materials(Materials.builder().any(texture).build())
                 .displayName("Processing Machine")
                 .build();
@@ -413,7 +512,7 @@ AllayBlockType.builder(ReinforcedBlockImpl.class)
     .identifier("myplugin:reinforced_block")
     .blockDefinitionGenerator(new CustomBlockDefinitionGenerator(
         state -> BlockStateDefinition.builder()
-            .geometry("geometry.reinforced")
+            .geometry(Geometry.of("geometry.reinforced"))
             .materials(Materials.builder().any("reinforced_texture").build())
             .build(),
         customComponents))
@@ -437,7 +536,7 @@ If you define:
 CustomBlockDefinitionGenerator.of(state -> {
     boolean open = state.getPropertyValue(OPEN_BIT);
     return BlockStateDefinition.builder()
-        .geometry(open ? "geometry.open" : "geometry.closed")
+        .geometry(Geometry.of(open ? "geometry.open" : "geometry.closed"))
         .materials(Materials.builder().any("door_texture").build())  // Same for all
         .build();
 });

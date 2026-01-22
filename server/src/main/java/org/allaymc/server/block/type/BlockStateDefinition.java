@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * BlockStateDefinition holds the client-side rendering properties for a single block state.
@@ -26,7 +27,7 @@ import java.util.Set;
  * Physical properties like collision shape, light emission, and friction are still
  * read from {@link BlockStateData} and are not part of this definition.
  *
- * @param geometry       the geometry identifier (e.g., "geometry.custom_block"), null for default
+ * @param geometry       the geometry component with identifier and advanced properties, null for default
  * @param materials      material instances for rendering, null for default
  * @param transformation transformation applied to the block model, null for none
  * @param displayName    display name shown in inventory/tooltips, null to use block identifier
@@ -35,7 +36,7 @@ import java.util.Set;
  */
 @Builder(toBuilder = true)
 public record BlockStateDefinition(
-        String geometry,
+        Geometry geometry,
         Materials materials,
         Transformation transformation,
         @MayContainTrKey String displayName
@@ -108,9 +109,7 @@ public record BlockStateDefinition(
         }
 
         if (geometry != null) {
-            builder.putCompound("minecraft:geometry", NbtMap.builder()
-                    .putString("identifier", geometry)
-                    .build());
+            builder.putCompound("minecraft:geometry", geometry.toNBT());
         }
 
         if (materials != null && !materials.isEmpty()) {
@@ -129,6 +128,27 @@ public record BlockStateDefinition(
         }
 
         return builder.build();
+    }
+
+    /**
+     * Custom builder extensions for convenience methods.
+     * <p>
+     * Lombok merges this class with its generated builder, allowing
+     * additional overloaded methods alongside the standard ones.
+     */
+    public static class BlockStateDefinitionBuilder {
+        /**
+         * Sets the geometry using a string identifier.
+         * <p>
+         * This is a convenience method equivalent to {@code geometry(Geometry.of(identifier))}.
+         *
+         * @param identifier the geometry identifier (e.g., "geometry.custom_block")
+         * @return this builder
+         */
+        public BlockStateDefinitionBuilder geometry(String identifier) {
+            this.geometry = Geometry.of(identifier);
+            return this;
+        }
     }
 
     /**
@@ -443,6 +463,327 @@ public record BlockStateDefinition(
                     .putFloat("TY", ty)
                     .putFloat("TZ", tz)
                     .build();
+        }
+    }
+
+    /**
+     * Geometry component for custom block models.
+     * <p>
+     * Defines the 3D model (geometry) used for rendering the block, including
+     * bone visibility, culling rules, and UV lock settings.
+     * <p>
+     * The NBT encoding supports both string shorthand ({@code "geometry.block"})
+     * and object form with advanced features like bone visibility and culling.
+     * <p>
+     * Example usage:
+     * <pre>{@code
+     * // Simple string form
+     * Geometry.of("geometry.custom_block")
+     *
+     * // Object form with bone visibility
+     * Geometry.builder()
+     *     .identifier("geometry.door")
+     *     .boneVisibility("hinge", false)
+     *     .boneVisibility("handle", "q.block_state('open') == 1")
+     *     .build()
+     *
+     * // With culling optimization
+     * Geometry.builder()
+     *     .identifier("geometry.leaves")
+     *     .culling("custom:culling.leaves")
+     *     .build()
+     * }</pre>
+     *
+     * @param identifier     geometry identifier (e.g., "geometry.custom_block")
+     * @param boneVisibility map of bone names to visibility conditions (Boolean or Molang String)
+     * @param culling        culling rules identifier (format: namespace:culling.name)
+     * @param cullingLayer   culling layer for optimization
+     * @param uvLockBones    list of bone names to lock UVs, or null for no UV lock
+     * @param uvLockAll      whether to lock UVs for all bones
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#geometry">minecraft:geometry</a>
+     */
+    public record Geometry(
+            String identifier,
+            Map<String, BoneVisibility> boneVisibility,
+            String culling,
+            String cullingLayer,
+            List<String> uvLockBones,
+            boolean uvLockAll
+    ) {
+        public Geometry {
+            if (identifier == null || identifier.isEmpty()) {
+                throw new IllegalArgumentException("Geometry identifier cannot be null or empty");
+            }
+            // Ensure immutability
+            if (boneVisibility != null) {
+                boneVisibility = Map.copyOf(boneVisibility);
+            }
+            if (uvLockBones != null) {
+                uvLockBones = List.copyOf(uvLockBones);
+            }
+        }
+
+        /**
+         * Creates a simple geometry with just an identifier.
+         *
+         * @param identifier the geometry identifier
+         * @return a Geometry with only the identifier set
+         */
+        public static Geometry of(String identifier) {
+            return new Geometry(identifier, null, null, null, null, false);
+        }
+
+        /**
+         * Creates a builder for configuring geometry with advanced properties.
+         *
+         * @return a new GeometryBuilder
+         */
+        public static GeometryBuilder builder() {
+            return new GeometryBuilder();
+        }
+
+        /**
+         * Converts this geometry to NBT format.
+         *
+         * @return the NBT representation
+         */
+        public NbtMap toNBT() {
+            var builder = NbtMap.builder()
+                    .putString("identifier", identifier);
+
+            if (boneVisibility != null && !boneVisibility.isEmpty()) {
+                var boneVisNbt = NbtMap.builder();
+                for (var entry : boneVisibility.entrySet()) {
+                    switch (entry.getValue()) {
+                        case BoneVisibility.Bool(boolean visible) ->
+                            boneVisNbt.putBoolean(entry.getKey(), visible);
+                        case BoneVisibility.Molang(String expression) ->
+                            boneVisNbt.putString(entry.getKey(), expression);
+                    }
+                }
+                builder.putCompound("bone_visibility", boneVisNbt.build());
+            }
+
+            if (culling != null) {
+                builder.putString("culling", culling);
+            }
+
+            if (cullingLayer != null) {
+                builder.putString("culling_layer", cullingLayer);
+            }
+
+            // uv_lock can be boolean (all bones) or array (specific bones)
+            if (uvLockAll) {
+                builder.putBoolean("uv_lock", true);
+            } else if (uvLockBones != null && !uvLockBones.isEmpty()) {
+                builder.putList("uv_lock", NbtType.STRING, uvLockBones);
+            }
+
+            return builder.build();
+        }
+
+        /**
+         * Sealed interface for bone visibility values.
+         * Supports both boolean (static visibility) and Molang expressions (dynamic visibility).
+         */
+        public sealed interface BoneVisibility permits BoneVisibility.Bool, BoneVisibility.Molang {
+
+            /**
+             * Static boolean visibility.
+             *
+             * @param visible whether the bone is visible
+             */
+            record Bool(boolean visible) implements BoneVisibility {
+                public static final Bool TRUE = new Bool(true);
+                public static final Bool FALSE = new Bool(false);
+            }
+
+            /**
+             * Dynamic Molang expression visibility.
+             *
+             * @param expression the Molang expression (e.g., "q.block_state('open') == 1")
+             */
+            record Molang(String expression) implements BoneVisibility {
+                public Molang {
+                    if (expression == null || expression.isEmpty()) {
+                        throw new IllegalArgumentException("Molang expression cannot be null or empty");
+                    }
+                }
+            }
+
+            static BoneVisibility of(boolean visible) {
+                return visible ? Bool.TRUE : Bool.FALSE;
+            }
+
+            static BoneVisibility of(String molangExpression) {
+                return new Molang(molangExpression);
+            }
+        }
+
+        /**
+         * Builder for creating Geometry instances with fluent API.
+         */
+        public static final class GeometryBuilder {
+            private String identifier;
+            private Map<String, BoneVisibility> boneVisibility;
+            private String culling;
+            private String cullingLayer;
+            private List<String> uvLockBones;
+            private boolean uvLockAll;
+
+            private GeometryBuilder() {}
+
+            /**
+             * Sets the geometry identifier (required).
+             *
+             * @param identifier the geometry identifier
+             * @return this builder
+             */
+            public GeometryBuilder identifier(String identifier) {
+                this.identifier = identifier;
+                return this;
+            }
+
+            /**
+             * Sets bone visibility using a boolean value.
+             *
+             * @param boneName the name of the bone
+             * @param visible  whether the bone is visible
+             * @return this builder
+             */
+            public GeometryBuilder boneVisibility(String boneName, boolean visible) {
+                if (this.boneVisibility == null) {
+                    this.boneVisibility = new HashMap<>();
+                }
+                this.boneVisibility.put(boneName, BoneVisibility.of(visible));
+                return this;
+            }
+
+            /**
+             * Sets bone visibility using a Molang expression.
+             *
+             * @param boneName   the name of the bone
+             * @param expression the Molang expression
+             * @return this builder
+             */
+            public GeometryBuilder boneVisibility(String boneName, String expression) {
+                if (this.boneVisibility == null) {
+                    this.boneVisibility = new HashMap<>();
+                }
+                this.boneVisibility.put(boneName, BoneVisibility.of(expression));
+                return this;
+            }
+
+            /**
+             * Configures bone visibility using a consumer function.
+             *
+             * @param configurer consumer to configure bone visibility
+             * @return this builder
+             */
+            public GeometryBuilder boneVisibility(Consumer<BoneVisibilityBuilder> configurer) {
+                var bvBuilder = new BoneVisibilityBuilder();
+                configurer.accept(bvBuilder);
+                this.boneVisibility = bvBuilder.build();
+                return this;
+            }
+
+            /**
+             * Sets the culling rules identifier.
+             *
+             * @param culling the culling identifier (format: namespace:culling.name)
+             * @return this builder
+             */
+            public GeometryBuilder culling(String culling) {
+                this.culling = culling;
+                return this;
+            }
+
+            /**
+             * Sets the culling layer.
+             *
+             * @param cullingLayer the culling layer identifier
+             * @return this builder
+             */
+            public GeometryBuilder cullingLayer(String cullingLayer) {
+                this.cullingLayer = cullingLayer;
+                return this;
+            }
+
+            /**
+             * Locks UVs for specific bones.
+             *
+             * @param boneNames the bones to lock UVs for
+             * @return this builder
+             */
+            public GeometryBuilder uvLock(String... boneNames) {
+                this.uvLockBones = List.of(boneNames);
+                return this;
+            }
+
+            /**
+             * Locks UVs for specific bones.
+             *
+             * @param boneNames the bones to lock UVs for
+             * @return this builder
+             */
+            public GeometryBuilder uvLock(List<String> boneNames) {
+                this.uvLockBones = boneNames;
+                return this;
+            }
+
+            /**
+             * Locks UVs for all bones.
+             *
+             * @return this builder
+             */
+            public GeometryBuilder uvLockAll() {
+                this.uvLockAll = true;
+                return this;
+            }
+
+            /**
+             * Builds the Geometry instance.
+             *
+             * @return the built Geometry
+             */
+            public Geometry build() {
+                return new Geometry(identifier, boneVisibility, culling, cullingLayer, uvLockBones, uvLockAll);
+            }
+        }
+
+        /**
+         * Builder for bone visibility map with fluent API.
+         */
+        public static final class BoneVisibilityBuilder {
+            private final Map<String, BoneVisibility> map = new HashMap<>();
+
+            /**
+             * Sets bone visibility using a boolean value.
+             *
+             * @param boneName the name of the bone
+             * @param visible  whether the bone is visible
+             * @return this builder
+             */
+            public BoneVisibilityBuilder bone(String boneName, boolean visible) {
+                map.put(boneName, BoneVisibility.of(visible));
+                return this;
+            }
+
+            /**
+             * Sets bone visibility using a Molang expression.
+             *
+             * @param boneName   the name of the bone
+             * @param expression the Molang expression
+             * @return this builder
+             */
+            public BoneVisibilityBuilder bone(String boneName, String expression) {
+                map.put(boneName, BoneVisibility.of(expression));
+                return this;
+            }
+
+            Map<String, BoneVisibility> build() {
+                return map.isEmpty() ? null : map;
+            }
         }
     }
 }

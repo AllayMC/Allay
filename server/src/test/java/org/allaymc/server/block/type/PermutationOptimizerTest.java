@@ -7,6 +7,7 @@ import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
+import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
 import org.allaymc.server.block.type.BlockStateDefinition.Materials;
 import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
 import org.allaymc.server.block.type.CustomBlockDefinitionGenerator.PermutationOptimizer;
@@ -60,7 +61,7 @@ class PermutationOptimizerTest {
         var definitions = PermutationOptimizer.collectDefinitions(
                 blockTypeWithAllProps,
                 state -> BlockStateDefinition.builder()
-                        .geometry("geometry.test")
+                        .geometry(Geometry.of("geometry.test"))
                         .build()
         );
 
@@ -83,7 +84,7 @@ class PermutationOptimizerTest {
         var definitions = PermutationOptimizer.collectDefinitions(
                 blockTypeNoProps,
                 state -> BlockStateDefinition.builder()
-                        .geometry("geometry.simple")
+                        .geometry(Geometry.of("geometry.simple"))
                         .materials(Materials.builder().any("texture").build())
                         .build()
         );
@@ -92,7 +93,7 @@ class PermutationOptimizerTest {
 
         // Single state = no permutations needed, everything is global
         assertTrue(optimized.permutations().isEmpty());
-        assertEquals("geometry.simple", optimized.globalComponents().geometry());
+        assertEquals("geometry.simple", optimized.globalComponents().geometry().identifier());
         assertNotNull(optimized.globalComponents().materials());
     }
 
@@ -104,7 +105,7 @@ class PermutationOptimizerTest {
                 state -> {
                     boolean boolVal = state.getPropertyValue(BOOL_PROP);
                     return BlockStateDefinition.builder()
-                            .geometry("geometry.shared")  // Same for all
+                            .geometry(Geometry.of("geometry.shared"))  // Same for all
                             .materials(Materials.builder()
                                     .any(boolVal ? "texture_on" : "texture_off")
                                     .build())
@@ -115,7 +116,7 @@ class PermutationOptimizerTest {
         var optimized = PermutationOptimizer.optimize(definitions, blockTypeWithAllProps);
 
         // Geometry should be extracted to global components
-        assertEquals("geometry.shared", optimized.globalComponents().geometry());
+        assertEquals("geometry.shared", optimized.globalComponents().geometry().identifier());
         // Materials vary, so should be in permutations
         assertFalse(optimized.permutations().isEmpty());
     }
@@ -129,7 +130,7 @@ class PermutationOptimizerTest {
                 state -> {
                     boolean boolVal = state.getPropertyValue(BOOL_PROP);
                     return BlockStateDefinition.builder()
-                            .geometry(boolVal ? "geometry.on" : "geometry.off")
+                            .geometry(Geometry.of(boolVal ? "geometry.on" : "geometry.off"))
                             .build();
                 }
         );
@@ -148,7 +149,7 @@ class PermutationOptimizerTest {
         var definitions = PermutationOptimizer.collectDefinitions(
                 blockTypeWithAllProps,
                 state -> BlockStateDefinition.builder()
-                        .geometry("geometry.same")
+                        .geometry(Geometry.of("geometry.same"))
                         .materials(Materials.builder().any("same_texture").build())
                         .transformation(Transformation.builder().ry(90).build())
                         .build()
@@ -158,7 +159,7 @@ class PermutationOptimizerTest {
 
         // All components should be global, no permutations needed
         assertTrue(optimized.permutations().isEmpty());
-        assertEquals("geometry.same", optimized.globalComponents().geometry());
+        assertEquals("geometry.same", optimized.globalComponents().geometry().identifier());
         assertNotNull(optimized.globalComponents().materials());
         assertNotNull(optimized.globalComponents().transformation());
     }
@@ -209,7 +210,7 @@ class PermutationOptimizerTest {
                         case C -> 180;
                     };
                     return BlockStateDefinition.builder()
-                            .geometry("geometry.rotatable")
+                            .geometry(Geometry.of("geometry.rotatable"))
                             .transformation(Transformation.builder()
                                     .ry(rotation)
                                     .build())
@@ -220,7 +221,7 @@ class PermutationOptimizerTest {
         var optimized = PermutationOptimizer.optimize(definitions, blockTypeWithAllProps);
 
         // Geometry is shared (global), transformation varies (permutations)
-        assertEquals("geometry.rotatable", optimized.globalComponents().geometry());
+        assertEquals("geometry.rotatable", optimized.globalComponents().geometry().identifier());
         // Should have permutations for different rotations
         assertFalse(optimized.permutations().isEmpty());
     }
@@ -233,7 +234,7 @@ class PermutationOptimizerTest {
                 state -> {
                     boolean boolVal = state.getPropertyValue(BOOL_PROP);
                     return BlockStateDefinition.builder()
-                            .geometry(boolVal ? "geometry.on" : "geometry.off")
+                            .geometry(Geometry.of(boolVal ? "geometry.on" : "geometry.off"))
                             .build();
                 }
         );
@@ -251,17 +252,17 @@ class PermutationOptimizerTest {
     @Test
     void testBlockStateDefinitionEquivalence() {
         var def1 = BlockStateDefinition.builder()
-                .geometry("geometry.test")
+                .geometry(Geometry.of("geometry.test"))
                 .materials(Materials.builder().any("texture").build())
                 .build();
 
         var def2 = BlockStateDefinition.builder()
-                .geometry("geometry.test")
+                .geometry(Geometry.of("geometry.test"))
                 .materials(Materials.builder().any("texture").build())
                 .build();
 
         var def3 = BlockStateDefinition.builder()
-                .geometry("geometry.different")
+                .geometry(Geometry.of("geometry.different"))
                 .build();
 
         assertEquals(def1, def2);
@@ -273,17 +274,17 @@ class PermutationOptimizerTest {
     @Test
     void testBlockStateDefinitionDiff() {
         var base = BlockStateDefinition.builder()
-                .geometry("geometry.base")
+                .geometry(Geometry.of("geometry.base"))
                 .displayName("Base")
                 .build();
 
         var same = BlockStateDefinition.builder()
-                .geometry("geometry.base")
+                .geometry(Geometry.of("geometry.base"))
                 .displayName("Base")
                 .build();
 
         var different = BlockStateDefinition.builder()
-                .geometry("geometry.different")
+                .geometry(Geometry.of("geometry.different"))
                 .displayName("Base")
                 .build();
 
@@ -293,14 +294,14 @@ class PermutationOptimizerTest {
         // different.diff(base) returns the properties in 'different' that differ from 'base'
         var diff = different.diff(base);
         assertNotNull(diff);
-        assertEquals("geometry.different", diff.geometry());
+        assertEquals("geometry.different", diff.geometry().identifier());
         assertNull(diff.displayName()); // Not different, so not in diff
     }
 
     @Test
     void testBlockStateDefinitionDiffWithNullBase() {
         var def = BlockStateDefinition.builder()
-                .geometry("geometry.test")
+                .geometry(Geometry.of("geometry.test"))
                 .build();
 
         // diff with null should return null
@@ -310,12 +311,12 @@ class PermutationOptimizerTest {
     @Test
     void testBlockStateDefinitionDiffMaterialsOnly() {
         var base = BlockStateDefinition.builder()
-                .geometry("geometry.same")
+                .geometry(Geometry.of("geometry.same"))
                 .materials(Materials.builder().any("texture_a").build())
                 .build();
 
         var different = BlockStateDefinition.builder()
-                .geometry("geometry.same")
+                .geometry(Geometry.of("geometry.same"))
                 .materials(Materials.builder().any("texture_b").build())
                 .build();
 
@@ -328,12 +329,12 @@ class PermutationOptimizerTest {
     @Test
     void testBlockStateDefinitionDiffTransformationOnly() {
         var base = BlockStateDefinition.builder()
-                .geometry("geometry.same")
+                .geometry(Geometry.of("geometry.same"))
                 .transformation(Transformation.builder().ry(0).build())
                 .build();
 
         var different = BlockStateDefinition.builder()
-                .geometry("geometry.same")
+                .geometry(Geometry.of("geometry.same"))
                 .transformation(Transformation.builder().ry(90).build())
                 .build();
 
@@ -356,7 +357,7 @@ class PermutationOptimizerTest {
     @Test
     void testHasAnyPropertyWithGeometryOnly() {
         var def = BlockStateDefinition.builder()
-                .geometry("geometry.test")
+                .geometry(Geometry.of("geometry.test"))
                 .build();
 
         assertTrue(def.hasAnyProperty());
@@ -412,7 +413,7 @@ class PermutationOptimizerTest {
                     int intVal = state.getPropertyValue(INT_PROP);
                     TestEnum enumVal = state.getPropertyValue(ENUM_PROP);
                     return BlockStateDefinition.builder()
-                            .geometry("geometry." + boolVal + "_" + intVal + "_" + enumVal)
+                            .geometry(Geometry.of("geometry." + boolVal + "_" + intVal + "_" + enumVal))
                             .build();
                 }
         );
