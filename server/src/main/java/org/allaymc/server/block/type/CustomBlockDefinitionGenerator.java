@@ -272,6 +272,14 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
     /**
      * Builds selection box NBT from VoxelShape.
+     * <p>
+     * Uses origin/size format where origin is relative to block center
+     * (range -8 to 8 pixels) and size defines dimensions in pixels (0-16).
+     * For VoxelShapes with multiple solids, uses the union AABB.
+     *
+     * @param voxelShape the selection shape
+     * @return NBT with enabled flag, origin, and size
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#selection-box">Selection Box</a>
      */
     private static NbtMap buildSelectionBoxNBT(VoxelShape voxelShape) {
         if (voxelShape == null || voxelShape.getSolids().isEmpty()) {
@@ -297,6 +305,15 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
     /**
      * Builds collision box NBT from VoxelShape.
+     * <p>
+     * Uses the 1.21.130+ "boxes" format which supports multiple collision boxes.
+     * Each box is defined by minX/minY/minZ/maxX/maxY/maxZ in pixels (0-16).
+     * For older clients, {@code MultiVersionHelper.adaptCollisionBox} converts
+     * to the legacy origin/size format (which only supports a single box).
+     *
+     * @param voxelShape the collision shape (can contain multiple AABBs)
+     * @return NBT with enabled flag and boxes list
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#collision-box">Collision Box</a>
      */
     static NbtMap buildCollisionBoxNBT(VoxelShape voxelShape) {
         if (voxelShape == null || voxelShape.getSolids().isEmpty()) {
@@ -378,6 +395,16 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
     /**
      * Optimizes block state definitions into an efficient permutation structure.
+     * <p>
+     * The optimization process has three steps:
+     * <ol>
+     *   <li><b>Extract global components</b>: Finds properties that are identical across all states
+     *       (geometry, materials, transformation, displayName) and moves them to global components</li>
+     *   <li><b>Group states by definition</b>: Groups states that have identical effective definitions
+     *       (after removing global components) to reduce permutation count</li>
+     *   <li><b>Generate Molang conditions</b>: Creates optimized condition strings for each group
+     *       using {@link MolangConditionBuilder}</li>
+     * </ol>
      * <p>
      * Internal class - not exposed to users, but package-private for testing.
      */
@@ -522,7 +549,22 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
     }
 
     /**
-     * Utility class for building Molang condition strings from block states.
+     * Builds Molang condition strings for block state permutations.
+     * <p>
+     * Generates conditions like {@code q.block_state('property') == value} that
+     * the client evaluates to determine which permutation to apply.
+     * <p>
+     * The builder optimizes conditions by:
+     * <ul>
+     *   <li>Factoring out constant properties that have the same value across all states in a group</li>
+     *   <li>Combining variable properties with OR conditions for states that share the same definition</li>
+     * </ul>
+     * <p>
+     * Example outputs:
+     * <ul>
+     *   <li>Single state: {@code q.block_state('facing') == 'north' && q.block_state('open') == 1}</li>
+     *   <li>Multiple states with constant: {@code q.block_state('facing') == 'north' && (q.block_state('open') == 0 || q.block_state('open') == 1)}</li>
+     * </ul>
      * <p>
      * Internal class - not exposed to users, but package-private for testing.
      */

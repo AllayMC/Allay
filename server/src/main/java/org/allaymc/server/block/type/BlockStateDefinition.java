@@ -132,14 +132,25 @@ public record BlockStateDefinition(
     }
 
     /**
-     * Represents a material instance for a block face.
+     * Represents a material instance for block face rendering.
+     * <p>
+     * Material instances define how each face of a block is rendered,
+     * including texture, transparency, and lighting effects.
+     * <p>
+     * The NBT encoding uses {@code packed_bools} (1.21.110+ format) to pack
+     * {@code faceDimming}, {@code randomUVRotation}, and {@code textureVariation}
+     * into a single byte. For older clients, {@code MultiVersionHelper.adaptMaterialInstances}
+     * converts to the legacy format with separate boolean fields.
      *
-     * @param texture          the texture name from the resource pack
-     * @param renderMethod     the render method to use (default: OPAQUE)
-     * @param faceDimming      whether face dimming is enabled (default: true)
-     * @param ambientOcclusion whether ambient occlusion is enabled (default: true)
-     * @param randomUVRotation whether random UV rotation is enabled (default: false)
+     * @param texture          the texture shortname from terrain_texture.json
+     * @param renderMethod     controls transparency and culling behavior
+     * @param faceDimming      whether faces receive directional shading (default: true)
+     * @param ambientOcclusion whether smooth lighting is applied (default: true)
+     * @param randomUVRotation whether texture randomly rotates based on world position,
+     *                         corresponds to "isotropic" in Bedrock documentation (default: false)
      * @param textureVariation whether texture variation is enabled (default: false)
+     * @see RenderMethod
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
      */
     @Builder
     public record MaterialInstance(
@@ -207,14 +218,23 @@ public record BlockStateDefinition(
     /**
      * Builder for creating material instances with convenient per-face methods.
      * <p>
+     * Material instances can be assigned to specific faces or to a wildcard ({@code *})
+     * that applies to all unspecified faces. The client first checks for a face-specific
+     * instance (e.g., "up", "north"), then falls back to the wildcard if not found.
+     * <p>
+     * Named material instances (any string key) can also be used in custom geometry
+     * to reference specific materials for different parts of the model.
+     * <p>
      * Example usage:
      * <pre>{@code
      * Materials.builder()
-     *     .any("default_texture")                           // all faces
-     *     .face(BlockFace.UP, "top_texture")                // override top
+     *     .any("default_texture")                           // all faces (wildcard)
+     *     .face(BlockFace.UP, "top_texture")                // override top face
      *     .face(BlockFace.DOWN, MaterialInstance.blend("bottom_texture"))
      *     .build();
      * }</pre>
+     *
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
      */
     public static final class Materials {
         /**
@@ -318,16 +338,52 @@ public record BlockStateDefinition(
 
     /**
      * Render methods for material instances.
+     * <p>
+     * Each method controls transparency handling, back-face culling, and distance-based rendering.
+     *
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#render-methods">Render Methods</a>
      */
     @Getter
     public enum RenderMethod {
+        /**
+         * Fully opaque rendering with back-face culling. No distance culling.
+         * Use for solid blocks like dirt, stone, and planks.
+         */
         OPAQUE("opaque"),
+        /**
+         * Supports full transparency and translucency with back-face culling.
+         * Use for semi-transparent blocks like glass, ice, and stained glass.
+         */
         BLEND("blend"),
+        /**
+         * Fully opaque rendering without back-face culling (renders both sides).
+         * Use for blocks visible from inside like powder snow.
+         */
         DOUBLE_SIDED("double_sided"),
+        /**
+         * Binary transparency (fully transparent or fully opaque pixels) without back-face culling.
+         * Has distance culling. Use for cross-model blocks like flowers, tall grass, and vines.
+         */
         ALPHA_TEST("alpha_test"),
+        /**
+         * Binary transparency with back-face culling. Has distance culling.
+         * Use for flat blocks like doors, trapdoors, and saplings.
+         */
         ALPHA_TEST_SINGLE_SIDED("alpha_test_single_sided"),
+        /**
+         * Like {@link #ALPHA_TEST} but switches to opaque rendering at distance.
+         * Improves performance while maintaining appearance up close.
+         */
         ALPHA_TEST_TO_OPAQUE("alpha_test_to_opaque"),
+        /**
+         * Like {@link #ALPHA_TEST_SINGLE_SIDED} but switches to opaque rendering at distance.
+         * Improves performance while maintaining appearance up close.
+         */
         ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE("alpha_test_single_sided_to_opaque"),
+        /**
+         * Like {@link #BLEND} but switches to opaque rendering at distance.
+         * Improves performance while maintaining appearance up close.
+         */
         BLEND_TO_OPAQUE("blend_to_opaque");
 
         private final String id;
@@ -338,7 +394,22 @@ public record BlockStateDefinition(
     }
 
     /**
-     * Transformation applied to the block model.
+     * Transformation applied to block geometry.
+     * <p>
+     * Rotation values must be multiples of 90 degrees. The NBT encoding
+     * divides rotation by 90 (e.g., 90 degrees becomes RX=1, 180 becomes RX=2).
+     * Negative rotations are normalized to positive equivalents.
+     *
+     * @param rx X-axis rotation in degrees (must be 0, 90, 180, or 270)
+     * @param ry Y-axis rotation in degrees (must be 0, 90, 180, or 270)
+     * @param rz Z-axis rotation in degrees (must be 0, 90, 180, or 270)
+     * @param sx X-axis scale factor (default: 1.0)
+     * @param sy Y-axis scale factor (default: 1.0)
+     * @param sz Z-axis scale factor (default: 1.0)
+     * @param tx X-axis translation in block units
+     * @param ty Y-axis translation in block units
+     * @param tz Z-axis translation in block units
+     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#transformation">Transformation</a>
      */
     @Builder
     public record Transformation(
@@ -352,6 +423,14 @@ public record BlockStateDefinition(
             if (sz == 0) sz = 1.0f;
         }
 
+        /**
+         * Converts this transformation to NBT format.
+         * <p>
+         * NBT format uses {@code RX/RY/RZ} as rotation divided by 90 (0-3),
+         * {@code SX/SY/SZ} as scale factors, and {@code TX/TY/TZ} as translation.
+         *
+         * @return the NBT representation
+         */
         public NbtMap toNBT() {
             return NbtMap.builder()
                     .putInt("RX", (((rx % 360) + 360) % 360) / 90)

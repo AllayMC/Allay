@@ -4,6 +4,7 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BooleanPropertyType;
 import org.allaymc.api.block.property.type.EnumPropertyType;
 import org.allaymc.api.block.property.type.IntPropertyType;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
@@ -108,7 +109,7 @@ class MolangConditionBuilderTest {
 
     @Test
     void testEmptyStatesReturnsAlwaysTrue() {
-        var states = Set.<org.allaymc.api.block.type.BlockState>of();
+        var states = Set.<BlockState>of();
 
         var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
 
@@ -118,7 +119,7 @@ class MolangConditionBuilderTest {
     @Test
     void testOptimizationWithConstantProperty() {
         // Create states where INT_PROP varies but BOOL_PROP is constant
-        var states = new HashSet<org.allaymc.api.block.type.BlockState>();
+        var states = new HashSet<BlockState>();
         for (int i = 0; i <= 3; i++) {
             states.add(blockTypeWithAllProps.getDefaultState()
                     .setPropertyValue(BOOL_PROP, true)  // constant
@@ -179,7 +180,7 @@ class MolangConditionBuilderTest {
     @Test
     void testAllPropertiesVaryingNoOptimization() {
         // Create states where all 3 properties vary - no optimization possible
-        var states = new HashSet<org.allaymc.api.block.type.BlockState>();
+        var states = new HashSet<BlockState>();
         states.add(blockTypeWithAllProps.getDefaultState()
                 .setPropertyValue(BOOL_PROP, false)
                 .setPropertyValue(INT_PROP, 0)
@@ -197,7 +198,7 @@ class MolangConditionBuilderTest {
 
     @Test
     void testMultipleEnumValues() {
-        var states = new HashSet<org.allaymc.api.block.type.BlockState>();
+        var states = new HashSet<BlockState>();
         for (TestEnum e : TestEnum.values()) {
             states.add(blockTypeWithAllProps.getDefaultState()
                     .setPropertyValue(BOOL_PROP, true)  // constant
@@ -216,7 +217,7 @@ class MolangConditionBuilderTest {
     @Test
     void testTwoVariableProperties() {
         // Both INT_PROP and ENUM_PROP vary, BOOL_PROP is constant
-        var states = new HashSet<org.allaymc.api.block.type.BlockState>();
+        var states = new HashSet<BlockState>();
         states.add(blockTypeWithAllProps.getDefaultState()
                 .setPropertyValue(BOOL_PROP, true)
                 .setPropertyValue(INT_PROP, 0)
