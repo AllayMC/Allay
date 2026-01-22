@@ -1,4 +1,4 @@
-package org.allaymc.server.block.type;
+package org.allaymc.server.utils.molang;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BooleanPropertyType;
@@ -7,10 +7,14 @@ import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
+import org.allaymc.server.block.type.AllayBlockType;
+import org.allaymc.server.block.type.BlockStateDefinition;
 import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
 import org.allaymc.server.block.type.BlockStateDefinition.Materials;
 import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
-import org.allaymc.server.block.type.CustomBlockDefinitionGenerator.PermutationOptimizer;
+import org.allaymc.server.block.type.TestBlock;
+import org.allaymc.server.block.type.TestBlockImpl;
+import org.allaymc.server.block.type.TestEnum;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -424,5 +428,139 @@ class PermutationOptimizerTest {
         assertNull(optimized.globalComponents().geometry());
         // Should have permutations for each unique combination
         assertFalse(optimized.permutations().isEmpty());
+    }
+
+    // ========== Geometry Bone Visibility Tests ==========
+
+    @Test
+    void testGeometryBoneVisibilityStatic() {
+        var geometry = Geometry.builder()
+                .identifier("geometry.test")
+                .boneVisibility("bone1", true)
+                .boneVisibility("bone2", false)
+                .build();
+
+        assertEquals("geometry.test", geometry.identifier());
+        assertNotNull(geometry.boneVisibility());
+        assertEquals(2, geometry.boneVisibility().size());
+
+        var nbt = geometry.toNBT();
+        assertEquals("geometry.test", nbt.getString("identifier"));
+        var boneVis = nbt.getCompound("bone_visibility");
+        assertTrue(boneVis.getBoolean("bone1"));
+        assertFalse(boneVis.getBoolean("bone2"));
+    }
+
+    @Test
+    void testGeometryBoneVisibilityWithBooleanProperty() {
+        var geometry = Geometry.builder()
+                .identifier("geometry.test")
+                .boneVisibility("indicator", BOOL_PROP)  // visible when true
+                .build();
+
+        var nbt = geometry.toNBT();
+        var boneVis = nbt.getCompound("bone_visibility");
+        assertEquals("q.block_state('perm_test_bool') == 1", boneVis.getString("indicator"));
+    }
+
+    @Test
+    void testGeometryBoneVisibilityWithBooleanPropertyAndValue() {
+        var geometry = Geometry.builder()
+                .identifier("geometry.test")
+                .boneVisibility("handle", BOOL_PROP, true)
+                .boneVisibility("lock", BOOL_PROP, false)
+                .build();
+
+        var nbt = geometry.toNBT();
+        var boneVis = nbt.getCompound("bone_visibility");
+        assertEquals("q.block_state('perm_test_bool') == 1", boneVis.getString("handle"));
+        assertEquals("q.block_state('perm_test_bool') == 0", boneVis.getString("lock"));
+    }
+
+    @Test
+    void testGeometryBoneVisibilityWithIntProperty() {
+        var geometry = Geometry.builder()
+                .identifier("geometry.test")
+                .boneVisibility("stage_0", INT_PROP, 0)
+                .boneVisibility("stage_1", INT_PROP, 1)
+                .boneVisibility("stage_2", INT_PROP, 2)
+                .build();
+
+        var nbt = geometry.toNBT();
+        var boneVis = nbt.getCompound("bone_visibility");
+        assertEquals("q.block_state('perm_test_int') == 0", boneVis.getString("stage_0"));
+        assertEquals("q.block_state('perm_test_int') == 1", boneVis.getString("stage_1"));
+        assertEquals("q.block_state('perm_test_int') == 2", boneVis.getString("stage_2"));
+    }
+
+    @Test
+    void testGeometryBoneVisibilityWithEnumProperty() {
+        var geometry = Geometry.builder()
+                .identifier("geometry.test")
+                .boneVisibility("mode_a", ENUM_PROP, TestEnum.A)
+                .boneVisibility("mode_b", ENUM_PROP, TestEnum.B)
+                .build();
+
+        var nbt = geometry.toNBT();
+        var boneVis = nbt.getCompound("bone_visibility");
+        assertEquals("q.block_state('perm_test_enum') == 'a'", boneVis.getString("mode_a"));
+        assertEquals("q.block_state('perm_test_enum') == 'b'", boneVis.getString("mode_b"));
+    }
+
+    @Test
+    void testGeometryBoneVisibilityMolang() {
+        var geometry = Geometry.builder()
+                .identifier("geometry.test")
+                .boneVisibilityMolang("complex", "q.block_state('a') == 1 && q.block_state('b') == 2")
+                .build();
+
+        var nbt = geometry.toNBT();
+        var boneVis = nbt.getCompound("bone_visibility");
+        assertEquals("q.block_state('a') == 1 && q.block_state('b') == 2", boneVis.getString("complex"));
+    }
+
+    @Test
+    void testGeometrySimpleForm() {
+        var geometry = Geometry.of("geometry.simple");
+
+        assertEquals("geometry.simple", geometry.identifier());
+        assertNull(geometry.boneVisibility());
+        assertNull(geometry.culling());
+        assertFalse(geometry.uvLockAll());
+    }
+
+    @Test
+    void testGeometryWithCulling() {
+        var geometry = Geometry.builder()
+                .identifier("geometry.test")
+                .culling("myplugin:culling.leaves")
+                .cullingLayer("minecraft:culling_layer.leaves")
+                .build();
+
+        var nbt = geometry.toNBT();
+        assertEquals("myplugin:culling.leaves", nbt.getString("culling"));
+        assertEquals("minecraft:culling_layer.leaves", nbt.getString("culling_layer"));
+    }
+
+    @Test
+    void testGeometryWithUvLock() {
+        var geometryAll = Geometry.builder()
+                .identifier("geometry.test")
+                .uvLockAll()
+                .build();
+
+        var nbtAll = geometryAll.toNBT();
+        assertTrue(nbtAll.getBoolean("uv_lock"));
+
+        var geometrySpecific = Geometry.builder()
+                .identifier("geometry.test")
+                .uvLock("top", "bottom")
+                .build();
+
+        var nbtSpecific = geometrySpecific.toNBT();
+        var uvLockList = nbtSpecific.getList("uv_lock", org.cloudburstmc.nbt.NbtType.STRING);
+        assertEquals(2, uvLockList.size());
+        assertTrue(uvLockList.contains("top"));
+        assertTrue(uvLockList.contains("bottom"));
     }
 }

@@ -1,4 +1,4 @@
-package org.allaymc.server.block.type;
+package org.allaymc.server.utils.molang;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BooleanPropertyType;
@@ -8,6 +8,10 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
+import org.allaymc.server.block.type.AllayBlockType;
+import org.allaymc.server.block.type.TestBlock;
+import org.allaymc.server.block.type.TestBlockImpl;
+import org.allaymc.server.block.type.TestEnum;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -61,7 +65,7 @@ class MolangConditionBuilderTest {
         var state = blockTypeWithBoolOnly.getDefaultState();
         var states = Set.of(state);
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
 
         assertEquals("q.block_state('test_bool') == 0", condition);
     }
@@ -71,7 +75,7 @@ class MolangConditionBuilderTest {
         var state = blockTypeWithBoolOnly.getDefaultState().setPropertyValue(BOOL_PROP, true);
         var states = Set.of(state);
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
 
         assertEquals("q.block_state('test_bool') == 1", condition);
     }
@@ -84,7 +88,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(ENUM_PROP, TestEnum.B);
         var states = Set.of(state);
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // Condition should contain all three property checks
         assertTrue(condition.contains("q.block_state('test_bool') == 1"));
@@ -99,7 +103,7 @@ class MolangConditionBuilderTest {
         var state2 = blockTypeWithBoolOnly.getDefaultState().setPropertyValue(BOOL_PROP, true);
         var states = Set.of(state1, state2);
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
 
         // Should produce an OR condition
         assertTrue(condition.contains("||"));
@@ -111,7 +115,7 @@ class MolangConditionBuilderTest {
     void testEmptyStatesReturnsAlwaysTrue() {
         var states = Set.<BlockState>of();
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithBoolOnly);
 
         assertEquals("1", condition);
     }
@@ -127,7 +131,7 @@ class MolangConditionBuilderTest {
                     .setPropertyValue(ENUM_PROP, TestEnum.A));  // constant
         }
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // The constant properties should be factored out
         // and the varying property should use OR
@@ -141,7 +145,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(INT_PROP, 2);
         var states = Set.of(state);
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         assertTrue(condition.contains("q.block_state('test_int') == 2"));
     }
@@ -152,7 +156,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(ENUM_PROP, TestEnum.C);
         var states = Set.of(state);
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // Enum values should be lowercase
         assertTrue(condition.contains("q.block_state('test_enum') == 'c'"));
@@ -171,7 +175,7 @@ class MolangConditionBuilderTest {
         var state = blockTypeNoProps.getDefaultState();
         var states = Set.of(state);
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeNoProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeNoProps);
 
         // Block with no properties should return "1"
         assertEquals("1", condition);
@@ -190,7 +194,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(INT_PROP, 1)
                 .setPropertyValue(ENUM_PROP, TestEnum.B));
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // Should contain OR since all properties vary
         assertTrue(condition.contains("||"));
@@ -206,7 +210,7 @@ class MolangConditionBuilderTest {
                     .setPropertyValue(ENUM_PROP, e));   // varies
         }
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // Should have constant bool and int, with OR for enum values
         assertTrue(condition.contains("q.block_state('test_bool') == 1"));
@@ -227,7 +231,7 @@ class MolangConditionBuilderTest {
                 .setPropertyValue(INT_PROP, 1)
                 .setPropertyValue(ENUM_PROP, TestEnum.B));
 
-        var condition = CustomBlockDefinitionGenerator.MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
+        var condition = MolangConditionBuilder.buildCondition(states, blockTypeWithAllProps);
 
         // BOOL_PROP should be factored out as constant
         assertTrue(condition.contains("q.block_state('test_bool') == 1"));

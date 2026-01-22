@@ -164,12 +164,12 @@ BlockStateDefinition.builder()
 
 ### Properties
 
-| Property         | Type             | Description                                                                  |
-|------------------|------------------|------------------------------------------------------------------------------|
+| Property         | Type             | Description                                                                           |
+|------------------|------------------|---------------------------------------------------------------------------------------|
 | `geometry`       | `Geometry`       | Geometry configuration with identifier and advanced properties, null for default cube |
-| `materials`      | `Materials`      | Material/texture configuration for block faces                               |
-| `transformation` | `Transformation` | Rotation, scale, and translation of the model                                |
-| `displayName`    | `String`         | Name shown in inventory, null uses block identifier                          |
+| `materials`      | `Materials`      | Material/texture configuration for block faces                                        |
+| `transformation` | `Transformation` | Rotation, scale, and translation of the model                                         |
+| `displayName`    | `String`         | Name shown in inventory, null uses block identifier                                   |
 
 ## Geometry
 
@@ -192,11 +192,13 @@ Geometry.of("geometry.custom_block")
 For advanced features like bone visibility control and culling optimization:
 
 ```java linenums="1"
-// Object form with bone visibility
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
+
+// Object form with bone visibility based on block properties
 Geometry.builder()
     .identifier("geometry.door")
-    .boneVisibility("hinge", false)                              // Hide bone
-    .boneVisibility("handle", "q.block_state('open_bit') == 1")  // Molang expression
+    .boneVisibility("hinge", false)                                    // Always hidden
+    .boneVisibility("handle", BlockPropertyTypes.OPEN_BIT, true)       // Visible when open
     .build()
 
 // With culling optimization
@@ -214,29 +216,40 @@ Geometry.builder()
 
 ### Properties
 
-| Property         | Type                      | Description                                                    |
-|------------------|---------------------------|----------------------------------------------------------------|
-| `identifier`     | `String`                  | **Required.** Geometry identifier (e.g., `"geometry.custom_block"`) |
-| `boneVisibility` | `Map<String, BoneVisibility>` | Map of bone names to visibility (Boolean or Molang String)    |
-| `culling`        | `String`                  | Culling rules identifier (format: `namespace:culling.name`)    |
-| `cullingLayer`   | `String`                  | Culling layer for optimization                                 |
-| `uvLockBones`    | `List<String>`            | List of specific bone names to lock UVs                        |
-| `uvLockAll`      | `boolean`                 | Whether to lock UVs for all bones                              |
+| Property         | Type                          | Description                                                         |
+|------------------|-------------------------------|---------------------------------------------------------------------|
+| `identifier`     | `String`                      | **Required.** Geometry identifier (e.g., `"geometry.custom_block"`) |
+| `boneVisibility` | `Map<String, BoneVisibility>` | Map of bone names to visibility conditions                          |
+| `culling`        | `String`                      | Culling rules identifier (format: `namespace:culling.name`)         |
+| `cullingLayer`   | `String`                      | Culling layer for optimization                                      |
+| `uvLockBones`    | `List<String>`                | List of specific bone names to lock UVs                             |
+| `uvLockAll`      | `boolean`                     | Whether to lock UVs for all bones                                   |
 
 ### Bone Visibility
 
-Control which bones of a geometry are visible. Supports both static boolean values and
-dynamic Molang expressions:
+Control which bones of a geometry are visible. Use property-based conditions for
+dynamic visibility based on block state:
 
 ```java linenums="1"
 Geometry.builder()
     .identifier("geometry.complex_model")
     // Static visibility - always hidden
     .boneVisibility("decoration", false)
-    // Dynamic visibility - based on block state
-    .boneVisibility("indicator", "q.block_state('powered') == 1")
+    // Property-based visibility - visible when powered
+    .boneVisibility("indicator", BlockPropertyTypes.POWERED_BIT)
+    // Property-based visibility with specific value
+    .boneVisibility("stage_2", BlockPropertyTypes.AGE, 2)
     .build()
 ```
+
+#### Bone Visibility Methods
+
+| Method                                               | Description                               |
+|------------------------------------------------------|-------------------------------------------|
+| `boneVisibility(String, boolean)`                    | Static visibility (always visible/hidden) |
+| `boneVisibility(String, BlockPropertyType<Boolean>)` | Visible when boolean property is true     |
+| `boneVisibility(String, BlockPropertyType<T>, T)`    | Visible when property equals value        |
+| `boneVisibilityMolang(String, String)`               | Raw Molang expression (advanced)          |
 
 ### Culling
 
@@ -565,10 +578,10 @@ These are configured through block components, not the definition generator.
 
 Certain block tags automatically add components to your custom block:
 
-| Block Tag       | Effect                                    |
-|-----------------|-------------------------------------------|
-| `REPLACEABLE`   | Block can be replaced when placing others |
-| `POTTABLE_PLANT`| Block can be placed in a flower pot       |
+| Block Tag        | Effect                                    |
+|------------------|-------------------------------------------|
+| `REPLACEABLE`    | Block can be replaced when placing others |
+| `POTTABLE_PLANT` | Block can be placed in a flower pot       |
 
 ```java linenums="1"
 import org.allaymc.api.block.tag.BlockTags;

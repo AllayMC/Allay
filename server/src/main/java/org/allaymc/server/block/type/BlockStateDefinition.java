@@ -2,10 +2,13 @@ package org.allaymc.server.block.type;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.Tolerate;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.TintMethod;
+import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.server.utils.molang.MolangConditionBuilder;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
@@ -15,7 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * BlockStateDefinition holds the client-side rendering properties for a single block state.
@@ -145,6 +147,7 @@ public record BlockStateDefinition(
          * @param identifier the geometry identifier (e.g., "geometry.custom_block")
          * @return this builder
          */
+        @Tolerate
         public BlockStateDefinitionBuilder geometry(String identifier) {
             this.geometry = Geometry.of(identifier);
             return this;
@@ -557,6 +560,8 @@ public record BlockStateDefinition(
                     switch (entry.getValue()) {
                         case BoneVisibility.Bool(boolean visible) ->
                             boneVisNbt.putBoolean(entry.getKey(), visible);
+                        case BoneVisibility.Property prop ->
+                            boneVisNbt.putString(entry.getKey(), prop.toMolang());
                         case BoneVisibility.Molang(String expression) ->
                             boneVisNbt.putString(entry.getKey(), expression);
                     }
@@ -584,9 +589,9 @@ public record BlockStateDefinition(
 
         /**
          * Sealed interface for bone visibility values.
-         * Supports both boolean (static visibility) and Molang expressions (dynamic visibility).
+         * Supports static boolean, property-based conditions, and raw Molang expressions.
          */
-        public sealed interface BoneVisibility permits BoneVisibility.Bool, BoneVisibility.Molang {
+        public sealed interface BoneVisibility permits BoneVisibility.Bool, BoneVisibility.Property, BoneVisibility.Molang {
 
             /**
              * Static boolean visibility.
@@ -599,7 +604,30 @@ public record BlockStateDefinition(
             }
 
             /**
-             * Dynamic Molang expression visibility.
+             * Property-based visibility condition.
+             * The bone is visible when the block property equals the specified value.
+             *
+             * @param property the block property type
+             * @param value    the value to compare against
+             */
+            record Property(BlockPropertyType<?> property, Object value) implements BoneVisibility {
+                public Property {
+                    Objects.requireNonNull(property, "property cannot be null");
+                    Objects.requireNonNull(value, "value cannot be null");
+                }
+
+                /**
+                 * Generates the Molang expression for this property condition.
+                 *
+                 * @return the Molang expression string
+                 */
+                public String toMolang() {
+                    return MolangConditionBuilder.formatPropertyCondition(property, value);
+                }
+            }
+
+            /**
+             * Raw Molang expression visibility (for advanced use cases).
              *
              * @param expression the Molang expression (e.g., "q.block_state('open') == 1")
              */
@@ -611,11 +639,47 @@ public record BlockStateDefinition(
                 }
             }
 
+            /**
+             * Creates a static boolean visibility.
+             *
+             * @param visible whether the bone is visible
+             * @return a Bool visibility
+             */
             static BoneVisibility of(boolean visible) {
                 return visible ? Bool.TRUE : Bool.FALSE;
             }
 
-            static BoneVisibility of(String molangExpression) {
+            /**
+             * Creates a property-based visibility condition.
+             * The bone is visible when the property equals the specified value.
+             *
+             * @param property the block property type
+             * @param value    the value to compare against
+             * @param <T>      the property value type
+             * @return a Property visibility
+             */
+            static <T> BoneVisibility of(BlockPropertyType<T> property, T value) {
+                return new Property(property, value);
+            }
+
+            /**
+             * Creates a property-based visibility for boolean properties.
+             * The bone is visible when the boolean property is true.
+             *
+             * @param property the boolean property type
+             * @return a Property visibility
+             */
+            static BoneVisibility of(BlockPropertyType<Boolean> property) {
+                return new Property(property, true);
+            }
+
+            /**
+             * Creates a raw Molang expression visibility (for advanced use cases).
+             *
+             * @param molangExpression the Molang expression
+             * @return a Molang visibility
+             */
+            static BoneVisibility ofMolang(String molangExpression) {
                 return new Molang(molangExpression);
             }
         }
@@ -645,7 +709,7 @@ public record BlockStateDefinition(
             }
 
             /**
-             * Sets bone visibility using a boolean value.
+             * Sets bone visibility using a static boolean value.
              *
              * @param boneName the name of the bone
              * @param visible  whether the bone is visible
@@ -660,30 +724,64 @@ public record BlockStateDefinition(
             }
 
             /**
-             * Sets bone visibility using a Molang expression.
+             * Sets bone visibility based on a block property value.
+             * The bone is visible when the property equals the specified value.
+             * <p>
+             * Example:
+             * <pre>{@code
+             * .boneVisibility("handle", BlockPropertyTypes.OPEN_BIT, true)  // visible when open
+             * .boneVisibility("stage_2", BlockPropertyTypes.AGE, 2)         // visible when age == 2
+             * }</pre>
+             *
+             * @param boneName the name of the bone
+             * @param property the block property type
+             * @param value    the value when the bone should be visible
+             * @param <T>      the property value type
+             * @return this builder
+             */
+            public <T> GeometryBuilder boneVisibility(String boneName, BlockPropertyType<T> property, T value) {
+                if (this.boneVisibility == null) {
+                    this.boneVisibility = new HashMap<>();
+                }
+                this.boneVisibility.put(boneName, BoneVisibility.of(property, value));
+                return this;
+            }
+
+            /**
+             * Sets bone visibility based on a boolean property being true.
+             * <p>
+             * Example:
+             * <pre>{@code
+             * .boneVisibility("indicator", BlockPropertyTypes.POWERED_BIT)  // visible when powered
+             * }</pre>
+             *
+             * @param boneName the name of the bone
+             * @param property the boolean property type
+             * @return this builder
+             */
+            public GeometryBuilder boneVisibility(String boneName, BlockPropertyType<Boolean> property) {
+                if (this.boneVisibility == null) {
+                    this.boneVisibility = new HashMap<>();
+                }
+                this.boneVisibility.put(boneName, BoneVisibility.of(property));
+                return this;
+            }
+
+            /**
+             * Sets bone visibility using a raw Molang expression.
+             * <p>
+             * This method is for advanced use cases where property-based methods
+             * are not sufficient. Prefer using property-based methods when possible.
              *
              * @param boneName   the name of the bone
              * @param expression the Molang expression
              * @return this builder
              */
-            public GeometryBuilder boneVisibility(String boneName, String expression) {
+            public GeometryBuilder boneVisibilityMolang(String boneName, String expression) {
                 if (this.boneVisibility == null) {
                     this.boneVisibility = new HashMap<>();
                 }
-                this.boneVisibility.put(boneName, BoneVisibility.of(expression));
-                return this;
-            }
-
-            /**
-             * Configures bone visibility using a consumer function.
-             *
-             * @param configurer consumer to configure bone visibility
-             * @return this builder
-             */
-            public GeometryBuilder boneVisibility(Consumer<BoneVisibilityBuilder> configurer) {
-                var bvBuilder = new BoneVisibilityBuilder();
-                configurer.accept(bvBuilder);
-                this.boneVisibility = bvBuilder.build();
+                this.boneVisibility.put(boneName, BoneVisibility.ofMolang(expression));
                 return this;
             }
 
@@ -748,41 +846,6 @@ public record BlockStateDefinition(
              */
             public Geometry build() {
                 return new Geometry(identifier, boneVisibility, culling, cullingLayer, uvLockBones, uvLockAll);
-            }
-        }
-
-        /**
-         * Builder for bone visibility map with fluent API.
-         */
-        public static final class BoneVisibilityBuilder {
-            private final Map<String, BoneVisibility> map = new HashMap<>();
-
-            /**
-             * Sets bone visibility using a boolean value.
-             *
-             * @param boneName the name of the bone
-             * @param visible  whether the bone is visible
-             * @return this builder
-             */
-            public BoneVisibilityBuilder bone(String boneName, boolean visible) {
-                map.put(boneName, BoneVisibility.of(visible));
-                return this;
-            }
-
-            /**
-             * Sets bone visibility using a Molang expression.
-             *
-             * @param boneName   the name of the bone
-             * @param expression the Molang expression
-             * @return this builder
-             */
-            public BoneVisibilityBuilder bone(String boneName, String expression) {
-                map.put(boneName, BoneVisibility.of(expression));
-                return this;
-            }
-
-            Map<String, BoneVisibility> build() {
-                return map.isEmpty() ? null : map;
             }
         }
     }
