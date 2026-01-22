@@ -241,28 +241,45 @@ MaterialInstance.builder()
     .renderMethod(RenderMethod.ALPHA_TEST)
     .faceDimming(true)
     .ambientOcclusion(true)
+    .randomUVRotation(false)
+    .textureVariation(false)
     .build()
 ```
 
+### Builder Properties
+
+| Property           | Type           | Default  | Description                                              |
+|--------------------|----------------|----------|----------------------------------------------------------|
+| `texture`          | `String`       | Required | Texture name from resource pack                          |
+| `renderMethod`     | `RenderMethod` | `OPAQUE` | How the texture is rendered                              |
+| `faceDimming`      | `boolean`      | `true`   | Apply directional light dimming                          |
+| `ambientOcclusion` | `boolean`      | `true`   | Apply ambient occlusion shadows                          |
+| `randomUVRotation` | `boolean`      | `false`  | Randomly rotate texture to avoid tiling patterns         |
+| `textureVariation` | `boolean`      | `false`  | Enable texture variation                                 |
+
 ### Factory Methods
 
-| Method                                 | Description                             |
-|----------------------------------------|-----------------------------------------|
-| `MaterialInstance.of(String texture)`  | Opaque texture with defaults            |
-| `MaterialInstance.opaque(String)`      | Explicit opaque rendering               |
-| `MaterialInstance.alphaTest(String)`   | Binary transparency (solid/transparent) |
-| `MaterialInstance.blend(String)`       | Smooth transparency blending            |
-| `MaterialInstance.doubleSided(String)` | Visible from both sides                 |
+| Method                                          | Description                             |
+|-------------------------------------------------|-----------------------------------------|
+| `MaterialInstance.of(String texture)`           | Opaque texture with defaults            |
+| `MaterialInstance.opaque(String)`               | Explicit opaque rendering               |
+| `MaterialInstance.alphaTest(String)`            | Binary transparency (solid/transparent) |
+| `MaterialInstance.alphaTestSingleSided(String)` | Binary transparency, single-sided       |
+| `MaterialInstance.blend(String)`                | Smooth transparency blending            |
+| `MaterialInstance.doubleSided(String)`          | Visible from both sides                 |
 
 ### Render Methods
 
-| RenderMethod              | Description         | Use Case                |
-|---------------------------|---------------------|-------------------------|
-| `OPAQUE`                  | Fully opaque        | Solid blocks like stone |
-| `ALPHA_TEST`              | Binary transparency | Leaves, flowers, crops  |
-| `ALPHA_TEST_SINGLE_SIDED` | Binary, one-sided   | Glass panes             |
-| `BLEND`                   | Smooth transparency | Stained glass, water    |
-| `DOUBLE_SIDED`            | Both sides visible  | Vines, banners          |
+| RenderMethod                        | Description                                      | Use Case                      |
+|-------------------------------------|--------------------------------------------------|-------------------------------|
+| `OPAQUE`                            | Fully opaque                                     | Solid blocks like stone       |
+| `ALPHA_TEST`                        | Binary transparency                              | Leaves, flowers, crops        |
+| `ALPHA_TEST_SINGLE_SIDED`           | Binary, one-sided                                | Glass panes                   |
+| `ALPHA_TEST_TO_OPAQUE`              | Binary transparency, opaque at distance          | Performance-optimized leaves  |
+| `ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE` | Single-sided, opaque at distance                 | Performance-optimized panes   |
+| `BLEND`                             | Smooth transparency                              | Stained glass, water          |
+| `BLEND_TO_OPAQUE`                   | Smooth transparency, opaque at distance          | Performance-optimized glass   |
+| `DOUBLE_SIDED`                      | Both sides visible                               | Vines, banners                |
 
 ### Example with Transparency
 
@@ -293,6 +310,9 @@ Transformation.builder()
 | `rx`, `ry`, `rz` | `int`   | Rotation in degrees (must be 0, 90, 180, or 270) |
 | `sx`, `sy`, `sz` | `float` | Scale factors (default 1.0)                      |
 | `tx`, `ty`, `tz` | `float` | Translation offsets                              |
+
+!!! warning "Rotation Constraints"
+    Rotation values must be 0, 90, 180, or 270 degrees. Other values will cause rendering issues.
 
 ### Rotation Example
 
@@ -441,6 +461,26 @@ Physical properties like collision shape, light emission, and friction are **aut
 - Friction coefficient
 
 These are configured through block components, not the definition generator.
+
+## Automatic Components from Block Tags
+
+Certain block tags automatically add components to your custom block:
+
+| Block Tag       | Effect                                    |
+|-----------------|-------------------------------------------|
+| `REPLACEABLE`   | Block can be replaced when placing others |
+| `POTTABLE_PLANT`| Block can be placed in a flower pot       |
+
+```java linenums="1"
+import org.allaymc.api.block.tag.BlockTags;
+
+AllayBlockType.builder(CustomFlowerImpl.class)
+    .identifier("myplugin:custom_flower")
+    .addBlockTag(BlockTags.POTTABLE_PLANT)  // Can be placed in flower pots
+    .blockDefinitionGenerator(
+        CustomBlockDefinitionGenerator.ofTexture("custom_flower"))
+    .build();
+```
 
 ## Tips and Best Practices
 

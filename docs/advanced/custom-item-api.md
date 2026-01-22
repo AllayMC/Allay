@@ -98,7 +98,7 @@ The main builder for custom item definitions.
 | `foil`                 | `boolean`             | Show enchantment glint even without enchantments    |
 | `canDestroyInCreative` | `boolean`             | Can destroy blocks in creative mode (default: true) |
 | `allowOffHand`         | `boolean`             | Can be placed in off-hand slot                      |
-| `cooldown`             | `Integer`             | Item cooldown in ticks                              |
+| `cooldown`             | `Integer`             | Item cooldown in seconds                            |
 | `customProperties`     | `Map<String, NbtMap>` | Additional NBT properties                           |
 | `customComponents`     | `Map<String, NbtMap>` | Custom Bedrock components                           |
 
@@ -121,7 +121,7 @@ CustomItemDefinitionGenerator.builder()
     .foil(true)
     .canDestroyInCreative(false)
     .allowOffHand(true)
-    .cooldown(20)  // 1 second cooldown
+    .cooldown(1)  // 1 second cooldown
     .build()
 ```
 
@@ -134,7 +134,7 @@ Configure how items appear when held in first-person and third-person views.
 The simplest way to adjust item size:
 
 ```java linenums="1"
-import org.allaymc.server.item.type.RenderOffsets;
+import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets;
 
 CustomItemDefinitionGenerator.builder()
     .texture("large_item")
@@ -168,9 +168,9 @@ CustomItemDefinitionGenerator.builder()
 For complete control over item positioning:
 
 ```java linenums="1"
-import org.allaymc.server.item.type.RenderOffsets;
-import org.allaymc.server.item.type.RenderOffsets.Hand;
-import org.allaymc.server.item.type.RenderOffsets.Offset;
+import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets;
+import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets.Hand;
+import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets.Offset;
 import org.joml.Vector3f;
 
 RenderOffsets offsets = RenderOffsets.builder()
@@ -246,10 +246,10 @@ CustomItemDefinitionGenerator.builder()
 Add a cooldown after using the item:
 
 ```java linenums="1"
-// 2 second cooldown (40 ticks)
+// 2 second cooldown
 CustomItemDefinitionGenerator.builder()
     .texture("teleport_crystal")
-    .cooldown(40)
+    .cooldown(2)
     .build()
 ```
 
@@ -409,7 +409,7 @@ AllayItemType.builder(ThrowableItemImpl.class)
             .texture("magic_orb")
             .displayName("Magic Orb")
             .allowOffHand(true)
-            .cooldown(20)  // 1 second cooldown
+            .cooldown(1)  // 1 second cooldown
             .build())
     .build();
 ```
@@ -468,7 +468,7 @@ AllayItemType.builder(CustomSwordImpl.class)
     and let the generator detect them automatically.
 
 !!! warning "Cooldown Values"
-    Cooldown is in game ticks (20 ticks = 1 second). Very short cooldowns may not be noticeable.
+    Cooldown is in seconds. Very short cooldowns may not be noticeable.
 
 !!! warning "Display Name Localization"
     For translatable display names, use translation keys that start with the appropriate prefix.
