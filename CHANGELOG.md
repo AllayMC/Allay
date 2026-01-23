@@ -95,6 +95,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - redstone diodes (repeaters/comparators)
 - Fixed TNT not responding to redstone signals - TNT now ignites when receiving redstone power.
 - Fixed ghost block issue on mobile clients where blocks would appear placed client-side but not server-side, caused by mobile clients sometimes skipping `START_ITEM_USE_ON` packet.
+- Fixed viewing self animations.
 
 ### Removed
 

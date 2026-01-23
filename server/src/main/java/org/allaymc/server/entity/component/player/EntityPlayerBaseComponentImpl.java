@@ -9,11 +9,12 @@ import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.item.component.ItemShieldBaseComponent;
 import org.allaymc.api.item.interfaces.ItemShieldStack;
-import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
@@ -674,6 +675,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.applyAction(action);
         if (isActualPlayer()) {
             this.controller.viewEntityAction(thisPlayer, action);
+        }
+    }
+
+    @Override
+    public void applyAnimation(EntityAnimation animation) {
+        super.applyAnimation(animation);
+        if (isActualPlayer()) {
+            this.controller.viewEntityAnimation(thisPlayer, animation);
         }
     }
 
