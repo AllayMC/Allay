@@ -31,7 +31,6 @@ Then, use it to export the following files:
 | File                                                    | Source                                                                                                                    |
 |---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
 | `biome_definitions.json`                                | [CloudburstMC/Data](https://github.com/CloudburstMC/Data/blob/master/stripped_biome_definitions.json)                     |
-| `entity_identifiers.nbt`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData/blob/master/entity_identifiers.nbt)                                |
 | `colormap/*`                                            | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/textures/colormap)             |
 | Others (`block_types.json`, `creative_items.nbt`, etc.) | Exported from Endstone                                                                                                    |
 

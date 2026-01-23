@@ -62,6 +62,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
 - Added support for (NetEase) bedrock 1.21.50 (protocol version 766).
+- Custom entities will be sent to the client now.
 
 ### Changed
 

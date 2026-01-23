@@ -262,14 +262,20 @@ public final class NetworkData {
     }
 
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {
-        // TODO: support custom entity, we just read it from file currently
-        try (var stream = NbtUtils.createNetworkReader(Utils.getResource("entity_identifiers.nbt"))) {
-            var packet = new AvailableEntityIdentifiersPacket();
-            packet.setIdentifiers((NbtMap) stream.readTag());
-            return packet;
-        } catch (Throwable t) {
-            throw new RuntimeException("Failed to load entity_identifiers.nbt", t);
+        var ids = new LinkedList<NbtMap>();
+        for (var type : Registries.ENTITIES.getContent().values()) {
+            ids.add(NbtMap.builder()
+                    .putString("id", type.getIdentifier().toString())
+                    .build()
+            );
         }
+
+        var packet = new AvailableEntityIdentifiersPacket();
+        packet.setIdentifiers(NbtMap.builder()
+                .putList("idlist", NbtType.COMPOUND, ids)
+                .build()
+        );
+        return packet;
     }
 
     public static BiomeDefinitionListPacket encodeBiomeDefinitionListPacket() {
