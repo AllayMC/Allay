@@ -58,11 +58,11 @@ public class BlockStateData {
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
     /**
      * The shape of the block state. When an entity is collided with block's shape, both
-     * {@link BlockBehavior#onEntityInside(Block, Entity)} and
-     * {@link Entity#onInsideBlock(Block)} will be called.
+     * {@link BlockBehavior#onEntityInside(Block, Entity)} and {@link Entity#onInsideBlock(Block)}
+     * will be called. This is useful for some blocks that do not have collision shape, such as
+     * lava and fire. These two blocks rely on the above method to ignite entity inside.
      * <p>
-     * This is useful for some blocks that do not have collision shape, such as lava and
-     * fire. These two blocks rely on the above method to ignite entity inside.
+     * This shape will also be considered as the selection box of the block state.
      */
     @Builder.Default
     protected VoxelShape shape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
