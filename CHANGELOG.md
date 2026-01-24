@@ -16,6 +16,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Implemented decorated pot behavior and recipe crafting.
 
+### Fixed
+
+- Fixed packet serializer of `PlayerEnchantOptionsPacket` for NetEase 1.21.50.
+
 # 0.10.6 (API 0.23.0) - 2026/1/24
 
 <small>[Compare with 0.10.5](https://github.com/AllayMC/Allay/compare/0.10.5...0.10.6)</small>

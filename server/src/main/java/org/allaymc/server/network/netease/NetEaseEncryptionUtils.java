@@ -1,6 +1,5 @@
 package org.allaymc.server.network.netease;
 
-import org.allaymc.server.network.multiversion.MultiVersion;
 import org.cloudburstmc.protocol.bedrock.data.auth.CertificateChainPayload;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;

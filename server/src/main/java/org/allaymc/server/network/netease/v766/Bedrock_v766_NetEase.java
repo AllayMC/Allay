@@ -5,6 +5,7 @@ import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
 import org.cloudburstmc.protocol.bedrock.codec.v766.BedrockCodecHelper_v766;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 import org.cloudburstmc.protocol.common.util.TypeMap;
 
@@ -26,5 +27,6 @@ public class Bedrock_v766_NetEase extends Bedrock_v766 {
             .helper(() -> new BedrockCodecHelper_v766_NetEase(ENTITY_DATA, GAME_RULE_TYPES, ITEM_STACK_REQUEST_TYPES, CONTAINER_SLOT_TYPES_NETEASE, PLAYER_ABILITIES, TEXT_PROCESSING_ORIGINS))
             .updateSerializer(PlayerAuthInputPacket.class, PlayerAuthInputSerializer_v766_NetEase.INSTANCE)
             .updateSerializer(TextPacket.class, TextSerializer_v766_NetEase.INSTANCE)
+            .updateSerializer(PlayerEnchantOptionsPacket.class, PlayerEnchantOptionsSerializer_v766_NetEase.INSTANCE)
             .build();
 }
