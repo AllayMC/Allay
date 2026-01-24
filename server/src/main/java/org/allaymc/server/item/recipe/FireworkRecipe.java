@@ -27,7 +27,7 @@ public final class FireworkRecipe extends ComplexRecipe {
     public static final FireworkRecipe INSTANCE = new FireworkRecipe();
 
     private FireworkRecipe() {
-        super(ComplexRecipeIds.FIREWORKS);
+        super(ComplexRecipeIds.BANNER_FIREWORKS);
     }
 
     @Override
