@@ -25,7 +25,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
-    @MultiVersion(version = "*-NetEase", details = "NetEase clients skip Xbox authentication and allow Chinese player names")
+    @MultiVersion(version = "*-NetEase", details = "NetEase clients allow Chinese player names")
     public void handle(Player player, LoginPacket packet) {
         var allayPlayer = (AllayPlayer) player;
         boolean isNetEaseClient = allayPlayer.isNetEasePlayer();
