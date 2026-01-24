@@ -1436,6 +1436,16 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initDecoratedPot() {
+        BlockTypes.DECORATED_POT = AllayBlockType
+                .builder(BlockDecoratedPotBehaviorImpl.class)
+                .vanillaBlock(BlockId.DECORATED_POT)
+                .setProperties(BlockPropertyTypes.DIRECTION_4)
+                .bindBlockEntity(BlockEntityTypes.DECORATED_POT)
+                .setBaseComponentSupplier(BlockDecoratedPotBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initGlazedTerracotta() {
         BlockTypes.BLACK_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.BLACK_GLAZED_TERRACOTTA);
         BlockTypes.BLUE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.BLUE_GLAZED_TERRACOTTA);

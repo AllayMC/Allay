@@ -239,4 +239,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityCauldronBaseComponentImpl::new, BlockEntityCauldronBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initDecoratedPot() {
+        BlockEntityTypes.DECORATED_POT = AllayBlockEntityType
+                .builder(BlockEntityDecoratedPotImpl.class)
+                .name(BlockEntityId.DECORATED_POT)
+                .addComponent(BlockEntityDecoratedPotBaseComponentImpl::new, BlockEntityDecoratedPotBaseComponentImpl.class)
+                .build();
+    }
 }

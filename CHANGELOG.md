@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.10.6](https://github.com/AllayMC/Allay/compare/0.10.6...HEAD)</small>
 
+### Added
+
+- Implemented decorated pot behavior and recipe crafting.
+
 # 0.10.6 (API 0.23.0) - 2026/1/24
 
 <small>[Compare with 0.10.5](https://github.com/AllayMC/Allay/compare/0.10.5...0.10.6)</small>

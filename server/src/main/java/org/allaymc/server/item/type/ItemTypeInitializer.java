@@ -1003,6 +1003,14 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    public static void initDecoratedPot() {
+        ItemTypes.DECORATED_POT = AllayItemType
+                .builder(ItemDecoratedPotStackImpl.class)
+                .vanillaItem(ItemId.DECORATED_POT)
+                .addComponent(ItemDecoratedPotBaseComponentImpl::new, ItemDecoratedPotBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initDye() {
         ItemTypes.WHITE_DYE = buildDye(ItemId.WHITE_DYE, DyeColor.WHITE);
         ItemTypes.ORANGE_DYE = buildDye(ItemId.ORANGE_DYE, DyeColor.ORANGE);

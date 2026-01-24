@@ -11,6 +11,7 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityComparator> COMPARATOR;
     public static BlockEntityType<BlockEntityBed> BED;
     public static BlockEntityType<BlockEntityChest> CHEST;
+    public static BlockEntityType<BlockEntityDecoratedPot> DECORATED_POT;
     public static BlockEntityType<BlockEntityHopper> HOPPER;
     public static BlockEntityType<BlockEntityShulkerBox> SHULKER_BOX;
     public static BlockEntityType<BlockEntityFurnace> FURNACE;

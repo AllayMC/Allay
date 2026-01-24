@@ -11,6 +11,7 @@ import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.item.recipe.ComplexRecipe;
+import org.allaymc.server.item.recipe.DecoratedPotRecipe;
 import org.allaymc.server.item.recipe.FireworkRecipe;
 
 import java.io.InputStreamReader;
@@ -87,6 +88,7 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
         // Complex
         var complexRecipes = new HashSet<ComplexRecipe>();
         complexRecipes.add(FireworkRecipe.INSTANCE);
+        complexRecipes.add(DecoratedPotRecipe.INSTANCE);
         complexRecipes.forEach(complexRecipe -> recipes.put(complexRecipe.getIdentifier(), complexRecipe));
 
         return recipes;
