@@ -77,7 +77,7 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.2" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.7" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.29346.255" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.30387.78" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.2" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
@@ -89,7 +89,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.29.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.31.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 # bStats
@@ -116,4 +116,4 @@ shadow = { id = "com.gradleup.shadow", version = "9.3.1" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.4" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
 delombok = { id = "com.github.monosoul.yadegrap", version = "1.0.0" }
-publish = { id = "com.vanniktech.maven.publish", version = "0.35.0" }
+publish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
