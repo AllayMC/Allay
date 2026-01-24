@@ -17,7 +17,8 @@ public class Bedrock_v766_NetEase extends Bedrock_v766 {
 
     protected static final TypeMap<ContainerSlotType> CONTAINER_SLOT_TYPES_NETEASE = CONTAINER_SLOT_TYPES
             .toBuilder()
-            .shift(21, 1)
+            // NetEase: RECIPE_CUSTOM
+            .shift(17, 1)
             .build();
 
     public static final BedrockCodec CODEC = Bedrock_v766.CODEC.toBuilder()
