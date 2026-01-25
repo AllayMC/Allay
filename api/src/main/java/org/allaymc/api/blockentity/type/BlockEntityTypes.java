@@ -8,6 +8,8 @@ import org.allaymc.api.blockentity.interfaces.*;
 public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityBanner> BANNER;
     public static BlockEntityType<BlockEntityBarrel> BARREL;
+    public static BlockEntityType<BlockEntityDispenser> DISPENSER;
+    public static BlockEntityType<BlockEntityDropper> DROPPER;
     public static BlockEntityType<BlockEntityBell> BELL;
     public static BlockEntityType<BlockEntityComparator> COMPARATOR;
     public static BlockEntityType<BlockEntityBed> BED;

@@ -459,12 +459,12 @@ public final class ItemTypeInitializer {
         ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG, EntityId.ZOMBIE_VILLAGER);
     }
 
-    private static ItemType<ItemSpawnEggStack> buildSpawnEgg(ItemId itemId, EntityId customEntityId) {
+    private static ItemType<ItemSpawnEggStack> buildSpawnEgg(ItemId itemId, EntityId entityId) {
         return AllayItemType
                 .builder(ItemSpawnEggStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(
-                        initInfo -> new ItemSpawnEggBaseComponentImpl(initInfo, customEntityId),
+                        initInfo -> new ItemSpawnEggBaseComponentImpl(initInfo, entityId),
                         ItemSpawnEggBaseComponentImpl.class
                 )
                 .build();

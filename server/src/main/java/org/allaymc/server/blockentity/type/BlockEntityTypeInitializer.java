@@ -56,6 +56,24 @@ public final class BlockEntityTypeInitializer {
                 .build();
     }
 
+    public static void initDispenser() {
+        BlockEntityTypes.DISPENSER = AllayBlockEntityType
+                .builder(BlockEntityDispenserImpl.class)
+                .name(BlockEntityId.DISPENSER)
+                .addComponent(BlockEntityDispenserBaseComponentImpl::new, BlockEntityDispenserBaseComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(DispenserContainerImpl::new), BlockEntityContainerHolderComponentImpl.class)
+                .build();
+    }
+
+    public static void initDropper() {
+        BlockEntityTypes.DROPPER = AllayBlockEntityType
+                .builder(BlockEntityDropperImpl.class)
+                .name(BlockEntityId.DROPPER)
+                .addComponent(BlockEntityDropperBaseComponentImpl::new, BlockEntityDropperBaseComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(DropperContainerImpl::new), BlockEntityContainerHolderComponentImpl.class)
+                .build();
+    }
+
     public static void initChest() {
         BlockEntityTypes.CHEST = AllayBlockEntityType
                 .builder(BlockEntityChestImpl.class)

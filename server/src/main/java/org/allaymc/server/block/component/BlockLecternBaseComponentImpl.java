@@ -20,7 +20,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
 
-import static org.allaymc.api.player.GameMode.*;
+import static org.allaymc.api.player.GameMode.CREATIVE;
 
 /**
  * Implementation of lectern block behavior.

@@ -468,6 +468,26 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initDispenser() {
+        BlockTypes.DISPENSER = AllayBlockType
+                .builder(BlockDispenserBehaviorImpl.class)
+                .vanillaBlock(BlockId.DISPENSER)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TRIGGERED_BIT)
+                .bindBlockEntity(BlockEntityTypes.DISPENSER)
+                .setBaseComponentSupplier(BlockDispenserBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initDropper() {
+        BlockTypes.DROPPER = AllayBlockType
+                .builder(BlockDropperBehaviorImpl.class)
+                .vanillaBlock(BlockId.DROPPER)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TRIGGERED_BIT)
+                .bindBlockEntity(BlockEntityTypes.DROPPER)
+                .setBaseComponentSupplier(BlockDropperBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initCraftingTable() {
         BlockTypes.CRAFTING_TABLE = AllayBlockType
                 .builder(BlockCraftingTableBehaviorImpl.class)

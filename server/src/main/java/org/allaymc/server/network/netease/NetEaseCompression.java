@@ -1,7 +1,6 @@
 package org.allaymc.server.network.netease;
 
 import io.netty.buffer.ByteBuf;
-import org.allaymc.server.network.multiversion.MultiVersion;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.Setter;

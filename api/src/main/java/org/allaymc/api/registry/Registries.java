@@ -1,5 +1,6 @@
 package org.allaymc.api.registry;
 
+import org.allaymc.api.block.dispenser.DispenseBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -66,4 +67,7 @@ public final class Registries {
 
     // Persistent Data Container (PDC)
     public static PersistentDataTypeRegistry PERSISTENT_DATA_TYPES;
+
+    // Dispenser
+    public static SimpleMappedRegistry<ItemType<?>, DispenseBehavior> DISPENSER_BEHAVIORS;
 }

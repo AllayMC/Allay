@@ -14,6 +14,19 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Implemented dispenser and dropper:
+  - Added `DispenseBehavior` interface for defining custom item dispense behaviors.
+  - Added `DispenseResult` class for representing dispense operation results.
+  - Added `BlockEntityDispenser` and `BlockEntityDropper` interfaces.
+  - Added `BlockEntityDispenserBaseComponent` interface with `tryDispense()` method.
+  - Added `BlockDispenseEvent` event fired when a dispenser or dropper dispenses an item, allowing plugins to modify or cancel the behavior.
+  - Added `Registries.DISPENSER_BEHAVIORS` registry for registering custom dispense behaviors.
+  - Added `BlockEntityTypes.DISPENSER` and `BlockEntityTypes.DROPPER` block entity types.
+  - Added `ContainerTypes.DISPENSER` and `ContainerTypes.DROPPER` container types.
+  - Added `ItemSpawnEggBaseComponent` interface with `getEntityType()` method for spawn egg items.
+  - Added `ShootParticle` particle for dispenser/dropper shoot effects.
+  - Added sounds `SimpleSound.BLOCK_CLICK` and `SimpleSound.BLOCK_CLICK_FAIL`.
+  - Implemented dispense behaviors for: TNT, fireworks, flint and steel, glass bottle, water bottle, buckets (water, lava, powder snow, fish, axolotl, tadpole), spawn eggs, and projectiles (arrows, eggs, snowballs, tridents, experience bottles, splash/lingering potions).
 - (API) Implemented composter:
   - Added `ComposterEvent` event fired when items are added to or harvested from a composter.
   - Added `Registries.COMPOSTABLE_ITEMS` for registering compostable items and their composting chances.

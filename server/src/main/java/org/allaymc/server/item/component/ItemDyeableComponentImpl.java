@@ -7,7 +7,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.item.component.event.CItemLoadExtraTagEvent;
 import org.allaymc.server.item.component.event.CItemSaveExtraTagEvent;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Implementation of dyeable item component for leather armor.

@@ -44,6 +44,10 @@ public enum SimpleSound implements Sound {
     DOOR_CRASH,
     // CLICK is a clicking sound.
     CLICK,
+    // BLOCK_CLICK is a sound played when a dispenser or dropper dispenses an item.
+    BLOCK_CLICK,
+    // BLOCK_CLICK_FAIL is a sound played when a dispenser or dropper fails to dispense.
+    BLOCK_CLICK_FAIL,
     // IGNITE is a sound played when using a flint & steel.
     IGNITE,
     // TNT is a sound played when TNT is ignited.

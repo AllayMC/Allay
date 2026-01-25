@@ -2,7 +2,7 @@ package org.allaymc.api.blockentity.component;
 
 import org.allaymc.api.item.data.PotionType;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Component interface for cauldron block entities.

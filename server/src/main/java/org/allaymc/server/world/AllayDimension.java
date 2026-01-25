@@ -38,11 +38,7 @@ import org.joml.Vector3ic;
 import java.util.Collections;
 import java.util.Set;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR;
-import static org.allaymc.api.block.type.BlockTypes.POWERED_COMPARATOR;
-import static org.allaymc.api.block.type.BlockTypes.POWERED_REPEATER;
-import static org.allaymc.api.block.type.BlockTypes.UNPOWERED_COMPARATOR;
-import static org.allaymc.api.block.type.BlockTypes.UNPOWERED_REPEATER;
+import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
  * @author daoge_cmd | Cool_Loong

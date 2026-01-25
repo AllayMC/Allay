@@ -1,6 +1,5 @@
 package org.allaymc.server.blockentity.component;
 
-import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;

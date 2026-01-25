@@ -12,7 +12,6 @@ import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPickupArrowEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPickupItemEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;

@@ -262,6 +262,9 @@ public final class Allay {
 
         // Persistent Data Container (PDC)
         Registries.PERSISTENT_DATA_TYPES = new AllayPersistentDataTypeRegistry();
+
+        // Dispenser
+        Registries.DISPENSER_BEHAVIORS = SimpleMappedRegistry.create(new DispenserBehaviorRegistryLoader());
     }
 
     @VisibleForTesting

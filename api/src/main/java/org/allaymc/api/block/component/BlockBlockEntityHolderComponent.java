@@ -30,7 +30,7 @@ public interface BlockBlockEntityHolderComponent<T extends BlockEntity> extends 
      * @param y         block entity's y coordinate
      * @param z         block entity's z coordinate
      * @param dimension the dimension which the block entity is in
-     * @return the block entity in the specified location
+     * @return the block entity in the specified location, will never be {@code null}
      * @throws IllegalStateException if the block entity is not the correct type
      */
     T getBlockEntity(int x, int y, int z, Dimension dimension);

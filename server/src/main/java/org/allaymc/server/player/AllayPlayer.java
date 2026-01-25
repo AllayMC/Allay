@@ -1172,6 +1172,8 @@ public class AllayPlayer implements Player {
             case SimpleSound.BREEZE_WIND_CHARGE_BURST -> packet.setSound(SoundEvent.WIND_CHARGE_BURST);
             case SimpleSound.PISTON_PUSH -> packet.setSound(SoundEvent.PISTON_OUT);
             case SimpleSound.PISTON_PULL -> packet.setSound(SoundEvent.PISTON_IN);
+            case SimpleSound.BLOCK_CLICK -> packet.setSound(SoundEvent.BLOCK_CLICK);
+            case SimpleSound.BLOCK_CLICK_FAIL -> packet.setSound(SoundEvent.BLOCK_CLICK_FAIL);
             case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case SimpleSound.PAINTING_PLACE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
@@ -1599,6 +1601,38 @@ public class AllayPlayer implements Player {
             case SimpleParticle.SMASH_ATTACK_GROUND_DUST -> packet.setType(LevelEvent.PARTICLE_SMASH_ATTACK_GROUND_DUST);
             case SimpleParticle.WIND_EXPLOSION -> packet.setType(ParticleType.WIND_EXPLOSION);
             case SimpleParticle.BREEZE_WIND_EXPLOSION -> packet.setType(ParticleType.BREEZE_WIND_EXPLOSION);
+            case ShootParticle pa -> {
+                packet.setType(LevelEvent.PARTICLE_SHOOT);
+                int data = 0;
+                switch (pa.face()) {
+                    case DOWN -> {
+                        data = 4;
+                        pos = pos.add(0, -0.9f, 0);
+                    }
+                    case UP -> {
+                        data = 4;
+                        pos = pos.add(0, 0.5f, 0);
+                    }
+                    case NORTH -> {
+                        data = 1;
+                        pos = pos.add(0, -0.2f, -0.7f);
+                    }
+                    case SOUTH -> {
+                        data = 7;
+                        pos = pos.add(0, -0.2f, 0.7f);
+                    }
+                    case WEST -> {
+                        data = 3;
+                        pos = pos.add(-0.7f, -0.2f, 0);
+                    }
+                    case EAST -> {
+                        data = 5;
+                        pos = pos.add(0.7f, -0.2f, 0);
+                    }
+                }
+                packet.setPosition(pos);
+                packet.setData(data);
+            }
             case CustomParticle pa -> {
                 var pk = new SpawnParticleEffectPacket();
                 pk.setDimensionId(this.controlledEntity.getDimension().getDimensionInfo().dimensionId());

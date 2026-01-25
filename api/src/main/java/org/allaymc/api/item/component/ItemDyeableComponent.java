@@ -1,6 +1,6 @@
 package org.allaymc.api.item.component;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Component for items that can be dyed with custom colors.

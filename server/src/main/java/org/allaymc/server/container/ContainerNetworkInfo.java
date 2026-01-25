@@ -207,6 +207,18 @@ public record ContainerNetworkInfo(
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
             .build();
 
+    public static final ContainerNetworkInfo DISPENSER = builder()
+            .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.DISPENSER)
+            .type(ContainerTypes.DISPENSER)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
+    public static final ContainerNetworkInfo DROPPER = builder()
+            .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.DROPPER)
+            .type(ContainerTypes.DROPPER)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
     // Fake Container Types
 
     public static final ContainerNetworkInfo FAKE_CHEST = builder()

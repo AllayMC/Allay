@@ -6,7 +6,7 @@ import org.allaymc.api.blockentity.component.BlockEntityCauldronBaseComponent;
 import org.allaymc.api.item.data.PotionType;
 import org.cloudburstmc.nbt.NbtMap;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Implementation of the cauldron block entity component.
