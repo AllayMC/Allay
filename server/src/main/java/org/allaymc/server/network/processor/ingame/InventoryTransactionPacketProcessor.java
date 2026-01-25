@@ -9,6 +9,7 @@ import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -193,7 +194,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
 
                         var damageContainer = DamageContainer.entityAttack(entity, damage);
-                        if (damageable.attack(damageContainer)) {
+                        var attackSuccess = damageable.attack(damageContainer);
+                        entity.getDimension().addSound(target.getLocation(), new AttackSound(attackSuccess));
+                        if (attackSuccess) {
                             itemInHand.onAttackEntity(entity, target);
                         }
                     }

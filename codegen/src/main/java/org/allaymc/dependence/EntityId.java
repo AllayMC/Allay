@@ -35,6 +35,8 @@ public enum EntityId {
 
     CAMEL("minecraft:camel"),
 
+    CAMEL_HUSK("minecraft:camel_husk"),
+
     CAT("minecraft:cat"),
 
     CAVE_SPIDER("minecraft:cave_spider"),
@@ -141,6 +143,8 @@ public enum EntityId {
 
     MULE("minecraft:mule"),
 
+    NAUTILUS("minecraft:nautilus"),
+
     NPC("minecraft:npc"),
 
     OCELOT("minecraft:ocelot"),
@@ -150,6 +154,8 @@ public enum EntityId {
     PAINTING("minecraft:painting"),
 
     PANDA("minecraft:panda"),
+
+    PARCHED("minecraft:parched"),
 
     PARROT("minecraft:parrot"),
 
@@ -258,6 +264,8 @@ public enum EntityId {
     ZOMBIE("minecraft:zombie"),
 
     ZOMBIE_HORSE("minecraft:zombie_horse"),
+
+    ZOMBIE_NAUTILUS("minecraft:zombie_nautilus"),
 
     ZOMBIE_PIGMAN("minecraft:zombie_pigman"),
 

@@ -46,7 +46,7 @@ public interface TypeNames {
     ClassName ENTITY = ClassName.get("org.allaymc.api.entity", "Entity");
     ClassName ENTITY_IMPL = ClassName.get("org.allaymc.server.entity.impl", "EntityImpl");
     ClassName ENTITY_INIT_INFO = ClassName.get("org.allaymc.api.entity", "EntityInitInfo");
-    ClassName ENTITY_ID = ClassName.get("org.allaymc.api.entity.data", "EntityId");
+    ClassName ENTITY_ID = ClassName.get("org.allaymc.server.entity.data", "EntityId");
     ClassName ENTITY_TYPE = ClassName.get("org.allaymc.api.entity.type", "EntityType");
     ClassName ENTITY_TYPES = ClassName.get("org.allaymc.api.entity.type", "EntityTypes");
     ClassName ALLAY_ENTITY_TYPE = ClassName.get("org.allaymc.server.entity.type", "AllayEntityType");

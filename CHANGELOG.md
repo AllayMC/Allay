@@ -54,6 +54,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Fixed
 
+- (API) Added missing attack sounds:
+  - Added attack sound when player punches air (`ATTACK_NODAMAGE`).
+  - Added attack sound when player attacks an entity (`ATTACK_STRONG` on hit, `ATTACK_NODAMAGE` on miss).
+  - `PlayerPunchAirEvent` now implements `CancellableEvent`, allowing plugins to cancel the event and prevent the sound from playing.
 - Fixed packet serializer of `PlayerEnchantOptionsPacket` for NetEase 1.21.50.
 
 # 0.10.6 (API 0.23.0) - 2026/1/24

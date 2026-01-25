@@ -385,11 +385,14 @@ public final class ItemTypeInitializer {
         ItemTypes.BOGGED_SPAWN_EGG = buildSpawnEgg(ItemId.BOGGED_SPAWN_EGG, EntityId.BOGGED);
         ItemTypes.BREEZE_SPAWN_EGG = buildSpawnEgg(ItemId.BREEZE_SPAWN_EGG, EntityId.BREEZE);
         ItemTypes.CAMEL_SPAWN_EGG = buildSpawnEgg(ItemId.CAMEL_SPAWN_EGG, EntityId.CAMEL);
+        ItemTypes.CAMEL_HUSK_SPAWN_EGG = buildSpawnEgg(ItemId.CAMEL_HUSK_SPAWN_EGG, EntityId.CAMEL_HUSK);
         ItemTypes.CAT_SPAWN_EGG = buildSpawnEgg(ItemId.CAT_SPAWN_EGG, EntityId.CAT);
         ItemTypes.CAVE_SPIDER_SPAWN_EGG = buildSpawnEgg(ItemId.CAVE_SPIDER_SPAWN_EGG, EntityId.CAVE_SPIDER);
         ItemTypes.CHICKEN_SPAWN_EGG = buildSpawnEgg(ItemId.CHICKEN_SPAWN_EGG, EntityId.CHICKEN);
         ItemTypes.COD_SPAWN_EGG = buildSpawnEgg(ItemId.COD_SPAWN_EGG, EntityId.COD);
+        ItemTypes.COPPER_GOLEM_SPAWN_EGG = buildSpawnEgg(ItemId.COPPER_GOLEM_SPAWN_EGG, EntityId.COPPER_GOLEM);
         ItemTypes.COW_SPAWN_EGG = buildSpawnEgg(ItemId.COW_SPAWN_EGG, EntityId.COW);
+        ItemTypes.CREAKING_SPAWN_EGG = buildSpawnEgg(ItemId.CREAKING_SPAWN_EGG, EntityId.CREAKING);
         ItemTypes.CREEPER_SPAWN_EGG = buildSpawnEgg(ItemId.CREEPER_SPAWN_EGG, EntityId.CREEPER);
         ItemTypes.DOLPHIN_SPAWN_EGG = buildSpawnEgg(ItemId.DOLPHIN_SPAWN_EGG, EntityId.DOLPHIN);
         ItemTypes.DONKEY_SPAWN_EGG = buildSpawnEgg(ItemId.DONKEY_SPAWN_EGG, EntityId.DONKEY);
@@ -405,6 +408,7 @@ public final class ItemTypeInitializer {
         ItemTypes.GLOW_SQUID_SPAWN_EGG = buildSpawnEgg(ItemId.GLOW_SQUID_SPAWN_EGG, EntityId.GLOW_SQUID);
         ItemTypes.GOAT_SPAWN_EGG = buildSpawnEgg(ItemId.GOAT_SPAWN_EGG, EntityId.GOAT);
         ItemTypes.GUARDIAN_SPAWN_EGG = buildSpawnEgg(ItemId.GUARDIAN_SPAWN_EGG, EntityId.GUARDIAN);
+        ItemTypes.HAPPY_GHAST_SPAWN_EGG = buildSpawnEgg(ItemId.HAPPY_GHAST_SPAWN_EGG, EntityId.HAPPY_GHAST);
         ItemTypes.HOGLIN_SPAWN_EGG = buildSpawnEgg(ItemId.HOGLIN_SPAWN_EGG, EntityId.HOGLIN);
         ItemTypes.HORSE_SPAWN_EGG = buildSpawnEgg(ItemId.HORSE_SPAWN_EGG, EntityId.HORSE);
         ItemTypes.HUSK_SPAWN_EGG = buildSpawnEgg(ItemId.HUSK_SPAWN_EGG, EntityId.HUSK);
@@ -413,9 +417,11 @@ public final class ItemTypeInitializer {
         ItemTypes.MAGMA_CUBE_SPAWN_EGG = buildSpawnEgg(ItemId.MAGMA_CUBE_SPAWN_EGG, EntityId.MAGMA_CUBE);
         ItemTypes.MOOSHROOM_SPAWN_EGG = buildSpawnEgg(ItemId.MOOSHROOM_SPAWN_EGG, EntityId.MOOSHROOM);
         ItemTypes.MULE_SPAWN_EGG = buildSpawnEgg(ItemId.MULE_SPAWN_EGG, EntityId.MULE);
+        ItemTypes.NAUTILUS_SPAWN_EGG = buildSpawnEgg(ItemId.NAUTILUS_SPAWN_EGG, EntityId.NAUTILUS);
         ItemTypes.NPC_SPAWN_EGG = buildSpawnEgg(ItemId.NPC_SPAWN_EGG, EntityId.NPC);
         ItemTypes.OCELOT_SPAWN_EGG = buildSpawnEgg(ItemId.OCELOT_SPAWN_EGG, EntityId.OCELOT);
         ItemTypes.PANDA_SPAWN_EGG = buildSpawnEgg(ItemId.PANDA_SPAWN_EGG, EntityId.PANDA);
+        ItemTypes.PARCHED_SPAWN_EGG = buildSpawnEgg(ItemId.PARCHED_SPAWN_EGG, EntityId.PARCHED);
         ItemTypes.PARROT_SPAWN_EGG = buildSpawnEgg(ItemId.PARROT_SPAWN_EGG, EntityId.PARROT);
         ItemTypes.PHANTOM_SPAWN_EGG = buildSpawnEgg(ItemId.PHANTOM_SPAWN_EGG, EntityId.PHANTOM);
         ItemTypes.PIG_SPAWN_EGG = buildSpawnEgg(ItemId.PIG_SPAWN_EGG, EntityId.PIG);
@@ -431,6 +437,7 @@ public final class ItemTypeInitializer {
         ItemTypes.SHULKER_SPAWN_EGG = buildSpawnEgg(ItemId.SHULKER_SPAWN_EGG, EntityId.SHULKER);
         ItemTypes.SILVERFISH_SPAWN_EGG = buildSpawnEgg(ItemId.SILVERFISH_SPAWN_EGG, EntityId.SILVERFISH);
         ItemTypes.SKELETON_SPAWN_EGG = buildSpawnEgg(ItemId.SKELETON_SPAWN_EGG, EntityId.SKELETON);
+        ItemTypes.SKELETON_HORSE_SPAWN_EGG = buildSpawnEgg(ItemId.SKELETON_HORSE_SPAWN_EGG, EntityId.SKELETON_HORSE);
         ItemTypes.SLIME_SPAWN_EGG = buildSpawnEgg(ItemId.SLIME_SPAWN_EGG, EntityId.SLIME);
         ItemTypes.SNIFFER_SPAWN_EGG = buildSpawnEgg(ItemId.SNIFFER_SPAWN_EGG, EntityId.SNIFFER);
         ItemTypes.SNOW_GOLEM_SPAWN_EGG = buildSpawnEgg(ItemId.SNOW_GOLEM_SPAWN_EGG, EntityId.SNOW_GOLEM);
@@ -454,6 +461,7 @@ public final class ItemTypeInitializer {
         ItemTypes.WOLF_SPAWN_EGG = buildSpawnEgg(ItemId.WOLF_SPAWN_EGG, EntityId.WOLF);
         ItemTypes.ZOGLIN_SPAWN_EGG = buildSpawnEgg(ItemId.ZOGLIN_SPAWN_EGG, EntityId.ZOGLIN);
         ItemTypes.ZOMBIE_HORSE_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_HORSE_SPAWN_EGG, EntityId.ZOMBIE_HORSE);
+        ItemTypes.ZOMBIE_NAUTILUS_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_NAUTILUS_SPAWN_EGG, EntityId.ZOMBIE_NAUTILUS);
         ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_PIGMAN_SPAWN_EGG, EntityId.ZOMBIE_PIGMAN);
         ItemTypes.ZOMBIE_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_SPAWN_EGG, EntityId.ZOMBIE);
         ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG, EntityId.ZOMBIE_VILLAGER);

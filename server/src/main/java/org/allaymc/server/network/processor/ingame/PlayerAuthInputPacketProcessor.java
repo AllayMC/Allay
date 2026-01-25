@@ -20,6 +20,7 @@ import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.particle.PunchBlockParticle;
+import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
@@ -350,7 +351,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     entity.setFlying(true);
                 }
                 case STOP_FLYING -> entity.setFlying(false);
-                case MISSED_SWING -> new PlayerPunchAirEvent(entity).call();
+                case MISSED_SWING -> {
+                    var event = new PlayerPunchAirEvent(entity);
+                    if (event.call()) {
+                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false));
+                    }
+                }
             }
         }
     }

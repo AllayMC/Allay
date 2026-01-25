@@ -127,6 +127,10 @@
   "minecraft:creaking": 146,
   "minecraft:happy_ghast": 147,
   "minecraft:copper_golem": 148,
+  "minecraft:nautilus": 149,
+  "minecraft:zombie_nautilus": 150,
+  "minecraft:parched": 151,
+  "minecraft:camel_husk": 152,
   "minecraft:trader_llama": 157,
   "minecraft:chest_boat": 218,
   "minecraft:player": 257
