@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -100,6 +101,11 @@ public class Explosion {
      * Whether this explosion will affect entities. This including damage and add motion to entities.
      */
     protected boolean affectEntities;
+    /**
+     * The block type that caused this explosion. Used for custom death messages
+     * (e.g., bed, respawn anchor). If null, uses generic block explosion message.
+     */
+    protected BlockType<?> sourceBlockType;
 
     /**
      * @see #Explosion(float, boolean, float, Sound, Particle)
@@ -339,7 +345,7 @@ public class Explosion {
                     };
                     var damage = (impact * impact + impact) * m * size / 2.0 + 1.0;
                     if (entity == null) {
-                        living.attack(DamageContainer.blockExplosion((float) damage));
+                        living.attack(DamageContainer.blockExplosion(sourceBlockType, (float) damage));
                     } else {
                         living.attack(DamageContainer.entityExplosion(entity, (float) damage));
                     }

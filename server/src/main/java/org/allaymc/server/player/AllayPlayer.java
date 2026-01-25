@@ -1174,6 +1174,8 @@ public class AllayPlayer implements Player {
             case SimpleSound.PISTON_PULL -> packet.setSound(SoundEvent.PISTON_IN);
             case SimpleSound.BLOCK_CLICK -> packet.setSound(SoundEvent.BLOCK_CLICK);
             case SimpleSound.BLOCK_CLICK_FAIL -> packet.setSound(SoundEvent.BLOCK_CLICK_FAIL);
+            case SimpleSound.RESPAWN_ANCHOR_SET_SPAWN -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_SET_SPAWN);
+            case SimpleSound.RESPAWN_ANCHOR_DEPLETE -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_DEPLETE);
             case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case SimpleSound.PAINTING_PLACE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
@@ -1530,6 +1532,10 @@ public class AllayPlayer implements Player {
                 } else {
                     packet.setSound(SoundEvent.POINTED_DRIPSTONE_CAULDRON_DRIP_LAVA);
                 }
+            }
+            case RespawnAnchorChargeSound so -> {
+                packet.setSound(SoundEvent.RESPAWN_ANCHOR_CHARGE);
+                packet.setExtraData(so.blockState().blockStateHash());
             }
             case DecoratedPotInsertedSound so -> {
                 PlaySoundPacket playSound = new PlaySoundPacket();

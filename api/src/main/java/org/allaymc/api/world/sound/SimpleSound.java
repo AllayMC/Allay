@@ -132,6 +132,12 @@ public enum SimpleSound implements Sound {
     CAULDRON_CLEAN_BANNER,
     // CAULDRON_EXPLODE is a sound played when different potions are mixed in a cauldron, causing it to explode.
     CAULDRON_EXPLODE,
+    // RESPAWN_ANCHOR_CHARGE is a sound played when a respawn anchor is charged with glowstone.
+    RESPAWN_ANCHOR_CHARGE,
+    // RESPAWN_ANCHOR_SET_SPAWN is a sound played when a player sets their spawn point at a respawn anchor.
+    RESPAWN_ANCHOR_SET_SPAWN,
+    // RESPAWN_ANCHOR_DEPLETE is a sound played when a respawn anchor loses a charge upon player respawn.
+    RESPAWN_ANCHOR_DEPLETE,
 
     /* Item */
 

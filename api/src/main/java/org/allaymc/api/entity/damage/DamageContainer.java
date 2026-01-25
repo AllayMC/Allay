@@ -2,6 +2,7 @@ package org.allaymc.api.entity.damage;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.EnchantedHit;
 
@@ -189,13 +190,15 @@ public class DamageContainer {
     }
 
     /**
-     * Create a block explosion damage container.
+     * Create a block explosion damage container with specific block type.
+     * Used for blocks that need custom death messages (e.g., bed, respawn anchor).
      *
+     * @param blockType    the block type that caused the explosion
      * @param sourceDamage the source damage
      * @return the damage container
      */
-    public static DamageContainer blockExplosion(float sourceDamage) {
-        return new DamageContainer(null, BLOCK_EXPLOSION, sourceDamage);
+    public static DamageContainer blockExplosion(BlockType<?> blockType, float sourceDamage) {
+        return new DamageContainer(blockType, BLOCK_EXPLOSION, sourceDamage);
     }
 
     /**

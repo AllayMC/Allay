@@ -45,6 +45,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `DamageType.STALACTITE` and `DamageType.STALAGMITE` damage types.
 - (API) Added method `WorldViewer.playPointedDripstoneDripSound()` for playing dripstone drip sounds.
 - (API) Added method `BlockFallableComponent.checkAndFall()` for programmatically triggering block falling.
+- (API) Added `BlockRespawnPointComponent` interface for blocks that can serve as respawn points (bed, respawn anchor), with `onPlayerRespawn()` method to handle respawn logic and safe position finding.
+- (API) Added method `Block.getLocation()` for creating a `Location3i` from the block's position.
+- (API) Added `Explosion.sourceBlockType` field for custom death messages when explosion is caused by specific blocks (e.g., bed, respawn anchor).
 - (API) Implemented decorated pot:
   - Added `PotSherds` record class representing the four sherds on a decorated pot (front, back, left, right).
   - Added `BlockEntityDecoratedPot` interface with methods for item storage, sherd management, and comparator output.

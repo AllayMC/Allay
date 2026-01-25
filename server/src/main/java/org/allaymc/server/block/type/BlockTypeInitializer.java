@@ -44,6 +44,8 @@ import org.allaymc.server.block.component.piston.BlockStickyPistonBaseComponentI
 import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
+import org.allaymc.server.block.component.respawnpoint.BlockBedRespawnPointComponentImpl;
+import org.allaymc.server.block.component.respawnpoint.BlockRespawnAnchorRespawnPointComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
@@ -1883,6 +1885,17 @@ public final class BlockTypeInitializer {
                 .bindBlockEntity(BlockEntityTypes.BED)
                 .setProperties(BlockPropertyTypes.HEAD_PIECE_BIT, BlockPropertyTypes.OCCUPIED_BIT, BlockPropertyTypes.DIRECTION_4)
                 .setBaseComponentSupplier(BlockBedBaseComponentImpl::new)
+                .addComponent(new BlockBedRespawnPointComponentImpl())
+                .build();
+    }
+
+    public static void initRespawnAnchor() {
+        BlockTypes.RESPAWN_ANCHOR = AllayBlockType
+                .builder(BlockRespawnAnchorBehaviorImpl.class)
+                .vanillaBlock(BlockId.RESPAWN_ANCHOR)
+                .setProperties(BlockPropertyTypes.RESPAWN_ANCHOR_CHARGE)
+                .setBaseComponentSupplier(BlockRespawnAnchorBaseComponentImpl::new)
+                .addComponent(new BlockRespawnAnchorRespawnPointComponentImpl())
                 .build();
     }
 

@@ -15,6 +15,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockExplodeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.explosion.Explosion;
@@ -77,15 +78,35 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        if (dimension.getDimensionInfo() != DimensionInfo.OVERWORLD &&
-            dimension.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.RESPAWN_BLOCKS_EXPLODE)) {
+        if (interactInfo == null) {
+            return false;
+        }
+
+        var block = interactInfo.getClickedBlock();
+
+        if (dimension.getDimensionInfo() != DimensionInfo.OVERWORLD) {
+            if (!dimension.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.RESPAWN_BLOCKS_EXPLODE)) {
+                return true;
+            }
+
             var explosion = new Explosion(5, true);
-            var event = new BlockExplodeEvent(interactInfo.getClickedBlock(), explosion);
+            explosion.setSourceBlockType(this.blockType);
+            var event = new BlockExplodeEvent(block, explosion);
             if (!event.call()) {
                 return false;
             }
 
-            explosion.explode(dimension, interactInfo.clickedBlockPos());
+            explosion.explode(dimension, block.getPosition());
+            return true;
+        }
+
+        var player = interactInfo.player();
+
+        var spawnPoint = player.validateAndGetSpawnPoint();
+        if (spawnPoint == null || !spawnPoint.equals(block.getLocation())) {
+            player.setSpawnPoint(block.getLocation());
+
+            player.sendTranslatable(TrKeys.MC_TILE_BED_RESPAWNSET);
             return true;
         }
 

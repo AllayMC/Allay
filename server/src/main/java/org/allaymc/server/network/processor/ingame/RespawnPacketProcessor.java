@@ -1,9 +1,14 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.BlockRespawnPointComponent;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
+import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.world.AllayDimension;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -30,8 +35,9 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         }
 
         var event = new PlayerRespawnEvent(entity);
-        event.setRespawnLocation(entity.validateAndGetSpawnPoint());
+        event.setRespawnLocation(this.findSpawnPoint(entity));
         event.call();
+
         var spawnPoint = event.getRespawnLocation();
 
         // NOTICE: No need to set runtime entity id
@@ -46,6 +52,24 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
             resetData(entity);
             entity.teleport(spawnPoint);
         });
+    }
+
+    private Location3ic findSpawnPoint(EntityPlayer entity) {
+        var spawnPoint = entity.validateAndGetSpawnPoint();
+        var dimension = spawnPoint.dimension();
+
+        var blockState = dimension.getBlockState(spawnPoint.x(), spawnPoint.y(), spawnPoint.z());
+        var blockBehavior = blockState.getBlockType().getBlockBehavior();
+        if (blockBehavior instanceof BlockRespawnPointComponent respawnPointComponent) {
+            var respawnLocation = respawnPointComponent.onPlayerRespawn(entity, new Block(blockState, new Position3i(spawnPoint, dimension)));
+            if (respawnLocation != null) {
+                return respawnLocation;
+            }
+
+            return Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+        }
+
+        return spawnPoint;
     }
 
     private void resetData(EntityPlayer player) {

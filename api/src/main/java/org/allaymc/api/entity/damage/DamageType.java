@@ -26,7 +26,12 @@ public class DamageType {
      * Block explosion damage
      */
     public static DamageType BLOCK_EXPLOSION = dynamic(block -> {
-        if (block == BlockTypes.BED) return TrKeys.MC_DEATH_ATTACK_EXPLOSION_BY_BED;
+        // no need to check whether the block is a bed or a respawn anchor because
+        // the current text is unique for all blocks
+        if (block != null) {
+            return TrKeys.MC_DEATH_ATTACK_EXPLOSION_BY_BED;
+        }
+
         return TrKeys.MC_DEATH_ATTACK_EXPLOSION;
     });
     public static DamageType CHARGING = defaultFixed(); // TODO
