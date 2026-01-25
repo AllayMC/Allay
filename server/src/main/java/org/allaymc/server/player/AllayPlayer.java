@@ -2256,19 +2256,11 @@ public class AllayPlayer implements Player {
         }
 
         if (sender == this.controlledEntity) {
-            var packet = new CommandOutputPacket();
-            packet.setType(CommandOutputType.ALL_OUTPUT);
-            packet.setCommandOriginData(new CommandOriginData(CommandOriginType.PLAYER, this.loginData.getUuid(), "", 0));
+            // NOTICE: Sending too long text via CommandOutputPacket will make the client disconnect in
+            // 1.21.130+, let just use TextPacket here since it's probably no different :c
             for (var output : outputs) {
-                packet.getMessages().add(new CommandOutputMessage(
-                        // Indicates if the output message was one of a successful command execution
-                        status != CommandResult.FAIL_STATUS,
-                        I18n.get().tr(this.loginData.getLangCode(), output.str(), output.args()),
-                        new String[0]
-                ));
+                sendMessage(I18n.get().tr(this.loginData.getLangCode(), output.str(), output.args()));
             }
-            packet.setSuccessCount(status);
-            sendPacket(packet);
         } else {
             for (var output : outputs) {
                 var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(this.loginData.getLangCode(), output.str(), output.args()) + "]";
