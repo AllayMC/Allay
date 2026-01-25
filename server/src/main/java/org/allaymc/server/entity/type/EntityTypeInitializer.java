@@ -49,6 +49,21 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> {
                     var component = new EntityLivingComponentImpl() {
                         @Override
+                        public boolean canBeAttacked(DamageContainer damage) {
+                            if (!super.canBeAttacked(damage)) {
+                                return false;
+                            }
+
+                            var damageType = damage.getDamageType();
+                            if (damageType == DamageType.FALLING_BLOCK ||
+                                damageType == DamageType.STALACTITE) {
+                                return false;
+                            }
+
+                            return true;
+                        }
+
+                        @Override
                         public boolean hasFallDamage() {
                             return false;
                         }

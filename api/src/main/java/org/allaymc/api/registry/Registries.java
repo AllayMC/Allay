@@ -31,6 +31,7 @@ public final class Registries {
     // Item
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEMS;
+    public static SimpleMappedRegistry<ItemType<?>, Float> COMPOSTABLE_ITEMS;
 
     // Block Entity
     public static SimpleMappedRegistry<String, BlockEntityType<?>> BLOCK_ENTITIES;

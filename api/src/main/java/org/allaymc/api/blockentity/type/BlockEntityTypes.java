@@ -8,6 +8,7 @@ import org.allaymc.api.blockentity.interfaces.*;
 public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityBanner> BANNER;
     public static BlockEntityType<BlockEntityBarrel> BARREL;
+    public static BlockEntityType<BlockEntityBell> BELL;
     public static BlockEntityType<BlockEntityComparator> COMPARATOR;
     public static BlockEntityType<BlockEntityBed> BED;
     public static BlockEntityType<BlockEntityChest> CHEST;
@@ -21,6 +22,7 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityHangingSign> HANGING_SIGN;
     public static BlockEntityType<BlockEntityEnchantTable> ENCHANT_TABLE;
     public static BlockEntityType<BlockEntityJukebox> JUKEBOX;
+    public static BlockEntityType<BlockEntityLectern> LECTERN;
     public static BlockEntityType<BlockEntityBeacon> BEACON;
     public static BlockEntityType<BlockEntityBrewingStand> BREWING_STAND;
     public static BlockEntityType<BlockEntityEnderChest> ENDER_CHEST;

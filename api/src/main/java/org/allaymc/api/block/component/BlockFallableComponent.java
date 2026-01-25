@@ -1,6 +1,7 @@
 package org.allaymc.api.block.component;
 
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.math.location.Location3d;
 
 /**
@@ -25,5 +26,16 @@ public interface BlockFallableComponent extends BlockComponent {
      */
     default float calculateDamage(double fallDistance) {
         return 0;
+    }
+
+    /**
+     * Creates the damage container for this falling block.
+     *
+     * @param damage the damage amount
+     *
+     * @return the damage container
+     */
+    default DamageContainer createDamageContainer(float damage) {
+        return DamageContainer.fallingBlock(damage);
     }
 }

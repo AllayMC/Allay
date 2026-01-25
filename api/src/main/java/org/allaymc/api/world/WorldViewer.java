@@ -265,4 +265,11 @@ public interface WorldViewer extends DebugShapeViewer {
      * @param blockEntity the block entity to view
      */
     void viewBlockEntity(BlockEntity blockEntity);
+
+    /**
+     * Opens the lectern reading interface for the viewer.
+     *
+     * @param pos the position of the lectern block
+     */
+    void viewLectern(Vector3ic pos);
 }

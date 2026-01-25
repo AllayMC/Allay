@@ -140,6 +140,7 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new ServerboundDiagnosticsPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new RequestAbilityPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new NPCRequestPacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new LecternUpdatePacketProcessor());
     }
 
     @SuppressWarnings("unchecked")

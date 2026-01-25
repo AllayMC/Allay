@@ -250,6 +250,26 @@ public class DamageContainer {
     }
 
     /**
+     * Create a stalactite damage container (for falling dripstone hitting entities).
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer stalactite(float sourceDamage) {
+        return new DamageContainer(null, STALACTITE, sourceDamage);
+    }
+
+    /**
+     * Create a stalagmite damage container (for entities falling onto pointed dripstone).
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer stalagmite(float sourceDamage) {
+        return new DamageContainer(null, STALAGMITE, sourceDamage);
+    }
+
+    /**
      * Get the attacker.
      *
      * @param <T> the type of the attacker

@@ -118,6 +118,7 @@ public class DamageType {
     });
     public static DamageType RAM_ATTACK = defaultFixed(); // TODO
     public static DamageType STALACTITE = fixed(TrKeys.MC_DEATH_ATTACK_STALACTITE);
+    public static DamageType STALAGMITE = fixed(TrKeys.MC_DEATH_ATTACK_STALAGMITE);
     /**
      * Damage caused by hunger
      */

@@ -28,6 +28,7 @@ import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockConcretePowderFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
+import org.allaymc.server.block.component.fallable.BlockPointedDripstoneFallableComponentImpl;
 import org.allaymc.server.block.component.flower.BlockBigFlowerBaseComponentImpl;
 import org.allaymc.server.block.component.flower.BlockSmallFlowerBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockDryGrassBaseComponentImpl;
@@ -2593,6 +2594,45 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.CAULDRON_LIQUID, BlockPropertyTypes.FILL_LEVEL)
                 .bindBlockEntity(BlockEntityTypes.CAULDRON)
                 .setBaseComponentSupplier(BlockCauldronBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initComposter() {
+        BlockTypes.COMPOSTER = AllayBlockType
+                .builder(BlockComposterBehaviorImpl.class)
+                .vanillaBlock(BlockId.COMPOSTER)
+                .setProperties(BlockPropertyTypes.COMPOSTER_FILL_LEVEL)
+                .setBaseComponentSupplier(BlockComposterBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initBell() {
+        BlockTypes.BELL = AllayBlockType
+                .builder(BlockBellBehaviorImpl.class)
+                .vanillaBlock(BlockId.BELL)
+                .setProperties(BlockPropertyTypes.ATTACHMENT, BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.TOGGLE_BIT)
+                .bindBlockEntity(BlockEntityTypes.BELL)
+                .setBaseComponentSupplier(BlockBellBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initLectern() {
+        BlockTypes.LECTERN = AllayBlockType
+                .builder(BlockLecternBehaviorImpl.class)
+                .vanillaBlock(BlockId.LECTERN)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                .bindBlockEntity(BlockEntityTypes.LECTERN)
+                .setBaseComponentSupplier(BlockLecternBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initPointedDripstone() {
+        BlockTypes.POINTED_DRIPSTONE = AllayBlockType
+                .builder(BlockPointedDripstoneBehaviorImpl.class)
+                .vanillaBlock(BlockId.POINTED_DRIPSTONE)
+                .setProperties(BlockPropertyTypes.DRIPSTONE_THICKNESS, BlockPropertyTypes.HANGING)
+                .setBaseComponentSupplier(BlockPointedDripstoneBaseComponentImpl::new)
+                .addComponent(new BlockPointedDripstoneFallableComponentImpl(SoundNames.LAND_POINTED_DRIPSTONE))
                 .build();
     }
 }

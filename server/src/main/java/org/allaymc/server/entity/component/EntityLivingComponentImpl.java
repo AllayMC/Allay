@@ -13,6 +13,9 @@ import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.block.property.enums.DripstoneThickness;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -679,7 +682,21 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
         // Physics component won't be null here, because CEntityFallEvent is called in physics component
         var blockStateStandingOn = physicsComponent.getBlockStateStandingOn();
-        double rawDamage = (event.getFallDistance() - 3) - getEffectLevel(EffectTypes.JUMP_BOOST);
+        var fallDistance = event.getFallDistance();
+
+        // Check if falling onto a stalagmite (upward-pointing dripstone tip)
+        if (blockStateStandingOn.getBlockType() == BlockTypes.POINTED_DRIPSTONE &&
+            blockStateStandingOn.getPropertyValue(BlockPropertyTypes.DRIPSTONE_THICKNESS) == DripstoneThickness.TIP &&
+            !blockStateStandingOn.getPropertyValue(BlockPropertyTypes.HANGING)) {
+            // Stalagmite damage: ceil(fallDistance * 2 - 2)
+            var damage = (long) Math.ceil(fallDistance * 2 - 2);
+            if (damage > 0) {
+                attack(DamageContainer.stalagmite(damage));
+            }
+            return;
+        }
+
+        double rawDamage = (fallDistance - 3) - getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
         if (damage > 0) {
             attack(DamageContainer.fall(damage));

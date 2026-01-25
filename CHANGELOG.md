@@ -14,7 +14,30 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
-- Implemented decorated pot behavior and recipe crafting.
+- (API) Implemented composter:
+  - Added `ComposterEvent` event fired when items are added to or harvested from a composter.
+  - Added `Registries.COMPOSTABLE_ITEMS` for registering compostable items and their composting chances.
+- (API) Implemented bell:
+  - Added `BlockEntityBell` interface for bell block entities.
+  - Added `BellRingEvent` event fired when a bell is rung by players, projectiles, or redstone.
+  - Added `BlockEntityTypes.BELL` block entity type.
+- (API) Implemented lectern:
+  - Added `BlockEntityLectern` interface with methods for managing stored books and current page.
+  - Added `BlockLecternBaseComponent` interface with methods for book placement and removal.
+  - Added `LecternPlaceBookEvent`, `LecternPageTurnEvent`, and `LecternDropBookEvent` events.
+  - Added `BlockEntityTypes.LECTERN` block entity type.
+- (API) Implemented pointed dripstone:
+  - Added `PointedDripstoneDripEvent` event fired when pointed dripstone drips fluid.
+  - Added `PointedDripstoneDripSound` for dripstone drip sounds.
+  - Added `DamageType.STALACTITE` and `DamageType.STALAGMITE` damage types.
+- (API) Added method `WorldViewer.playPointedDripstoneDripSound()` for playing dripstone drip sounds.
+- (API) Added method `BlockFallableComponent.checkAndFall()` for programmatically triggering block falling.
+- (API) Implemented decorated pot:
+  - Added `PotSherds` record class representing the four sherds on a decorated pot (front, back, left, right).
+  - Added `BlockEntityDecoratedPot` interface with methods for item storage, sherd management, and comparator output.
+  - Added `ItemDecoratedPotBaseComponent` interface with methods for managing sherds on decorated pot items.
+  - Added `BlockEntityTypes.DECORATED_POT` block entity type.
+  - Implemented decorated pot crafting recipe with sherds/bricks pattern support.
 
 ### Fixed
 

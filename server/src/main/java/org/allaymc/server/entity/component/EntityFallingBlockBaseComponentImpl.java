@@ -11,7 +11,6 @@ import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.component.annotation.Dependency;
@@ -71,11 +70,12 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
             var damage = fallableComponent.calculateDamage(event.getFallDistance());
             if (damage > 0) {
+                var damageContainer = fallableComponent.createDamageContainer(damage);
                 dimension.getEntityManager().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
                         .stream()
                         .filter(entity -> entity instanceof EntityLivingComponent)
                         .map(EntityLivingComponent.class::cast)
-                        .forEach(entity -> entity.attack(DamageContainer.fallingBlock(damage)));
+                        .forEach(entity -> entity.attack(damageContainer));
             }
 
             if (!physicsComponent.getBlockStateStandingOn().getBlockStateData().collisionShape().isFull(BlockFace.UP)) {

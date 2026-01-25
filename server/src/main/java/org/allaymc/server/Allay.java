@@ -194,6 +194,7 @@ public final class Allay {
                 r -> Registries.ITEMS = r,
                 new ItemTypeRegistryPopulator()
         );
+        Registries.COMPOSTABLE_ITEMS = SimpleMappedRegistry.create(new CompostableItemRegistryLoader());
 
         // BlockEntity
         SimpleMappedRegistry.create(

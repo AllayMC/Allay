@@ -171,6 +171,22 @@ public final class BlockEntityTypeInitializer {
                 .build();
     }
 
+    public static void initBell() {
+        BlockEntityTypes.BELL = AllayBlockEntityType
+                .builder(BlockEntityBellImpl.class)
+                .name(BlockEntityId.BELL)
+                .addComponent(BlockEntityBellBaseComponentImpl::new, BlockEntityBellBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initLectern() {
+        BlockEntityTypes.LECTERN = AllayBlockEntityType
+                .builder(BlockEntityLecternImpl.class)
+                .name(BlockEntityId.LECTERN)
+                .addComponent(BlockEntityLecternBaseComponentImpl::new, BlockEntityLecternBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initNoteblock() {
         BlockEntityTypes.NOTEBLOCK = AllayBlockEntityType
                 .builder(BlockEntityNoteblockImpl.class)

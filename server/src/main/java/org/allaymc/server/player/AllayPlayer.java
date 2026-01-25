@@ -1522,6 +1522,13 @@ public class AllayPlayer implements Player {
                     default -> throw new IllegalArgumentException();
                 }
             }
+            case PointedDripstoneDripSound so -> {
+                if (so.isWater()) {
+                    packet.setSound(SoundEvent.POINTED_DRIPSTONE_CAULDRON_DRIP_WATER);
+                } else {
+                    packet.setSound(SoundEvent.POINTED_DRIPSTONE_CAULDRON_DRIP_LAVA);
+                }
+            }
             case DecoratedPotInsertedSound so -> {
                 PlaySoundPacket playSound = new PlaySoundPacket();
                 playSound.setSound(SoundNames.BLOCK_DECORATED_POT_INSERT);
@@ -1722,6 +1729,16 @@ public class AllayPlayer implements Player {
         var packet = new BlockEntityDataPacket();
         packet.setBlockPosition(toNetwork(blockEntity.getPosition()));
         packet.setData(blockEntity.saveNBT());
+        sendPacket(packet);
+    }
+
+    @Override
+    public void viewLectern(Vector3ic pos) {
+        var packet = new ContainerOpenPacket();
+        // Use a fixed container ID for lectern (the client doesn't send ContainerClose for lecterns)
+        packet.setId((byte) -1);
+        packet.setType(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.LECTERN);
+        packet.setBlockPosition(toNetwork(pos));
         sendPacket(packet);
     }
 
