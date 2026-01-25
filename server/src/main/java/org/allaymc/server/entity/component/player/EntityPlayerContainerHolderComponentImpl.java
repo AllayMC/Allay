@@ -7,10 +7,12 @@ import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityThrownTrident;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPickupArrowEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPickupItemEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPickupTridentEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -225,6 +227,41 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
             if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrowItem) != -1) {
                 entityArrow.applyAction(new PickedUpAction(thisPlayer));
                 entityArrow.remove();
+            }
+        }
+
+        // Pick up tridents
+        var entityTridents = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
+                .stream()
+                .filter(EntityThrownTrident.class::isInstance)
+                .map(EntityThrownTrident.class::cast)
+                // Check motion == 0 to ensure trident is stationary (not falling after block removal)
+                .filter(trident -> trident.getMotion().lengthSquared() == 0 && !trident.isReturning())
+                .toList();
+        for (var entityTrident : entityTridents) {
+            if (entityTrident.willBeDespawnedNextTick()) {
+                // Have been picked by others
+                continue;
+            }
+
+            var tridentItem = entityTrident.getTridentItem();
+            if (tridentItem == null) {
+                // No item to pick up
+                entityTrident.remove();
+                continue;
+            }
+
+            var event = new PlayerPickupTridentEvent(thisPlayer, entityTrident, tridentItem);
+            if (!event.call()) {
+                // Event was cancelled, skip pickup
+                continue;
+            }
+
+            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(tridentItem) != -1) {
+                entityTrident.applyAction(new PickedUpAction(thisPlayer));
+                // Clear the trident item to prevent double pickup
+                entityTrident.setTridentItem(null);
+                entityTrident.remove();
             }
         }
     }

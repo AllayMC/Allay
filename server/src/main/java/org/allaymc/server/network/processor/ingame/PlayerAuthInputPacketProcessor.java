@@ -330,6 +330,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case STOP_GLIDING -> entity.setGliding(false);
                 case START_CRAWLING -> entity.setCrawling(true);
                 case STOP_CRAWLING -> entity.setCrawling(false);
+                case START_SPIN_ATTACK -> entity.setSpinAttacking(true);
+                case STOP_SPIN_ATTACK -> entity.setSpinAttacking(false);
                 case START_JUMPING -> {
                     new PlayerJumpEvent(entity).call();
                     entity.exhaust(entity.isSprinting() ? 0.2f : 0.05f);

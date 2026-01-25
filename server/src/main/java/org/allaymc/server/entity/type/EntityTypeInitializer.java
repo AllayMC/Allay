@@ -145,6 +145,14 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    public static void initLightningBolt() {
+        EntityTypes.LIGHTNING_BOLT = AllayEntityType
+                .builder(EntityLightningBoltImpl.class)
+                .vanillaEntity(EntityId.LIGHTNING_BOLT)
+                .addComponent(EntityLightningBoltBaseComponentImpl::new, EntityLightningBoltBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initEnderCrystal() {
         EntityTypes.ENDER_CRYSTAL = AllayEntityType
                 .builder(EntityEnderCrystalImpl.class)
@@ -313,6 +321,48 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.BREEZE_WIND_CHARGE_PROJECTILE)
                 .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntityBreezeWindChargePhysicsComponentImpl::new, EntityBreezeWindChargePhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .build();
+    }
+
+    public static void initFireball() {
+        EntityTypes.SMALL_FIREBALL = AllayEntityType
+                .builder(EntitySmallFireballImpl.class)
+                .vanillaEntity(EntityId.SMALL_FIREBALL)
+                .addComponent(EntitySmallFireballBaseComponentImpl::new, EntitySmallFireballBaseComponentImpl.class)
+                .addComponent(EntitySmallFireballPhysicsComponentImpl::new, EntitySmallFireballPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .build();
+        EntityTypes.FIREBALL = AllayEntityType
+                .builder(EntityFireballImpl.class)
+                .vanillaEntity(EntityId.FIREBALL)
+                .addComponent(EntityFireballBaseComponentImpl::new, EntityFireballBaseComponentImpl.class)
+                .addComponent(EntityFireballPhysicsComponentImpl::new, EntityFireballPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .build();
+    }
+
+    public static void initThrownTrident() {
+        EntityTypes.THROWN_TRIDENT = AllayEntityType
+                .builder(EntityThrownTridentImpl.class)
+                .vanillaEntity(EntityId.THROWN_TRIDENT)
+                .addComponent(EntityThrownTridentBaseComponentImpl::new, EntityThrownTridentBaseComponentImpl.class)
+                .addComponent(EntityThrownTridentPhysicsComponentImpl::new, EntityThrownTridentPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                // Bedrock Edition tridents never despawn - use max integer age
+                .addComponent(() -> new EntityAgeComponentImpl(Integer.MAX_VALUE), EntityAgeComponentImpl.class)
+                .build();
+    }
+
+    public static void initEgg() {
+        EntityTypes.EGG = AllayEntityType
+                .builder(EntityEggImpl.class)
+                .vanillaEntity(EntityId.EGG)
+                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
+                .addComponent(EntityEggPhysicsComponentImpl::new, EntityEggPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();

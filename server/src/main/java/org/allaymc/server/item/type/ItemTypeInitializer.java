@@ -878,6 +878,11 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.SNOWBALL)
                 .addComponent(() -> new ItemProjectileComponentImpl(EntityId.SNOWBALL, 1.5), ItemProjectileComponentImpl.class)
                 .build();
+        ItemTypes.EGG = AllayItemType
+                .builder(ItemEggStackImpl.class)
+                .vanillaItem(ItemId.EGG)
+                .addComponent(() -> new ItemProjectileComponentImpl(EntityId.EGG, 1.5), ItemProjectileComponentImpl.class)
+                .build();
         ItemTypes.ENDER_PEARL = AllayItemType
                 .builder(ItemEnderPearlStackImpl.class)
                 .vanillaItem(ItemId.ENDER_PEARL)
@@ -1107,6 +1112,14 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.SHIELD)
                 .addComponent(ItemShieldBaseComponentImpl::new, ItemShieldBaseComponentImpl.class)
                 .addComponent(() -> new ItemRepairableComponentImpl(ItemId.PLANKS), ItemRepairableComponentImpl.class)
+                .build();
+    }
+
+    public static void initTrident() {
+        ItemTypes.TRIDENT = AllayItemType
+                .builder(ItemTridentStackImpl.class)
+                .vanillaItem(ItemId.TRIDENT)
+                .addComponent(ItemTridentBaseComponentImpl::new, ItemTridentBaseComponentImpl.class)
                 .build();
     }
 }

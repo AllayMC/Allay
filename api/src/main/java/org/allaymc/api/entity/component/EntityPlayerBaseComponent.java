@@ -119,6 +119,27 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setCrawling(boolean crawling);
 
     /**
+     * Check if the player is in a spin attack (riptide).
+     *
+     * @return {@code true} if the player is in a spin attack, {@code false} otherwise.
+     */
+    boolean isSpinAttacking();
+
+    /**
+     * Set the player's spin attack state.
+     *
+     * @param spinAttacking Whether the player should be spin attacking
+     */
+    void setSpinAttacking(boolean spinAttacking);
+
+    /**
+     * Check if the player can use riptide (must be in water or rain).
+     *
+     * @return {@code true} if the player can use riptide, {@code false} otherwise.
+     */
+    boolean canUseRiptide();
+
+    /**
      * Check if the player is using an item on a block.
      *
      * @return {@code true} if the player is using an item on a block, {@code false} otherwise.

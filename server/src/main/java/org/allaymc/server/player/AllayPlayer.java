@@ -21,7 +21,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.Command;
-import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerHolder;
@@ -650,6 +649,7 @@ public class AllayPlayer implements Player {
                 map.setFlag(EntityFlag.SWIMMING, player.isSwimming());
                 map.setFlag(EntityFlag.GLIDING, player.isGliding());
                 map.setFlag(EntityFlag.CRAWLING, player.isCrawling());
+                map.setFlag(EntityFlag.DAMAGE_NEARBY_MOBS, player.isSpinAttacking());
                 map.setFlag(EntityFlag.USING_ITEM, player.isUsingItemInAir());
                 map.setFlag(EntityFlag.BREATHING, player.canBreathe());
                 map.put(EntityDataTypes.AIR_SUPPLY, (short) player.getAirSupplyTicks());
@@ -667,6 +667,16 @@ public class AllayPlayer implements Player {
             }
             case EntityArrow arrow -> {
                 map.setFlag(EntityFlag.CRITICAL, arrow.isCritical());
+            }
+            case EntityThrownTrident trident -> {
+                map.setFlag(EntityFlag.RETURN_TRIDENT, trident.isReturning());
+                // TODO: find out why the rope is not shown although we have set OWNER_EID and RETURN_TRIDENT to true
+                if (trident.isReturning()) {
+                    var shooter = trident.getShooter();
+                    map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getRuntimeId() : -1L);
+                } else {
+                    map.put(EntityDataTypes.OWNER_EID, -1L);
+                }
             }
             case EntityFireworksRocket firework -> {
                 var nbt = NbtMap.builder()
@@ -1174,6 +1184,17 @@ public class AllayPlayer implements Player {
             case SimpleSound.PISTON_PULL -> packet.setSound(SoundEvent.PISTON_IN);
             case SimpleSound.BLOCK_CLICK -> packet.setSound(SoundEvent.BLOCK_CLICK);
             case SimpleSound.BLOCK_CLICK_FAIL -> packet.setSound(SoundEvent.BLOCK_CLICK_FAIL);
+            case SimpleSound.TRIDENT_THROW -> packet.setSound(SoundEvent.ITEM_TRIDENT_THROW);
+            case SimpleSound.TRIDENT_HIT -> packet.setSound(SoundEvent.ITEM_TRIDENT_HIT);
+            case SimpleSound.TRIDENT_HIT_GROUND -> packet.setSound(SoundEvent.ITEM_TRIDENT_HIT_GROUND);
+            case SimpleSound.TRIDENT_RETURN -> packet.setSound(SoundEvent.ITEM_TRIDENT_RETURN);
+            case SimpleSound.TRIDENT_THUNDER -> packet.setSound(SoundEvent.ITEM_TRIDENT_THUNDER);
+            case TridentRiptideSound riptide -> packet.setSound(switch (riptide.level()) {
+                case 1 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_1;
+                case 2 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_2;
+                case 3 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_3;
+                default -> throw new IllegalArgumentException("Invalid riptide level: " + riptide.level());
+            });
             case SimpleSound.RESPAWN_ANCHOR_SET_SPAWN -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_SET_SPAWN);
             case SimpleSound.RESPAWN_ANCHOR_DEPLETE -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_DEPLETE);
             case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));

@@ -130,6 +130,17 @@ public class DamageContainer {
     }
 
     /**
+     * Create a lightning damage container.
+     *
+     * @param attacker     the lightning bolt entity
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer lightning(Entity attacker, float sourceDamage) {
+        return new DamageContainer(attacker, LIGHTNING, sourceDamage);
+    }
+
+    /**
      * Create a magic effect damage container.
      *
      * @param sourceDamage the source damage

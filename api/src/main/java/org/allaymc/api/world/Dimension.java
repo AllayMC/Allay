@@ -15,6 +15,7 @@ import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.world.LightningStrikeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
@@ -1457,6 +1458,52 @@ public interface Dimension extends TaskCreator {
      * @param z the z coordinate of the block
      */
     void updateComparatorOutputLevel(int x, int y, int z);
+
+    /**
+     * Strikes lightning at the specified position.
+     * <p>
+     * This method fires a {@link LightningStrikeEvent} which can be cancelled by plugins.
+     *
+     * @param x     the x coordinate
+     * @param y     the y coordinate
+     * @param z     the z coordinate
+     * @param cause the cause of the lightning strike
+     * @return {@code true} if the lightning was spawned, {@code false} if the event was cancelled
+     */
+    boolean strikeLightning(double x, double y, double z, LightningStrikeEvent.Cause cause);
+
+    /**
+     * Strikes lightning at the specified position with {@link LightningStrikeEvent.Cause#CUSTOM} cause.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     * @return {@code true} if the lightning was spawned, {@code false} if the event was cancelled
+     */
+    default boolean strikeLightning(double x, double y, double z) {
+        return strikeLightning(x, y, z, LightningStrikeEvent.Cause.CUSTOM);
+    }
+
+    /**
+     * Strikes lightning at the specified position.
+     *
+     * @param pos   the position
+     * @param cause the cause of the lightning strike
+     * @return {@code true} if the lightning was spawned, {@code false} if the event was cancelled
+     */
+    default boolean strikeLightning(Vector3dc pos, LightningStrikeEvent.Cause cause) {
+        return strikeLightning(pos.x(), pos.y(), pos.z(), cause);
+    }
+
+    /**
+     * Strikes lightning at the specified position with {@link LightningStrikeEvent.Cause#CUSTOM} cause.
+     *
+     * @param pos the position
+     * @return {@code true} if the lightning was spawned, {@code false} if the event was cancelled
+     */
+    default boolean strikeLightning(Vector3dc pos) {
+        return strikeLightning(pos.x(), pos.y(), pos.z());
+    }
 
     @Override
     default boolean isValid() {

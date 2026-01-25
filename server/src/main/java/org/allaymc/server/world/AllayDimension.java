@@ -9,9 +9,12 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
+import org.allaymc.api.eventbus.event.world.LightningStrikeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.ClientState;
@@ -21,6 +24,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
@@ -37,6 +41,7 @@ import org.joml.Vector3ic;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.type.BlockTypes.*;
 
@@ -46,6 +51,12 @@ import static org.allaymc.api.block.type.BlockTypes.*;
 @Slf4j
 @Getter
 public class AllayDimension implements Dimension {
+
+    /**
+     * The probability of lightning striking per chunk per tick during a thunderstorm.
+     * Based on Minecraft: 1/100,000 chance per chunk per tick.
+     */
+    protected static final int LIGHTNING_STRIKE_CHANCE = 100000;
 
     protected final AllayWorld world;
     protected final DimensionInfo dimensionInfo;
@@ -77,6 +88,7 @@ public class AllayDimension implements Dimension {
     }
 
     public void tick(long currentTick) {
+        tickLightning();
         this.scheduler.tick();
         this.entityManager.tick(currentTick);
         this.chunkManager.tick(currentTick);
@@ -393,6 +405,61 @@ public class AllayDimension implements Dimension {
                type == UNPOWERED_REPEATER ||
                type == POWERED_COMPARATOR ||
                type == UNPOWERED_COMPARATOR;
+    }
+
+    /**
+     * Handles random lightning spawning during thunderstorms.
+     * Lightning has a 1/100,000 chance to strike per loaded chunk per tick.
+     */
+    protected void tickLightning() {
+        if (world.getWeather() != Weather.THUNDER) {
+            return;
+        }
+
+        // Only spawn lightning in overworld
+        if (dimensionInfo.dimensionId() != DimensionInfo.OVERWORLD.dimensionId()) {
+            return;
+        }
+
+        var rand = ThreadLocalRandom.current();
+        var loadedChunks = chunkManager.getLoadedChunks();
+        for (var chunk : loadedChunks) {
+            // 1/100,000 chance per chunk per tick
+            if (rand.nextInt(LIGHTNING_STRIKE_CHANCE) != 0) {
+                continue;
+            }
+
+            // Random position within the chunk
+            int x = (chunk.getX() << 4) + rand.nextInt(16);
+            int z = (chunk.getZ() << 4) + rand.nextInt(16);
+            int y = getHeight(x, z) + 1;
+
+            // Check if the position can see the sky
+            if (!canPosSeeSky(x, y, z)) {
+                continue;
+            }
+
+            // Spawn lightning at the position
+            strikeLightning(x, y, z, LightningStrikeEvent.Cause.WEATHER);
+        }
+    }
+
+    @Override
+    public boolean strikeLightning(double x, double y, double z, LightningStrikeEvent.Cause cause) {
+        var lightningBolt = EntityTypes.LIGHTNING_BOLT.createEntity(
+                EntityInitInfo.builder()
+                        .dimension(this)
+                        .pos(x, y, z)
+                        .build()
+        );
+
+        var event = new LightningStrikeEvent(this, lightningBolt, cause);
+        if (!event.call()) {
+            return false;
+        }
+
+        entityManager.addEntity(lightningBolt);
+        return true;
     }
 
     @Override

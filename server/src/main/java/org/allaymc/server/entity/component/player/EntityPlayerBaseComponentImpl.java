@@ -27,6 +27,7 @@ import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -114,7 +115,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected String scoreTag;
     @Getter
-    protected boolean sprinting, sneaking, swimming, gliding, crawling, flying, blocking;
+    protected boolean sprinting, sneaking, swimming, gliding, crawling, flying, blocking, spinAttacking;
 
     @Getter
     protected int experienceLevel;
@@ -832,6 +833,38 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             broadcastState();
             new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
         }
+    }
+
+    @Override
+    public void setSpinAttacking(boolean spinAttacking) {
+        if (this.spinAttacking == spinAttacking) {
+            return;
+        }
+
+        this.spinAttacking = spinAttacking;
+        broadcastState();
+        new PlayerToggleSpinAttackEvent(thisPlayer, spinAttacking).call();
+    }
+
+    @Override
+    public boolean canUseRiptide() {
+        // Check if player is touching water
+        if (thisPlayer.isTouchingWater()) {
+            return true;
+        }
+
+        // Check if player is in rain
+        var dimension = thisPlayer.getDimension();
+        var world = dimension.getWorld();
+        var weather = world.getWeather();
+
+        if (weather == Weather.CLEAR) {
+            return false;
+        }
+
+        // Check if position can see sky (for rain)
+        var pos = thisPlayer.getLocation();
+        return dimension.canPosSeeSky((int) pos.x(), (int) pos.y(), (int) pos.z());
     }
 
     @Override

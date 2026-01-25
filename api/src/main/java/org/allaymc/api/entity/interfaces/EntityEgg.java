@@ -1,7 +1,9 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.Entity;
-
-public interface EntityEgg extends Entity {
-
+/**
+ * Represents an egg projectile entity.
+ *
+ * @author daoge_cmd
+ */
+public interface EntityEgg extends EntityProjectile {
 }

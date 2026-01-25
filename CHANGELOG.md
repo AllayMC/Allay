@@ -54,6 +54,28 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `ItemDecoratedPotBaseComponent` interface with methods for managing sherds on decorated pot items.
   - Added `BlockEntityTypes.DECORATED_POT` block entity type.
   - Implemented decorated pot crafting recipe with sherds/bricks pattern support.
+- (API) Implemented trident:
+  - Added `EntityThrownTridentBaseComponent` interface with methods for managing trident item, favored slot, loyalty/impaling/channeling enchantments, and returning state.
+  - Added `EntityThrownTrident` entity interface.
+  - Added `PlayerPickupTridentEvent` event fired when a player picks up a trident, allowing plugins to cancel the pickup.
+  - Added `PlayerToggleSpinAttackEvent` event fired when a player starts or stops a spin attack (riptide).
+  - Added methods `isSpinAttacking()`, `setSpinAttacking()`, and `canUseRiptide()` to `EntityPlayerBaseComponent`.
+  - Added `TridentRiptideSound` record class for riptide sounds with level parameter.
+  - Added sounds `SimpleSound.TRIDENT_THROW`, `TRIDENT_HIT`, `TRIDENT_HIT_GROUND`, `TRIDENT_RETURN`, and `TRIDENT_THUNDER`.
+  - Implemented trident dispense behavior for dispensers.
+- (API) Implemented lightning bolt:
+  - Added `EntityLightningBoltBaseComponent` interface with methods `isEffect()` and `setEffect()` for controlling lightning effects.
+  - Added `EntityLightningBolt` entity interface.
+  - Added `LightningStrikeEvent` event fired when lightning strikes, with cause types (WEATHER, TRIDENT, COMMAND, CUSTOM).
+  - Added methods `strikeLightning()` to `Dimension` interface for spawning lightning at a position.
+  - Added `DamageContainer.lightning()` factory method for lightning damage.
+- (API) Implemented fireball entities:
+  - Added `EntityFireballBaseComponent` interface with `getExplosionPower()` and `setExplosionPower()` methods for large fireballs.
+  - Added `EntitySmallFireball` and `EntityFireball` entity interfaces.
+  - Implemented fire charge dispense behavior for dispensers.
+- (API) Implemented egg projectile:
+  - Added `EntityEgg` entity interface.
+  - Implemented egg throwing mechanics with chicken spawning chance.
 
 ### Fixed
 

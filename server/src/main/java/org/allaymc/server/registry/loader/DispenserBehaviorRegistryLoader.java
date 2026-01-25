@@ -30,8 +30,11 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
         map.put(ItemTypes.EGG, new ProjectileDispenseBehavior(EntityTypes.EGG, 1.0));
         map.put(ItemTypes.SPLASH_POTION, new PotionDispenseBehavior(EntityTypes.SPLASH_POTION, 1.25));
         map.put(ItemTypes.EXPERIENCE_BOTTLE, new ProjectileDispenseBehavior(EntityTypes.XP_BOTTLE, 1.25));
-        map.put(ItemTypes.TRIDENT, new ProjectileDispenseBehavior(EntityTypes.THROWN_TRIDENT, 1.25));
+        map.put(ItemTypes.TRIDENT, new TridentDispenseBehavior());
         map.put(ItemTypes.LINGERING_POTION, new PotionDispenseBehavior(EntityTypes.LINGERING_POTION, 1.25));
+
+        // Fire charge - launches small fireball with no random spread
+        map.put(ItemTypes.FIRE_CHARGE, new FireChargeDispenseBehavior());
 
         // TNT
         map.put(ItemTypes.TNT, new TNTDispenseBehavior());

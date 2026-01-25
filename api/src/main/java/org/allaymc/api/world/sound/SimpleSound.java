@@ -169,6 +169,16 @@ public enum SimpleSound implements Sound {
     MACE_SMASH_HEAVY_GROUND,
     // SHIELD_BLOCK is a sound played when a shield successfully blocks damage.
     SHIELD_BLOCK,
+    // TRIDENT_THROW is a sound played when a trident is thrown.
+    TRIDENT_THROW,
+    // TRIDENT_HIT is a sound played when a trident hits an entity.
+    TRIDENT_HIT,
+    // TRIDENT_HIT_GROUND is a sound played when a trident hits the ground.
+    TRIDENT_HIT_GROUND,
+    // TRIDENT_RETURN is a sound played when a trident with loyalty returns to the player.
+    TRIDENT_RETURN,
+    // TRIDENT_THUNDER is a sound played when a trident with channeling summons lightning.
+    TRIDENT_THUNDER,
 
     /* Entity */
 
