@@ -271,6 +271,15 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     }
 
     @Override
+    protected void tickBreathe() {
+        // Creative and spectator mode players don't need breath updates
+        if (thisPlayer.getGameMode() == GameMode.CREATIVE || thisPlayer.getGameMode() == GameMode.SPECTATOR) {
+            return;
+        }
+        super.tickBreathe();
+    }
+
+    @Override
     protected void sendEffects(EffectInstance newEffect, EffectInstance oldEffect) {
         super.sendEffects(newEffect, oldEffect);
         if (thisPlayer.isActualPlayer()) {

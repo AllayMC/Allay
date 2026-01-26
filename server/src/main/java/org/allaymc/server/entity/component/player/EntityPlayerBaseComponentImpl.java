@@ -198,6 +198,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.gameMode = gameMode;
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
+        // Reset food and air supply to max when switching to creative/spectator mode
+        if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) {
+            setFoodLevel(MAX_FOOD_LEVEL);
+            setFoodSaturationLevel(MAX_FOOD_SATURATION_LEVEL);
+            setFoodExhaustionLevel(0);
+            thisPlayer.setAirSupplyTicks(thisPlayer.getAirSupplyMaxTicks());
+        }
+
         if (isActualPlayer()) {
             this.controller.viewPlayerGameMode(thisPlayer);
             // Send permission after game mode to make overriding client's state (e.g., mayfly) possible
@@ -249,6 +257,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     protected void tickFood() {
+        // Creative and spectator mode players don't need food updates
+        if (this.gameMode == GameMode.CREATIVE || this.gameMode == GameMode.SPECTATOR) {
+            return;
+        }
+
         this.foodTickTimer++;
         if (this.foodTickTimer >= FOOD_TICK_THRESHOLD) {
             this.foodTickTimer = 0;

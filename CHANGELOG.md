@@ -91,6 +91,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed packet serializer of `PlayerEnchantOptionsPacket` for NetEase 1.21.50.
 - Fixed an issue where too long command outputs will make the client disconnect in 1.21.130+.
 - Fixed race condition in physics engine where `onFall()` and projectile hit callbacks were called in parallel context, potentially causing concurrent modification issues when modifying shared world state.
+- Fixed hunger and air supply not being handled correctly for creative/spectator mode players:
+  - Creative and spectator mode players no longer have their hunger or air supply updated.
+  - Switching to creative or spectator mode now resets hunger and air supply to maximum values.
 
 # 0.10.6 (API 0.23.0) - 2026/1/24
 
