@@ -90,16 +90,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
             if (entity instanceof EntityPlayer || (width * width * height) > 0.512f) {
                 var event = new EntityTrampleFarmlandEvent(entity, block);
                 if (event.call()) {
-                    var dimension = block.getDimension();
-                    var blockState = block.getBlockState();
-                    // onEntityFallOn is called in the compute thread, let's use dimension scheduler
-                    // to set block in the dimension thread
-                    dimension.getScheduler().runLater(dimension, () -> {
-                        // This check is essential which ensure that the block in place is still farm land
-                        if (blockState == dimension.getBlockState(block.getPosition())) {
-                            dimension.setBlockState(block.getPosition(), BlockTypes.DIRT.getDefaultState());
-                        }
-                    });
+                    block.getDimension().setBlockState(block.getPosition(), BlockTypes.DIRT.getDefaultState());
                 }
             }
         }

@@ -77,6 +77,11 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected double fallDistance;
     @Getter
     protected float knockbackResistance;
+    /**
+     * Pending onGround status to be set in afterApplyMotion().
+     * This defers the setOnGround() call to avoid race conditions in parallel context.
+     */
+    protected Boolean pendingOnGround;
 
     public EntityPhysicsComponentImpl() {
         this.motion = new Vector3d();
@@ -179,13 +184,20 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
         this.setMotion(new Vector3d(mx, my, mz));
         if (!pos.equals(location) && thisEntity.trySetLocation(pos)) {
-            // Update onGround status after updated entity location
-            // to make sure that some block (for example: water) can reset
-            // entity's fallDistance before onFall() called
-            this.setOnGround(isOnGround);
+            // Defer setOnGround() call to afterApplyMotion() to avoid race conditions.
+            // This ensures onFall() is called sequentially after all parallel motion completes.
+            this.pendingOnGround = isOnGround;
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void afterApplyMotion() {
+        if (pendingOnGround != null) {
+            this.setOnGround(pendingOnGround);
+            pendingOnGround = null;
+        }
     }
 
     public void setOnGround(boolean onGround) {

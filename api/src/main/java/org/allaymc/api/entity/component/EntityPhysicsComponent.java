@@ -30,6 +30,18 @@ public interface EntityPhysicsComponent extends EntityComponent {
     boolean applyMotion();
 
     /**
+     * Called after applyMotion() completes for all entities. This method is called
+     * sequentially (not in parallel) and is safe to modify shared state.
+     * <p>
+     * Use this method for operations that cannot be performed safely in a parallel
+     * context, such as collision callbacks that modify world state.
+     */
+    @ApiStatus.OverrideOnly
+    default void afterApplyMotion() {
+        // Default: no-op
+    }
+
+    /**
      * Update the entity's motion. This method is used by physics engine, and allow
      * entity to customize how its motion being updated.
      * <p>

@@ -23,8 +23,21 @@ import org.joml.primitives.Rayd;
  */
 public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponentImpl {
 
+    /**
+     * Stores the result of a raycast collision.
+     *
+     * @param hit    the object that was hit (Block or Entity)
+     * @param hitPos the position where the collision occurred
+     */
+    protected record RaycastResult(Object hit, Vector3dc hitPos) {}
+
     @ComponentObject
     protected Entity thisEntity;
+
+    /**
+     * Collision result storage (set in applyMotion, consumed in afterApplyMotion).
+     */
+    protected RaycastResult pendingRaycastResult;
 
     @Dependency
     protected EntityAgeComponent ageComponent;
@@ -132,11 +145,11 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
 
         if (!newPos.equals(location) && thisEntity.trySetLocation(newPos)) {
             if (rayCastResult.hit instanceof Block block && callHitEvent(newPos, null, block)) {
-                block.getBehavior().onProjectileHit(block, (EntityProjectile) thisEntity, newPos);
-                onHitBlock(block, newPos);
+                // Store for later processing in afterApplyMotion()
+                this.pendingRaycastResult = new RaycastResult(block, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
             } else if (rayCastResult.hit instanceof Entity entity && callHitEvent(newPos, entity, null)) {
-                entity.onProjectileHit((EntityProjectile) thisEntity, newPos);
-                onHitEntity(entity, newPos);
+                // Store for later processing in afterApplyMotion()
+                this.pendingRaycastResult = new RaycastResult(entity, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
             }
 
             return true;
@@ -153,6 +166,27 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
     protected boolean callHitEvent(Vector3dc hitPos, Entity victim, Block block) {
         var event = new ProjectileHitEvent((EntityProjectile) thisEntity, hitPos, victim, block);
         return event.call();
+    }
+
+    @Override
+    public void afterApplyMotion() {
+        if (pendingRaycastResult == null) {
+            return;
+        }
+
+        var hit = pendingRaycastResult.hit();
+        var hitPos = pendingRaycastResult.hitPos();
+
+        if (hit instanceof Block block) {
+            block.getBehavior().onProjectileHit(block, (EntityProjectile) thisEntity, hitPos);
+            onHitBlock(block, hitPos);
+        } else if (hit instanceof Entity entity) {
+            entity.onProjectileHit((EntityProjectile) thisEntity, hitPos);
+            onHitEntity(entity, hitPos);
+        }
+
+        // Clear pending state
+        pendingRaycastResult = null;
     }
 
     protected void onHitBlock(Block block, Vector3dc hitPos) {

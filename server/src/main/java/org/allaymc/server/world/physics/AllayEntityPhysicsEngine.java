@@ -131,6 +131,8 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
             }
         }).join();
         updatedEntities.values().forEach(entityAABBTree::update);
+        // Call afterApplyMotion() sequentially for all updated entities
+        updatedEntities.values().forEach(entity -> ((EntityPhysicsComponent) entity).afterApplyMotion());
     }
 
     protected void cacheEntityCollisionResult() {

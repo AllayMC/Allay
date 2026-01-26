@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.COMPUTE)
+@CallerThread(ThreadType.DIMENSION)
 public class EntityFallEvent extends EntityEvent implements CancellableEvent {
     protected double fallDistance;
 

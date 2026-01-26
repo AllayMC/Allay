@@ -83,12 +83,11 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
 
         var location = thisEntity.getLocation();
         var shooterPos = shooter.getLocation();
-        var eyeHeight = shooter instanceof EntityLiving living ? living.getEyeHeight() : 1.62;
 
         // Calculate direction to shooter's eye level
         var direction = new Vector3d(
                 shooterPos.x() - location.x(),
-                shooterPos.y() + eyeHeight - location.y(),
+                shooterPos.y() - location.y() + shooter.getEyeHeight(),
                 shooterPos.z() - location.z()
         );
 
@@ -169,7 +168,7 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         if (other instanceof EntityLiving living) {
             float damage = BASE_DAMAGE;
 
-            // Apply impaling damage bonus in water or rain (Bedrock Edition behavior)
+            // Apply impaling damage bonus in water or rain
             var impalingLevel = tridentBaseComponent.getImpalingLevel();
             if (impalingLevel > 0) {
                 if (other.isTouchingWater() || isEntityInRain(other)) {
@@ -340,11 +339,7 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
             computeRotationFromMotion(newPos, this.motion);
         }
 
-        if (!newPos.equals(location) && thisEntity.trySetLocation(newPos)) {
-            return true;
-        }
-
-        return false;
+        return !newPos.equals(location) && thisEntity.trySetLocation(newPos);
     }
 
     @Override

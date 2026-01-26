@@ -76,6 +76,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Implemented egg projectile:
   - Added `EntityEgg` entity interface.
   - Implemented egg throwing mechanics with chicken spawning chance.
+- (API) Added `afterApplyMotion()` method to `EntityPhysicsComponent` interface, called sequentially after parallel motion processing completes, allowing safe modification of shared world state.
+
+### Changed
+
+- (API) Changed `EntityFallEvent` and `ProjectileHitEvent` caller thread annotation from `COMPUTE` to `DIMENSION`, as these events are now fired sequentially in the dimension thread.
 
 ### Fixed
 
@@ -85,6 +90,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `PlayerPunchAirEvent` now implements `CancellableEvent`, allowing plugins to cancel the event and prevent the sound from playing.
 - Fixed packet serializer of `PlayerEnchantOptionsPacket` for NetEase 1.21.50.
 - Fixed an issue where too long command outputs will make the client disconnect in 1.21.130+.
+- Fixed race condition in physics engine where `onFall()` and projectile hit callbacks were called in parallel context, potentially causing concurrent modification issues when modifying shared world state.
 
 # 0.10.6 (API 0.23.0) - 2026/1/24
 
