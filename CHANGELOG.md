@@ -77,6 +77,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `EntityEgg` entity interface.
   - Implemented egg throwing mechanics with chicken spawning chance.
 - (API) Added `afterApplyMotion()` method to `EntityPhysicsComponent` interface, called sequentially after parallel motion processing completes, allowing safe modification of shared world state.
+- Added dimension-level light calculation toggle:
+  - (API) Added new `WorldPool.loadWorld()` overload with light calculation parameters for programmatic world creation.
+  - Added `enable-light-calculation` config option in `world-settings.yml` for each dimension.
+  - When disabled, all light queries return max value (15), improving performance for dimensions where lighting is not important.
 
 ### Changed
 

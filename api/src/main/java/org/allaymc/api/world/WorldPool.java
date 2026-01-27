@@ -57,11 +57,38 @@ public interface WorldPool {
      *                           {@code null} to disable the end dimension
      * @throws IllegalArgumentException if the world with the specific name already exists
      */
-    void loadWorld(
+    default void loadWorld(
             String name, WorldStorage storage,
             WorldGenerator overworldGenerator,
             WorldGenerator netherGenerator,
             WorldGenerator theEndGenerator
+    ) {
+        loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator, true, true, true);
+    }
+
+    /**
+     * Create a world with the provided name, storage, generators and light calculation settings for different dimensions.
+     *
+     * @param name                    the name of the world to be loaded
+     * @param storage                 the storage used for reading and writing chunks and world data
+     * @param overworldGenerator      the generator used to initialize or generate the overworld dimension
+     * @param netherGenerator         the generator used to initialize or generate the nether dimension, or
+     *                                {@code null} to disable nether dimension
+     * @param theEndGenerator         the generator used to initialize or generate the end dimension, or
+     *                                {@code null} to disable the end dimension
+     * @param overworldEnableLightCalc whether to enable light calculation for the overworld dimension
+     * @param netherEnableLightCalc    whether to enable light calculation for the nether dimension
+     * @param theEndEnableLightCalc    whether to enable light calculation for the end dimension
+     * @throws IllegalArgumentException if the world with the specific name already exists
+     */
+    void loadWorld(
+            String name, WorldStorage storage,
+            WorldGenerator overworldGenerator,
+            WorldGenerator netherGenerator,
+            WorldGenerator theEndGenerator,
+            boolean overworldEnableLightCalc,
+            boolean netherEnableLightCalc,
+            boolean theEndEnableLightCalc
     );
 
     /**

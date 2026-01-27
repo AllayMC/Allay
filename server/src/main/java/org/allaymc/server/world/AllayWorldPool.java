@@ -22,6 +22,7 @@ import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.utils.Utils;
+import org.allaymc.server.world.light.NoLightEngine;
 
 import java.nio.file.Path;
 import java.util.Collections;
@@ -82,7 +83,10 @@ public final class AllayWorldPool implements WorldPool {
             String name, WorldStorage storage,
             WorldGenerator overworldGenerator,
             WorldGenerator netherGenerator,
-            WorldGenerator theEndGenerator
+            WorldGenerator theEndGenerator,
+            boolean overworldEnableLightCalc,
+            boolean netherEnableLightCalc,
+            boolean theEndEnableLightCalc
     ) {
         log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADING, name));
         if (worlds.containsKey(name)) {
@@ -98,14 +102,14 @@ public final class AllayWorldPool implements WorldPool {
         }
 
         // Load overworld dimension
-        world.addDimension(new AllayDimension(world, overworldGenerator, DimensionInfo.OVERWORLD));
+        world.addDimension(new AllayDimension(world, overworldGenerator, DimensionInfo.OVERWORLD, overworldEnableLightCalc));
 
         // Load nether and the end dimension if they are not null
         if (netherGenerator != null) {
-            world.addDimension(new AllayDimension(world, netherGenerator, DimensionInfo.NETHER));
+            world.addDimension(new AllayDimension(world, netherGenerator, DimensionInfo.NETHER, netherEnableLightCalc));
         }
         if (theEndGenerator != null) {
-            world.addDimension(new AllayDimension(world, theEndGenerator, DimensionInfo.THE_END));
+            world.addDimension(new AllayDimension(world, theEndGenerator, DimensionInfo.THE_END, theEndEnableLightCalc));
         }
 
         var event = new WorldLoadEvent(world);
@@ -163,7 +167,13 @@ public final class AllayWorldPool implements WorldPool {
         var netherGenerator = setting.nether() == null ? null : tryCreateWorldGenerator(setting.nether());
         var theEndGenerator = setting.theEnd() == null ? null : tryCreateWorldGenerator(setting.theEnd());
 
-        loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
+        loadWorld(
+                name, storage,
+                overworldGenerator, netherGenerator, theEndGenerator,
+                setting.overworld().enableLightCalculation(),
+                setting.nether() != null ? setting.nether().enableLightCalculation() : true,
+                setting.theEnd() != null ? setting.theEnd().enableLightCalculation() : true
+        );
     }
 
     private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldSetting.DimensionSetting settings) {
@@ -194,11 +204,15 @@ public final class AllayWorldPool implements WorldPool {
             theEndGenerator = world.getTheEnd().getWorldGenerator();
         }
 
+        var overworldLightEnabled = !(((AllayDimension) world.getOverWorld()).getLightEngine() instanceof NoLightEngine);
+        var netherLightEnabled = world.getNether() == null || !(((AllayDimension) world.getNether()).getLightEngine() instanceof NoLightEngine);
+        var theEndLightEnabled = world.getTheEnd() == null || !(((AllayDimension) world.getTheEnd()).getLightEngine() instanceof NoLightEngine);
+
         return new WorldSettings.WorldSetting(
                 world.getWorldStorage().getName(),
-                new WorldSettings.WorldSetting.DimensionSetting(owGenerator.getName(), owGenerator.getPreset()),
-                netherGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(netherGenerator.getName(), netherGenerator.getPreset()) : null,
-                theEndGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(theEndGenerator.getName(), theEndGenerator.getPreset()) : null
+                new WorldSettings.WorldSetting.DimensionSetting(owGenerator.getName(), owGenerator.getPreset(), overworldLightEnabled),
+                netherGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(netherGenerator.getName(), netherGenerator.getPreset(), netherLightEnabled) : null,
+                theEndGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(theEndGenerator.getName(), theEndGenerator.getPreset(), theEndLightEnabled) : null
         );
     }
 
@@ -245,6 +259,15 @@ public final class AllayWorldPool implements WorldPool {
 
                 @CustomKey("generator-preset")
                 private String generatorPreset;
+
+                @Comment("If set to false, light calculation will be disabled for this dimension")
+                @Comment("All light queries will return max value (15)")
+                @CustomKey("enable-light-calculation")
+                private boolean enableLightCalculation;
+
+                public DimensionSetting(String generatorType, String generatorPreset) {
+                    this(generatorType, generatorPreset, true);
+                }
             }
         }
     }

@@ -31,6 +31,7 @@ import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPac
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.light.AllayLightEngine;
+import org.allaymc.server.world.light.NoLightEngine;
 import org.allaymc.server.world.manager.AllayBlockUpdateManager;
 import org.allaymc.server.world.manager.AllayChunkManager;
 import org.allaymc.server.world.manager.AllayEntityManager;
@@ -69,7 +70,7 @@ public class AllayDimension implements Dimension {
     protected final Set<Player> players;
     protected final Set<DebugShape> debugShapes;
 
-    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
+    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo, boolean enableLightCalculation) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
@@ -77,7 +78,7 @@ public class AllayDimension implements Dimension {
         this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
         this.blockUpdateManager = new AllayBlockUpdateManager(this);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
-        this.lightEngine = new AllayLightEngine(this);
+        this.lightEngine = enableLightCalculation ? new AllayLightEngine(this) : new NoLightEngine(this);
         this.players = new NonBlockingHashSet<>();
         this.debugShapes = new NonBlockingHashSet<>();
         worldGenerator.setDimension(this);
