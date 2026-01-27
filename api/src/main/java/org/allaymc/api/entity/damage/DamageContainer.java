@@ -5,6 +5,9 @@ import lombok.Setter;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.EnchantedHit;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.Objects;
 import java.util.function.UnaryOperator;
@@ -61,6 +64,38 @@ public class DamageContainer {
      */
     @Setter
     protected boolean enchanted;
+
+    /**
+     * Horizontal knockback strength. Defaults to {@link EntityPhysicsComponent#DEFAULT_KNOCKBACK}.
+     */
+    @Setter
+    protected double knockback = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
+
+    /**
+     * Vertical knockback strength. Defaults to {@link EntityPhysicsComponent#DEFAULT_KNOCKBACK}.
+     */
+    @Setter
+    protected double knockbackVertical = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
+
+    /**
+     * Additional knockback motion vector (e.g., for knockback enchantment effect).
+     */
+    @Setter
+    protected Vector3dc knockbackAdditional = new Vector3d();
+
+    /**
+     * Source position for calculating knockback direction.
+     * If {@code null}, uses the attacker's position (default behavior).
+     * Projectiles can set this to hitPos - motion for accurate direction.
+     */
+    @Setter
+    protected Vector3dc knockbackSource = null;
+
+    /**
+     * Whether to ignore knockback resistance. Defaults to {@code false}.
+     */
+    @Setter
+    protected boolean ignoreKnockbackResistance = false;
 
     /**
      * Creates a new damage container.

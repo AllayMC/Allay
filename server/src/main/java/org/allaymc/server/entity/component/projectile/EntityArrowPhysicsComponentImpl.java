@@ -92,19 +92,17 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             }
 
             var damageContainer = DamageContainer.projectile(thisEntity, (float) damage);
-            damageContainer.setHasKnockback(false);
-            if (living.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
-                var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
-                var additionalMotion = new Vector3d();
-                var punchLevel = arrowBaseComponent.getPunchLevel();
-                if (punchLevel != 0) {
-                    kb /= 2.0;
-                    additionalMotion = MathUtils.normalizeIfNotZero(this.motion).setComponent(1, 0);
-                    additionalMotion.mul(punchLevel * 0.5);
-                }
-                // Use the last location as the knockback source
-                physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()), kb, EntityPhysicsComponent.DEFAULT_KNOCKBACK, additionalMotion);
+            damageContainer.setKnockbackSource(hitPos.sub(this.motion, new Vector3d()));
+
+            var punchLevel = arrowBaseComponent.getPunchLevel();
+            if (punchLevel != 0) {
+                damageContainer.setKnockback(EntityPhysicsComponent.DEFAULT_KNOCKBACK / 2.0);
+                var knockbackAdditional = MathUtils.normalizeIfNotZero(this.motion).setComponent(1, 0);
+                knockbackAdditional.mul(punchLevel * 0.5);
+                damageContainer.setKnockbackAdditional(knockbackAdditional);
             }
+
+            living.attack(damageContainer);
 
             if (this.livingComponent.isOnFire()) {
                 living.setOnFireTicks(20 * 5);

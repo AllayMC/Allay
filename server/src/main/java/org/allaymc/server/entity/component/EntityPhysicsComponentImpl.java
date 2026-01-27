@@ -426,8 +426,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     @Override
-    public void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
-        setMotion(calculateKnockbackMotion(source, kb, kby, additionalMotion, ignoreKnockbackResistance));
+    public void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional, boolean ignoreKnockbackResistance) {
+        setMotion(calculateKnockbackMotion(knockbackSource, knockback, knockbackVertical, knockbackAdditional, ignoreKnockbackResistance));
     }
 
     @Override
@@ -435,29 +435,29 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         this.knockbackResistance = Math.clamp(knockbackResistance, 0, 1);
     }
 
-    protected Vector3d calculateKnockbackMotion(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
+    protected Vector3d calculateKnockbackMotion(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional, boolean ignoreKnockbackResistance) {
         if (!ignoreKnockbackResistance) {
             if (this.knockbackResistance > 0) {
                 var factor = 1 - this.knockbackResistance;
-                kb *= factor;
-                kby *= factor;
-                additionalMotion = additionalMotion.mul(factor, new Vector3d());
+                knockback *= factor;
+                knockbackVertical *= factor;
+                knockbackAdditional = knockbackAdditional.mul(factor, new Vector3d());
             }
         }
 
         Vector3d vec;
         var location = thisEntity.getLocation();
-        if (location.distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
-            // Generate a random kb direction if distance <= 0.01m
+        if (location.distanceSquared(knockbackSource) <= 0.0001 /* 0.01 * 0.01 */) {
+            // Generate a random knockback direction if distance <= 0.01m
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextDouble(1) - 0.5;
             var rz = rand.nextDouble(1) - 0.5;
-            vec = MathUtils.normalizeIfNotZero(new Vector3d(rx, 0, rz)).mul(kb);
+            vec = MathUtils.normalizeIfNotZero(new Vector3d(rx, 0, rz)).mul(knockback);
         } else {
-            vec = MathUtils.normalizeIfNotZero(location.sub(source, new Vector3d()).setComponent(1, 0)).mul(kb);
+            vec = MathUtils.normalizeIfNotZero(location.sub(knockbackSource, new Vector3d()).setComponent(1, 0)).mul(knockback);
         }
-        vec.y = kby;
-        return motion.mul(0.5, new Vector3d()).add(vec).add(additionalMotion);
+        vec.y = knockbackVertical;
+        return motion.mul(0.5, new Vector3d()).add(vec).add(knockbackAdditional);
     }
 
     @Override

@@ -238,41 +238,41 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source) {
-        knockback(source, DEFAULT_KNOCKBACK);
+    default void knockback(Vector3dc knockbackSource) {
+        knockback(knockbackSource, DEFAULT_KNOCKBACK);
     }
 
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source, double kb) {
-        knockback(source, kb, kb);
+    default void knockback(Vector3dc knockbackSource, double knockback) {
+        knockback(knockbackSource, knockback, knockback);
     }
 
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source, double kb, double kby) {
-        knockback(source, kb, kby, new Vector3d());
+    default void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical) {
+        knockback(knockbackSource, knockback, knockbackVertical, new Vector3d());
     }
 
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion) {
-        knockback(source, kb, kby, additionalMotion, false);
+    default void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional) {
+        knockback(knockbackSource, knockback, knockbackVertical, knockbackAdditional, false);
     }
 
     /**
-     * Knockback the entity with specified kb value.
+     * Knockback the entity with specified knockback value.
      *
-     * @param source                    the source of the knockback
-     * @param kb                        the knockback strength to apply
-     * @param kby                       the knockback strength in y-axis
-     * @param additionalMotion          the additional motion that will be appiled to the entity
+     * @param knockbackSource           the source position of the knockback
+     * @param knockback                 the horizontal knockback strength to apply
+     * @param knockbackVertical         the vertical knockback strength to apply
+     * @param knockbackAdditional       the additional motion that will be applied to the entity
      * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored
      */
-    void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance);
+    void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional, boolean ignoreKnockbackResistance);
 
     /**
      * Retrieve the knockback resistance of the entity.

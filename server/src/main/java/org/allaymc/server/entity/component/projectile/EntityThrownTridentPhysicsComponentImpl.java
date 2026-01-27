@@ -3,7 +3,6 @@ package org.allaymc.server.entity.component.projectile;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityThrownTridentBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
@@ -177,12 +176,10 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
             }
 
             var damageContainer = DamageContainer.projectile(thisEntity, damage);
-            damageContainer.setHasKnockback(false);
+            // Use the last location as the knockback source
+            damageContainer.setKnockbackSource(hitPos.sub(this.motion, new Vector3d()));
 
-            if (living.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
-                // Apply knockback
-                physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()));
-
+            if (living.attack(damageContainer)) {
                 // Apply additional durability cost for hitting entity
                 applyHitDurabilityCost();
             }

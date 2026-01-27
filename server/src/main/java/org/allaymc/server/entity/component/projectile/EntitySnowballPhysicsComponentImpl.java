@@ -2,7 +2,6 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -43,12 +42,9 @@ public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsC
 
         if (other instanceof EntityLiving living) {
             var damage = DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0);
-            damage.setHasKnockback(false);
-            if (living.attack(damage) && other instanceof EntityPhysicsComponent physicsComponent) {
-                // Use the last location as the knockback source
-                physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()));
-            }
-
+            // Use the last location as the knockback source
+            damage.setKnockbackSource(hitPos.sub(this.motion, new Vector3d()));
+            living.attack(damage);
         }
 
         thisEntity.remove();

@@ -97,6 +97,39 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         this.health = this.maxHealth = DEFAULT_MAX_HEALTH;
     }
 
+    /**
+     * Calculates knockback values before EntityDamageEvent is fired.
+     * This allows event listeners to modify knockback values.
+     */
+    protected void calculateKnockback(DamageContainer damage) {
+        if (!damage.isHasKnockback()) {
+            return;
+        }
+
+        if (!(damage.getAttacker() instanceof Entity attacker)) {
+            return;
+        }
+
+        // Set default knockback source
+        if (damage.getKnockbackSource() == null) {
+            damage.setKnockbackSource(attacker.getLocation());
+        }
+
+        // Calculate knockback enchantment's additional motion
+        if (attacker instanceof EntityContainerHolderComponent component &&
+            component.hasContainer(ContainerTypes.INVENTORY)) {
+            var kbEnchantmentLevel = component.getContainer(ContainerTypes.INVENTORY)
+                .getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+            if (kbEnchantmentLevel != 0) {
+                damage.setKnockback(damage.getKnockback() / 2.0);
+                var knockbackAdditional = MathUtils.normalizeIfNotZero(
+                    MathUtils.getDirectionVector(attacker.getLocation()).setComponent(1, 0));
+                knockbackAdditional.mul(kbEnchantmentLevel * 0.5);
+                damage.setKnockbackAdditional(knockbackAdditional);
+            }
+        }
+    }
+
     @Override
     public boolean attack(DamageContainer damage, boolean ignoreCoolDown) {
         if (!thisEntity.isAlive() ||
@@ -104,6 +137,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
             !checkAndUpdateCoolDown(damage, ignoreCoolDown)) {
             return false;
         }
+
+        calculateKnockback(damage);
 
         var event = new EntityDamageEvent(thisEntity, damage);
         if (!event.call()) return false;
@@ -131,29 +166,27 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
         if (damage.getAttacker() instanceof Entity entity) {
             ((ComponentClass) entity).getManager().callEvent(CEntityAttackEvent.INSTANCE);
-        } else {
-            return;
         }
-
 
         if (!damage.isHasKnockback()) {
             return;
         }
 
         if (physicsComponent != null) {
-            var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
-            var kby = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
-            var additionalMotion = new Vector3d();
-            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerTypes.INVENTORY)) {
-                var kbEnchantmentLevel = component.getContainer(ContainerTypes.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
-                if (kbEnchantmentLevel != 0) {
-                    kb /= 2.0;
-                    additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
-                    additionalMotion.mul(kbEnchantmentLevel * 0.5);
-                }
+            var knockbackSource = damage.getKnockbackSource();
+            if (knockbackSource == null && damage.getAttacker() instanceof Entity attacker) {
+                knockbackSource = attacker.getLocation();
             }
 
-            physicsComponent.knockback(entity.getLocation(), kb, kby, additionalMotion);
+            if (knockbackSource != null) {
+                physicsComponent.knockback(
+                    knockbackSource,
+                    damage.getKnockback(),
+                    damage.getKnockbackVertical(),
+                    damage.getKnockbackAdditional(),
+                    damage.isIgnoreKnockbackResistance()
+                );
+            }
         }
     }
 

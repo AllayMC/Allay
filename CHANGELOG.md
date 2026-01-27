@@ -85,6 +85,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Changed
 
 - (API) Changed `EntityFallEvent` and `ProjectileHitEvent` caller thread annotation from `COMPUTE` to `DIMENSION`, as these events are now fired sequentially in the dimension thread.
+- (API) Refactored knockback system for better extensibility:
+  - Added knockback-related fields to `DamageContainer`: `knockback`, `knockbackVertical`, `knockbackAdditional`, `knockbackSource`, and `ignoreKnockbackResistance`.
+  - Knockback values are now calculated before `EntityDamageEvent` is fired, allowing event listeners to modify knockback parameters.
+  - Renamed `EntityPhysicsComponent.knockback()` parameters for clarity: `source` → `knockbackSource`, `kb` → `knockback`, `kby` → `knockbackVertical`, `additionalMotion` → `knockbackAdditional`.
+  - Projectiles (arrow, egg, snowball, trident) now use `DamageContainer` knockback fields instead of manually calling `knockback()` method.
 
 ### Fixed
 
