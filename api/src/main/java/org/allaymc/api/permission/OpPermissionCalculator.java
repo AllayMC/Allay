@@ -28,7 +28,7 @@ public record OpPermissionCalculator(Player player) implements PermissionCalcula
     /**
      * Permissions that should return UNDEFINED even for operators.
      */
-    public static final Set<String> OP_DEFAULT_PERMISSIONS = new HashSet<>(Set.of(
+    public static final Set<String> OP_UNDEFINED_PERMISSIONS = new HashSet<>(Set.of(
             Permissions.ABILITY_FLY_SURVIVAL,
             Permissions.ABILITY_FLY_CREATIVE,
             Permissions.ABILITY_FLY_ADVENTURE
@@ -37,7 +37,7 @@ public record OpPermissionCalculator(Player player) implements PermissionCalcula
     @Override
     public Tristate calculatePermission(String permission) {
         if (Server.getInstance().getPlayerManager().isOperator(player)) {
-            if (OP_DEFAULT_PERMISSIONS.contains(permission)) {
+            if (OP_UNDEFINED_PERMISSIONS.contains(permission)) {
                 return Tristate.UNDEFINED;
             }
             return Tristate.TRUE;
