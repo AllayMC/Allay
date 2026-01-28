@@ -84,6 +84,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Changed
 
+- (API) Refactored flight permission system for game mode specific control:
+  - Replaced single `ability.fly` permission with game mode specific permissions: `ability.fly.survival`, `ability.fly.creative`, `ability.fly.adventure`.
+  - Spectator mode always allows flight (hardcoded behavior).
+  - Creative mode allows flight by default (unless explicitly denied with `ability.fly.creative=FALSE`).
+  - Survival and Adventure modes deny flight by default (require explicit `ability.fly.survival=TRUE` or `ability.fly.adventure=TRUE`).
+  - Added `canFly()` method to `EntityPlayerBaseComponent` for unified flight permission checking.
+  - OP players now follow the same default flight behavior as regular players.
 - (API) Changed `EntityFallEvent` and `ProjectileHitEvent` caller thread annotation from `COMPUTE` to `DIMENSION`, as these events are now fired sequentially in the dimension thread.
 - (API) Refactored knockback system for better extensibility:
   - Added knockback-related fields to `DamageContainer`: `knockback`, `knockbackVertical`, `knockbackAdditional`, `knockbackSource`, and `ignoreKnockbackResistance`.
@@ -104,6 +111,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed hunger and air supply not being handled correctly for creative/spectator mode players:
   - Creative and spectator mode players no longer have their hunger or air supply updated.
   - Switching to creative or spectator mode now resets hunger and air supply to maximum values.
+
+### Removed
+
+- (API) Removed `Permissions.ABILITY_FLY` constant, replaced by game mode specific permissions (`ABILITY_FLY_SURVIVAL`, `ABILITY_FLY_CREATIVE`, `ABILITY_FLY_ADVENTURE`).
 
 # 0.10.6 (API 0.23.0) - 2026/1/24
 

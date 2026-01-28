@@ -56,7 +56,6 @@ import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
-import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.*;
 import org.allaymc.api.player.HudElement;
 import org.allaymc.api.registry.Registries;
@@ -2570,8 +2569,7 @@ public class AllayPlayer implements Player {
             abilities.add(Ability.INSTABUILD);
         }
 
-        var tristate = player.hasPermission(Permissions.ABILITY_FLY);
-        if (tristate.asBoolean() || (tristate != Tristate.FALSE && (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR))) {
+        if (player.canFly()) {
             abilities.add(Ability.MAY_FLY);
         }
 

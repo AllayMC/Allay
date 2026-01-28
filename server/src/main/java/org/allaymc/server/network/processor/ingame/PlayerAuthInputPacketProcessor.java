@@ -15,8 +15,6 @@ import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.permission.Permissions;
-import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.particle.PunchBlockParticle;
@@ -337,11 +335,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     entity.exhaust(entity.isSprinting() ? 0.2f : 0.05f);
                 }
                 case START_FLYING -> {
-                    var gameMode = entity.getGameMode();
-                    var tristate = entity.hasPermission(Permissions.ABILITY_FLY);
-                    if (tristate == Tristate.FALSE ||
-                        (gameMode != GameMode.CREATIVE && gameMode != GameMode.SPECTATOR && !tristate.asBoolean())) {
-
+                    if (!entity.canFly()) {
                         // Reset client-side flying state
                         var controller = entity.getController();
                         controller.viewPlayerPermission(controller);

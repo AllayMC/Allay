@@ -2,6 +2,8 @@ package org.allaymc.api.entity.component;
 
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
@@ -244,6 +246,26 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @param flying Whether the player is flying
      */
     void setFlying(boolean flying);
+
+    /**
+     * Checks if the player is allowed to fly based on the current game mode and permissions.
+     * <ul>
+     *   <li>Spectator mode: always allowed to fly (hardcoded)</li>
+     *   <li>Creative mode: allowed unless explicitly denied (FALSE)</li>
+     *   <li>Survival/Adventure mode: denied unless explicitly allowed (TRUE)</li>
+     * </ul>
+     *
+     * @return {@code true} if the player can fly, {@code false} otherwise
+     */
+    default boolean canFly() {
+        var gameMode = getGameMode();
+        return switch (gameMode) {
+            case SPECTATOR -> true;
+            case CREATIVE -> hasPermission(Permissions.ABILITY_FLY_CREATIVE) != Tristate.FALSE;
+            case SURVIVAL -> hasPermission(Permissions.ABILITY_FLY_SURVIVAL) == Tristate.TRUE;
+            case ADVENTURE -> hasPermission(Permissions.ABILITY_FLY_ADVENTURE) == Tristate.TRUE;
+        };
+    }
 
     /**
      * Gets the score tag of the player.
