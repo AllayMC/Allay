@@ -17,5 +17,7 @@ public enum SimpleEntityAction implements EntityAction {
     // FIREWORK_EXPLODE makes a firework rocket display an explosion particle
     FIREWORK_EXPLODE,
     // TOTEM_USE displays the totem use particles and animation
-    TOTEM_USE
+    TOTEM_USE,
+    // FISHING_HOOK_BITE makes a fishing hook entity display the fish bite animation with bubble and splash effects
+    FISHING_HOOK_BITE
 }

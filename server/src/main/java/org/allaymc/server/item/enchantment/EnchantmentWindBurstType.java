@@ -27,4 +27,9 @@ public class EnchantmentWindBurstType extends EnchantmentType {
     public int getMaxModifiedLevel(int level) {
         return getMinModifiedLevel(level) + 50;
     }
+
+    @Override
+    public boolean isFishable() {
+        return false;
+    }
 }

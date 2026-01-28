@@ -81,6 +81,17 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - (API) Added new `WorldPool.loadWorld()` overload with light calculation parameters for programmatic world creation.
   - Added `enable-light-calculation` config option in `world-settings.yml` for each dimension.
   - When disabled, all light queries return max value (15), improving performance for dimensions where lighting is not important.
+- (API) Implemented fishing:
+  - Added `EntityFishingHookBaseComponent` interface with fishing state management (`FLYING`, `WAITING`, `ATTRACTING`, `CAUGHT`), hooked entity handling, and `reelLine()` method.
+  - Added `PlayerFishEvent` event fired when a player catches something while fishing, allowing plugins to modify caught items, experience, hooked entities, and motion.
+  - Added `FishingLoot` interface for defining custom fishing loot entries.
+  - Added `FishingLootCategory` enum (FISH, TREASURE, JUNK) with Bedrock Edition base chances.
+  - Added `FishingLootTable` utility class for selecting fishing loot based on Luck of the Sea and Lure enchantments with Bedrock Edition mechanics.
+  - Added `Registries.FISHING_LOOTS` registry for registering custom fishing loot.
+  - Added `EntityPlayer.getFishingHook()`, `setFishingHook()`, and `isFishing()` methods for managing the player's active fishing hook.
+  - Added `EnchantmentType.isFishable()` method for checking if an enchantment can be obtained from fishing (excludes Soul Speed, Swift Sneak, and Wind Burst).
+  - Added `SimpleEntityAction.FISHING_HOOK_BITE` for displaying the fish bite animation with bubble and splash effects.
+  - Added `SimpleParticle.WATER_WAKE` for fish attraction effects and `SimpleParticle.BUBBLE` for fish bite effects.
 
 ### Changed
 

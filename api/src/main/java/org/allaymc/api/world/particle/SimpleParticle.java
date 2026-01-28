@@ -39,5 +39,9 @@ public enum SimpleParticle implements Particle {
     // WIND_EXPLOSION is a particle shown when a player wind charge explodes.
     WIND_EXPLOSION,
     // BREEZE_WIND_EXPLOSION is a particle shown when a breeze wind charge explodes.
-    BREEZE_WIND_EXPLOSION
+    BREEZE_WIND_EXPLOSION,
+    // WATER_WAKE is a particle shown when a fish is attracted to a fishing hook.
+    WATER_WAKE,
+    // BUBBLE is a particle shown when a fish bites the fishing hook.
+    BUBBLE
 }

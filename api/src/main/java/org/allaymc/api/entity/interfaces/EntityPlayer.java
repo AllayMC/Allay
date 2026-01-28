@@ -198,6 +198,13 @@ public interface EntityPlayer extends
                 controller.viewEntityHand(this);
             }
         }
+
+        // Clear fishing hook when switching items
+        var fishingHook = getFishingHook();
+        if (fishingHook != null) {
+            fishingHook.remove();
+            setFishingHook(null);
+        }
     }
 
     /**

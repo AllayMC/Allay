@@ -672,7 +672,7 @@ public class AllayPlayer implements Player {
                 // TODO: find out why the rope is not shown although we have set OWNER_EID and RETURN_TRIDENT to true
                 if (trident.isReturning()) {
                     var shooter = trident.getShooter();
-                    map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getRuntimeId() : -1L);
+                    map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getUniqueId().getLeastSignificantBits() : -1L);
                 } else {
                     map.put(EntityDataTypes.OWNER_EID, -1L);
                 }
@@ -707,6 +707,12 @@ public class AllayPlayer implements Player {
             }
             case EntityLingeringPotion lingeringPotion -> {
                 map.setFlag(EntityFlag.LINGERING, true);
+            }
+            case EntityFishingHook fishingHook -> {
+                var shooter = fishingHook.getShooter();
+                map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getUniqueId().getLeastSignificantBits() : -1L);
+                var hookedEntity = fishingHook.getHookedEntity();
+                map.put(EntityDataTypes.TARGET_EID, hookedEntity != null ? hookedEntity.getUniqueId().getLeastSignificantBits() : -1L);
             }
             default -> {
             }
@@ -924,6 +930,23 @@ public class AllayPlayer implements Player {
                 packet.setRuntimeEntityId(entity.getRuntimeId());
                 packet.setData(count);
                 sendPacket(packet);
+            }
+            case SimpleEntityAction.FISHING_HOOK_BITE -> {
+                // Send all three fishing hook events for the bite animation
+                var bubblePacket = new EntityEventPacket();
+                bubblePacket.setType(EntityEventType.FISH_HOOK_BUBBLE);
+                bubblePacket.setRuntimeEntityId(entity.getRuntimeId());
+                sendPacket(bubblePacket);
+
+                var timePacket = new EntityEventPacket();
+                timePacket.setType(EntityEventType.FISH_HOOK_TIME);
+                timePacket.setRuntimeEntityId(entity.getRuntimeId());
+                sendPacket(timePacket);
+
+                var teasePacket = new EntityEventPacket();
+                teasePacket.setType(EntityEventType.FISH_HOOK_TEASE);
+                teasePacket.setRuntimeEntityId(entity.getRuntimeId());
+                sendPacket(teasePacket);
             }
             default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
         }
@@ -1627,6 +1650,8 @@ public class AllayPlayer implements Player {
             case SimpleParticle.SMASH_ATTACK_GROUND_DUST -> packet.setType(LevelEvent.PARTICLE_SMASH_ATTACK_GROUND_DUST);
             case SimpleParticle.WIND_EXPLOSION -> packet.setType(ParticleType.WIND_EXPLOSION);
             case SimpleParticle.BREEZE_WIND_EXPLOSION -> packet.setType(ParticleType.BREEZE_WIND_EXPLOSION);
+            case SimpleParticle.WATER_WAKE -> packet.setType(ParticleType.WATER_WAKE);
+            case SimpleParticle.BUBBLE -> packet.setType(ParticleType.BUBBLE);
             case ShootParticle pa -> {
                 packet.setType(LevelEvent.PARTICLE_SHOOT);
                 int data = 0;

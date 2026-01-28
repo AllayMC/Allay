@@ -367,4 +367,16 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
     }
+
+    public static void initFishingHook() {
+        EntityTypes.FISHING_HOOK = AllayEntityType
+                .builder(EntityFishingHookImpl.class)
+                .vanillaEntity(EntityId.FISHING_HOOK)
+                .addComponent(EntityFishingHookBaseComponentImpl::new, EntityFishingHookBaseComponentImpl.class)
+                .addComponent(EntityFishingHookPhysicsComponentImpl::new, EntityFishingHookPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                // Fishing hook despawns after 60 seconds if not used
+                .addComponent(() -> new EntityAgeComponentImpl(1200), EntityAgeComponentImpl.class)
+                .build();
+    }
 }

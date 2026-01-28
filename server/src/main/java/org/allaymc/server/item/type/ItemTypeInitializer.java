@@ -1122,4 +1122,13 @@ public final class ItemTypeInitializer {
                 .addComponent(ItemTridentBaseComponentImpl::new, ItemTridentBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initFishingRod() {
+        ItemTypes.FISHING_ROD = AllayItemType
+                .builder(ItemFishingRodStackImpl.class)
+                .vanillaItem(ItemId.FISHING_ROD)
+                .addComponent(ItemFishingRodBaseComponentImpl::new, ItemFishingRodBaseComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
+                .build();
+    }
 }

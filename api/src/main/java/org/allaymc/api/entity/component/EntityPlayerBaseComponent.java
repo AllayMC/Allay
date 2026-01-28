@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.component;
 
+import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.permission.Permissions;
@@ -8,6 +9,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.world.chunk.ChunkLoader;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -600,4 +602,27 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @return {@code true} if the player can eat, {@code false} otherwise.
      */
     boolean canEat();
+
+    /**
+     * Gets the fishing hook entity that the player has cast.
+     *
+     * @return the fishing hook, or {@code null} if the player is not fishing or the fishing hook is not alive
+     */
+    EntityFishingHook getFishingHook();
+
+    /**
+     * Sets the fishing hook entity for this player.
+     *
+     * @param fishingHook the fishing hook, or {@code null} to clear
+     */
+    void setFishingHook(EntityFishingHook fishingHook);
+
+    /**
+     * Checks if the player is currently fishing.
+     *
+     * @return {@code true} if the player has a fishing hook out
+     */
+    default boolean isFishing() {
+        return getFishingHook() != null;
+    }
 }

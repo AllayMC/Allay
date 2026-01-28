@@ -9,6 +9,7 @@ import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.creative.CreativeItemRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.fishing.FishingLoot;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
@@ -33,6 +34,9 @@ public final class Registries {
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEMS;
     public static SimpleMappedRegistry<ItemType<?>, Float> COMPOSTABLE_ITEMS;
+
+    // Fishing
+    public static SimpleMappedRegistry<Identifier, FishingLoot> FISHING_LOOTS;
 
     // Block Entity
     public static SimpleMappedRegistry<String, BlockEntityType<?>> BLOCK_ENTITIES;

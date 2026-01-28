@@ -10,6 +10,7 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.data.EntityAnimation;
+import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.*;
@@ -136,6 +137,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected int chunkLoadingRadius;
     @Getter
     protected int chunkMaxSendCountPerTick;
+
+    @Setter
+    protected EntityFishingHook fishingHook;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -434,6 +438,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         return getFoodLevel() < 20 ||
                thisPlayer.getGameMode() == GameMode.CREATIVE ||
                thisPlayer.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
+    }
+
+    @Override
+    public EntityFishingHook getFishingHook() {
+        if (this.fishingHook != null && !this.fishingHook.isAlive()) {
+            // Set the fishing hook to null if it is not alive
+            setFishingHook(null);
+        }
+
+        return this.fishingHook;
     }
 
     @Override

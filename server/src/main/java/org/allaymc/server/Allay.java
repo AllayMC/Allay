@@ -196,6 +196,9 @@ public final class Allay {
         );
         Registries.COMPOSTABLE_ITEMS = SimpleMappedRegistry.create(new CompostableItemRegistryLoader());
 
+        // Fishing
+        Registries.FISHING_LOOTS = SimpleMappedRegistry.create(new FishingLootRegistryLoader());
+
         // BlockEntity
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<String, BlockEntityType<?>>()),

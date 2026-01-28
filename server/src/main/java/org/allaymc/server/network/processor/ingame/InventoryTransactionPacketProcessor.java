@@ -69,6 +69,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 var world = entity.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
+                        if (entity.isUsingItemInAir()) {
+                            break;
+                        }
+
                         var clickBlockPos = NetworkHelper.fromNetwork(packet.getBlockPosition());
                         var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
                         // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
@@ -178,8 +182,18 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             return;
                         }
 
-                        if (!itemInHand.interactEntity(entity, target)) {
-                            target.onInteract(entity, itemInHand);
+                        if (!itemInHand.interactEntity(entity, target) && !target.onInteract(entity, itemInHand)) {
+                            // Neither item nor entity handled the interaction, fall back to air click
+                            // This allows items like fishing rods to cast when clicking on entities
+                            if (itemInHand.canUseItemInAir(entity)) {
+                                if (new PlayerStartUseItemInAirEvent(entity).call()) {
+                                    entity.setUsingItemInAir(true, receiveTime);
+                                }
+                            } else {
+                                if (new PlayerRightClickItemInAirEvent(entity).call()) {
+                                    itemInHand.rightClickItemInAir(entity);
+                                }
+                            }
                         }
                     }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
