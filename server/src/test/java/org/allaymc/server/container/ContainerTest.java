@@ -181,7 +181,7 @@ class ContainerTest {
         void testRemoveAllViewers() {
             var viewer2 = new FakeContainerViewer() {
                 @Override
-                public byte viewOpen(Container container) {
+                public byte viewContainerOpen(Container container) {
                     return 1;
                 }
             };
@@ -419,7 +419,7 @@ class ContainerTest {
             AtomicInteger viewCount = new AtomicInteger(0);
             var trackingViewer = new FakeContainerViewer() {
                 @Override
-                public void viewSlot(Container container, int slot) {
+                public void viewContainerSlot(Container container, int slot) {
                     viewCount.incrementAndGet();
                 }
             };
@@ -435,7 +435,7 @@ class ContainerTest {
             AtomicInteger viewCount = new AtomicInteger(0);
             var trackingViewer = new FakeContainerViewer() {
                 @Override
-                public void viewSlot(Container container, int slot) {
+                public void viewContainerSlot(Container container, int slot) {
                     viewCount.incrementAndGet();
                 }
             };
@@ -821,7 +821,7 @@ class ContainerTest {
             AtomicInteger viewCount = new AtomicInteger(0);
             var trackingViewer = new FakeContainerViewer() {
                 @Override
-                public void viewSlot(Container container, int slot) {
+                public void viewContainerSlot(Container container, int slot) {
                     viewCount.incrementAndGet();
                 }
             };
@@ -839,7 +839,7 @@ class ContainerTest {
             AtomicInteger viewCount = new AtomicInteger(0);
             var trackingViewer = new FakeContainerViewer() {
                 @Override
-                public void viewSlot(Container container, int slot) {
+                public void viewContainerSlot(Container container, int slot) {
                     viewCount.incrementAndGet();
                 }
             };

@@ -341,9 +341,9 @@ public class AllayPlayer implements Player {
         this.controlledEntity.forEachViewers(viewer -> viewer.viewPlayerGameMode(this.controlledEntity));
         viewTime(world.getWorldData().getTimeOfDay());
         viewWeather(world.getWeather());
-        viewContents(this.controlledEntity.getContainer(ContainerTypes.INVENTORY));
-        viewContents(this.controlledEntity.getContainer(ContainerTypes.OFFHAND));
-        viewContents(this.controlledEntity.getContainer(ContainerTypes.ARMOR));
+        viewContainerContents(this.controlledEntity.getContainer(ContainerTypes.INVENTORY));
+        viewContainerContents(this.controlledEntity.getContainer(ContainerTypes.OFFHAND));
+        viewContainerContents(this.controlledEntity.getContainer(ContainerTypes.ARMOR));
         viewPlayerPermission(this);
         viewPlayerListChange(playerManager.getPlayers().values(), true);
 
@@ -1803,7 +1803,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewContents(Container container) {
+    public void viewContainerContents(Container container) {
         if (container instanceof AbstractPlayerContainer playerContainer) {
             viewContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId());
             return;
@@ -1828,7 +1828,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewSlot(Container container, int slot) {
+    public void viewContainerSlot(Container container, int slot) {
         if (container instanceof AbstractPlayerContainer playerContainer) {
             if (playerContainer.getContainerType() == ContainerTypes.OFFHAND) {
                 // HACK: for unknown reason, we should send InventoryContentPacket instead of InventorySlotPacket
@@ -1859,7 +1859,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public byte viewOpen(Container container) {
+    public byte viewContainerOpen(Container container) {
         if (idToContainer.inverse().containsKey(container)) {
             throw new IllegalStateException("The container " + container.getContainerType() + " have been opened by this viewer");
         }
@@ -1871,7 +1871,7 @@ public class AllayPlayer implements Player {
         var containerType = container.getContainerType();
         // We should send the container's contents to the client if the container is not held by the entity
         if (this.controlledEntity.getContainer(containerType) == null) {
-            viewContents(container);
+            viewContainerContents(container);
         }
 
         return assignedId;
@@ -1900,7 +1900,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewClose(Container container) {
+    public void viewContainerClose(Container container) {
         var assignedId = this.idToContainer.inverse().get(container);
         if (assignedId == null) {
             throw new IllegalStateException("Trying to close a container which is not opened! Type: " + container.getContainerType());

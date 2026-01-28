@@ -95,7 +95,7 @@ public class BaseContainer implements Container {
             return false;
         }
 
-        var assignedId = viewer.viewOpen(this);
+        var assignedId = viewer.viewContainerOpen(this);
         if (viewers.containsKey(assignedId)) {
             removeViewer(viewers.get(assignedId));
         }
@@ -111,7 +111,7 @@ public class BaseContainer implements Container {
 
         var removed = viewers.inverse().remove(viewer);
         if (removed != null) {
-            viewer.viewClose(this);
+            viewer.viewContainerClose(this);
             onClose(viewer);
             return true;
         }
@@ -123,7 +123,7 @@ public class BaseContainer implements Container {
     public void notifySlotChange(int slot, boolean send) {
         if (send) {
             for (var viewer : viewers.values()) {
-                viewer.viewSlot(this, slot);
+                viewer.viewContainerSlot(this, slot);
             }
         }
 

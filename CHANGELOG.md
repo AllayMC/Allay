@@ -97,6 +97,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Knockback values are now calculated before `EntityDamageEvent` is fired, allowing event listeners to modify knockback parameters.
   - Renamed `EntityPhysicsComponent.knockback()` parameters for clarity: `source` → `knockbackSource`, `kb` → `knockback`, `kby` → `knockbackVertical`, `additionalMotion` → `knockbackAdditional`.
   - Projectiles (arrow, egg, snowball, trident) now use `DamageContainer` knockback fields instead of manually calling `knockback()` method.
+- (API) Renamed `ContainerViewer` methods for clarity and consistency: `viewContents()` → `viewContainerContents()`, `viewSlot()` → `viewContainerSlot()`, `viewOpen()` → `viewContainerOpen()`, `viewClose()` → `viewContainerClose()`.
 - Extracted NetEase protocol extension code to separate library `org.allaymc:protocol-extension`, reducing codebase complexity and improving maintainability.
 
 ### Fixed

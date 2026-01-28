@@ -80,9 +80,9 @@ public class GameTestCommand extends Command {
                 .key("rfinv")
                 .exec((context, p) -> {
                     var player = p.getController();
-                    player.viewContents(p.getContainer(ContainerTypes.INVENTORY));
-                    player.viewContents(p.getContainer(ContainerTypes.ARMOR));
-                    player.viewContents(p.getContainer(ContainerTypes.OFFHAND));
+                    player.viewContainerContents(p.getContainer(ContainerTypes.INVENTORY));
+                    player.viewContainerContents(p.getContainer(ContainerTypes.ARMOR));
+                    player.viewContainerContents(p.getContainer(ContainerTypes.OFFHAND));
                     context.addOutput("Inventory is refreshed!");
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER)

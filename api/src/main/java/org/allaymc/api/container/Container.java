@@ -253,7 +253,7 @@ public interface Container {
      * @param viewer the viewer
      */
     default void sendContents(ContainerViewer viewer) {
-        viewer.viewContents(this);
+        viewer.viewContainerContents(this);
     }
 
     /**
@@ -263,7 +263,7 @@ public interface Container {
      * @param slot   the slot
      */
     default void sendContent(ContainerViewer viewer, int slot) {
-        viewer.viewSlot(this, slot);
+        viewer.viewContainerSlot(this, slot);
     }
 
     /**

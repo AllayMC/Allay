@@ -14,7 +14,7 @@ public interface ContainerViewer {
      * @param container the container to view
      * @throws IllegalStateException if this viewer does not open the container
      */
-    void viewContents(Container container);
+    void viewContainerContents(Container container);
 
     /**
      * View a slot in an opened container.
@@ -23,7 +23,7 @@ public interface ContainerViewer {
      * @param slot      the slot to view
      * @throws IllegalStateException if this viewer does not open the container
      */
-    void viewSlot(Container container, int slot);
+    void viewContainerSlot(Container container, int slot);
 
     /**
      * Open a container in the viewer's side.
@@ -32,7 +32,7 @@ public interface ContainerViewer {
      * @return the assigned id for this container
      * @throws IllegalStateException if this viewer has opened the container
      */
-    byte viewOpen(Container container);
+    byte viewContainerOpen(Container container);
 
     /**
      * Close a container in the viewer's side.
@@ -40,7 +40,7 @@ public interface ContainerViewer {
      * @param container the container that is closed
      * @throws IllegalStateException if this viewer hasn't opened the container
      */
-    void viewClose(Container container);
+    void viewContainerClose(Container container);
 
     /**
      * View container data.

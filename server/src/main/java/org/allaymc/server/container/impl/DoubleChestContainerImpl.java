@@ -199,7 +199,7 @@ public class DoubleChestContainerImpl implements BlockContainer {
             return false;
         }
 
-        var assignedId = viewer.viewOpen(this);
+        var assignedId = viewer.viewContainerOpen(this);
         if (viewers.containsKey(assignedId)) {
             removeViewer(viewers.get(assignedId));
         }
@@ -215,7 +215,7 @@ public class DoubleChestContainerImpl implements BlockContainer {
 
         var removed = viewers.inverse().remove(viewer);
         if (removed != null) {
-            viewer.viewClose(this);
+            viewer.viewContainerClose(this);
             onClose(viewer);
             return true;
         }
@@ -235,7 +235,7 @@ public class DoubleChestContainerImpl implements BlockContainer {
     public void notifySlotChange(int slot, boolean send) {
         if (send) {
             for (var viewer : viewers.values()) {
-                viewer.viewSlot(this, slot);
+                viewer.viewContainerSlot(this, slot);
             }
         }
 
@@ -259,7 +259,7 @@ public class DoubleChestContainerImpl implements BlockContainer {
     private void attachSyncListeners(Container container, Int2ObjectMap<Consumer<ItemStack>> listeners, int slotOffset) {
         for (int slot = 0; slot < CHEST_SIZE; slot++) {
             int viewSlot = slot + slotOffset;
-            Consumer<ItemStack> listener = $ -> viewers.values().forEach(viewer -> viewer.viewSlot(this, viewSlot));
+            Consumer<ItemStack> listener = $ -> viewers.values().forEach(viewer -> viewer.viewContainerSlot(this, viewSlot));
             listeners.put(slot, listener);
             container.addSlotChangeListener(slot, listener);
         }

@@ -11,20 +11,20 @@ import java.util.Set;
  */
 public class FakeContainerViewer implements ContainerViewer {
     @Override
-    public void viewContents(Container container) {
+    public void viewContainerContents(Container container) {
     }
 
     @Override
-    public void viewSlot(Container container, int slot) {
+    public void viewContainerSlot(Container container, int slot) {
     }
 
     @Override
-    public byte viewOpen(Container container) {
+    public byte viewContainerOpen(Container container) {
         return 0;
     }
 
     @Override
-    public void viewClose(Container container) {
+    public void viewContainerClose(Container container) {
     }
 
     @Override
