@@ -95,6 +95,7 @@ public class EntityFishingHookBaseComponentImpl extends EntityBaseComponentImpl 
 
     public EntityFishingHookBaseComponentImpl(EntityInitInfo info) {
         super(info);
+        this.persistent = false;
     }
 
     @Override

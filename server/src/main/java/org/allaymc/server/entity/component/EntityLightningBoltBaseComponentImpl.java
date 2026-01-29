@@ -37,6 +37,7 @@ public class EntityLightningBoltBaseComponentImpl extends EntityBaseComponentImp
 
     public EntityLightningBoltBaseComponentImpl(EntityInitInfo info) {
         super(info);
+        this.persistent = false;
     }
 
     @OnInitFinish
