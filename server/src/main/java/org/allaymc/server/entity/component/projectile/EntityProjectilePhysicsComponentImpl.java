@@ -24,12 +24,12 @@ import org.joml.primitives.Rayd;
 public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponentImpl {
 
     /**
-     * Stores the result of a raycast collision.
+     * Stores the result of a ray-cast collision.
      *
      * @param hit    the object that was hit (Block or Entity)
      * @param hitPos the position where the collision occurred
      */
-    protected record RaycastResult(Object hit, Vector3dc hitPos) {}
+    protected record CollisionResult(Object hit, Vector3dc hitPos) {}
 
     @ComponentObject
     protected Entity thisEntity;
@@ -37,7 +37,7 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
     /**
      * Collision result storage (set in applyMotion, consumed in afterApplyMotion).
      */
-    protected RaycastResult pendingRaycastResult;
+    protected CollisionResult pendingCollisionResult;
 
     @Dependency
     protected EntityAgeComponent ageComponent;
@@ -146,10 +146,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         if (!newPos.equals(location) && thisEntity.trySetLocation(newPos)) {
             if (rayCastResult.hit instanceof Block block && callHitEvent(newPos, null, block)) {
                 // Store for later processing in afterApplyMotion()
-                this.pendingRaycastResult = new RaycastResult(block, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
+                this.pendingCollisionResult = new CollisionResult(block, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
             } else if (rayCastResult.hit instanceof Entity entity && callHitEvent(newPos, entity, null)) {
                 // Store for later processing in afterApplyMotion()
-                this.pendingRaycastResult = new RaycastResult(entity, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
+                this.pendingCollisionResult = new CollisionResult(entity, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
             }
 
             return true;
@@ -170,12 +170,12 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
 
     @Override
     public void afterApplyMotion() {
-        if (pendingRaycastResult == null) {
+        if (pendingCollisionResult == null) {
             return;
         }
 
-        var hit = pendingRaycastResult.hit();
-        var hitPos = pendingRaycastResult.hitPos();
+        var hit = pendingCollisionResult.hit();
+        var hitPos = pendingCollisionResult.hitPos();
 
         if (hit instanceof Block block) {
             block.getBehavior().onProjectileHit(block, (EntityProjectile) thisEntity, hitPos);
@@ -186,7 +186,7 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         }
 
         // Clear pending state
-        pendingRaycastResult = null;
+        pendingCollisionResult = null;
     }
 
     protected void onHitBlock(Block block, Vector3dc hitPos) {

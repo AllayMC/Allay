@@ -30,7 +30,7 @@ public class ItemFishingRodBaseComponentImpl extends ItemBaseComponentImpl {
     /**
      * Initial throwing force.
      */
-    protected static final double THROW_FORCE = 1.1;
+    protected static final double THROW_FORCE = 1.21;
 
     @ComponentObject
     protected ItemStack thisItemStack;
@@ -67,7 +67,7 @@ public class ItemFishingRodBaseComponentImpl extends ItemBaseComponentImpl {
                 location.z()
         );
         var direction = MathUtils.getDirectionVector(location);
-        var motion = direction.mul(THROW_FORCE * THROW_FORCE);
+        var motion = direction.mul(THROW_FORCE);
 
         // Create fishing hook entity
         var fishingHook = EntityTypes.FISHING_HOOK.createEntity(
