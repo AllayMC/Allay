@@ -175,9 +175,12 @@ public interface EntityPlayer extends
     default void setHandSlot(int handSlot, boolean serverSide) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
         var container = getContainer(ContainerTypes.INVENTORY);
+        var oldHandSlot = container.getHandSlot();
+        if (oldHandSlot == handSlot) {
+            return;
+        }
 
         var oldItemStack = container.getItemInHand();
-        var oldHandSlot = container.getHandSlot();
         var newItemStack = container.getItemStack(handSlot);
         var event = new PlayerItemHeldEvent(this, oldItemStack, oldHandSlot, newItemStack, handSlot);
         if (!event.call()) {
