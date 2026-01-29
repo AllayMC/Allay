@@ -28,11 +28,6 @@ public class EntityFishingHookPhysicsComponentImpl extends EntityProjectilePhysi
     protected EntityFishingHookBaseComponent fishingHookBaseComponent;
 
     @Override
-    public double getGravity() {
-        return 0.04;
-    }
-
-    @Override
     protected void onHitEntity(Entity entity, Vector3dc hitPos) {
         if (fishingHookBaseComponent.hasHookedEntity()) {
             return;

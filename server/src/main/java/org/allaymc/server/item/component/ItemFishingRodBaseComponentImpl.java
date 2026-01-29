@@ -30,7 +30,7 @@ public class ItemFishingRodBaseComponentImpl extends ItemBaseComponentImpl {
     /**
      * Initial throwing force.
      */
-    protected static final double THROW_FORCE = 1.21;
+    protected static final double THROW_FORCE = 0.8;
 
     @ComponentObject
     protected ItemStack thisItemStack;
@@ -63,7 +63,7 @@ public class ItemFishingRodBaseComponentImpl extends ItemBaseComponentImpl {
         // Calculate initial position and velocity
         var spawnPos = new Vector3d(
                 location.x(),
-                location.y() + player.getEyeHeight(),
+                location.y() + player.getEyeHeight() - 0.3,
                 location.z()
         );
         var direction = MathUtils.getDirectionVector(location);
