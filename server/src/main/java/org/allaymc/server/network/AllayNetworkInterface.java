@@ -27,6 +27,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.ServerSettings;
+import org.allaymc.server.eventbus.event.network.NettyPipelineInitEvent;
 import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
@@ -196,6 +197,7 @@ public class AllayNetworkInterface implements NetworkInterface {
         @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")
         protected void preInitChannel(Channel channel) throws Exception {
             super.preInitChannel(channel);
+            new NettyPipelineInitEvent(channel).call();
 
             // For NetEase clients (rakVersion 8), use NOOP compression initially because
             // RequestNetworkSettingsPacket is not compressed. The real compression strategy
@@ -240,7 +242,9 @@ public class AllayNetworkInterface implements NetworkInterface {
                 return;
             }
 
+
             var player = new AllayPlayer(session);
+            session.getPeer().getChannel().attr(NettyPipelineInitEvent.PLAYER_ATTRIBUTE_KEY).set(player);
             var event = new PlayerConnectEvent(player, "disconnect.disconnected");
             if (!event.call()) {
                 session.disconnect(event.getDisconnectReason());
