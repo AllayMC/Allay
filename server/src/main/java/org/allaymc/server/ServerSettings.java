@@ -170,6 +170,11 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("only-allow-netease-client")
         private boolean onlyAllowNeteaseClient = false;
 
+        @Comment("Maximum size in bytes for decompressed packet data. Default is 50MB (52428800)")
+        @Comment("Increase this if you encounter decompression errors with large packets")
+        @CustomKey("max-decompressed-bytes")
+        private int maxDecompressedBytes = 1024 * 1024 * 50;
+
         public enum CompressionAlgorithm {
             ZLIB,
             SNAPPY

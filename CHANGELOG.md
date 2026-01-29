@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.10.7](https://github.com/AllayMC/Allay/compare/0.10.7...HEAD)</small>
 
+### Added
+
+- Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
+
 ### Fixed
 
 - Fixed a bug where item is used twice when facing a villager.

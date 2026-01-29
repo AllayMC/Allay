@@ -79,6 +79,7 @@ public final class Allay {
         System.setProperty("joml.format", "false");
         // Enable async logging
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName());
+        System.setProperty("bedrock.maxDecompressedBytes", String.valueOf(AllayServer.getSettings().networkSettings().maxDecompressedBytes()));
 
         initI18n();
         EXTENSION_MANAGER.loadExtensions(args);
