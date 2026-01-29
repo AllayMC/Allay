@@ -182,18 +182,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             return;
                         }
 
-                        if (!itemInHand.interactEntity(entity, target) && !target.onInteract(entity, itemInHand)) {
-                            // Neither item nor entity handled the interaction, fall back to air click
-                            // This allows items like fishing rods to cast when clicking on entities
-                            if (itemInHand.canUseItemInAir(entity)) {
-                                if (new PlayerStartUseItemInAirEvent(entity).call()) {
-                                    entity.setUsingItemInAir(true, receiveTime);
-                                }
-                            } else {
-                                if (new PlayerRightClickItemInAirEvent(entity).call()) {
-                                    itemInHand.rightClickItemInAir(entity);
-                                }
-                            }
+                        if (!itemInHand.interactEntity(entity, target)) {
+                            target.onInteract(entity, itemInHand);
                         }
                     }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {

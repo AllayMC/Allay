@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.10.7](https://github.com/AllayMC/Allay/compare/0.10.7...HEAD)</small>
 
+### Fixed
+
+- Fixed a bug where item is used twice when facing a villager.
+
 # 0.10.7 (API 0.24.0) - 2026/1/29
 
 <small>[Compare with 0.10.6](https://github.com/AllayMC/Allay/compare/0.10.6...0.10.7)</small>
