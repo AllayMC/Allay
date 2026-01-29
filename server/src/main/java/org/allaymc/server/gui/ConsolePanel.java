@@ -45,6 +45,8 @@ public class ConsolePanel extends JTextPane {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private static final int MAX_DOCUMENT_CHARS = 200_000;
+
     private static Color colorCurrent = ANSIColor.RESET.getColor();
     int currentLength = 0; // Used to let ProgressBars work
     private String remaining = "";
@@ -68,6 +70,7 @@ public class ConsolePanel extends JTextPane {
                 // We're good to normally add to the document
                 try {
                     getDocument().insertString(len, text, attribute);
+                    trimDocument();
                 } catch (BadLocationException e) {
                     log.error("Error while appending text to console", e);
                 }
@@ -80,6 +83,7 @@ public class ConsolePanel extends JTextPane {
             try {
                 getDocument().remove(len - currentLength, currentLength);
                 getDocument().insertString(len - currentLength, text, attribute);
+                trimDocument();
                 currentLength = text.length();
             } catch (BadLocationException e) {
                 log.error("Error while removing text from console, most likely has to do with printing weirdly", e);
@@ -91,8 +95,20 @@ public class ConsolePanel extends JTextPane {
 
         try {
             getDocument().insertString(len, text, attribute);
+            trimDocument();
         } catch (BadLocationException e) {
             log.error("Error while appending text to console", e);
+        }
+    }
+
+    private void trimDocument() {
+        var doc = getDocument();
+        var excess = doc.getLength() - MAX_DOCUMENT_CHARS;
+        if (excess <= 0) return;
+        try {
+            doc.remove(0, excess);
+        } catch (BadLocationException e) {
+            log.warn("Error while trimming console output", e);
         }
     }
 
