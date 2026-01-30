@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
 - Added `NettyPipelineInitEvent` for packet level middleware support. The `AllayPlayer` instance is attached to the channel attribute.
+- Implemented tripwire hook and tripwire.
 
 ### Fixed
 

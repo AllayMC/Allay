@@ -53,6 +53,8 @@ import org.allaymc.server.block.component.slab.BlockDoubleSlabBaseComponentImpl;
 import org.allaymc.server.block.component.slab.BlockSlabBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
+import org.allaymc.server.block.component.tripwire.BlockTripWireBaseComponentImpl;
+import org.allaymc.server.block.component.tripwire.BlockTripwireHookBaseComponentImpl;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.impl.*;
 import org.allaymc.server.item.data.ItemId;
@@ -2197,6 +2199,21 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                 .setBaseComponentSupplier(blockBaseComponentSupplier)
+                .build();
+    }
+
+    public static void initTripwire() {
+        BlockTypes.TRIPWIRE_HOOK = AllayBlockType
+                .builder(BlockTripwireHookBehaviorImpl.class)
+                .vanillaBlock(BlockId.TRIPWIRE_HOOK)
+                .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.POWERED_BIT)
+                .setBaseComponentSupplier(BlockTripwireHookBaseComponentImpl::new)
+                .build();
+        BlockTypes.TRIP_WIRE = AllayBlockType
+                .builder(BlockTripWireBehaviorImpl.class)
+                .vanillaBlock(BlockId.TRIP_WIRE)
+                .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.DISARMED_BIT, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.SUSPENDED_BIT)
+                .setBaseComponentSupplier(BlockTripWireBaseComponentImpl::new)
                 .build();
     }
 

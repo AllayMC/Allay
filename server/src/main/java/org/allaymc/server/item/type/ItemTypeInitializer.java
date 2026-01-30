@@ -1080,6 +1080,14 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    public static void initString() {
+        ItemTypes.STRING = AllayItemType
+                .builder(ItemStringStackImpl.class)
+                .vanillaItem(ItemId.STRING)
+                .addComponent(ItemStringBaseComponentImpl::new, ItemStringBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initRepeater() {
         ItemTypes.REPEATER = AllayItemType
                 .builder(ItemRepeaterStackImpl.class)
