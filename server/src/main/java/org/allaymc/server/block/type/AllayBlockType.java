@@ -46,7 +46,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final Map<String, BlockPropertyType<?>> properties;
     private final Identifier identifier;
     private final Set<BlockTag> blockTags;
-    private final ItemType<?> blockItemType;
+    private final ItemType<?> itemType;
     private final Map<Integer, BlockState> blockStateHashMap;
     private final byte specialValueBits;
     private final Map<Long, BlockState> specialValueMap;
@@ -59,7 +59,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private AllayBlockType(
             Map<String, BlockPropertyType<?>> properties,
             Identifier identifier,
-            ItemType<?> blockItemType,
+            ItemType<?> itemType,
             Set<BlockTag> blockTags,
             boolean customBlock,
             Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier
@@ -67,7 +67,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
         this.blockTags = blockTags;
-        this.blockItemType = blockItemType;
+        this.itemType = itemType;
         this.customBlock = customBlock;
         this.blockStateHashMap = initStates(defaultStateSupplier);
 
@@ -112,7 +112,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     @Override
     public ItemType<?> getItemType() {
-        return blockItemType;
+        return itemType;
     }
 
     @Override
