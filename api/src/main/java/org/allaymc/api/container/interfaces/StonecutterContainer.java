@@ -7,7 +7,7 @@ import org.allaymc.api.item.ItemStack;
  *
  * @author daoge_cmd
  */
-public interface StonecutterContainer extends BlockContainer {
+public interface StonecutterContainer extends BlockContainer, RecipeContainer {
     /**
      * The constant representing the input slot index in the stonecutter container.
      */

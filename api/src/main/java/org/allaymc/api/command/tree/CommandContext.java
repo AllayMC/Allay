@@ -169,7 +169,7 @@ public interface CommandContext {
                 right.append(" ").append(arg);
             }
         }
-        addError(TrKeys.MC_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
+        addError("%" + TrKeys.MC_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
     }
 
     /**

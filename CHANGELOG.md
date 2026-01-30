@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Fixed
 
 - Fixed a bug where item is used twice when facing a villager.
+- Fixed a bug where stonecutter is unusable.
 
 # 0.10.7 (API 0.24.0) - 2026/1/29
 

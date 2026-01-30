@@ -62,6 +62,16 @@ public record CraftingRecipeInput(ItemStack[][] items) implements RecipeInput {
     }
 
     /**
+     * Constructs a new recipe input with one item. This is used by stonecutter.
+     *
+     * @param item the item
+     */
+    public CraftingRecipeInput(ItemStack item) {
+        this(new ItemStack[][]{{item}});
+        checkValid();
+    }
+
+    /**
      * Flattens the two-dimensional array of ItemStack objects into a single-dimensional array.
      * The size of the resulting array depends on the type of the recipe input:
      * - 9 for a "BIG" type
