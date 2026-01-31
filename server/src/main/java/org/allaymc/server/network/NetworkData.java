@@ -293,23 +293,24 @@ public final class NetworkData {
         packet.setWorldTemplateId(new UUID(0, 0));
         packet.setWorldTemplateVersion("");
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
-        packet.setScriptingEnabled(true);
 
         for (var pack : Registries.PACKS.getContent().values()) {
+            var scripting = pack.getType() == Pack.Type.SCRIPT;
+            if (scripting && !packet.isScriptingEnabled()) {
+                // ScriptingEnabled specifies if any of the resource packs contain scripts in them. If set to true, only clients
+                // that support scripts will be able to download them.
+                packet.setScriptingEnabled(true);
+            }
             var info = switch (pack.getType()) {
                 case RESOURCES -> new ResourcePacksInfoPacket.Entry(
-                        pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
-                        "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
-                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                        false, null
+                        pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
+                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), false, null
                 );
                 case DATA -> {
                     packet.setHasAddonPacks(true);
                     yield new ResourcePacksInfoPacket.Entry(
-                            pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
-                            "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
-                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                            true, null
+                            pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
+                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), true, null
                     );
                 }
                 case null, default -> null;
