@@ -333,12 +333,9 @@ public final class NetworkData {
         packet.getExperiments().addAll(EXPERIMENT_DATA_LIST.get());
 
         for (var pack : Registries.PACKS.getContent().values()) {
-            var entry = switch (pack.getType()) {
-                case RESOURCES, DATA -> new ResourcePackStackPacket.Entry(pack.getId().toString(), pack.getStringVersion(), "");
-                case null, default -> null;
-            };
-            if (entry != null) {
-                packet.getResourcePacks().add(entry);
+            switch (pack.getType()) {
+                case RESOURCES -> packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(pack.getId().toString(), pack.getStringVersion(), ""));
+                case DATA -> packet.getBehaviorPacks().add(new ResourcePackStackPacket.Entry(pack.getId().toString(), pack.getStringVersion(), ""));
             }
         }
 
