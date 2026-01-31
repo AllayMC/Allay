@@ -295,14 +295,23 @@ public final class NetworkData {
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
 
         for (var pack : Registries.PACKS.getContent().values()) {
-            var type = pack.getType();
-            if (type == Pack.Type.RESOURCES) {
-                packet.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(
+            var info = switch (pack.getType()) {
+                case RESOURCES -> new ResourcePacksInfoPacket.Entry(
                         pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
                         "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
                         pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
                         false, null
-                ));
+                );
+                case DATA -> new ResourcePacksInfoPacket.Entry(
+                        pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
+                        "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
+                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
+                        true, null
+                );
+                case null, default -> null;
+            };
+            if (info != null) {
+                packet.getResourcePackInfos().add(info);
             }
         }
 
