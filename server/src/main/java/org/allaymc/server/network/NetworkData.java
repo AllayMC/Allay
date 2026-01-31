@@ -329,11 +329,12 @@ public final class NetworkData {
         packet.getExperiments().addAll(EXPERIMENT_DATA_LIST.get());
 
         for (var pack : Registries.PACKS.getContent().values()) {
-            var type = pack.getType();
-            if (type == Pack.Type.RESOURCES) {
-                packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
-                        pack.getId().toString(), pack.getStringVersion(), ""
-                ));
+            var entry = switch (pack.getType()) {
+                case RESOURCES, DATA -> new ResourcePackStackPacket.Entry(pack.getId().toString(), pack.getStringVersion(), "");
+                case null, default -> null;
+            };
+            if (entry != null) {
+                packet.getResourcePacks().add(entry);
             }
         }
 
