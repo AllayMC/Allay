@@ -67,6 +67,7 @@ public class PackManifest {
 
     /**
      * Check if the pack manifest is valid.
+     * Note: name and description are optional for compatibility with some packs.
      *
      * @return {@code true} if the pack manifest is valid, {@code false} otherwise.
      */
@@ -75,10 +76,8 @@ public class PackManifest {
             return false;
         }
 
-        return this.header.description != null &&
-               this.header.name != null &&
-               this.header.uuid != null &&
-               this.header.version != null;
+        // Only uuid and version are required, name and description are optional
+        return this.header.uuid != null && this.header.version != null;
     }
 
     public enum Capability {

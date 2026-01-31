@@ -12,6 +12,7 @@ import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.pack.PackEncryptor;
 import org.allaymc.server.pack.PackUtils;
+import org.allaymc.server.pack.defaults.BehaviorPack;
 import org.allaymc.server.pack.defaults.ResourcePack;
 import org.allaymc.server.pack.loader.InPluginPackLoader;
 import org.allaymc.server.pack.loader.ZipPackLoader;
@@ -83,7 +84,8 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
                 continue;
             }
 
-            log.info(I18n.get().tr(TrKeys.ALLAY_PACK_LOADING_ENTRY, manifest.getHeader().getName()));
+            var packName = manifest.getHeader().getName();
+            log.info(I18n.get().tr(TrKeys.ALLAY_PACK_LOADING_ENTRY, packName != null ? packName : manifest.getHeader().getUuid().toString()));
             loader2manifest.put(loader, manifest);
         }
 
@@ -120,6 +122,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
         this.registerLoaderFactory(ZipPackLoader.FACTORY);
         this.registerLoaderFactory(InPluginPackLoader.FACTORY);
         this.registerPackFactory(Pack.Type.RESOURCES, ResourcePack.FACTORY);
+        this.registerPackFactory(Pack.Type.DATA, BehaviorPack.FACTORY);
     }
 
     @SneakyThrows

@@ -296,12 +296,12 @@ public final class NetworkData {
 
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
-            if (type == Pack.Type.RESOURCES) {
+            if (type == Pack.Type.RESOURCES || type == Pack.Type.DATA) {
                 packet.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(
                         pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
                         "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
                         pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                        false, null
+                        type == Pack.Type.DATA, null
                 ));
             }
         }
@@ -323,6 +323,10 @@ public final class NetworkData {
             var type = pack.getType();
             if (type == Pack.Type.RESOURCES) {
                 packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
+                        pack.getId().toString(), pack.getStringVersion(), ""
+                ));
+            } else if (type == Pack.Type.DATA) {
+                packet.getBehaviorPacks().add(new ResourcePackStackPacket.Entry(
                         pack.getId().toString(), pack.getStringVersion(), ""
                 ));
             }

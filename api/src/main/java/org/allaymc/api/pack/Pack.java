@@ -41,7 +41,8 @@ public abstract class Pack implements AutoCloseable {
     }
 
     public String getName() {
-        return this.manifest.getHeader().getName();
+        var name = this.manifest.getHeader().getName();
+        return name != null ? name : this.getId().toString();
     }
 
     public UUID getId() {
