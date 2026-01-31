@@ -108,7 +108,7 @@ jobs:
           max_releases: 1
 
       - name: Restart Test Server
-        uses: fjogeleit/http-request-action@v1
+        uses: fjogeleit/http-request-action@v2
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         continue-on-error: true
         with:
