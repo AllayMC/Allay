@@ -194,7 +194,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
         protected Identifier identifier;
         protected ItemType<?> itemType;
-        protected ItemType<?> hardItemType;
         protected boolean isCustomBlock = true;
         protected boolean autoCreateItemType = true;
         protected Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier = BlockBaseComponentImpl::new;
@@ -496,12 +495,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 // This is a vanilla block
                 // The hard item type (when conflict) for vanilla block is pre-registered
                 Preconditions.checkNotNull(this.itemType);
-                this.hardItemType = Registries.ITEMS.get(hardItemIdWhenConflict);
-                if (this.hardItemType == null) {
-                    // The actual item type and the hard item type
-                    // are the same for this vanilla block
-                    this.hardItemType = itemType;
-                }
                 return;
             }
 
@@ -519,23 +512,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         .builder(ItemStackImpl.class)
                         .identifier(itemId)
                         .build();
-                this.hardItemType = itemType;
-            } else {
-                if (!autoCreateItemType) {
-                    // User pre-registered the item type, use it directly without creating "item." prefix version
-                    this.hardItemType = itemType;
-                    return;
-                }
-
+            } else if (autoCreateItemType && Registries.ITEMS.get(hardItemIdWhenConflict) == null) {
                 // If an additional block item has already been registered, add "item." prefix
                 // Allay will pre-register block items with the "item." prefix in the vanilla registry, so let's check again for this ID
-                this.hardItemType = Registries.ITEMS.get(hardItemIdWhenConflict);
-                if (this.hardItemType == null) {
-                    this.hardItemType = AllayItemType
-                            .builder(ItemStackImpl.class)
-                            .identifier(hardItemIdWhenConflict)
-                            .build();
-                }
+                AllayItemType
+                        .builder(ItemStackImpl.class)
+                        .identifier(hardItemIdWhenConflict)
+                        .build();
             }
         }
     }
