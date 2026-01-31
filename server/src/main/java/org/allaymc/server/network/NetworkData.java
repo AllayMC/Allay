@@ -293,6 +293,7 @@ public final class NetworkData {
         packet.setWorldTemplateId(new UUID(0, 0));
         packet.setWorldTemplateVersion("");
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
+        packet.setScriptingEnabled(true);
 
         for (var pack : Registries.PACKS.getContent().values()) {
             var info = switch (pack.getType()) {
@@ -302,12 +303,15 @@ public final class NetworkData {
                         pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
                         false, null
                 );
-                case DATA -> new ResourcePacksInfoPacket.Entry(
-                        pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
-                        "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
-                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                        true, null
-                );
+                case DATA -> {
+                    packet.setHasAddonPacks(true);
+                    yield new ResourcePacksInfoPacket.Entry(
+                            pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
+                            "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
+                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
+                            true, null
+                    );
+                }
                 case null, default -> null;
             };
             if (info != null) {
