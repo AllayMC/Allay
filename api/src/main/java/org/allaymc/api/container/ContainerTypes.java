@@ -10,6 +10,7 @@ import org.allaymc.api.container.interfaces.*;
 public interface ContainerTypes {
     ContainerType<AnvilContainer> ANVIL = new ContainerType<>(3);
     ContainerType<ArmorContainer> ARMOR = new ContainerType<>(4);
+    ContainerType<ArmorStandHandContainer> ARMOR_STAND_HAND = new ContainerType<>(1);
     ContainerType<BlockContainer> BARREL = new ContainerType<>(27);
     ContainerType<BeaconContainer> BEACON = new ContainerType<>(1);
     ContainerType<FurnaceContainer> BLAST_FURNACE = new ContainerType<>(3);

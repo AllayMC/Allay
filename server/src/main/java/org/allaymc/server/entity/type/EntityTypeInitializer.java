@@ -5,6 +5,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityEnderDragon;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
@@ -377,6 +378,25 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 // Fishing hook despawns after 60 seconds if not used
                 .addComponent(() -> new EntityAgeComponentImpl(1200), EntityAgeComponentImpl.class)
+                .build();
+    }
+
+    public static void initArmorStand() {
+        EntityTypes.ARMOR_STAND = AllayEntityType
+                .builder(EntityArmorStandImpl.class)
+                .vanillaEntity(EntityId.ARMOR_STAND)
+                .addComponent(EntityArmorStandBaseComponentImpl::new, EntityArmorStandBaseComponentImpl.class)
+                .addComponent(EntityArmorStandContainerHolderComponentImpl::new, EntityArmorStandContainerHolderComponentImpl.class)
+                .addComponent(EntityArmorStandLivingComponentImpl::new, EntityArmorStandLivingComponentImpl.class)
+                .addComponent(() -> new EntityHumanPhysicsComponentImpl() {
+                    @Override
+                    public void onFall(double fallDistance) {
+                        super.onFall(fallDistance);
+                        if (fallDistance >= 3) {
+                            thisEntity.getDimension().addSound(thisEntity.getLocation(), SimpleSound.ARMOR_STAND_LAND);
+                        }
+                    }
+                }, EntityHumanPhysicsComponentImpl.class)
                 .build();
     }
 }

@@ -254,16 +254,6 @@ public class ServerSettings extends OkaeriConfig {
         @Getter
         @Accessors(fluent = true)
         public static class PhysicsEngineSettings extends OkaeriConfig {
-            @Comment("Send packets to the client when the amount of position change accumulates")
-            @Comment("This threshold acts on each axis individually")
-            @Comment("Increasing this threshold will reduce bandwidth pressure, but may result in untimely motion updates")
-            @CustomKey("diff-position-threshold")
-            private float diffPositionThreshold = 0.0001f;
-
-            @Comment("Similar to \"diffPositionThreshold\"")
-            @CustomKey("diff-rotation-threshold")
-            private float diffRotationThreshold = 0.1f;
-
             @Comment("When the motion falls below this value, its motion is zeroed")
             @CustomKey("motion-threshold")
             private float motionThreshold = 0.003f;
@@ -271,10 +261,6 @@ public class ServerSettings extends OkaeriConfig {
             @Comment("This usually determines how quickly an entity item is moved when getting stuck in a block")
             @CustomKey("block-collision-motion")
             private float blockCollisionMotion = 0.2f;
-
-            @Comment("Delta move packet will reduce the network pressure if there are a lot of entities")
-            @CustomKey("use-delta-move-packet")
-            private boolean useDeltaMovePacket = false;
         }
     }
 

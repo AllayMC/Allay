@@ -144,7 +144,6 @@ import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
 import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
 import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
  * @author daoge_cmd
@@ -463,69 +462,31 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewEntityLocation(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
+    public void viewEntityLocation(Entity entity, Location3dc newLocation, boolean teleporting) {
         BedrockPacket packet;
-        if (AllayServer.getSettings().entitySettings().physicsEngineSettings().useDeltaMovePacket()) {
-            packet = createDeltaMovePacket(entity, locationLastSent, newLocation, teleporting);
+        if (this.controlledEntity == entity) {
+            // If the entity is actually the player himself, use MovePlayerPacket instead since
+            // the client has some bugs in handling MoveEntityAbsolutePacket in that case
+            packet = createMovePlayerPacket(entity, newLocation, teleporting);
         } else {
-            packet = createAbsoluteMovePacket(entity, locationLastSent, newLocation, teleporting);
+            packet = createAbsoluteMovePacket(entity, newLocation, teleporting);
         }
         sendPacket(packet);
     }
 
-    protected BedrockPacket createDeltaMovePacket(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
-        var packet = new MoveEntityDeltaPacket();
+    protected BedrockPacket createMovePlayerPacket(Entity entity, Location3dc newLocation, boolean teleporting) {
+        var packet = new MovePlayerPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        var moveFlags = computeMoveFlags(entity, locationLastSent, newLocation);
-        packet.getFlags().addAll(moveFlags);
-        if (moveFlags.contains(HAS_X)) {
-            packet.setX((float) newLocation.x());
-            locationLastSent.x = newLocation.x();
-        }
-        if (moveFlags.contains(HAS_Y)) {
-            packet.setY((float) newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f));
-            locationLastSent.y = newLocation.y();
-        }
-        if (moveFlags.contains(HAS_Z)) {
-            packet.setZ((float) newLocation.z());
-            locationLastSent.z = newLocation.z();
-        }
-        if (moveFlags.contains(HAS_PITCH)) {
-            packet.setPitch((float) newLocation.pitch());
-            locationLastSent.pitch = newLocation.pitch();
-        }
-        if (moveFlags.contains(HAS_YAW)) {
-            packet.setYaw((float) newLocation.yaw());
-            packet.setHeadYaw((float) newLocation.yaw());
-            locationLastSent.yaw = newLocation.yaw();
-        }
+        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
+        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), newLocation.yaw()));
+        packet.setTeleportationCause(MovePlayerPacket.TeleportationCause.UNKNOWN);
         if (teleporting) {
-            packet.getFlags().add(TELEPORTING);
-        }
-        if (entity instanceof EntityPhysicsComponent physicsComponent && physicsComponent.isOnGround()) {
-            packet.getFlags().add(ON_GROUND);
+            packet.setMode(MovePlayerPacket.Mode.TELEPORT);
         }
         return packet;
     }
 
-    protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Entity entity, Location3d locationLastSent, Location3dc newLocation) {
-        var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
-        var settings = AllayServer.getSettings().entitySettings().physicsEngineSettings();
-        var diffPositionThreshold = settings.diffPositionThreshold();
-        var diffRotationThreshold = settings.diffRotationThreshold();
-        if (Math.abs(locationLastSent.x() - newLocation.x()) > diffPositionThreshold) flags.add(HAS_X);
-        if (Math.abs(locationLastSent.y() - newLocation.y()) > diffPositionThreshold) flags.add(HAS_Y);
-        if (Math.abs(locationLastSent.z() - newLocation.z()) > diffPositionThreshold) flags.add(HAS_Z);
-        if (Math.abs(locationLastSent.yaw() - newLocation.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
-        if (Math.abs(locationLastSent.pitch() - newLocation.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
-        return flags;
-    }
-
-    protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
-        locationLastSent.set(newLocation);
-        locationLastSent.setPitch(newLocation.pitch());
-        locationLastSent.setYaw(newLocation.yaw());
-
+    protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3dc newLocation, boolean teleporting) {
         var packet = new MoveEntityAbsolutePacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
@@ -714,6 +675,15 @@ public class AllayPlayer implements Player {
                 var hookedEntity = fishingHook.getHookedEntity();
                 map.put(EntityDataTypes.TARGET_EID, hookedEntity != null ? hookedEntity.getUniqueId().getLeastSignificantBits() : -1L);
             }
+            case EntityArmorStand armorStand -> {
+                map.put(EntityDataTypes.ARMOR_STAND_POSE_INDEX, armorStand.getPoseIndex());
+                if (armorStand.getLastDamage() != null) {
+                    var interval = armorStand.getWorld().getTick() - armorStand.getLastDamageTime();
+                    if (interval <= 5) {
+                        map.put(EntityDataTypes.HURT_TICKS, (int) interval);
+                    }
+                }
+            }
             default -> {
             }
         }
@@ -733,14 +703,23 @@ public class AllayPlayer implements Player {
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityHand(T entity) {
-        var container = entity.getContainer(ContainerTypes.INVENTORY);
-        var handSlot = container.getHandSlot();
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
-        packet.setItem(toNetwork(container.getItemInHand()));
-        packet.setInventorySlot(handSlot);
-        packet.setHotbarSlot(handSlot);
+
+        var handContainer = entity.getContainer(ContainerTypes.ARMOR_STAND_HAND);
+        if (handContainer != null) {
+            packet.setItem(toNetwork(handContainer.getItemInHand()));
+            packet.setInventorySlot(0);
+            packet.setHotbarSlot(0);
+        } else {
+            var container = entity.getContainer(ContainerTypes.INVENTORY);
+            var handSlot = container.getHandSlot();
+            packet.setItem(toNetwork(container.getItemInHand()));
+            packet.setInventorySlot(handSlot);
+            packet.setHotbarSlot(handSlot);
+        }
+
         sendPacket(packet);
     }
 
@@ -750,8 +729,8 @@ public class AllayPlayer implements Player {
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.OFFHAND);
-        // Network slot index for offhand is 1, see FullContainerType.OFFHAND. Field `hotbarSlot` is unused
         packet.setInventorySlot(1);
+        packet.setHotbarSlot(1);
         packet.setItem(toNetwork(container.getOffhand()));
         sendPacket(packet);
     }
@@ -1587,6 +1566,34 @@ public class AllayPlayer implements Player {
                 playSound.setVolume(1.0f);
                 playSound.setPitch(0.7f + 0.5f * (float) so.progress());
                 sendPacket(playSound);
+                return;
+            }
+            case SimpleSound.ARMOR_STAND_PLACE -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_PLACE);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.ARMOR_STAND_HIT -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_HIT);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.ARMOR_STAND_BREAK -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_BREAK);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.ARMOR_STAND_LAND -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_LAND);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
                 return;
             }
             case CustomSound so -> {

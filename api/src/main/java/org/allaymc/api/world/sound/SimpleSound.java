@@ -215,6 +215,14 @@ public enum SimpleSound implements Sound {
     // WIND_CHARGE_BURST is a sound played when a player wind charge explodes.
     WIND_CHARGE_BURST,
     // BREEZE_WIND_CHARGE_BURST is a sound played when a breeze wind charge explodes.
-    BREEZE_WIND_CHARGE_BURST
+    BREEZE_WIND_CHARGE_BURST,
+    // ARMOR_STAND_PLACE is a sound played when an armor stand is placed.
+    ARMOR_STAND_PLACE,
+    // ARMOR_STAND_HIT is a sound played when an armor stand is hit.
+    ARMOR_STAND_HIT,
+    // ARMOR_STAND_BREAK is a sound played when an armor stand is broken.
+    ARMOR_STAND_BREAK,
+    // ARMOR_STAND_LAND is a sound played when an armor stand drops from a height to the ground.
+    ARMOR_STAND_LAND
 }
 

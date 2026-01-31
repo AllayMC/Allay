@@ -6,8 +6,6 @@ import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.server.entity.component.EntityBaseComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.world.AllayDimension;
@@ -29,11 +27,10 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
 
         allayPlayer.setClientState(ClientState.IN_GAME);
         var entity = player.getControlledEntity();
-        var baseComponent = (EntityBaseComponentImpl) ((EntityPlayerImpl) entity).getBaseComponent();
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after the player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with the
         // client, otherwise the client will snap into the ground
-        player.viewEntityLocation(entity, baseComponent.getLastSentLocation(), baseComponent.getLocation(), true);
+        player.viewEntityLocation(entity, entity.getLocation(), true);
         // Send debug shapes to the player after the player fully joined
         ((AllayDimension) entity.getDimension()).addDebugShapesTo(player);
         Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), allayPlayer.getLoginData().getXname());

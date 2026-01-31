@@ -19,6 +19,7 @@ import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.api.world.sound.Sound;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -49,12 +50,19 @@ public interface WorldViewer extends DebugShapeViewer {
      * Views the location of the entity passed.
      *
      * @param entity           the entity to view
-     * @param locationLastSent the location that is sent in the last method call. Changes will be applied to this parameter when the difference in a
-     *                         specific field (e.g. x-axis) exceeds the threshold.
      * @param newLocation      the new location of the entity
      * @param teleporting      whether the entity is being teleported to the new location
      */
-    void viewEntityLocation(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting);
+    void viewEntityLocation(Entity entity, Location3dc newLocation, boolean teleporting);
+
+    /**
+     * @deprecated Please use {@link #viewEntityLocation(Entity, Location3dc, boolean)} instead.
+     */
+    @Deprecated(since = "0.24.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "0.26.0")
+    default void viewEntityLocation(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
+        viewEntityLocation(entity, newLocation, teleporting);
+    }
 
     /**
      * Views the motion of the entity passed.

@@ -178,28 +178,28 @@ public interface CommandContext {
      * @param correctSenderType the correct {@link SenderType} required to execute the command
      */
     default void addInvalidExecutorError(SenderType<?> correctSenderType) {
-        addError(correctSenderType.errorMsg());
+        addError("%" + correctSenderType.errorMsg());
     }
 
     /**
      * Adds an error message indicating that no targets were found for the command.
      */
     default void addNoTargetMatchError() {
-        addError(TrKeys.MC_COMMANDS_GENERIC_NOTARGETMATCH);
+        addError("%" + TrKeys.MC_COMMANDS_GENERIC_NOTARGETMATCH);
     }
 
     /**
      * Adds an error message indicating that too many targets were found for the command.
      */
     default void addTooManyTargetsError() {
-        addError(TrKeys.MC_COMMANDS_GENERIC_TOOMANYTARGETS);
+        addError("%" + TrKeys.MC_COMMANDS_GENERIC_TOOMANYTARGETS);
     }
 
     /**
      * Adds an error message indicating that a player could not be found.
      */
     default void addPlayerNotFoundError() {
-        addError(TrKeys.MC_COMMANDS_GENERIC_PLAYER_NOTFOUND);
+        addError("%" + TrKeys.MC_COMMANDS_GENERIC_PLAYER_NOTFOUND);
     }
 
     /**

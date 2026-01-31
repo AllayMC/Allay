@@ -16,12 +16,23 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
 - Added `NettyPipelineInitEvent` for packet level middleware support. The `AllayPlayer` instance is attached to the channel attribute.
+- Added pitch and yaw parameters to the teleport command.
 - Implemented tripwire hook and tripwire.
+- Implemented armor stand.
+
+### Changed
+
+- (API) Removed parameter `locationLastSent` in method `WorldViewer.viewEntityLocation()` since the use of delta move packet have been removed.
 
 ### Fixed
 
 - Fixed a bug where item is used twice when facing a villager.
 - Fixed a bug where stonecutter is unusable.
+- Fixed a bug where player pitch and yaw could not be specified during teleporting.
+
+### Removed
+
+- Removed options `diff-position-threshold`, `diff-rotation-threshold` and `use-delta-move-packet` since we no longer use `MoveEntityDeltaPacket`.
 
 # 0.10.7 (API 0.24.0) - 2026/1/29
 

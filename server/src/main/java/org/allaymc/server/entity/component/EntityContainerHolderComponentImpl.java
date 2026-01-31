@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EntityContainerHolderComponentImpl extends BaseContainerHolder implements EntityContainerHolderComponent {
 
     @Identifier.Component
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_holder_component");
+    protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_container_holder_component");
 
     @ComponentObject
     protected static Entity thisEntity;

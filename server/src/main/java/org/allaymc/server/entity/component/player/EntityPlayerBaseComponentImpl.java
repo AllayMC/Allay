@@ -473,7 +473,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // For player, we also need to send the move packet to client
         // However, there is no need to send the motion packet as we are teleporting the player
         if (isActualPlayer()) {
-            this.controller.viewEntityLocation(thisPlayer, lastSentLocation, location, true);
+            this.controller.viewEntityLocation(thisPlayer, location, true);
         }
     }
 
@@ -508,7 +508,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                     this.controller.sendPacket(packet2);
                 }
                 targetDim.addPlayer(this.controller, () -> {
-                    this.controller.viewEntityLocation(thisPlayer, lastSentLocation, location, true);
+                    this.controller.viewEntityLocation(thisPlayer, location, true);
                 });
             });
         } else {

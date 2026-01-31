@@ -1139,4 +1139,12 @@ public final class ItemTypeInitializer {
                 .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
                 .build();
     }
+
+    public static void initArmorStand() {
+        ItemTypes.ARMOR_STAND = AllayItemType
+                .builder(ItemArmorStandStackImpl.class)
+                .vanillaItem(ItemId.ARMOR_STAND)
+                .addComponent(ItemArmorStandBaseComponentImpl::new, ItemArmorStandBaseComponentImpl.class)
+                .build();
+    }
 }

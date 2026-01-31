@@ -79,7 +79,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected Entity thisEntity;
 
     @Getter
-    protected final Location3d location, lastLocation, lastSentLocation;
+    protected final Location3d location, lastLocation;
     @Getter
     protected final long runtimeId;
 
@@ -121,7 +121,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.lastLocation = new Location3d(this.location);
-        this.lastSentLocation = new Location3d(this.location);
         this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
@@ -407,7 +406,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {
-        forEachViewers(viewer -> viewer.viewEntityLocation(thisEntity, lastSentLocation, newLocation, teleporting));
+        forEachViewers(viewer -> viewer.viewEntityLocation(thisEntity, newLocation, teleporting));
         if (thisEntity instanceof EntityPhysicsComponent physicsComponent) {
             forEachViewers(viewer -> viewer.viewEntityMotion((Entity & EntityPhysicsComponent) thisEntity, physicsComponent.getMotion()));
         }
