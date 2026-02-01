@@ -550,6 +550,10 @@ public class AllayPlayer implements Player {
                 (float) (aabb.maxY() - aabb.minY()),
                 (float) (aabb.maxZ() - aabb.minZ())
         ));
+        // WIDTH and HEIGHT are required for the client to update the collision box correctly
+        // COLLISION_BOX alone does not affect actual collisions according to protocol documentation
+        map.put(EntityDataTypes.WIDTH, (float) (aabb.maxX() - aabb.minX()));
+        map.put(EntityDataTypes.HEIGHT, (float) (aabb.maxY() - aabb.minY()));
         map.put(EntityDataTypes.SCALE, (float) entity.getScale());
         // Minecraft 1.21.101 client crashes if HAS_NPC is set to true for EntityItem.
         // Other entity types are not affected. The issue is fixed in newer client versions.
