@@ -30,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where item is used twice when facing a villager.
 - Fixed a bug where stonecutter is unusable.
 - Fixed a bug where player pitch and yaw could not be specified during teleporting.
+- Fixed a bug where in some cases the client will stick at `Locating Server` stage when joining the server.
 
 ### Removed
 

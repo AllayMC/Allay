@@ -2751,10 +2751,13 @@ public class AllayPlayer implements Player {
         }
 
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
+
+        // Send StartGamePacket to the client first before we start sending chunks, otherwise
+        // the chunks will be ignored by the client, and the client will be unable to join the server
+        startGame(dimension.getWorld(), playerData, dimension);
+
         dimension.addPlayer(this);
         playerManager.addPlayer(this);
-
-        startGame(dimension.getWorld(), playerData, dimension);
 
         if (!MultiVersionHelper.is1_21_50(this)) {
             // ItemRegistryPacket is only sent in 1.21.60+
