@@ -92,7 +92,7 @@ public class MyScoreboard {
         var networkSettings = Server.SETTINGS.networkSettings();
         info.setLines(List.of(
                 "Welcome to the server!",
-                "Online: " + Server.getInstance().getOnlinePlayerCount(),
+                "Online: " + Server.getInstance().getPlayerManager().getPlayerCount(),
                 networkSettings.ip() + ":" + networkSettings.port()
         ));
     }

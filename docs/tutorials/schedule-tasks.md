@@ -19,7 +19,7 @@ public class MyPlugin extends Plugin {
     @Override
     public void onEnable() {
         Server.getInstance().getScheduler().scheduleRepeating(this, () -> {
-            Server.getInstance().getOnlinePlayers().values().forEach(player -> player.sendPopup("Hi!"));
+            Server.getInstance().getPlayerManager().getPlayers().values().forEach(player -> player.sendPopup("Hi!"));
             return true; /*(1)!*/
         }, 20/*(2)!*/);
     }
