@@ -655,8 +655,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     /// Called when the entity dead (health == 0)
     protected void onDie() {
-        manager.callEvent(CEntityDieEvent.INSTANCE);
         new EntityDieEvent(thisEntity).call();
+        manager.callEvent(CEntityDieEvent.INSTANCE);
 
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         this.baseComponent.setState(EntityState.DEAD);
