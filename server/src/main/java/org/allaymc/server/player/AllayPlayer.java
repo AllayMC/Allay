@@ -2313,7 +2313,8 @@ public class AllayPlayer implements Player {
 
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
-        if (!this.controlledEntity.hasPermissions(permissions)) {
+        if (!this.controlledEntity.hasPermission(Permissions.COMMAND_VIEW_OTHER_OUTPUTS).asBoolean() ||
+            !this.controlledEntity.hasPermissions(permissions)) {
             return;
         }
 

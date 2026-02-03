@@ -13,12 +13,10 @@ public interface Permissions {
      * Permission to fly in survival mode. Only TRUE allows flying.
      */
     String ABILITY_FLY_SURVIVAL = "ability.fly.survival";
-
     /**
      * Permission to fly in creative mode. FALSE denies, otherwise allowed.
      */
     String ABILITY_FLY_CREATIVE = "ability.fly.creative";
-
     /**
      * Permission to fly in adventure mode. Only TRUE allows flying.
      */
@@ -36,6 +34,10 @@ public interface Permissions {
 
     /* Command */
 
+    /**
+     * The permission to view other's command outputs.
+     */
+    String COMMAND_VIEW_OTHER_OUTPUTS = "allay.command.view_other_outputs";
     /**
      * The permission to use /alwaysday command.
      */
