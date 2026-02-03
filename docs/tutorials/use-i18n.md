@@ -250,8 +250,8 @@ Here's a complete example of a plugin with i18n support:
 **MyPlugin.java:**
 ```java linenums="1"
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
-import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerQuitEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.plugin.Plugin;
 import org.allaymc.api.registry.Registries;

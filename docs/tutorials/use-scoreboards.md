@@ -25,8 +25,8 @@ join:
 
 ```java linenums="1" hl_lines="13-15 16-23 25-28 30-33"
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
-import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerQuitEvent;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.server.Server;
@@ -77,8 +77,8 @@ that's pretty easy:
 
 ```java linenums="1" hl_lines="17 25 31"
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
-import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerQuitEvent;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.server.Server;

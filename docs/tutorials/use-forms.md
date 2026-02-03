@@ -13,7 +13,7 @@ Let's say you want to show a simple form to the player when they join the server
 About how to register event listeners, please refer to [register an event listener](register-event-listeners.md).
 
 ```java linenums="1" hl_lines="8-11"
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.utils.TextFormat;
 
@@ -40,7 +40,7 @@ and reply with different content based on the player's options. Here's how you c
 
 ```java linenums="1" hl_lines="12-14"
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.utils.TextFormat;
 
