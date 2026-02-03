@@ -651,7 +651,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public Location3ic validateAndGetSpawnPoint() {
-        if (spawnPoint.dimension().getWorld().getState() != WorldState.RUNNING) {
+        var dimension = spawnPoint.dimension();
+        if (dimension == null || dimension.getWorld().getState() != WorldState.RUNNING) {
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
         }
         return spawnPoint;
