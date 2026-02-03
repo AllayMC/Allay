@@ -200,7 +200,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
                 .toList();
         for (var entityArrow : entityArrows) {
-            if (entityArrow.willBeDespawnedNextTick()) {
+            if (entityArrow.willBeDespawnedLater()) {
                 // Have been picked by others
                 continue;
             }
@@ -239,7 +239,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 .filter(trident -> trident.getMotion().lengthSquared() == 0 && !trident.isReturning())
                 .toList();
         for (var entityTrident : entityTridents) {
-            if (entityTrident.willBeDespawnedNextTick()) {
+            if (entityTrident.willBeDespawnedLater()) {
                 // Have been picked by others
                 continue;
             }

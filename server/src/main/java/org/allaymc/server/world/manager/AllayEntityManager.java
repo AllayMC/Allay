@@ -177,7 +177,7 @@ public class AllayEntityManager implements EntityManager {
             return;
         }
 
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.SPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.SPAWNED_LATER)) {
             queue.add(() -> {
                 addEntityImmediately(entity);
                 callback.run();
@@ -209,7 +209,7 @@ public class AllayEntityManager implements EntityManager {
 
     @Override
     public void removeEntity(Entity entity, Runnable callback) {
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED_LATER)) {
             queue.add(() -> {
                 removeEntityImmediately(entity);
                 callback.run();

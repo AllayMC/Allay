@@ -220,21 +220,21 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     EntityState getState();
 
     /**
-     * Check if the entity will be spawned in the next tick.
+     * Check if the entity will be spawned later.
      *
-     * @return {@code true} if the entity will be spawned in the next tick.
+     * @return {@code true} if the entity will be spawned later.
      */
-    default boolean willBeSpawnedNextTick() {
-        return getState() == EntityState.SPAWNED_NEXT_TICK;
+    default boolean willBeSpawnedLater() {
+        return getState() == EntityState.SPAWNED_LATER;
     }
 
     /**
-     * Check if the entity will be despawned in the next tick.
+     * Check if the entity will be despawned later.
      *
-     * @return {@code true} if the entity will be despawned in the next tick.
+     * @return {@code true} if the entity will be despawned later.
      */
-    default boolean willBeDespawnedNextTick() {
-        return getState() == EntityState.DESPAWNED_NEXT_TICK;
+    default boolean willBeDespawnedLater() {
+        return getState() == EntityState.DESPAWNED_LATER;
     }
 
     /**
@@ -496,7 +496,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
     /**
      * Remove the entity from the current dimension's {@link EntityManager}. Compared to {@link #despawnFromAll()},
-     * this method will also remove the entity from the world, and {@link #willBeDespawnedNextTick()} will return
+     * this method will also remove the entity from the world, and {@link #willBeDespawnedLater()} will return
      * {@code true} after this method is called.
      *
      * @param callback the callback to be called after the entity is removed from the world. Can be {@code null}.

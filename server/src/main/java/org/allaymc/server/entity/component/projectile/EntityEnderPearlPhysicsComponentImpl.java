@@ -21,7 +21,7 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 
@@ -35,7 +35,7 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 

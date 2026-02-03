@@ -464,7 +464,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected boolean notReadyForInput(Player player) {
         var entity = player.getControlledEntity();
-        return !player.isInitialized() || entity == null || !entity.isSpawned() || entity.willBeDespawnedNextTick();
+        return !player.isInitialized() || entity == null || !entity.isSpawned() || entity.willBeDespawnedLater();
     }
 
     @Override

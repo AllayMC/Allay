@@ -153,7 +153,7 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 
@@ -194,7 +194,7 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick() || this.hitBlock) {
+        if (thisEntity.willBeDespawnedLater() || this.hitBlock) {
             return;
         }
 

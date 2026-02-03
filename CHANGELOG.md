@@ -26,6 +26,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Changed
 
 - (API) Removed parameter `locationLastSent` in method `WorldViewer.viewEntityLocation()` since the use of delta move packet have been removed.
+- (API) Renamed `EntityState.SPAWNED_NEXT_TICK` and `EntityState.DESPAWNED_NEXT_TICK` to `EntityState.SPAWNED_LATER` and `EntityState.DESPAWNED_LATER` to match the code behavior.
 
 ### Fixed
 
