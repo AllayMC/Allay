@@ -17,6 +17,7 @@ import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -54,6 +55,10 @@ public class AllayEntityManager implements EntityManager {
         processQueue();
         tickEntities(currentTick);
         this.physicsService.tick();
+    }
+
+    public void idle() {
+        processQueue();
     }
 
     public void shutdown() {
@@ -177,6 +182,8 @@ public class AllayEntityManager implements EntityManager {
                 addEntityImmediately(entity);
                 callback.run();
             });
+
+            ((AllayWorld) this.dimension.getWorld()).wakeUp();
         }
     }
 
@@ -207,6 +214,8 @@ public class AllayEntityManager implements EntityManager {
                 removeEntityImmediately(entity);
                 callback.run();
             });
+
+            ((AllayWorld) this.dimension.getWorld()).wakeUp();
         }
     }
 

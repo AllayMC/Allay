@@ -29,6 +29,7 @@ import org.allaymc.server.AllayServer;
 import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
+import org.allaymc.server.world.manager.AllayEntityManager;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
@@ -93,7 +94,7 @@ public class AllayWorld implements World {
                 .currentTick(this.worldData.getTotalTime())
                 .onStart(this::onWorldStart)
                 .onTick(this::worldThreadMain)
-                .onIdle(this::handleSyncPackets)
+                .onIdle(this::idle)
                 .onStop(this::shutdownReally)
                 .build();
         this.worldThread = Thread.ofPlatform()
@@ -121,6 +122,17 @@ public class AllayWorld implements World {
         } catch (Throwable throwable) {
             log.error("Error while ticking world {}", name, throwable);
         }
+    }
+
+    private void idle() {
+        handleSyncPackets();
+        for (var dimension : this.dimensionMap.values()) {
+            ((AllayEntityManager) dimension.getEntityManager()).idle();
+        }
+    }
+
+    public void wakeUp() {
+        this.gameLoop.wakeUp();
     }
 
     public void addSyncPacketToQueue(Player player, BedrockPacket packet, long time) {
