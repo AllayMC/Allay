@@ -66,7 +66,9 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
                 return respawnLocation;
             }
 
-            return Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            var globalSpawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            entity.setSpawnPoint(globalSpawnPoint);
+            return globalSpawnPoint;
         }
 
         return spawnPoint;
