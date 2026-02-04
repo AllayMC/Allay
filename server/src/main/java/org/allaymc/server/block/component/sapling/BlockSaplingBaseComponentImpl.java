@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component;
+package org.allaymc.server.block.component.sapling;
 
 import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
@@ -19,6 +19,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.feature.WorldFeature;
 import org.allaymc.api.world.feature.WorldFeatureContext;
 import org.allaymc.api.world.particle.SimpleParticle;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -75,7 +76,9 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
      * Check if sapling can be placed on this block.
      */
     protected boolean canPlaceOn(BlockState blockState) {
-        return blockState.getBlockType().hasBlockTag(BlockTags.DIRT);
+        var blockType = blockState.getBlockType();
+        return blockType.hasBlockTag(BlockTags.DIRT) ||
+               blockType == BlockTypes.CLAY;
     }
 
     @Override

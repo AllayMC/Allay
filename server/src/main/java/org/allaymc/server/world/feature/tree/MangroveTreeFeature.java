@@ -1,5 +1,6 @@
 package org.allaymc.server.world.feature.tree;
 
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -132,7 +133,11 @@ public class MangroveTreeFeature extends TreeWorldFeature {
             if (random.nextInt(8) == 0) {
                 var below = context.getBlockState(x, y - 1, z);
                 if (below.getBlockType() == BlockTypes.AIR) {
-                    context.setBlockState(x, y - 1, z, BlockTypes.MANGROVE_PROPAGULE.getDefaultState());
+                    // Place hanging propagule with random stage (0-4)
+                    var hangingPropagule = BlockTypes.MANGROVE_PROPAGULE.getDefaultState()
+                            .setPropertyValue(BlockPropertyTypes.HANGING, true)
+                            .setPropertyValue(BlockPropertyTypes.PROPAGULE_STAGE, random.nextInt(5));
+                    context.setBlockState(x, y - 1, z, hangingPropagule);
                 }
             }
         }

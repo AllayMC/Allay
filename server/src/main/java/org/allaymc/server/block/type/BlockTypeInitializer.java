@@ -46,6 +46,8 @@ import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressu
 import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.respawnpoint.BlockBedRespawnPointComponentImpl;
 import org.allaymc.server.block.component.respawnpoint.BlockRespawnAnchorRespawnPointComponentImpl;
+import org.allaymc.server.block.component.sapling.BlockMangrovePropaguleBaseComponentImpl;
+import org.allaymc.server.block.component.sapling.BlockSaplingBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
@@ -2380,7 +2382,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_PROPAGULE)
                 .setProperties(BlockPropertyTypes.HANGING, BlockPropertyTypes.PROPAGULE_STAGE)
-                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, MangroveTreeFeature.IDENTIFIER, null, null))
+                .setBaseComponentSupplier(BlockMangrovePropaguleBaseComponentImpl::new)
                 .build();
     }
 
