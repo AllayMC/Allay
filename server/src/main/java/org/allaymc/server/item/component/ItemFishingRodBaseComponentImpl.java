@@ -4,6 +4,7 @@ import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.player.PlayerStartFishEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.math.MathUtils;
@@ -82,6 +83,11 @@ public class ItemFishingRodBaseComponentImpl extends ItemBaseComponentImpl {
         // Set shooter and fishing rod reference
         fishingHook.setShooter(player);
         fishingHook.setFishingRod(thisItemStack);
+
+        var event = new PlayerStartFishEvent(player, fishingHook);
+        if (!event.call()) {
+            return;
+        }
 
         // Add entity to world
         dimension.getEntityManager().addEntity(fishingHook);
