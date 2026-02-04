@@ -8,6 +8,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
@@ -79,6 +80,12 @@ public class BlockMangrovePropaguleBaseComponentImpl extends BlockSaplingBaseCom
                 groundState,
                 placementInfo
         );
+    }
+
+    @Override
+    protected boolean canPlaceOn(BlockState blockState) {
+        return super.canPlaceOn(blockState) ||
+               blockState.getBlockType() == BlockTypes.CLAY;
     }
 
     @Override

@@ -76,9 +76,7 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
      * Check if sapling can be placed on this block.
      */
     protected boolean canPlaceOn(BlockState blockState) {
-        var blockType = blockState.getBlockType();
-        return blockType.hasBlockTag(BlockTags.DIRT) ||
-               blockType == BlockTypes.CLAY;
+        return blockState.getBlockType().hasBlockTag(BlockTags.DIRT);
     }
 
     @Override
