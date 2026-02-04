@@ -5,6 +5,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.component.BlockOxidationComponent;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -57,6 +58,7 @@ import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponen
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.tripwire.BlockTripWireBaseComponentImpl;
 import org.allaymc.server.block.component.tripwire.BlockTripwireHookBaseComponentImpl;
+import org.allaymc.server.block.component.BlockNetherVinesBaseComponentImpl;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.impl.*;
 import org.allaymc.server.item.data.ItemId;
@@ -2685,6 +2687,21 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.DRIPSTONE_THICKNESS, BlockPropertyTypes.HANGING)
                 .setBaseComponentSupplier(BlockPointedDripstoneBaseComponentImpl::new)
                 .addComponent(new BlockPointedDripstoneFallableComponentImpl(SoundNames.LAND_POINTED_DRIPSTONE))
+                .build();
+    }
+
+    public static void initNetherVines() {
+        BlockTypes.TWISTING_VINES = AllayBlockType
+                .builder(BlockTwistingVinesBehaviorImpl.class)
+                .vanillaBlock(BlockId.TWISTING_VINES)
+                .setProperties(BlockPropertyTypes.TWISTING_VINES_AGE)
+                .setBaseComponentSupplier(blockType -> new BlockNetherVinesBaseComponentImpl(blockType, BlockFace.UP, BlockFace.DOWN, BlockPropertyTypes.TWISTING_VINES_AGE))
+                .build();
+        BlockTypes.WEEPING_VINES = AllayBlockType
+                .builder(BlockWeepingVinesBehaviorImpl.class)
+                .vanillaBlock(BlockId.WEEPING_VINES)
+                .setProperties(BlockPropertyTypes.WEEPING_VINES_AGE)
+                .setBaseComponentSupplier(blockType -> new BlockNetherVinesBaseComponentImpl(blockType, BlockFace.DOWN, BlockFace.UP, BlockPropertyTypes.WEEPING_VINES_AGE))
                 .build();
     }
 }

@@ -23,6 +23,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented tripwire hook and tripwire.
 - Implemented armor stand.
 - Implemented mangrove propagule growth mechanics (hanging/non-hanging states, bone meal interaction, tree growth).
+- Implemented nether vines including twisting vines and weeping vines.
 - Improved entity tasks handling. Now the Entity Manager task queue uses the same handling strategy as the synced packets, and the entity will be spawned/removed as soon as possible, rather than waiting for the next game tick.
 
 ### Changed
