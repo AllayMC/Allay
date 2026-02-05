@@ -10,6 +10,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.component.annotation.Dependency;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author IWareQ
@@ -32,8 +33,8 @@ public class BlockCopperDoorBaseComponentImpl extends BlockDoorBaseComponentImpl
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         if (!isSameDoor(neighbor)) {
             return;

@@ -67,8 +67,8 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         var keep = true;
         if (face == BlockFace.UP) {
@@ -84,9 +84,12 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Only check redstone power if:
         // 1. Neighbor is a power source (new redstone component placed), OR
-        // 2. Neighbor is air (block broken, might be a redstone source removed)
-        // This prevents the door from closing when normal blocks are placed next to it
-        if (neighbor.getBlockType().hasBlockTag(POWER_SOURCE) || neighbor.isAir()) {
+        // 2. Old neighbor was a power source (power source removed, neighbor is now air or different block)
+        // This prevents the door from closing when normal blocks are placed/broken next to it
+        boolean isNewPowerSource = neighbor.getBlockType().hasBlockTag(POWER_SOURCE);
+        boolean wasOldPowerSource = oldNeighborState != null && oldNeighborState.getBlockType().hasBlockTag(POWER_SOURCE);
+        
+        if (isNewPowerSource || wasOldPowerSource) {
             checkRedstonePower(block);
         }
     }

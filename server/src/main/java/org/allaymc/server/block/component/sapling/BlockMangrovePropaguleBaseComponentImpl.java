@@ -89,7 +89,7 @@ public class BlockMangrovePropaguleBaseComponentImpl extends BlockSaplingBaseCom
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         boolean isHanging = block.getPropertyValue(BlockPropertyTypes.HANGING);
 
         if (isHanging) {

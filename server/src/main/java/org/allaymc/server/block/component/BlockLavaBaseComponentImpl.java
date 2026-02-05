@@ -63,9 +63,9 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         if (!tryHarden(block, null)) {
-            super.onNeighborUpdate(block, neighbor, face);
+            super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         }
     }
 

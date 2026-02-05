@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPDATE_BIT;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd
@@ -47,8 +48,8 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         onNeighborOrScheduledUpdate(block);
     }
 

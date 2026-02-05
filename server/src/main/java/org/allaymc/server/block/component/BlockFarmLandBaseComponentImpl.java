@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MOISTURIZED_AMOUNT;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd
@@ -27,8 +28,8 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         if (face == BlockFace.UP && neighbor.getBlockStateData().isSolid()) {
             block.getDimension().setBlockState(block.getPosition(), BlockTypes.DIRT.getDefaultState());

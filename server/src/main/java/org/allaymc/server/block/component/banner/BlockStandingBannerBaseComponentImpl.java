@@ -11,6 +11,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 import java.util.Set;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd
@@ -22,8 +23,8 @@ public class BlockStandingBannerBaseComponentImpl extends BlockBaseComponentImpl
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
             block.breakBlock();

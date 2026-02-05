@@ -27,8 +27,8 @@ public class BlockFrameBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         BlockFace frameFacing = BlockFace.fromIndex(block.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION));
         if (frameFacing == null || face != frameFacing.opposite()) {

@@ -33,13 +33,13 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         if (block.getDimension().getDimensionInfo() == DimensionInfo.NETHER) {
             block.getDimension().setLiquid(block.getPosition(), null);
             return;
         }
 
-        super.onNeighborUpdate(block, neighbor, face);
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.allaymc.api.item.type.ItemTypes;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author IWareQ
@@ -21,8 +22,8 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         if (!canBeSupportedAt(block)) {
             block.breakBlock();
         }

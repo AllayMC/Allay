@@ -41,7 +41,7 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         if (!canGrowHere(block.getDimension(), block.getPosition(), true)) {
             block.breakBlock();
         }

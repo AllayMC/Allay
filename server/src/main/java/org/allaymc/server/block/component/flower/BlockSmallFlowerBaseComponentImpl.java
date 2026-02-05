@@ -6,6 +6,7 @@ import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd
@@ -17,8 +18,8 @@ public class BlockSmallFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         if (face == BlockFace.DOWN && !canPlaceOn(neighbor.getBlockType())) {
             block.breakBlock();

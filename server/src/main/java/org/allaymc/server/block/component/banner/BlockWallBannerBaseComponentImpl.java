@@ -37,8 +37,8 @@ public class BlockWallBannerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         var bannerFace = Objects.requireNonNull(BlockFace.fromIndex(block.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)));
         if (face == bannerFace.opposite() && !neighbor.getBlockStateData().isSolid()) {

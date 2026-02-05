@@ -49,7 +49,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         manager.callEvent(new CBlockOnNeighborUpdateEvent(block, neighbor, face));
     }
 

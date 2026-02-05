@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -117,6 +118,6 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
         return new BlockNeighborUpdateEvent(block, neighborBlock, blockFace).call();
     }
 
-    protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace) {
+    protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace, BlockState oldNeighborState) {
     }
 }

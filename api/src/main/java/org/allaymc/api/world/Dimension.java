@@ -754,7 +754,7 @@ public interface Dimension extends TaskCreator {
      */
     default void updateAtFace(Vector3ic pos, BlockFace face) {
         var offsetPos = face.offsetPos(pos);
-        getBlockUpdateManager().neighborBlockUpdate(offsetPos, pos, face.opposite());
+        getBlockUpdateManager().neighborBlockUpdate(offsetPos, pos, face.opposite(), null);
     }
 
     /**
