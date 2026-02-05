@@ -63,8 +63,8 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
     }
 
     @Override
-    public void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace) {
-        neighborUpdates.add(new NeighborUpdate(pos, changedNeighbour, blockFace));
+    public void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace, BlockState oldNeighborState) {
+        neighborUpdates.add(new NeighborUpdate(pos, changedNeighbour, blockFace, oldNeighborState));
     }
 
     protected void tickNeighborUpdates() {
@@ -77,6 +77,7 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             var blockFace = update.blockFace();
             var pos = update.pos();
             var neighborPos = update.neighborPos();
+            var oldNeighborState = update.oldNeighborState();
 
             var layer0 = dimension.getBlockState(pos);
             var layer1 = dimension.getBlockState(pos, 1);
@@ -91,7 +92,8 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             layer0.getBehavior().onNeighborUpdate(
                     block0,
                     neighborBlock0,
-                    blockFace
+                    blockFace,
+                    oldNeighborState
             );
 
             // Only update second layer block if it's a liquid block for better performance,
@@ -106,7 +108,8 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
                 layer1.getBehavior().onNeighborUpdate(
                         block1,
                         neighborBlock0,
-                        blockFace
+                        blockFace,
+                        oldNeighborState
                 );
             }
 
