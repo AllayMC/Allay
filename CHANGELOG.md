@@ -14,7 +14,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
-- (API) Added `oldNeighborState` parameter to `onNeighborUpdate()` method, allowing blocks to know the previous state of their neighbor when receiving a neighbor update.
+- (API) Added `oldNeighborState` parameter to `onNeighborUpdate()` method and `BlockNeighborUpdateEvent`, allowing blocks to know the previous state of their neighbor when receiving a neighbor update.
 - (API) Added new permission `Permissions.COMMAND_VIEW_OTHER_OUTPUTS`, player now must have that permission to be able to view other's command outputs.
 - (API) Added event `PlayerStartFishEvent` that will be called when a player tries to throw a fishing rod.
 - Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).

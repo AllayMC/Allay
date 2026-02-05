@@ -85,7 +85,7 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             var block0 = new Block(layer0, new Position3i(pos, dimension), 0);
             var neighborBlock0 = new Block(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
 
-            if (!callNeighborUpdateEvent(block0, neighborBlock0, blockFace)) {
+            if (!callNeighborUpdateEvent(block0, neighborBlock0, blockFace, oldNeighborState)) {
                 return;
             }
 
@@ -101,7 +101,7 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
                 var block1 = new Block(layer1, new Position3i(pos, dimension), 1);
 
-                if (!callNeighborUpdateEvent(block1, neighborBlock0, blockFace)) {
+                if (!callNeighborUpdateEvent(block1, neighborBlock0, blockFace, oldNeighborState)) {
                     return;
                 }
 
@@ -117,8 +117,8 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
         }
     }
 
-    protected boolean callNeighborUpdateEvent(Block block, Block neighborBlock, BlockFace blockFace) {
-        return new BlockNeighborUpdateEvent(block, neighborBlock, blockFace).call();
+    protected boolean callNeighborUpdateEvent(Block block, Block neighborBlock, BlockFace blockFace, BlockState oldNeighborState) {
+        return new BlockNeighborUpdateEvent(block, neighborBlock, blockFace, oldNeighborState).call();
     }
 
     protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace, BlockState oldNeighborState) {
