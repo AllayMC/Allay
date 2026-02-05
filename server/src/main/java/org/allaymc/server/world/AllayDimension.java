@@ -237,7 +237,7 @@ public class AllayDimension implements Dimension {
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
         if (update) {
-            updateAround(x, y, z);
+            updateAround(x, y, z, oldBlockState);
         }
 
         if (callBlockBehavior) {
