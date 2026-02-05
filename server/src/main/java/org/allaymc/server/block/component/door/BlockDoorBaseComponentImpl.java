@@ -3,6 +3,7 @@ package org.allaymc.server.block.component.door;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
+import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -81,8 +82,13 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        // Check redstone power and update door state
-        checkRedstonePower(block);
+        // Only check redstone power if:
+        // 1. Neighbor is a power source (new redstone component placed), OR
+        // 2. Neighbor is air (block broken, might be a redstone source removed)
+        // This prevents the door from closing when normal blocks are placed next to it
+        if (neighbor.getBlockType().hasBlockTag(POWER_SOURCE) || neighbor.isAir()) {
+            checkRedstonePower(block);
+        }
     }
 
     /**

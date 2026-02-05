@@ -2,6 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
@@ -29,8 +30,13 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(block, neighbor, face);
         block.updateBlockProperty(IN_WALL_BIT, shouldBeLowered(block));
 
-        // Check redstone power and update fence gate state
-        checkRedstonePower(block);
+        // Only check redstone power if:
+        // 1. Neighbor is a power source (new redstone component placed), OR
+        // 2. Neighbor is air (block broken, might be a redstone source removed)
+        // This prevents the fence gate from closing when normal blocks are placed next to it
+        if (neighbor.getBlockType().hasBlockTag(POWER_SOURCE) || neighbor.isAir()) {
+            checkRedstonePower(block);
+        }
     }
 
     @Override
