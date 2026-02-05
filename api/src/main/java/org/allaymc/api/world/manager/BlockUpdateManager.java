@@ -1,6 +1,7 @@
 package org.allaymc.api.world.manager;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
 
 import java.time.Duration;
