@@ -62,10 +62,6 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         var position = new Position3i(interactInfo.clickedBlockPos(), dimension);
         var flowerPot = blockEntityHolderComponent.getBlockEntity(position);
         var plant = flowerPot.getPlantItem();

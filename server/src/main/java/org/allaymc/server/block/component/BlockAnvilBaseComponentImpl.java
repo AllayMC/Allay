@@ -48,10 +48,6 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         if (player.isActualPlayer()) {
             var anvilContainer = player.getContainer(ContainerTypes.ANVIL);
             anvilContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));

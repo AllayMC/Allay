@@ -51,10 +51,6 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         if (player.isActualPlayer()) {
             var grindstoneContainer = new GrindstoneContainerImpl();
             grindstoneContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));

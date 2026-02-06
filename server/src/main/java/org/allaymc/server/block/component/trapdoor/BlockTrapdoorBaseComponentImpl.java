@@ -53,7 +53,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        if (interactInfo == null || interactInfo.player().isSneaking()) {
+        if (interactInfo == null) {
             return false;
         }
 

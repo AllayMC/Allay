@@ -48,11 +48,6 @@ public class BlockNoteblockBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Sneaking player should not trigger noteblock (allows placing blocks on top)
-        if (interactInfo.player().isSneaking()) {
-            return false;
-        }
-
         var clickedBlock = interactInfo.getClickedBlock();
         // Can't play if block above is not air
         if (clickedBlock.offsetPos(BlockFace.UP).getBlockType() != BlockTypes.AIR) {

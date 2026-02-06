@@ -23,10 +23,6 @@ public class BlockBeaconBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         if (player.isActualPlayer()) {
             var beaconContainer = player.getContainer(ContainerTypes.BEACON);
             beaconContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));

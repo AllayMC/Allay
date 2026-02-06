@@ -23,10 +23,6 @@ public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl 
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         if (player.isActualPlayer()) {
             var craftingTableContainer = player.getContainer(ContainerTypes.CRAFTING_TABLE);
             craftingTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));

@@ -77,7 +77,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
-        if (player == null || player.isSneaking()) {
+        if (player == null) {
             return;
         }
 

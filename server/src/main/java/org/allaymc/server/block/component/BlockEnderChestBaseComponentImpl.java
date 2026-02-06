@@ -29,10 +29,6 @@ public class BlockEnderChestBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         var upperBlock = dimension.getBlockState(BlockFace.UP.offsetPos(interactInfo.clickedBlockPos()));
         if (upperBlock.getBlockStateData().isSolid()) {
             return false;

@@ -117,7 +117,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     @EventHandler
     protected void onBlockInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
-        if (player == null || player.isSneaking()) return;
+        if (player == null) return;
         // If a sign is waxed, it cannot be modified.
         if (waxed) return;
 

@@ -23,10 +23,6 @@ public class BlockStonecutterBlockBaseComponentImpl extends BlockBaseComponentIm
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         if (player.isActualPlayer()) {
             var stonecutterContainer = new StonecutterContainerImpl();
             stonecutterContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));

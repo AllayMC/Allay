@@ -23,10 +23,6 @@ public class BlockEnchantingTableBaseComponentImpl extends BlockBaseComponentImp
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         if (player.isActualPlayer()) {
             var enchantTableContainer = player.getContainer(ContainerTypes.ENCHANT_TABLE);
             enchantTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
