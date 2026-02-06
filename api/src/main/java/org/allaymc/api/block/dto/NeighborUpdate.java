@@ -22,7 +22,7 @@ import org.allaymc.api.block.type.BlockState;
  *
  * @author ClexaGod
  */
-public record BlockNeighborUpdateContext(
+public record NeighborUpdate(
         Block block,
         Block neighbor,
         BlockFace face,

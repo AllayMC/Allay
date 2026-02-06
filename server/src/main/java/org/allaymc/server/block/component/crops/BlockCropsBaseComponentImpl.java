@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
+import org.allaymc.api.block.dto.NeighborUpdate;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -43,7 +43,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     }
 
     @Override
-    public void onNeighborUpdate(BlockNeighborUpdateContext context) {
+    public void onNeighborUpdate(NeighborUpdate context) {
         super.onNeighborUpdate(context);
 
         var block = context.block();

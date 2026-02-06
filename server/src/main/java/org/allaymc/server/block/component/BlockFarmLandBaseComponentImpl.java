@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MOISTURIZED_AMOUNT;
-import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
+import org.allaymc.api.block.dto.NeighborUpdate;
 import org.allaymc.api.block.type.BlockState;
 
 /**
@@ -29,7 +29,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockNeighborUpdateContext context) {
+    public void onNeighborUpdate(NeighborUpdate context) {
         super.onNeighborUpdate(context);
         var block = context.block();
         var neighbor = context.neighbor();

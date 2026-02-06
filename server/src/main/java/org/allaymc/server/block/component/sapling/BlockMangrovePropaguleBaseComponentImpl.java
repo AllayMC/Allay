@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.sapling;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
+import org.allaymc.api.block.dto.NeighborUpdate;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -90,7 +90,7 @@ public class BlockMangrovePropaguleBaseComponentImpl extends BlockSaplingBaseCom
     }
 
     @Override
-    public void onNeighborUpdate(BlockNeighborUpdateContext context) {
+    public void onNeighborUpdate(NeighborUpdate context) {
         var block = context.block();
         var face = context.face();
         boolean isHanging = block.getPropertyValue(BlockPropertyTypes.HANGING);
