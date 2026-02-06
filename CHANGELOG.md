@@ -38,6 +38,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where player pitch and yaw could not be specified during teleporting.
 - Fixed a bug where in some cases the client will stick at `Locating Server` stage when joining the server.
 - Fixed a bug where player collision box was not updated on the client side after stopping gliding (elytra).
+- Fixed a bug where sneaking players could interact with blocks (e.g. opening doors, sleeping in beds) while holding an item, instead of placing the block.
 - Event `EntityDieEvent` now will be called before the player's items being dropped.
 
 ### Removed
