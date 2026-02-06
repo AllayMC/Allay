@@ -2,7 +2,6 @@ package org.allaymc.api.block.dto;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Context object containing all information about a block neighbor update.
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * @param block            the block being updated
  * @param neighbor         the neighboring block that triggered the update
  * @param face             the face of the block being updated (direction from block to neighbor)
- * @param oldNeighborState the previous block state at the neighbor position, or {@code null} if unknown
+ * @param oldNeighborState the previous block state at the neighbor position, may be null if unknown
  *
  * @author ClexaGod
  */
@@ -27,6 +26,6 @@ public record BlockNeighborUpdateContext(
         Block block,
         Block neighbor,
         BlockFace face,
-        @Nullable BlockState oldNeighborState
+        BlockState oldNeighborState
 ) {
 }
