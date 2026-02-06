@@ -73,14 +73,24 @@ public record CraftingRecipeInput(ItemStack[][] items) implements RecipeInput {
 
     /**
      * Flattens the two-dimensional array of ItemStack objects into a single-dimensional array.
-     * The size of the resulting array depends on the type of the recipe input:
-     * - 9 for a "BIG" type
-     * - 4 for a "SMALL" type
+     * The size of the resulting array depends on the input grid:
+     * - 9 for 3x3 crafting table
+     * - 4 for 2x2 crafting grid
+     * - 1 for 1x1 inputs (stonecutter)
      *
      * @return a one-dimensional ItemStack array containing all the elements of the two-dimensional array.
      */
     public ItemStack[] flattenedItems() {
-        ItemStack[] result = new ItemStack[getType() == Type.BIG ? 9 : 4];
+        if (items.length == 0) {
+            return new ItemStack[0];
+        }
+
+        int size = 0;
+        for (ItemStack[] itemStacks : items) {
+            size += itemStacks.length;
+        }
+
+        ItemStack[] result = new ItemStack[size];
         int index = 0;
         for (ItemStack[] itemStacks : items) {
             for (ItemStack itemStack : itemStacks) {
