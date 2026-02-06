@@ -2,6 +2,7 @@ package org.allaymc.server.block.component.grass;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -38,7 +39,10 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+    public void onNeighborUpdate(BlockNeighborUpdateContext context) {
+        var block = context.block();
+        var neighbor = context.neighbor();
+        var face = context.face();
         var keep = true;
         if (face == BlockFace.UP) {
             if (!block.getPropertyValue(UPPER_BLOCK_BIT)) {

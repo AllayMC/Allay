@@ -3,6 +3,7 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -35,13 +36,10 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a neighboring block causes the current block to update.
      *
-     * @param block            the current block that is being updated
-     * @param neighbor         the neighboring block that triggered the update
-     * @param face             the face of the current block that is being updated
-     * @param oldNeighborState the previous block state at neighbor position (null if unknown or new block)
+     * @param context the context containing all information about the neighbor update
      */
     @ApiStatus.OverrideOnly
-    void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState);
+    void onNeighborUpdate(BlockNeighborUpdateContext context);
 
     /**
      * Called when the block encounters a random update.

@@ -3,6 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 import org.allaymc.api.block.type.BlockState;
@@ -63,8 +64,11 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
-        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
+    public void onNeighborUpdate(BlockNeighborUpdateContext context) {
+        var block = context.block();
+        var neighbor = context.neighbor();
+        var face = context.face();
+        super.onNeighborUpdate(context);
 
         // Break if block below no longer supports the diode
         if (face == BlockFace.DOWN && !canSupportRedstoneDiode(neighbor.getBlockState())) {
