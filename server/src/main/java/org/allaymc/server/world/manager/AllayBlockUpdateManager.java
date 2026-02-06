@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.dto.NeighborUpdate;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
@@ -86,7 +86,7 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             var block0 = new Block(layer0, new Position3i(pos, dimension), 0);
             var neighborBlock0 = new Block(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
 
-            var context0 = new NeighborUpdate(block0, neighborBlock0, blockFace, oldNeighborState);
+            var context0 = new NeighborUpdateContext(block0, neighborBlock0, blockFace, oldNeighborState);
             if (!callNeighborUpdateEvent(context0)) {
                 return;
             }
@@ -98,7 +98,7 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
                 var block1 = new Block(layer1, new Position3i(pos, dimension), 1);
 
-                var context1 = new NeighborUpdate(block1, neighborBlock0, blockFace, oldNeighborState);
+                var context1 = new NeighborUpdateContext(block1, neighborBlock0, blockFace, oldNeighborState);
                 if (!callNeighborUpdateEvent(context1)) {
                     return;
                 }
@@ -110,7 +110,7 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
         }
     }
 
-    protected boolean callNeighborUpdateEvent(NeighborUpdate context) {
+    protected boolean callNeighborUpdateEvent(NeighborUpdateContext context) {
         return new BlockNeighborUpdateEvent(context.block(), context.neighbor(), context.face(), context.oldNeighborState()).call();
     }
 
