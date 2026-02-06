@@ -28,6 +28,7 @@ public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockNeighborUpdateContext context) {
         super.onNeighborUpdate(context);
 
+        var block = context.block();
         var face = context.face();
         var neighbor = context.neighbor();
         if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
