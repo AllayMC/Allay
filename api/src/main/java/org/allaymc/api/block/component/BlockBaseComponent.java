@@ -3,7 +3,7 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.dto.NeighborUpdate;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -39,7 +39,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param context the context containing all information about the neighbor update
      */
     @ApiStatus.OverrideOnly
-    void onNeighborUpdate(NeighborUpdate context);
+    void onNeighborUpdate(NeighborUpdateContext context);
 
     /**
      * Called when the block encounters a random update.

@@ -18,7 +18,7 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.item.data.ItemId;
 
 import java.util.Set;
-import org.allaymc.api.block.dto.NeighborUpdate;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.type.BlockState;
 
 /**
@@ -95,7 +95,7 @@ public class BlockCandleCakeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdate context) {
+    public void onNeighborUpdate(NeighborUpdateContext context) {
         super.onNeighborUpdate(context);
         var block = context.block();
         var neighbor = context.neighbor();
