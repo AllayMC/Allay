@@ -3,6 +3,7 @@ package org.allaymc.server.block.component.piston;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -83,9 +84,10 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
-        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
+    public void onNeighborUpdate(BlockNeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
 
+        var block = context.block();
         // Schedule a check for next tick to handle redstone updates
         block.scheduleUpdateInDelay(Duration.ofMillis(50));
     }

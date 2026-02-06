@@ -2,6 +2,7 @@ package org.allaymc.server.block.component.banner;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.BlockNeighborUpdateContext;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -37,9 +38,12 @@ public class BlockWallBannerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
-        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
+    public void onNeighborUpdate(BlockNeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
 
+        var block = context.block();
+        var neighbor = context.neighbor();
+        var face = context.face();
         var bannerFace = Objects.requireNonNull(BlockFace.fromIndex(block.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)));
         if (face == bannerFace.opposite() && !neighbor.getBlockStateData().isSolid()) {
             block.breakBlock();
