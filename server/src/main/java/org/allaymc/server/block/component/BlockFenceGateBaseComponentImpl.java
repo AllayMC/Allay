@@ -2,7 +2,9 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
 import org.allaymc.api.block.type.BlockState;
@@ -25,12 +27,25 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+
+        var block = context.block();
+        var neighbor = context.neighbor();
+        var oldNeighborState = context.oldNeighborState();
+
         block.updateBlockProperty(IN_WALL_BIT, shouldBeLowered(block));
 
-        // Check redstone power and update fence gate state
-        checkRedstonePower(block);
+        // Only check redstone power if:
+        // 1. Neighbor is a power source (new redstone component placed), OR
+        // 2. Old neighbor was a power source (power source removed)
+        // This prevents the fence gate from closing when normal blocks are placed/broken next to it
+        boolean isNewPowerSource = neighbor.getBlockType().hasBlockTag(POWER_SOURCE);
+        boolean wasOldPowerSource = oldNeighborState != null && oldNeighborState.getBlockType().hasBlockTag(POWER_SOURCE);
+        
+        if (isNewPowerSource || wasOldPowerSource) {
+            checkRedstonePower(block);
+        }
     }
 
     @Override

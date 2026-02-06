@@ -2,10 +2,12 @@ package org.allaymc.server.block.component.flower;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd
@@ -17,9 +19,12 @@ public class BlockSmallFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
 
+        var block = context.block();
+        var face = context.face();
+        var neighbor = context.neighbor();
         if (face == BlockFace.DOWN && !canPlaceOn(neighbor.getBlockType())) {
             block.breakBlock();
         }

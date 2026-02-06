@@ -8,6 +8,7 @@ import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
@@ -115,8 +116,10 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+        var block = context.block();
+        var neighbor = context.neighbor();
         if (posEqVec3ic(neighbor.getPosition(), posOfOtherPart(block))
             && neighbor.getBlockType() != getBlockType()) {
             block.breakBlock();

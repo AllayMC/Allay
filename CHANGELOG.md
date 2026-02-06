@@ -14,6 +14,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Changed `onNeighborUpdate()` method signature to accept a `NeighborUpdateContext` parameter instead of individual parameters. This context object contains `block`, `neighbor`, `face`, and `oldNeighborState`, making the API extensible for future additions without breaking changes.
 - (API) Added new permission `Permissions.COMMAND_VIEW_OTHER_OUTPUTS`, player now must have that permission to be able to view other's command outputs.
 - (API) Added event `PlayerStartFishEvent` that will be called when a player tries to throw a fishing rod.
 - Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
@@ -33,6 +34,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Fixed
 
+- Fixed a bug where doors, trapdoors and fence gates would close when placing or breaking normal blocks next to them. Now redstone power is only checked when a power source is placed or removed.
 - Fixed a bug where item is used twice when facing a villager.
 - Fixed a bug where stonecutter is unusable.
 - Fixed a bug where player pitch and yaw could not be specified during teleporting.

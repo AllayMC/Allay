@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
@@ -21,6 +22,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPDATE_BIT;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd
@@ -47,8 +49,9 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+        var block = context.block();
         onNeighborOrScheduledUpdate(block);
     }
 

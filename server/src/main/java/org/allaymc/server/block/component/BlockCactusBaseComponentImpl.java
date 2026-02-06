@@ -5,6 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -41,7 +42,8 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        var block = context.block();
         if (!canGrowHere(block.getDimension(), block.getPosition(), true)) {
             block.breakBlock();
         }

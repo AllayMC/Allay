@@ -4,6 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.Instrument;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -12,6 +13,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.NoteParticle;
 import org.allaymc.api.world.sound.NoteSound;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * Implementation of the noteblock.
@@ -26,8 +28,9 @@ public class BlockNoteblockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+        var block = context.block();
 
         var blockEntity = (BlockEntityNoteblock) block.getBlockEntity();
         if (blockEntity == null) {

@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -62,8 +64,8 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
     }
 
     @Override
-    public void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace) {
-        neighborUpdates.add(new NeighborUpdate(pos, changedNeighbour, blockFace));
+    public void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace, BlockState oldNeighborState) {
+        neighborUpdates.add(new NeighborUpdate(pos, changedNeighbour, blockFace, oldNeighborState));
     }
 
     protected void tickNeighborUpdates() {
@@ -76,6 +78,7 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             var blockFace = update.blockFace();
             var pos = update.pos();
             var neighborPos = update.neighborPos();
+            var oldNeighborState = update.oldNeighborState();
 
             var layer0 = dimension.getBlockState(pos);
             var layer1 = dimension.getBlockState(pos, 1);
@@ -83,40 +86,34 @@ public class AllayBlockUpdateManager implements BlockUpdateManager {
             var block0 = new Block(layer0, new Position3i(pos, dimension), 0);
             var neighborBlock0 = new Block(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
 
-            if (!callNeighborUpdateEvent(block0, neighborBlock0, blockFace)) {
+            var context0 = new NeighborUpdateContext(block0, neighborBlock0, blockFace, oldNeighborState);
+            if (!callNeighborUpdateEvent(context0)) {
                 return;
             }
 
-            layer0.getBehavior().onNeighborUpdate(
-                    block0,
-                    neighborBlock0,
-                    blockFace
-            );
+            layer0.getBehavior().onNeighborUpdate(context0);
 
             // Only update second layer block if it's a liquid block for better performance,
             // because only liquid blocks need to be updated in the second layer.
             if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
                 var block1 = new Block(layer1, new Position3i(pos, dimension), 1);
 
-                if (!callNeighborUpdateEvent(block1, neighborBlock0, blockFace)) {
+                var context1 = new NeighborUpdateContext(block1, neighborBlock0, blockFace, oldNeighborState);
+                if (!callNeighborUpdateEvent(context1)) {
                     return;
                 }
 
-                layer1.getBehavior().onNeighborUpdate(
-                        block1,
-                        neighborBlock0,
-                        blockFace
-                );
+                layer1.getBehavior().onNeighborUpdate(context1);
             }
 
             count++;
         }
     }
 
-    protected boolean callNeighborUpdateEvent(Block block, Block neighborBlock, BlockFace blockFace) {
-        return new BlockNeighborUpdateEvent(block, neighborBlock, blockFace).call();
+    protected boolean callNeighborUpdateEvent(NeighborUpdateContext context) {
+        return new BlockNeighborUpdateEvent(context.block(), context.neighbor(), context.face(), context.oldNeighborState()).call();
     }
 
-    protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace) {
+    protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace, BlockState oldNeighborState) {
     }
 }

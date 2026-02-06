@@ -696,10 +696,17 @@ public interface Dimension extends TaskCreator {
     }
 
     /**
-     * @see #updateAround(Vector3ic)
+     * @see #updateAround(Vector3ic, BlockState)
      */
     default void updateAround(int x, int y, int z) {
-        for (var face : BlockFace.VALUES) updateAtFace(x, y, z, face);
+        updateAround(x, y, z, null);
+    }
+
+    /**
+     * @see #updateAround(Vector3ic, BlockState)
+     */
+    default void updateAround(int x, int y, int z, BlockState oldBlockState) {
+        for (var face : BlockFace.VALUES) updateAtFace(x, y, z, face, oldBlockState);
     }
 
     /**
@@ -708,7 +715,17 @@ public interface Dimension extends TaskCreator {
      * @param pos the pos where the block is in
      */
     default void updateAround(Vector3ic pos) {
-        for (var face : BlockFace.VALUES) updateAtFace(pos, face);
+        updateAround(pos, null);
+    }
+
+    /**
+     * Update the blocks around a block.
+     *
+     * @param pos the pos where the block is in
+     * @param oldBlockState the previous block state at this position (null if unknown)
+     */
+    default void updateAround(Vector3ic pos, BlockState oldBlockState) {
+        for (var face : BlockFace.VALUES) updateAtFace(pos, face, oldBlockState);
     }
 
     /**
@@ -743,7 +760,20 @@ public interface Dimension extends TaskCreator {
      * @param face the face of the block
      */
     default void updateAtFace(int x, int y, int z, BlockFace face) {
-        updateAtFace(new Vector3i(x, y, z), face);
+        updateAtFace(x, y, z, face, null);
+    }
+
+    /**
+     * Update the block which is at the specified face of the specified block.
+     *
+     * @param x    the x coordinate of the block
+     * @param y    the y coordinate of the block
+     * @param z    the z coordinate of the block
+     * @param face the face of the block
+     * @param oldBlockState the previous block state at this position (null if unknown)
+     */
+    default void updateAtFace(int x, int y, int z, BlockFace face, BlockState oldBlockState) {
+        updateAtFace(new Vector3i(x, y, z), face, oldBlockState);
     }
 
     /**
@@ -753,8 +783,19 @@ public interface Dimension extends TaskCreator {
      * @param face the face of the block
      */
     default void updateAtFace(Vector3ic pos, BlockFace face) {
+        updateAtFace(pos, face, null);
+    }
+
+    /**
+     * Update the block which is at the specified face of the specified block.
+     *
+     * @param pos  the pos of the block
+     * @param face the face of the block
+     * @param oldBlockState the previous block state at this position (null if unknown)
+     */
+    default void updateAtFace(Vector3ic pos, BlockFace face, BlockState oldBlockState) {
         var offsetPos = face.offsetPos(pos);
-        getBlockUpdateManager().neighborBlockUpdate(offsetPos, pos, face.opposite());
+        getBlockUpdateManager().neighborBlockUpdate(offsetPos, pos, face.opposite(), oldBlockState);
     }
 
     /**

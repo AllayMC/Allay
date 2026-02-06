@@ -17,6 +17,8 @@ import org.allaymc.api.world.sound.SimpleSound;
 import java.util.Set;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.BITE_COUNTER;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * Base component for cake block behavior.
@@ -81,8 +83,11 @@ public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+        var block = context.block();
+        var neighbor = context.neighbor();
+        var face = context.face();
 
         // Break cake if support block is removed
         if (face == BlockFace.DOWN) {

@@ -237,7 +237,7 @@ public class AllayDimension implements Dimension {
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
         if (update) {
-            updateAround(x, y, z);
+            updateAround(x, y, z, oldBlockState);
         }
 
         if (callBlockBehavior) {
@@ -378,7 +378,7 @@ public class AllayDimension implements Dimension {
 
             if (isDiode(neighborState)) {
                 // Direct neighbor is a diode, update it
-                blockUpdateManager.neighborBlockUpdate(neighborPos, sourcePos, face.opposite());
+                blockUpdateManager.neighborBlockUpdate(neighborPos, sourcePos, face.opposite(), null);
             } else if (neighborState.getBlockStateData().isSolid()) {
                 // Neighbor is solid, check if there's a diode on the other side
                 int nx2 = nx + offset.x();
@@ -391,7 +391,7 @@ public class AllayDimension implements Dimension {
                 BlockState behindState = getBlockState(nx2, ny, nz2);
                 if (isDiode(behindState)) {
                     var behindPos = new Vector3i(nx2, ny, nz2);
-                    blockUpdateManager.neighborBlockUpdate(behindPos, neighborPos, face.opposite());
+                    blockUpdateManager.neighborBlockUpdate(behindPos, neighborPos, face.opposite(), null);
                 }
             }
         }

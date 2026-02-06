@@ -5,6 +5,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -49,8 +50,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        manager.callEvent(new CBlockOnNeighborUpdateEvent(block, neighbor, face));
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        manager.callEvent(new CBlockOnNeighborUpdateEvent(context.block(), context.neighbor(), context.face()));
     }
 
     @Override

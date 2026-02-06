@@ -18,6 +18,8 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.item.data.ItemId;
 
 import java.util.Set;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * Base component for candle cake block behavior.
@@ -93,8 +95,11 @@ public class BlockCandleCakeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+        var block = context.block();
+        var neighbor = context.neighbor();
+        var face = context.face();
 
         // Break candle cake if support block is removed
         if (face == BlockFace.DOWN) {

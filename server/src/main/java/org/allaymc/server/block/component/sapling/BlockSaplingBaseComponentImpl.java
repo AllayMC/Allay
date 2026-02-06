@@ -3,6 +3,7 @@ package org.allaymc.server.block.component.sapling;
 import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -61,9 +62,11 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
 
+        var block = context.block();
+        var face = context.face();
         if (face == BlockFace.DOWN) {
             var blockBelow = block.offsetPos(BlockFace.DOWN);
             if (!canPlaceOn(blockBelow.getBlockState())) {

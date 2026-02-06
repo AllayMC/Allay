@@ -3,6 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -11,6 +12,7 @@ import org.allaymc.api.item.type.ItemTypes;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author IWareQ
@@ -21,8 +23,9 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+        var block = context.block();
         if (!canBeSupportedAt(block)) {
             block.breakBlock();
         }

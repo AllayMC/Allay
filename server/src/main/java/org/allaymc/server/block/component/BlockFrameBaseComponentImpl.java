@@ -6,6 +6,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityItemFrame;
@@ -27,8 +28,11 @@ public class BlockFrameBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(NeighborUpdateContext context) {
+        super.onNeighborUpdate(context);
+        var block = context.block();
+        var neighbor = context.neighbor();
+        var face = context.face();
 
         BlockFace frameFacing = BlockFace.fromIndex(block.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION));
         if (frameFacing == null || face != frameFacing.opposite()) {
