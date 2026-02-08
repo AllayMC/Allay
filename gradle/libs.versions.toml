@@ -7,7 +7,7 @@ netty = "4.2.9.Final"
 
 [libraries]
 # NBT
-nbt = { group = "org.allaymc", name = "nbt", version = "3.0.10" }
+nbt = { group = "org.allaymc", name = "nbt", version = "3.0.11" }
 # Protocol
 protocol-connection = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta11-20260105.115034-18" }
 protocol-common = { group = "org.cloudburstmc.protocol", name = "common", version = "3.0.0.Beta11-20260105.115034-17" }
