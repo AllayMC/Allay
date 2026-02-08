@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
 import org.allaymc.protocol.extension.NetEaseCompression;
-import org.allaymc.protocol.extension.v766.Bedrock_v766_NetEase;
+import org.allaymc.protocol.extension.codec.v766.Bedrock_v766_NetEase;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.multiversion.MultiVersion;
