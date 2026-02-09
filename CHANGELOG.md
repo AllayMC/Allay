@@ -49,6 +49,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where in some cases the client will stick at `Locating Server` stage when joining the server.
 - Fixed a bug where player collision box was not updated on the client side after stopping gliding (elytra).
 - Fixed a bug where sneaking players could interact with blocks (e.g. opening doors, sleeping in beds) while holding an item, instead of placing the block.
+- Fixed a bug where other players' skins would become Steve after the viewer respawns. The old chunk loader was not properly cleaned up during respawn, causing duplicate `AddPlayerPacket` to be sent without prior `RemoveEntityPacket`.
 - Event `EntityDieEvent` now will be called before the player's items being dropped.
 
 ### Removed

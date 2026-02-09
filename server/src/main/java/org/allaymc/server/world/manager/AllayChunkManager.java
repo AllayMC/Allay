@@ -218,7 +218,8 @@ public final class AllayChunkManager implements ChunkManager {
 
     @Override
     public void addChunkLoader(ChunkLoader chunkLoader) {
-        this.chunkLoaders.put(chunkLoader, new ChunkLoaderHolder(this, chunkLoader));
+        var old = this.chunkLoaders.put(chunkLoader, new ChunkLoaderHolder(this, chunkLoader));
+        if (old != null) old.onRemoved();
     }
 
     @Override

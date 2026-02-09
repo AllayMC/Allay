@@ -79,6 +79,7 @@ import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
+import org.allaymc.protocol.extension.packet.ConfirmSkinPacket;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
@@ -783,7 +784,8 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewPlayerSkin(EntityPlayer player) {
-        if (player.getSkin() == null) {
+        var skin = player.getSkin();
+        if (skin == null) {
             return;
         }
 
@@ -791,6 +793,37 @@ public class AllayPlayer implements Player {
             viewActualPlayerSkin(player);
         } else {
             viewFakePlayerSkin(player);
+        }
+
+        // For NetEase player, we should send an extra ConfirmSkinPacket; otherwise the skin won't be displayed
+        if (this.netEasePlayer) {
+            var entry = new ConfirmSkinPacket.SkinEntry();
+            entry.setValid(true);
+            entry.setUuid(player.getUniqueId());
+            entry.setGeoStr(skin.skinGeometry());
+            entry.setSkinBytes(skin.skinData().data());
+            entry.setUidStr(String.valueOf(getNetEaseUid(player)));
+
+            var packet = new ConfirmSkinPacket();
+            packet.setEntries(List.of(entry));
+            sendPacket(packet);
+        }
+    }
+
+    // Return the player's NetEase uid if it is an actual NetEase player, or generate an uid from the player entity's
+    // unique id if the player is a fake player or a normal bedrock player
+    protected long getNetEaseUid(EntityPlayer player) {
+        if (player.isActualPlayer() && player.getController().isNetEasePlayer()) {
+            return player.getController().getLoginData().getNetEaseData().uid();
+        } else {
+            // For fake or normal bedrock player, let's generate the NetEase uid from the uuid
+            var uid = player.getUniqueId().toString().replace("-", "").hashCode();
+            if (uid < 0) {
+                // The NetEase uid should always be positive, and if the hash code is negative, let's simply invert it
+                uid = -uid;
+            }
+
+            return uid;
         }
     }
 

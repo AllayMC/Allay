@@ -46,11 +46,14 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         respawnPacket.setState(RespawnPacket.State.SERVER_READY);
         player.sendPacket(respawnPacket);
 
-        // Respawn the player at the current dimension first, reset its data and then teleport to
-        // the spawn point
-        ((AllayDimension) entity.getDimension()).addPlayer(player, () -> {
-            resetData(entity);
-            entity.teleport(spawnPoint);
+        // Remove the player from the dimension first to properly clean up chunk loader and entity
+        // viewer state, then re-add the player to respawn
+        var dimension = (AllayDimension) entity.getDimension();
+        dimension.removePlayer(player, () -> {
+            dimension.addPlayer(player, () -> {
+                resetData(entity);
+                entity.teleport(spawnPoint);
+            });
         });
     }
 

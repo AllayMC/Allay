@@ -29,9 +29,8 @@ public interface EntityManager {
     /**
      * Add an entity to the dimension.
      * <p>
-     * The entity won't be added to the dimension immediately.
-     * It will be added to the dimension in the next tick, and
-     * the callback will be called.
+     * The entity won't be added to the dimension immediately. It will be added to the dimension
+     * later, and the callback will be called.
      *
      * @param entity   The entity pending to be spawned
      * @param callback The callback to be called after the entity is added to the dimension
@@ -51,9 +50,8 @@ public interface EntityManager {
     /**
      * Remove an entity from the dimension.
      * <p>
-     * The entity won't be removed from the dimension immediately.
-     * It will be removed from the dimension in the next tick, and
-     * the callback will be called.
+     * The entity won't be removed from the dimension immediately. It will be removed from the
+     * dimension later, and the callback will be called.
      *
      * @param entity   The entity pending to be despawned
      * @param callback The callback to be called after the entity is removed from the dimension
@@ -78,8 +76,8 @@ public interface EntityManager {
 
     /**
      * For-each all entities in specified chunk. Note that the consumer will be called
-     * the next tick on the main thread instead of the caller's thread immediately, so
-     * that this method is safe to be called in any thread.
+     * later on the main thread instead of the caller's thread immediately, so that this
+     * method is safe to be called in any thread.
      *
      * @param chunkX the x coordinate of the chunk
      * @param chunkZ the z coordinate of the chunk
@@ -135,7 +133,7 @@ public interface EntityManager {
     EntityPhysicsEngine getPhysicsService();
 
     /**
-     * Let the service check auto save in the next tick immediately.
+     * Let the service check auto save later immediately.
      */
     void checkAutoSaveImmediately();
 }
