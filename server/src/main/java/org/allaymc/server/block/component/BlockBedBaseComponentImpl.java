@@ -13,12 +13,15 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.eventbus.event.block.BlockExplodeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.Dependency;
@@ -103,16 +106,48 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
         var player = interactInfo.player();
 
-        var spawnPoint = player.validateAndGetSpawnPoint();
-        if (spawnPoint == null || !spawnPoint.equals(block.getLocation())) {
-            player.setSpawnPoint(block.getLocation());
+        // Find the head block of the bed
+        var headBlock = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT)
+                ? block : getPairBlock(block);
+        var headPos = headBlock.getPosition();
 
+        // Always set spawn point to the head position
+        var spawnPoint = player.validateAndGetSpawnPoint();
+        if (spawnPoint == null || spawnPoint.x() != headPos.x() || spawnPoint.y() != headPos.y() || spawnPoint.z() != headPos.z()
+            || spawnPoint.dimension() != dimension) {
+            player.setSpawnPoint(headBlock.getLocation());
             player.sendTranslatable(TrKeys.MC_TILE_BED_RESPAWNSET);
+        }
+
+        // Check time - can only sleep at night or during rain/thunder
+        var world = dimension.getWorld();
+        var time = world.getWorldData().getTimeOfDay() % WorldData.TIME_FULL;
+        var weather = world.getWeather();
+
+        if (weather != Weather.THUNDER) {
+            if (weather != Weather.RAIN && (time <= WorldData.TIME_SLEEP || time >= WorldData.TIME_WAKE)) {
+                player.sendTranslatable(TrKeys.MC_TILE_BED_NOSLEEP);
+                return true;
+            }
+            if (time <= WorldData.TIME_SLEEP_WITH_RAIN || time >= WorldData.TIME_WAKE_WITH_RAIN) {
+                player.sendTranslatable(TrKeys.MC_TILE_BED_NOSLEEP);
+                return true;
+            }
+        }
+
+        // Check if bed is occupied
+        if (headBlock.getPropertyValue(BlockPropertyTypes.OCCUPIED_BIT)) {
+            player.sendTranslatable(TrKeys.MC_TILE_BED_OCCUPIED);
             return true;
         }
 
-        // TODO: implement sleep logic
-        return false;
+        // Check if player is already sleeping
+        if (player.isSleeping()) {
+            return true;
+        }
+
+        player.sleep(headPos);
+        return true;
     }
 
     @Override
@@ -128,11 +163,28 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onBreak(Block block, ItemStack usedItem, Entity entity) {
+        // Wake up any entity sleeping in this bed
         if (block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT)) {
+            wakeSleeper(block);
             var footPos = posOfOtherPart(block);
             block.getDimension().breakBlock(footPos, null, entity);
+        } else {
+            var headBlock = getPairBlock(block);
+            wakeSleeper(headBlock);
         }
         super.onBreak(block, usedItem, entity);
+    }
+
+    private void wakeSleeper(Block headBlock) {
+        var headPos = headBlock.getPosition();
+        for (var entity : headBlock.getDimension().getEntities().values()) {
+            if (entity instanceof EntitySleepableComponent sleepable && sleepable.isSleeping()) {
+                var sleepPos = sleepable.getSleepingPos();
+                if (sleepPos != null && sleepPos.x() == headPos.x() && sleepPos.y() == headPos.y() && sleepPos.z() == headPos.z()) {
+                    sleepable.wake();
+                }
+            }
+        }
     }
 
     @Override

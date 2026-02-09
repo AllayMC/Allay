@@ -24,6 +24,11 @@ public interface WorldData extends PersistentDataHolder {
     int TIME_SUNRISE = 23000;
     int TIME_FULL = 24000;
 
+    int TIME_SLEEP = 12542;
+    int TIME_WAKE = 23459;
+    int TIME_SLEEP_WITH_RAIN = 12010;
+    int TIME_WAKE_WITH_RAIN = 23991;
+
     /**
      * Get the difficulty of the world.
      *

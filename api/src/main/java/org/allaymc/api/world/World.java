@@ -165,6 +165,14 @@ public interface World extends TaskCreator {
     void setWeather(Weather weather);
 
     /**
+     * Set the required sleep duration (in ticks) before day advancement is attempted.
+     * Called when a player starts sleeping.
+     *
+     * @param ticks the number of ticks to wait
+     */
+    void setRequiredSleepTicks(int ticks);
+
+    /**
      * Set the weather to {@link Weather#CLEAR}.
      */
     default void clearWeather() {

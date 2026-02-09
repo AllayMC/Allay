@@ -100,6 +100,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerLivingComponentImpl::new, EntityPlayerLivingComponentImpl.class)
                 .addComponent(EntityPlayerPhysicsComponentImpl::new, EntityPlayerPhysicsComponentImpl.class)
+                .addComponent(EntitySleepableComponentImpl::new, EntitySleepableComponentImpl.class)
                 .build();
     }
 

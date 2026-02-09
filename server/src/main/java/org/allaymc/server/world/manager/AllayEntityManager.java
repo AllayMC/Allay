@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
@@ -222,6 +223,10 @@ public class AllayEntityManager implements EntityManager {
     protected void removeEntityImmediately(Entity entity) {
         new EntityDespawnEvent(entity).call();
 
+        // Wake up the entity if they are sleeping, so the bed's occupied state is cleared
+        if (entity instanceof EntitySleepableComponent sleepableComponent && sleepableComponent.isSleeping()) {
+            sleepableComponent.wake();
+        }
         entities.remove(entity.getRuntimeId());
         physicsService.removeEntity(entity);
         entity.despawnFromAll();

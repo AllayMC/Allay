@@ -19,5 +19,7 @@ public enum SimpleEntityAction implements EntityAction {
     // TOTEM_USE displays the totem use particles and animation
     TOTEM_USE,
     // FISHING_HOOK_BITE makes a fishing hook entity display the fish bite animation with bubble and splash effects
-    FISHING_HOOK_BITE
+    FISHING_HOOK_BITE,
+    // WAKE_UP makes an entity play the wake-up animation (used when a sleeping entity stops sleeping)
+    WAKE_UP
 }

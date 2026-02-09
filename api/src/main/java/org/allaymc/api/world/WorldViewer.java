@@ -280,4 +280,12 @@ public interface WorldViewer extends DebugShapeViewer {
      * @param pos the position of the lectern block
      */
     void viewLectern(Vector3ic pos);
+
+    /**
+     * Views the sleeping indicator showing how many players are currently sleeping.
+     *
+     * @param sleepingCount the number of players currently sleeping
+     * @param totalCount    the total number of players that can sleep
+     */
+    void viewSleepingIndicator(int sleepingCount, int totalCount);
 }

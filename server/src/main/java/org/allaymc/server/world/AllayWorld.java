@@ -20,6 +20,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.FakeChunkLoader;
 import org.allaymc.api.world.data.Weather;
@@ -78,6 +79,10 @@ public class AllayWorld implements World {
     @Getter
     @Setter
     protected boolean runtimeOnly;
+
+    // Number of ticks remaining before day advancement is attempted
+    @Setter
+    protected int requiredSleepTicks;
 
     public AllayWorld(String name, WorldStorage worldStorage) {
         this.name = name;
@@ -171,6 +176,7 @@ public class AllayWorld implements World {
 
         tickTime(currentTick);
         tickWeather();
+        tickSleep();
         scheduler.tick();
 
         var dimensions = dimensionMap.values();
@@ -276,6 +282,84 @@ public class AllayWorld implements World {
         }
 
         setWeather(newWeather);
+    }
+
+    protected void tickSleep() {
+        var players = getPlayers();
+        if (players.isEmpty()) {
+            return;
+        }
+
+        // Only overworld players can sleep
+        var overworldPlayers = players.stream()
+                .filter(p -> p.getControlledEntity().getDimension().getDimensionInfo().dimensionId() == 0)
+                .toList();
+
+        if (overworldPlayers.isEmpty()) {
+            return;
+        }
+
+        var sleepingCount = 0;
+        for (var player : overworldPlayers) {
+            if (player.getControlledEntity().isSleeping()) {
+                sleepingCount++;
+            }
+        }
+
+        // Send sleeping indicator to all sleeping players
+        if (sleepingCount > 0) {
+            for (var player : overworldPlayers) {
+                if (player.getControlledEntity().isSleeping()) {
+                    player.viewSleepingIndicator(sleepingCount, overworldPlayers.size());
+                }
+            }
+        }
+
+        // Countdown mechanism: only attempt day advancement after the countdown expires
+        if (this.requiredSleepTicks > 0) {
+            this.requiredSleepTicks--;
+            if (this.requiredSleepTicks > 0) {
+                return;
+            }
+        } else {
+            // No countdown active, nothing to do
+            return;
+        }
+
+        // Countdown just reached zero — try to advance day
+        tryAdvanceDay(overworldPlayers);
+    }
+
+    protected void tryAdvanceDay(java.util.List<Player> overworldPlayers) {
+        // Check time - ensure it's actually night
+        int time = this.worldData.getTimeOfDay() % WorldData.TIME_FULL;
+        if (this.weather != Weather.THUNDER) {
+            if (this.weather != Weather.RAIN && (time <= WorldData.TIME_SLEEP || time >= WorldData.TIME_WAKE)) {
+                return;
+            }
+            if (time <= WorldData.TIME_SLEEP_WITH_RAIN || time >= WorldData.TIME_WAKE_WITH_RAIN) {
+                return;
+            }
+        }
+
+        // Check if all sleeping players are still sleeping
+        for (var player : overworldPlayers) {
+            if (!player.getControlledEntity().isSleeping()) {
+                return;
+            }
+        }
+
+        // Advance day: wake all players, set time to day, stop raining
+        for (var player : overworldPlayers) {
+            player.getControlledEntity().wake();
+        }
+
+        if (this.worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
+            int newTime = this.worldData.getTimeOfDay() + (WorldData.TIME_FULL - time);
+            this.worldData.setTimeOfDay(newTime);
+        }
+
+        setWeather(Weather.CLEAR);
     }
 
     @Override

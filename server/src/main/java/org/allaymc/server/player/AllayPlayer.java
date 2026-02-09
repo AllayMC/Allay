@@ -593,6 +593,12 @@ public class AllayPlayer implements Player {
                 }
             }
         }
+        if (entity instanceof EntitySleepableComponent sleepableComponent && sleepableComponent.isSleeping()) {
+            var bedPos = sleepableComponent.getSleepingPos();
+            map.setFlag(EntityFlag.SLEEPING, true);
+            map.put(EntityDataTypes.BED_POSITION, Vector3i.from(bedPos.x(), bedPos.y(), bedPos.z()));
+            map.put(EntityDataTypes.PLAYER_FLAGS, (byte) 2);
+        }
     }
 
     /**
@@ -634,7 +640,6 @@ public class AllayPlayer implements Player {
             }
             case EntityThrownTrident trident -> {
                 map.setFlag(EntityFlag.RETURN_TRIDENT, trident.isReturning());
-                // TODO: find out why the rope is not shown although we have set OWNER_EID and RETURN_TRIDENT to true
                 if (trident.isReturning()) {
                     var shooter = trident.getShooter();
                     map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getUniqueId().getLeastSignificantBits() : -1L);
@@ -760,6 +765,19 @@ public class AllayPlayer implements Player {
         packet.setStopExpression(animation.stopCondition());
         packet.setController(animation.controller());
         packet.getRuntimeEntityIds().add(entity.getRuntimeId());
+        sendPacket(packet);
+    }
+
+    @Override
+    public void viewSleepingIndicator(int sleepingCount, int totalCount) {
+        var nbt = NbtMap.builder()
+                .putInt("ableToSleep", totalCount)
+                .putInt("overworldPlayerCount", totalCount)
+                .putInt("sleepingPlayerCount", sleepingCount)
+                .build();
+        var packet = new LevelEventGenericPacket();
+        packet.setType(LevelEvent.SLEEPING_PLAYERS);
+        packet.setTag(nbt);
         sendPacket(packet);
     }
 
@@ -930,6 +948,12 @@ public class AllayPlayer implements Player {
                 teasePacket.setType(EntityEventType.FISH_HOOK_TEASE);
                 teasePacket.setRuntimeEntityId(entity.getRuntimeId());
                 sendPacket(teasePacket);
+            }
+            case SimpleEntityAction.WAKE_UP -> {
+                var packet = new AnimatePacket();
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                packet.setAction(AnimatePacket.Action.WAKE_UP);
+                sendPacket(packet);
             }
             default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
         }

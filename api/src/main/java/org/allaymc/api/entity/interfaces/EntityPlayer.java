@@ -7,6 +7,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
 import org.allaymc.api.eventbus.event.player.PlayerItemHeldEvent;
 import org.allaymc.api.item.ItemStack;
@@ -27,7 +28,8 @@ public interface EntityPlayer extends
         EntityLiving,
         EntityContainerHolderComponent,
         EntityPhysicsComponent,
-        EntityPlayerBaseComponent {
+        EntityPlayerBaseComponent,
+        EntitySleepableComponent {
 
     /**
      * Returns the reachable container for the given full container type. This

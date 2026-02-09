@@ -336,6 +336,11 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     protected void onDie() {
         super.onDie();
 
+        // Wake up the player if they are sleeping (clears bed occupied state)
+        if (thisPlayer.isSleeping()) {
+            thisPlayer.wake();
+        }
+
         var deathInfo = lastDamage != null ?
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
                 DamageType.API.getDeathInfo(thisPlayer, null);
