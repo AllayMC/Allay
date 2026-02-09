@@ -2,7 +2,6 @@ package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -38,10 +37,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        var block = context.block();
-        var neighbor = context.neighbor();
-        var face = context.face();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         if (face == BlockFace.DOWN && neighbor.getBlockType() != BlockTypes.FARMLAND) {
             block.breakBlock();
             return;

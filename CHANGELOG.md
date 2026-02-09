@@ -19,9 +19,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `WAKE_UP` action to `SimpleEntityAction` for broadcasting wake-up animations.
 - (API) Added `World.setRequiredSleepTicks()` method for controlling sleep-to-day-advance countdown.
 - (API) Added `PLAYERS_SLEEPING_PERCENTAGE` game rule (default 100).
-- (API) Changed `onNeighborUpdate()` method signature to accept a `NeighborUpdateContext` parameter instead of individual parameters. This context object contains `block`, `neighbor`, `face`, and `oldNeighborState`, making the API extensible for future additions without breaking changes.
 - (API) Added new permission `Permissions.COMMAND_VIEW_OTHER_OUTPUTS`, player now must have that permission to be able to view other's command outputs.
 - (API) Added event `PlayerStartFishEvent` that will be called when a player tries to throw a fishing rod.
+- (API) Added method `WorldViewer.viewSleepingIndicator()`.
 - Implemented bed sleeping: time/weather validation, occupied state, sleeping indicator UI, day advancement after 5-second countdown, and wake-up animation.
 - Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
 - Added `NettyPipelineInitEvent` for packet level middleware support. The `AllayPlayer` instance is attached to the channel attribute.

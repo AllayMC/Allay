@@ -5,7 +5,6 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -33,9 +32,8 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        super.onNeighborUpdate(context);
-        var block = context.block();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         tryAbsorbWater(block);
     }
 

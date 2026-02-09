@@ -4,7 +4,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
 import org.allaymc.api.block.type.BlockState;
@@ -27,12 +26,8 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        super.onNeighborUpdate(context);
-
-        var block = context.block();
-        var neighbor = context.neighbor();
-        var oldNeighborState = context.oldNeighborState();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         block.updateBlockProperty(IN_WALL_BIT, shouldBeLowered(block));
 

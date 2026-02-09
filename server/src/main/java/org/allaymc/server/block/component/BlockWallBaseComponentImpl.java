@@ -2,7 +2,6 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
@@ -32,10 +31,8 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        super.onNeighborUpdate(context);
-
-        var block = context.block();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         var updatedState = updateConnectionsAndPost(block);
         if (!block.getBlockState().equals(updatedState)) {
@@ -111,7 +108,6 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
                type == BlockTypes.GLASS_PANE ||
                neighbor.getBlockStateData().collisionShape().isFull(face.opposite());
     }
-
 
     /**
      * @see <a href="https://joakimthorsen.github.io/MCPropertyEncyclopedia/?selection=variants,tag_wall_post_override&filter=(tag_wall_post_override:No)#">Minecraft Block Property Encyclopedia</a>

@@ -3,7 +3,6 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.LeverDirection;
 import org.allaymc.api.block.type.BlockState;
@@ -73,11 +72,8 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        var block = context.block();
-        var neighbor = context.neighbor();
-        var face = context.face();
-        super.onNeighborUpdate(context);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         // Check if the attached block still has a full surface
         LeverDirection direction = block.getPropertyValue(LEVER_DIRECTION);

@@ -2,7 +2,6 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -34,14 +33,13 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        var block = context.block();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         if (block.getDimension().getDimensionInfo() == DimensionInfo.NETHER) {
             block.getDimension().setLiquid(block.getPosition(), null);
             return;
         }
 
-        super.onNeighborUpdate(context);
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
     }
 
     @Override

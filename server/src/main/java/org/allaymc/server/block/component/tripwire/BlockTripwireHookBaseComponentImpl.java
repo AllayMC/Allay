@@ -3,7 +3,6 @@ package org.allaymc.server.block.component.tripwire;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -72,9 +71,8 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        super.onNeighborUpdate(context);
-        var block = context.block();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         // Check if the attached block still supports the hook
         BlockFace hookFacing = getHookFacing(block);
@@ -83,8 +81,8 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         BlockFace attachedFace = hookFacing.opposite();
-        if (context.face() == attachedFace) {
-            if (!context.neighbor().getBlockStateData().collisionShape().isFull(hookFacing)) {
+        if (face == attachedFace) {
+            if (!neighbor.getBlockStateData().collisionShape().isFull(hookFacing)) {
                 block.breakBlock();
             }
         }

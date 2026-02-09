@@ -3,7 +3,6 @@ package org.allaymc.server.block.component.pressureplate;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.dto.NeighborUpdateContext;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -43,11 +42,8 @@ public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     @Override
-    public void onNeighborUpdate(NeighborUpdateContext context) {
-        var block = context.block();
-        var neighbor = context.neighbor();
-        var face = context.face();
-        super.onNeighborUpdate(context);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         // Break if block below no longer has a full top surface
         if (face == BlockFace.DOWN && !neighbor.getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
