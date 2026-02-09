@@ -12,7 +12,7 @@ nbt = { group = "org.allaymc", name = "nbt", version = "3.0.11" }
 protocol-connection = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta11-20260105.115034-18" }
 protocol-common = { group = "org.cloudburstmc.protocol", name = "common", version = "3.0.0.Beta11-20260105.115034-17" }
 protocol-codec = { group = "org.cloudburstmc.protocol", name = "bedrock-codec", version = "3.0.0.Beta11-20260105.115034-18" }
-protocol-extension = {group = "org.allaymc", name = "protocol-extension", version = "0.1.4" }
+protocol-extension = {group = "org.allaymc", name = "protocol-extension", version = "0.1.5" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
 item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.110-R1" }
