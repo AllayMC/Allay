@@ -22,7 +22,7 @@ import java.awt.event.*;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +34,16 @@ public final class Dashboard {
     public static final int CHUNK_VALUE_COUNT = 100;
     public static final int ENTITY_VALUE_COUNT = 100;
     private static final long MEGABYTE = 1024L * 1024L;
+    private static final Map<Integer, Color> DIMENSION_COLORS = Map.of(
+            0, new Color(76, 175, 80, 200),
+            1, new Color(244, 67, 54, 200),
+            2, new Color(156, 39, 176, 200)
+    );
+    private static final Map<Integer, String> DIMENSION_NAMES = Map.of(
+            0, "Overworld",
+            1, "Nether",
+            2, "The End"
+    );
     private static Dashboard INSTANCE;
     private JPanel rootPane;
     private JTabbedPane rootTabbedPane;
@@ -54,8 +64,9 @@ public final class Dashboard {
     private JPanel pluginTab;
     private JTabbedPane perfTabbedPane;
     private List<Integer> ramValues;
-    private List<Integer> chunkValues;
-    private List<Integer> entityValues;
+    private final Map<String, Map<Integer, List<Integer>>> chunkCountByWorld = new LinkedHashMap<>();
+    private final Map<String, Map<Integer, List<Integer>>> entityCountByWorld = new LinkedHashMap<>();
+    private String selectedWorld;
 
     private Dashboard() {
         $$$setupUI$$$();
@@ -207,6 +218,26 @@ public final class Dashboard {
                 popupMenu.show(e.getComponent(), e.getX(), e.getY());
             }
         });
+        var worldSelectListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON3) return;
+                var worldNames = new ArrayList<>(chunkCountByWorld.keySet());
+                if (worldNames.isEmpty()) return;
+                JPopupMenu popupMenu = new JPopupMenu();
+                for (var worldName : worldNames) {
+                    var item = new JCheckBoxMenuItem(worldName, worldName.equals(selectedWorld));
+                    item.addActionListener($ -> {
+                        selectedWorld = worldName;
+                        refreshDimensionGraphs();
+                    });
+                    popupMenu.add(item);
+                }
+                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        };
+        chunkGraph.addMouseListener(worldSelectListener);
+        entityGraph.addMouseListener(worldSelectListener);
     }
 
     public static Dashboard getInstance() {
@@ -276,51 +307,39 @@ public final class Dashboard {
             // Update the graph
             ramGraph.setValues(ramValues);
 
-            // Update chunk graph
-            var loadedChunkCount = Server.getInstance()
-                    .getWorldPool()
-                    .getWorlds()
-                    .values()
-                    .stream()
-                    .mapToInt(world ->
-                            world.getDimensions()
-                                    .values()
-                                    .stream()
-                                    .mapToInt(dimension -> dimension.getChunkManager().getLoadedChunks().size())
-                                    .sum()
-                    )
-                    .sum();
-            chunkValues.add(loadedChunkCount);
-            chunkGraph.setXLabel(I18n.get().tr(TrKeys.ALLAY_GUI_CHUNK_LABEL, loadedChunkCount));
-            // Trim the list
-            k = chunkValues.size();
-            if (k > CHUNK_VALUE_COUNT)
-                chunkValues.subList(0, k - CHUNK_VALUE_COUNT).clear();
-            // Update the graph
-            chunkGraph.setValues(chunkValues);
+            // Update chunk & entity graphs - per world per dimension
+            var loadedWorldNames = new HashSet<String>();
+            Server.getInstance().getWorldPool().getWorlds().values().forEach(world -> {
+                var worldName = world.getWorldData().getDisplayName();
+                loadedWorldNames.add(worldName);
+                var chunkDimMap = chunkCountByWorld.computeIfAbsent(worldName, n -> new LinkedHashMap<>());
+                var entityDimMap = entityCountByWorld.computeIfAbsent(worldName, n -> new LinkedHashMap<>());
+                var loadedDimIds = world.getDimensions().keySet();
+                // Remove dimensions that no longer exist in this world
+                chunkDimMap.keySet().retainAll(loadedDimIds);
+                entityDimMap.keySet().retainAll(loadedDimIds);
+                // Append data for existing dimensions
+                world.getDimensions().values().forEach(dimension -> {
+                    int dimId = dimension.getDimensionInfo().dimensionId();
+                    appendAndTrim(
+                            chunkDimMap.computeIfAbsent(dimId, id -> new ArrayList<>(Collections.nCopies(CHUNK_VALUE_COUNT, 0))),
+                            dimension.getChunkManager().getLoadedChunks().size(), CHUNK_VALUE_COUNT);
+                    appendAndTrim(
+                            entityDimMap.computeIfAbsent(dimId, id -> new ArrayList<>(Collections.nCopies(ENTITY_VALUE_COUNT, 0))),
+                            dimension.getEntityCount(), ENTITY_VALUE_COUNT);
+                });
+            });
 
-            // Update entity graph
-            var loadedEntityCount = Server.getInstance()
-                    .getWorldPool()
-                    .getWorlds()
-                    .values()
-                    .stream()
-                    .mapToInt(world ->
-                            world.getDimensions()
-                                    .values()
-                                    .stream()
-                                    .mapToInt(org.allaymc.api.world.Dimension::getEntityCount)
-                                    .sum()
-                    )
-                    .sum();
-            entityValues.add(loadedEntityCount);
-            entityGraph.setXLabel(I18n.get().tr(TrKeys.ALLAY_GUI_ENTITY_LABEL, loadedEntityCount));
-            // Trim the list
-            k = entityValues.size();
-            if (k > ENTITY_VALUE_COUNT)
-                entityValues.subList(0, k - ENTITY_VALUE_COUNT).clear();
-            // Update the graph
-            entityGraph.setValues(entityValues);
+            // Remove unloaded worlds
+            chunkCountByWorld.keySet().retainAll(loadedWorldNames);
+            entityCountByWorld.keySet().retainAll(loadedWorldNames);
+
+            // Auto-select first world if none selected or selected world was unloaded
+            if (selectedWorld == null || !chunkCountByWorld.containsKey(selectedWorld)) {
+                selectedWorld = chunkCountByWorld.keySet().stream().findFirst().orElse(null);
+            }
+
+            refreshDimensionGraphs();
         };
 
         // SwingUtilities.invokeLater is called so that we don't run into threading issues with the GUI
@@ -377,6 +396,45 @@ public final class Dashboard {
             playerTable.setModel(model);
             playerTable.getTableHeader().setReorderingAllowed(false);
         });
+    }
+
+    private static void appendAndTrim(List<Integer> list, int value, int maxSize) {
+        list.add(value);
+        int sz = list.size();
+        if (sz > maxSize) list.subList(0, sz - maxSize).clear();
+    }
+
+    private void refreshDimensionGraphs() {
+        if (selectedWorld == null) return;
+        var chunkDimMap = chunkCountByWorld.get(selectedWorld);
+        var entityDimMap = entityCountByWorld.get(selectedWorld);
+        if (chunkDimMap == null || entityDimMap == null) return;
+
+        var chunkSeries = buildDimSeriesList(chunkDimMap);
+        var totalChunks = chunkDimMap.values().stream()
+                .mapToInt(list -> list.isEmpty() ? 0 : list.getLast())
+                .sum();
+        chunkGraph.setXLabel(I18n.get().tr(TrKeys.ALLAY_GUI_CHUNK_LABEL, totalChunks));
+        chunkGraph.setSeries(chunkSeries);
+
+        var entitySeries = buildDimSeriesList(entityDimMap);
+        var totalEntities = entityDimMap.values().stream()
+                .mapToInt(list -> list.isEmpty() ? 0 : list.getLast())
+                .sum();
+        entityGraph.setXLabel(I18n.get().tr(TrKeys.ALLAY_GUI_ENTITY_LABEL, totalEntities));
+        entityGraph.setSeries(entitySeries);
+    }
+
+    private static List<GraphPanel.Series> buildDimSeriesList(Map<Integer, List<Integer>> dimMap) {
+        var series = new ArrayList<GraphPanel.Series>();
+        dimMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> series.add(new GraphPanel.Series(
+                        DIMENSION_NAMES.getOrDefault(entry.getKey(), "Dim " + entry.getKey()),
+                        DIMENSION_COLORS.getOrDefault(entry.getKey(), Color.WHITE),
+                        new ArrayList<>(entry.getValue())
+                )));
+        return series;
     }
 
     private void updatePluginTable() {
@@ -481,20 +539,10 @@ public final class Dashboard {
         ramGraph.setValues(ramValues);
 
         chunkGraph = new GraphPanel();
-        chunkValues = new ArrayList<>();
-        // Set the chunk graph to 0
-        for (int i = 0; i < CHUNK_VALUE_COUNT; i++) {
-            chunkValues.add(0);
-        }
-        chunkGraph.setValues(chunkValues);
+        chunkGraph.setValues(Collections.nCopies(CHUNK_VALUE_COUNT, 0));
 
         entityGraph = new GraphPanel();
-        entityValues = new ArrayList<>();
-        // Set the entity graph to 0
-        for (int i = 0; i < ENTITY_VALUE_COUNT; i++) {
-            entityValues.add(0);
-        }
-        entityGraph.setValues(entityValues);
+        entityGraph.setValues(Collections.nCopies(ENTITY_VALUE_COUNT, 0));
 
         // Init the console
         consolePane = new ConsolePanel();

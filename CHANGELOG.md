@@ -34,6 +34,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented nether vines including twisting vines and weeping vines.
 - Implemented copper bulb.
 - Added op/deop options to the Dashboard player list context menu.
+- Added per-dimension line charts to the Dashboard chunk and entity graphs, with a right-click context menu to select which world to view. Each dimension (Overworld, Nether, The End) is displayed as a separate colored line with a legend.
 - Improved entity tasks handling. Now the Entity Manager task queue uses the same handling strategy as the synced packets, and the entity will be spawned/removed as soon as possible, rather than waiting for the next game tick.
 
 ### Changed
