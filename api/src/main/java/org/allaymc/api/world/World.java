@@ -46,6 +46,13 @@ public interface World extends TaskCreator {
     WorldStorage getWorldStorage();
 
     /**
+     * Whether the world is using virtual thread as the ticking thread of the world and the dimension in the world.
+     *
+     * @return {@code true} if the world is using virtual thread, otherwise {@code false}
+     */
+    boolean isVirtualTickingThread();
+
+    /**
      * Get the tick of the world.
      *
      * @return the tick of the world

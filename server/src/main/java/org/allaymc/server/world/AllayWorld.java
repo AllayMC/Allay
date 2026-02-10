@@ -56,6 +56,8 @@ public class AllayWorld implements World {
     @Getter
     protected final WorldStorage worldStorage;
     @Getter
+    protected final boolean virtualTickingThread;
+    @Getter
     protected final AllayWorldData worldData;
 
     protected final Queue<PacketQueueEntry> packetQueue;
@@ -84,10 +86,11 @@ public class AllayWorld implements World {
     @Setter
     protected int requiredSleepTicks;
 
-    public AllayWorld(String name, WorldStorage worldStorage) {
+    public AllayWorld(String name, WorldStorage worldStorage, boolean virtualTickingThread) {
         this.name = name;
         this.worldStorage = worldStorage;
         this.worldStorage.setWorld(this);
+        this.virtualTickingThread = virtualTickingThread;
         this.worldData = (AllayWorldData) worldStorage.readWorldData();
         this.worldData.setWorld(this);
         this.worldData.increaseWorldStartCount();
@@ -102,7 +105,7 @@ public class AllayWorld implements World {
                 .onIdle(this::idle)
                 .onStop(this::shutdownReally)
                 .build();
-        this.worldThread = Thread.ofPlatform()
+        this.worldThread = (virtualTickingThread ? Thread.ofVirtual() : Thread.ofPlatform())
                 .name("World Thread #" + this.getName())
                 .unstarted(gameLoop::startLoop);
         this.weather = Weather.CLEAR;
@@ -181,8 +184,9 @@ public class AllayWorld implements World {
 
         var dimensions = dimensionMap.values();
         if (TICK_DIMENSION_IN_PARALLEL && dimensions.size() > 1) {
+            var server = Server.getInstance();
             Utils.forEachInParallel(
-                    dimensions, Server.getInstance().getComputeThreadPool(),
+                    dimensions, virtualTickingThread ? server.getVirtualThreadPool() : server.getComputeThreadPool(),
                     dimension -> ((AllayDimension) dimension).tick(currentTick)
             ).join();
         } else {

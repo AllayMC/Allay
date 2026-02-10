@@ -39,6 +39,7 @@ public class AllayLightEngine implements LightEngine {
     protected final Supplier<Integer> timeSupplier;
     protected final Supplier<Weather> weatherSupplier;
     protected final int maxUpdateCount;
+    protected final boolean useVirtualThread;
     protected final BlockingQueueWrapper<Runnable> chunkAndBlockUpdateQueue;
     protected final BlockingQueueWrapper<Runnable> blockLightUpdateQueue;
     protected final Set<Long> chunks;
@@ -84,22 +85,23 @@ public class AllayLightEngine implements LightEngine {
     protected NonBlockingHashMapLong<ChunkSectionNibbleArray[]> skyLightInBorder;
     protected LightPropagator skyLightPropagator;
 
-    public AllayLightEngine(Dimension dimension) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeather, AllayServer.getSettings().worldSettings().maxLightUpdateCountPerDimension());
+    public AllayLightEngine(Dimension dimension, boolean useVirtualThread) {
+        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeather, AllayServer.getSettings().worldSettings().maxLightUpdateCountPerDimension(), useVirtualThread);
     }
 
     @VisibleForTesting
     public AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier) {
-        this(dimensionInfo, worldName, timeSupplier, weatherSupplier, Integer.MAX_VALUE);
+        this(dimensionInfo, worldName, timeSupplier, weatherSupplier, Integer.MAX_VALUE, false);
     }
 
-    protected AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier, int maxUpdateCount) {
+    protected AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier, int maxUpdateCount, boolean useVirtualThread) {
         this.dimensionInfo = dimensionInfo;
         this.worldName = worldName;
         this.isRunning = new AtomicBoolean(true);
         this.timeSupplier = timeSupplier;
         this.weatherSupplier = weatherSupplier;
         this.maxUpdateCount = maxUpdateCount;
+        this.useVirtualThread = useVirtualThread;
         this.chunkAndBlockUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.blockLightUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.chunks = new NonBlockingHashSet<>();
@@ -173,7 +175,7 @@ public class AllayLightEngine implements LightEngine {
     }
 
     protected void startCalculatingThread(String name, BlockingQueueWrapper<Runnable> queue) {
-        Thread.ofPlatform().name(name).start(() -> {
+        (useVirtualThread ? Thread.ofVirtual() : Thread.ofPlatform()).name(name).start(() -> {
             while (isRunning.get()) {
                 this.handleUpdateIn(queue);
             }

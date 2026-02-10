@@ -4,15 +4,14 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 
 /**
- * A light engine that always returns max light value (15).
- * Used when light calculation is disabled for a dimension.
+ * A light engine that always returns max light value (15). Used when light calculation is disabled for a dimension.
  *
  * @author daoge_cmd
  */
 public class NoLightEngine extends AllayLightEngine {
 
     public NoLightEngine(Dimension dimension) {
-        super(dimension);
+        super(dimension, false);
     }
 
     @Override
