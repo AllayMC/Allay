@@ -260,6 +260,11 @@ public interface TrKeys {
     String ALLAY_GUI_PLAYER_BANIP = "allay:gui.player.banip";
 
     /**
+     * {@literal Remove OP}
+     */
+    String ALLAY_GUI_PLAYER_DEOP = "allay:gui.player.deop";
+
+    /**
      * {@literal Dimension}
      */
     String ALLAY_GUI_PLAYER_DIMENSION = "allay:gui.player.dimension";
@@ -283,6 +288,11 @@ public interface TrKeys {
      * {@literal Online: %1}
      */
     String ALLAY_GUI_PLAYER_ONLINE = "allay:gui.player.online";
+
+    /**
+     * {@literal Set as OP}
+     */
+    String ALLAY_GUI_PLAYER_OP = "allay:gui.player.op";
 
     /**
      * {@literal Pos}

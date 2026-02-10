@@ -162,6 +162,22 @@ public final class Dashboard {
                 });
                 popupMenu.add(banIpItem);
 
+                var manager = Server.getInstance().getPlayerManager();
+                int selectedRow = playerTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    String selectedPlayerName = (String) playerTable.getValueAt(selectedRow, 0);
+                    var selectedPlayer = manager.getPlayerByName(selectedPlayerName);
+                    if (selectedPlayer != null) {
+                        boolean isOp = manager.isOperator(selectedPlayer);
+                        JMenuItem opItem = new JMenuItem(I18n.get().tr(isOp ? TrKeys.ALLAY_GUI_PLAYER_DEOP : TrKeys.ALLAY_GUI_PLAYER_OP));
+                        opItem.addActionListener($ -> {
+                            manager.setOperator(selectedPlayer.getOriginName(), !isOp);
+                            selectedPlayer.sendTranslatable(isOp ? TrKeys.MC_COMMANDS_DEOP_MESSAGE : TrKeys.MC_COMMANDS_OP_MESSAGE);
+                        });
+                        popupMenu.add(opItem);
+                    }
+                }
+
                 popupMenu.show(e.getComponent(), e.getX(), e.getY());
             }
         });

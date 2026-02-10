@@ -33,6 +33,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented stonecutter recipe crafting support.
 - Implemented nether vines including twisting vines and weeping vines.
 - Implemented copper bulb.
+- Added op/deop options to the Dashboard player list context menu.
 - Improved entity tasks handling. Now the Entity Manager task queue uses the same handling strategy as the synced packets, and the entity will be spawned/removed as soon as possible, rather than waiting for the next game tick.
 
 ### Changed
