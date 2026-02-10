@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.commonslang3)
     implementation(libs.commonsio)
     implementation(libs.mcterminal)
+    implementation(libs.jline.reader)
     implementation(libs.disruptor)
     implementation(libs.netty.epoll)
     implementation(libs.netty.kqueue)
