@@ -161,7 +161,7 @@ public final class AllayWorldPool implements WorldPool {
         var theEndGenerator = setting.theEnd() == null ? null : tryCreateWorldGenerator(setting.theEnd());
 
         loadWorld(
-                new WorldSetting(name, storage, false),
+                new WorldSetting(name, storage, setting.useVirtualThread),
                 new DimensionSetting(overworldGenerator, setting.overworld().enableLightCalculation()),
                 netherGenerator != null ? new DimensionSetting(netherGenerator, setting.nether().enableLightCalculation()) : null,
                 theEndGenerator != null ? new DimensionSetting(theEndGenerator, setting.theEnd().enableLightCalculation()) : null
