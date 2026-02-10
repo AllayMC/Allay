@@ -3053,7 +3053,7 @@ public class AllayPlayer implements Player {
                 if (world == null) {
                     // Packet processors should make sure that PacketProcessor.handleSync()
                     // method won't be called if the player is not in any world
-                    log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().name(), AllayPlayer.this);
+                    log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().getName(), AllayPlayer.this);
                     processor.handleSync(AllayPlayer.this, packet, time);
                 } else {
                     ((AllayWorld) world).addSyncPacketToQueue(AllayPlayer.this, packet, time);

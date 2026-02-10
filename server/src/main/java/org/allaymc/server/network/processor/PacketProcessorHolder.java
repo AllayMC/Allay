@@ -8,13 +8,15 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Cool_Loong
  */
 @Slf4j
 public final class PacketProcessorHolder {
-    private final EnumMap<ClientState, EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
+    private final EnumMap<ClientState, Map<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
 
     private ClientState clientState = ClientState.DISCONNECTED;
     private ClientState lastClientState = null;
@@ -22,7 +24,7 @@ public final class PacketProcessorHolder {
     public PacketProcessorHolder() {
         this.processors = new EnumMap<>(ClientState.class);
         for (ClientState state : ClientState.values()) {
-            processors.put(state, new EnumMap<>(BedrockPacketType.class));
+            processors.put(state, new HashMap<>());
         }
 
         registerConnectedPacketProcessors();
