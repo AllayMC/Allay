@@ -120,6 +120,7 @@ public final class BlockTypeInitializer {
         return AllayBlockType
                 .builder(BlockCopperBulbBehaviorImpl.class)
                 .vanillaBlock(blockId)
+                .setBaseComponentSupplier(BlockCopperBulbBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                 .build();
