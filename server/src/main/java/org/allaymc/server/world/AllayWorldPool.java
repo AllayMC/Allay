@@ -235,8 +235,8 @@ public final class AllayWorldPool implements WorldPool {
             private String storageType;
 
             @Comment("If set to true, virtual thread will be used as the ticking thread of the world and the dimensions in the world")
-            @CustomKey("virtual-ticking-thread")
-            private boolean virtualTickingThread;
+            @CustomKey("use-virtual-thread")
+            private boolean useVirtualThread;
 
             private DimensionSetting overworld;
 
