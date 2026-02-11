@@ -6,6 +6,7 @@ import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
@@ -49,7 +50,16 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
             return;
         }
 
-        var location = thisEntity.getLocation();
+        var pearlLoc = thisEntity.getLocation();
+        var shooterLoc = shooter.getLocation();
+        var location = new Location3d(
+                pearlLoc.x(),
+                pearlLoc.y(),
+                pearlLoc.z(),
+                shooterLoc.pitch(),
+                shooterLoc.yaw(),
+                pearlLoc.dimension()
+        );
         var dimension = thisEntity.getDimension();
         dimension.addSound(location, SimpleSound.TELEPORT);
         if (!shooter.teleport(location, EntityTeleportEvent.Reason.PROJECTILE)) {
