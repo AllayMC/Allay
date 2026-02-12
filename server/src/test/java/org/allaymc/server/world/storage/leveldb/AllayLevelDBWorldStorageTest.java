@@ -1,4 +1,4 @@
-package org.allaymc.server.world.storage;
+package org.allaymc.server.world.storage.leveldb;
 
 import lombok.SneakyThrows;
 import org.allaymc.api.world.World;
@@ -8,7 +8,6 @@ import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.testutils.AllayTestExtension;
 import org.joml.Vector3i;
 import org.junit.jupiter.api.AfterEach;
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Cool_Loong
  */
 @ExtendWith(AllayTestExtension.class)
-class LevelDBWorldStorageTest {
+class AllayLevelDBWorldStorageTest {
 
     @TempDir
     Path tempDir;

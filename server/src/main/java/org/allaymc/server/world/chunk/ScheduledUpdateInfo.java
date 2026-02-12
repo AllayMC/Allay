@@ -26,7 +26,7 @@ public final class ScheduledUpdateInfo {
     public static ScheduledUpdateInfo fromNBT(NbtMap nbt) {
         return new ScheduledUpdateInfo(
                 new Vector3i(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z")),
-                nbt.getInt("time")
+                nbt.getLong("time")
                 // blockState is not used, just ignore it
         );
     }
