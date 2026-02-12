@@ -45,7 +45,9 @@ class LevelDBWorldStorageTest {
         copyTestResource("ldbworld/level.dat");
         mockWorld = Mockito.mock(World.class);
         Mockito.when(mockWorld.getPlayers()).thenReturn(List.of());
+        Mockito.when(mockWorld.getTick()).thenReturn(0L);
         levelDBWorldStorage = new AllayLevelDBWorldStorage(tempDir.resolve("ldbworld"));
+        levelDBWorldStorage.setWorld(mockWorld);
     }
 
     @AfterEach
