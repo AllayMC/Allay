@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...HEAD)</small>
 
+### Removed
+
+- (API) Removed deprecated `viewEntityLocation` overload from `WorldViewer`.
+
 # 0.11.0 (API 0.25.0) - 2026/2/12
 
 <small>[Compare with 0.10.7](https://github.com/AllayMC/Allay/compare/0.10.7...0.11.0)</small>
