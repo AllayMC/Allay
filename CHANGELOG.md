@@ -22,6 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added new permission `Permissions.COMMAND_VIEW_OTHER_OUTPUTS`, player now must have that permission to be able to view other's command outputs.
 - (API) Added event `PlayerStartFishEvent` that will be called when a player tries to throw a fishing rod.
 - (API) Added method `WorldViewer.viewSleepingIndicator()`.
+- (API) Added method `WorldViewer.viewSignEditor()` for opening the sign editor interface.
 - (API) Added method `World.isVirtualTickingThread()`.
 - Implemented bed sleeping: time/weather validation, occupied state, sleeping indicator UI, day advancement after 5-second countdown, and wake-up animation.
 - Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
@@ -49,6 +50,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `WorldPool.DimensionSetting` record containing world generator and light calculation toggle.
 - (API) `EntityPlayer` now extends `EntitySleepableComponent`.
 - (API) Removed parameter `locationLastSent` in method `WorldViewer.viewEntityLocation()` since the use of delta move packet have been removed.
+- (API) Moved `BlockEntitySignBaseComponent.openSignEditorFor()` to `WorldViewer.viewSignEditor()`.
 - (API) Renamed `EntityState.SPAWNED_NEXT_TICK` and `EntityState.DESPAWNED_NEXT_TICK` to `EntityState.SPAWNED_LATER` and `EntityState.DESPAWNED_LATER` to match the code behavior.
 
 ### Fixed

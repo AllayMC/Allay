@@ -1896,6 +1896,14 @@ public class AllayPlayer implements Player {
     }
 
     @Override
+    public void viewSignEditor(Vector3ic pos, boolean frontSide) {
+        var packet = new OpenSignPacket();
+        packet.setPosition(toNetwork(pos));
+        packet.setFrontSide(frontSide);
+        sendPacket(packet);
+    }
+
+    @Override
     public void viewContainerContents(Container container) {
         if (container instanceof AbstractPlayerContainer playerContainer) {
             viewContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId());

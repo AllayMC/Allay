@@ -282,6 +282,14 @@ public interface WorldViewer extends DebugShapeViewer {
     void viewLectern(Vector3ic pos);
 
     /**
+     * Opens the sign editor interface for the viewer.
+     *
+     * @param pos       the position of the sign block
+     * @param frontSide {@code true} if the front side of the sign should be edited, {@code false} otherwise
+     */
+    void viewSignEditor(Vector3ic pos, boolean frontSide);
+
+    /**
      * Views the sleeping indicator showing how many players are currently sleeping.
      *
      * @param sleepingCount the number of players currently sleeping
