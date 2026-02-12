@@ -1,4 +1,4 @@
-package org.allaymc.server.world.storage.leveldb;
+package org.allaymc.server.world.storage.leveldb.data;
 
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.data.DimensionInfo;

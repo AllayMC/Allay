@@ -1,4 +1,4 @@
-package org.allaymc.server.world.storage.leveldb;
+package org.allaymc.server.world.storage.leveldb.data;
 
 /**
  * Indicates the state of generation of the chunk in vanilla.

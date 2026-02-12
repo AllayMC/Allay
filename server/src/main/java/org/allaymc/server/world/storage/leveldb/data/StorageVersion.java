@@ -1,4 +1,4 @@
-package org.allaymc.server.world.storage.leveldb;
+package org.allaymc.server.world.storage.leveldb.data;
 
 /**
  * @author daoge_cmd

@@ -1,4 +1,4 @@
-package org.allaymc.server.world.storage.leveldb;
+package org.allaymc.server.world.storage.leveldb.data;
 
 /**
  * Enum that represents the versions of chunk formats used in the system.

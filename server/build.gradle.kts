@@ -16,35 +16,35 @@ application {
 
 dependencies {
     api(project(":api"))
-    implementation(libs.bundles.logging)
-    implementation(libs.bundles.leveldb)
-    implementation(libs.bundles.rng)
-    implementation(libs.bundles.fastutil)
-    implementation(libs.bundles.stateupdater)
-    implementation(libs.semver4j)
-    implementation(libs.commonslang3)
-    implementation(libs.commonsio)
-    implementation(libs.mcterminal)
-    implementation(libs.jline.reader)
-    implementation(libs.disruptor)
-    implementation(libs.netty.epoll)
-    implementation(libs.netty.kqueue)
-    implementation(libs.fastreflect)
-    implementation(libs.oshi)
-    implementation(libs.flatlaf)
-    implementation(libs.formsrt)
-    implementation(libs.sentry)
-    implementation(libs.jctools)
-    implementation(libs.caffeine)
-    implementation(libs.bundles.protocol) {
+    api(libs.bundles.logging)
+    api(libs.bundles.leveldb)
+    api(libs.bundles.rng)
+    api(libs.bundles.fastutil)
+    api(libs.bundles.stateupdater)
+    api(libs.semver4j)
+    api(libs.commonslang3)
+    api(libs.commonsio)
+    api(libs.mcterminal)
+    api(libs.jline.reader)
+    api(libs.disruptor)
+    api(libs.netty.epoll)
+    api(libs.netty.kqueue)
+    api(libs.fastreflect)
+    api(libs.oshi)
+    api(libs.flatlaf)
+    api(libs.formsrt)
+    api(libs.sentry)
+    api(libs.jctools)
+    api(libs.caffeine)
+    api(libs.bundles.protocol) {
         exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")
     }
-    implementation(libs.okaeri.configs.yaml.snakeyaml) {
+    api(libs.okaeri.configs.yaml.snakeyaml) {
         exclude(group = "org.yaml", module = "snakeyaml") // Use the latest version
     }
-    implementation(libs.bstats)
+    api(libs.bstats)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)

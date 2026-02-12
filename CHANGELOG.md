@@ -41,6 +41,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Changed
 
+- Changed server module dependencies from `implementation` to `api` scope in `build.gradle.kts`, allowing plugins that depend on the server module to access its transitive dependencies.
+- Refactored `AllayLevelDBWorldStorage` by extracting serialization/deserialization logic into independent codec classes under `org.allaymc.server.world.storage.leveldb.codec` (`ChunkSectionCodec`, `HeightAndBiomeCodec`, `BlockEntityCodec`,
+  `ScheduledUpdateCodec`, `WorldDataCodec`, `LevelDBUtils`), and moved data enums (`LevelDBKey`, `ChunkVersion`, etc.) to the `data` subpackage.
 - (API) Refactored `WorldPool.loadWorld()` to accept `WorldSetting` and `DimensionSetting` records instead of individual parameters.
 - (API) Added `WorldPool.WorldSetting` record containing world name, storage, and virtual ticking thread option.
 - (API) Added `WorldPool.DimensionSetting` record containing world generator and light calculation toggle.
