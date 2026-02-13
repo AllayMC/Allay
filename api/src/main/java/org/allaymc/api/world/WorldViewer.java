@@ -287,4 +287,11 @@ public interface WorldViewer extends DebugShapeViewer {
      * @param totalCount    the total number of players that can sleep
      */
     void viewSleepingIndicator(int sleepingCount, int totalCount);
+
+    /**
+     * Open the command block editor interface for the viewer.
+     *
+     * @param pos the pos of the command block
+     */
+    void viewCommandBlockEditor(Vector3ic pos);
 }

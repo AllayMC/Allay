@@ -2710,6 +2710,30 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initCommandBlock() {
+        BlockTypes.COMMAND_BLOCK = AllayBlockType
+                .builder(BlockCommandBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.COMMAND_BLOCK)
+                .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.COMMAND_BLOCK)
+                .setBaseComponentSupplier(BlockCommandBlockBaseComponentImpl::new)
+                .build();
+        BlockTypes.CHAIN_COMMAND_BLOCK = AllayBlockType
+                .builder(BlockChainCommandBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHAIN_COMMAND_BLOCK)
+                .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.COMMAND_BLOCK)
+                .setBaseComponentSupplier(BlockCommandBlockBaseComponentImpl::new)
+                .build();
+        BlockTypes.REPEATING_COMMAND_BLOCK = AllayBlockType
+                .builder(BlockRepeatingCommandBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.REPEATING_COMMAND_BLOCK)
+                .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.COMMAND_BLOCK)
+                .setBaseComponentSupplier(BlockCommandBlockBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initPointedDripstone() {
         BlockTypes.POINTED_DRIPSTONE = AllayBlockType
                 .builder(BlockPointedDripstoneBehaviorImpl.class)

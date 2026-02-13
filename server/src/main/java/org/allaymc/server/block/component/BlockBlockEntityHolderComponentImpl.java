@@ -90,8 +90,11 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
 
         var placementInfo = event.getPlacementInfo();
         if (placementInfo != null) {
-            // Set the block entity's custom name to the item's custom name
-            blockEntity.setCustomName(placementInfo.player().getItemInHand().getCustomName());
+            var itemInHand = placementInfo.player().getItemInHand();
+            if (itemInHand.hasCustomName()) {
+                // Set the block entity's custom name to the item's custom name
+                blockEntity.setCustomName(itemInHand.getCustomName());
+            }
         }
 
         forwardEvent(blockEntity, event);

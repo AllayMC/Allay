@@ -12,10 +12,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...HEAD)</small>
 
+## Added
+
+- (API) Implemented command block.
+
 ### Fixed
 
 - Fixed block collision shapes being clamped to a maximum height of 1.0. Blocks such as fences, fence gates, walls, and border blocks now correctly use their vanilla collision height of 1.5, preventing players from jumping over them.
 - Fixed door collision shapes not changing based on block state. Doors now correctly compute their collision and selection shapes based on cardinal direction, open state, and hinge side.
+- Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
+- Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
 
 ### Removed
 

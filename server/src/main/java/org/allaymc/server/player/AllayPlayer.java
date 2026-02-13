@@ -783,6 +783,15 @@ public class AllayPlayer implements Player {
     }
 
     @Override
+    public void viewCommandBlockEditor(Vector3ic pos) {
+        var packet = new ContainerOpenPacket();
+        packet.setId((byte) -1);
+        packet.setType(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.COMMAND_BLOCK);
+        packet.setBlockPosition(toNetwork(pos));
+        sendPacket(packet);
+    }
+
+    @Override
     public void viewPlayerSkin(EntityPlayer player) {
         var skin = player.getSkin();
         if (skin == null) {
@@ -853,7 +862,7 @@ public class AllayPlayer implements Player {
         var skin = SkinConvertor.toSerializedSkin(player.getSkin());
 
         var entry = new PlayerListPacket.Entry(player.getUniqueId());
-        entry.setEntityId(player.getRuntimeId());
+        entry.setEntityId(player.getUniqueId().getLeastSignificantBits());
         entry.setName(player.getUniqueId().toString());
         entry.setXuid("");
         entry.setPlatformChatId("");
@@ -2622,7 +2631,7 @@ public class AllayPlayer implements Player {
         var packet = new UpdateAbilitiesPacket();
 
         var entity = Preconditions.checkNotNull(player.getControlledEntity());
-        packet.setUniqueEntityId(entity.getRuntimeId());
+        packet.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
         // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
         // If this player does not have specific command permissions, the command description won't even be sent to the client
         packet.setCommandPermission(entity.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
@@ -2679,11 +2688,15 @@ public class AllayPlayer implements Player {
             abilities.add(Ability.FLYING);
         }
 
+        if (player.isActualPlayer() && Server.getInstance().getPlayerManager().isOperator(player.getController())) {
+            abilities.add(Ability.OPERATOR_COMMANDS);
+        }
+
         return abilities;
     }
 
     protected PlayerPermission calculatePlayerPermission(EntityPlayer player) {
-        if (!player.isActualPlayer() || Server.getInstance().getPlayerManager().isOperator(player.getController())) {
+        if (player.isActualPlayer() && Server.getInstance().getPlayerManager().isOperator(player.getController())) {
             return PlayerPermission.OPERATOR;
         }
 
@@ -2696,7 +2709,7 @@ public class AllayPlayer implements Player {
         packet.setAction(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE);
         for (var player : players) {
             var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
-            entry.setEntityId(Preconditions.checkNotNull(player.getControlledEntity()).getRuntimeId());
+            entry.setEntityId(Preconditions.checkNotNull(player.getControlledEntity()).getUniqueId().getLeastSignificantBits());
             entry.setName(player.getOriginName());
             entry.setXuid(player.getLoginData().getXuid());
             entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());

@@ -30,6 +30,14 @@ public final class BlockEntityTypeInitializer {
                 .build();
     }
 
+    public static void initCommandBlock() {
+        BlockEntityTypes.COMMAND_BLOCK = AllayBlockEntityType
+                .builder(BlockEntityCommandBlockImpl.class)
+                .name(BlockEntityId.COMMAND_BLOCK)
+                .addComponent(BlockEntityCommandBlockBaseComponentImpl::new, BlockEntityCommandBlockBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initJukebox() {
         BlockEntityTypes.JUKEBOX = AllayBlockEntityType
                 .builder(BlockEntityJukeboxImpl.class)

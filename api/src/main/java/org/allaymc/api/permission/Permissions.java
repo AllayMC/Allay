@@ -32,6 +32,13 @@ public interface Permissions {
 
     // TODO: input permission
 
+    /* Block */
+
+    /**
+     * The permission to use command blocks (modify and view output).
+     */
+    String BLOCK_USE_COMMAND_BLOCK = "allay.block.use_command_block";
+
     /* Command */
 
     /**

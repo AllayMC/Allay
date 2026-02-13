@@ -161,16 +161,25 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     boolean canBeDamagedThisTime();
 
     /**
-     * Gets the custom name.
+     * Checks if the item has a custom name.
      *
-     * @return the custom name, or empty if none
+     * @return {@code true} if a custom name is set and not empty; {@code false} otherwise.
+     */
+    default boolean hasCustomName() {
+        return !getCustomName().isEmpty();
+    }
+
+    /**
+     * Gets the custom name of the item.
+     *
+     * @return the custom name, or empty if none. Never be {@code null}.
      */
     String getCustomName();
 
     /**
-     * Sets the custom name.
+     * Sets the custom name of the item.
      *
-     * @param customName the new custom name
+     * @param customName the new custom name of the item
      */
     void setCustomName(String customName);
 
