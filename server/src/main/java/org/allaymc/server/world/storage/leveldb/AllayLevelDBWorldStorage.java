@@ -360,10 +360,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                         log.error("Failed to write entities in chunk ({}, {})", chunkX, chunkZ, t);
                         return null;
                     });
-        } else {
-            this.db.write(writeBatch);
-            return null;
         }
+
+        this.db.write(writeBatch);
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
