@@ -989,7 +989,36 @@ public final class BlockTypeInitializer {
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBaseComponentSupplier(blockBaseComponentSupplier);
+                .setBaseComponentSupplier(blockBaseComponentSupplier)
+                // NOTICE: The data in the resource file about the door's collision box is incorrect, so let's calculate the correct hitbox manually
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedData((builder, blockType, blockStateHash) -> {
+                    var shape = buildDoorCollisionShape(blockType.ofState(blockStateHash));
+                    return builder.collisionShape(shape).shape(shape).build();
+                }));
+    }
+
+    private static VoxelShape buildDoorCollisionShape(BlockState doorBlockState) {
+        var cardinal = BlockFace.from(doorBlockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION));
+        var open = doorBlockState.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
+        var hingeBit = doorBlockState.getPropertyValue(BlockPropertyTypes.DOOR_HINGE_BIT);
+
+        BlockFace edge;
+        if (!open) {
+            edge = cardinal.rotateY();
+        } else if (!hingeBit) {
+            edge = cardinal.opposite();
+        } else {
+            edge = cardinal;
+        }
+
+        var thickness = 3.0 / 16.0;
+        return switch (edge) {
+            case NORTH -> VoxelShape.builder().solid(0, 0, 0, 1, 1, thickness).build();
+            case SOUTH -> VoxelShape.builder().solid(0, 0, 1 - thickness, 1, 1, 1).build();
+            case WEST -> VoxelShape.builder().solid(0, 0, 0, thickness, 1, 1).build();
+            case EAST -> VoxelShape.builder().solid(1 - thickness, 0, 0, 1, 1, 1).build();
+            default -> throw new IllegalStateException("Unexpected edge face: " + edge);
+        };
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildWoodenButton(BlockId blockId) {
