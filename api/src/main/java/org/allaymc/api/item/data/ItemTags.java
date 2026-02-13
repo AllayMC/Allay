@@ -1,9 +1,8 @@
 package org.allaymc.api.item.data;
 
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface ItemTags {
@@ -98,6 +97,8 @@ public interface ItemTags {
     ItemTag EGG = create("minecraft:egg");
 
     ItemTag TRANSFORM_TEMPLATES = create("minecraft:transform_templates");
+
+    ItemTag METAL_NUGGETS = create("minecraft:metal_nuggets");
 
     ItemTag IS_ARMOR = create("minecraft:is_armor");
 

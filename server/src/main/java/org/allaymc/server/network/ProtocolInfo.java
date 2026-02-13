@@ -48,7 +48,7 @@ public final class ProtocolInfo {
     /**
      * Feature version is the version of the game from which vanilla features will be used.
      */
-    public static final BedrockCodec FEATURE_VERSION = Bedrock_v898.CODEC;
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v924.CODEC;
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.

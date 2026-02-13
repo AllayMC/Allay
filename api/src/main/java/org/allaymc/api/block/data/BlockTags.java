@@ -1,9 +1,8 @@
 package org.allaymc.api.block.data;
 
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface BlockTags {
@@ -57,6 +56,8 @@ public interface BlockTags {
 
     BlockTag INFINITE_FIRE_SUPPORTER = create("minecraft:infinite_fire_supporter");
 
+    BlockTag BREAK_WHEN_PUSHED = create("minecraft:break_when_pushed");
+
     BlockTag DIAMOND_TIER_DESTRUCTIBLE = create("minecraft:diamond_tier_destructible");
 
     BlockTag IS_SHEARS_ITEM_DESTRUCTIBLE = create("minecraft:is_shears_item_destructible");
@@ -95,6 +96,14 @@ public interface BlockTags {
 
     BlockTag INFESTED = create("minecraft:infested");
 
+    BlockTag POWER_SOURCE = create("minecraft:power_source");
+
+    BlockTag UNPULLABLE = create("minecraft:unpullable");
+
+    BlockTag REDSTONE_WIRE_CONNECT_TO = create("minecraft:redstone_wire_connect_to");
+
+    BlockTag CAN_STICK_BLOCKS = create("minecraft:can_stick_blocks");
+
     BlockTag LAVA = create("minecraft:lava");
 
     BlockTag METAL = create("minecraft:metal");
@@ -105,19 +114,9 @@ public interface BlockTags {
 
     BlockTag STONE_PICK_DIGGABLE = create("minecraft:stone_pick_diggable");
 
-    BlockTag LEAVES = create("minecraft:leaves");
-
     BlockTag UNPUSHABLE = create("minecraft:unpushable");
 
-    BlockTag UNPULLABLE = create("minecraft:unpullable");
-
-    BlockTag BREAK_WHEN_PUSHED = create("minecraft:break_when_pushed");
-
-    BlockTag CAN_STICK_BLOCKS = create("minecraft:can_stick_blocks");
-
-    BlockTag REDSTONE_WIRE_CONNECT_TO = create("minecraft:redstone_wire_connect_to");
-
-    BlockTag POWER_SOURCE = create("minecraft:power_source");
+    BlockTag LEAVES = create("minecraft:leaves");
 
     static BlockTag create(String name) {
         var tag = new BlockTag(name);
