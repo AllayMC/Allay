@@ -35,6 +35,7 @@ import org.iq80.leveldb.WriteBatch;
 import org.iq80.leveldb.impl.Iq80DBFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -135,7 +136,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
         var chunkStateBytes = this.db.get(LevelDBKey.ALLAY_CHUNK_STATE.createKey(chunkX, chunkZ, dimensionInfo));
         if (chunkStateBytes != null) {
-            var chunkStateName = new String(chunkStateBytes);
+            var chunkStateName = new String(chunkStateBytes, StandardCharsets.UTF_8);
             try {
                 builder.state(ChunkState.valueOf(chunkStateName));
             } catch (IllegalArgumentException e) {
