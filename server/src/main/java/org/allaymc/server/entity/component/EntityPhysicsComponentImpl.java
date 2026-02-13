@@ -6,6 +6,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
@@ -58,7 +59,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @ComponentObject
     protected Entity thisEntity;
     @Dependency
-    protected EntityBaseComponentImpl baseComponent;
+    protected EntityBaseComponent baseComponent;
     @Dependency(optional = true)
     protected EntityLivingComponent livingComponent;
     @Manager

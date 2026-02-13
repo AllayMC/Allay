@@ -13,6 +13,7 @@ import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.CriticalHit;
 import org.allaymc.api.entity.action.EnchantedHit;
 import org.allaymc.api.entity.action.SimpleEntityAction;
+import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -64,7 +65,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Manager
     protected ComponentManager manager;
     @Dependency
-    protected EntityBaseComponentImpl baseComponent;
+    protected EntityBaseComponent baseComponent;
     @Dependency(optional = true)
     protected EntityPhysicsComponent physicsComponent;
     @Dependency(optional = true)
@@ -659,7 +660,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         manager.callEvent(CEntityDieEvent.INSTANCE);
 
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
-        this.baseComponent.setState(EntityState.DEAD);
+        ((EntityBaseComponentImpl) this.baseComponent).setState(EntityState.DEAD);
         if (hasDeadTimer()) {
             this.deadTimer = 20;
         }
