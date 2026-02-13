@@ -644,6 +644,15 @@ public interface Dimension extends TaskCreator {
 
     /**
      * Get the block states that collide with the specified AABB.
+     * <p>
+     * The search range on the Y-axis is expanded by 1 block downward to account for blocks
+     * whose collision shapes extend above their own block position (e.g. fences, walls, and
+     * fence gates have collision shapes with maxY = 1.5). The intersection test still uses
+     * the original AABB, so blocks without tall collision shapes are correctly filtered out.
+     * <p>
+     * <b>Note:</b> The returned array's Y dimension is 1 larger than {@code ceil(maxY) - floor(minY)}
+     * due to this expansion. Callers that convert array indices back to world coordinates must
+     * use {@code floor(aabb.minY()) - 1 + offsetY} instead of {@code floor(aabb.minY()) + offsetY}.
      *
      * @param aabb            the AABB to check
      * @param layer           the layer which contains the block
@@ -655,7 +664,8 @@ public interface Dimension extends TaskCreator {
         var maxY = (int) Math.ceil(aabb.maxY());
         var maxZ = (int) Math.ceil(aabb.maxZ());
         var minX = (int) Math.floor(aabb.minX());
-        var minY = (int) Math.floor(aabb.minY());
+        // -1 to include blocks below whose collision shapes may extend upward (e.g. fences with maxY = 1.5)
+        var minY = (int) Math.floor(aabb.minY()) - 1;
         var minZ = (int) Math.floor(aabb.minZ());
         var blockStates = new BlockState[maxX - minX][maxY - minY][maxZ - minZ];
         AtomicBoolean notEmpty = new AtomicBoolean(false);

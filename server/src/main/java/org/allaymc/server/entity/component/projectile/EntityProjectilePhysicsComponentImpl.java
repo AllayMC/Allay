@@ -102,7 +102,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         var rayCastResult = new RayCastResult();
 
         // Ray cast blocks
-        dimension.forEachBlockStates(aabb, 0, (x, y, z, block) -> {
+        // Expand search range by 1 block downward to include blocks with tall collision shapes (e.g. fences with maxY = 1.5)
+        var blockSearchAABB = new AABBd(aabb);
+        blockSearchAABB.minY -= 1;
+        dimension.forEachBlockStates(blockSearchAABB, 0, (x, y, z, block) -> {
             var result = new Vector2d();
             if (block.getBlockStateData().computeOffsetCollisionShape(x, y, z).intersectsRay(ray, result)) {
                 if (result.x() < rayCastResult.result) {

@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...HEAD)</small>
 
+### Fixed
+
+- Fixed block collision shapes being clamped to a maximum height of 1.0. Blocks such as fences, fence gates, walls, and border blocks now correctly use their vanilla collision height of 1.5, preventing players from jumping over them.
+
 ### Removed
 
 - (API) Removed deprecated `viewEntityLocation` overload from `WorldViewer`.

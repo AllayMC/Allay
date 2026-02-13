@@ -367,7 +367,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
                         continue;
                     }
 
-                    var shape = blockState.getBlockStateData().computeOffsetCollisionShape(floor(extAABBInAxis.minX()) + ox, floor(extAABBInAxis.minY()) + oy, floor(extAABBInAxis.minZ()) + oz);
+                    // -1 on Y to match the expanded search range in getCollidingBlockStates()
+                    var shape = blockState.getBlockStateData().computeOffsetCollisionShape(floor(extAABBInAxis.minX()) + ox, floor(extAABBInAxis.minY()) - 1 + oy, floor(extAABBInAxis.minZ()) + oz);
                     if (shape.intersectsAABB(entityAABB)) {
                         // Ignore the blocks that collided with the entity
                         continue;

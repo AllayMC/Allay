@@ -119,8 +119,9 @@ public class BlockStateDataProcessor {
 
         private static float[] clampShape(float[] shape) {
             for (var i = 0; i < shape.length; i++) {
-                // Clamp the value between 0 and 1 because bigger than 1 is not allowed in allay
-                shape[i] = Math.max(0, Math.min(1, shape[i]));
+                // Only clamp the lower bound. Values > 1 are allowed because some blocks
+                // (fences, walls, fence gates, border_block) have collision shapes with maxY = 1.5
+                shape[i] = Math.max(0, shape[i]);
             }
 
             return shape;

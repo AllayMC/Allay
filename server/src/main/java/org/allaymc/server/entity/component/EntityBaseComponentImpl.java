@@ -153,7 +153,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var aabb = getOffsetAABB();
         var aabbFat = getOffsetAABBForCollisionCheck();
         var dimension = getDimension();
-        dimension.forEachBlockStates(aabbFat, 0, (x, y, z, blockState) -> {
+        // Expand search range by 1 block downward to include blocks with tall collision shapes (e.g. fences with maxY = 1.5)
+        var searchAABB = new AABBd(aabbFat);
+        searchAABB.minY -= 1;
+        dimension.forEachBlockStates(searchAABB, 0, (x, y, z, blockState) -> {
             var block = new Block(blockState, new Position3i(x, y, z, dimension), 0);
 
             if (blockState.getBlockStateData().collisionShape().translate(x, y, z).intersectsAABB(aabbFat)) {

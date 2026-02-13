@@ -160,7 +160,8 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         // 1. Find out the block state which entity collided most
         var aabb = entity.getOffsetAABB();
         var minX = (int) floor(aabb.minX());
-        var minY = (int) floor(aabb.minY());
+        // -1 on Y to match the expanded search range in getCollidingBlockStates()
+        var minY = (int) floor(aabb.minY()) - 1;
         var minZ = (int) floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
         double volume = 0;
