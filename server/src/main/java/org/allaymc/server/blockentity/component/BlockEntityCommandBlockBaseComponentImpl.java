@@ -91,7 +91,7 @@ public class BlockEntityCommandBlockBaseComponentImpl extends BlockEntityBaseCom
     protected int tickDelay;
     @Getter
     @Setter
-    protected boolean executingOnFirstTick;
+    protected boolean executeOnFirstTick;
 
     protected CommandBlockMode lastOutputCommandMode;
     protected boolean lastOutputConditionalMode;
@@ -125,8 +125,8 @@ public class BlockEntityCommandBlockBaseComponentImpl extends BlockEntityBaseCom
         if (!wasActiveLastTick) {
             wasActiveLastTick = true;
             currentTickCount = 0;
-            if (executingOnFirstTick) {
-                execute(0);
+            if (executeOnFirstTick) {
+                trigger();
             }
             return;
         }
@@ -135,7 +135,7 @@ public class BlockEntityCommandBlockBaseComponentImpl extends BlockEntityBaseCom
             return;
         }
 
-        execute(0);
+        trigger();
         currentTickCount = 0;
     }
 
@@ -335,7 +335,7 @@ public class BlockEntityCommandBlockBaseComponentImpl extends BlockEntityBaseCom
         builder.putBoolean(TAG_CONDITION_MET, conditionMet);
         builder.putBoolean(TAG_POWERED, powered);
         builder.putInt(TAG_TICK_DELAY, tickDelay);
-        builder.putBoolean(TAG_EXECUTE_ON_FIRST_TICK, executingOnFirstTick);
+        builder.putBoolean(TAG_EXECUTE_ON_FIRST_TICK, executeOnFirstTick);
         builder.putInt(TAG_LP_COMMAND_MODE, lastOutputCommandMode != null ? lastOutputCommandMode.ordinal() : 0);
         builder.putBoolean(TAG_LP_CONDIONAL_MODE, lastOutputConditionalMode);
         builder.putBoolean(TAG_LP_REDSTONE_MODE, lastOutputRedstoneMode);
@@ -358,7 +358,7 @@ public class BlockEntityCommandBlockBaseComponentImpl extends BlockEntityBaseCom
         nbt.listenForBoolean(TAG_CONDITION_MET, v -> conditionMet = v);
         nbt.listenForBoolean(TAG_POWERED, v -> powered = v);
         nbt.listenForInt(TAG_TICK_DELAY, this::setTickDelay);
-        nbt.listenForBoolean(TAG_EXECUTE_ON_FIRST_TICK, v -> executingOnFirstTick = v);
+        nbt.listenForBoolean(TAG_EXECUTE_ON_FIRST_TICK, v -> executeOnFirstTick = v);
         nbt.listenForInt(TAG_LP_COMMAND_MODE, v -> lastOutputCommandMode = CommandBlockMode.fromId(v));
         nbt.listenForBoolean(TAG_LP_CONDIONAL_MODE, v -> lastOutputConditionalMode = v);
         nbt.listenForBoolean(TAG_LP_REDSTONE_MODE, v -> lastOutputRedstoneMode = v);

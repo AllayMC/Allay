@@ -79,7 +79,7 @@ public class CommandBlockUpdatePacketProcessor extends PacketProcessor<CommandBl
         commandBlock.setTrackingOutput(packet.isOutputTracked());
         commandBlock.setConditional(packet.isConditional());
         commandBlock.setTickDelay((int) Math.max(0L, Math.min(packet.getTickDelay(), Integer.MAX_VALUE)));
-        commandBlock.setExecutingOnFirstTick(packet.isExecutingOnFirstTick());
+        commandBlock.setExecuteOnFirstTick(packet.isExecutingOnFirstTick());
 
         var customName = packet.getName();
         if (!customName.isEmpty()) {

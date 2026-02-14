@@ -164,14 +164,14 @@ public interface BlockEntityCommandBlockBaseComponent extends BlockEntityBaseCom
      *
      * @return true if executing on first tick
      */
-    boolean isExecutingOnFirstTick();
+    boolean isExecuteOnFirstTick();
 
     /**
      * Set whether this command block should execute on the first tick.
      *
-     * @param executingOnFirstTick true to execute on first tick
+     * @param executeOnFirstTick true to execute on first tick
      */
-    void setExecutingOnFirstTick(boolean executingOnFirstTick);
+    void setExecuteOnFirstTick(boolean executeOnFirstTick);
 
     /**
      * Trigger the command block execution.

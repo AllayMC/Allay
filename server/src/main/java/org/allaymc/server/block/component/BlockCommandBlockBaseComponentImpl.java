@@ -100,7 +100,7 @@ public class BlockCommandBlockBaseComponentImpl extends BlockBaseComponentImpl {
         if (isPowered) {
             if (!commandBlock.isPowered()) {
                 commandBlock.setPowered(true);
-                if (commandBlock.getMode() != BlockEntityCommandBlockBaseComponent.CommandBlockMode.REPEATING || commandBlock.isExecutingOnFirstTick()) {
+                if (commandBlock.getMode() != BlockEntityCommandBlockBaseComponent.CommandBlockMode.REPEATING || commandBlock.isExecuteOnFirstTick()) {
                     commandBlock.trigger();
                 }
             }
