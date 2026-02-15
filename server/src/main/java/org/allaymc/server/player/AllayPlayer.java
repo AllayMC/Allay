@@ -622,9 +622,6 @@ public class AllayPlayer implements Player {
                 map.setFlag(EntityFlag.CRAWLING, player.isCrawling());
                 map.setFlag(EntityFlag.DAMAGE_NEARBY_MOBS, player.isSpinAttacking());
                 map.setFlag(EntityFlag.USING_ITEM, player.isUsingItemInAir());
-                map.setFlag(EntityFlag.BREATHING, player.canBreathe());
-                map.put(EntityDataTypes.AIR_SUPPLY, (short) player.getAirSupplyTicks());
-                map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) player.getAirSupplyMaxTicks());
                 if (player.hasScoreTag()) {
                     map.put(EntityDataTypes.SCORE, player.getScoreTag());
                 }

@@ -10,7 +10,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.particle.ShootParticle;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.entity.component.EntityTntBaseComponentImpl;
+import org.allaymc.server.entity.component.tnt.EntityTntBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3d;
 

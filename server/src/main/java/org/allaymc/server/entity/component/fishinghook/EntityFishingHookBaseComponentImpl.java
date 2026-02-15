@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.fishinghook;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +22,7 @@ import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;

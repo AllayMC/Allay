@@ -7,11 +7,21 @@ import org.allaymc.api.entity.interfaces.EntityEnderDragon;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.entity.component.*;
+import org.allaymc.server.entity.component.armorstand.EntityArmorStandBaseComponentImpl;
+import org.allaymc.server.entity.component.armorstand.EntityArmorStandContainerHolderComponentImpl;
+import org.allaymc.server.entity.component.armorstand.EntityArmorStandLivingComponentImpl;
+import org.allaymc.server.entity.component.fireworks.EntityFireworksRocketBaseComponentImpl;
+import org.allaymc.server.entity.component.fireworks.EntityFireworksRocketPhysicsComponentImpl;
+import org.allaymc.server.entity.component.fishinghook.EntityFishingHookBaseComponentImpl;
+import org.allaymc.server.entity.component.fishinghook.EntityFishingHookPhysicsComponentImpl;
+import org.allaymc.server.entity.component.EntityItemBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerLivingComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.component.projectile.*;
+import org.allaymc.server.entity.component.tnt.EntityTntBaseComponentImpl;
+import org.allaymc.server.entity.component.tnt.EntityTntPhysicsComponentImpl;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 
@@ -37,6 +47,12 @@ public final class EntityTypeInitializer {
                     @Override
                     public double getGravity() {
                         return 0.04;
+                    }
+
+                    @Override
+                    public boolean computeLiquidPhysics() {
+                        // Falling blocks have no special water physics in vanilla
+                        return false;
                     }
                 }, EntityPhysicsComponentImpl.class)
                 .build();
@@ -87,6 +103,26 @@ public final class EntityTypeInitializer {
                     public double getGravity() {
                         return 0.04;
                     }
+
+                    @Override
+                    public double getWaterBuoyancy() {
+                        return 0.0405;
+                    }
+
+                    @Override
+                    public double getWaterDragFactor() {
+                        return 0.02;
+                    }
+
+                    @Override
+                    public double getLavaBuoyancy() {
+                        return 0.0405;
+                    }
+
+                    @Override
+                    public double getLavaDragFactor() {
+                        return 0.05;
+                    }
                 }, EntityPhysicsComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
@@ -131,7 +167,27 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
                     @Override
                     public double getGravity() {
-                        return 0.04;
+                        return 0.03;
+                    }
+
+                    @Override
+                    public double getWaterBuoyancy() {
+                        return 0.0405;
+                    }
+
+                    @Override
+                    public double getWaterDragFactor() {
+                        return 0.02;
+                    }
+
+                    @Override
+                    public double getLavaBuoyancy() {
+                        return 0.0405;
+                    }
+
+                    @Override
+                    public double getLavaDragFactor() {
+                        return 0.05;
                     }
                 }, EntityPhysicsComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)

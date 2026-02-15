@@ -41,10 +41,24 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public double getWaterDragFactor() {
+        return 0.01;
+    }
+
+    @Override
+    public double getLavaDragFactor() {
+        return 0.01;
+    }
+
+    @Override
+    public Vector3d updateMotion(LiquidState liquidState) {
         // If returning to shooter, use special motion logic
         if (tridentBaseComponent.isReturning()) {
             return updateReturningMotion();
+        }
+
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
         }
 
         // Same as arrow: if hit block and still colliding with blocks, no motion

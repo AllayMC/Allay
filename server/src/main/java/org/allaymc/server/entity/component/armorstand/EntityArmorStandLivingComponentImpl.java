@@ -1,10 +1,9 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.armorstand;
 
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -13,7 +12,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.entity.component.event.CEntityFallEvent;
+import org.allaymc.server.entity.component.EntityLivingComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
 import org.joml.Vector3d;
 

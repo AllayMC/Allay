@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.fireworks;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +14,7 @@ import org.allaymc.api.eventbus.event.entity.FireworkExplodeEvent;
 import org.allaymc.api.world.data.FireworkType;
 import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;

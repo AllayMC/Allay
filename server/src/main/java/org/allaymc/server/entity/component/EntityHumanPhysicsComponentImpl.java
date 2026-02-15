@@ -14,12 +14,16 @@ public class EntityHumanPhysicsComponentImpl extends EntityPhysicsComponentImpl 
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public Vector3d updateMotion(LiquidState liquidState) {
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
+        }
+
         var blockStateStandingOn = getBlockStateStandingOn();
         var isOnGround = blockStateStandingOn.getBlockType() != BlockTypes.AIR;
         var slipperinessMultiplier = 1.0;
         // Entity that has liquid motion won't be affected by the friction of the block it stands on
-        if (!hasLiquidMotion && isOnGround) {
+        if (!liquidState.inLiquid() && isOnGround) {
             slipperinessMultiplier = blockStateStandingOn.getBlockStateData().friction();
         }
 

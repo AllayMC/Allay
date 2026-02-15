@@ -394,12 +394,16 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public Vector3d updateMotion(LiquidState liquidState) {
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
+        }
+
         var blockStateStandingOn = getBlockStateStandingOn();
         var isOnGround = blockStateStandingOn.getBlockType() != BlockTypes.AIR;
         var slipperinessMultiplier = 1.0;
         // Entity that has liquid motion won't be affected by the friction of the block it stands on
-        if (!hasLiquidMotion && isOnGround) {
+        if (!liquidState.inLiquid() && isOnGround) {
             slipperinessMultiplier = blockStateStandingOn.getBlockStateData().friction();
         }
 
@@ -408,6 +412,26 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
                 motion.x() * horizontalFactor,
                 (motion.y() - (hasGravity() ? getGravity() : 0f)) * (1 - getDragFactorInAir()),
                 motion.z() * horizontalFactor
+        );
+    }
+
+    /**
+     * Compute updated motion when the entity is submerged in liquid.
+     * Applies liquid-specific buoyancy and drag.
+     *
+     * @param liquidState the liquid state describing which liquids the entity is in
+     * @return the updated motion
+     */
+    protected Vector3d updateMotionInLiquid(LiquidState liquidState) {
+        var dragFactor = liquidState.inWater() ? getWaterDragFactor() : getLavaDragFactor();
+        var buoyancy = liquidState.inWater() ? getWaterBuoyancy() : getLavaBuoyancy();
+        var retain = 1.0 - dragFactor;
+        var gravity = hasGravity() ? getGravity() : 0.0;
+
+        return new Vector3d(
+                motion.x() * retain,
+                (motion.y() - gravity + buoyancy) * retain,
+                motion.z() * retain
         );
     }
 
@@ -535,16 +559,6 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @Override
     public boolean computeEntityCollisionMotion() {
         return thisEntity.hasEntityCollision();
-    }
-
-    @Override
-    public boolean computeBlockCollisionMotion() {
-        return true;
-    }
-
-    @Override
-    public boolean computeLiquidMotion() {
-        return true;
     }
 
     private enum Axis {

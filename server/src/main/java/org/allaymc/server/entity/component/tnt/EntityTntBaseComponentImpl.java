@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.tnt;
 
 import lombok.Getter;
 import org.allaymc.api.entity.EntityInitInfo;
@@ -8,6 +8,7 @@ import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;

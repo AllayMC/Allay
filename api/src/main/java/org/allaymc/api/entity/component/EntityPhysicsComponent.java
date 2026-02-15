@@ -19,7 +19,21 @@ public interface EntityPhysicsComponent extends EntityComponent {
     double DEFAULT_KNOCKBACK = 0.4;
 
     /**
-     * Apply the entity's motion. Similar to {@link #updateMotion(boolean)}, this method
+     * Represents the liquid state of an entity, tracking which liquid types it is submerged in.
+     *
+     * @param inWater whether the entity is in water
+     * @param inLava  whether the entity is in lava
+     */
+    record LiquidState(boolean inWater, boolean inLava) {
+        public static final LiquidState NONE = new LiquidState(false, false);
+
+        public boolean inLiquid() {
+            return inWater || inLava;
+        }
+    }
+
+    /**
+     * Apply the entity's motion. Similar to {@link #updateMotion(LiquidState)}, this method
      * is used by physics engine, and allow entity to customize how its motion being applied.
      * <p>
      * This method is also required to be safe called in multithread environment.
@@ -48,11 +62,11 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * This method should be safe to be called in multithread environment since physics
      * engine may use parallel stream to handle all the entities.
      *
-     * @param hasLiquidMotion whether this entity's motion is affected by liquid
+     * @param liquidState the liquid state describing which liquids the entity is submerged in
      * @return the updated motion
      */
     @ApiStatus.OverrideOnly
-    Vector3d updateMotion(boolean hasLiquidMotion);
+    Vector3d updateMotion(LiquidState liquidState);
 
     /**
      * Get the motion of this entity.
@@ -119,21 +133,84 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * <p>
      * If return {@code true}, the physics engine will calculate a specific motion for the entity when
      * it is sticking in blocks to move the entity out of the blocks. When performing the above calculations,
-     * the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods will not be called.
+     * the entity's {@link #applyMotion()} and {@link #updateMotion(LiquidState)} methods will not be called.
      * <p>
-     * If return {@code false}, the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods
+     * If return {@code false}, the entity's {@link #applyMotion()} and {@link #updateMotion(LiquidState)} methods
      * will always being called even if the entity is sticking in blocks.
      *
      * @return {@code true} if the entity has block collision motion.
      */
-    boolean computeBlockCollisionMotion();
+    default boolean computeBlockCollisionMotion() {
+        return true;
+    }
 
     /**
      * Check if the entity has liquid motion.
      *
      * @return {@code true} if the entity has liquid motion.
      */
-    boolean computeLiquidMotion();
+    default boolean computeLiquidMotion() {
+        return true;
+    }
+
+    /**
+     * Check if liquid buoyancy and drag should be applied to this entity.
+     *
+     * @return {@code true} if liquid buoyancy/drag is enabled for this entity.
+     */
+    default boolean computeLiquidPhysics() {
+        return true;
+    }
+
+    /**
+     * Get the upward acceleration per tick when submerged in water.
+     * <p>
+     * The default value is calibrated so that the effective gravity in water
+     * equals {@code gravity / 16}, matching vanilla LivingEntity behavior.
+     *
+     * @return the water buoyancy value
+     */
+    default double getWaterBuoyancy() {
+        return 0.075;
+    }
+
+    /**
+     * Get the velocity retention reduction when submerged in water.
+     * Velocity is multiplied by {@code (1 - factor)} each tick.
+     * <p>
+     * The default value gives a retain factor of {@code 0.8},
+     * matching vanilla LivingEntity water drag.
+     *
+     * @return the water drag factor
+     */
+    default double getWaterDragFactor() {
+        return 0.2;
+    }
+
+    /**
+     * Get the upward acceleration per tick when submerged in lava.
+     * <p>
+     * The default value is calibrated so that the effective gravity in lava
+     * equals {@code gravity / 4}, matching vanilla LivingEntity behavior.
+     *
+     * @return the lava buoyancy value
+     */
+    default double getLavaBuoyancy() {
+        return 0.04;
+    }
+
+    /**
+     * Get the velocity retention reduction when submerged in lava.
+     * Velocity is multiplied by {@code (1 - factor)} each tick.
+     * <p>
+     * The default value gives a retain factor of {@code 0.5},
+     * matching vanilla LivingEntity lava drag.
+     *
+     * @return the lava drag factor
+     */
+    default double getLavaDragFactor() {
+        return 0.5;
+    }
 
     /**
      * Check whether the entity's movement should be computed server-side.

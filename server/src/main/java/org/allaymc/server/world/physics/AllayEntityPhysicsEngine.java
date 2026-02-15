@@ -8,6 +8,7 @@ import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent.LiquidState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.MathUtils;
@@ -31,6 +32,7 @@ import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -108,24 +110,24 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                     computeEntityCollisionMotion(entity);
                 }
 
-                var hasLiquidMotion = false;
+                var liquidState = LiquidState.NONE;
                 if (physicsComponent.computeLiquidMotion()) {
-                    hasLiquidMotion = computeLiquidMotion(entity);
+                    liquidState = computeLiquidMotion(entity);
                 }
 
-                // We should always check the threshold for motion after we modified it
-                physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
-                if (physicsComponent.applyMotion()) {
+                // Only attempt to move the entity if its motion is above the threshold.
+                // The stored motion is NOT zeroed, so small forces (e.g. buoyancy) can
+                // accumulate across ticks via updateMotion.
+                if (isAboveMotionThreshold(physicsComponent.getMotion()) && physicsComponent.applyMotion()) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
 
-                // Update and set motion again
-                physicsComponent.setMotion(checkMotionThreshold(physicsComponent.updateMotion(hasLiquidMotion)));
+                // Calculate the next tick's motion without thresholding
+                physicsComponent.setMotion(physicsComponent.updateMotion(liquidState));
             } else if (physicsComponent.computeBlockCollisionMotion()) {
                 // The entity is stuck in the block. Do not calculate other motions exclude block collision motion
                 computeBlockCollisionMotion(entity, collidedBlocks);
-                physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
-                if (forceApplyMotion(entity)) {
+                if (isAboveMotionThreshold(physicsComponent.getMotion()) && forceApplyMotion(entity)) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
             }
@@ -250,11 +252,11 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
      * Compute the liquid motion for the entity.
      *
      * @param entity the entity to compute liquid motion
-     * @return {@code true} if the entity has liquid motion, otherwise {@code false}.
+     * @return the {@link LiquidState} describing which liquids the entity is submerged in.
      */
-    protected boolean computeLiquidMotion(Entity entity) {
-        var hasWaterMotion = new AtomicBoolean(false);
-        var hasLavaMotion = new AtomicBoolean(false);
+    protected LiquidState computeLiquidMotion(Entity entity) {
+        var inWater = new AtomicBoolean(false);
+        var inLava = new AtomicBoolean(false);
         var waterMotion = new Vector3d();
         var lavaMotion = new Vector3d();
         var entityY = entity.getLocation().y();
@@ -262,6 +264,12 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         dimension.forEachBlockStates(entity.getOffsetAABB(), 0, (x, y, z, block) -> {
             if (!(block.getBehavior() instanceof BlockLiquidBehaviorImpl liquidBehavior)) {
                 return;
+            }
+
+            if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.WATER)) {
+                inWater.set(true);
+            } else if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.LAVA)) {
+                inLava.set(true);
             }
 
             var flowVector = ((BlockLiquidBaseComponentImpl) liquidBehavior.getBaseComponent()).calculateFlowVector(dimension, x, y, z, block);
@@ -278,38 +286,34 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
             }
 
             if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.WATER)) {
-                hasWaterMotion.set(true);
                 waterMotion.add(flowVector);
             } else if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.LAVA)) {
-                hasLavaMotion.set(true);
                 lavaMotion.add(flowVector);
             }
         });
 
-        if (!hasWaterMotion.get() && !hasLavaMotion.get()) {
-            return false;
-        }
-
         var finalMotion = new Vector3d();
-        if (hasWaterMotion.get()) {
+        if (waterMotion.lengthSquared() > 0) {
             // Multiple water flow vector may cancel each other out and let the final motion result
             // in zero vector, so we still need to use normalizeIfNotZero() here to prevent NaN
             finalMotion.add(MathUtils.normalizeIfNotZero(waterMotion).mul(WATER_FLOW_MOTION));
         }
-        if (hasLavaMotion.get()) {
+        if (lavaMotion.lengthSquared() > 0) {
             // Same to above
             finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
         }
 
-        ((EntityPhysicsComponent) entity).addMotion(finalMotion);
-        return true;
+        if (finalMotion.lengthSquared() > 0) {
+            ((EntityPhysicsComponent) entity).addMotion(finalMotion);
+        }
+
+        return new LiquidState(inWater.get(), inLava.get());
     }
 
-    protected Vector3d checkMotionThreshold(Vector3d motion) {
-        if (abs(motion.x) < MOTION_THRESHOLD) motion.x = 0;
-        if (abs(motion.y) < MOTION_THRESHOLD) motion.y = 0;
-        if (abs(motion.z) < MOTION_THRESHOLD) motion.z = 0;
-        return motion;
+    protected boolean isAboveMotionThreshold(Vector3dc motion) {
+        return abs(motion.x()) >= MOTION_THRESHOLD ||
+               abs(motion.y()) >= MOTION_THRESHOLD ||
+               abs(motion.z()) >= MOTION_THRESHOLD;
     }
 
     protected boolean forceApplyMotion(Entity entity) {

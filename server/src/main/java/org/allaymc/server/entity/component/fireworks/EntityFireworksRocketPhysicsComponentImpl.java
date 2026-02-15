@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.fireworks;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +7,7 @@ import org.allaymc.api.entity.component.EntityFireworksRocketPhysicsComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.EntityPhysicsComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
 import org.joml.Vector3d;
 
@@ -29,7 +30,7 @@ public class EntityFireworksRocketPhysicsComponentImpl extends EntityPhysicsComp
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public Vector3d updateMotion(LiquidState liquidState) {
         if (!this.fireworkBaseComponent.isAttached()) {
             return new Vector3d(
                     this.motion.x * this.sidewaysMotionMultiplier,

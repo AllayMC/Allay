@@ -16,6 +16,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Implemented command block.
 - (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
+- (API) Added liquid physics for entities including buoyancy and drag in water and lava, with configurable parameters per entity type via `EntityPhysicsComponent`.
+- (API) Added `EntityBaseComponent.isTouchingLava()` method.
+- (API) Added `LiquidState` record to `EntityPhysicsComponent` for tracking entity liquid submersion state.
+
+### Changed
+
+- (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
+- Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
 
 ### Fixed
 

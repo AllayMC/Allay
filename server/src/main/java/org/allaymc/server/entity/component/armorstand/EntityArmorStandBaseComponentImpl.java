@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.armorstand;
 
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
@@ -15,6 +15,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;

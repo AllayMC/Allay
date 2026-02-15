@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.fishinghook;
 
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.entity.Entity;
@@ -43,14 +43,14 @@ public class EntityFishingHookPhysicsComponentImpl extends EntityProjectilePhysi
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public Vector3d updateMotion(LiquidState liquidState) {
         // If hooked an entity, the hook will be teleported to the entity every tick,
         // so we do not need to update the motion
         if (fishingHookBaseComponent.hasHookedEntity()) {
             return new Vector3d(0, 0, 0);
         }
 
-        if (thisEntity.isTouchingWater()) {
+        if (liquidState.inWater()) {
             // Water physics: float and slow down
             var location = thisEntity.getLocation();
             double waterY = getWaterSurfaceY(location);

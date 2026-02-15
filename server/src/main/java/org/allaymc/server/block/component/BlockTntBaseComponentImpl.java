@@ -16,7 +16,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.entity.component.EntityTntBaseComponentImpl;
+import org.allaymc.server.entity.component.tnt.EntityTntBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3d;
 

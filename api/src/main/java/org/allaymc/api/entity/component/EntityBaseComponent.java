@@ -679,6 +679,20 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Check if the entity is touching lava.
+     *
+     * @return {@code true} if the entity is touching lava, otherwise {@code false}.
+     */
+    default boolean isTouchingLava() {
+        var dim = getDimension();
+        var loc = getLocation();
+        var blockState = dim.getBlockState(loc);
+
+        return blockState.getBlockType().hasBlockTag(BlockTags.LAVA) &&
+               blockState.getBlockStateData().computeOffsetShape(MathUtils.floor(loc)).intersectsPoint(loc);
+    }
+
+    /**
      * Called when the entity interacts with another entity.
      *
      * @param player    The player who interacted with the entity, can be null

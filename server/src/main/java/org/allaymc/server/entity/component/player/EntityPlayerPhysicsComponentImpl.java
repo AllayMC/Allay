@@ -51,6 +51,12 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
         return computeMovementServerSide() && (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE);
     }
 
+    @Override
+    public boolean computeLiquidPhysics() {
+        var gameMode = thisPlayer.getGameMode();
+        return computeMovementServerSide() && (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE);
+    }
+
     public void setMotionValueOnly(Vector3dc motion) {
         this.lastMotion = this.motion;
         this.motion = new Vector3d(motion);

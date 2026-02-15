@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.armorstand;
 
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityArmorStand;
@@ -7,6 +7,7 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.ArmorStandArmorContainerImpl;
 import org.allaymc.server.container.impl.ArmorStandHandContainerImpl;
 import org.allaymc.server.container.impl.ArmorStandOffhandContainerImpl;
+import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.cloudburstmc.nbt.NbtType;
