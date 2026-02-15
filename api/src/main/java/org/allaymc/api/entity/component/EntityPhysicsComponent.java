@@ -164,9 +164,6 @@ public interface EntityPhysicsComponent extends EntityComponent {
 
     /**
      * Get the upward acceleration per tick when submerged in water.
-     * <p>
-     * The default value is calibrated so that the effective gravity in water
-     * equals {@code gravity / 16}, matching vanilla LivingEntity behavior.
      *
      * @return the water buoyancy value
      */
@@ -177,9 +174,6 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Get the velocity retention reduction when submerged in water.
      * Velocity is multiplied by {@code (1 - factor)} each tick.
-     * <p>
-     * The default value gives a retain factor of {@code 0.8},
-     * matching vanilla LivingEntity water drag.
      *
      * @return the water drag factor
      */
@@ -189,9 +183,6 @@ public interface EntityPhysicsComponent extends EntityComponent {
 
     /**
      * Get the upward acceleration per tick when submerged in lava.
-     * <p>
-     * The default value is calibrated so that the effective gravity in lava
-     * equals {@code gravity / 4}, matching vanilla LivingEntity behavior.
      *
      * @return the lava buoyancy value
      */
@@ -202,9 +193,6 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Get the velocity retention reduction when submerged in lava.
      * Velocity is multiplied by {@code (1 - factor)} each tick.
-     * <p>
-     * The default value gives a retain factor of {@code 0.5},
-     * matching vanilla LivingEntity lava drag.
      *
      * @return the lava drag factor
      */
