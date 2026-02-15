@@ -69,7 +69,7 @@ javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.11.0" }
 fastreflect = { group = "me.sunlan", name = "fast-reflection", version = "1.0.3" }
 # Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.8" }
-joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "1.11.0" }
+joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "1.11.1" }
 # Netty
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version.ref = "netty" }
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version.ref = "netty" }
