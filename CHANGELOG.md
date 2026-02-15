@@ -15,6 +15,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ## Added
 
 - (API) Implemented command block.
+- (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
 
 ### Fixed
 

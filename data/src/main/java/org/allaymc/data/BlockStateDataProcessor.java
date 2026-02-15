@@ -53,6 +53,7 @@ public class BlockStateDataProcessor {
         public float translucency;
 
         public String name;
+        public String translationKey;
         public long blockStateHash;
     }
 
@@ -76,6 +77,7 @@ public class BlockStateDataProcessor {
         public float translucency;
 
         public String name;
+        public String translationKey;
         public long blockStateHash;
 
         public static NewBlockStateData fromRaw(RawBlockStateData raw) {
@@ -98,6 +100,7 @@ public class BlockStateDataProcessor {
             data.translucency = raw.translucency;
 
             data.name = raw.name;
+            data.translationKey = "minecraft:" + raw.translationKey;
             data.blockStateHash = raw.blockStateHash;
 
             if (raw.collisionShape.length == 0) {
