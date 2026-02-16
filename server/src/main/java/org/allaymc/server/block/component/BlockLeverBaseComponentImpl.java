@@ -123,12 +123,12 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
 
     private LeverDirection calculateLeverDirection(PlayerInteractInfo placementInfo) {
         BlockFace clickedFace = placementInfo.blockFace();
-        double yaw = placementInfo.player().getLocation().yaw();
+        var playerFace = placementInfo.player().getHorizontalFace();
 
         return switch (clickedFace) {
             case DOWN -> {
                 // Lever on ceiling, determine orientation based on player facing
-                if (isEastWestFacing(yaw)) {
+                if (playerFace == BlockFace.EAST || playerFace == BlockFace.WEST) {
                     yield LeverDirection.DOWN_EAST_WEST;
                 } else {
                     yield LeverDirection.DOWN_NORTH_SOUTH;
@@ -136,7 +136,7 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
             }
             case UP -> {
                 // Lever on floor, determine orientation based on player facing
-                if (isEastWestFacing(yaw)) {
+                if (playerFace == BlockFace.EAST || playerFace == BlockFace.WEST) {
                     yield LeverDirection.UP_EAST_WEST;
                 } else {
                     yield LeverDirection.UP_NORTH_SOUTH;
@@ -147,13 +147,6 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
             case WEST -> LeverDirection.WEST;
             case EAST -> LeverDirection.EAST;
         };
-    }
-
-    private boolean isEastWestFacing(double yaw) {
-        // Normalize yaw to 0-360 range
-        yaw = ((yaw % 360) + 360) % 360;
-        // East-West is around 90 and 270 degrees
-        return (yaw >= 45 && yaw < 135) || (yaw >= 225 && yaw < 315);
     }
 
     private BlockFace getAttachedFace(LeverDirection direction) {

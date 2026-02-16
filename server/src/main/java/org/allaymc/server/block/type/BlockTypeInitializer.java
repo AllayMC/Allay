@@ -42,6 +42,9 @@ import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockPistonArmCollisionBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockPistonBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockStickyPistonBaseComponentImpl;
+import org.allaymc.server.block.component.rail.BlockDetectorRailBaseComponentImpl;
+import org.allaymc.server.block.component.rail.BlockNormalRailBaseComponentImpl;
+import org.allaymc.server.block.component.rail.BlockPoweredRailBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
@@ -2756,6 +2759,42 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.WEEPING_VINES)
                 .setProperties(BlockPropertyTypes.WEEPING_VINES_AGE)
                 .setBaseComponentSupplier(blockType -> new BlockNetherVinesBaseComponentImpl(blockType, BlockFace.DOWN, BlockFace.UP, BlockPropertyTypes.WEEPING_VINES_AGE))
+                .build();
+    }
+
+    public static void initRail() {
+        BlockTypes.RAIL = AllayBlockType
+                .builder(BlockRailBehaviorImpl.class)
+                .vanillaBlock(BlockId.RAIL)
+                .setProperties(BlockPropertyTypes.RAIL_DIRECTION_10)
+                .setBaseComponentSupplier(BlockNormalRailBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initGoldenRail() {
+        BlockTypes.GOLDEN_RAIL = AllayBlockType
+                .builder(BlockGoldenRailBehaviorImpl.class)
+                .vanillaBlock(BlockId.GOLDEN_RAIL)
+                .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
+                .setBaseComponentSupplier(BlockPoweredRailBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initDetectorRail() {
+        BlockTypes.DETECTOR_RAIL = AllayBlockType
+                .builder(BlockDetectorRailBehaviorImpl.class)
+                .vanillaBlock(BlockId.DETECTOR_RAIL)
+                .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
+                .setBaseComponentSupplier(BlockDetectorRailBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initActivatorRail() {
+        BlockTypes.ACTIVATOR_RAIL = AllayBlockType
+                .builder(BlockActivatorRailBehaviorImpl.class)
+                .vanillaBlock(BlockId.ACTIVATOR_RAIL)
+                .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
+                .setBaseComponentSupplier(BlockPoweredRailBaseComponentImpl::new)
                 .build();
     }
 }
