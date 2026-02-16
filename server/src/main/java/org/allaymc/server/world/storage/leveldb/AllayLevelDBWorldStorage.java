@@ -59,7 +59,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static final String DIR_DB = "db";
 
-    private static final int CURRENT_CHUNK_VERSION = ChunkVersion.V1_21_40.ordinal();
+    private static final int CURRENT_CHUNK_VERSION = ChunkVersion.V1_21_120.ordinal();
 
     private final Path path;
     private final String worldName;

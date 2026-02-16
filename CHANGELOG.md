@@ -19,6 +19,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added liquid physics for entities including buoyancy and drag in water and lava, with configurable parameters per entity type via `EntityPhysicsComponent`.
 - (API) Added `EntityBaseComponent.isTouchingLava()` method.
 - (API) Added `LiquidState` record to `EntityPhysicsComponent` for tracking entity liquid submersion state.
+- Updated the chunk version to 42 (1.21.120).
 
 ### Changed
 

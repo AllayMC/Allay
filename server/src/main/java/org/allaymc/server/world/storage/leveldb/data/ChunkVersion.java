@@ -194,5 +194,9 @@ public enum ChunkVersion {
      * Version v1_21_4
      * </p>
      */
-    V1_21_40
+    V1_21_40,
+    /**
+     * Version v1_21_120
+     */
+    V1_21_120
 }
