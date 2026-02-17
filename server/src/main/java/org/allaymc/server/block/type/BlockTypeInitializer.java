@@ -1422,6 +1422,18 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
                 .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.PUMPKIN, ItemId.PUMPKIN_SEEDS))
                 .build();
+        BlockTypes.TORCHFLOWER_CROP = AllayBlockType
+                .builder(BlockTorchflowerCropBehaviorImpl.class)
+                .vanillaBlock(BlockId.TORCHFLOWER_CROP)
+                .setProperties(BlockPropertyTypes.GROWTH)
+                .setBaseComponentSupplier(BlockTorchflowerCropBaseComponentImpl::new)
+                .build();
+        BlockTypes.PITCHER_CROP = AllayBlockType
+                .builder(BlockPitcherCropBehaviorImpl.class)
+                .vanillaBlock(BlockId.PITCHER_CROP)
+                .setProperties(BlockPropertyTypes.GROWTH, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBaseComponentSupplier(BlockPitcherCropBaseComponentImpl::new)
+                .build();
     }
 
     public static void initMelonBlock() {

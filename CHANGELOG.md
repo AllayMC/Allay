@@ -44,12 +44,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Seagrass
   - rail
   - dripleaf
+  - Torchflower crop
+  - Pitcher crop
 - Implemented the following items:
   - Cocoa beans
   - Sweet berries
   - Glow berries
   - Kelp
   - Nether wart
+  - Torchflower seeds
+  - Pitcher pod
 - Updated the chunk version to 42 (1.21.120).
 
 ### Changed

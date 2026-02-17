@@ -21,7 +21,9 @@ import org.allaymc.server.item.component.projectile.ItemBottleProjectileComponen
 import org.allaymc.server.item.component.projectile.ItemProjectileComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemBeetrootSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemMelonSeedsBaseComponentImpl;
+import org.allaymc.server.item.component.seeds.ItemPitcherPodBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemPumpkinSeedsBaseComponentImpl;
+import org.allaymc.server.item.component.seeds.ItemTorchflowerSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemWheatSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.tool.ItemHoeToolComponentImpl;
 import org.allaymc.server.item.component.tool.ItemSwordToolComponentImpl;
@@ -840,6 +842,16 @@ public final class ItemTypeInitializer {
                 .builder(ItemPumpkinSeedsStackImpl.class)
                 .vanillaItem(ItemId.PUMPKIN_SEEDS)
                 .addComponent(ItemPumpkinSeedsBaseComponentImpl::new, ItemPumpkinSeedsBaseComponentImpl.class)
+                .build();
+        ItemTypes.TORCHFLOWER_SEEDS = AllayItemType
+                .builder(ItemTorchflowerSeedsStackImpl.class)
+                .vanillaItem(ItemId.TORCHFLOWER_SEEDS)
+                .addComponent(ItemTorchflowerSeedsBaseComponentImpl::new, ItemTorchflowerSeedsBaseComponentImpl.class)
+                .build();
+        ItemTypes.PITCHER_POD = AllayItemType
+                .builder(ItemPitcherPodStackImpl.class)
+                .vanillaItem(ItemId.PITCHER_POD)
+                .addComponent(ItemPitcherPodBaseComponentImpl::new, ItemPitcherPodBaseComponentImpl.class)
                 .build();
     }
 
