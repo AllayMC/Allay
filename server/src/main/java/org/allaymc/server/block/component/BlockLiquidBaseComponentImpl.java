@@ -338,6 +338,12 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             }
         }
 
+        // If the block can contain liquid source and already has liquid on layer 1,
+        // it is "waterlogged" and should not be destroyed by liquid flow.
+        if (existing.getBlockStateData().canContainLiquidSource() && dimension.getLiquid(pos).right() != null) {
+            return false;
+        }
+
         var removedOnTouch = liquidReactionOnTouch.shouldRemoveOnTouch();
         if (!(existing.getBlockType() == BlockTypes.AIR || removedOnTouch) && (!canContainLiquid || !liquidReactionOnTouch.canLiquidFlowInto()/*canContainSpecificLiquid(existing.getBlockStateData(), getLiquidBlockState(newDepth, falling))*/)) {
             // Can't flow into this block.

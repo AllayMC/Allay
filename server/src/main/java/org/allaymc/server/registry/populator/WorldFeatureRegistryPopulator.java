@@ -1,7 +1,11 @@
 package org.allaymc.server.registry.populator;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.feature.WorldFeatures;
+import org.allaymc.server.world.feature.fungus.HugeFungusFeature;
+import org.allaymc.server.world.feature.mushroom.HugeBrownMushroomFeature;
+import org.allaymc.server.world.feature.mushroom.HugeRedMushroomFeature;
 import org.allaymc.server.world.feature.tree.*;
 
 /**
@@ -30,5 +34,19 @@ public class WorldFeatureRegistryPopulator implements Runnable {
         WorldFeatures.MEGA_JUNGLE_TREE = new MegaJungleTreeFeature();
         WorldFeatures.TALL_BIRCH_TREE = new TallBirchTreeFeature();
         WorldFeatures.FANCY_OAK_TREE = new FancyOakTreeFeature();
+
+        // Huge mushrooms
+        WorldFeatures.HUGE_BROWN_MUSHROOM = new HugeBrownMushroomFeature();
+        WorldFeatures.HUGE_RED_MUSHROOM = new HugeRedMushroomFeature();
+
+        // Huge fungi (nether trees)
+        WorldFeatures.HUGE_CRIMSON_FUNGUS = new HugeFungusFeature(
+                HugeFungusFeature.CRIMSON_IDENTIFIER,
+                BlockTypes.CRIMSON_STEM, BlockTypes.NETHER_WART_BLOCK
+        );
+        WorldFeatures.HUGE_WARPED_FUNGUS = new HugeFungusFeature(
+                HugeFungusFeature.WARPED_IDENTIFIER,
+                BlockTypes.WARPED_STEM, BlockTypes.WARPED_WART_BLOCK
+        );
     }
 }

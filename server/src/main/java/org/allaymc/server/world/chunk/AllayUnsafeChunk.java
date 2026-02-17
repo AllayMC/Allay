@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -158,6 +159,16 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             }
 
             blockState.getBehavior().onScheduledUpdate(block);
+
+            // Also update liquid on layer 1 if present, so that waterlogged blocks
+            // (e.g. sea pickle, kelp) properly trigger liquid flow.
+            var layer1State = getBlockState(pos.x() & 15, pos.y(), pos.z() & 15, 1);
+            if (layer1State.getBehavior() instanceof BlockLiquidBehavior) {
+                var layer1Block = new Block(layer1State, new Position3i(pos, dimension), 1);
+                if (new BlockScheduleUpdateEvent(layer1Block).call()) {
+                    layer1State.getBehavior().onScheduledUpdate(layer1Block);
+                }
+            }
         });
     }
 

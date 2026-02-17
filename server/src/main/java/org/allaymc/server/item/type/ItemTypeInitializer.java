@@ -100,6 +100,7 @@ public final class ItemTypeInitializer {
                         $ -> new ItemEdibleComponentImpl(2, 1.2f),
                         ItemEdibleComponentImpl.class
                 )
+                .addComponent(ItemSweetBerriesBaseComponentImpl::new, ItemSweetBerriesBaseComponentImpl.class)
                 .build();
         ItemTypes.COOKED_BEEF = AllayItemType
                 .builder(ItemCookedBeefStackImpl.class)
@@ -213,6 +214,7 @@ public final class ItemTypeInitializer {
                         $ -> new ItemEdibleComponentImpl(2, 0.4f),
                         ItemEdibleComponentImpl.class
                 )
+                .addComponent(ItemGlowBerriesBaseComponentImpl::new, ItemGlowBerriesBaseComponentImpl.class)
                 .build();
         ItemTypes.COOKIE = AllayItemType
                 .builder(ItemCookieStackImpl.class)
@@ -1145,6 +1147,30 @@ public final class ItemTypeInitializer {
                 .builder(ItemArmorStandStackImpl.class)
                 .vanillaItem(ItemId.ARMOR_STAND)
                 .addComponent(ItemArmorStandBaseComponentImpl::new, ItemArmorStandBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initNetherWart() {
+        ItemTypes.ITEM_NETHER_WART = AllayItemType
+                .builder(ItemItemNetherWartStackImpl.class)
+                .vanillaItem(ItemId.ITEM_NETHER_WART)
+                .addComponent(ItemNetherWartBaseComponentImpl::new, ItemNetherWartBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initCocoaBeans() {
+        ItemTypes.COCOA_BEANS = AllayItemType
+                .builder(ItemCocoaBeansStackImpl.class)
+                .vanillaItem(ItemId.COCOA_BEANS)
+                .addComponent(ItemCocoaBeansBaseComponentImpl::new, ItemCocoaBeansBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initKelp() {
+        ItemTypes.KELP = AllayItemType
+                .builder(ItemKelpStackImpl.class)
+                .vanillaItem(ItemId.KELP)
+                .addComponent(ItemKelpBaseComponentImpl::new, ItemKelpBaseComponentImpl.class)
                 .build();
     }
 }
