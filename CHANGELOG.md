@@ -19,6 +19,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added liquid physics for entities including buoyancy and drag in water and lava, with configurable parameters per entity type via `EntityPhysicsComponent`.
 - (API) Added `EntityBaseComponent.isTouchingLava()` method.
 - (API) Added `LiquidState` record to `EntityPhysicsComponent` for tracking entity liquid submersion state.
+- (API) Added the following new sounds to `SimpleSound`:
+  - `BIG_DRIPLEAF_TILT_UP`
+  - `BIG_DRIPLEAF_TILT_DOWN`
+  - `BELL_HIT`
 - (API) Implemented the following world features:
   - Huge brown mushroom
   - Huge red mushroom
@@ -39,6 +43,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Warped fungus
   - Seagrass
   - rail
+  - dripleaf
 - Implemented the following items:
   - Cocoa beans
   - Sweet berries

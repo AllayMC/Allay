@@ -1257,6 +1257,9 @@ public class AllayPlayer implements Player {
             case SimpleSound.TRIDENT_HIT_GROUND -> packet.setSound(SoundEvent.ITEM_TRIDENT_HIT_GROUND);
             case SimpleSound.TRIDENT_RETURN -> packet.setSound(SoundEvent.ITEM_TRIDENT_RETURN);
             case SimpleSound.TRIDENT_THUNDER -> packet.setSound(SoundEvent.ITEM_TRIDENT_THUNDER);
+            case SimpleSound.BIG_DRIPLEAF_TILT_DOWN -> packet.setSound(SoundEvent.BIG_DRIPLEAF_TILT_DOWN);
+            case SimpleSound.BIG_DRIPLEAF_TILT_UP -> packet.setSound(SoundEvent.BIG_DRIPLEAF_TILT_UP);
+            case SimpleSound.BELL_HIT -> packet.setSound(SoundEvent.BELL);
             case TridentRiptideSound riptide -> packet.setSound(switch (riptide.level()) {
                 case 1 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_1;
                 case 2 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_2;

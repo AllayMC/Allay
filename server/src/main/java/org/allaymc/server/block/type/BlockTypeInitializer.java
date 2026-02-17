@@ -2918,4 +2918,20 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(bt -> new BlockCaveVinesBaseComponentImpl(bt, true, true))
                 .build();
     }
+
+    public static void initDripleaf() {
+        BlockTypes.SMALL_DRIPLEAF_BLOCK = AllayBlockType
+                .builder(BlockSmallDripleafBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.SMALL_DRIPLEAF_BLOCK)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBaseComponentSupplier(BlockSmallDripleafBaseComponentImpl::new)
+                .build();
+
+        BlockTypes.BIG_DRIPLEAF = AllayBlockType
+                .builder(BlockBigDripleafBehaviorImpl.class)
+                .vanillaBlock(BlockId.BIG_DRIPLEAF)
+                .setProperties(BlockPropertyTypes.BIG_DRIPLEAF_HEAD, BlockPropertyTypes.BIG_DRIPLEAF_TILT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockBigDripleafBaseComponentImpl::new)
+                .build();
+    }
 }

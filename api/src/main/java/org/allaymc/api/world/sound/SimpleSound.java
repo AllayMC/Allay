@@ -223,6 +223,12 @@ public enum SimpleSound implements Sound {
     // ARMOR_STAND_BREAK is a sound played when an armor stand is broken.
     ARMOR_STAND_BREAK,
     // ARMOR_STAND_LAND is a sound played when an armor stand drops from a height to the ground.
-    ARMOR_STAND_LAND
+    ARMOR_STAND_LAND,
+    // BIG_DRIPLEAF_TILT_DOWN is a sound played when a big dripleaf tilts down.
+    BIG_DRIPLEAF_TILT_DOWN,
+    // BIG_DRIPLEAF_TILT_UP is a sound played when a big dripleaf tilts back up.
+    BIG_DRIPLEAF_TILT_UP,
+    // BELL_HIT is a sound played when a bell is rung.
+    BELL_HIT
 }
 
