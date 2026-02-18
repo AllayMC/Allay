@@ -10,6 +10,7 @@ import org.allaymc.api.message.MessageReceiver;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.world.WorldViewer;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.net.SocketAddress;
@@ -357,6 +358,35 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * @param port    the port of the server to transfer to
      */
     void transfer(String address, int port);
+
+    /**
+     * Whether the player's client is currently showing the dimension switching loading screen.
+     *
+     * @return {@code true} if a dimension change is in progress
+     */
+    boolean isChangingDimension();
+
+    /**
+     * Show the dimension switching loading screen to the client immediately.
+     * <p>
+     * Call this before performing async work (e.g. chunk loading) to give the
+     * player visual feedback while the server prepares the target dimension.
+     * The flag is automatically cleared when {@link #completeDimensionChange()} is called.
+     *
+     * @param targetDimInfo the target dimension info
+     * @param x             approximate target x coordinate
+     * @param y             approximate target y coordinate
+     * @param z             approximate target z coordinate
+     */
+    void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z);
+
+    /**
+     * Complete a dimension change by sending the dimension ack and resetting the flag.
+     * Call this after the player has been added to the target dimension,
+     * or to dismiss the loading screen if the teleport fails.
+     */
+    @ApiStatus.Internal
+    void completeDimensionChange();
 
     /**
      * Sends a packet to the client.

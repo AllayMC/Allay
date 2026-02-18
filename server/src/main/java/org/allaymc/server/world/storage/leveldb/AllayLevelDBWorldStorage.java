@@ -181,6 +181,12 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             builder.scheduledUpdates(ScheduledUpdateCodec.deserialize(scheduledBytes));
         }
 
+        // POI data
+        var poiBytes = this.db.get(LevelDBKey.ALLAY_POI_DATA.createKey(chunkX, chunkZ, dimensionInfo));
+        if (poiBytes != null) {
+            builder.poiEntries(PoiCodec.deserialize(poiBytes));
+        }
+
         return builder.build().toSafeChunk();
     }
 
@@ -244,6 +250,15 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                     writeBatch.delete(scheduledKey);
                 } else {
                     writeBatch.put(scheduledKey, scheduledData);
+                }
+
+                // POI data
+                var poiKey = LevelDBKey.ALLAY_POI_DATA.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionInfo);
+                var poiData = PoiCodec.serialize(allayUnsafeChunk.getPoiEntries());
+                if (poiData == null) {
+                    writeBatch.delete(poiKey);
+                } else {
+                    writeBatch.put(poiKey, poiData);
                 }
             }, OperationType.READ, OperationType.READ);
             this.db.write(writeBatch);

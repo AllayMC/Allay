@@ -19,14 +19,17 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
+import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -236,6 +239,16 @@ public class AllayDimension implements Dimension {
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
+        // Update POI index when main-layer blocks change
+        if (layer == 0) {
+            var oldPoi = Registries.POI_TYPES.get(oldBlockState.getBlockType());
+            var newPoi = Registries.POI_TYPES.get(blockState.getBlockType());
+            if (oldPoi != newPoi) {
+                if (oldPoi != null) chunk.removePoi(xIndex, y, zIndex);
+                if (newPoi != null) chunk.addPoi(xIndex, y, zIndex, newPoi);
+            }
+        }
+
         if (update) {
             updateAround(x, y, z, oldBlockState);
         }
@@ -247,6 +260,33 @@ public class AllayDimension implements Dimension {
         }
 
         return true;
+    }
+
+    @Override
+    public Vector3ic findNearestPoi(PoiType type, int x, int y, int z, int chunkRadius) {
+        int cx = x >> 4, cz = z >> 4;
+        Vector3ic nearest = null;
+        double nearestDistSq = Double.MAX_VALUE;
+
+        for (int dx = -chunkRadius; dx <= chunkRadius; dx++) {
+            for (int dz = -chunkRadius; dz <= chunkRadius; dz++) {
+                var chunk = chunkManager.getChunk(cx + dx, cz + dz);
+                if (chunk == null) continue;
+                for (var entry : chunk.getPoiEntries().entrySet()) {
+                    if (entry.getValue() != type) continue;
+                    int hash = entry.getKey();
+                    int px = HashUtils.getXFromHashChunkXYZ(hash) + ((cx + dx) << 4);
+                    int py = HashUtils.getYFromHashChunkXYZ(hash);
+                    int pz = HashUtils.getZFromHashChunkXYZ(hash) + ((cz + dz) << 4);
+                    double distSq = (double) (px - x) * (px - x) + (double) (py - y) * (py - y) + (double) (pz - z) * (pz - z);
+                    if (distSq < nearestDistSq) {
+                        nearestDistSq = distSq;
+                        nearest = new Vector3i(px, py, pz);
+                    }
+                }
+            }
+        }
+        return nearest;
     }
 
     @Override

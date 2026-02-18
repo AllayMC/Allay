@@ -248,6 +248,9 @@ public final class Allay {
                 new WorldFeatureRegistryPopulator()
         );
 
+        // POI (Point of Interest)
+        Registries.POI_TYPES = SimpleMappedRegistry.create(new PoiTypeRegistryLoader());
+
         // Creative Item
         Registries.CREATIVE_ITEMS = new AllayCreativeItemRegistry();
 

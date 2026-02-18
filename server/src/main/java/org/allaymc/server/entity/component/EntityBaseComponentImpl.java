@@ -12,8 +12,10 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
+import org.allaymc.api.eventbus.event.entity.EntityPortalEnterEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
@@ -24,6 +26,7 @@ import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.permission.ConstantPermissionCalculator;
 import org.allaymc.api.permission.PermissionCalculator;
 import org.allaymc.api.permission.Tristate;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
@@ -33,6 +36,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.server.block.NetherPortalHelper;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
@@ -69,6 +73,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected static final String TAG_TAGS = "Tags";
     protected static final String TAG_UNIQUE_ID = "UniqueID";
     protected static final String TAG_PDC = "PDC";
+    protected static final String TAG_PORTAL_COOLDOWN = "PortalCooldown";
 
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
@@ -117,6 +122,15 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     @Setter
     protected boolean persistent = true;
+    @Getter
+    @Setter
+    protected int portalTicks;
+    @Getter
+    @Setter
+    protected int portalCooldown;
+    @Getter
+    @Setter
+    protected boolean inNetherPortal;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -146,6 +160,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void tick(long currentTick) {
         manager.callEvent(new CEntityTickEvent(currentTick));
         this.scheduler.tick();
+        tickPortal();
         tickBlockCollision();
     }
 
@@ -170,6 +185,58 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 blockState.getBehavior().onEntityInside(block, thisEntity);
                 this.onInsideBlock(block);
             }
+        });
+    }
+
+    protected void tickPortal() {
+        if (portalCooldown > 0) {
+            portalCooldown--;
+            inNetherPortal = false;
+            return;
+        }
+
+        if (inNetherPortal) {
+            // Creative/spectator players and non-player entities teleport instantly
+            if (thisEntity instanceof EntityPlayer player) {
+                var gameMode = player.getGameMode();
+                if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) {
+                    portalTicks = NETHER_PORTAL_TRANSITION_TICKS;
+                } else {
+                    portalTicks++;
+                }
+            } else {
+                portalTicks = NETHER_PORTAL_TRANSITION_TICKS;
+            }
+
+            if (portalTicks >= NETHER_PORTAL_TRANSITION_TICKS) {
+                performNetherPortalTeleport();
+            }
+        } else {
+            portalTicks = 0;
+        }
+
+        // Reset flag — will be set again by the portal block's onEntityInside next tick
+        inNetherPortal = false;
+    }
+
+    protected void performNetherPortalTeleport() {
+        if (!new EntityPortalEnterEvent(thisEntity, EntityPortalEnterEvent.PortalType.NETHER).call()) {
+            return;
+        }
+
+        // Set cooldown immediately to prevent re-entry while async teleport is in progress
+        portalCooldown = PORTAL_COOLDOWN_TICKS;
+        portalTicks = 0;
+
+        // Run teleport in a virtual thread to avoid blocking the dimension tick thread
+        // while loading chunks in the target dimension
+        Server.getInstance().getVirtualThreadPool().submit(() -> {
+            NetherPortalHelper.teleport(thisEntity).thenAccept(success -> {
+                if (!success) {
+                    // Teleport failed, reset cooldown so entity can try again
+                    portalCooldown = 0;
+                }
+            });
         });
     }
 
@@ -433,6 +500,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         saveUniqueId(builder);
+
+        if (portalCooldown > 0) {
+            builder.putInt(TAG_PORTAL_COOLDOWN, portalCooldown);
+        }
+
         return builder.build();
     }
 
@@ -464,6 +536,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         });
 
         loadUniqueId(nbt);
+
+        if (nbt.containsKey(TAG_PORTAL_COOLDOWN)) {
+            this.portalCooldown = nbt.getInt(TAG_PORTAL_COOLDOWN);
+        }
     }
 
     protected void loadUniqueId(NbtMap nbt) {

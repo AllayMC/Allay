@@ -280,6 +280,52 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     boolean canBeSpawned();
 
+    // Portal constants
+    int NETHER_PORTAL_TRANSITION_TICKS = 80;
+    int PORTAL_COOLDOWN_TICKS = 300;
+
+    /**
+     * Gets the number of ticks the entity has been standing in a nether portal.
+     *
+     * @return the portal ticks
+     */
+    int getPortalTicks();
+
+    /**
+     * Sets the number of ticks the entity has been standing in a nether portal.
+     *
+     * @param ticks the portal ticks
+     */
+    void setPortalTicks(int ticks);
+
+    /**
+     * Gets the remaining cooldown ticks before the entity can use a portal again.
+     *
+     * @return the portal cooldown ticks
+     */
+    int getPortalCooldown();
+
+    /**
+     * Sets the remaining cooldown ticks before the entity can use a portal again.
+     *
+     * @param cooldown the portal cooldown ticks
+     */
+    void setPortalCooldown(int cooldown);
+
+    /**
+     * Checks if the entity is currently standing in a nether portal.
+     *
+     * @return {@code true} if the entity is in a nether portal
+     */
+    boolean isInNetherPortal();
+
+    /**
+     * Sets whether the entity is currently standing in a nether portal.
+     *
+     * @param inNetherPortal whether the entity is in a nether portal
+     */
+    void setInNetherPortal(boolean inNetherPortal);
+
     /**
      * Teleport the entity to the specified location.
      *

@@ -1,6 +1,5 @@
-package org.allaymc.server.world.storage.leveldb.codec;
+package org.allaymc.server.world.storage.leveldb;
 
-import org.allaymc.server.world.storage.leveldb.LevelDBUtils;
 import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;

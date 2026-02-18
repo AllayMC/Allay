@@ -1745,6 +1745,23 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initPortal() {
+        BlockTypes.PORTAL = AllayBlockType
+                .builder(BlockPortalBehaviorImpl.class)
+                .vanillaBlock(BlockId.PORTAL)
+                .setProperties(BlockPropertyTypes.PORTAL_AXIS)
+                .setBaseComponentSupplier(BlockPortalBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initEndPortal() {
+        BlockTypes.END_PORTAL = AllayBlockType
+                .builder(BlockEndPortalBehaviorImpl.class)
+                .vanillaBlock(BlockId.END_PORTAL)
+                .setBaseComponentSupplier(BlockEndPortalBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initIce() {
         BlockTypes.BLUE_ICE = AllayBlockType
                 .builder(BlockIceBehaviorImpl.class)

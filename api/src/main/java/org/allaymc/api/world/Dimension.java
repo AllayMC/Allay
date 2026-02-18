@@ -35,6 +35,7 @@ import org.allaymc.api.world.manager.BlockUpdateManager;
 import org.allaymc.api.world.manager.ChunkManager;
 import org.allaymc.api.world.manager.EntityManager;
 import org.allaymc.api.world.particle.Particle;
+import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.api.world.sound.Sound;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
@@ -1560,4 +1561,16 @@ public interface Dimension extends TaskCreator {
     default boolean isValid() {
         return getWorld().isValid();
     }
+
+    /**
+     * Find the nearest POI of the given type within the specified chunk radius.
+     *
+     * @param type        the POI type to search for
+     * @param x           the center x coordinate (world)
+     * @param y           the center y coordinate (world)
+     * @param z           the center z coordinate (world)
+     * @param chunkRadius the search radius in chunks
+     * @return the position of the nearest POI, or {@code null} if none found
+     */
+    Vector3ic findNearestPoi(PoiType type, int x, int y, int z, int chunkRadius);
 }

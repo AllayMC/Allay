@@ -18,6 +18,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.feature.WorldFeature;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.api.world.storage.WorldStorage;
 
 import java.nio.file.Path;
@@ -56,6 +57,9 @@ public final class Registries {
     public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;
     public static SimpleMappedRegistry<String, Function<String, WorldGenerator>> WORLD_GENERATOR_FACTORIES;
     public static SimpleMappedRegistry<Identifier, WorldFeature> WORLD_FEATURES;
+
+    // POI (Point of Interest)
+    public static SimpleMappedRegistry<BlockType<?>, PoiType> POI_TYPES;
 
     // Creative Item
     public static CreativeItemRegistry CREATIVE_ITEMS;

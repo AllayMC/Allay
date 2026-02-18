@@ -99,7 +99,11 @@ public enum LevelDBKey {
     /**
      * Stores a string which represents the state of the chunk. The string is consistent with the name in class {@link ChunkState}.
      */
-    ALLAY_CHUNK_STATE(-1);
+    ALLAY_CHUNK_STATE(-1),
+    /**
+     * Stores POI (Point of Interest) data for the chunk in NBT format.
+     */
+    ALLAY_POI_DATA(-2);
 
     /**
      * Used in the <a href="https://learn.microsoft.com/en-us/minecraft/creator/documents/actorstorage?view=minecraft-bedrock-stable">New Actor Storage</a>.

@@ -15,6 +15,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
@@ -23,6 +24,7 @@ import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
@@ -54,6 +56,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
     protected final NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
     protected final NonBlockingHashMap<Integer, BlockEntity> blockEntities;
+    protected final NonBlockingHashMap<Integer, PoiType> poiEntries;
     protected final ChunkBitMap heightMapDirtyFlags;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<WorldViewer.BlockUpdate> blockUpdates;
@@ -86,7 +89,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             int x, int z, DimensionInfo dimensionInfo,
             AllayChunkSection[] sections, HeightMap heightMap,
             NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates,
-            ChunkState state, NonBlockingHashMap<Integer, BlockEntity> blockEntities) {
+            ChunkState state, NonBlockingHashMap<Integer, BlockEntity> blockEntities,
+            NonBlockingHashMap<Integer, PoiType> poiEntries) {
         this.x = x;
         this.z = z;
         this.dimensionInfo = dimensionInfo;
@@ -95,6 +99,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.scheduledUpdates = scheduledUpdates;
         this.state = state;
         this.blockEntities = blockEntities;
+        this.poiEntries = poiEntries;
         this.heightMapDirtyFlags = new ChunkBitMap();
         this.chunkLoaders = Sets.newConcurrentHashSet();
         this.blockUpdates = PlatformDependent.newMpscQueue();
@@ -221,6 +226,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             }
         });
         ((AllayEntityManager) dimension.getEntityManager()).onChunkLoad(this.x, this.z);
+        discoverPoiBlocks();
 
         loaded = true;
     }
@@ -229,6 +235,31 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         ((AllayLightEngine) dimension.getLightEngine()).onChunkUnload(safeChunk);
         ((AllayEntityManager) dimension.getEntityManager()).onChunkUnload(this.x, this.z);
         blockChangeCallback = null;
+    }
+
+    /**
+     * Discover existing POI blocks in chunks that have no persisted POI data.
+     */
+    private void discoverPoiBlocks() {
+        if (!poiEntries.isEmpty()) return;
+        for (var section : sections) {
+            if (section.isAirSection()) continue;
+            if (section.blockLayers()[0].allEntriesMatch(state -> Registries.POI_TYPES.get(state.getBlockType()) == null)) {
+                continue;
+            }
+            int sectionWorldY = section.sectionY() << 4;
+            for (int lx = 0; lx < 16; lx++) {
+                for (int ly = 0; ly < 16; ly++) {
+                    for (int lz = 0; lz < 16; lz++) {
+                        var state = section.getBlockState(lx, ly, lz, 0);
+                        var poi = Registries.POI_TYPES.get(state.getBlockType());
+                        if (poi != null) {
+                            poiEntries.put(HashUtils.hashChunkXYZ(lx, sectionWorldY + ly, lz), poi);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -415,6 +446,29 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public Map<Integer, BlockEntity> getBlockEntities() {
         return Collections.unmodifiableMap(blockEntities);
+    }
+
+    @Override
+    public Map<Integer, PoiType> getPoiEntries() {
+        return Collections.unmodifiableMap(poiEntries);
+    }
+
+    @Override
+    public void addPoi(int x, int y, int z, PoiType type) {
+        checkXYZ(x, y, z);
+        poiEntries.put(HashUtils.hashChunkXYZ(x, y, z), type);
+    }
+
+    @Override
+    public void removePoi(int x, int y, int z) {
+        checkXYZ(x, y, z);
+        poiEntries.remove(HashUtils.hashChunkXYZ(x, y, z));
+    }
+
+    @Override
+    public PoiType getPoi(int x, int y, int z) {
+        checkXYZ(x, y, z);
+        return poiEntries.get(HashUtils.hashChunkXYZ(x, y, z));
     }
 
     @Override

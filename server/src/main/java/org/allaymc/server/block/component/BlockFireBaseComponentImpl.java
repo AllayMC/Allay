@@ -19,6 +19,8 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.eventbus.event.block.PortalCreateEvent;
+import org.allaymc.server.block.NetherPortalHelper;
 import org.joml.Vector3i;
 
 import java.util.Set;
@@ -99,6 +101,24 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     public void onPlace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onPlace(block, newBlockState, placementInfo);
         block.getDimension().getBlockUpdateManager().scheduleRandomBlockUpdateInDelay(block.getPosition(), FIRE_SCHEDULED_UPDATE_DELAY);
+    }
+
+    @Override
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
+
+        // Try to create a nether portal (must be in afterPlaced because
+        // onPlace runs before the block is committed to the chunk, so
+        // fill() would be overwritten by the fire block placement)
+        var dimension = oldBlock.getDimension();
+        var shape = NetherPortalHelper.detect(dimension, oldBlock.getPosition());
+        if (shape != null) {
+            // Compute positions first, fire event, only fill if not cancelled
+            var portalBlocks = shape.getInteriorPositions();
+            if (new PortalCreateEvent(dimension, portalBlocks, PortalCreateEvent.CreateReason.FIRE).call()) {
+                shape.fill();
+            }
+        }
     }
 
     @Override

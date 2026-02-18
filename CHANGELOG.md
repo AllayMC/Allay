@@ -15,6 +15,20 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ## Added
 
 - (API) Implemented command block.
+- (API) Added portal-related APIs:
+  - Added `EntityPortalEnterEvent` (cancellable) and `PortalCreateEvent` (cancellable).
+  - Added `NETHER_PORTAL` and `END_PORTAL` reasons to `EntityTeleportEvent`.
+  - Added portal state/cooldown API to `EntityBaseComponent`:
+    - `NETHER_PORTAL_TRANSITION_TICKS`, `PORTAL_COOLDOWN_TICKS`
+    - `get/setPortalTicks()`, `get/setPortalCooldown()`, `is/setInNetherPortal()`
+  - Added POI APIs for portal lookup:
+    - `PoiType`, `PoiTypes`, and `Registries.POI_TYPES`
+    - `Dimension.findNearestPoi(...)`
+    - POI methods on `UnsafeChunk` (`getPoiEntries`, `addPoi`, `removePoi`, `getPoi`)
+  - Added dimension change UI helpers to `Player`:
+    - `isChangingDimension()`
+    - `beginDimensionChange(...)`
+    - `completeDimensionChange()`
 - (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
 - (API) Added liquid physics for entities including buoyancy and drag in water and lava, with configurable parameters per entity type via `EntityPhysicsComponent`.
 - (API) Added `EntityBaseComponent.isTouchingLava()` method.
@@ -62,6 +76,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Nether wart
   - Torchflower seeds
   - Pitcher pod
+- Implemented nether portal and end portal mechanics:
+  - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
+  - End portal frame completion logic and end portal teleport behavior.
+  - End spawn platform creation during teleport to The End.
+- Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
 - Updated the chunk version to 42 (1.21.120).
 
 ### Changed

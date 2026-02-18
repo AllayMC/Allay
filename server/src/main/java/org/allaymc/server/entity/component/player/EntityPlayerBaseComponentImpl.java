@@ -13,6 +13,7 @@ import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.entity.EntityPortalEnterEvent;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.item.component.ItemShieldBaseComponent;
 import org.allaymc.api.item.interfaces.ItemShieldStack;
@@ -25,24 +26,23 @@ import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.block.NetherPortalHelper;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.allaymc.server.entity.component.event.CEntityAttackEvent;
 import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
 import org.allaymc.server.world.AllayDimension;
-import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
-import org.cloudburstmc.protocol.bedrock.packet.ChangeDimensionPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -478,6 +478,50 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    protected void performNetherPortalTeleport() {
+        if (!isActualPlayer()) {
+            super.performNetherPortalTeleport();
+            return;
+        }
+
+        // Determine target dimension to show loading screen early
+        var world = thisEntity.getWorld();
+        var currentDimInfo = thisEntity.getDimension().getDimensionInfo();
+        Dimension targetDim;
+        if (currentDimInfo == DimensionInfo.OVERWORLD) {
+            targetDim = world.getNether();
+        } else if (currentDimInfo == DimensionInfo.NETHER) {
+            targetDim = world.getOverWorld();
+        } else {
+            return;
+        }
+        if (targetDim == null) return;
+
+        if (!new EntityPortalEnterEvent(thisEntity, EntityPortalEnterEvent.PortalType.NETHER).call()) {
+            return;
+        }
+
+        portalCooldown = PORTAL_COOLDOWN_TICKS;
+        portalTicks = 0;
+
+        // Send dimension change screen immediately so the client shows the loading UI
+        // while chunks are being loaded asynchronously in the target dimension
+        var loc = thisEntity.getLocation();
+        double targetX = NetherPortalHelper.scaleCoordinate(loc.x(), currentDimInfo, targetDim.getDimensionInfo());
+        double targetZ = NetherPortalHelper.scaleCoordinate(loc.z(), currentDimInfo, targetDim.getDimensionInfo());
+        this.controller.beginDimensionChange(targetDim.getDimensionInfo(), targetX, loc.y(), targetZ);
+
+        Server.getInstance().getVirtualThreadPool().submit(() -> {
+            NetherPortalHelper.teleport(thisEntity).thenAccept(success -> {
+                if (!success) {
+                    portalCooldown = 0;
+                    this.controller.completeDimensionChange();
+                }
+            });
+        });
+    }
+
+    @Override
     protected void teleportOverDimension(Location3dc target) {
         if (isActualPlayer()) {
             var currentDim = (AllayDimension) location.dimension();
@@ -489,25 +533,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 this.controller.viewGameRules(targetDim.getWorld().getWorldData().getGameRules());
                 this.controller.viewWeather(targetDim.getWorld().getWeather());
             }
+            boolean dimensionChanged = currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId();
             currentDim.removePlayer(this.controller, () -> {
                 setLocationBeforeSpawn(target);
-                if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
-                    // TODO: implement boolean changingDimension here
-                    var packet1 = new ChangeDimensionPacket();
-                    packet1.setDimension(targetDim.getDimensionInfo().dimensionId());
-                    packet1.setPosition(Vector3f.from(target.x(), target.y() + 1.62f, target.z()));
-                    this.controller.sendPacket(packet1);
-
-                    // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server. The client
-                    // still sends the ack, but after the server has sent it. Thanks to Mojang for another groundbreaking change.
-                    var packet2 = new PlayerActionPacket();
-                    packet2.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
-                    packet2.setRuntimeEntityId(this.runtimeId);
-                    packet2.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-                    packet2.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-                    this.controller.sendPacket(packet2);
+                if (dimensionChanged && !this.controller.isChangingDimension()) {
+                    // ChangeDimensionPacket was not sent early — send it now
+                    this.controller.beginDimensionChange(targetDim.getDimensionInfo(), target.x(), target.y(), target.z());
                 }
                 targetDim.addPlayer(this.controller, () -> {
+                    if (dimensionChanged) {
+                        // As of v1.19.50, the dimension ack is sent by the server after dimension transfer completes
+                        this.controller.completeDimensionChange();
+                    }
                     this.controller.viewEntityLocation(thisPlayer, location, true);
                 });
             });

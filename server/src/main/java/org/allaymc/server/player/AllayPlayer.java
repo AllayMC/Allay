@@ -74,6 +74,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.gamerule.GameRules;
@@ -199,6 +200,9 @@ public class AllayPlayer implements Player {
     protected boolean containerClosedByClient;
     @Getter
     protected Speed speed, flySpeed, verticalFlySpeed;
+
+    @Getter
+    protected volatile boolean changingDimension;
 
     // Container
     protected byte containerIdCounter;
@@ -2482,6 +2486,30 @@ public class AllayPlayer implements Player {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.CLEAR);
         sendPacket(pk);
+    }
+
+    @Override
+    public void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z) {
+        changingDimension = true;
+
+        var packet = new ChangeDimensionPacket();
+        packet.setDimension(targetDimInfo.dimensionId());
+        packet.setPosition(Vector3f.from((float) x, (float) y + 1.62f, (float) z));
+        sendPacket(packet);
+    }
+
+    @Override
+    public void completeDimensionChange() {
+        changingDimension = false;
+
+        // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server.
+        // Send it after the player has been added to the target dimension.
+        var packet = new PlayerActionPacket();
+        packet.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
+        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
+        packet.setBlockPosition(Vector3i.ZERO);
+        packet.setResultPosition(Vector3i.ZERO);
+        sendPacket(packet);
     }
 
     @Override

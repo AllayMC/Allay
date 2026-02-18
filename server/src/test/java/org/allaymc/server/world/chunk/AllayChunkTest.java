@@ -6,6 +6,8 @@ import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.poi.PoiType;
+import org.allaymc.api.world.poi.PoiTypes;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,5 +103,50 @@ class AllayChunkTest {
         assertNotNull(chunk.getBlockEntity(11, 45, 14));
         chunk.removeBlockEntity(11, 45, 14);
         assertNull(chunk.getBlockEntity(11, 45, 14));
+    }
+
+    @Test
+    void testAddAndGetPoi() {
+        var type = PoiTypes.NETHER_PORTAL;
+        chunk.addPoi(3, 64, 7, type);
+        assertEquals(type, chunk.getPoi(3, 64, 7));
+    }
+
+    @Test
+    void testRemovePoi() {
+        var type = PoiTypes.NETHER_PORTAL;
+        chunk.addPoi(5, 100, 10, type);
+        assertNotNull(chunk.getPoi(5, 100, 10));
+        chunk.removePoi(5, 100, 10);
+        assertNull(chunk.getPoi(5, 100, 10));
+    }
+
+    @Test
+    void testGetPoiEntries() {
+        assertTrue(chunk.getPoiEntries().isEmpty());
+        chunk.addPoi(0, 0, 0, PoiTypes.NETHER_PORTAL);
+        chunk.addPoi(15, 64, 15, PoiTypes.NETHER_PORTAL);
+        assertEquals(2, chunk.getPoiEntries().size());
+    }
+
+    @Test
+    void testPoiNullWhenNotSet() {
+        assertNull(chunk.getPoi(8, 32, 8));
+    }
+
+    @Test
+    void testInvalidPoiMethodCall() {
+        var type = PoiTypes.NETHER_PORTAL;
+        assertThrows(IllegalArgumentException.class, () -> chunk.addPoi(0, -10000, 0, type));
+        assertThrows(IllegalArgumentException.class, () -> chunk.addPoi(-1, 0, -1, type));
+        assertThrows(IllegalArgumentException.class, () -> chunk.addPoi(16, 0, 16, type));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.removePoi(0, -10000, 0));
+        assertThrows(IllegalArgumentException.class, () -> chunk.removePoi(-1, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.removePoi(16, 0, 16));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.getPoi(0, -10000, 0));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getPoi(-1, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getPoi(16, 0, 16));
     }
 }
