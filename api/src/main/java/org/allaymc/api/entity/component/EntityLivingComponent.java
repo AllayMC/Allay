@@ -15,6 +15,7 @@ public interface EntityLivingComponent extends EntityComponent {
 
     int DEFAULT_MAX_AIR_SUPPLY = 300;
     int DEFAULT_MAX_HEALTH = 20;
+    int MAX_FREEZE_TICKS = 140;
 
     /**
      * Attack this entity with the given damage container.
@@ -145,6 +146,46 @@ public interface EntityLivingComponent extends EntityComponent {
      */
     default boolean isOnFire() {
         return getOnFireTicks() > 0;
+    }
+
+    /**
+     * Get the current freeze ticks of the entity.
+     * Freeze ticks increase while the entity is inside powder snow, up to {@link #MAX_FREEZE_TICKS}.
+     *
+     * @return the freeze ticks, {@code 0} if not freezing.
+     */
+    int getFreezeTicks();
+
+    /**
+     * Set the freeze ticks of the entity.
+     *
+     * @param freezeTicks the freeze ticks to set, clamped to [0, {@link #MAX_FREEZE_TICKS}]
+     */
+    void setFreezeTicks(int freezeTicks);
+
+    /**
+     * Check whether the entity was inside powder snow during the last block-collision pass.
+     * This flag is set by the powder-snow block component and cleared at the start of each tick.
+     *
+     * @return {@code true} if the entity was in powder snow last tick
+     */
+    boolean isInPowderSnow();
+
+    /**
+     * Mark that the entity is (or is not) currently inside powder snow.
+     * Called by the powder-snow block component during block-collision handling.
+     *
+     * @param inPowderSnow {@code true} if the entity is inside powder snow
+     */
+    void setInPowderSnow(boolean inPowderSnow);
+
+    /**
+     * Check if the entity is fully frozen (freeze ticks have reached {@link #MAX_FREEZE_TICKS}).
+     *
+     * @return {@code true} if the entity is fully frozen
+     */
+    default boolean isFrozen() {
+        return getFreezeTicks() >= MAX_FREEZE_TICKS;
     }
 
     /**

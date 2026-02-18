@@ -1772,6 +1772,14 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initPowderSnow() {
+        BlockTypes.POWDER_SNOW = AllayBlockType
+                .builder(BlockPowderSnowBehaviorImpl.class)
+                .vanillaBlock(BlockId.POWDER_SNOW)
+                .setBaseComponentSupplier(BlockPowderSnowBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initSnowLayer() {
         BlockTypes.SNOW_LAYER = AllayBlockType
                 .builder(BlockSnowLayerBehaviorImpl.class)

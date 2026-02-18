@@ -226,6 +226,16 @@ public class DamageContainer {
     }
 
     /**
+     * Create a freezing (powder snow) damage container.
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer freezing(float sourceDamage) {
+        return new DamageContainer(null, FREEZING, sourceDamage);
+    }
+
+    /**
      * Create a lava damage container.
      *
      * @param sourceDamage the source damage

@@ -39,7 +39,6 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.joml.Vector3d;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -80,6 +79,11 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     @Getter
     protected int onFireTicks;
+    @Getter
+    protected int freezeTicks;
+    @Getter
+    @Setter
+    protected boolean inPowderSnow;
     @Getter
     protected int airSupplyTicks, airSupplyMaxTicks;
 
@@ -441,6 +445,12 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     }
 
     @Override
+    public void setFreezeTicks(int freezeTicks) {
+        this.freezeTicks = Math.clamp(freezeTicks, 0, MAX_FREEZE_TICKS);
+        this.baseComponent.broadcastState();
+    }
+
+    @Override
     public void setAirSupplyTicks(int ticks) {
         this.airSupplyTicks = ticks;
         this.baseComponent.broadcastState();
@@ -549,6 +559,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         var currentTick = event.getCurrentTick();
         tickVoid(currentTick);
         tickFire(currentTick);
+        tickFreeze(currentTick);
         tickBreathe();
         tickEffects();
         tickDead();
@@ -582,6 +593,33 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         if (currentTick % 20 == 0) {
             attack(DamageContainer.fireTick(1));
         }
+    }
+
+    /// Update the {@link #freezeTicks} of the entity. This runs before {@code tickBlockCollision()}, so
+    /// {@link #inPowderSnow} reflects whether the entity was in powder snow during the <em>previous</em>
+    /// tick's block-collision pass. The powder-snow block component only sets the {@link #inPowderSnow} flag
+    /// during the current tick's block-collision pass; the actual increment happens here, guaranteeing
+    /// exactly one change per tick regardless of how many powder snow blocks the entity intersects.
+    ///
+    /// <ul>
+    ///   <li>If {@link #inPowderSnow} was {@code true}: increment freeze ticks by 1 (up to {@link #MAX_FREEZE_TICKS})
+    ///       and apply freezing damage when fully frozen (respects {@code GameRule.FREEZE_DAMAGE}).</li>
+    ///   <li>If {@link #inPowderSnow} was {@code false} and freeze ticks > 0: decrement by 1.</li>
+    /// </ul>
+    protected void tickFreeze(long currentTick) {
+        if (inPowderSnow) {
+            if (freezeTicks < MAX_FREEZE_TICKS) {
+                setFreezeTicks(freezeTicks + 1);
+            }
+            if (freezeTicks >= MAX_FREEZE_TICKS && currentTick % 40 == 0 &&
+                    thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FREEZE_DAMAGE)) {
+                attack(DamageContainer.freezing(1f));
+            }
+        } else if (freezeTicks > 0) {
+            setFreezeTicks(freezeTicks - 1);
+        }
+        // Reset the flag; the block component will set it again during tickBlockCollision() if needed.
+        inPowderSnow = false;
     }
 
     /// Update the {@link #airSupplyTicks} of the entity. Drown damage will be applied to the entity every second

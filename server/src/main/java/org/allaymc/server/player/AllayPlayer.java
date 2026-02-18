@@ -583,6 +583,7 @@ public class AllayPlayer implements Player {
             map.put(EntityDataTypes.AIR_SUPPLY, (short) livingComponent.getAirSupplyTicks());
             map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) livingComponent.getAirSupplyMaxTicks());
             map.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
+            map.put(EntityDataTypes.FREEZING_EFFECT_STRENGTH, livingComponent.getFreezeTicks() / (float) EntityLivingComponent.MAX_FREEZE_TICKS);
         }
         if (entity instanceof EntityPotionComponent potionComponent) {
             var potionType = potionComponent.getPotionType();
@@ -1572,18 +1573,20 @@ public class AllayPlayer implements Player {
                 }
             }
             case BucketFillSound so -> {
-                if (so.water()) {
-                    packet.setSound(SoundEvent.BUCKET_FILL_WATER);
-                } else {
-                    packet.setSound(SoundEvent.BUCKET_FILL_LAVA);
-                }
+                packet.setSound(switch (so.type()) {
+                    case WATER -> SoundEvent.BUCKET_FILL_WATER;
+                    case LAVA -> SoundEvent.BUCKET_FILL_LAVA;
+                    case POWDER_SNOW -> SoundEvent.BUCKET_FILL_POWDER_SNOW;
+                    case FISH -> SoundEvent.BUCKET_FILL_FISH;
+                });
             }
             case BucketEmptySound so -> {
-                if (so.water()) {
-                    packet.setSound(SoundEvent.BUCKET_EMPTY_WATER);
-                } else {
-                    packet.setSound(SoundEvent.BUCKET_EMPTY_LAVA);
-                }
+                packet.setSound(switch (so.type()) {
+                    case WATER -> SoundEvent.BUCKET_EMPTY_WATER;
+                    case LAVA -> SoundEvent.BUCKET_EMPTY_LAVA;
+                    case POWDER_SNOW -> SoundEvent.BUCKET_EMPTY_POWDER_SNOW;
+                    case FISH -> SoundEvent.BUCKET_EMPTY_FISH;
+                });
             }
             case CrossbowLoadSound so -> {
                 switch (so.stage()) {

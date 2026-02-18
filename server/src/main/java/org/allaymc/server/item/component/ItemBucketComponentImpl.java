@@ -19,6 +19,8 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.sound.BucketEmptySound;
+import org.allaymc.api.world.sound.BucketFillSound;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.data.EntityId;
@@ -87,10 +89,12 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
                 player.tryConsumeItemInHand();
                 player.getContainer(ContainerTypes.INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
+                dimension.addSound(interactInfo.clickedBlockPos(), new BucketFillSound(BucketFillSound.Type.WATER));
             } else if (blockType == BlockTypes.LAVA || blockType == BlockTypes.FLOWING_LAVA) {
                 player.tryConsumeItemInHand();
                 player.getContainer(ContainerTypes.INVENTORY).tryAddItem(ItemTypes.LAVA_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
+                dimension.addSound(interactInfo.clickedBlockPos(), new BucketFillSound(BucketFillSound.Type.LAVA));
             }
             event.setCanBeUsed(true);
             return;
@@ -119,6 +123,8 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             dimension.getEntityManager().addEntity(entityInstance);
         }
 
+        dimension.addSound(liquidPlacedPos, new BucketEmptySound(getEmptySoundType()));
+
         player.tryConsumeItemInHand();
         if (player.getGameMode() != GameMode.CREATIVE) {
             // Because the max stack size of bucket is 1
@@ -126,5 +132,16 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             player.setItemInHand(ItemTypes.BUCKET.createItemStack(1));
         }
         event.setCanBeUsed(true);
+    }
+
+    protected BucketEmptySound.Type getEmptySoundType() {
+        if (entityId != null) {
+            return BucketEmptySound.Type.FISH;
+        }
+        return switch (liquidId) {
+            case LAVA -> BucketEmptySound.Type.LAVA;
+            case POWDER_SNOW -> BucketEmptySound.Type.POWDER_SNOW;
+            default -> BucketEmptySound.Type.WATER;
+        };
     }
 }

@@ -28,6 +28,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Huge red mushroom
   - Huge crimson fungus
   - Huge warped fungus
+- (API) Added freeze mechanic for powder snow:
+  - `EntityLivingComponent.getFreezeTicks()` / `setFreezeTicks()` — tracks how long an entity has been inside powder snow (0–140 ticks).
+  - `EntityLivingComponent.isInPowderSnow()` / `setInPowderSnow()` — flag set each tick by the powder snow block component.
+  - `EntityLivingComponent.isFrozen()` — returns `true` when freeze ticks reach the maximum.
+  - `EntityLivingComponent.MAX_FREEZE_TICKS` — constant (140) for the freeze threshold.
+  - `DamageContainer.freezing(float)` — factory method for `DamageType.FREEZING` damage.
+- (API) Refactored `BucketFillSound` and `BucketEmptySound`: replaced `boolean water` parameter with a `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`) to support all bucket content types.
 - Implemented the following blocks:
   - Bamboo
   - Bamboo sapling
@@ -46,6 +53,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - dripleaf
   - Torchflower crop
   - Pitcher crop
+  - Powder snow
 - Implemented the following items:
   - Cocoa beans
   - Sweet berries
@@ -58,6 +66,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Changed
 
+- (API) Changed `BucketFillSound` and `BucketEmptySound` from `boolean water` to `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`).
 - (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
 
