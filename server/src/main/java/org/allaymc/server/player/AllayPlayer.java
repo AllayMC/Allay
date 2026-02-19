@@ -94,6 +94,7 @@ import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
+import org.allaymc.server.network.AllayNetworkInterface;
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.multiversion.MultiVersion;
@@ -110,8 +111,6 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
-import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
@@ -182,6 +181,7 @@ public class AllayPlayer implements Player {
     protected final AtomicInteger fullyJoinChunkThreshold;
     @Getter
     protected final BedrockServerSession session;
+    protected final AllayNetworkInterface sourceInterface;
 
     @Getter
     protected EntityPlayer controlledEntity;
@@ -228,8 +228,9 @@ public class AllayPlayer implements Player {
     @Setter
     protected boolean netEasePlayer;
 
-    public AllayPlayer(BedrockServerSession session) {
+    public AllayPlayer(BedrockServerSession session, AllayNetworkInterface sourceInterface) {
         this.session = session;
+        this.sourceInterface = sourceInterface;
         this.session.setPacketHandler(new AllayPacketHandler());
         this.packetProcessorHolder = new PacketProcessorHolder();
         this.packetProcessorHolder.setClientState(ClientState.CONNECTED);
@@ -2651,10 +2652,7 @@ public class AllayPlayer implements Player {
 
     @Override
     public int getPing() {
-        var rakServerChannel = (RakServerChannel) session.getPeer().getChannel().parent();
-        var childChannel = rakServerChannel.getChildChannel(session.getSocketAddress());
-        var rakSessionCodec = childChannel.rakPipeline().get(RakSessionCodec.class);
-        return (int) rakSessionCodec.getPing();
+        return sourceInterface.getPing(session);
     }
 
     @Override

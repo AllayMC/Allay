@@ -18,6 +18,7 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.AllayNetworkInterface;
+import org.allaymc.server.network.AllayNetworkManager;
 import org.allaymc.server.utils.Utils;
 import org.allaymc.server.world.AllayDimension;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -40,16 +41,18 @@ public class AllayPlayerManager implements PlayerManager {
     @Getter
     protected final AllayPlayerStorage playerStorage;
     @Getter
-    protected final AllayNetworkInterface networkInterface;
+    protected final AllayNetworkManager networkManager;
 
     protected final Map<UUID, Player> players;
     protected final BanInfo banInfo;
     protected final Whitelist whitelist;
     protected final Operators operators;
+    protected int maxPlayerCount;
 
-    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayNetworkInterface networkInterface) {
+    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayNetworkManager networkManager) {
         this.playerStorage = playerStorage;
-        this.networkInterface = networkInterface;
+        this.networkManager = networkManager;
+        this.maxPlayerCount = AllayServer.getSettings().genericSettings().maxPlayerCount();
         this.players = new Object2ObjectOpenHashMap<>();
         this.banInfo = ConfigManager.create(BanInfo.class, org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
@@ -76,12 +79,15 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public int getMaxPlayerCount() {
-        return networkInterface.getMaxPlayerCount();
+        return maxPlayerCount;
     }
 
     @Override
     public void setMaxPlayerCount(int value) {
-        networkInterface.setMaxPlayerCount(value);
+        this.maxPlayerCount = value;
+        for (var iface : networkManager.getInterfaces()) {
+            ((AllayNetworkInterface) iface).setMaxPlayerCount(value);
+        }
     }
 
     @Override
@@ -262,17 +268,17 @@ public class AllayPlayerManager implements PlayerManager {
                 .ifPresent(player -> player.viewPlayerPermission(player));
     }
 
-    public void startNetworkInterface() {
-        this.networkInterface.start();
+    public void startNetworkInterfaces() {
+        this.networkManager.startAll();
     }
 
-    public void shutdownNetworkInterface() {
-        this.networkInterface.shutdown();
+    public void shutdownNetworkInterfaces() {
+        this.networkManager.shutdownAll();
     }
 
     public synchronized void addPlayer(Player player) {
         this.players.put(player.getLoginData().getUuid(), player);
-        this.networkInterface.setPlayerCount(this.players.size());
+        updatePlayerCount();
         Server.getInstance().getMessageChannel().addReceiver(player.getControlledEntity());
         broadcastPlayerListChange(player, true);
         // NOTICE: player list should be sent to the player itself later when the client is fully loaded.
@@ -286,7 +292,7 @@ public class AllayPlayerManager implements PlayerManager {
         // At this time the client has disconnected
         if (player.getLastClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
             this.players.remove(player.getLoginData().getUuid());
-            this.networkInterface.setPlayerCount(this.players.size());
+            updatePlayerCount();
 
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
@@ -316,6 +322,13 @@ public class AllayPlayerManager implements PlayerManager {
             }
 
             other.viewPlayerListChange(Collections.singleton(player), add);
+        }
+    }
+
+    protected void updatePlayerCount() {
+        var count = this.players.size();
+        for (var iface : networkManager.getInterfaces()) {
+            ((AllayNetworkInterface) iface).setPlayerCount(count);
         }
     }
 

@@ -49,6 +49,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `EntityLivingComponent.MAX_FREEZE_TICKS` — constant (140) for the freeze threshold.
   - `DamageContainer.freezing(float)` — factory method for `DamageType.FREEZING` damage.
 - (API) Refactored `BucketFillSound` and `BucketEmptySound`: replaced `boolean water` parameter with a `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`) to support all bucket content types.
+- (API) Added `NetworkManager` interface for managing multiple network interfaces, allowing plugins to register custom transport protocols (QUIC, TCP, WebSocket, etc.) alongside the built-in RakNet interface.
+- (API) Added `PlayerManager.getNetworkManager()` method.
+- (API) Added cancellable `NetworkInterfaceRegisterEvent` and `NetworkInterfaceUnregisterEvent`.
+- Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Implemented the following blocks:
   - Bamboo
   - Bamboo sapling
@@ -99,6 +103,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Removed
 
 - (API) Removed deprecated `viewEntityLocation` overload from `WorldViewer`.
+- (API) Removed `PlayerManager.getNetworkInterface()`. Use `PlayerManager.getNetworkManager().getDefaultInterface()` instead.
 
 # 0.11.0 (API 0.25.0) - 2026/2/12
 

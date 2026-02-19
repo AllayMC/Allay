@@ -3,6 +3,7 @@ package org.allaymc.api.player;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
+import org.allaymc.api.network.NetworkManager;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -246,9 +247,9 @@ public interface PlayerManager {
     void setOperator(String uuidOrName, boolean value);
 
     /**
-     * Get the network interface.
+     * Get the network manager that manages all network interfaces.
      *
-     * @return the network interface
+     * @return the network manager
      */
-    NetworkInterface getNetworkInterface();
+    NetworkManager getNetworkManager();
 }
