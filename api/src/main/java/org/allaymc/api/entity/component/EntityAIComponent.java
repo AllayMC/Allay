@@ -35,7 +35,23 @@ public interface EntityAIComponent extends EntityComponent {
         return getBehaviorGroup().getMemoryStorage();
     }
 
-    // --- Move/look target utilities ---
+    /**
+     * Get the movement speed of this entity.
+     *
+     * @return the movement speed
+     */
+    default float getMovementSpeed() {
+        return getMemoryStorage().get(MemoryTypes.MOVEMENT_SPEED);
+    }
+
+    /**
+     * Set the movement speed of this entity.
+     *
+     * @param speed the movement speed
+     */
+    default void setMovementSpeed(float speed) {
+        getMemoryStorage().put(MemoryTypes.MOVEMENT_SPEED, speed);
+    }
 
     default Vector3dc getLookTarget() {
         return getMemoryStorage().get(MemoryTypes.LOOK_TARGET);

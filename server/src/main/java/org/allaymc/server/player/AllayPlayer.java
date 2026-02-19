@@ -1000,6 +1000,18 @@ public class AllayPlayer implements Player {
                 packet.setAction(AnimatePacket.Action.WAKE_UP);
                 sendPacket(packet);
             }
+            case SimpleEntityAction.IN_LOVE -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.LOVE_PARTICLES);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                sendPacket(packet);
+            }
+            case SimpleEntityAction.EAT_GRASS -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.EAT_GRASS);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                sendPacket(packet);
+            }
             default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
         }
     }

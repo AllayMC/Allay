@@ -3,13 +3,10 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import org.allaymc.api.entity.ai.behaviorgroup.BehaviorGroup;
 import org.allaymc.api.entity.component.EntityAIComponent;
-import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.entity.ai.behaviorgroup.EmptyBehaviorGroup;
 import org.allaymc.server.entity.ai.behaviorgroup.SimpleBehaviorGroup;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
 

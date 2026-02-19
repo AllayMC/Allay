@@ -35,7 +35,7 @@ public class SimpleMemoryStorage implements MemoryStorage {
     }
 
     @Override
-    public <Data> void put(MemoryType<Data> type, Data value) {
+    public <T> void put(MemoryType<T> type, T value) {
         if (value == null) {
             storage.put(type, EMPTY_VALUE);
         } else {
@@ -45,7 +45,7 @@ public class SimpleMemoryStorage implements MemoryStorage {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <Data> Data get(MemoryType<Data> type) {
+    public <T> T get(MemoryType<T> type) {
         var value = storage.get(type);
         if (value == null) {
             // Not present in map, return default
@@ -58,7 +58,7 @@ public class SimpleMemoryStorage implements MemoryStorage {
         if (value == EMPTY_VALUE) {
             return null;
         }
-        return (Data) value;
+        return (T) value;
     }
 
     @Override
@@ -73,12 +73,23 @@ public class SimpleMemoryStorage implements MemoryStorage {
     }
 
     @Override
+    public <T> void clear(MemoryType<T> type) {
+        storage.remove(type);
+    }
+
+    @Override
     public boolean isEmpty() {
         return storage.isEmpty();
     }
 
     @Override
-    public <Data> boolean compareDataTo(MemoryType<Data> type, Data value) {
+    public <T> boolean isEmpty(MemoryType<T> type) {
+        var v = storage.get(type);
+        return v == null || v == EMPTY_VALUE;
+    }
+
+    @Override
+    public <T> boolean compareDataTo(MemoryType<T> type, T value) {
         return Objects.equals(get(type), value);
     }
 }

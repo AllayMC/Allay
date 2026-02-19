@@ -105,41 +105,20 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
 
     @Override
     public void evaluateCoreBehaviors(EntityIntelligent entity) {
-        if (coreBehaviorPeriodCounters == null) return;
-        // Core behaviors: highest priority evaluated one wins
-        Behavior best = null;
-        for (var behavior : coreBehaviors) {
-            int counter = coreBehaviorPeriodCounters.getOrDefault(behavior, 0) + 1;
-            if (counter >= behavior.getPeriod()) {
-                if (behavior.evaluate(entity)) {
-                    if (best == null || behavior.getPriority() < best.getPriority()) {
-                        best = behavior;
-                    }
-                }
-                counter = 0;
-            }
-            coreBehaviorPeriodCounters.put(behavior, counter);
-        }
-
-        if (best != null) {
-            if (runningCoreBehavior != null && runningCoreBehavior != best) {
-                runningCoreBehavior.onInterrupt(entity);
-                runningCoreBehavior.setBehaviorState(BehaviorState.STOP);
-            }
-            if (runningCoreBehavior != best) {
-                best.onStart(entity);
-                best.setBehaviorState(BehaviorState.ACTIVE);
-            }
-            runningCoreBehavior = best;
-        }
+        runningCoreBehavior = evaluateBehaviorSet(entity, coreBehaviors, coreBehaviorPeriodCounters, runningCoreBehavior);
     }
 
     @Override
     public void evaluateBehaviors(EntityIntelligent entity) {
-        if (behaviorPeriodCounters == null) return;
+        runningBehavior = evaluateBehaviorSet(entity, behaviors, behaviorPeriodCounters, runningBehavior);
+    }
+
+    protected Behavior evaluateBehaviorSet(EntityIntelligent entity, Set<Behavior> behaviorSet,
+                                           Map<Behavior, Integer> periodCounters, Behavior currentRunning) {
+        if (periodCounters == null) return currentRunning;
         Behavior best = null;
-        for (var behavior : behaviors) {
-            int counter = behaviorPeriodCounters.getOrDefault(behavior, 0) + 1;
+        for (var behavior : behaviorSet) {
+            int counter = periodCounters.getOrDefault(behavior, 0) + 1;
             if (counter >= behavior.getPeriod()) {
                 if (behavior.evaluate(entity)) {
                     if (best == null || behavior.getPriority() < best.getPriority()) {
@@ -148,46 +127,44 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
                 }
                 counter = 0;
             }
-            behaviorPeriodCounters.put(behavior, counter);
+            periodCounters.put(behavior, counter);
         }
 
         if (best != null) {
-            if (runningBehavior != null && runningBehavior != best) {
-                runningBehavior.onInterrupt(entity);
-                runningBehavior.setBehaviorState(BehaviorState.STOP);
+            if (currentRunning != null && currentRunning != best) {
+                currentRunning.onInterrupt(entity);
+                currentRunning.setBehaviorState(BehaviorState.STOP);
             }
-            if (runningBehavior != best) {
+            if (currentRunning != best) {
                 best.onStart(entity);
                 best.setBehaviorState(BehaviorState.ACTIVE);
             }
-            runningBehavior = best;
+            return best;
         }
+        return currentRunning;
     }
 
     @Override
     public void tickRunningCoreBehaviors(EntityIntelligent entity) {
-        if (runningCoreBehavior == null) return;
-        if (runningCoreBehavior.getBehaviorState() != BehaviorState.ACTIVE) return;
-
-        boolean continueRunning = runningCoreBehavior.execute(entity);
-        if (!continueRunning) {
-            runningCoreBehavior.onStop(entity);
-            runningCoreBehavior.setBehaviorState(BehaviorState.STOP);
-            runningCoreBehavior = null;
-        }
+        runningCoreBehavior = tickRunningBehavior(entity, runningCoreBehavior);
     }
 
     @Override
     public void tickRunningBehaviors(EntityIntelligent entity) {
-        if (runningBehavior == null) return;
-        if (runningBehavior.getBehaviorState() != BehaviorState.ACTIVE) return;
+        runningBehavior = tickRunningBehavior(entity, runningBehavior);
+    }
 
-        boolean continueRunning = runningBehavior.execute(entity);
+    protected Behavior tickRunningBehavior(EntityIntelligent entity, Behavior running) {
+        if (running == null) return null;
+        if (running.getBehaviorState() != BehaviorState.ACTIVE) return running;
+
+        boolean continueRunning = running.execute(entity);
         if (!continueRunning) {
-            runningBehavior.onStop(entity);
-            runningBehavior.setBehaviorState(BehaviorState.STOP);
-            runningBehavior = null;
+            running.onStop(entity);
+            running.setBehaviorState(BehaviorState.STOP);
+            return null;
         }
+        return running;
     }
 
     @Override
