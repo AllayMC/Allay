@@ -21,14 +21,15 @@ public class EntityAIComponentImpl implements EntityAIComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_ai_component");
 
-    @Dependency
-    protected EntityBaseComponent baseComponent;
-
     @ComponentObject
     protected EntityIntelligent thisEntity;
 
     @Getter
-    protected BehaviorGroup behaviorGroup = EmptyBehaviorGroup.INSTANCE;
+    protected BehaviorGroup behaviorGroup;
+
+    public EntityAIComponentImpl(BehaviorGroup behaviorGroup) {
+        this.behaviorGroup = behaviorGroup;
+    }
 
     @Override
     public void setBehaviorGroup(BehaviorGroup behaviorGroup) {
@@ -42,7 +43,7 @@ public class EntityAIComponentImpl implements EntityAIComponent {
 
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
-        if (baseComponent.isImmobile()) return;
+        if (thisEntity.isImmobile()) return;
 
         behaviorGroup.collectSensorData(thisEntity);
         behaviorGroup.evaluateCoreBehaviors(thisEntity);

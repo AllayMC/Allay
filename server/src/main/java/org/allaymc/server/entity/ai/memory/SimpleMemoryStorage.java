@@ -49,7 +49,7 @@ public class SimpleMemoryStorage implements MemoryStorage {
         var value = storage.get(type);
         if (value == null) {
             // Not present in map, return default
-            var defaultData = type.getDefaultData().get();
+            var defaultData = type.defaultData().get();
             if (defaultData != null) {
                 storage.put(type, defaultData);
             }

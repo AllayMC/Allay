@@ -53,10 +53,8 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
 
     // Period counters for sensors and behaviors
     protected transient Map<Sensor, Integer> sensorPeriodCounters;
-    protected transient Map<Behavior, Integer> coreBehaviorPeriodCounters;
-    protected transient Map<Behavior, Integer> behaviorPeriodCounters;
-    protected transient Behavior runningCoreBehavior;
-    protected transient Behavior runningBehavior;
+    protected transient Map<Behavior, Integer> coreBehaviorPeriodCounters, behaviorPeriodCounters;
+    protected transient Behavior runningCoreBehavior, runningBehavior;
 
     public static class SimpleBehaviorGroupBuilder {
         // Ensure memoryStorage has a default value
