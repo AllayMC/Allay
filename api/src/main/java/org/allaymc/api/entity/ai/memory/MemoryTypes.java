@@ -39,10 +39,10 @@ public final class MemoryTypes {
             new MemoryType<>(new Identifier("minecraft:enable_dive_force"), () -> true);
 
     public static final MemoryType<Long> LAST_BE_FEED_TIME =
-            new MemoryType<>(new Identifier("minecraft:last_be_feed_time"), () -> -65536L);
+            new MemoryType<>(new Identifier("minecraft:last_be_feed_time"), () -> -1L);
 
     public static final MemoryType<Long> LAST_IN_LOVE_TIME =
-            new MemoryType<>(new Identifier("minecraft:last_in_love_time"), () -> -65536L);
+            new MemoryType<>(new Identifier("minecraft:last_in_love_time"), () -> -1L);
 
     public static final MemoryType<Boolean> IS_IN_LOVE =
             new MemoryType<>(new Identifier("minecraft:is_in_love"), () -> false);
