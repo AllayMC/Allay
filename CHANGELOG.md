@@ -92,6 +92,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Changed `BucketFillSound` and `BucketEmptySound` from `boolean water` to `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`).
 - (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
+- (API) The return type of Pack.getVersion() is changed from `SemVersion` to `Semver` from the `semver4j`. This is because the support of semver in package manifest version fields.
 
 ### Fixed
 
@@ -99,6 +100,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed door collision shapes not changing based on block state. Doors now correctly compute their collision and selection shapes based on cardinal direction, open state, and hinge side.
 - Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
 - Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
+- Allay now support semver in package manifest version fields.
 
 ### Removed
 

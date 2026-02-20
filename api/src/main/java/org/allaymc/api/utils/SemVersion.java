@@ -6,7 +6,7 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 /**
- * Represents a semantic version.
+ * A semantic like version for Minecraft.
  *
  * @see <a href="https://semver.org/">Semantic Versioning</a>
  */
