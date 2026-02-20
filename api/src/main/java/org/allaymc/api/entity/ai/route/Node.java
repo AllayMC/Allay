@@ -50,7 +50,7 @@ public class Node implements Comparable<Node> {
         long bits = Double.doubleToLongBits(vector.x());
         bits = 31 * bits + Double.doubleToLongBits(vector.y());
         bits = 31 * bits + Double.doubleToLongBits(vector.z());
-        return (int) (bits ^ (bits >>> 32));
+        return Long.hashCode(bits);
     }
 
     @Override
