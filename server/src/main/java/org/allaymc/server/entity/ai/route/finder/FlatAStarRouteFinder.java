@@ -2,11 +2,11 @@ package org.allaymc.server.entity.ai.route.finder;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.ai.route.Node;
-import org.allaymc.api.entity.ai.route.PosEvaluator;
+import org.allaymc.api.entity.ai.route.RouteFinder;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.entity.ai.route.SimpleRouteFinder;
+import org.allaymc.server.entity.ai.route.posevaluator.GroundPosEvaluator;
 import org.joml.Vector3dc;
 
 import java.util.*;
@@ -16,44 +16,35 @@ import java.util.*;
  *
  * @author daoge_cmd
  */
-public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
+public class FlatAStarRouteFinder implements RouteFinder {
 
     protected static final int[][] FLAT_NEIGHBORS = {
             {1, 0}, {-1, 0}, {0, 1}, {0, -1},
             {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
     };
 
-    protected final PosEvaluator posEvaluator;
+    protected final GroundPosEvaluator groundPosEvaluator;
     protected final int maxSearchDepth;
     protected final int maxFallDistance;
 
-    public SimpleFlatAStarRouteFinder(PosEvaluator posEvaluator) {
-        this(posEvaluator, 100, 3);
+    public FlatAStarRouteFinder(GroundPosEvaluator groundPosEvaluator) {
+        this(groundPosEvaluator, 100, 3);
     }
 
-    public SimpleFlatAStarRouteFinder(PosEvaluator posEvaluator, int maxSearchDepth, int maxFallDistance) {
-        this.posEvaluator = posEvaluator;
+    public FlatAStarRouteFinder(GroundPosEvaluator groundPosEvaluator, int maxSearchDepth, int maxFallDistance) {
+        this.groundPosEvaluator = groundPosEvaluator;
+        this.maxSearchDepth = maxSearchDepth;
+        this.maxFallDistance = maxFallDistance;
+    }
+
+    protected FlatAStarRouteFinder(int maxSearchDepth, int maxFallDistance) {
+        this.groundPosEvaluator = null;
         this.maxSearchDepth = maxSearchDepth;
         this.maxFallDistance = maxFallDistance;
     }
 
     @Override
-    public void search(EntityIntelligent entity, Vector3dc target) {
-        super.search(entity, target);
-        findPath(entity, target);
-    }
-
-    @Override
-    public boolean isSearching() {
-        return false; // Synchronous search, never "in progress" after search() returns
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true; // Synchronous search is always finished immediately
-    }
-
-    protected void findPath(EntityIntelligent entity, Vector3dc target) {
+    public List<Node> search(EntityIntelligent entity, Vector3dc target) {
         var dimension = entity.getDimension();
         var startPos = entity.getLocation();
 
@@ -79,8 +70,7 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
         while (!openSet.isEmpty() && depth < maxSearchDepth) {
             var current = openSet.poll();
             if (isCloseEnough(current, endNode)) {
-                reconstructPath(current);
-                return;
+                return floydSmooth(reconstructPath(current), dimension, entity);
             }
 
             closedSet.add(current);
@@ -102,7 +92,8 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
                 }
             }
         }
-        // No path found, leave route empty
+        // No path found
+        return List.of();
     }
 
     protected List<Node> getNeighbors(Node current, Dimension dimension, EntityIntelligent entity) {
@@ -129,22 +120,10 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
     }
 
     protected boolean isWalkable(int x, int y, int z, Dimension dimension, EntityIntelligent entity) {
-        // The block at feet level and head level must be passable
-        var feetBlock = dimension.getBlockState(x, y, z);
-        var headBlock = dimension.getBlockState(x, y + 1, z);
-        // The block below must be solid (standing surface)
         var groundBlock = dimension.getBlockState(x, y - 1, z);
+        if (groundBlock == null) return false;
 
-        if (feetBlock == null || headBlock == null || groundBlock == null) return false;
-
-        boolean feetPassable = !feetBlock.getBlockStateData().hasCollision();
-        boolean headPassable = !headBlock.getBlockStateData().hasCollision();
-        boolean groundSolid = groundBlock.getBlockStateData().hasCollision();
-
-        if (!feetPassable || !headPassable || !groundSolid) return false;
-
-        // Check with PosEvaluator
-        return posEvaluator.evalStandingBlock(entity,
+        return groundPosEvaluator.evaluate(entity,
                 new Block(groundBlock, new Position3i(x, y - 1, z, dimension)));
     }
 
@@ -164,7 +143,71 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
         return a.getVector().distance(b.getVector());
     }
 
-    protected void reconstructPath(Node endNode) {
+    protected List<Node> floydSmooth(List<Node> path, Dimension dimension, EntityIntelligent entity) {
+        if (path.size() <= 2) return path;
+
+        // Clear first node's parent so reconstruction stops here
+        path.getFirst().setParent(null);
+
+        int current = 0;
+        int total = 2;
+        while (total < path.size()) {
+            if (hasBarrier(path.get(current), path.get(total), dimension, entity) || total == path.size() - 1) {
+                path.get(total - 1).setParent(path.get(current));
+                current = total - 1;
+            }
+            total++;
+        }
+
+        // Reconstruct smoothed path by following parent links from end
+        var result = new ArrayList<Node>();
+        var node = path.getLast();
+        result.add(node);
+        while (node.getParent() != null) {
+            result.add(node = node.getParent());
+        }
+        Collections.reverse(result);
+        return result;
+    }
+
+    /**
+     * Check if there is an unwalkable block between two nodes using Bresenham's line algorithm.
+     */
+    protected boolean hasBarrier(Node a, Node b, Dimension dimension, EntityIntelligent entity) {
+        int x1 = (int) Math.floor(a.getVector().x());
+        int z1 = (int) Math.floor(a.getVector().z());
+        int x2 = (int) Math.floor(b.getVector().x());
+        int z2 = (int) Math.floor(b.getVector().z());
+
+        if (x1 == x2 && z1 == z2) return false;
+
+        int dx = Math.abs(x2 - x1);
+        int dz = Math.abs(z2 - z1);
+        int sx = Integer.signum(x2 - x1);
+        int sz = Integer.signum(z2 - z1);
+        int err = dx - dz;
+        int x = x1, z = z1;
+
+        while (x != x2 || z != z2) {
+            int e2 = 2 * err;
+            if (e2 > -dz) { err -= dz; x += sx; }
+            if (e2 < dx) { err += dx; z += sz; }
+
+            // Don't check the endpoint (already validated by A*)
+            if (x == x2 && z == z2) break;
+
+            // Interpolate Y along the line
+            double t = dx >= dz
+                    ? (double) (x - x1) / (x2 - x1)
+                    : (double) (z - z1) / (z2 - z1);
+            int y = (int) Math.floor(a.getVector().y() + t * (b.getVector().y() - a.getVector().y()));
+
+            if (!isWalkable(x, y, z, dimension, entity)) return true;
+        }
+        return false;
+    }
+
+    protected List<Node> reconstructPath(Node endNode) {
         var path = new ArrayList<Node>();
         var current = endNode;
         while (current != null) {
@@ -172,6 +215,12 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
             current = current.getParent();
         }
         Collections.reverse(path);
-        route.addAll(path);
+        // Skip the start node — the entity is already there.
+        // Without this, the entity would turn back to reach the
+        // center of its current block before moving forward.
+        if (path.size() > 1) {
+            path.removeFirst();
+        }
+        return path;
     }
 }

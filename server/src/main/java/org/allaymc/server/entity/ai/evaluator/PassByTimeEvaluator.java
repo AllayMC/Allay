@@ -3,7 +3,7 @@ package org.allaymc.server.entity.ai.evaluator;
 import org.allaymc.api.entity.ai.behavior.BehaviorEvaluator;
 import org.allaymc.api.entity.ai.memory.MemoryType;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
-import org.allaymc.api.server.Server;
+
 
 /**
  * Checks if the time elapsed since a timed memory value is within
@@ -26,8 +26,8 @@ public class PassByTimeEvaluator implements BehaviorEvaluator {
     @Override
     public boolean evaluate(EntityIntelligent entity) {
         var lastTime = entity.getMemoryStorage().get(timedMemory);
-        if (lastTime == null) return false;
-        long elapsed = Server.getInstance().getTick() - lastTime;
+        if (lastTime == null || lastTime < 0) return false;
+        long elapsed = entity.getTick() - lastTime;
         return elapsed >= min && elapsed <= max;
     }
 }

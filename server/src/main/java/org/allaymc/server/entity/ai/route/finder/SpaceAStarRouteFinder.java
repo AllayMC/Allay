@@ -1,9 +1,9 @@
 package org.allaymc.server.entity.ai.route.finder;
 
 import org.allaymc.api.entity.ai.route.Node;
-import org.allaymc.api.entity.ai.route.PosEvaluator;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.entity.ai.route.posevaluator.SpacePosEvaluator;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public class SimpleSpaceAStarRouteFinder extends SimpleFlatAStarRouteFinder {
+public class SpaceAStarRouteFinder extends FlatAStarRouteFinder {
 
     protected static final int[][] SPACE_NEIGHBORS = {
             // Same level (8 directions)
@@ -31,12 +31,15 @@ public class SimpleSpaceAStarRouteFinder extends SimpleFlatAStarRouteFinder {
             {1, -1, 1}, {1, -1, -1}, {-1, -1, 1}, {-1, -1, -1}
     };
 
-    public SimpleSpaceAStarRouteFinder(PosEvaluator posEvaluator) {
-        super(posEvaluator);
+    protected final SpacePosEvaluator spacePosEvaluator;
+
+    public SpaceAStarRouteFinder(SpacePosEvaluator spacePosEvaluator) {
+        this(spacePosEvaluator, 100, 3);
     }
 
-    public SimpleSpaceAStarRouteFinder(PosEvaluator posEvaluator, int maxSearchDepth, int maxFallDistance) {
-        super(posEvaluator, maxSearchDepth, maxFallDistance);
+    public SpaceAStarRouteFinder(SpacePosEvaluator spacePosEvaluator, int maxSearchDepth, int maxFallDistance) {
+        super(maxSearchDepth, maxFallDistance);
+        this.spacePosEvaluator = spacePosEvaluator;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class SimpleSpaceAStarRouteFinder extends SimpleFlatAStarRouteFinder {
 
         if (blockState.getBlockStateData().hasCollision()) return false;
 
-        return posEvaluator.evalPos(entity, new Vector3d(x + 0.5, y + 0.5, z + 0.5));
+        return spacePosEvaluator.evaluate(entity, new Vector3d(x + 0.5, y + 0.5, z + 0.5));
     }
 
     @Override

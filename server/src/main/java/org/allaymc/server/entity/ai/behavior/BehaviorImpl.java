@@ -12,7 +12,7 @@ import org.allaymc.api.entity.interfaces.EntityIntelligent;
  * @author daoge_cmd
  */
 @Getter
-public class SimpleBehavior extends AbstractBehavior {
+public class BehaviorImpl extends AbstractBehavior {
 
     protected final BehaviorExecutor executor;
     protected final BehaviorEvaluator evaluator;
@@ -20,7 +20,7 @@ public class SimpleBehavior extends AbstractBehavior {
     protected final int weight;
     protected final int period;
 
-    public SimpleBehavior(BehaviorExecutor executor, BehaviorEvaluator evaluator, int priority, int weight, int period) {
+    public BehaviorImpl(BehaviorExecutor executor, BehaviorEvaluator evaluator, int priority, int weight, int period) {
         this.executor = executor;
         this.evaluator = evaluator;
         this.priority = priority;
@@ -28,12 +28,16 @@ public class SimpleBehavior extends AbstractBehavior {
         this.period = period;
     }
 
-    public SimpleBehavior(BehaviorExecutor executor, BehaviorEvaluator evaluator, int priority, int weight) {
+    public BehaviorImpl(BehaviorExecutor executor, BehaviorEvaluator evaluator, int priority, int weight) {
         this(executor, evaluator, priority, weight, 1);
     }
 
-    public SimpleBehavior(BehaviorExecutor executor, BehaviorEvaluator evaluator, int priority) {
+    public BehaviorImpl(BehaviorExecutor executor, BehaviorEvaluator evaluator, int priority) {
         this(executor, evaluator, priority, 1, 1);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -59,5 +63,42 @@ public class SimpleBehavior extends AbstractBehavior {
     @Override
     public void onStop(EntityIntelligent entity) {
         executor.onStop(entity);
+    }
+
+    public static class Builder {
+        private BehaviorExecutor executor;
+        private BehaviorEvaluator evaluator;
+        private int priority;
+        private int weight = 1;
+        private int period = 1;
+
+        public Builder executor(BehaviorExecutor executor) {
+            this.executor = executor;
+            return this;
+        }
+
+        public Builder evaluator(BehaviorEvaluator evaluator) {
+            this.evaluator = evaluator;
+            return this;
+        }
+
+        public Builder priority(int priority) {
+            this.priority = priority;
+            return this;
+        }
+
+        public Builder weight(int weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public Builder period(int period) {
+            this.period = period;
+            return this;
+        }
+
+        public BehaviorImpl build() {
+            return new BehaviorImpl(executor, evaluator, priority, weight, period);
+        }
     }
 }

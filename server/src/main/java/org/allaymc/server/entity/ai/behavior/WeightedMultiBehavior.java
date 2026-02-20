@@ -5,6 +5,7 @@ import org.allaymc.api.entity.ai.behavior.Behavior;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -31,8 +32,8 @@ public class WeightedMultiBehavior extends AbstractBehavior {
         this.period = period;
     }
 
-    public WeightedMultiBehavior(Set<Behavior> behaviors, int priority, int weight) {
-        this(behaviors, priority, weight, 1);
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -99,6 +100,37 @@ public class WeightedMultiBehavior extends AbstractBehavior {
         if (activeBehavior != null) {
             activeBehavior.onStop(entity);
             activeBehavior = null;
+        }
+    }
+
+    public static class Builder {
+        private final Set<Behavior> behaviors = new LinkedHashSet<>();
+        private int priority;
+        private int weight = 1;
+        private int period = 1;
+
+        public Builder behavior(Behavior behavior) {
+            this.behaviors.add(behavior);
+            return this;
+        }
+
+        public Builder priority(int priority) {
+            this.priority = priority;
+            return this;
+        }
+
+        public Builder weight(int weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public Builder period(int period) {
+            this.period = period;
+            return this;
+        }
+
+        public WeightedMultiBehavior build() {
+            return new WeightedMultiBehavior(behaviors, priority, weight, period);
         }
     }
 }

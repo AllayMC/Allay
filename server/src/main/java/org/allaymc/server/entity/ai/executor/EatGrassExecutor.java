@@ -6,6 +6,7 @@ import org.allaymc.api.entity.ai.behavior.BehaviorExecutor;
 import org.allaymc.api.entity.interfaces.EntityAnimal;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.particle.BlockBreakParticle;
 
 /**
  * Sheep-specific grass eating executor. Plays the eat animation,
@@ -41,14 +42,17 @@ public class EatGrassExecutor implements BehaviorExecutor {
     @Override
     public void onStop(EntityIntelligent entity) {
         var dimension = entity.getDimension();
-        boolean mobGriefing = dimension.getWorld().getWorldData()
-                .<Boolean>getGameRuleValue(GameRule.MOB_GRIEFING);
-        if (!mobGriefing) return;
-
         var loc = entity.getLocation();
         int x = (int) Math.floor(loc.x());
         int y = (int) Math.floor(loc.y());
         int z = (int) Math.floor(loc.z());
+
+        // Spawn block break particle
+        dimension.addParticle(loc, new BlockBreakParticle(BlockTypes.SHORT_GRASS.getDefaultState()));
+
+        if (!dimension.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.MOB_GRIEFING)) {
+            return;
+        }
 
         // Check for short grass at feet level
         var feetBlock = dimension.getBlockState(x, y, z);

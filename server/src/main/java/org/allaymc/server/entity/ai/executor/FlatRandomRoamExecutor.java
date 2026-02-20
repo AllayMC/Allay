@@ -62,7 +62,7 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
     public boolean execute(EntityIntelligent entity) {
         tickCounter++;
 
-        if (tickCounter > runningTime) {
+        if (runningTime > 0 && tickCounter > runningTime) {
             return false;
         }
 

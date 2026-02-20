@@ -4,7 +4,7 @@ import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.ai.behavior.BehaviorExecutor;
 import org.allaymc.api.entity.ai.memory.MemoryTypes;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
-import org.allaymc.api.server.Server;
+
 
 /**
  * Sets the entity in love mode for a specified duration and sends
@@ -25,13 +25,13 @@ public class InLoveExecutor implements BehaviorExecutor {
     public void onStart(EntityIntelligent entity) {
         tickCounter = 0;
         entity.getMemoryStorage().put(MemoryTypes.IS_IN_LOVE, true);
-        entity.getMemoryStorage().put(MemoryTypes.LAST_IN_LOVE_TIME, Server.getInstance().getTick());
+        entity.getMemoryStorage().put(MemoryTypes.LAST_IN_LOVE_TIME, entity.getTick());
     }
 
     @Override
     public boolean execute(EntityIntelligent entity) {
         tickCounter++;
-        if (tickCounter > duration) {
+        if (tickCounter > duration || !Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))) {
             return false;
         }
 

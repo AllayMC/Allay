@@ -9,8 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.math.location.Location3d;
 import org.joml.Vector3d;
 
-import static org.allaymc.server.entity.ai.executor.EntityControlHelper.removeLookTarget;
-import static org.allaymc.server.entity.ai.executor.EntityControlHelper.removeRouteTarget;
+import static org.allaymc.server.entity.ai.executor.EntityControlHelper.*;
 
 /**
  * Generic breeding executor. Finds the nearest in-love entity of the same type,
@@ -20,11 +19,15 @@ import static org.allaymc.server.entity.ai.executor.EntityControlHelper.removeRo
  */
 public class EntityBreedingExecutor implements BehaviorExecutor {
 
+    protected static final int FINDING_RANGE_SQUARED = 256; // 16 blocks
+
     protected final int duration;
     protected final float speed;
 
     protected int tickCounter;
     protected Entity spouse;
+    protected boolean isInitiator;
+    protected Vector3d lastTargetPos;
 
     public EntityBreedingExecutor(int duration, float speed) {
         this.duration = duration;
@@ -35,6 +38,8 @@ public class EntityBreedingExecutor implements BehaviorExecutor {
     public void onStart(EntityIntelligent entity) {
         tickCounter = 0;
         spouse = null;
+        isInitiator = false;
+        lastTargetPos = null;
         entity.setMovementSpeed(speed);
     }
 
@@ -43,30 +48,52 @@ public class EntityBreedingExecutor implements BehaviorExecutor {
         tickCounter++;
 
         if (spouse == null || spouse.isDead()) {
-            spouse = findSpouse(entity);
-            if (spouse == null) {
-                return false;
+            spouse = null;
+            // Check if another entity's executor already paired with us
+            var spouseId = entity.getMemoryStorage().get(MemoryTypes.ENTITY_SPOUSE);
+            if (spouseId != null) {
+                var resolved = entity.getDimension().getEntityManager().getEntity(spouseId);
+                if (resolved != null && !resolved.isDead()) {
+                    spouse = resolved;
+                }
             }
-            entity.getMemoryStorage().put(MemoryTypes.ENTITY_SPOUSE, spouse.getRuntimeId());
+
+            if (spouse == null) {
+                spouse = findSpouse(entity);
+                if (spouse == null) {
+                    return true; // keep searching
+                }
+                isInitiator = true;
+                entity.getMemoryStorage().put(MemoryTypes.ENTITY_SPOUSE, spouse.getRuntimeId());
+                if (spouse instanceof EntityIntelligent spouseIntelligent) {
+                    spouseIntelligent.getMemoryStorage().put(MemoryTypes.ENTITY_SPOUSE, entity.getRuntimeId());
+                }
+            }
         }
 
-        // Move toward spouse
+        // Move toward spouse, re-path only when target moved >1 block
         var spouseLoc = spouse.getLocation();
-        EntityControlHelper.setRouteTarget(entity, new Vector3d(spouseLoc.x(), spouseLoc.y(), spouseLoc.z()));
-        EntityControlHelper.setLookTarget(entity, new Vector3d(spouseLoc.x(), spouseLoc.y() + spouse.getEyeHeight(), spouseLoc.z()));
+        var targetPos = new Vector3d(spouseLoc.x(), spouseLoc.y(), spouseLoc.z());
+        if (lastTargetPos == null || lastTargetPos.distanceSquared(targetPos) > 1.0) {
+            setRouteTarget(entity, targetPos);
+            lastTargetPos = targetPos;
+        }
 
-        // Check if close enough and enough time has passed
-        var loc = entity.getLocation();
-        double distSq = loc.distanceSquared(spouseLoc);
-        if (distSq < 4.0 && tickCounter >= duration) {
-            // Spawn baby
-            spawnBaby(entity);
-            // Reset love state for both parents
-            entity.getMemoryStorage().put(MemoryTypes.IS_IN_LOVE, false);
-            if (spouse instanceof EntityIntelligent spouseIntelligent) {
-                spouseIntelligent.getMemoryStorage().put(MemoryTypes.IS_IN_LOVE, false);
+        setLookTarget(entity, new Vector3d(
+                spouseLoc.x(), spouseLoc.y() + spouse.getEyeHeight(), spouseLoc.z()
+        ));
+
+        // Only the initiator checks for breeding completion and spawns the baby
+        if (isInitiator) {
+            double distSq = entity.getLocation().distanceSquared(spouseLoc);
+            if (distSq < 4.0 && tickCounter >= duration) {
+                spawnBaby(entity);
+                entity.getMemoryStorage().put(MemoryTypes.IS_IN_LOVE, false);
+                if (spouse instanceof EntityIntelligent spouseIntelligent) {
+                    spouseIntelligent.getMemoryStorage().put(MemoryTypes.IS_IN_LOVE, false);
+                }
+                return false;
             }
-            return false;
         }
 
         return tickCounter < duration + 60; // timeout after duration + buffer
@@ -74,14 +101,24 @@ public class EntityBreedingExecutor implements BehaviorExecutor {
 
     @Override
     public void onStop(EntityIntelligent entity) {
-        removeRouteTarget(entity);
-        removeLookTarget(entity);
-        entity.getMemoryStorage().clear(MemoryTypes.ENTITY_SPOUSE);
+        clearEntityState(entity);
+        if (spouse instanceof EntityIntelligent spouseIntelligent) {
+            clearEntityState(spouseIntelligent);
+        }
+        spouse = null;
+        isInitiator = false;
+        lastTargetPos = null;
     }
 
     @Override
     public void onInterrupt(EntityIntelligent entity) {
         onStop(entity);
+    }
+
+    protected void clearEntityState(EntityIntelligent entity) {
+        removeRouteTarget(entity);
+        removeLookTarget(entity);
+        entity.getMemoryStorage().clear(MemoryTypes.ENTITY_SPOUSE);
     }
 
     protected Entity findSpouse(EntityIntelligent entity) {
@@ -92,9 +129,14 @@ public class EntityBreedingExecutor implements BehaviorExecutor {
             if (candidate == entity) continue;
             if (candidate.getEntityType() != entity.getEntityType()) continue;
             if (!(candidate instanceof EntityIntelligent candidateIntelligent)) continue;
-            if (!Boolean.TRUE.equals(candidateIntelligent.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))) continue;
+            if (!candidateIntelligent.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)) continue;
+            // Skip babies
+            if (candidate instanceof EntityAnimal animal && animal.isBaby()) continue;
+            // Skip already paired entities
+            if (candidateIntelligent.getMemoryStorage().get(MemoryTypes.ENTITY_SPOUSE) != null) continue;
 
             double distSq = entity.getLocation().distanceSquared(candidate.getLocation());
+            if (distSq > FINDING_RANGE_SQUARED) continue;
             if (distSq < nearestDistSq) {
                 nearestDistSq = distSq;
                 nearest = candidate;
@@ -112,6 +154,10 @@ public class EntityBreedingExecutor implements BehaviorExecutor {
         );
         if (baby instanceof EntityAnimal animalBaby) {
             animalBaby.setBaby(true);
+        }
+        // Prevent baby from breeding immediately
+        if (baby instanceof EntityIntelligent babyIntelligent) {
+            babyIntelligent.getMemoryStorage().put(MemoryTypes.LAST_IN_LOVE_TIME, entity.getTick());
         }
         entity.getDimension().getEntityManager().addEntity(baby);
     }

@@ -9,11 +9,13 @@ import org.allaymc.api.entity.ai.behaviorgroup.BehaviorGroup;
 import org.allaymc.api.entity.ai.controller.Controller;
 import org.allaymc.api.entity.ai.memory.MemoryStorage;
 import org.allaymc.api.entity.ai.memory.MemoryTypes;
+import org.allaymc.api.entity.ai.route.Node;
 import org.allaymc.api.entity.ai.route.RouteFinder;
 import org.allaymc.api.entity.ai.sensor.Sensor;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.entity.ai.memory.SimpleMemoryStorage;
+import org.allaymc.server.entity.ai.memory.MemoryStorageImpl;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.*;
@@ -25,7 +27,7 @@ import java.util.*;
  * @author daoge_cmd
  */
 @Builder
-public class SimpleBehaviorGroup implements BehaviorGroup {
+public class BehaviorGroupImpl implements BehaviorGroup {
 
     @Singular
     @Getter
@@ -48,18 +50,20 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
 
     protected boolean routeUpdateRequired;
 
+    // Route state managed locally (RouteFinder is stateless)
+    protected transient List<Node> route;
+    protected transient int nodeIndex;
+
+    @Builder.Default
     @Getter
-    protected MemoryStorage memoryStorage;
+    protected MemoryStorage memoryStorage = new MemoryStorageImpl();
 
     // Period counters for sensors and behaviors
     protected transient Map<Sensor, Integer> sensorPeriodCounters;
     protected transient Map<Behavior, Integer> coreBehaviorPeriodCounters, behaviorPeriodCounters;
     protected transient Behavior runningCoreBehavior, runningBehavior;
 
-    public static class SimpleBehaviorGroupBuilder {
-        // Ensure memoryStorage has a default value
-        private MemoryStorage memoryStorage = new SimpleMemoryStorage();
-    }
+    protected transient EntityIntelligent entity;
 
     /**
      * Called when this behavior group is assigned to an entity.
@@ -68,11 +72,22 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
      * @param entity the entity this behavior group is assigned to
      */
     public void setEntity(EntityIntelligent entity) {
-        if (memoryStorage == null) {
-            memoryStorage = new SimpleMemoryStorage();
-        }
-        memoryStorage.setEntity(entity);
+        this.entity = entity;
         initPeriodCounters();
+    }
+
+    public void tick() {
+        if (entity == null) {
+            return;
+        }
+
+        collectSensorData(entity);
+        evaluateCoreBehaviors(entity);
+        evaluateBehaviors(entity);
+        tickRunningCoreBehaviors(entity);
+        tickRunningBehaviors(entity);
+        updateRoute(entity);
+        applyController(entity);
     }
 
     protected void initPeriodCounters() {
@@ -90,8 +105,7 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
         }
     }
 
-    @Override
-    public void collectSensorData(EntityIntelligent entity) {
+    protected void collectSensorData(EntityIntelligent entity) {
         if (sensorPeriodCounters == null) return;
         for (var sensor : sensors) {
             int counter = sensorPeriodCounters.getOrDefault(sensor, 0) + 1;
@@ -103,13 +117,11 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
         }
     }
 
-    @Override
-    public void evaluateCoreBehaviors(EntityIntelligent entity) {
+    protected void evaluateCoreBehaviors(EntityIntelligent entity) {
         runningCoreBehavior = evaluateBehaviorSet(entity, coreBehaviors, coreBehaviorPeriodCounters, runningCoreBehavior);
     }
 
-    @Override
-    public void evaluateBehaviors(EntityIntelligent entity) {
+    protected void evaluateBehaviors(EntityIntelligent entity) {
         runningBehavior = evaluateBehaviorSet(entity, behaviors, behaviorPeriodCounters, runningBehavior);
     }
 
@@ -144,13 +156,11 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
         return currentRunning;
     }
 
-    @Override
-    public void tickRunningCoreBehaviors(EntityIntelligent entity) {
+    protected void tickRunningCoreBehaviors(EntityIntelligent entity) {
         runningCoreBehavior = tickRunningBehavior(entity, runningCoreBehavior);
     }
 
-    @Override
-    public void tickRunningBehaviors(EntityIntelligent entity) {
+    protected void tickRunningBehaviors(EntityIntelligent entity) {
         runningBehavior = tickRunningBehavior(entity, runningBehavior);
     }
 
@@ -167,23 +177,76 @@ public class SimpleBehaviorGroup implements BehaviorGroup {
         return running;
     }
 
-    @Override
-    public void updateRoute(EntityIntelligent entity) {
+    protected void updateRoute(EntityIntelligent entity) {
         if (routeFinder == null) return;
 
         Vector3dc moveTarget = memoryStorage.get(MemoryTypes.MOVE_TARGET);
-        if (moveTarget == null) return;
+        if (moveTarget == null) {
+            entity.setMoveDirectionStart(null);
+            entity.setMoveDirectionEnd(null);
+            return;
+        }
 
-        if (routeUpdateRequired || routeFinder.hasReached() || !routeFinder.hasNext()) {
+        if (routeUpdateRequired || !hasNextNode()) {
             routeUpdateRequired = false;
             // Submit route finding to virtual thread pool
-            Server.getInstance().getVirtualThreadPool().submit(() ->
-                    routeFinder.search(entity, moveTarget));
+            Server.getInstance().getVirtualThreadPool().submit(() -> {
+                this.route = routeFinder.search(entity, moveTarget);
+                this.nodeIndex = 0;
+            });
+        }
+
+        // Auto-advance waypoint when entity is close enough (Paper: followThePath)
+        // This runs BEFORE controllers, so WalkController always has a valid ahead-target
+        if (!entity.shouldUpdateMoveDirection() && entity.hasMoveDirection()) {
+            var end = entity.getMoveDirectionEnd();
+            if (end != null) {
+                var loc = entity.getLocation();
+                double dx = end.x() - loc.x();
+                double dz = end.z() - loc.z();
+                double horizontalDistSq = dx * dx + dz * dz;
+                // Paper: maxDistanceToWaypoint = bbWidth > 0.75 ? bbWidth / 2 : 0.75 - bbWidth / 2
+                var aabb = entity.getAABB();
+                double bbWidth = aabb.maxX() - aabb.minX();
+                double maxDist = bbWidth > 0.75 ? bbWidth / 2.0 : 0.75 - bbWidth / 2.0;
+                if (horizontalDistSq < maxDist * maxDist) {
+                    entity.setShouldUpdateMoveDirection(true);
+                }
+            }
+        }
+
+        // Consume next direction node when needed
+        if (entity.shouldUpdateMoveDirection() || !entity.hasMoveDirection()) {
+            if (hasNextNode()) {
+                updateMoveDirection(entity);
+                entity.setShouldUpdateMoveDirection(false);
+            } else if (entity.shouldUpdateMoveDirection()) {
+                entity.setMoveDirectionStart(null);
+                entity.setMoveDirectionEnd(null);
+                entity.setShouldUpdateMoveDirection(false);
+            }
         }
     }
 
-    @Override
-    public void applyController(EntityIntelligent entity) {
+    protected boolean hasNextNode() {
+        return route != null && nodeIndex < route.size();
+    }
+
+    protected Node nextNode() {
+        if (!hasNextNode()) return null;
+        return route.get(nodeIndex++);
+    }
+
+    protected void updateMoveDirection(EntityIntelligent entity) {
+        var end = entity.getMoveDirectionEnd();
+        var next = nextNode();
+        if (next != null) {
+            entity.setMoveDirectionStart(end != null ? end : new Vector3d(entity.getLocation().x(), entity.getLocation().y(), entity.getLocation().z()));
+            entity.setMoveDirectionEnd(next.getVector());
+        }
+    }
+
+    protected void applyController(EntityIntelligent entity) {
         for (var controller : controllers) {
             controller.control(entity);
         }

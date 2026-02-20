@@ -8,6 +8,7 @@ import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemSpawnEggBaseComponent;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.entity.data.EntityId;
+import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.joml.Vector3ic;
 
 /**
@@ -40,7 +41,8 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl impleme
                         .dimension(dimension)
                         .pos(
                                 (double) clickedPos.x() + clickedBlockPos.x(),
-                                (double) clickedPos.y() + clickedBlockPos.y(),
+                                // Add FAT_AABB_MARGIN to prevent the spawned entity from clipping into the ground
+                                (double) clickedPos.y() + clickedBlockPos.y() + AllayEntityPhysicsEngine.FAT_AABB_MARGIN,
                                 (double) clickedPos.z() + clickedBlockPos.z()
                         )
                         .build()

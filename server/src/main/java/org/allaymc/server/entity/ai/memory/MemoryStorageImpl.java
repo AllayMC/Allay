@@ -1,8 +1,5 @@
 package org.allaymc.server.entity.ai.memory;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.ai.memory.MemoryStorage;
 import org.allaymc.api.entity.ai.memory.MemoryType;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -17,22 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author daoge_cmd
  */
-public class SimpleMemoryStorage implements MemoryStorage {
+public class MemoryStorageImpl implements MemoryStorage {
 
     private static final Object EMPTY_VALUE = new Object();
 
     private final ConcurrentHashMap<MemoryType<?>, Object> storage = new ConcurrentHashMap<>();
-
-    @Getter
-    @Setter
-    private Entity entity;
-
-    public SimpleMemoryStorage() {
-    }
-
-    public SimpleMemoryStorage(Entity entity) {
-        this.entity = entity;
-    }
 
     @Override
     public <T> void put(MemoryType<T> type, T value) {

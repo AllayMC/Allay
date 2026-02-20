@@ -213,6 +213,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     Scheduler getScheduler();
 
     /**
+     * Gets the number of ticks this entity has been alive for.
+     *
+     * @return the entity's tick count
+     */
+    long getTick();
+
+    /**
      * Get the state of the entity.
      *
      * @return the state of the entity

@@ -1,6 +1,5 @@
 package org.allaymc.api.entity.ai.memory;
 
-import org.allaymc.api.entity.Entity;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -42,20 +41,6 @@ public interface MemoryStorage {
      * Clear all stored memory data.
      */
     void clear();
-
-    /**
-     * Get the entity that owns this memory storage.
-     *
-     * @return the entity
-     */
-    Entity getEntity();
-
-    /**
-     * Set the entity that owns this memory storage.
-     *
-     * @param entity the entity
-     */
-    void setEntity(Entity entity);
 
     /**
      * Check if this memory storage has no data.
