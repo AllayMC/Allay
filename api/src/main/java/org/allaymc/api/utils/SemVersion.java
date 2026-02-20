@@ -7,7 +7,6 @@ import java.lang.reflect.Type;
 
 /**
  * A semantic like version for Minecraft.
- * If you need a real semantic version, please use {@link SemanticVersion} instead.
  *
  * @see <a href="https://semver.org/">Semantic Versioning</a>
  */

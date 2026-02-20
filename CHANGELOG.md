@@ -82,14 +82,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - End spawn platform creation during teleport to The End.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
 - Updated the chunk version to 42 (1.21.120).
-- (API) Added a semver2.0 implementation in `org.allaymc.api.util.version.SemanticVersion`.
 
 ### Changed
 
 - (API) Changed `BucketFillSound` and `BucketEmptySound` from `boolean water` to `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`).
 - (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
-- (API) The return type of Pack.getVersion() is changed from `SemVersion` to `SemanticVersion` to support semver in package manifest.
+- (API) The return type of Pack.getVersion() is changed from `SemVersion` to `Semver` from the `semver4j`. This is because the support of semver in package manifest version fields.
 
 ### Fixed
 

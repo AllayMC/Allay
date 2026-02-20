@@ -4,7 +4,7 @@ import com.google.gson.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.SemanticVersion;
+import org.semver4j.Semver;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
@@ -48,12 +48,12 @@ public abstract class Pack implements AutoCloseable {
         return this.manifest.getHeader().getUuid();
     }
 
-    public SemanticVersion getVersion() {
+    public Semver getVersion() {
         return this.manifest.getHeader().getVersion();
     }
 
     public String getStringVersion() {
-        return this.getVersion().toVersionString();
+        return this.getVersion().getVersion();
     }
 
     public int getSize() {
