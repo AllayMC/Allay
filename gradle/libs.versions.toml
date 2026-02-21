@@ -45,7 +45,7 @@ gson = { group = "com.google.code.gson", name = "gson", version = "2.13.2" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.5" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.20.0" }
-annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2-1" }
+annotations = { group = "org.jetbrains", name = "annotations", version = "26.1.0" }
 semver4j = { group = "org.semver4j", name = "semver4j", version = "6.0.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
@@ -79,11 +79,11 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.3" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.7" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.30387.193" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.31033.145" }
 # JUnit
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.2" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.3" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "6.0.2" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "6.0.3" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.21.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
@@ -91,7 +91,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.32.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.33.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 # bStats
