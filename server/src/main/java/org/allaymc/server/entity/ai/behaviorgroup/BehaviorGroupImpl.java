@@ -2,6 +2,7 @@ package org.allaymc.server.entity.ai.behaviorgroup;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.Singular;
 import org.allaymc.api.entity.ai.behavior.Behavior;
 import org.allaymc.api.entity.ai.behavior.BehaviorState;
@@ -48,7 +49,10 @@ public class BehaviorGroupImpl implements BehaviorGroup {
     @Getter
     protected final RouteFinder routeFinder;
 
+    @Getter
+    @Setter
     protected boolean routeUpdateRequired;
+    protected volatile boolean routeFinding;
 
     // Route state managed locally (RouteFinder is stateless)
     protected transient List<Node> route;
@@ -187,12 +191,17 @@ public class BehaviorGroupImpl implements BehaviorGroup {
             return;
         }
 
-        if (routeUpdateRequired || !hasNextNode()) {
+        if ((routeUpdateRequired || !hasNextNode()) && !routeFinding) {
             routeUpdateRequired = false;
+            routeFinding = true;
             // Submit route finding to virtual thread pool
             Server.getInstance().getVirtualThreadPool().submit(() -> {
-                this.route = routeFinder.search(entity, moveTarget);
-                this.nodeIndex = 0;
+                try {
+                    this.route = routeFinder.search(entity, moveTarget);
+                    this.nodeIndex = 0;
+                } finally {
+                    routeFinding = false;
+                }
             });
         }
 
@@ -250,15 +259,5 @@ public class BehaviorGroupImpl implements BehaviorGroup {
         for (var controller : controllers) {
             controller.control(entity);
         }
-    }
-
-    @Override
-    public boolean isRouteUpdateRequired() {
-        return routeUpdateRequired;
-    }
-
-    @Override
-    public void setRouteUpdateRequired(boolean routeUpdateRequired) {
-        this.routeUpdateRequired = routeUpdateRequired;
     }
 }
