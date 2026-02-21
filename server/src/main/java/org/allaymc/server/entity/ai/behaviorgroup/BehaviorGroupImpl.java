@@ -206,7 +206,9 @@ public class BehaviorGroupImpl implements BehaviorGroup {
         var first = runningBehaviors.isEmpty() ? null : runningBehaviors.iterator().next();
         int runningPriority = first != null ? first.getPriority() : Integer.MIN_VALUE;
 
-        if (highestPriority > runningPriority) {
+        if (highestPriority < runningPriority) {
+            // New behaviors have lower priority than running — do nothing
+        } else if (highestPriority > runningPriority) {
             // New behaviors have higher priority — interrupt and replace
             interruptRunningBehaviors(entity);
             startBehaviors(entity, evalSucceed);
