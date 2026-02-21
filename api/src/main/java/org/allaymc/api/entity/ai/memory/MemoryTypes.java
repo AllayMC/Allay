@@ -119,7 +119,7 @@ public final class MemoryTypes {
      * Currently only used by chicken.
      */
     public static final MemoryType<Long> LAST_EGG_SPAWN_TIME =
-            new MemoryType<>(new Identifier("minecraft:last_egg_spawn_time"), () -> 0L);
+            new MemoryType<>(new Identifier("minecraft:last_egg_spawn_time"), () -> -1L);
 
     /**
      * The entity tick when this entity was last attacked.
