@@ -75,6 +75,19 @@ public class MemoryStorageImpl implements MemoryStorage {
     }
 
     @Override
+    public <T> boolean putIfAbsent(MemoryType<T> type, T value) {
+        boolean[] inserted = {false};
+        storage.compute(type, (k, existing) -> {
+            if (existing == null || existing == EMPTY_VALUE) {
+                inserted[0] = true;
+                return value != null ? value : EMPTY_VALUE;
+            }
+            return existing;
+        });
+        return inserted[0];
+    }
+
+    @Override
     public <T> boolean compareDataTo(MemoryType<T> type, T value) {
         return Objects.equals(get(type), value);
     }

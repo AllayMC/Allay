@@ -30,6 +30,8 @@ import java.util.*;
 @Builder
 public class BehaviorGroupImpl implements BehaviorGroup {
 
+    protected static final int ROUTE_UPDATE_CYCLE = 20;
+
     @Singular
     @Getter
     protected final Set<Behavior> coreBehaviors;
@@ -57,6 +59,7 @@ public class BehaviorGroupImpl implements BehaviorGroup {
     // Route state managed locally (RouteFinder is stateless)
     protected transient List<Node> route;
     protected transient int nodeIndex;
+    protected transient int routeUpdateTick;
 
     @Builder.Default
     @Getter
@@ -71,6 +74,9 @@ public class BehaviorGroupImpl implements BehaviorGroup {
 
     protected transient EntityIntelligent entity;
 
+    // Queue for actions that must run sequentially after the parallel AI tick
+    protected final Queue<Runnable> syncedActions = new LinkedList<>();
+
     /**
      * Called when this behavior group is assigned to an entity.
      * Initializes period counters and injects entity reference into memory storage.
@@ -80,6 +86,27 @@ public class BehaviorGroupImpl implements BehaviorGroup {
     public void setEntity(EntityIntelligent entity) {
         this.entity = entity;
         initPeriodCounters();
+    }
+
+    /**
+     * Queue an action to be run sequentially after the parallel AI tick completes.
+     * Use this for world-modifying operations (e.g., setBlockState) that are
+     * not safe to call from parallel threads.
+     *
+     * @param action the action to queue
+     */
+    public void addSyncedAction(Runnable action) {
+        syncedActions.offer(action);
+    }
+
+    /**
+     * Process all synced actions. Called from the sequential entity tick.
+     */
+    public void processSyncedActions() {
+        Runnable action;
+        while ((action = syncedActions.poll()) != null) {
+            action.run();
+        }
     }
 
     public void tick() {
@@ -179,9 +206,7 @@ public class BehaviorGroupImpl implements BehaviorGroup {
         var first = runningBehaviors.isEmpty() ? null : runningBehaviors.iterator().next();
         int runningPriority = first != null ? first.getPriority() : Integer.MIN_VALUE;
 
-        if (highestPriority < runningPriority) {
-            // New behaviors have lower priority than running — do nothing
-        } else if (highestPriority > runningPriority) {
+        if (highestPriority > runningPriority) {
             // New behaviors have higher priority — interrupt and replace
             interruptRunningBehaviors(entity);
             startBehaviors(entity, evalSucceed);
@@ -241,6 +266,16 @@ public class BehaviorGroupImpl implements BehaviorGroup {
             entity.setMoveDirectionStart(null);
             entity.setMoveDirectionEnd(null);
             return;
+        }
+
+        // Periodically force route recalculation so stale paths
+        // (caused by block changes along the route) get refreshed.
+        if (hasNextNode()) {
+            routeUpdateTick++;
+            if (routeUpdateTick >= ROUTE_UPDATE_CYCLE) {
+                routeUpdateTick = 0;
+                routeUpdateRequired = true;
+            }
         }
 
         if ((routeUpdateRequired || !hasNextNode()) && !routeFinding) {

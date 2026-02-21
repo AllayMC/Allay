@@ -71,4 +71,13 @@ public interface BehaviorGroup {
      * @param routeUpdateRequired whether a route update is needed
      */
     void setRouteUpdateRequired(boolean routeUpdateRequired);
+
+    /**
+     * Queue an action to be run sequentially after the parallel AI tick completes.
+     * Use this for world-modifying operations (e.g., setBlockState) that are
+     * not safe to call from parallel threads.
+     *
+     * @param action the action to queue
+     */
+    void addSyncedAction(Runnable action);
 }

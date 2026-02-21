@@ -54,20 +54,23 @@ public class EatGrassExecutor implements BehaviorExecutor {
             return;
         }
 
-        // Check for short grass at feet level
-        var feetBlock = dimension.getBlockState(x, y, z);
-        if (feetBlock != null && feetBlock.getBlockType() == BlockTypes.SHORT_GRASS) {
-            dimension.setBlockState(x, y, z, BlockTypes.AIR.getDefaultState());
-            onEatGrass(entity);
-            return;
-        }
+        // Defer block modifications to sequential tick to avoid concurrent world writes
+        entity.getBehaviorGroup().addSyncedAction(() -> {
+            // Check for short grass at feet level
+            var feetBlock = dimension.getBlockState(x, y, z);
+            if (feetBlock != null && feetBlock.getBlockType() == BlockTypes.SHORT_GRASS) {
+                dimension.setBlockState(x, y, z, BlockTypes.AIR.getDefaultState());
+                onEatGrass(entity);
+                return;
+            }
 
-        // Check for grass block below feet
-        var belowBlock = dimension.getBlockState(x, y - 1, z);
-        if (belowBlock != null && belowBlock.getBlockType() == BlockTypes.GRASS_BLOCK) {
-            dimension.setBlockState(x, y - 1, z, BlockTypes.DIRT.getDefaultState());
-            onEatGrass(entity);
-        }
+            // Check for grass block below feet
+            var belowBlock = dimension.getBlockState(x, y - 1, z);
+            if (belowBlock != null && belowBlock.getBlockType() == BlockTypes.GRASS_BLOCK) {
+                dimension.setBlockState(x, y - 1, z, BlockTypes.DIRT.getDefaultState());
+                onEatGrass(entity);
+            }
+        });
     }
 
     protected void onEatGrass(EntityIntelligent entity) {

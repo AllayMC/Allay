@@ -492,6 +492,7 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityAnimalComponentImpl(item -> item.getItemType() == ItemTypes.WHEAT), EntityAnimalComponentImpl.class)
                 .addComponent(EntityBabyComponentImpl::new, EntityBabyComponentImpl.class)
                 .addComponent(EntityHeadYawComponentImpl::new, EntityHeadYawComponentImpl.class)
+                .addComponent(EntityParallelTickComponentImpl::new, EntityParallelTickComponentImpl.class)
                 .addComponent(() -> new EntityDyeableComponentImpl(() -> {
                     var rand = ThreadLocalRandom.current();
                     int roll = rand.nextInt(100);

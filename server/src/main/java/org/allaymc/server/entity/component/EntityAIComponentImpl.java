@@ -10,6 +10,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.ai.behaviorgroup.BehaviorGroupImpl;
+import org.allaymc.server.entity.component.event.CEntityParallelTickEvent;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
 
 /**
@@ -24,27 +25,32 @@ public class EntityAIComponentImpl implements EntityAIComponent {
     protected EntityIntelligent thisEntity;
 
     @Getter
-    protected BehaviorGroup behaviorGroup;
+    protected BehaviorGroupImpl behaviorGroup;
 
     public EntityAIComponentImpl(BehaviorGroup behaviorGroup) {
-        this.behaviorGroup = behaviorGroup;
+        this.behaviorGroup = (BehaviorGroupImpl) behaviorGroup;
     }
 
     @OnInitFinish
     public void onInitFinish(EntityInitInfo initInfo) {
-        ((BehaviorGroupImpl) behaviorGroup).setEntity(thisEntity);
+        behaviorGroup.setEntity(thisEntity);
     }
 
     @Override
     public void setBehaviorGroup(BehaviorGroup behaviorGroup) {
-        this.behaviorGroup = behaviorGroup;
-        ((BehaviorGroupImpl) behaviorGroup).setEntity(thisEntity);
+        this.behaviorGroup = (BehaviorGroupImpl) behaviorGroup;
+        this.behaviorGroup.setEntity(thisEntity);
+    }
+
+    @EventHandler
+    protected void onParallelTick(CEntityParallelTickEvent event) {
+        if (!thisEntity.isImmobile()) {
+            behaviorGroup.tick();
+        }
     }
 
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
-        if (thisEntity.isImmobile()) return;
-
-        ((BehaviorGroupImpl) behaviorGroup).tick();
+        behaviorGroup.processSyncedActions();
     }
 }

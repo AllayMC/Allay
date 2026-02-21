@@ -24,6 +24,9 @@ public class EntitySheepImpl extends EntityImpl implements EntitySheep {
     private EntityAIComponent aiComponent;
 
     @Delegate
+    private EntityParallelTickComponent parallelTickComponent;
+
+    @Delegate
     private EntityAnimalComponent animalComponent;
 
     @Delegate

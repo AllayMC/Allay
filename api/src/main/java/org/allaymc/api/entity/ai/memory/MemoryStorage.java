@@ -87,6 +87,16 @@ public interface MemoryStorage {
     <T> void clear(MemoryType<T> type);
 
     /**
+     * Atomically store a value only if no value is currently stored for this type.
+     *
+     * @param type  the memory type
+     * @param value the value to store
+     * @param <T> the type of data
+     * @return {@code true} if the value was stored, {@code false} if a value already existed
+     */
+    <T> boolean putIfAbsent(MemoryType<T> type, T value);
+
+    /**
      * Compare a stored memory value with the given value using {@code equals}.
      *
      * @param type  the memory type

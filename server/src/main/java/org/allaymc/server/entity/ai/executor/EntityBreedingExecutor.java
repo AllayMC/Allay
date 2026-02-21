@@ -64,10 +64,15 @@ public class EntityBreedingExecutor implements BehaviorExecutor {
                     return true; // keep searching
                 }
                 isInitiator = true;
-                entity.getMemoryStorage().put(MemoryTypes.ENTITY_SPOUSE, spouse.getRuntimeId());
                 if (spouse instanceof EntityIntelligent spouseIntelligent) {
-                    spouseIntelligent.getMemoryStorage().put(MemoryTypes.ENTITY_SPOUSE, entity.getRuntimeId());
+                    // Atomically claim the spouse — if another entity already claimed it, retry next tick
+                    if (!spouseIntelligent.getMemoryStorage().putIfAbsent(MemoryTypes.ENTITY_SPOUSE, entity.getRuntimeId())) {
+                        spouse = null;
+                        isInitiator = false;
+                        return true;
+                    }
                 }
+                entity.getMemoryStorage().put(MemoryTypes.ENTITY_SPOUSE, spouse.getRuntimeId());
             }
         }
 
