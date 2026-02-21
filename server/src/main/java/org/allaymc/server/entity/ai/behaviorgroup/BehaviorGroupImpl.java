@@ -65,7 +65,9 @@ public class BehaviorGroupImpl implements BehaviorGroup {
     // Period counters for sensors and behaviors
     protected transient Map<Sensor, Integer> sensorPeriodCounters;
     protected transient Map<Behavior, Integer> coreBehaviorPeriodCounters, behaviorPeriodCounters;
-    protected transient Behavior runningCoreBehavior, runningBehavior;
+    // Running behavior sets (multiple same-priority behaviors can run simultaneously)
+    protected transient Set<Behavior> runningCoreBehaviors;
+    protected transient Set<Behavior> runningBehaviors;
 
     protected transient EntityIntelligent entity;
 
@@ -107,6 +109,8 @@ public class BehaviorGroupImpl implements BehaviorGroup {
         for (var behavior : behaviors) {
             behaviorPeriodCounters.put(behavior, 0);
         }
+        runningCoreBehaviors = new LinkedHashSet<>();
+        runningBehaviors = new LinkedHashSet<>();
     }
 
     protected void collectSensorData(EntityIntelligent entity) {
@@ -121,64 +125,112 @@ public class BehaviorGroupImpl implements BehaviorGroup {
         }
     }
 
+    /**
+     * Core behaviors are independent of priority — any that evaluate to true
+     * will start running alongside others. They are never interrupted by priority.
+     */
     protected void evaluateCoreBehaviors(EntityIntelligent entity) {
-        runningCoreBehavior = evaluateBehaviorSet(entity, coreBehaviors, coreBehaviorPeriodCounters, runningCoreBehavior);
+        if (coreBehaviorPeriodCounters == null) return;
+        for (var entry : coreBehaviorPeriodCounters.entrySet()) {
+            var behavior = entry.getKey();
+            // Skip already running core behaviors
+            if (runningCoreBehaviors.contains(behavior)) continue;
+            int counter = entry.getValue() + 1;
+            coreBehaviorPeriodCounters.put(behavior, counter);
+            if (counter < behavior.getPeriod()) continue;
+            coreBehaviorPeriodCounters.put(behavior, 0);
+            if (behavior.evaluate(entity)) {
+                behavior.onStart(entity);
+                behavior.setBehaviorState(BehaviorState.ACTIVE);
+                runningCoreBehaviors.add(behavior);
+            }
+        }
     }
 
+    /**
+     * Normal behaviors use priority-based selection. Higher priority number = higher priority.
+     * Only the highest-priority evaluated behaviors are considered.
+     * A running behavior is only interrupted by a strictly higher priority.
+     */
     protected void evaluateBehaviors(EntityIntelligent entity) {
-        runningBehavior = evaluateBehaviorSet(entity, behaviors, behaviorPeriodCounters, runningBehavior);
+        if (behaviorPeriodCounters == null) return;
+        var evalSucceed = new HashSet<Behavior>();
+        int highestPriority = Integer.MIN_VALUE;
+        for (var entry : behaviorPeriodCounters.entrySet()) {
+            var behavior = entry.getKey();
+            // Skip already running behaviors
+            if (runningBehaviors.contains(behavior)) continue;
+            int counter = entry.getValue() + 1;
+            behaviorPeriodCounters.put(behavior, counter);
+            if (counter < behavior.getPeriod()) continue;
+            behaviorPeriodCounters.put(behavior, 0);
+            if (behavior.evaluate(entity)) {
+                if (behavior.getPriority() > highestPriority) {
+                    evalSucceed.clear();
+                    highestPriority = behavior.getPriority();
+                } else if (behavior.getPriority() < highestPriority) {
+                    continue;
+                }
+                evalSucceed.add(behavior);
+            }
+        }
+        if (evalSucceed.isEmpty()) return;
+
+        var first = runningBehaviors.isEmpty() ? null : runningBehaviors.iterator().next();
+        int runningPriority = first != null ? first.getPriority() : Integer.MIN_VALUE;
+
+        if (highestPriority < runningPriority) {
+            // New behaviors have lower priority than running — do nothing
+        } else if (highestPriority > runningPriority) {
+            // New behaviors have higher priority — interrupt and replace
+            interruptRunningBehaviors(entity);
+            startBehaviors(entity, evalSucceed);
+        } else {
+            // Same priority — add alongside
+            startBehaviors(entity, evalSucceed);
+        }
     }
 
-    protected Behavior evaluateBehaviorSet(EntityIntelligent entity, Set<Behavior> behaviorSet,
-                                           Map<Behavior, Integer> periodCounters, Behavior currentRunning) {
-        if (periodCounters == null) return currentRunning;
-        Behavior best = null;
-        for (var behavior : behaviorSet) {
-            int counter = periodCounters.getOrDefault(behavior, 0) + 1;
-            if (counter >= behavior.getPeriod()) {
-                if (behavior.evaluate(entity)) {
-                    if (best == null || behavior.getPriority() < best.getPriority()) {
-                        best = behavior;
-                    }
-                }
-                counter = 0;
-            }
-            periodCounters.put(behavior, counter);
+    protected void interruptRunningBehaviors(EntityIntelligent entity) {
+        for (var behavior : runningBehaviors) {
+            behavior.onInterrupt(entity);
+            behavior.setBehaviorState(BehaviorState.STOP);
         }
+        runningBehaviors.clear();
+    }
 
-        if (best != null) {
-            if (currentRunning != null && currentRunning != best) {
-                currentRunning.onInterrupt(entity);
-                currentRunning.setBehaviorState(BehaviorState.STOP);
-            }
-            if (currentRunning != best) {
-                best.onStart(entity);
-                best.setBehaviorState(BehaviorState.ACTIVE);
-            }
-            return best;
+    protected void startBehaviors(EntityIntelligent entity, Set<Behavior> toStart) {
+        for (var behavior : toStart) {
+            behavior.onStart(entity);
+            behavior.setBehaviorState(BehaviorState.ACTIVE);
+            runningBehaviors.add(behavior);
         }
-        return currentRunning;
     }
 
     protected void tickRunningCoreBehaviors(EntityIntelligent entity) {
-        runningCoreBehavior = tickRunningBehavior(entity, runningCoreBehavior);
+        if (runningCoreBehaviors == null) return;
+        var it = runningCoreBehaviors.iterator();
+        while (it.hasNext()) {
+            var behavior = it.next();
+            if (!behavior.execute(entity)) {
+                behavior.onStop(entity);
+                behavior.setBehaviorState(BehaviorState.STOP);
+                it.remove();
+            }
+        }
     }
 
     protected void tickRunningBehaviors(EntityIntelligent entity) {
-        runningBehavior = tickRunningBehavior(entity, runningBehavior);
-    }
-
-    protected Behavior tickRunningBehavior(EntityIntelligent entity, Behavior running) {
-        if (running == null) return null;
-        if (running.getBehaviorState() != BehaviorState.ACTIVE) return running;
-
-        boolean continueRunning = running.execute(entity);
-        if (!continueRunning) {
-            running.onStop(entity);
-            running.setBehaviorState(BehaviorState.STOP);
-            return null;
+        if (runningBehaviors == null) return;
+        var it = runningBehaviors.iterator();
+        while (it.hasNext()) {
+            var behavior = it.next();
+            if (!behavior.execute(entity)) {
+                behavior.onStop(entity);
+                behavior.setBehaviorState(BehaviorState.STOP);
+                it.remove();
+            }
         }
-        return running;
     }
 
     protected void updateRoute(EntityIntelligent entity) {

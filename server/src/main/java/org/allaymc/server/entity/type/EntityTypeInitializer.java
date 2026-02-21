@@ -521,25 +521,25 @@ public final class EntityTypeInitializer {
                                     })
                                     .priority(1)
                                     .build())
-                            // Priority 1 (highest): flee when attacked
+                            // Priority 6 (highest): flee when attacked
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FlatRandomRoamExecutor(0.2875f, 12, 40, true, 100, true, 10))
                                     .evaluator(new PassByTimeEvaluator(MemoryTypes.LAST_BE_ATTACKED_TIME, 0, 100))
-                                    .priority(1)
+                                    .priority(6)
                                     .build())
-                            // Priority 2: breed when in love
+                            // Priority 5: breed when in love
                             .behavior(BehaviorImpl.builder()
                                     .executor(new EntityBreedingExecutor(100, 0.23f))
                                     .evaluator(entity -> Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)))
-                                    .priority(2)
+                                    .priority(5)
                                     .build())
-                            // Priority 3: follow player holding wheat
+                            // Priority 4: follow player holding wheat
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FollowEntityExecutor(MemoryTypes.NEAREST_FEEDING_PLAYER, 0.253f, 64, 2.25))
                                     .evaluator(new MemoryCheckNotEmptyEvaluator(MemoryTypes.NEAREST_FEEDING_PLAYER))
-                                    .priority(3)
+                                    .priority(4)
                                     .build())
-                            // Priority 4: eat grass
+                            // Priority 3: eat grass
                             .behavior(BehaviorImpl.builder()
                                     .executor(new SheepEatGrassExecutor())
                                     .evaluator(entity -> {
@@ -558,21 +558,21 @@ public final class EntityTypeInitializer {
                                         var belowBlock = dim.getBlockState(x, y - 1, z);
                                         return belowBlock != null && belowBlock.getBlockType() == BlockTypes.GRASS_BLOCK;
                                     })
-                                    .priority(4)
+                                    .priority(3)
                                     .period(100)
                                     .build())
-                            // Priority 5: look at nearest player
+                            // Priority 2: look at nearest player
                             .behavior(BehaviorImpl.builder()
                                     .executor(new LookAtEntityExecutor(MemoryTypes.NEAREST_PLAYER, 100))
                                     .evaluator(entity -> entity.getMemoryStorage().notEmpty(MemoryTypes.NEAREST_PLAYER) && Math.random() < 0.4)
-                                    .priority(5)
+                                    .priority(2)
                                     .period(100)
                                     .build())
-                            // Priority 6 (lowest): random wandering
+                            // Priority 1 (lowest): random wandering
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FlatRandomRoamExecutor(0.1f, 12, 100, false, -1, true, 10))
                                     .evaluator(entity -> true)
-                                    .priority(6)
+                                    .priority(1)
                                     .build())
                             // Controllers
                             .controller(new WalkController())

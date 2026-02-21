@@ -38,14 +38,14 @@ public class WeightedMultiBehavior extends AbstractBehavior {
 
     @Override
     public boolean evaluate(EntityIntelligent entity) {
-        // Find the highest priority (lowest value) among evaluated behaviors
-        int highestPriority = Integer.MAX_VALUE;
+        // Find the highest priority (highest value) among evaluated behaviors
+        int highestPriority = Integer.MIN_VALUE;
         for (var behavior : behaviors) {
-            if (behavior.evaluate(entity) && behavior.getPriority() < highestPriority) {
+            if (behavior.evaluate(entity) && behavior.getPriority() > highestPriority) {
                 highestPriority = behavior.getPriority();
             }
         }
-        if (highestPriority == Integer.MAX_VALUE) {
+        if (highestPriority == Integer.MIN_VALUE) {
             return false;
         }
 

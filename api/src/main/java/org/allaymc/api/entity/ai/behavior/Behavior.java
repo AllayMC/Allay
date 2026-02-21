@@ -8,7 +8,7 @@ package org.allaymc.api.entity.ai.behavior;
 public interface Behavior extends BehaviorExecutor, BehaviorEvaluator {
 
     /**
-     * Get the priority of this behavior. Lower values indicate higher priority.
+     * Get the priority of this behavior. Higher values indicate higher priority.
      *
      * @return the priority
      */
