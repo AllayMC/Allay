@@ -196,7 +196,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     }
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {
-        var currentTime = thisEntity.getWorld().getTick();
+        var currentTime = baseComponent.getTick();
         if (!forceToUpdate && lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
             return false;
         }

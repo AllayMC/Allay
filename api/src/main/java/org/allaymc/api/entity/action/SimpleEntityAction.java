@@ -21,5 +21,9 @@ public enum SimpleEntityAction implements EntityAction {
     // FISHING_HOOK_BITE makes a fishing hook entity display the fish bite animation with bubble and splash effects
     FISHING_HOOK_BITE,
     // WAKE_UP makes an entity play the wake-up animation (used when a sleeping entity stops sleeping)
-    WAKE_UP
+    WAKE_UP,
+    // IN_LOVE makes an entity display love (heart) particles to viewers
+    IN_LOVE,
+    // EAT_GRASS makes an entity display the grass eating animation to viewers (used by sheep)
+    EAT_GRASS
 }

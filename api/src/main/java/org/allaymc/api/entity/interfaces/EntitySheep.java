@@ -1,7 +1,11 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityDyeableComponent;
+import org.allaymc.api.entity.component.EntityHeadYawComponent;
+import org.allaymc.api.entity.component.EntitySheepBaseComponent;
 
-public interface EntitySheep extends Entity {
-
+/**
+ * @author daoge_cmd
+ */
+public interface EntitySheep extends EntityAnimal, EntitySheepBaseComponent, EntityDyeableComponent, EntityHeadYawComponent {
 }

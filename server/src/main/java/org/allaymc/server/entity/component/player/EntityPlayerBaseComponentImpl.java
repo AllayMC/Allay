@@ -332,7 +332,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void setCooldown(String category, int duration, boolean send) {
-        this.cooldowns.put(category, getWorld().getTick() + duration);
+        this.cooldowns.put(category, this.tick + duration);
         if (send && isActualPlayer()) {
             this.controller.sendCooldown(category, duration);
         }
@@ -345,7 +345,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return true;
         }
 
-        return coolDown < getWorld().getTick();
+        return coolDown < this.tick;
     }
 
     @Override
@@ -604,8 +604,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public long getItemUsingInAirTime(long currentTime) {
-        return currentTime - this.startUsingItemInAirTime;
+    public long getItemUsingInAirTime() {
+        return this.tick - this.startUsingItemInAirTime;
     }
 
     @Override
@@ -705,10 +705,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setUsingItemInAir(boolean value, long time) {
+    public void setUsingItemInAir(boolean value) {
         this.usingItemInAir = value;
         if (value) {
-            this.startUsingItemInAirTime = time;
+            this.startUsingItemInAirTime = this.tick;
         }
         // Update blocking state immediately when item use changes
         updateBlockingFlag();

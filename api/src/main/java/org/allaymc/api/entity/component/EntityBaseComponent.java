@@ -213,6 +213,18 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     Scheduler getScheduler();
 
     /**
+     * Gets the number of ticks this entity has been alive for.
+     * <p>
+     * Note that the entity tick is independent of the world tick.
+     * If the entity has not been ticked by the world (e.g. the
+     * chunk it resides in is not loaded), its tick count will not
+     * increase, even though the world tick continues to advance.
+     *
+     * @return the entity's tick count
+     */
+    long getTick();
+
+    /**
      * Get the state of the entity.
      *
      * @return the state of the entity
