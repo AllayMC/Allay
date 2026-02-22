@@ -7,6 +7,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityAnimal;
 import org.allaymc.api.entity.interfaces.EntityEnderDragon;
+import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemTypes;
 
@@ -525,7 +526,7 @@ public final class EntityTypeInitializer {
                             // Priority 6 (highest): flee when attacked
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FlatRandomRoamExecutor(0.2875f, 12, 40, true, 100, true, 10))
-                                    .evaluator(new PassByTimeEvaluator(MemoryTypes.LAST_BE_ATTACKED_TIME, 0, 100))
+                                    .evaluator(new PassByTimeEvaluator(EntityIntelligent::getLastDamageTime, 0, 100))
                                     .priority(6)
                                     .build())
                             // Priority 5: breed when in love
