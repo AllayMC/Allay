@@ -42,9 +42,33 @@ public class WalkController implements Controller {
             return false;
         }
 
-        // Jump logic (Paper-inspired): only jump when on ground and horizontally close to obstacle
-        double dy = end.y() - loc.y();
-        double motionY = (entity.isOnGround() && dy > entity.getStepHeight() && horizontalDistSq < 1.0) ? 0.55 : 0;
+        // Jump logic:
+        // Condition A: target waypoint is above step height and entity is horizontally close
+        // Condition B: entity is stuck inside a block's collision shape at feet level
+        double motionY = 0;
+        if (entity.isOnGround()) {
+            double dy = end.y() - loc.y();
+            double entityWidth = entity.getAABB().maxX() - entity.getAABB().minX();
+            // Use 2.25 as minimum threshold (vs vanilla's 1.0) because Allay's
+            // pathfinder includes diagonal neighbors, where horizontal distance can reach ~√2
+            boolean shouldJump = dy > entity.getStepHeight()
+                    && horizontalDistSq < Math.max(2.25, entityWidth);
+
+            if (!shouldJump) {
+                int blockX = (int) Math.floor(loc.x());
+                int blockY = (int) Math.floor(loc.y());
+                int blockZ = (int) Math.floor(loc.z());
+                var blockState = entity.getDimension().getBlockState(blockX, blockY, blockZ);
+                var blockStateData = blockState.getBlockStateData();
+                if (blockStateData.hasCollision()) {
+                    shouldJump = loc.y() < blockStateData.collisionShape().unionAABB().maxY() + blockY;
+                }
+            }
+
+            if (shouldJump) {
+                motionY = 0.55;
+            }
+        }
 
         // Clamp speed if very close to avoid overshooting
         double effectiveSpeed = Math.min(speed, horizontalDist);
