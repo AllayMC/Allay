@@ -15,7 +15,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
@@ -226,7 +225,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             }
         });
         ((AllayEntityManager) dimension.getEntityManager()).onChunkLoad(this.x, this.z);
-        discoverPoiBlocks();
 
         loaded = true;
     }
@@ -235,31 +233,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         ((AllayLightEngine) dimension.getLightEngine()).onChunkUnload(safeChunk);
         ((AllayEntityManager) dimension.getEntityManager()).onChunkUnload(this.x, this.z);
         blockChangeCallback = null;
-    }
-
-    /**
-     * Discover existing POI blocks in chunks that have no persisted POI data.
-     */
-    private void discoverPoiBlocks() {
-        if (!poiEntries.isEmpty()) return;
-        for (var section : sections) {
-            if (section.isAirSection()) continue;
-            if (section.blockLayers()[0].allEntriesMatch(state -> Registries.POI_TYPES.get(state.getBlockType()) == null)) {
-                continue;
-            }
-            int sectionWorldY = section.sectionY() << 4;
-            for (int lx = 0; lx < 16; lx++) {
-                for (int ly = 0; ly < 16; ly++) {
-                    for (int lz = 0; lz < 16; lz++) {
-                        var state = section.getBlockState(lx, ly, lz, 0);
-                        var poi = Registries.POI_TYPES.get(state.getBlockType());
-                        if (poi != null) {
-                            poiEntries.put(HashUtils.hashChunkXYZ(lx, sectionWorldY + ly, lz), poi);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @Override

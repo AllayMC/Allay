@@ -29,7 +29,7 @@ public class EntityArmorStandLivingComponentImpl extends EntityLivingComponentIm
 
     @Override
     public boolean attack(DamageContainer damage, boolean ignoreCoolDown) {
-        var currentTime = thisEntity.getDimension().getWorld().getTick();
+        var currentTime = baseComponent.getTick();
         var interval = currentTime - this.lastDamageTime;
         this.lastDamage = damage;
         this.lastDamageTime = currentTime;
@@ -87,7 +87,7 @@ public class EntityArmorStandLivingComponentImpl extends EntityLivingComponentIm
             return;
         }
 
-        var interval = thisEntity.getWorld().getTick() - this.lastDamageTime;
+        var interval = baseComponent.getTick() - this.lastDamageTime;
         if (interval <= 5) {
             thisEntity.broadcastState();
         }

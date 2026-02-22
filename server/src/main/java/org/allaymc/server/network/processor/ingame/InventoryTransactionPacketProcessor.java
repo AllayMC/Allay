@@ -131,7 +131,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         if (!entity.isUsingItemInAir()) {
                             if (itemInHand.canUseItemInAir(entity)) {
                                 if (new PlayerStartUseItemInAirEvent(entity).call()) {
-                                    entity.setUsingItemInAir(true, receiveTime);
+                                    entity.setUsingItemInAir(true);
                                 }
                             } else {
                                 if (new PlayerRightClickItemInAirEvent(entity).call()) {
@@ -140,7 +140,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             }
                         } else if (entity.isUsingItemInAir()) {
                             entity.setUsingItemInAir(false);
-                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime(receiveTime));
+                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime());
                             if (event.call()) {
                                 itemInHand.useItemInAir(entity, event.getUsingTime());
                             }
@@ -153,7 +153,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     case ITEM_RELEASE_RELEASE -> {
                         if (entity.isUsingItemInAir()) {
                             entity.setUsingItemInAir(false);
-                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime(receiveTime));
+                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime());
                             if (event.call()) {
                                 itemInHand.useItemInAir(entity, event.getUsingTime());
                             }

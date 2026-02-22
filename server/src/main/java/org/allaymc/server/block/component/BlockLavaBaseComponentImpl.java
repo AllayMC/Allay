@@ -54,7 +54,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
 
         // Lava damage
-        if (living.hasFireDamage() && entity.getWorld().getTick() % 10 == 0) {
+        if (living.hasFireDamage() && entity.getTick() % 10 == 0) {
             var event2 = new EntityDamageEvent(entity, DamageContainer.lava(4));
             if (event2.call()) {
                 living.attack(event2.getDamageContainer(), true);

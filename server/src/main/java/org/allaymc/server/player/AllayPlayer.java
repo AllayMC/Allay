@@ -710,7 +710,7 @@ public class AllayPlayer implements Player {
             case EntityArmorStand armorStand -> {
                 map.put(EntityDataTypes.ARMOR_STAND_POSE_INDEX, armorStand.getPoseIndex());
                 if (armorStand.getLastDamage() != null) {
-                    var interval = armorStand.getWorld().getTick() - armorStand.getLastDamageTime();
+                    var interval = armorStand.getTick() - armorStand.getLastDamageTime();
                     if (interval <= 5) {
                         map.put(EntityDataTypes.HURT_TICKS, (int) interval);
                     }
@@ -3128,8 +3128,8 @@ public class AllayPlayer implements Player {
             if (controlledEntity != null) {
                 world = controlledEntity.getWorld();
                 if (world != null) {
-                    // If the player is in any world, use world tick instead
-                    time = world.getTick();
+                    // If the player is in any world, use entity tick instead
+                    time = controlledEntity.getTick();
                 }
             }
 
