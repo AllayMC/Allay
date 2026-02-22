@@ -534,7 +534,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         if (!blockUnder.getBlockStateData().isSolid()) {
             return false;
         }
-        var aabb = thisEntity.getAABB().translate(x + 0.5, y + 0.5, z + 0.5, new AABBd());
+        var aabb = thisEntity.getAABB().translate(x + 0.5, y + FAT_AABB_MARGIN, z + 0.5, new AABBd());
         return dimension.getCollidingBlockStates(aabb) == null;
     }
 
