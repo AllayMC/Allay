@@ -131,6 +131,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     @Setter
     protected boolean inNetherPortal;
+    @Getter
+    protected long tick;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -158,6 +160,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     public void tick(long currentTick) {
+        this.tick++;
         manager.callEvent(new CEntityTickEvent(currentTick));
         this.scheduler.tick();
         tickPortal();

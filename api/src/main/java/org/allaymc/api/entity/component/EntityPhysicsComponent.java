@@ -365,21 +365,21 @@ public interface EntityPhysicsComponent extends EntityComponent {
     Block getBlockStateStandingOn();
 
     /**
-     * @see #canStandSafely(int, int, int, Dimension)
+     * @see #canStandSafely(double, double, double, Dimension)
      */
     default boolean canStandSafely(Position3ic pos) {
-        return canStandSafely(pos.x(), pos.y(), pos.z(), pos.dimension());
+        return canStandSafely(pos.x() + 0.5, pos.y(), pos.z() + 0.5, pos.dimension());
     }
 
     /**
      * Check if the specified position is a safe standing position.
      *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
+     * @param x the exact x coordinate (entity center)
+     * @param y the exact y coordinate (entity feet, can be non-integer for partial-height blocks like slabs)
+     * @param z the exact z coordinate (entity center)
      * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
      */
-    boolean canStandSafely(int x, int y, int z, Dimension dimension);
+    boolean canStandSafely(double x, double y, double z, Dimension dimension);
 
     /**
      * Check if the entity can critical attack.

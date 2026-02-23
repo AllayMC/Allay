@@ -166,6 +166,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         var minY = (int) floor(aabb.minY()) - 1;
         var minZ = (int) floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
+        BlockState targetBlockState = null;
         double volume = 0;
         for (int offsetX = 0, length0 = collidedBlocks.length; offsetX < length0; offsetX++) {
             var sub1 = collidedBlocks[offsetX];
@@ -191,23 +192,39 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                         targetX = currentX;
                         targetY = currentY;
                         targetZ = currentZ;
+                        targetBlockState = blockState;
                     }
                 }
             }
         }
 
-        // 2. Centered on the block pos we found (1), find out the best moving direction
+        // 2. Find the face with minimum penetration depth (shortest escape path)
         BlockFace movingDirection = null;
-        double distanceSqrt = Integer.MAX_VALUE;
-        for (int i = BlockFace.VALUES.length - 1; i >= 0; i--) {
-            var blockFace = BlockFace.VALUES[i];
-            var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
-            var blockState = dimension.getBlockState(offsetVec);
-            if (blockState.getBlockType() == AIR) {
-                var currentDistanceSqrt = entity.getLocation().distanceSquared(offsetVec.x() + 0.5f, offsetVec.y() + 0.5f, offsetVec.z() + 0.5f);
-                if (currentDistanceSqrt < distanceSqrt) {
-                    movingDirection = blockFace;
-                    distanceSqrt = currentDistanceSqrt;
+        if (targetBlockState != null) {
+            var targetAABB = targetBlockState
+                    .getBlockStateData()
+                    .computeOffsetCollisionShape(targetX, targetY, targetZ)
+                    .unionAABB();
+            // Penetration depth for each face: how far the entity must move to clear the block
+            // BlockFace order: DOWN(0), UP(1), NORTH(2), SOUTH(3), WEST(4), EAST(5)
+            double[] penetrations = {
+                    aabb.maxY() - targetAABB.minY(), // DOWN
+                    targetAABB.maxY() - aabb.minY(), // UP
+                    aabb.maxZ() - targetAABB.minZ(), // NORTH
+                    targetAABB.maxZ() - aabb.minZ(), // SOUTH
+                    aabb.maxX() - targetAABB.minX(), // WEST
+                    targetAABB.maxX() - aabb.minX(), // EAST
+            };
+            double minPenetration = Double.MAX_VALUE;
+            for (int i = 0; i < BlockFace.VALUES.length; i++) {
+                var penetration = penetrations[i];
+                if (penetration > 0 && penetration < minPenetration) {
+                    var blockFace = BlockFace.VALUES[i];
+                    var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
+                    if (dimension.getBlockState(offsetVec).getBlockType() == AIR) {
+                        minPenetration = penetration;
+                        movingDirection = blockFace;
+                    }
                 }
             }
         }

@@ -5,10 +5,13 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.component.EntityParallelTickComponent;
 import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
@@ -117,6 +120,19 @@ public class AllayEntityManager implements EntityManager {
     }
 
     protected void tickEntities(long currentTick) {
+        // Parallel AI tick on compute thread pool
+        var parallelTickEntities = entities.values().stream()
+                .filter(e -> e instanceof EntityParallelTickComponent)
+                .toList();
+        if (!parallelTickEntities.isEmpty()) {
+            Utils.forEachInParallel(
+                    parallelTickEntities,
+                    Server.getInstance().getComputeThreadPool(),
+                    entity -> ((EntityParallelTickComponent) entity).parallelTick()
+            ).join();
+        }
+
+        // Normal tick
         for (var entity : entities.values()) {
             ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick);
         }

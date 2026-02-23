@@ -171,41 +171,21 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @param value Whether the player should be using an item in the air
      */
-    default void setUsingItemInAir(boolean value) {
-        setUsingItemInAir(value, getWorld().getTick());
-    }
-
-    /**
-     * Set whether the player is using an item in the air.
-     *
-     * @param value Whether the player should be using an item in the air
-     * @param time  The current tick
-     */
-    void setUsingItemInAir(boolean value, long time);
+    void setUsingItemInAir(boolean value);
 
     /**
      * Get the time when the player most recently started using an item.
      *
-     * @return The time when the player most recently started using an item
+     * @return The time when the player most recently started using an item, in entity ticks
      */
     long getStartUsingItemInAirTime();
 
     /**
-     * Get how long the player has been using the item, in game ticks.
+     * Get how long the player has been using the item, in entity ticks.
      *
-     * @param currentTime The current time
-     * @return How long the player has been using the item in game ticks
+     * @return How long the player has been using the item in entity ticks
      */
-    long getItemUsingInAirTime(long currentTime);
-
-    /**
-     * Retrieves the in-air time of an item based on the current world tick.
-     *
-     * @return the in-air time of the item as a long value
-     */
-    default long getItemUsingInAirTime() {
-        return getItemUsingInAirTime(getWorld().getTick());
-    }
+    long getItemUsingInAirTime();
 
     /**
      * Get the skin of the player.

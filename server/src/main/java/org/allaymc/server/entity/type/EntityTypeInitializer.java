@@ -1,11 +1,30 @@
 package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.ai.memory.MemoryTypes;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
+import org.allaymc.api.entity.interfaces.EntityAnimal;
 import org.allaymc.api.entity.interfaces.EntityEnderDragon;
+import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.item.type.ItemTypes;
+
+import org.allaymc.api.utils.DyeColor;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.entity.ai.behavior.BehaviorImpl;
+import org.allaymc.server.entity.ai.behaviorgroup.BehaviorGroupImpl;
+import org.allaymc.server.entity.ai.controller.FluctuateController;
+import org.allaymc.server.entity.ai.controller.LookController;
+import org.allaymc.server.entity.ai.controller.WalkController;
+import org.allaymc.server.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator;
+import org.allaymc.server.entity.ai.evaluator.PassByTimeEvaluator;
+import org.allaymc.server.entity.ai.executor.*;
+import org.allaymc.server.entity.ai.route.finder.FlatAStarRouteFinder;
+import org.allaymc.server.entity.ai.route.posevaluator.WalkingPosEvaluator;
+import org.allaymc.server.entity.ai.sensor.NearestFeedingPlayerSensor;
+import org.allaymc.server.entity.ai.sensor.NearestPlayerSensor;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.armorstand.EntityArmorStandBaseComponentImpl;
 import org.allaymc.server.entity.component.armorstand.EntityArmorStandContainerHolderComponentImpl;
@@ -22,8 +41,11 @@ import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentIm
 import org.allaymc.server.entity.component.projectile.*;
 import org.allaymc.server.entity.component.tnt.EntityTntBaseComponentImpl;
 import org.allaymc.server.entity.component.tnt.EntityTntPhysicsComponentImpl;
+import org.allaymc.server.entity.component.sheep.EntitySheepBaseComponentImpl;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author daoge_cmd
@@ -454,6 +476,116 @@ public final class EntityTypeInitializer {
                         }
                     }
                 }, EntityHumanPhysicsComponentImpl.class)
+                .build();
+    }
+
+    public static void initSheep() {
+        EntityTypes.SHEEP = AllayEntityType
+                .builder(EntitySheepImpl.class)
+                .vanillaEntity(EntityId.SHEEP)
+                .addComponent(EntitySheepBaseComponentImpl::new, EntitySheepBaseComponentImpl.class)
+                .addComponent(() -> {
+                    var component = new EntityLivingComponentImpl();
+                    component.setMaxHealth(8);
+                    return component;
+                }, EntityLivingComponentImpl.class)
+                .addComponent(EntityAnimalPhysicsComponentImpl::new, EntityAnimalPhysicsComponentImpl.class)
+                .addComponent(() -> new EntityAnimalComponentImpl(item -> item.getItemType() == ItemTypes.WHEAT), EntityAnimalComponentImpl.class)
+                .addComponent(EntityBabyComponentImpl::new, EntityBabyComponentImpl.class)
+                .addComponent(EntityHeadYawComponentImpl::new, EntityHeadYawComponentImpl.class)
+                .addComponent(EntityParallelTickComponentImpl::new, EntityParallelTickComponentImpl.class)
+                .addComponent(() -> new EntityDyeableComponentImpl(() -> {
+                    var rand = ThreadLocalRandom.current();
+                    int roll = rand.nextInt(100);
+                    if (roll < 82) return DyeColor.WHITE;
+                    if (roll < 87) return DyeColor.BLACK;
+                    if (roll < 92) return DyeColor.GRAY;
+                    if (roll < 97) return DyeColor.LIGHT_GRAY;
+                    if (roll < 99) return DyeColor.BROWN;
+                    return DyeColor.PINK;
+                }), EntityDyeableComponentImpl.class)
+                .addComponent(() -> {
+                    var behaviorGroup = BehaviorGroupImpl.builder()
+                            // Sensors
+                            .sensor(new NearestFeedingPlayerSensor(8))
+                            .sensor(new NearestPlayerSensor(8, 0, 20))
+                            // Core behavior: enter love mode when fed
+                            .coreBehavior(BehaviorImpl.builder()
+                                    .executor(new InLoveExecutor(400))
+                                    .evaluator(entity -> {
+                                        if (Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))) return false;
+                                        // 5-minute cooldown after last love (6000 ticks)
+                                        var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
+                                        if (lastLoveTime != null && lastLoveTime > 0) {
+                                            if (entity.getTick() - lastLoveTime < 6000) return false;
+                                        }
+                                        return new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400).evaluate(entity);
+                                    })
+                                    .priority(1)
+                                    .build())
+                            // Priority 6 (highest): flee when attacked
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new FlatRandomRoamExecutor(0.2875f, 12, 40, true, 100, true, 10))
+                                    .evaluator(new PassByTimeEvaluator(EntityIntelligent::getLastDamageTime, 0, 100))
+                                    .priority(6)
+                                    .build())
+                            // Priority 5: breed when in love
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new EntityBreedingExecutor(100, 0.23f))
+                                    .evaluator(entity -> Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)))
+                                    .priority(5)
+                                    .build())
+                            // Priority 4: follow player holding wheat
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new FollowEntityExecutor(MemoryTypes.NEAREST_FEEDING_PLAYER, 0.253f, 64, 2.25))
+                                    .evaluator(new MemoryCheckNotEmptyEvaluator(MemoryTypes.NEAREST_FEEDING_PLAYER))
+                                    .priority(4)
+                                    .build())
+                            // Priority 3: eat grass
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new SheepEatGrassExecutor())
+                                    .evaluator(entity -> {
+                                        if (entity instanceof EntityAnimal animal && animal.isBaby()) {
+                                            if (Math.random() >= 0.86) return false;
+                                        } else {
+                                            if (Math.random() >= 0.01) return false;
+                                        }
+                                        var loc = entity.getLocation();
+                                        int x = (int) Math.floor(loc.x());
+                                        int y = (int) Math.floor(loc.y());
+                                        int z = (int) Math.floor(loc.z());
+                                        var dim = entity.getDimension();
+                                        var feetBlock = dim.getBlockState(x, y, z);
+                                        if (feetBlock != null && feetBlock.getBlockType() == BlockTypes.SHORT_GRASS) return true;
+                                        var belowBlock = dim.getBlockState(x, y - 1, z);
+                                        return belowBlock != null && belowBlock.getBlockType() == BlockTypes.GRASS_BLOCK;
+                                    })
+                                    .priority(3)
+                                    .period(100)
+                                    .build())
+                            // Priority 2: look at nearest player
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new LookAtEntityExecutor(MemoryTypes.NEAREST_PLAYER, 100))
+                                    .evaluator(entity -> entity.getMemoryStorage().notEmpty(MemoryTypes.NEAREST_PLAYER) && Math.random() < 0.4)
+                                    .priority(2)
+                                    .period(100)
+                                    .build())
+                            // Priority 1 (lowest): random wandering
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new FlatRandomRoamExecutor(0.1f, 12, 100, false, -1, true, 10))
+                                    .evaluator(entity -> true)
+                                    .priority(1)
+                                    .build())
+                            // Controllers
+                            .controller(new WalkController())
+                            .controller(new LookController(true, true))
+                            .controller(new FluctuateController())
+                            // Route finder
+                            .routeFinder(new FlatAStarRouteFinder(new WalkingPosEvaluator()))
+                            .build();
+
+                    return new EntityAIComponentImpl(behaviorGroup);
+                }, EntityAIComponentImpl.class)
                 .build();
     }
 }

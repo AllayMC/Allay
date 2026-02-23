@@ -213,6 +213,18 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     Scheduler getScheduler();
 
     /**
+     * Gets the number of ticks this entity has been alive for.
+     * <p>
+     * Note that the entity tick is independent of the world tick.
+     * If the entity has not been ticked by the world (e.g. the
+     * chunk it resides in is not loaded), its tick count will not
+     * increase, even though the world tick continues to advance.
+     *
+     * @return the entity's tick count
+     */
+    long getTick();
+
+    /**
      * Get the state of the entity.
      *
      * @return the state of the entity
@@ -578,6 +590,19 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default double getEyeHeight() {
         return (getAABB().maxY() - getAABB().minY()) * 0.9;
+    }
+
+    /**
+     * Check if this entity is in an active chunk (within tick radius of a chunk loader).
+     * Inactive entities may have reduced AI update frequency.
+     *
+     * @return {@code true} if the entity is in an active chunk, otherwise {@code false}.
+     */
+    default boolean isActive() {
+        var loc = getLocation();
+        int cx = (int) Math.floor(loc.x()) >> 4;
+        int cz = (int) Math.floor(loc.z()) >> 4;
+        return getDimension().getChunkManager().isChunkActive(cx, cz);
     }
 
     /**
