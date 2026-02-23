@@ -27,6 +27,8 @@ public class FlatAStarRouteFinder implements RouteFinder {
     protected final int maxSearchDepth;
     protected final int maxFallDistance;
 
+    protected HashMap<Long, Boolean> walkableCache;
+
     public FlatAStarRouteFinder(GroundPosEvaluator groundPosEvaluator) {
         this(groundPosEvaluator, 100, 3);
     }
@@ -45,6 +47,15 @@ public class FlatAStarRouteFinder implements RouteFinder {
 
     @Override
     public List<Node> search(EntityIntelligent entity, Vector3dc target) {
+        walkableCache = new HashMap<>();
+        try {
+            return doSearch(entity, target);
+        } finally {
+            walkableCache = null;
+        }
+    }
+
+    protected List<Node> doSearch(EntityIntelligent entity, Vector3dc target) {
         var dimension = entity.getDimension();
         var startPos = entity.getLocation();
 
@@ -111,8 +122,18 @@ public class FlatAStarRouteFinder implements RouteFinder {
         int cz = (int) Math.floor(current.getVector().z());
 
         for (var offset : FLAT_NEIGHBORS) {
-            int nx = cx + offset[0];
-            int nz = cz + offset[1];
+            int dx = offset[0];
+            int dz = offset[1];
+            int nx = cx + dx;
+            int nz = cz + dz;
+
+            // For diagonal moves, require at least one adjacent cardinal
+            // direction to be walkable to prevent corner-cutting through walls
+            if (dx != 0 && dz != 0) {
+                boolean cardinalXPassable = hasWalkableAt(cx + dx, cy, cz, dimension, entity);
+                boolean cardinalZPassable = hasWalkableAt(cx, cy, cz + dz, dimension, entity);
+                if (!cardinalXPassable && !cardinalZPassable) continue;
+            }
 
             // Try same level, up 1, or down up to maxFallDistance
             for (int dy = 1; dy >= -maxFallDistance; dy--) {
@@ -127,12 +148,32 @@ public class FlatAStarRouteFinder implements RouteFinder {
         return neighbors;
     }
 
-    protected boolean isWalkable(int x, int y, int z, Dimension dimension, EntityIntelligent entity) {
-        var groundBlock = dimension.getBlockState(x, y - 1, z);
-        if (groundBlock == null) return false;
+    protected boolean hasWalkableAt(int x, int cy, int z, Dimension dimension, EntityIntelligent entity) {
+        for (int dy = 1; dy >= -maxFallDistance; dy--) {
+            if (isWalkable(x, cy + dy, z, dimension, entity)) return true;
+        }
+        return false;
+    }
 
-        return groundPosEvaluator.evaluate(entity,
+    protected static long packPos(int x, int y, int z) {
+        return (((long) x & 0x3FFFFFFL) << 38) | (((long) y & 0xFFFL) << 26) | ((long) z & 0x3FFFFFFL);
+    }
+
+    protected boolean isWalkable(int x, int y, int z, Dimension dimension, EntityIntelligent entity) {
+        var key = packPos(x, y, z);
+        var cached = walkableCache.get(key);
+        if (cached != null) return cached;
+
+        var groundBlock = dimension.getBlockState(x, y - 1, z);
+        if (groundBlock == null) {
+            walkableCache.put(key, false);
+            return false;
+        }
+
+        boolean result = groundPosEvaluator.evaluate(entity,
                 new Block(groundBlock, new Position3i(x, y - 1, z, dimension)));
+        walkableCache.put(key, result);
+        return result;
     }
 
     protected boolean isCloseEnough(Node a, Node b) {
@@ -201,8 +242,10 @@ public class FlatAStarRouteFinder implements RouteFinder {
 
         while (x != x2 || z != z2) {
             int e2 = 2 * err;
-            if (e2 > -dz) { err -= dz; x += sx; }
-            if (e2 < dx) { err += dx; z += sz; }
+            boolean stepX = e2 > -dz;
+            boolean stepZ = e2 < dx;
+            if (stepX) { err -= dz; x += sx; }
+            if (stepZ) { err += dx; z += sz; }
 
             // Don't check the endpoint (already validated by A*)
             if (x == x2 && z == z2) break;
@@ -214,6 +257,14 @@ public class FlatAStarRouteFinder implements RouteFinder {
             int y = (int) Math.floor(a.getVector().y() + t * (b.getVector().y() - a.getVector().y()));
 
             if (!isWalkable(x, y, z, dimension, entity)) return true;
+
+            // For diagonal steps, also check both orthogonal cells to prevent corner-cutting
+            if (stepX && stepZ) {
+                if (!isWalkable(x - sx, y, z, dimension, entity)
+                        && !isWalkable(x, y, z - sz, dimension, entity)) {
+                    return true;
+                }
+            }
 
             // Verify the vertical drop between consecutive points does not exceed maxFallDistance
             if (prevY - y > maxFallDistance) return true;

@@ -77,6 +77,30 @@ public class SpaceAStarRouteFinder extends FlatAStarRouteFinder {
     }
 
     @Override
+    protected boolean hasBarrier(Node a, Node b, Dimension dimension, EntityIntelligent entity) {
+        int x1 = (int) Math.floor(a.getVector().x());
+        int y1 = (int) Math.floor(a.getVector().y());
+        int z1 = (int) Math.floor(a.getVector().z());
+        int x2 = (int) Math.floor(b.getVector().x());
+        int y2 = (int) Math.floor(b.getVector().y());
+        int z2 = (int) Math.floor(b.getVector().z());
+
+        if (x1 == x2 && y1 == y2 && z1 == z2) return false;
+
+        int steps = Math.max(Math.abs(x2 - x1), Math.max(Math.abs(y2 - y1), Math.abs(z2 - z1)));
+
+        for (int i = 1; i < steps; i++) {
+            double t = (double) i / steps;
+            int x = x1 + (int) Math.round(t * (x2 - x1));
+            int y = y1 + (int) Math.round(t * (y2 - y1));
+            int z = z1 + (int) Math.round(t * (z2 - z1));
+
+            if (!isSpacePassable(x, y, z, dimension, entity)) return true;
+        }
+        return false;
+    }
+
+    @Override
     protected double heuristic(Node a, Node b) {
         double dx = Math.abs(a.getVector().x() - b.getVector().x());
         double dy = Math.abs(a.getVector().y() - b.getVector().y());
