@@ -31,6 +31,7 @@ import java.util.*;
 public class BehaviorGroupImpl implements BehaviorGroup {
 
     protected static final int ROUTE_UPDATE_CYCLE = 20;
+    protected static final int INACTIVE_ROUTE_MULTIPLIER = 4;
 
     @Singular
     @Getter
@@ -274,7 +275,8 @@ public class BehaviorGroupImpl implements BehaviorGroup {
         // (caused by block changes along the route) get refreshed.
         if (hasNextNode()) {
             routeUpdateTick++;
-            if (routeUpdateTick >= ROUTE_UPDATE_CYCLE) {
+            int cycle = entity.isActive() ? ROUTE_UPDATE_CYCLE : ROUTE_UPDATE_CYCLE * INACTIVE_ROUTE_MULTIPLIER;
+            if (routeUpdateTick >= cycle) {
                 routeUpdateTick = 0;
                 routeUpdateRequired = true;
             }

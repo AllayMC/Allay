@@ -70,7 +70,8 @@ public class FlatAStarRouteFinder implements RouteFinder {
         while (!openSet.isEmpty() && depth < maxSearchDepth) {
             var current = openSet.poll();
             if (isCloseEnough(current, endNode)) {
-                return floydSmooth(reconstructPath(current), dimension, entity);
+                var path = reconstructPath(current);
+                return entity.isActive() ? floydSmooth(path, dimension, entity) : path;
             }
 
             closedSet.add(current);

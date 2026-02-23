@@ -593,6 +593,19 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Check if this entity is in an active chunk (within tick radius of a chunk loader).
+     * Inactive entities may have reduced AI update frequency.
+     *
+     * @return {@code true} if the entity is in an active chunk, otherwise {@code false}.
+     */
+    default boolean isActive() {
+        var loc = getLocation();
+        int cx = (int) Math.floor(loc.x()) >> 4;
+        int cz = (int) Math.floor(loc.z()) >> 4;
+        return getDimension().getChunkManager().isChunkActive(cx, cz);
+    }
+
+    /**
      * Check if the chunk which the entity's location is in is loaded.
      *
      * @return {@code true} if the chunk is loaded, otherwise {@code false}.
