@@ -531,7 +531,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @Override
     public boolean canStandSafely(int x, int y, int z, Dimension dimension) {
         var blockUnder = dimension.getBlockState(x, y - 1, z);
-        if (!blockUnder.getBlockStateData().isSolid()) {
+        if (!blockUnder.getBlockStateData().hasCollision()) {
             return false;
         }
         var aabb = thisEntity.getAABB().translate(x + 0.5, y + FAT_AABB_MARGIN, z + 0.5, new AABBd());
