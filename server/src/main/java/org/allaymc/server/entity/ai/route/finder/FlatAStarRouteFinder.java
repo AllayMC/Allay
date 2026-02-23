@@ -18,13 +18,15 @@ import java.util.*;
  */
 public class FlatAStarRouteFinder implements RouteFinder {
 
+    protected static final double SQRT2_MINUS_1 = Math.sqrt(2) - 1;
+
     protected static final int[][] FLAT_NEIGHBORS = {
             {1, 0}, {-1, 0}, {0, 1}, {0, -1},
             {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
     };
 
     protected final GroundPosEvaluator groundPosEvaluator;
-    protected final int maxSearchDepth;
+    protected final int maxExpandedNodes;
     protected final int maxFallDistance;
 
     protected HashMap<Long, Boolean> walkableCache;
@@ -33,15 +35,15 @@ public class FlatAStarRouteFinder implements RouteFinder {
         this(groundPosEvaluator, 100, 3);
     }
 
-    public FlatAStarRouteFinder(GroundPosEvaluator groundPosEvaluator, int maxSearchDepth, int maxFallDistance) {
+    public FlatAStarRouteFinder(GroundPosEvaluator groundPosEvaluator, int maxExpandedNodes, int maxFallDistance) {
         this.groundPosEvaluator = groundPosEvaluator;
-        this.maxSearchDepth = maxSearchDepth;
+        this.maxExpandedNodes = maxExpandedNodes;
         this.maxFallDistance = maxFallDistance;
     }
 
-    protected FlatAStarRouteFinder(int maxSearchDepth, int maxFallDistance) {
+    protected FlatAStarRouteFinder(int maxExpandedNodes, int maxFallDistance) {
         this.groundPosEvaluator = null;
-        this.maxSearchDepth = maxSearchDepth;
+        this.maxExpandedNodes = maxExpandedNodes;
         this.maxFallDistance = maxFallDistance;
     }
 
@@ -80,7 +82,7 @@ public class FlatAStarRouteFinder implements RouteFinder {
         openMap.put(startNode, startNode);
 
         int depth = 0;
-        while (!openSet.isEmpty() && depth < maxSearchDepth) {
+        while (!openSet.isEmpty() && depth < maxExpandedNodes) {
             var current = openSet.poll();
             openMap.remove(current);
             if (isCloseEnough(current, endNode)) {
@@ -178,14 +180,16 @@ public class FlatAStarRouteFinder implements RouteFinder {
 
     protected boolean isCloseEnough(Node a, Node b) {
         double dx = a.getVector().x() - b.getVector().x();
+        double dy = a.getVector().y() - b.getVector().y();
         double dz = a.getVector().z() - b.getVector().z();
-        return dx * dx + dz * dz < 1.0;
+        return dx * dx + dz * dz < 1.0 && Math.abs(dy) <= maxFallDistance;
     }
 
     protected double heuristic(Node a, Node b) {
         double dx = Math.abs(a.getVector().x() - b.getVector().x());
         double dz = Math.abs(a.getVector().z() - b.getVector().z());
-        return dx + dz;
+        // Octile distance: admissible and consistent for 8-directional movement
+        return Math.max(dx, dz) + SQRT2_MINUS_1 * Math.min(dx, dz);
     }
 
     protected double distance(Node a, Node b) {
@@ -273,25 +277,22 @@ public class FlatAStarRouteFinder implements RouteFinder {
 
         // Also check the drop to the endpoint
         int endY = (int) Math.floor(b.getVector().y());
-        if (prevY - endY > maxFallDistance) return true;
-
-        return false;
+        return prevY - endY > maxFallDistance;
     }
 
     protected List<Node> reconstructPath(Node endNode) {
-        var path = new ArrayList<Node>();
+        var path = new ArrayDeque<Node>();
         var current = endNode;
         while (current != null) {
-            path.add(current);
+            path.addFirst(current);
             current = current.getParent();
         }
-        Collections.reverse(path);
         // Skip the start node — the entity is already there.
         // Without this, the entity would turn back to reach the
         // center of its current block before moving forward.
         if (path.size() > 1) {
             path.removeFirst();
         }
-        return path;
+        return new ArrayList<>(path);
     }
 }

@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class SpaceAStarRouteFinder extends FlatAStarRouteFinder {
 
+    protected static final double SQRT3_MINUS_SQRT2 = Math.sqrt(3) - Math.sqrt(2);
+
     protected static final int[][] SPACE_NEIGHBORS = {
             // Same level (8 directions)
             {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1},
@@ -37,8 +39,8 @@ public class SpaceAStarRouteFinder extends FlatAStarRouteFinder {
         this(spacePosEvaluator, 100, 3);
     }
 
-    public SpaceAStarRouteFinder(SpacePosEvaluator spacePosEvaluator, int maxSearchDepth, int maxFallDistance) {
-        super(maxSearchDepth, maxFallDistance);
+    public SpaceAStarRouteFinder(SpacePosEvaluator spacePosEvaluator, int maxExpandedNodes, int maxFallDistance) {
+        super(maxExpandedNodes, maxFallDistance);
         this.spacePosEvaluator = spacePosEvaluator;
     }
 
@@ -105,6 +107,10 @@ public class SpaceAStarRouteFinder extends FlatAStarRouteFinder {
         double dx = Math.abs(a.getVector().x() - b.getVector().x());
         double dy = Math.abs(a.getVector().y() - b.getVector().y());
         double dz = Math.abs(a.getVector().z() - b.getVector().z());
-        return dx + dy + dz;
+        // 3D Octile distance: admissible for 26-directional movement
+        double max = Math.max(dx, Math.max(dy, dz));
+        double min = Math.min(dx, Math.min(dy, dz));
+        double mid = dx + dy + dz - max - min;
+        return SQRT3_MINUS_SQRT2 * min + SQRT2_MINUS_1 * mid + max;
     }
 }
