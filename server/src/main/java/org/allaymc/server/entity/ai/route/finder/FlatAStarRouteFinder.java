@@ -84,6 +84,9 @@ public class FlatAStarRouteFinder implements RouteFinder {
         int depth = 0;
         while (!openSet.isEmpty() && depth < maxExpandedNodes) {
             var current = openSet.poll();
+            if (closedSet.contains(current)) continue;
+            // Skip stale heap entries superseded by a newer node at the same position
+            if (openMap.get(current) != current) continue;
             openMap.remove(current);
             if (isCloseEnough(current, endNode)) {
                 var path = reconstructPath(current);
@@ -106,10 +109,13 @@ public class FlatAStarRouteFinder implements RouteFinder {
                     openSet.add(neighbor);
                     openMap.put(neighbor, neighbor);
                 } else if (tentativeG < existing.getG()) {
-                    openSet.remove(existing);
-                    existing.setParent(current);
-                    existing.setG(tentativeG);
-                    openSet.add(existing);
+                    // Create a new node so the stale entry's compareTo stays consistent in the heap
+                    var updated = new Node(existing.getVector());
+                    updated.setParent(current);
+                    updated.setG(tentativeG);
+                    updated.setH(existing.getH());
+                    openSet.add(updated);
+                    openMap.put(updated, updated);
                 }
             }
         }
@@ -270,14 +276,14 @@ public class FlatAStarRouteFinder implements RouteFinder {
                 }
             }
 
-            // Verify the vertical drop between consecutive points does not exceed maxFallDistance
-            if (prevY - y > maxFallDistance) return true;
+            // Verify vertical constraints: max +1 climb, max -maxFallDistance drop
+            if (y - prevY > 1 || prevY - y > maxFallDistance) return true;
             prevY = y;
         }
 
-        // Also check the drop to the endpoint
+        // Also check vertical constraints to the endpoint
         int endY = (int) Math.floor(b.getVector().y());
-        return prevY - endY > maxFallDistance;
+        return endY - prevY > 1 || prevY - endY > maxFallDistance;
     }
 
     protected List<Node> reconstructPath(Node endNode) {
