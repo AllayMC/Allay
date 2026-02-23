@@ -27,8 +27,12 @@ public class WalkingPosEvaluator implements GroundPosEvaluator {
         // Water is a valid standing surface
         if (blockType.hasBlockTag(BlockTags.WATER)) return true;
 
-        // For other blocks, delegate to physics: checks solid ground + AABB passability
+        // For other blocks, delegate to physics: checks solid ground + AABB passability.
+        // Use the ground block's collision shape top as the standing Y, so that
+        // partial-height blocks (e.g. slabs) get the correct AABB placement.
         var pos = block.getPosition();
-        return entity.canStandSafely(pos.x(), pos.y() + 1, pos.z(), pos.dimension());
+        var data = block.getBlockStateData();
+        double standingY = data.hasCollision() ? pos.y() + data.collisionShape().unionAABB().maxY() : pos.y() + 1;
+        return entity.canStandSafely(pos.x() + 0.5, standingY, pos.z() + 0.5, pos.dimension());
     }
 }

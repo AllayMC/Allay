@@ -62,15 +62,15 @@ public class FlatAStarRouteFinder implements RouteFinder {
         var startPos = entity.getLocation();
 
         int startX = (int) Math.floor(startPos.x());
-        int startY = (int) Math.floor(startPos.y());
         int startZ = (int) Math.floor(startPos.z());
 
         int endX = (int) Math.floor(target.x());
-        int endY = (int) Math.floor(target.y());
         int endZ = (int) Math.floor(target.z());
 
-        var startNode = new Node(startX + 0.5, startY, startZ + 0.5);
-        var endNode = new Node(endX + 0.5, endY, endZ + 0.5);
+        // Use actual Y positions (not integer-floored) so that nodes on partial-height
+        // blocks (e.g. slabs) carry the correct standing height for the walk controller.
+        var startNode = new Node(startX + 0.5, startPos.y(), startZ + 0.5);
+        var endNode = new Node(endX + 0.5, target.y(), endZ + 0.5);
 
         startNode.setG(0);
         startNode.setH(heuristic(startNode, endNode));
@@ -147,7 +147,7 @@ public class FlatAStarRouteFinder implements RouteFinder {
             for (int dy = 1; dy >= -maxFallDistance; dy--) {
                 int ny = cy + dy;
                 if (isWalkable(nx, ny, nz, dimension, entity)) {
-                    neighbors.add(new Node(nx + 0.5, ny, nz + 0.5));
+                    neighbors.add(new Node(nx + 0.5, computeStandingY(nx, ny, nz, dimension), nz + 0.5));
                     break;
                 }
             }
@@ -182,6 +182,23 @@ public class FlatAStarRouteFinder implements RouteFinder {
                 new Block(groundBlock, new Position3i(x, y - 1, z, dimension)));
         walkableCache.put(key, result);
         return result;
+    }
+
+    /**
+     * Compute the actual Y position an entity would stand at for the walkable
+     * position (x, y, z). Uses the ground block's collision shape top rather
+     * than the integer block Y, so nodes on partial-height blocks (e.g. slabs)
+     * carry the correct standing height.
+     */
+    protected double computeStandingY(int x, int y, int z, Dimension dimension) {
+        var groundBlock = dimension.getBlockState(x, y - 1, z);
+        if (groundBlock != null) {
+            var data = groundBlock.getBlockStateData();
+            if (data.hasCollision()) {
+                return (y - 1) + data.collisionShape().unionAABB().maxY();
+            }
+        }
+        return y;
     }
 
     protected boolean isCloseEnough(Node a, Node b) {
@@ -248,7 +265,10 @@ public class FlatAStarRouteFinder implements RouteFinder {
         int sz = Integer.signum(z2 - z1);
         int err = dx - dz;
         int x = x1, z = z1;
-        int prevY = (int) Math.floor(a.getVector().y());
+        // Use ceil to recover the "walkable Y level" from non-integer standing Y.
+        // For a slab at block y=64 (standingY=64.5), ceil gives 65 → isWalkable(x,65,z)
+        // checks ground at y=64 (the slab). floor would give 64 → wrong ground block.
+        int prevY = (int) Math.ceil(a.getVector().y());
 
         while (x != x2 || z != z2) {
             int e2 = 2 * err;
@@ -264,7 +284,7 @@ public class FlatAStarRouteFinder implements RouteFinder {
             double t = dx >= dz
                     ? (double) (x - x1) / (x2 - x1)
                     : (double) (z - z1) / (z2 - z1);
-            int y = (int) Math.floor(a.getVector().y() + t * (b.getVector().y() - a.getVector().y()));
+            int y = (int) Math.ceil(a.getVector().y() + t * (b.getVector().y() - a.getVector().y()));
 
             if (!isWalkable(x, y, z, dimension, entity)) return true;
 
@@ -282,7 +302,7 @@ public class FlatAStarRouteFinder implements RouteFinder {
         }
 
         // Also check vertical constraints to the endpoint
-        int endY = (int) Math.floor(b.getVector().y());
+        int endY = (int) Math.ceil(b.getVector().y());
         return endY - prevY > 1 || prevY - endY > maxFallDistance;
     }
 
