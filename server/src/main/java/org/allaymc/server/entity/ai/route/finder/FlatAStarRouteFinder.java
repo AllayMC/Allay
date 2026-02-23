@@ -63,12 +63,15 @@ public class FlatAStarRouteFinder implements RouteFinder {
         startNode.setH(heuristic(startNode, endNode));
 
         var openSet = new PriorityQueue<Node>();
+        var openMap = new HashMap<Node, Node>();
         var closedSet = new HashSet<Node>();
         openSet.add(startNode);
+        openMap.put(startNode, startNode);
 
         int depth = 0;
         while (!openSet.isEmpty() && depth < maxSearchDepth) {
             var current = openSet.poll();
+            openMap.remove(current);
             if (isCloseEnough(current, endNode)) {
                 var path = reconstructPath(current);
                 return entity.isActive() ? floydSmooth(path, dimension, entity) : path;
@@ -82,14 +85,18 @@ public class FlatAStarRouteFinder implements RouteFinder {
 
                 double tentativeG = current.getG() + distance(current, neighbor);
 
-                boolean inOpen = openSet.contains(neighbor);
-                if (!inOpen || tentativeG < neighbor.getG()) {
+                var existing = openMap.get(neighbor);
+                if (existing == null) {
                     neighbor.setParent(current);
                     neighbor.setG(tentativeG);
                     neighbor.setH(heuristic(neighbor, endNode));
-                    if (!inOpen) {
-                        openSet.add(neighbor);
-                    }
+                    openSet.add(neighbor);
+                    openMap.put(neighbor, neighbor);
+                } else if (tentativeG < existing.getG()) {
+                    openSet.remove(existing);
+                    existing.setParent(current);
+                    existing.setG(tentativeG);
+                    openSet.add(existing);
                 }
             }
         }
@@ -153,12 +160,14 @@ public class FlatAStarRouteFinder implements RouteFinder {
         int current = 0;
         int total = 2;
         while (total < path.size()) {
-            if (hasBarrier(path.get(current), path.get(total), dimension, entity) || total == path.size() - 1) {
+            if (hasBarrier(path.get(current), path.get(total), dimension, entity)) {
                 path.get(total - 1).setParent(path.get(current));
                 current = total - 1;
             }
             total++;
         }
+        // Connect the last node directly to the final pivot
+        path.getLast().setParent(path.get(current));
 
         // Reconstruct smoothed path by following parent links from end
         var result = new ArrayList<Node>();
@@ -188,6 +197,7 @@ public class FlatAStarRouteFinder implements RouteFinder {
         int sz = Integer.signum(z2 - z1);
         int err = dx - dz;
         int x = x1, z = z1;
+        int prevY = (int) Math.floor(a.getVector().y());
 
         while (x != x2 || z != z2) {
             int e2 = 2 * err;
@@ -204,7 +214,16 @@ public class FlatAStarRouteFinder implements RouteFinder {
             int y = (int) Math.floor(a.getVector().y() + t * (b.getVector().y() - a.getVector().y()));
 
             if (!isWalkable(x, y, z, dimension, entity)) return true;
+
+            // Verify the vertical drop between consecutive points does not exceed maxFallDistance
+            if (prevY - y > maxFallDistance) return true;
+            prevY = y;
         }
+
+        // Also check the drop to the endpoint
+        int endY = (int) Math.floor(b.getVector().y());
+        if (prevY - endY > maxFallDistance) return true;
+
         return false;
     }
 
