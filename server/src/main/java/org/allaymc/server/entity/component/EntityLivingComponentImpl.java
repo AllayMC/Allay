@@ -23,9 +23,11 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -39,10 +41,13 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
+import org.joml.Vector3d;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -692,10 +697,57 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         return true;
     }
 
+    @Override
+    public List<ItemStack> getDrops(int lootingLevel) {
+        var event = new CEntityGetDropEvent(lootingLevel);
+        manager.callEvent(event);
+        return event.getDrops();
+    }
+
+    @Override
+    public int getDropXpAmount() {
+        var event = new CEntityGetDropXpEvent(0);
+        manager.callEvent(event);
+        return event.getXp();
+    }
+
     /// Called when the entity dead (health == 0)
     protected void onDie() {
         new EntityDieEvent(thisEntity).call();
-        manager.callEvent(CEntityDieEvent.INSTANCE);
+
+        var pos = baseComponent.getLocation();
+        var dieEvent = new CEntityDieEvent();
+        dieEvent.setDropPosition(new Vector3d(pos.x(), pos.y(), pos.z()));
+        manager.callEvent(dieEvent);
+
+        // Calculate Looting level from killer's weapon
+        int lootingLevel = 0;
+        if (lastDamage != null &&
+            lastDamage.getAttacker() instanceof ContainerHolder holder &&
+            holder.hasContainer(ContainerTypes.INVENTORY)) {
+            lootingLevel = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.LOOTING);
+        }
+
+        // Drop loot items
+        var drops = getDrops(lootingLevel);
+        if (!drops.isEmpty()) {
+            var dimension = baseComponent.getDimension();
+            var dropPos = dieEvent.getDropPosition();
+            var motionFactory = dieEvent.getDropMotionFactory();
+            for (var drop : drops) {
+                dimension.dropItem(drop, dropPos, motionFactory.get(), 40);
+            }
+        }
+
+        // Drop XP if killed by player
+        if (lastDamage != null && lastDamage.getAttacker() instanceof EntityPlayer) {
+            var xpAmount = getDropXpAmount();
+            if (xpAmount > 0) {
+                baseComponent.getDimension().splitAndDropXpOrb(
+                    new Vector3d(pos.x(), pos.y(), pos.z()), xpAmount
+                );
+            }
+        }
 
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         ((EntityBaseComponentImpl) this.baseComponent).setState(EntityState.DEAD);

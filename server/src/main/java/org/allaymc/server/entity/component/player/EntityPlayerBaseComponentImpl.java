@@ -38,6 +38,8 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.allaymc.server.entity.component.event.CEntityAttackEvent;
+import org.allaymc.server.entity.component.event.CEntityDieEvent;
+import org.allaymc.server.entity.component.event.CEntityGetDropXpEvent;
 import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
 import org.allaymc.server.world.AllayDimension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -975,5 +977,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @EventHandler
     protected void onAttack(CEntityAttackEvent event) {
         exhaust(0.1f);
+    }
+
+    @EventHandler
+    protected void onDie(CEntityDieEvent event) {
+        // Player: circular motion distribution, spawn from eye height - 0.3
+        var pos = thisPlayer.getLocation();
+        event.setDropPosition(new Vector3d(pos.x(), pos.y() + thisPlayer.getEyeHeight() - 0.3, pos.z()));
+        event.setDropMotionFactory(() -> {
+            var rand = ThreadLocalRandom.current();
+            float speed = rand.nextFloat() * 0.5f;
+            float angle = rand.nextFloat() * (float) (Math.PI * 2);
+            return new Vector3d(-Math.sin(angle) * speed, 0.2, Math.cos(angle) * speed);
+        });
+    }
+
+    @EventHandler
+    protected void onGetDropXp(CEntityGetDropXpEvent event) {
+        // Vanilla: min(level * 7, 100)
+        event.setXp(Math.min(experienceLevel * 7, 100));
     }
 }

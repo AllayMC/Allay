@@ -4,8 +4,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
+import org.allaymc.api.item.ItemStack;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -283,6 +285,21 @@ public interface EntityLivingComponent extends EntityComponent {
     default boolean canApplyEffect(EffectType effectType) {
         return true;
     }
+
+    /**
+     * Get the items this entity drops on death.
+     *
+     * @param lootingLevel the looting enchantment level of the killer's weapon
+     * @return the list of item stacks to drop
+     */
+    List<ItemStack> getDrops(int lootingLevel);
+
+    /**
+     * Get the amount of XP this entity drops on death.
+     *
+     * @return the amount of XP to drop
+     */
+    int getDropXpAmount();
 
     /**
      * Gets the damage absorption value of this entity. This value represents how much

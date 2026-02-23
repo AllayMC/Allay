@@ -10,10 +10,13 @@ import org.allaymc.api.item.component.ItemDyeComponent;
 import org.allaymc.api.item.type.ItemTypes;
 
 import org.allaymc.api.utils.DyeColor;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.event.CEntityGetDropEvent;
+import org.allaymc.server.entity.component.event.CEntityGetDropXpEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.joml.Vector3d;
@@ -140,6 +143,32 @@ public class EntitySheepBaseComponentImpl extends EntityBaseComponentImpl implem
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         event.getNbt().listenForBoolean(TAG_SHEARED, v -> this.sheared = v);
+    }
+
+    @EventHandler
+    protected void onGetDrop(CEntityGetDropEvent event) {
+        if (!thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_MOB_LOOT)) return;
+        if (babyComponent.isBaby()) return;
+
+        // Drop 1 wool of sheep's color if not sheared
+        if (!sheared) {
+            var woolType = getWoolItemForColor(dyeableComponent.getColor());
+            if (woolType != null) {
+                event.getDrops().add(woolType.createItemStack(1));
+            }
+        }
+
+        // Drop 1-2 raw mutton (cooked if on fire), +0-1 per Looting level
+        var rand = ThreadLocalRandom.current();
+        int muttonCount = rand.nextInt(1, 3) + rand.nextInt(event.getLootingLevel() + 1);
+        var muttonType = livingComponent.isOnFire() ? ItemTypes.COOKED_MUTTON : ItemTypes.MUTTON;
+        event.getDrops().add(muttonType.createItemStack(muttonCount));
+    }
+
+    @EventHandler
+    protected void onGetDropXp(CEntityGetDropXpEvent event) {
+        if (babyComponent.isBaby()) return;
+        event.setXp(ThreadLocalRandom.current().nextInt(1, 4)); // 1-3 XP
     }
 
 }
