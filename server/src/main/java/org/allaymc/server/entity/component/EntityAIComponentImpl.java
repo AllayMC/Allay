@@ -44,7 +44,7 @@ public class EntityAIComponentImpl implements EntityAIComponent {
 
     @EventHandler
     protected void onParallelTick(CEntityParallelTickEvent event) {
-        if (!thisEntity.isImmobile() && !thisEntity.isAlive()) {
+        if (!thisEntity.isImmobile() && thisEntity.isAlive()) {
             behaviorGroup.tick();
         }
     }
