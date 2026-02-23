@@ -80,7 +80,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Getter
     protected DamageContainer lastDamage;
     @Getter
-    protected long lastDamageTime;
+    protected long lastDamageTime = -1;
 
     @Getter
     protected int onFireTicks;

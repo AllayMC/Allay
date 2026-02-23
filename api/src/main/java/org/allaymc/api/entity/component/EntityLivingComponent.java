@@ -75,7 +75,7 @@ public interface EntityLivingComponent extends EntityComponent {
     /**
      * Get the time when the last damage was dealt to this entity.
      *
-     * @return the time in entity ticks
+     * @return the time in entity ticks, or {@code -1} if no damage has been received
      */
     long getLastDamageTime();
 
