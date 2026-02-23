@@ -388,7 +388,7 @@ public class AllayPlayer implements Player {
                 // NOTICE: Player network offset is not used in AddPlayerPacket
                 p.setPosition(Vector3f.from(l.x(), l.y(), l.z()));
                 p.setMotion(motion);
-                p.setRotation(Vector3f.from(l.pitch(), l.yaw(), getHeadYaw(entity)));
+                p.setRotation(Vector3f.from(l.pitch(), l.yaw(), getHeadYaw(entity, l.yaw())));
                 p.setGameType(toNetwork(player.getGameMode()));
                 p.getMetadata().putAll(parseMetadata(entity));
                 p.setHand(toNetwork(player.getContainer(ContainerTypes.INVENTORY).getItemInHand()));
@@ -428,7 +428,7 @@ public class AllayPlayer implements Player {
                 p.setPosition(position);
                 p.setMotion(motion);
                 p.setRotation(Vector2f.from(l.pitch(), l.yaw()));
-                p.setHeadRotation((float) getHeadYaw(entity));
+                p.setHeadRotation((float) getHeadYaw(entity, l.yaw()));
                 p.setBodyRotation((float) l.yaw());
                 p.getMetadata().putAll(parseMetadata(entity));
                 yield p;
@@ -484,7 +484,7 @@ public class AllayPlayer implements Player {
         var packet = new MovePlayerPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
-        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity)));
+        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
         packet.setTeleportationCause(MovePlayerPacket.TeleportationCause.UNKNOWN);
         if (teleporting) {
             packet.setMode(MovePlayerPacket.Mode.TELEPORT);
@@ -496,7 +496,7 @@ public class AllayPlayer implements Player {
         var packet = new MoveEntityAbsolutePacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
-        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity)));
+        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
         packet.setTeleported(teleporting);
         if (entity instanceof EntityPhysicsComponent physicsComponent) {
             packet.setOnGround(physicsComponent.isOnGround());
@@ -509,10 +509,8 @@ public class AllayPlayer implements Player {
      * Returns the entity's head yaw if it has the {@link EntityHeadYawComponent},
      * otherwise falls back to the body yaw from the location.
      */
-    protected static double getHeadYaw(Entity entity) {
-        return entity instanceof EntityHeadYawComponent headYaw
-                ? headYaw.getHeadYaw()
-                : entity.getLocation().yaw();
+    protected static double getHeadYaw(Entity entity, double yaw) {
+        return entity instanceof EntityHeadYawComponent headYawComponent ? headYawComponent.getHeadYaw() : yaw;
     }
 
     @Override
