@@ -18,8 +18,12 @@ import org.allaymc.server.entity.ai.behaviorgroup.BehaviorGroupImpl;
 import org.allaymc.server.entity.ai.controller.FluctuateController;
 import org.allaymc.server.entity.ai.controller.LookController;
 import org.allaymc.server.entity.ai.controller.WalkController;
+import org.allaymc.server.entity.ai.evaluator.BlockCheckEvaluator;
+import org.allaymc.server.entity.ai.evaluator.LogicHelper;
 import org.allaymc.server.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator;
 import org.allaymc.server.entity.ai.evaluator.PassByTimeEvaluator;
+import org.allaymc.server.entity.ai.evaluator.ProbabilityEvaluator;
+import org.joml.Vector3i;
 import org.allaymc.server.entity.ai.executor.*;
 import org.allaymc.server.entity.ai.route.finder.FlatAStarRouteFinder;
 import org.allaymc.server.entity.ai.route.posevaluator.WalkingPosEvaluator;
@@ -46,6 +50,9 @@ import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import static org.allaymc.server.entity.ai.evaluator.LogicHelper.all;
+import static org.allaymc.server.entity.ai.evaluator.LogicHelper.any;
 
 /**
  * @author daoge_cmd
@@ -512,15 +519,14 @@ public final class EntityTypeInitializer {
                             // Core behavior: enter love mode when fed
                             .coreBehavior(BehaviorImpl.builder()
                                     .executor(new InLoveExecutor(400))
-                                    .evaluator(entity -> {
-                                        if (Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))) return false;
-                                        // 5-minute cooldown after last love (6000 ticks)
-                                        var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
-                                        if (lastLoveTime != null && lastLoveTime > 0) {
-                                            if (entity.getTick() - lastLoveTime < 6000) return false;
-                                        }
-                                        return new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400).evaluate(entity);
-                                    })
+                                    .evaluator(all(
+                                            entity -> !Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)),
+                                            entity -> {
+                                                var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
+                                                return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
+                                            },
+                                            new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400)
+                                    ))
                                     .priority(1)
                                     .build())
                             // Priority 6 (highest): flee when attacked
@@ -544,29 +550,32 @@ public final class EntityTypeInitializer {
                             // Priority 3: eat grass
                             .behavior(BehaviorImpl.builder()
                                     .executor(new SheepEatGrassExecutor())
-                                    .evaluator(entity -> {
-                                        if (entity instanceof EntityAnimal animal && animal.isBaby()) {
-                                            if (Math.random() >= 0.86) return false;
-                                        } else {
-                                            if (Math.random() >= 0.01) return false;
-                                        }
-                                        var loc = entity.getLocation();
-                                        int x = (int) Math.floor(loc.x());
-                                        int y = (int) Math.floor(loc.y());
-                                        int z = (int) Math.floor(loc.z());
-                                        var dim = entity.getDimension();
-                                        var feetBlock = dim.getBlockState(x, y, z);
-                                        if (feetBlock != null && feetBlock.getBlockType() == BlockTypes.SHORT_GRASS) return true;
-                                        var belowBlock = dim.getBlockState(x, y - 1, z);
-                                        return belowBlock != null && belowBlock.getBlockType() == BlockTypes.GRASS_BLOCK;
-                                    })
+                                    .evaluator(all(
+                                            any(
+                                                    all(
+                                                            entity -> entity instanceof EntityAnimal animal && animal.isBaby(),
+                                                            new ProbabilityEvaluator(86, 100)
+                                                    ),
+                                                    all(
+                                                            entity -> !(entity instanceof EntityAnimal animal && animal.isBaby()),
+                                                            new ProbabilityEvaluator(1, 100)
+                                                    )
+                                            ),
+                                            any(
+                                                    new BlockCheckEvaluator(BlockTypes.SHORT_GRASS, new Vector3i(0, 0, 0)),
+                                                    new BlockCheckEvaluator(BlockTypes.GRASS_BLOCK, new Vector3i(0, -1, 0))
+                                            )
+                                    ))
                                     .priority(3)
                                     .period(100)
                                     .build())
                             // Priority 2: look at nearest player
                             .behavior(BehaviorImpl.builder()
                                     .executor(new LookAtEntityExecutor(MemoryTypes.NEAREST_PLAYER, 100))
-                                    .evaluator(entity -> entity.getMemoryStorage().notEmpty(MemoryTypes.NEAREST_PLAYER) && Math.random() < 0.4)
+                                    .evaluator(all(
+                                            new MemoryCheckNotEmptyEvaluator(MemoryTypes.NEAREST_PLAYER),
+                                            new ProbabilityEvaluator(2, 5)
+                                    ))
                                     .priority(2)
                                     .period(100)
                                     .build())
