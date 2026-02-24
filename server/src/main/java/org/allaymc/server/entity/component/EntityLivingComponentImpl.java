@@ -360,6 +360,11 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
                     damage.updateFinalDamage(d -> d + sharpnessLevel * 1.25f);
                     damage.setEnchanted(true);
                 }
+                var fireAspectLevel = item.getEnchantmentLevel(EnchantmentTypes.FIRE_ASPECT);
+                if (fireAspectLevel > 0) {
+                    setOnFireTicks(fireAspectLevel * 80);
+                    damage.setEnchanted(true);
+                }
             }
 
             if (attacker instanceof EntityPhysicsComponent component) {

@@ -99,6 +99,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - End portal frame completion logic and end portal teleport behavior.
   - End spawn platform creation during teleport to The End.
 - Implemented sheep AI.
+- Implemented Fire Aspect enchantment.
 - Implemented entity item and XP drops on death.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
 - Updated the chunk version to 42 (1.21.120).
