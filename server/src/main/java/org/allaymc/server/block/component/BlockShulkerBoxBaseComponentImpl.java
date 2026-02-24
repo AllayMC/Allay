@@ -8,10 +8,11 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemStuffStorableComponent;
+import org.allaymc.api.item.component.ItemShulkerBoxBaseComponent;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.server.component.annotation.Dependency;
 
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -36,12 +37,18 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
         return createShulkerBoxDrop(block);
     }
 
-    protected ItemStack createShulkerBoxDrop(Block blockState) {
-        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.getPosition());
+    protected ItemStack createShulkerBoxDrop(Block block) {
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(block.getPosition());
         var container = blockEntity.getContainer();
-        var containerItems = container.saveNBT();
-        var drop = blockState.toItemStack();
-        ((ItemStuffStorableComponent) drop).setStoredItems(containerItems);
+        var drop = block.toItemStack();
+        var itemStacks = container.getItemStackArray();
+        var items = new HashMap<Integer, ItemStack>();
+        for (int slot = 0; slot < itemStacks.length; slot++) {
+            if (!itemStacks[slot].isEmptyOrAir()) {
+                items.put(slot, itemStacks[slot]);
+            }
+        }
+        ((ItemShulkerBoxBaseComponent) drop).setStoredItems(items);
         return drop;
     }
 

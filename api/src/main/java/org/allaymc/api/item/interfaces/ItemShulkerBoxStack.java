@@ -1,7 +1,7 @@
 package org.allaymc.api.item.interfaces;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemStuffStorableComponent;
+import org.allaymc.api.item.component.ItemShulkerBoxBaseComponent;
 
-public interface ItemShulkerBoxStack extends ItemStack, ItemStuffStorableComponent {
+public interface ItemShulkerBoxStack extends ItemStack, ItemShulkerBoxBaseComponent {
 }

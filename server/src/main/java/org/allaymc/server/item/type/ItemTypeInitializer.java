@@ -603,7 +603,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
+                .addComponent(ItemShulkerBoxBaseComponentImpl::new, ItemShulkerBoxBaseComponentImpl.class)
                 .build();
     }
 
