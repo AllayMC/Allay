@@ -2427,8 +2427,7 @@ public class AllayPlayer implements Player {
 
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
-        if (!this.controlledEntity.hasPermission(Permissions.COMMAND_VIEW_OTHER_OUTPUTS).asBoolean() ||
-            !this.controlledEntity.hasPermissions(permissions)) {
+        if (!this.controlledEntity.hasPermissions(permissions)) {
             return;
         }
 
@@ -2438,7 +2437,7 @@ public class AllayPlayer implements Player {
             for (var output : outputs) {
                 sendMessage(I18n.get().tr(this.loginData.getLangCode(), output.str(), output.args()));
             }
-        } else {
+        } else if (this.controlledEntity.hasPermission(Permissions.COMMAND_VIEW_OTHER_OUTPUTS).asBoolean()) {
             for (var output : outputs) {
                 var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(this.loginData.getLangCode(), output.str(), output.args()) + "]";
                 sendMessage(str);
