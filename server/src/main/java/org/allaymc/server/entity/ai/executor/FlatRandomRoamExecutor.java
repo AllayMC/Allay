@@ -26,7 +26,8 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
     protected final boolean avoidWater;
     protected final int maxRetryTime;
 
-    protected int tickCounter;
+    protected int durationTick;
+    protected int targetCalTick;
     protected int retryCount;
     protected boolean hasTarget;
 
@@ -48,7 +49,8 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
 
     @Override
     public void onStart(EntityIntelligent entity) {
-        tickCounter = 0;
+        durationTick = 0;
+        targetCalTick = 0;
         retryCount = 0;
         hasTarget = false;
         entity.setMovementSpeed(speed);
@@ -61,15 +63,8 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
 
     @Override
     public boolean execute(EntityIntelligent entity) {
-        tickCounter++;
-
-        if (runningTime > 0 && tickCounter > runningTime) {
-            return false;
-        }
-
-        if (!hasTarget && tickCounter % frequency == 0) {
-            findNewTarget(entity);
-        }
+        durationTick++;
+        targetCalTick++;
 
         // Check if we've reached the target
         var moveTarget = entity.getMoveTarget();
@@ -79,12 +74,22 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
             double dz = moveTarget.z() - loc.z();
             if (dx * dx + dz * dz < 1.0) {
                 hasTarget = false;
-                EntityControlHelper.removeRouteTarget(entity);
-                EntityControlHelper.removeLookTarget(entity);
+                if (!calNextTargetImmediately) {
+                    EntityControlHelper.removeRouteTarget(entity);
+                    EntityControlHelper.removeLookTarget(entity);
+                }
             }
         }
 
-        return true;
+        if (!hasTarget) {
+            if (calNextTargetImmediately) {
+                findNewTarget(entity);
+            } else if (targetCalTick >= frequency) {
+                findNewTarget(entity);
+            }
+        }
+
+        return runningTime <= 0 || durationTick <= runningTime;
     }
 
     @Override
@@ -129,6 +134,7 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
         setRouteTarget(entity, target);
         setLookTarget(entity, target);
         hasTarget = true;
+        targetCalTick = 0;
         retryCount = 0;
     }
 }
