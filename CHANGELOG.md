@@ -52,6 +52,20 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `NetworkManager` interface for managing multiple network interfaces, allowing plugins to register custom transport protocols (QUIC, TCP, WebSocket, etc.) alongside the built-in RakNet interface.
 - (API) Added `PlayerManager.getNetworkManager()` method.
 - (API) Added cancellable `NetworkInterfaceRegisterEvent` and `NetworkInterfaceUnregisterEvent`.
+- (API) Added entity AI framework with the following components:
+  - `EntityAIComponent` — core component providing behavior group, memory storage, movement speed, and look/move targets.
+  - `EntityIntelligent` — marker interface for entities with AI.
+  - `BehaviorGroup` — orchestrates the AI tick pipeline: sensors, evaluators, executors, route finding, and controllers.
+  - `Behavior`, `BehaviorEvaluator`, `BehaviorExecutor`, `BehaviorState` — behavior definition and lifecycle.
+  - `Controller` — AI controllers (walk, look, fluctuate).
+  - `Sensor` — environment sensing (nearest player, nearest feeding player).
+  - `MemoryStorage`, `MemoryType`, `MemoryTypes` — typed memory system for AI state.
+  - `RouteFinder`, `Node` — A* pathfinding with flat and 3D route finders.
+  - `EntityParallelTickComponent` — parallel tick support for entity AI.
+- (API) Added `EntityAnimalComponent` with breeding item check, `EntityBabyComponent` for baby entity growth, `EntityDyeableComponent` for dyeable entities, and `EntityHeadYawComponent` for head yaw tracking.
+- (API) Added `EntitySheepBaseComponent` and `EntityAnimal` interface.
+- (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
+- (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
 - Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Implemented the following blocks:
   - Bamboo
@@ -84,6 +98,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
   - End portal frame completion logic and end portal teleport behavior.
   - End spawn platform creation during teleport to The End.
+- Implemented sheep AI.
+- Implemented entity item and XP drops on death.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
 - Updated the chunk version to 42 (1.21.120).
 
@@ -101,6 +117,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
 - Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
 - Fixed shulker box losing its stored items when cleaned in a cauldron.
+- Fixed players without `COMMAND_VIEW_OTHER_OUTPUTS` permission being unable to view their own command output.
+- Fixed incorrect permissions used for gamemode and plugin commands.
 
 ### Removed
 
