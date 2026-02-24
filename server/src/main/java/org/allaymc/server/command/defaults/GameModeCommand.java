@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class GameModeCommand extends Command {
     public GameModeCommand() {
-        super("gamemode", TrKeys.MC_COMMANDS_GAMEMODE_DESCRIPTION, Permissions.COMMAND_FILL);
+        super("gamemode", TrKeys.MC_COMMANDS_GAMEMODE_DESCRIPTION, Permissions.COMMAND_GAMEMODE);
         aliases.add("gm");
     }
 

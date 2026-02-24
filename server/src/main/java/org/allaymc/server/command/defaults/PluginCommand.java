@@ -13,7 +13,7 @@ import org.allaymc.api.utils.TextFormat;
 public class PluginCommand extends Command {
 
     public PluginCommand() {
-        super("plugin", TrKeys.ALLAY_COMMAND_PLUGIN_DESCRIPTION, Permissions.COMMAND_PERMISSION);
+        super("plugin", TrKeys.ALLAY_COMMAND_PLUGIN_DESCRIPTION, Permissions.COMMAND_PLUGIN);
         aliases.add("pl");
     }
 
