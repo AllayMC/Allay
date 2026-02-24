@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.ai.executor;
 
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.entity.ai.behavior.BehaviorExecutor;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.joml.Vector3d;
@@ -118,8 +119,7 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
                     (int) Math.floor(targetY) - 1,
                     (int) Math.floor(targetZ)
             );
-            if (blockBelow != null && blockBelow.getBlockType().hasBlockTag(
-                    org.allaymc.api.block.data.BlockTags.WATER)) {
+            if (blockBelow != null && blockBelow.getBlockType().hasBlockTag(BlockTags.WATER)) {
                 retryCount++;
                 return;
             }

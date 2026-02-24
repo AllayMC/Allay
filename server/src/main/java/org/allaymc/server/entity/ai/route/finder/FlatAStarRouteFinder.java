@@ -81,6 +81,11 @@ public class FlatAStarRouteFinder implements RouteFinder {
         openSet.add(startNode);
         openMap.put(startNode, startNode);
 
+        // Track the closest reachable node to the target so that when
+        // the exact destination is unreachable, we can still return a
+        // partial path toward it instead of giving up entirely.
+        Node bestNode = startNode;
+
         int depth = 0;
         while (!openSet.isEmpty() && depth < maxExpandedNodes) {
             var current = openSet.poll();
@@ -95,6 +100,10 @@ public class FlatAStarRouteFinder implements RouteFinder {
 
             closedSet.add(current);
             depth++;
+
+            if (current.getH() < bestNode.getH()) {
+                bestNode = current;
+            }
 
             for (var neighbor : getNeighbors(current, dimension, entity)) {
                 if (closedSet.contains(neighbor)) continue;
@@ -119,7 +128,11 @@ public class FlatAStarRouteFinder implements RouteFinder {
                 }
             }
         }
-        // No path found
+        // Exact path not found — move to the closest reachable node instead
+        if (bestNode != startNode) {
+            var path = reconstructPath(bestNode);
+            return entity.isActive() ? floydSmooth(path, dimension, entity) : path;
+        }
         return List.of();
     }
 
