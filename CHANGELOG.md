@@ -66,6 +66,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `EntitySheepBaseComponent` and `EntityAnimal` interface.
 - (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
 - (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
+- (API) Added entity property system:
+  - `EntityPropertyType<DATATYPE>` sealed interface with `BooleanPropertyType`, `IntPropertyType`, `FloatPropertyType`, and `EnumPropertyType<T>` concrete types.
+  - `EntityPropertyTypes` constants class (e.g., `CLIMATE_VARIANT`).
+  - `EntityType.getProperties()` / `hasProperty()` for querying property definitions on entity types.
+  - `EntityBaseComponent.getPropertyValue()` / `setPropertyValue()` for reading and writing property values at runtime.
+  - Entity properties are persisted via NBT and synchronized to clients via `SyncEntityPropertyPacket`.
+- (API) Added `ClimateVariant` enum (`TEMPERATE`, `WARM`, `COLD`) and `BiomeData.getEntityClimateVariant()` for biome-based climate variant resolution.
 - Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Implemented the following blocks:
   - Bamboo
@@ -98,6 +105,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
   - End portal frame completion logic and end portal teleport behavior.
   - End spawn platform creation during teleport to The End.
+- Implemented climate variant property for pig, cow, chicken, and egg entities, with biome-based initialization on spawn.
 - Implemented sheep AI.
 - Implemented Fire Aspect enchantment.
 - Implemented entity item and XP drops on death.
