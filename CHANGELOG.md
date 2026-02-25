@@ -125,11 +125,12 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Fixed block collision shapes being clamped to a maximum height of 1.0. Blocks such as fences, fence gates, walls, and border blocks now correctly use their vanilla collision height of 1.5, preventing players from jumping over them.
 - Fixed door collision shapes not changing based on block state. Doors now correctly compute their collision and selection shapes based on cardinal direction, open state, and hinge side.
-- Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
-- Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
 - Fixed shulker box losing its stored items when cleaned in a cauldron.
 - Fixed players without `COMMAND_VIEW_OTHER_OUTPUTS` permission being unable to view their own command output.
 - Fixed incorrect permissions used for gamemode and plugin commands.
+- Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
+- Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
+- Fixed a bug where boss bar is not shown.
 
 ### Removed
 

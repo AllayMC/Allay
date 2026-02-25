@@ -2177,7 +2177,7 @@ public class AllayPlayer implements Player {
         // easier to implement by creating a new one.
         clearBossBar();
         var packet = new BossEventPacket();
-        packet.setBossUniqueEntityId(this.controlledEntity.getRuntimeId());
+        packet.setBossUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
         packet.setAction(BossEventPacket.Action.CREATE);
         packet.setTitle(bossBar.getTitle());
         packet.setHealthPercentage(bossBar.getProgress());
@@ -2190,7 +2190,7 @@ public class AllayPlayer implements Player {
     @Override
     public void clearBossBar() {
         var packet = new BossEventPacket();
-        packet.setBossUniqueEntityId(this.controlledEntity.getRuntimeId());
+        packet.setBossUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
         packet.setAction(BossEventPacket.Action.REMOVE);
         sendPacket(packet);
     }
