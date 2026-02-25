@@ -392,6 +392,9 @@ public class AllayPlayer implements Player {
                 p.setGameType(toNetwork(player.getGameMode()));
                 p.getMetadata().putAll(parseMetadata(entity));
                 p.setHand(toNetwork(player.getContainer(ContainerTypes.INVENTORY).getItemInHand()));
+                var properties = NetworkHelper.toNetworkProperties(entity);
+                p.getProperties().getIntProperties().addAll(properties.getIntProperties());
+                p.getProperties().getFloatProperties().addAll(properties.getFloatProperties());
                 yield p;
             }
             case EntityItem item -> {
@@ -431,6 +434,9 @@ public class AllayPlayer implements Player {
                 p.setHeadRotation((float) getHeadYaw(entity, l.yaw()));
                 p.setBodyRotation((float) l.yaw());
                 p.getMetadata().putAll(parseMetadata(entity));
+                var properties = NetworkHelper.toNetworkProperties(entity);
+                p.getProperties().getIntProperties().addAll(properties.getIntProperties());
+                p.getProperties().getFloatProperties().addAll(properties.getFloatProperties());
                 yield p;
             }
         };
@@ -526,6 +532,7 @@ public class AllayPlayer implements Player {
         var packet = new SetEntityDataPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setMetadata(parseMetadata(entity));
+        packet.setProperties(NetworkHelper.toNetworkProperties(entity));
         sendPacket(packet);
     }
 
@@ -2908,6 +2915,9 @@ public class AllayPlayer implements Player {
         }
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
+        for (var pkt : NetworkData.SYNC_ENTITY_PROPERTY_PACKETS.get()) {
+            sendPacket(pkt);
+        }
         sendPacket(MultiVersionHelper.adaptBiomeDefinitionListPacket(this, NetworkData.BIOME_DEFINITION_LIST_PACKET.get()));
         sendPacket(MultiVersionHelper.adaptCraftingDataPacket(this, NetworkData.CRAFTING_DATA_PACKET.get()));
         sendPacket(NetworkData.TRIM_DATA_PACKET.get());

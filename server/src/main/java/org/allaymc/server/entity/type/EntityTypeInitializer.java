@@ -11,7 +11,10 @@ import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemTypes;
 
+import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.utils.DyeColor;
+
+import java.util.List;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.entity.ai.behavior.BehaviorImpl;
 import org.allaymc.server.entity.ai.behaviorgroup.BehaviorGroupImpl;
@@ -19,7 +22,6 @@ import org.allaymc.server.entity.ai.controller.FluctuateController;
 import org.allaymc.server.entity.ai.controller.LookController;
 import org.allaymc.server.entity.ai.controller.WalkController;
 import org.allaymc.server.entity.ai.evaluator.BlockCheckEvaluator;
-import org.allaymc.server.entity.ai.evaluator.LogicHelper;
 import org.allaymc.server.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator;
 import org.allaymc.server.entity.ai.evaluator.PassByTimeEvaluator;
 import org.allaymc.server.entity.ai.evaluator.ProbabilityEvaluator;
@@ -448,10 +450,35 @@ public final class EntityTypeInitializer {
         EntityTypes.EGG = AllayEntityType
                 .builder(EntityEggImpl.class)
                 .vanillaEntity(EntityId.EGG)
+                .setProperties(EntityPropertyTypes.CLIMATE_VARIANT)
                 .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntityEggPhysicsComponentImpl::new, EntityEggPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .build();
+    }
+
+    public static void initPig() {
+        EntityTypes.PIG = AllayEntityType
+                .builder(EntityPigImpl.class)
+                .vanillaEntity(EntityId.PIG)
+                .setProperties(EntityPropertyTypes.CLIMATE_VARIANT)
+                .build();
+    }
+
+    public static void initCow() {
+        EntityTypes.COW = AllayEntityType
+                .builder(EntityCowImpl.class)
+                .vanillaEntity(EntityId.COW)
+                .setProperties(EntityPropertyTypes.CLIMATE_VARIANT)
+                .build();
+    }
+
+    public static void initChicken() {
+        EntityTypes.CHICKEN = AllayEntityType
+                .builder(EntityChickenImpl.class)
+                .vanillaEntity(EntityId.CHICKEN)
+                .setProperties(EntityPropertyTypes.CLIMATE_VARIANT)
                 .build();
     }
 

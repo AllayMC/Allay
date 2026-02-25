@@ -5,9 +5,11 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.particle.ItemBreakParticle;
+
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -111,20 +113,14 @@ public class EntityEggPhysicsComponentImpl extends EntityProjectilePhysicsCompon
 
         // 1/32 chance to spawn 4 chickens instead of 1
         int chickenCount = random.nextInt(FOUR_CHICKENS_CHANCE) == 0 ? 4 : 1;
-
         for (int i = 0; i < chickenCount; i++) {
-            var chicken = EntityTypes.CHICKEN.createEntity(
-                    EntityInitInfo.builder()
-                            .dimension(dimension)
-                            .pos(hitPos.x(), hitPos.y(), hitPos.z())
-                            .build()
-            );
-
-            if (chicken != null) {
-                // Spawn as baby chicken
-                // TODO: Set chicken as baby when age component is available for mobs
-                dimension.getEntityManager().addEntity(chicken);
-            }
+            var chicken = EntityTypes.CHICKEN.createEntity(EntityInitInfo.builder()
+                    .dimension(dimension)
+                    .pos(hitPos.x(), hitPos.y(), hitPos.z())
+                    .build());
+            chicken.setPropertyValue(EntityPropertyTypes.CLIMATE_VARIANT, thisEntity.getPropertyValue(EntityPropertyTypes.CLIMATE_VARIANT));
+            // TODO: Set chicken as baby when age component is available for mobs
+            dimension.getEntityManager().addEntity(chicken);
         }
     }
 }

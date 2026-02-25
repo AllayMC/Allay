@@ -2,6 +2,10 @@ package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.entity.property.type.BooleanPropertyType;
+import org.allaymc.api.entity.property.type.EnumPropertyType;
+import org.allaymc.api.entity.property.type.FloatPropertyType;
+import org.allaymc.api.entity.property.type.IntPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.pack.Pack;
@@ -65,6 +69,7 @@ public final class NetworkData {
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
+    public static final Supplier<List<SyncEntityPropertyPacket>> SYNC_ENTITY_PROPERTY_PACKETS = Suppliers.memoize(NetworkData::encodeSyncEntityPropertyPackets);
 
     public static final List<Recipe> INDEXED_RECIPES = new ArrayList<>();
 
@@ -359,5 +364,52 @@ public final class NetworkData {
                 )
         ).collect(Collectors.toSet()));
         return packet;
+    }
+
+    public static List<SyncEntityPropertyPacket> encodeSyncEntityPropertyPackets() {
+        var result = new ArrayList<SyncEntityPropertyPacket>();
+        for (var entityType : Registries.ENTITIES.getContent().values()) {
+            var propTypes = entityType.getProperties();
+            if (propTypes.isEmpty()) {
+                continue;
+            }
+
+            var properties = new ArrayList<NbtMap>();
+            for (var propType : propTypes.values()) {
+                var propBuilder = NbtMap.builder();
+                propBuilder.putString("name", propType.getName());
+                propBuilder.putBoolean("clientSync", true);
+                propBuilder.putInt("type", propType.getType().ordinal());
+
+                switch (propType) {
+                    case EnumPropertyType<?> enumProp -> {
+                        propBuilder.putList("enum", NbtType.STRING, enumProp.serializedValues());
+                    }
+                    case IntPropertyType intProp -> {
+                        propBuilder.putInt("default", intProp.getDefaultValue());
+                        propBuilder.putInt("min", intProp.getMin());
+                        propBuilder.putInt("max", intProp.getMax());
+                    }
+                    case FloatPropertyType floatProp -> {
+                        propBuilder.putFloat("default", floatProp.getDefaultValue());
+                        propBuilder.putFloat("min", floatProp.getMin());
+                        propBuilder.putFloat("max", floatProp.getMax());
+                    }
+                    case BooleanPropertyType ignored -> {
+                        // no-op
+                    }
+                }
+                properties.add(propBuilder.build());
+            }
+
+            var packet = new SyncEntityPropertyPacket();
+            packet.setData(NbtMap.builder()
+                    .putString("type", entityType.getIdentifier().toString())
+                    .putList("properties", NbtType.COMPOUND, properties)
+                    .build()
+            );
+            result.add(packet);
+        }
+        return result;
     }
 }

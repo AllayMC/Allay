@@ -10,6 +10,7 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
+import org.allaymc.api.entity.property.type.EntityPropertyType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
@@ -40,6 +41,7 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -799,6 +801,32 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param persistent {@code true} if the entity should be persistent
      */
     void setPersistent(boolean persistent);
+
+    /**
+     * Gets the current value of an entity property.
+     *
+     * @param propertyType the property type to query
+     * @param <DATATYPE>   the property value type
+     * @return the current value
+     */
+    <DATATYPE> DATATYPE getPropertyValue(EntityPropertyType<DATATYPE> propertyType);
+
+    /**
+     * Sets an entity property value.
+     *
+     * @param propertyType the property type to set
+     * @param value        the value to set
+     * @param <DATATYPE>   the property value type
+     */
+    <DATATYPE> void setPropertyValue(EntityPropertyType<DATATYPE> propertyType, DATATYPE value);
+
+    /**
+     * Gets all current entity property values.
+     *
+     * @return an unmodifiable view of the map of property types to their current values
+     */
+    @UnmodifiableView
+    Map<EntityPropertyType<?>, Object> getPropertyValues();
 
     @Override
     default boolean isValid() {
