@@ -5,8 +5,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.entity.property.enums.ClimateVariant;
 import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.particle.ItemBreakParticle;
 
@@ -89,13 +91,25 @@ public class EntityEggPhysicsComponentImpl extends EntityProjectilePhysicsCompon
     protected void addBreakEffect() {
         var dimension = thisEntity.getDimension();
         var location = thisEntity.getLocation();
-        var eggItem = ItemTypes.EGG.createItemStack(1);
+        var eggItem = getEggItemType().createItemStack(1);
         var particle = new ItemBreakParticle(eggItem);
 
         var particleCount = nextParticleCount();
         for (int i = 0; i < particleCount; i++) {
             dimension.addParticle(location, particle);
         }
+    }
+
+    /**
+     * Gets the correct egg item type for break particles based on climate variant.
+     */
+    protected ItemType<?> getEggItemType() {
+        var variant = thisEntity.getPropertyValue(EntityPropertyTypes.CLIMATE_VARIANT);
+        return switch (variant) {
+            case COLD -> ItemTypes.BLUE_EGG;
+            case WARM -> ItemTypes.BROWN_EGG;
+            default -> ItemTypes.EGG;
+        };
     }
 
     /**

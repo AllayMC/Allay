@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityLingeringPotion;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.property.enums.ClimateVariant;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySplashPotion;
 import org.allaymc.api.item.data.ArmorType;
@@ -18,6 +19,7 @@ import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.edible.*;
 import org.allaymc.server.item.component.projectile.ItemBottleProjectileComponentImpl;
+import org.allaymc.server.item.component.projectile.ItemEggProjectileComponentImpl;
 import org.allaymc.server.item.component.projectile.ItemProjectileComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemBeetrootSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemMelonSeedsBaseComponentImpl;
@@ -895,7 +897,17 @@ public final class ItemTypeInitializer {
         ItemTypes.EGG = AllayItemType
                 .builder(ItemEggStackImpl.class)
                 .vanillaItem(ItemId.EGG)
-                .addComponent(() -> new ItemProjectileComponentImpl(EntityId.EGG, 1.5), ItemProjectileComponentImpl.class)
+                .addComponent(() -> new ItemEggProjectileComponentImpl(ClimateVariant.TEMPERATE), ItemProjectileComponentImpl.class)
+                .build();
+        ItemTypes.BLUE_EGG = AllayItemType
+                .builder(ItemEggStackImpl.class)
+                .vanillaItem(ItemId.BLUE_EGG)
+                .addComponent(() -> new ItemEggProjectileComponentImpl(ClimateVariant.COLD), ItemProjectileComponentImpl.class)
+                .build();
+        ItemTypes.BROWN_EGG = AllayItemType
+                .builder(ItemEggStackImpl.class)
+                .vanillaItem(ItemId.BROWN_EGG)
+                .addComponent(() -> new ItemEggProjectileComponentImpl(ClimateVariant.WARM), ItemProjectileComponentImpl.class)
                 .build();
         ItemTypes.ENDER_PEARL = AllayItemType
                 .builder(ItemEnderPearlStackImpl.class)

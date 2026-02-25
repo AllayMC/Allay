@@ -242,5 +242,6 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*RepeaterStack"), "ItemRepeaterStack");
         registerMergedItem(Pattern.compile(".*ComparatorStack"), "ItemComparatorStack");
         registerMergedItem(Pattern.compile(".*RedstoneLampStack"), "ItemRedstoneLampStack");
+        registerMergedItem(Pattern.compile("Item(Egg|BlueEgg|BrownEgg)Stack"), "ItemEggStack");
     }
 }

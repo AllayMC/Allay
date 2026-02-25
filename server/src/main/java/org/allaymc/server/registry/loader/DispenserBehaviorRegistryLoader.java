@@ -1,6 +1,7 @@
 package org.allaymc.server.registry.loader;
 
 import org.allaymc.api.block.dispenser.DispenseBehavior;
+import org.allaymc.api.entity.property.enums.ClimateVariant;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
@@ -27,7 +28,9 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
         // Projectile behaviors
         map.put(ItemTypes.ARROW, new ProjectileDispenseBehavior(EntityTypes.ARROW, 1.5));
         map.put(ItemTypes.SNOWBALL, new ProjectileDispenseBehavior(EntityTypes.SNOWBALL, 1.0));
-        map.put(ItemTypes.EGG, new ProjectileDispenseBehavior(EntityTypes.EGG, 1.0));
+        map.put(ItemTypes.EGG, new EggProjectileDispenseBehavior(ClimateVariant.TEMPERATE));
+        map.put(ItemTypes.BLUE_EGG, new EggProjectileDispenseBehavior(ClimateVariant.COLD));
+        map.put(ItemTypes.BROWN_EGG, new EggProjectileDispenseBehavior(ClimateVariant.WARM));
         map.put(ItemTypes.SPLASH_POTION, new PotionDispenseBehavior(EntityTypes.SPLASH_POTION, 1.25));
         map.put(ItemTypes.EXPERIENCE_BOTTLE, new ProjectileDispenseBehavior(EntityTypes.XP_BOTTLE, 1.25));
         map.put(ItemTypes.TRIDENT, new TridentDispenseBehavior());

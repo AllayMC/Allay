@@ -101,6 +101,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Nether wart
   - Torchflower seeds
   - Pitcher pod
+  - Blue egg
+  - Brown egg
 - Implemented nether portal and end portal mechanics:
   - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
   - End portal frame completion logic and end portal teleport behavior.
