@@ -37,6 +37,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `BIG_DRIPLEAF_TILT_UP`
   - `BIG_DRIPLEAF_TILT_DOWN`
   - `BELL_HIT`
+  - `MILKING`
 - (API) Implemented the following world features:
   - Huge brown mushroom
   - Huge red mushroom
@@ -103,12 +104,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Pitcher pod
   - Blue egg
   - Brown egg
+- Implemented the following entities:
+  - Sheep
+  - Cow
+  - Chicken
+  - Pig
 - Implemented nether portal and end portal mechanics:
   - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
   - End portal frame completion logic and end portal teleport behavior.
   - End spawn platform creation during teleport to The End.
 - Implemented climate variant property for pig, cow, chicken, and egg entities, with biome-based initialization on spawn.
-- Implemented sheep AI.
 - Implemented Fire Aspect enchantment.
 - Implemented entity item and XP drops on death.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.

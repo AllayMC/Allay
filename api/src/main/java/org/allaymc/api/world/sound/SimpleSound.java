@@ -229,6 +229,8 @@ public enum SimpleSound implements Sound {
     // BIG_DRIPLEAF_TILT_UP is a sound played when a big dripleaf tilts back up.
     BIG_DRIPLEAF_TILT_UP,
     // BELL_HIT is a sound played when a bell is rung.
-    BELL_HIT
+    BELL_HIT,
+    // MILKING is a sound played when a player gets a milk bucket from a cow.
+    MILKING
 }
 

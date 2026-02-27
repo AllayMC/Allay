@@ -768,7 +768,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Called when the entity interacts with another entity.
      *
-     * @param player    The player who interacted with the entity, can be null
+     * @param player    The player who interacted with the entity, can be {@code null}
      * @param itemStack The item used to interact with the entity
      * @return {@code true} if the interaction is successful
      */

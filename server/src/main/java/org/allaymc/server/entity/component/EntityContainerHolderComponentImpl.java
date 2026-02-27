@@ -30,10 +30,14 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
     protected void onGetDrop(CEntityGetDropEvent event) {
         for (var container : getContainers().values()) {
             container.removeAllViewers();
-            if (!canDropItemInContainers()) continue;
+            if (!canDropItemInContainers()) {
+                continue;
+            }
+
             for (var itemStack : container.getItemStacks()) {
-                if (itemStack == ItemAirStack.AIR_STACK) continue;
-                event.getDrops().add(itemStack);
+                if (itemStack != ItemAirStack.AIR_STACK) {
+                    event.getDrops().add(itemStack);
+                }
             }
             container.clearAllSlots();
         }

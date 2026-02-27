@@ -4,14 +4,13 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityAnimal;
 import org.allaymc.api.entity.interfaces.EntityLiving;
-import org.allaymc.api.entity.property.enums.ClimateVariant;
 import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.particle.ItemBreakParticle;
-
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -133,7 +132,9 @@ public class EntityEggPhysicsComponentImpl extends EntityProjectilePhysicsCompon
                     .pos(hitPos.x(), hitPos.y(), hitPos.z())
                     .build());
             chicken.setPropertyValue(EntityPropertyTypes.CLIMATE_VARIANT, thisEntity.getPropertyValue(EntityPropertyTypes.CLIMATE_VARIANT));
-            // TODO: Set chicken as baby when age component is available for mobs
+            if (chicken instanceof EntityAnimal animalBaby) {
+                animalBaby.setBaby(true);
+            }
             dimension.getEntityManager().addEntity(chicken);
         }
     }
