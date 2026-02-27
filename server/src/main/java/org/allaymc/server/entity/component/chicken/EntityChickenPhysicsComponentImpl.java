@@ -1,6 +1,6 @@
 package org.allaymc.server.entity.component.chicken;
 
-import org.allaymc.server.entity.component.EntityAnimalPhysicsComponentImpl;
+import org.allaymc.server.entity.component.animal.EntityAnimalPhysicsComponentImpl;
 import org.joml.Vector3d;
 
 /**

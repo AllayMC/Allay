@@ -1,4 +1,6 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.animal;
+
+import org.allaymc.server.entity.component.EntityPhysicsComponentImpl;
 
 /**
  * @author daoge_cmd

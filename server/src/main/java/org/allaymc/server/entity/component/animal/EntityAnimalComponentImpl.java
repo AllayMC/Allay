@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.animal;
 
 import org.allaymc.api.entity.component.EntityAnimalComponent;
 import org.allaymc.api.entity.interfaces.EntityAnimal;

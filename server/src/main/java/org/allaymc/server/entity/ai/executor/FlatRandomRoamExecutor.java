@@ -55,10 +55,7 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
         hasTarget = false;
         entity.setMovementSpeed(speed);
         entity.setPitchEnabled(false);
-
-        if (calNextTargetImmediately) {
-            findNewTarget(entity);
-        }
+        findNewTarget(entity);
     }
 
     @Override

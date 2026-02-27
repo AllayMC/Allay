@@ -28,6 +28,8 @@ import org.allaymc.server.entity.ai.route.posevaluator.WalkingPosEvaluator;
 import org.allaymc.server.entity.ai.sensor.NearestFeedingPlayerSensor;
 import org.allaymc.server.entity.ai.sensor.NearestPlayerSensor;
 import org.allaymc.server.entity.component.*;
+import org.allaymc.server.entity.component.animal.EntityAnimalComponentImpl;
+import org.allaymc.server.entity.component.animal.EntityAnimalPhysicsComponentImpl;
 import org.allaymc.server.entity.component.armorstand.EntityArmorStandBaseComponentImpl;
 import org.allaymc.server.entity.component.armorstand.EntityArmorStandContainerHolderComponentImpl;
 import org.allaymc.server.entity.component.armorstand.EntityArmorStandLivingComponentImpl;
