@@ -52,6 +52,7 @@ import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressu
 import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.respawnpoint.BlockBedRespawnPointComponentImpl;
 import org.allaymc.server.block.component.respawnpoint.BlockRespawnAnchorRespawnPointComponentImpl;
+import org.allaymc.server.block.component.BlockAzaleaBaseComponentImpl;
 import org.allaymc.server.block.component.sapling.BlockMangrovePropaguleBaseComponentImpl;
 import org.allaymc.server.block.component.sapling.BlockSaplingBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
@@ -252,8 +253,8 @@ public final class BlockTypeInitializer {
 
     public static void initLeaves() {
         BlockTypes.ACACIA_LEAVES = buildLeaves(BlockId.ACACIA_LEAVES, ItemId.ACACIA_SAPLING);
-        BlockTypes.AZALEA_LEAVES = buildLeaves(BlockId.AZALEA_LEAVES, null);
-        BlockTypes.AZALEA_LEAVES_FLOWERED = buildLeaves(BlockId.AZALEA_LEAVES_FLOWERED, null);
+        BlockTypes.AZALEA_LEAVES = buildLeaves(BlockId.AZALEA_LEAVES, ItemId.AZALEA);
+        BlockTypes.AZALEA_LEAVES_FLOWERED = buildLeaves(BlockId.AZALEA_LEAVES_FLOWERED, ItemId.FLOWERING_AZALEA);
         BlockTypes.BIRCH_LEAVES = buildLeaves(BlockId.BIRCH_LEAVES, ItemId.BIRCH_SAPLING);
         BlockTypes.CHERRY_LEAVES = buildLeaves(BlockId.CHERRY_LEAVES, ItemId.CHERRY_SAPLING);
         BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockId.DARK_OAK_LEAVES, ItemId.DARK_OAK_SAPLING);
@@ -2859,6 +2860,19 @@ public final class BlockTypeInitializer {
                 .builder(BlockRedMushroomBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_MUSHROOM)
                 .setBaseComponentSupplier(bt -> new BlockMushroomBaseComponentImpl(bt, HugeRedMushroomFeature.IDENTIFIER))
+                .build();
+    }
+
+    public static void initAzalea() {
+        BlockTypes.AZALEA = AllayBlockType
+                .builder(BlockAzaleaBehaviorImpl.class)
+                .vanillaBlock(BlockId.AZALEA)
+                .setBaseComponentSupplier(bt -> new BlockAzaleaBaseComponentImpl(bt, AzaleaTreeFeature.IDENTIFIER))
+                .build();
+        BlockTypes.FLOWERING_AZALEA = AllayBlockType
+                .builder(BlockFloweringAzaleaBehaviorImpl.class)
+                .vanillaBlock(BlockId.FLOWERING_AZALEA)
+                .setBaseComponentSupplier(bt -> new BlockAzaleaBaseComponentImpl(bt, AzaleaTreeFeature.IDENTIFIER))
                 .build();
     }
 

@@ -28,6 +28,9 @@ public class WorldFeatureRegistryPopulator implements Runnable {
         WorldFeatures.MANGROVE_TREE = new MangroveTreeFeature();
         WorldFeatures.PALE_OAK_TREE = new PaleOakTreeFeature();
 
+        // Azalea tree
+        WorldFeatures.AZALEA_TREE = new AzaleaTreeFeature();
+
         // Large tree variants
         WorldFeatures.MEGA_SPRUCE_TREE = new MegaSpruceTreeFeature();
         WorldFeatures.MEGA_PINE_TREE = new MegaPineTreeFeature();

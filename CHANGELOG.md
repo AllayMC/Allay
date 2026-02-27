@@ -44,6 +44,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Huge red mushroom
   - Huge crimson fungus
   - Huge warped fungus
+  - Azalea tree
 - (API) Added freeze mechanic for powder snow:
   - `EntityLivingComponent.getFreezeTicks()` / `setFreezeTicks()` — tracks how long an entity has been inside powder snow (0–140 ticks).
   - `EntityLivingComponent.isInPowderSnow()` / `setInPowderSnow()` — flag set each tick by the powder snow block component.
@@ -95,6 +96,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Torchflower crop
   - Pitcher crop
   - Powder snow
+  - Azalea (bone meal → azalea tree growth)
+  - Flowering azalea (bone meal → azalea tree growth)
 - Implemented the following items:
   - Cocoa beans
   - Sweet berries
