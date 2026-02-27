@@ -227,7 +227,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
         // The first time directly moves
         var result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
-        if (Boolean.TRUE.equals(result.right())) {
+        if (result.right()) {
             // There is a collision, try to step over
             // Calculate the remaining speed
             motion -= axis.getComponent(resultPos) - axis.getComponent(pos);

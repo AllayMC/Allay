@@ -31,7 +31,7 @@ public class InLoveExecutor implements BehaviorExecutor {
     @Override
     public boolean execute(EntityIntelligent entity) {
         tickCounter++;
-        if (tickCounter > duration || !Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))) {
+        if (tickCounter > duration || !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)) {
             return false;
         }
 

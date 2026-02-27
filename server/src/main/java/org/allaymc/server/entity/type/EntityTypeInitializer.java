@@ -490,7 +490,7 @@ public final class EntityTypeInitializer {
                             .coreBehavior(BehaviorImpl.builder()
                                     .executor(new InLoveExecutor(400))
                                     .evaluator(all(
-                                            entity -> !Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)),
+                                            entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
@@ -506,7 +506,7 @@ public final class EntityTypeInitializer {
                                     .build())
                             .behavior(BehaviorImpl.builder()
                                     .executor(new EntityBreedingExecutor(100, 0.23f))
-                                    .evaluator(entity -> Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)))
+                                    .evaluator(entity -> entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))
                                     .priority(5)
                                     .build())
                             .behavior(BehaviorImpl.builder()
@@ -562,7 +562,7 @@ public final class EntityTypeInitializer {
                             .coreBehavior(BehaviorImpl.builder()
                                     .executor(new InLoveExecutor(400))
                                     .evaluator(all(
-                                            entity -> !Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)),
+                                            entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
@@ -578,7 +578,7 @@ public final class EntityTypeInitializer {
                                     .build())
                             .behavior(BehaviorImpl.builder()
                                     .executor(new EntityBreedingExecutor(100, 0.23f))
-                                    .evaluator(entity -> Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)))
+                                    .evaluator(entity -> entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))
                                     .priority(5)
                                     .build())
                             .behavior(BehaviorImpl.builder()
@@ -647,7 +647,7 @@ public final class EntityTypeInitializer {
                             .coreBehavior(BehaviorImpl.builder()
                                     .executor(new InLoveExecutor(400))
                                     .evaluator(all(
-                                            entity -> !Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)),
+                                            entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
@@ -683,7 +683,7 @@ public final class EntityTypeInitializer {
                                     .build())
                             .behavior(BehaviorImpl.builder()
                                     .executor(new EntityBreedingExecutor(100, 0.15f))
-                                    .evaluator(entity -> Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)))
+                                    .evaluator(entity -> entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))
                                     .priority(5)
                                     .build())
                             .behavior(BehaviorImpl.builder()
@@ -781,7 +781,7 @@ public final class EntityTypeInitializer {
                             .coreBehavior(BehaviorImpl.builder()
                                     .executor(new InLoveExecutor(400))
                                     .evaluator(all(
-                                            entity -> !Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)),
+                                            entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
@@ -799,7 +799,7 @@ public final class EntityTypeInitializer {
                             // Priority 5: breed when in love
                             .behavior(BehaviorImpl.builder()
                                     .executor(new EntityBreedingExecutor(100, 0.23f))
-                                    .evaluator(entity -> Boolean.TRUE.equals(entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE)))
+                                    .evaluator(entity -> entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))
                                     .priority(5)
                                     .build())
                             // Priority 4: follow player holding wheat

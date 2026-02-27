@@ -90,7 +90,7 @@ public interface EntityAIComponent extends EntityComponent {
     }
 
     default boolean shouldUpdateMoveDirection() {
-        return Boolean.TRUE.equals(getMemoryStorage().get(MemoryTypes.SHOULD_UPDATE_MOVE_DIRECTION));
+        return getMemoryStorage().get(MemoryTypes.SHOULD_UPDATE_MOVE_DIRECTION);
     }
 
     default void setShouldUpdateMoveDirection(boolean shouldUpdate) {
@@ -98,7 +98,7 @@ public interface EntityAIComponent extends EntityComponent {
     }
 
     default boolean isPitchEnabled() {
-        return Boolean.TRUE.equals(getMemoryStorage().get(MemoryTypes.ENABLE_PITCH));
+        return getMemoryStorage().get(MemoryTypes.ENABLE_PITCH);
     }
 
     default void setPitchEnabled(boolean enabled) {
