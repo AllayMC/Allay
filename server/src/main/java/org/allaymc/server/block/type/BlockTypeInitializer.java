@@ -410,6 +410,14 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initMossBlock() {
+        BlockTypes.MOSS_BLOCK = AllayBlockType
+                .builder(BlockMossBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.MOSS_BLOCK)
+                .setBaseComponentSupplier(BlockMossBlockBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initShortGrass() {
         BlockTypes.SHORT_GRASS = AllayBlockType
                 .builder(BlockShortGrassBehaviorImpl.class)

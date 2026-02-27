@@ -76,6 +76,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `EntityBaseComponent.getPropertyValue()` / `setPropertyValue()` for reading and writing property values at runtime.
   - Entity properties are persisted via NBT and synchronized to clients via `SyncEntityPropertyPacket`.
 - (API) Added `ClimateVariant` enum (`TEMPERATE`, `WARM`, `COLD`) and `BiomeData.getEntityClimateVariant()` for biome-based climate variant resolution.
+- (API) Added new block tag `minecraft:moss_replaceable`.
 - Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Implemented the following blocks:
   - Bamboo
@@ -98,6 +99,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Powder snow
   - Azalea (bone meal → azalea tree growth)
   - Flowering azalea (bone meal → azalea tree growth)
+  - Moss
 - Implemented the following items:
   - Cocoa beans
   - Sweet berries

@@ -332,6 +332,28 @@
     "minecraft:glow_lichen",
     "minecraft:sculk_vein"
   ],
+  "minecraft:moss_replaceable": [
+    "minecraft:dirt",
+    "minecraft:grass_block",
+    "minecraft:podzol",
+    "minecraft:coarse_dirt",
+    "minecraft:mycelium",
+    "minecraft:dirt_with_roots",
+    "minecraft:moss_block",
+    "minecraft:pale_moss_block",
+    "minecraft:mud",
+    "minecraft:muddy_mangrove_roots",
+    "minecraft:farmland",
+    "minecraft:stone",
+    "minecraft:granite",
+    "minecraft:diorite",
+    "minecraft:andesite",
+    "minecraft:tuff",
+    "minecraft:deepslate",
+    "minecraft:cave_vines",
+    "minecraft:cave_vines_body_with_berries",
+    "minecraft:cave_vines_head_with_berries"
+  ],
   "minecraft:can_stick_blocks": [
     "minecraft:slime",
     "minecraft:honey_block"
