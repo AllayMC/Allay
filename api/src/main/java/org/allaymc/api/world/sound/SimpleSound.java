@@ -231,6 +231,8 @@ public enum SimpleSound implements Sound {
     // BELL_HIT is a sound played when a bell is rung.
     BELL_HIT,
     // MILKING is a sound played when a player gets a milk bucket from a cow.
-    MILKING
+    MILKING,
+    // EGG_LAY is a sound played when a chicken lays an egg.
+    EGG_LAY,
 }
 

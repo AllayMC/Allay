@@ -34,10 +34,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `EntityBaseComponent.isTouchingLava()` method.
 - (API) Added `LiquidState` record to `EntityPhysicsComponent` for tracking entity liquid submersion state.
 - (API) Added the following new sounds to `SimpleSound`:
-  - `BIG_DRIPLEAF_TILT_UP`
-  - `BIG_DRIPLEAF_TILT_DOWN`
-  - `BELL_HIT`
-  - `MILKING`
+  - BIG_DRIPLEAF_TILT_UP
+  - BIG_DRIPLEAF_TILT_DOWN
+  - BELL_HIT
+  - MILKING
+  - EGG_LAY
 - (API) Implemented the following world features:
   - Huge brown mushroom
   - Huge red mushroom

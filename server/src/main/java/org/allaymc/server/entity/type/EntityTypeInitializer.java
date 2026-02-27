@@ -3,6 +3,7 @@ package org.allaymc.server.entity.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.ai.memory.MemoryTypes;
+import org.allaymc.api.entity.component.EntityBabyComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityAnimal;
@@ -12,7 +13,9 @@ import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.DyeColor;
+import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.entity.ai.behavior.BehaviorImpl;
 import org.allaymc.server.entity.ai.behaviorgroup.BehaviorGroupImpl;
 import org.allaymc.server.entity.ai.controller.FluctuateController;
@@ -652,6 +655,26 @@ public final class EntityTypeInitializer {
                                             new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400)
                                     ))
                                     .priority(1)
+                                    .build())
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(entity -> {
+                                        entity.getMemoryStorage().put(MemoryTypes.LAST_EGG_SPAWN_TIME, entity.getTick());
+                                        entity.getDimension().dropItem(ItemTypes.EGG.createItemStack(1), entity.getLocation());
+                                        entity.getDimension().addSound(entity.getLocation(), SimpleSound.EGG_LAY);
+                                        return false;
+                                    })
+                                    .evaluator(all(
+                                            entity -> !(entity instanceof EntityBabyComponent babyComponent && babyComponent.isBaby()),
+                                            any(
+                                                    all(
+                                                            new PassByTimeEvaluator(MemoryTypes.LAST_EGG_SPAWN_TIME, 6000, 12000),
+                                                            new ProbabilityEvaluator(20, 100)
+                                                    ),
+                                                    new PassByTimeEvaluator(MemoryTypes.LAST_EGG_SPAWN_TIME, 12000, Integer.MAX_VALUE)
+                                            )
+                                    ))
+                                    .priority(1)
+                                    .period(20)
                                     .build())
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FlatRandomRoamExecutor(0.2875f, 12, 40, true, 100, true, 10))
