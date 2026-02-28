@@ -3,16 +3,20 @@ package org.allaymc.api.player;
 import org.allaymc.api.bossbar.BossBarViewer;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.dialog.DialogViewer;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormViewer;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.MessageReceiver;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.jetbrains.annotations.ApiStatus;
+import org.joml.Vector3dc;
 
+import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.Collection;
 
@@ -258,12 +262,48 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void sendFoodExhaustionLevel(float value);
 
     /**
+     * Sends the health and max health to the client.
+     *
+     * @param health    the current health value to be sent
+     * @param maxHealth the maximum health value to be sent
+     */
+    void sendHealth(float health, float maxHealth);
+
+    /**
+     * Sends the absorption value to the client.
+     *
+     * @param absorption the absorption value to be sent
+     */
+    void sendAbsorption(float absorption);
+
+    /**
      * Sends a cooldown notification to the client for the specified category.
      *
      * @param category the identifier for the cooldown category
      * @param duration the length of the cooldown in ticks
      */
     void sendCooldown(String category, int duration);
+
+    /**
+     * Sends map image data to the client.
+     *
+     * @param mapId the unique id of the map
+     * @param image the image to be rendered on the map
+     */
+    void sendMapData(long mapId, BufferedImage image);
+
+    /**
+     * Sends the death info to the client, which will be displayed on the death screen.
+     *
+     * @param deathInfo a pair where the left is the translation key of the death message,
+     *                  and the right is the translation parameters
+     */
+    void sendDeathInfo(Pair<String, String[]> deathInfo);
+
+    /**
+     * Notifies the client that an item charging action has finished (e.g. crossbow fully loaded).
+     */
+    void sendItemChargingFinished();
 
     /**
      * Represents a speed value controlled by a base speed and a multiplier. The actual
@@ -334,6 +374,13 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * @param verticalFlySpeed the vertical fly speed to set
      */
     void setVerticalFlySpeed(Speed verticalFlySpeed);
+
+    /**
+     * Sets the motion of the player.
+     *
+     * @param motion the motion vector to set
+     */
+    void setMotion(Vector3dc motion);
 
     /**
      * Sets the visibility of a specific HUD element for the player.

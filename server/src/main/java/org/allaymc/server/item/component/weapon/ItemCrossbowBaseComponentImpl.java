@@ -147,12 +147,8 @@ public class ItemCrossbowBaseComponentImpl extends ItemBaseComponentImpl impleme
             hasCompletedCharge = true;
             playLoadSound(player, CrossbowLoadSound.LoadingStage.END);
 
-            // Send "finished charging" packet to client
             if (player.isActualPlayer()) {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.FINISHED_CHARGING_ITEM);
-                packet.setRuntimeEntityId(player.getRuntimeId());
-                player.getController().sendPacket(packet);
+                player.getController().sendItemChargingFinished();
             }
         }
     }

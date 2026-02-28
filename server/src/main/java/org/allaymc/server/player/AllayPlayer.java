@@ -33,6 +33,7 @@ import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.*;
 import org.allaymc.api.entity.component.*;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
@@ -44,6 +45,7 @@ import org.allaymc.api.eventbus.event.server.PlayerSpawnEvent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.ItemHelper;
+import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
@@ -134,6 +136,7 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.*;
 import java.util.List;
@@ -818,6 +821,15 @@ public class AllayPlayer implements Player {
         packet.setId((byte) -1);
         packet.setType(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.COMMAND_BLOCK);
         packet.setBlockPosition(toNetwork(pos));
+        sendPacket(packet);
+    }
+
+    @Override
+    public void viewEnchantOptions(List<Pair<Integer, EnchantOption>> enchantOptions) {
+        var packet = new PlayerEnchantOptionsPacket();
+        for (var option : enchantOptions) {
+            packet.getOptions().add(NetworkHelper.toNetwork(option));
+        }
         sendPacket(packet);
     }
 
@@ -2405,11 +2417,76 @@ public class AllayPlayer implements Player {
     }
 
     @Override
+    public void sendHealth(float health, float maxHealth) {
+        var defaultMax = EntityLivingComponent.DEFAULT_MAX_HEALTH;
+        sendAttribute(new AttributeData(
+                "minecraft:health", 0, maxHealth,
+                health, 0, defaultMax, defaultMax,
+                Collections.emptyList()
+        ));
+    }
+
+    @Override
+    public void sendAbsorption(float absorption) {
+        var maxAbsorption = 16.0f;
+        sendAttribute(new AttributeData(
+                "minecraft:absorption", 0, maxAbsorption,
+                absorption, 0, maxAbsorption, 0,
+                Collections.emptyList()
+        ));
+    }
+
+    @Override
     public void sendCooldown(String category, int duration) {
         var packet = new PlayerStartItemCooldownPacket();
         packet.setItemCategory(category);
         packet.setCooldownDuration(duration);
         sendPacket(packet);
+    }
+
+    @Override
+    public void sendMapData(long mapId, BufferedImage image) {
+        int imageHW = 128;
+
+        var packet = new ClientboundMapItemDataPacket();
+        packet.setUniqueMapId(mapId);
+        // Required since 1.19.20
+        packet.setOrigin(Vector3i.ZERO);
+        // Required as of 1.19.50
+        packet.getTrackedEntityIds().add(mapId);
+        packet.setHeight(imageHW);
+        packet.setWidth(imageHW);
+        var colors = new int[imageHW * imageHW];
+        int index = 0;
+        for (int y = 0; y < imageHW; y++) {
+            for (int x = 0; x < imageHW; x++) {
+                colors[index++] = toABGR(image.getRGB(x, y));
+            }
+        }
+        packet.setColors(colors);
+        sendPacket(packet);
+    }
+
+    @Override
+    public void sendDeathInfo(Pair<String, String[]> deathInfo) {
+        var packet = new DeathInfoPacket();
+        packet.setCauseAttackName(I18n.get().tr(this.loginData.getLangCode(), deathInfo.left(), (Object[]) deathInfo.right()));
+        sendPacket(packet);
+    }
+
+    @Override
+    public void sendItemChargingFinished() {
+        var packet = new EntityEventPacket();
+        packet.setType(EntityEventType.FINISHED_CHARGING_ITEM);
+        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
+        sendPacket(packet);
+    }
+
+    protected static int toABGR(int argb) {
+        return ((argb >> 16) & 0xFF) |      // Blue
+               ((argb >> 8) & 0xFF) << 8 |  // Green
+               ((argb) & 0xFF) << 16 |      // Red
+               ((argb >> 24) & 0xFF) << 24; // Alpha
     }
 
     protected void sendAttribute(AttributeData attributeData) {
@@ -2820,6 +2897,14 @@ public class AllayPlayer implements Player {
             this.verticalFlySpeed = verticalFlySpeed;
             viewPlayerPermission(this);
         }
+    }
+
+    @Override
+    public void setMotion(Vector3dc m) {
+        var packet = new SetEntityMotionPacket();
+        packet.setMotion(Vector3f.from(m.x(), m.y(), m.z()));
+        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
+        sendPacket(packet);
     }
 
     @Override

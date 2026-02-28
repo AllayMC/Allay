@@ -5,7 +5,6 @@ import org.allaymc.api.container.interfaces.InventoryContainer;
 import org.allaymc.api.container.interfaces.OffhandContainer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.SimpleEntityAction;
-import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
@@ -24,13 +23,9 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityLivingComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
 import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
-import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 import org.joml.Vector3d;
-
-import java.util.Collections;
 
 /**
  * @author daoge_cmd
@@ -291,12 +286,7 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     public void setAbsorption(float absorption) {
         super.setAbsorption(absorption);
         if (thisPlayer.isActualPlayer()) {
-            var maxAbsorption = 16.0f;
-            sendAttribute(new AttributeData(
-                    "minecraft:absorption", 0, maxAbsorption,
-                    this.absorption, 0, maxAbsorption, 0,
-                    Collections.emptyList()
-            ));
+            thisPlayer.getController().sendAbsorption(absorption);
         }
     }
 
@@ -304,7 +294,7 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     public void setHealth(float health) {
         super.setHealth(health);
         if (thisPlayer.isActualPlayer()) {
-            sendHealth(this.health, this.maxHealth);
+            thisPlayer.getController().sendHealth(this.health, this.maxHealth);
         }
     }
 
@@ -312,24 +302,8 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     public void setMaxHealth(float maxHealth) {
         super.setMaxHealth(maxHealth);
         if (thisPlayer.isActualPlayer()) {
-            sendHealth(this.health, this.maxHealth);
+            thisPlayer.getController().sendHealth(this.health, this.maxHealth);
         }
-    }
-
-    protected void sendHealth(float health, float maxHealth) {
-        var defaultMax = EntityLivingComponent.DEFAULT_MAX_HEALTH;
-        sendAttribute(new AttributeData(
-                "minecraft:health", 0, maxHealth,
-                health, 0, defaultMax, defaultMax,
-                Collections.emptyList()
-        ));
-    }
-
-    protected void sendAttribute(AttributeData attributeData) {
-        var packet = new UpdateAttributesPacket();
-        packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        packet.getAttributes().add(attributeData);
-        thisPlayer.getController().sendPacket(packet);
     }
 
     @Override
@@ -344,19 +318,10 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         var deathInfo = lastDamage != null ?
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
                 DamageType.API.getDeathInfo(thisPlayer, null);
+
         Server.getInstance().getMessageChannel().broadcastTranslatable(deathInfo.left(), (Object[]) deathInfo.right());
-
         if (thisPlayer.isActualPlayer()) {
-            var controller = thisPlayer.getController();
-
-            var packet1 = new DeathInfoPacket();
-            packet1.setCauseAttackName(I18n.get().tr(controller.getLoginData().getLangCode(), deathInfo.left(), (Object[]) deathInfo.right()));
-            controller.sendPacket(packet1);
-
-            var packet2 = new RespawnPacket();
-            packet2.setPosition(Vector3f.ZERO);
-            packet2.setState(RespawnPacket.State.SERVER_SEARCHING);
-            controller.sendPacket(packet2);
+            thisPlayer.getController().sendDeathInfo(deathInfo);
         }
     }
 }

@@ -128,6 +128,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented entity item and XP drops on death.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
 - Updated the chunk version to 42 (1.21.120).
+- (API) Added the following methods to `Player`:
+  - `sendHealth(float, float)` — sends health and max health to the client.
+  - `sendAbsorption(float)` — sends absorption value to the client.
+  - `sendMapData(long, BufferedImage)` — sends map image data to the client.
+  - `sendDeathInfo(Pair<String, String[]>)` — sends death info to the client.
+  - `sendItemChargingFinished()` — notifies the client that item charging has finished.
+  - `setMotion(Vector3dc)` — sets the motion of the player.
+- (API) Added `WorldViewer.viewEnchantOptions(List<Pair<Integer, EnchantOption>>)` for sending enchantment table options to the viewer.
 
 ### Changed
 

@@ -84,7 +84,6 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         if (thisPlayer.isActualPlayer()) {
             clearEnchantOptions();
-            var packet = new PlayerEnchantOptionsPacket();
             if (item != ItemAirStack.AIR_STACK) {
                 var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
                 var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
@@ -93,12 +92,11 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 }
 
                 for (var option : enchantOptions) {
-                    packet.getOptions().add(NetworkHelper.toNetwork(option));
                     this.enchantOptions.add(Long.valueOf(option.left()));
                 }
-            }
 
-            thisPlayer.getController().sendPacket(packet);
+                thisPlayer.getController().viewEnchantOptions(enchantOptions);
+            }
         }
     }
 

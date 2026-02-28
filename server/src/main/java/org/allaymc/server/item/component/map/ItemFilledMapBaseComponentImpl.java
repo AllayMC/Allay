@@ -16,9 +16,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypes;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.ClientboundMapItemDataPacket;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -285,13 +283,6 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         );
     }
 
-    protected static int toABGR(int argb) {
-        return ((argb >> 16) & 0xFF) |      // Blue
-               ((argb >> 8) & 0xFF) << 8 |  // Green
-               ((argb) & 0xFF) << 16 |      // Red
-               ((argb >> 24) & 0xFF) << 24; // Alpha
-    }
-
     @Override
     public void setImage(BufferedImage image) {
         if (image.getHeight() == IMAGE_HW && image.getWidth() == IMAGE_HW) {
@@ -331,27 +322,11 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
 
     @Override
     public void sendToPlayer(Player player) {
-        if (image == null) {
+        if (this.image == null) {
             throw new IllegalStateException("Image is not set for the filled map.");
         }
 
-        var packet = new ClientboundMapItemDataPacket();
-        packet.setUniqueMapId(mapId);
-        // Required since 1.19.20
-        packet.setOrigin(Vector3i.ZERO);
-        // Required as of 1.19.50
-        packet.getTrackedEntityIds().add(mapId);
-        packet.setHeight(IMAGE_HW);
-        packet.setWidth(IMAGE_HW);
-        var colors = new int[IMAGE_HW * IMAGE_HW];
-        int index = 0;
-        for (int y = 0; y < IMAGE_HW; y++) {
-            for (int x = 0; x < IMAGE_HW; x++) {
-                colors[index++] = toABGR(image.getRGB(x, y));
-            }
-        }
-        packet.setColors(colors);
-        player.sendPacket(packet);
+        player.sendMapData(this.mapId, this.image);
     }
 
     @Override
