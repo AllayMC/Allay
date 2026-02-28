@@ -16,6 +16,8 @@ import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.block.component.*;
+import org.allaymc.server.block.component.amethyst.BlockAmethystClusterBaseComponentImpl;
+import org.allaymc.server.block.component.amethyst.BlockBuddingAmethystBaseComponentImpl;
 import org.allaymc.server.block.component.bamboo.BlockBambooBaseComponentImpl;
 import org.allaymc.server.block.component.bamboo.BlockBambooSaplingBaseComponentImpl;
 import org.allaymc.server.block.component.banner.BlockStandingBannerBaseComponentImpl;
@@ -83,6 +85,27 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
+    public static void initAmethyst() {
+        BlockTypes.BUDDING_AMETHYST = AllayBlockType
+                .builder(BlockBuddingAmethystBehaviorImpl.class)
+                .vanillaBlock(BlockId.BUDDING_AMETHYST)
+                .setBaseComponentSupplier(BlockBuddingAmethystBaseComponentImpl::new)
+                .build();
+        BlockTypes.SMALL_AMETHYST_BUD = buildAmethystCluster(BlockId.SMALL_AMETHYST_BUD);
+        BlockTypes.MEDIUM_AMETHYST_BUD = buildAmethystCluster(BlockId.MEDIUM_AMETHYST_BUD);
+        BlockTypes.LARGE_AMETHYST_BUD = buildAmethystCluster(BlockId.LARGE_AMETHYST_BUD);
+        BlockTypes.AMETHYST_CLUSTER = buildAmethystCluster(BlockId.AMETHYST_CLUSTER);
+    }
+
+    private static BlockType<BlockAmethystClusterBehavior> buildAmethystCluster(BlockId blockId) {
+        return AllayBlockType
+                .builder(BlockAmethystClusterBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.MINECRAFT_BLOCK_FACE)
+                .setBaseComponentSupplier(BlockAmethystClusterBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initCopperGrate() {
         BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperGrate = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_GRATE : BlockTypes.COPPER_GRATE;

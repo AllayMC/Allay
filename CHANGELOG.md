@@ -100,6 +100,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Azalea (bone meal → azalea tree growth)
   - Flowering azalea (bone meal → azalea tree growth)
   - Moss
+  - Amethyst
+  - Amethyst bud & cluster
+  - Budding amethyst
 - Implemented the following items:
   - Cocoa beans
   - Sweet berries

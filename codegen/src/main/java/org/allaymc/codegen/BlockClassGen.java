@@ -281,5 +281,6 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*RepeaterBehavior"), "BlockRepeaterBehavior");
         registerMergedBlock(Pattern.compile(".*ComparatorBehavior"), "BlockComparatorBehavior");
         registerMergedBlock(Pattern.compile(".*RedstoneLampBehavior"), "BlockRedstoneLampBehavior");
+        registerMergedBlock(Pattern.compile(".*Amethyst(Bud|Cluster)Behavior"), "BlockAmethystClusterBehavior");
     }
 }
