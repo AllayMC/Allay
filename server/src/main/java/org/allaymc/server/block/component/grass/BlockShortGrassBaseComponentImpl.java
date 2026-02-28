@@ -2,6 +2,7 @@ package org.allaymc.server.block.component.grass;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
@@ -32,15 +33,7 @@ public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected boolean canPlaceOn(BlockType<?> blockType) {
-        return blockType == GRASS_BLOCK ||
-               blockType == MYCELIUM ||
-               blockType == PODZOL ||
-               blockType == DIRT ||
-               blockType == DIRT_WITH_ROOTS ||
-               blockType == FARMLAND ||
-               blockType == MUD ||
-               blockType == MUDDY_MANGROVE_ROOTS ||
-               blockType == MOSS_BLOCK;
+        return blockType.hasBlockTag(BlockTags.DIRT);
     }
 
     @Override

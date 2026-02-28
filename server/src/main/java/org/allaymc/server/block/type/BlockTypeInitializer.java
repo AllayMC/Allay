@@ -89,6 +89,7 @@ import org.allaymc.server.world.feature.mushroom.HugeRedMushroomFeature;
 import org.allaymc.server.world.feature.tree.*;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -466,7 +467,25 @@ public final class BlockTypeInitializer {
         BlockTypes.MOSS_BLOCK = AllayBlockType
                 .builder(BlockMossBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSS_BLOCK)
-                .setBaseComponentSupplier(BlockMossBlockBaseComponentImpl::new)
+                .setBaseComponentSupplier(blockType -> new BlockMossBlockBaseComponentImpl(blockType, List.of(
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(50, () -> BlockTypes.SHORT_GRASS, false),
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(25, () -> BlockTypes.MOSS_CARPET, false),
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(10, () -> BlockTypes.TALL_GRASS, true),
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(7, () -> BlockTypes.AZALEA, false),
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(4, () -> BlockTypes.FLOWERING_AZALEA, false)
+                )))
+                .build();
+    }
+
+    public static void initPaleMossBlock() {
+        BlockTypes.PALE_MOSS_BLOCK = AllayBlockType
+                .builder(BlockPaleMossBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.PALE_MOSS_BLOCK)
+                .setBaseComponentSupplier(type -> new BlockMossBlockBaseComponentImpl(type, List.of(
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(25, () -> BlockTypes.SHORT_GRASS, false),
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(25, () -> BlockTypes.PALE_MOSS_CARPET, false),
+                        new BlockMossBlockBaseComponentImpl.VegetationEntry(10, () -> BlockTypes.TALL_GRASS, true)
+                )))
                 .build();
     }
 
