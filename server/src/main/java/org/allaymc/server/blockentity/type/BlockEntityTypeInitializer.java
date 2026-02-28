@@ -245,6 +245,14 @@ public final class BlockEntityTypeInitializer {
                 .build();
     }
 
+    public static void initShelf() {
+        BlockEntityTypes.SHELF = AllayBlockEntityType
+                .builder(BlockEntityShelfImpl.class)
+                .name(BlockEntityId.SHELF)
+                .addComponent(BlockEntityShelfBaseComponentImpl::new, BlockEntityShelfBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initCampfire() {
         BlockEntityTypes.CAMPFIRE = AllayBlockEntityType
                 .builder(BlockEntityCampfireImpl.class)

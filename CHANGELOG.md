@@ -65,7 +65,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
 - (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
 - (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
-- (API) Added new sounds to `SimpleSound`: `BIG_DRIPLEAF_TILT_UP`, `BIG_DRIPLEAF_TILT_DOWN`, `BELL_HIT`, `MILKING`, `EGG_LAY`.
+- (API) Added `BlockEntityShelfBaseComponent` interface for shelf block entities, with `getItemStack()`, `setItemStack()`, and `swapItemStack()` methods.
+- (API) Added cancellable `ShelfUseEvent` with `SINGLE_SWAP` and `MULTI_SWAP` actions.
+- (API) Added new sounds to `SimpleSound`: `BIG_DRIPLEAF_TILT_UP`, `BIG_DRIPLEAF_TILT_DOWN`, `BELL_HIT`, `MILKING`, `EGG_LAY`, `POWER_ON`, `POWER_OFF`, `ACTIVATED`, `DEACTIVATED`, `SHELF_SWAP_SINGLE`, `SHELF_SWAP_MULTI`.
 - (API) Added new block tag `minecraft:moss_replaceable`.
 - Implemented nether portal and end portal mechanics:
   - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
@@ -90,6 +92,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Pitcher crop and torchflower crop
   - Powder snow
   - Rail, golden rail, detector rail, activator rail
+  - Shelf
   - Sea pickle
   - Seagrass
   - Sweet berry bush
@@ -124,6 +127,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Removed
 
 - (API) Removed deprecated `viewEntityLocation` overload from `WorldViewer`.
+- (API) Removed `PowerSound` record. Use `SimpleSound.POWER_ON` / `SimpleSound.POWER_OFF` instead.
 - (API) Removed `PlayerManager.getNetworkInterface()`. Use `PlayerManager.getNetworkManager().getDefaultInterface()` instead.
 
 # 0.11.0 (API 0.25.0) - 2026/2/12

@@ -106,6 +106,14 @@ public enum SimpleSound implements Sound {
     PISTON_PUSH,
     // PISTON_PULL is a sound played when a piston pulls.
     PISTON_PULL,
+    // POWER_ON is a sound played when a redstone component is powered on.
+    POWER_ON,
+    // POWER_OFF is a sound played when a redstone component is powered off.
+    POWER_OFF,
+    // ACTIVATED is a sound played when a block is activated, such as shelf.
+    ACTIVATED,
+    // DEACTIVATED is a sound played when a block is deactivated, such as shelf.
+    DEACTIVATED,
     // CAULDRON_FILL_WATER is a sound played when a cauldron is filled with water.
     CAULDRON_FILL_WATER,
     // CAULDRON_TAKE_WATER is a sound played when water is taken from a cauldron.
@@ -138,6 +146,10 @@ public enum SimpleSound implements Sound {
     RESPAWN_ANCHOR_SET_SPAWN,
     // RESPAWN_ANCHOR_DEPLETE is a sound played when a respawn anchor loses a charge upon player respawn.
     RESPAWN_ANCHOR_DEPLETE,
+    // SHELF_SWAP_SINGLE is a sound played when a single item is swapped in a shelf.
+    SHELF_SWAP_SINGLE,
+    // SHELF_SWAP_MULTI is a sound played when multiple items are swapped in a shelf.
+    SHELF_SWAP_MULTI,
 
     /* Item */
 

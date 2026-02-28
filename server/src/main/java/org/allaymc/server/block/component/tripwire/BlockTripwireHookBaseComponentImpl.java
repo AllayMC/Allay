@@ -8,7 +8,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.PowerSound;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
@@ -298,13 +298,13 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
         Block block = new Block(dimension, pos);
 
         if (nextPowered && !wasPowered) {
-            block.addSound(new PowerSound(true));
+            block.addSound(SimpleSound.POWER_ON);
         } else if (!nextPowered && wasPowered) {
-            block.addSound(new PowerSound(false));
+            block.addSound(SimpleSound.POWER_OFF);
         } else if (canConnect && !wasAttached) {
-            block.addSound(new PowerSound(true)); // Attach sound
+            block.addSound(SimpleSound.POWER_ON); // Attach sound
         } else if (!canConnect && wasAttached) {
-            block.addSound(new PowerSound(false)); // Detach sound
+            block.addSound(SimpleSound.POWER_OFF); // Detach sound
         }
     }
 }

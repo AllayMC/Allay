@@ -1319,15 +1319,21 @@ public class AllayPlayer implements Player {
             case SimpleSound.BELL_HIT -> packet.setSound(SoundEvent.BELL);
             case SimpleSound.MILKING -> packet.setSound(SoundEvent.MILK);
             case SimpleSound.EGG_LAY -> packet.setSound(SoundEvent.PLOP);
+            case SimpleSound.POWER_ON -> packet.setSound(SoundEvent.POWER_ON);
+            case SimpleSound.POWER_OFF -> packet.setSound(SoundEvent.POWER_OFF);
+            case SimpleSound.ACTIVATED -> packet.setSound(SoundEvent.ACTIVATE);
+            case SimpleSound.DEACTIVATED -> packet.setSound(SoundEvent.DEACTIVATE);
+            case SimpleSound.RESPAWN_ANCHOR_SET_SPAWN -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_SET_SPAWN);
+            case SimpleSound.RESPAWN_ANCHOR_DEPLETE -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_DEPLETE);
+            case SimpleSound.SHELF_SWAP_SINGLE -> packet.setSound(SoundEvent.SINGLE_ITEM_SWAP);
+            case SimpleSound.SHELF_SWAP_MULTI -> packet.setSound(SoundEvent.MULTI_ITEM_SWAP);
+            case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case TridentRiptideSound riptide -> packet.setSound(switch (riptide.level()) {
                 case 1 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_1;
                 case 2 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_2;
                 case 3 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_3;
                 default -> throw new IllegalArgumentException("Invalid riptide level: " + riptide.level());
             });
-            case SimpleSound.RESPAWN_ANCHOR_SET_SPAWN -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_SET_SPAWN);
-            case SimpleSound.RESPAWN_ANCHOR_DEPLETE -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_DEPLETE);
-            case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case SimpleSound.PAINTING_PLACE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_PLACE);
@@ -1594,9 +1600,6 @@ public class AllayPlayer implements Player {
             case ButtonReleaseSound so -> {
                 packet.setSound(SoundEvent.BUTTON_CLICK_OFF);
                 packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case PowerSound so -> {
-                packet.setSound(so.powered() ? SoundEvent.POWER_ON : SoundEvent.POWER_OFF);
             }
             case PressurePlateSound so -> {
                 packet.setSound(so.activated() ? SoundEvent.PRESSURE_PLATE_CLICK_ON : SoundEvent.PRESSURE_PLATE_CLICK_OFF);

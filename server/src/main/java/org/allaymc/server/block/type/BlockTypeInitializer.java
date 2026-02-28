@@ -3064,4 +3064,29 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockBigDripleafBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initShelf() {
+        BlockTypes.OAK_SHELF = buildShelf(BlockId.OAK_SHELF);
+        BlockTypes.ACACIA_SHELF = buildShelf(BlockId.ACACIA_SHELF);
+        BlockTypes.BAMBOO_SHELF = buildShelf(BlockId.BAMBOO_SHELF);
+        BlockTypes.BIRCH_SHELF = buildShelf(BlockId.BIRCH_SHELF);
+        BlockTypes.CHERRY_SHELF = buildShelf(BlockId.CHERRY_SHELF);
+        BlockTypes.CRIMSON_SHELF = buildShelf(BlockId.CRIMSON_SHELF);
+        BlockTypes.DARK_OAK_SHELF = buildShelf(BlockId.DARK_OAK_SHELF);
+        BlockTypes.JUNGLE_SHELF = buildShelf(BlockId.JUNGLE_SHELF);
+        BlockTypes.MANGROVE_SHELF = buildShelf(BlockId.MANGROVE_SHELF);
+        BlockTypes.PALE_OAK_SHELF = buildShelf(BlockId.PALE_OAK_SHELF);
+        BlockTypes.SPRUCE_SHELF = buildShelf(BlockId.SPRUCE_SHELF);
+        BlockTypes.WARPED_SHELF = buildShelf(BlockId.WARPED_SHELF);
+    }
+
+    private static BlockType<BlockShelfBehavior> buildShelf(BlockId blockId) {
+        return AllayBlockType
+                .builder(BlockShelfBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .bindBlockEntity(BlockEntityTypes.SHELF)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
+                .setBaseComponentSupplier(BlockShelfBaseComponentImpl::new)
+                .build();
+    }
 }
