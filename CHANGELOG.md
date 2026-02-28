@@ -65,7 +65,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
 - (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
 - (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
-- (API) Added `BlockEntityShelfBaseComponent` interface for shelf block entities, with `getItemStack()`, `setItemStack()`, and `swapItemStack()` methods.
+- (API) Added `ContainerTypes.SHELF` container type and `Container.saveNBT(boolean saveEmptySlots)` overload.
 - (API) Added cancellable `ShelfUseEvent` with `SINGLE_SWAP` and `MULTI_SWAP` actions.
 - (API) Added new sounds to `SimpleSound`: `BIG_DRIPLEAF_TILT_UP`, `BIG_DRIPLEAF_TILT_DOWN`, `BELL_HIT`, `MILKING`, `EGG_LAY`, `POWER_ON`, `POWER_OFF`, `ACTIVATED`, `DEACTIVATED`, `SHELF_SWAP_SINGLE`, `SHELF_SWAP_MULTI`.
 - (API) Added new block tag `minecraft:moss_replaceable`.

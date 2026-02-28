@@ -35,6 +35,7 @@ public interface ContainerTypes {
     ContainerType<BlockContainer> SHULKER_BOX = new ContainerType<>(27);
     ContainerType<SmithingTableContainer> SMITHING_TABLE = new ContainerType<>(4);
     ContainerType<FurnaceContainer> SMOKER = new ContainerType<>(3);
+    ContainerType<Container> SHELF = new ContainerType<>(3);
     ContainerType<StonecutterContainer> STONECUTTER = new ContainerType<>(2);
 
     // Fake Container Types

@@ -10,8 +10,8 @@ import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.blockentity.component.BlockEntityShelfBaseComponent;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShelf;
+import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -102,13 +102,15 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
                 return false;
             }
             var heldItem = player.getItemInHand();
+            Container shelfContainer = shelf.getContainer();
             if (player.getGameMode() == GameMode.CREATIVE) {
                 // Creative mode: replace slot item with a copy of the held item, no swap
                 var newItem = (heldItem != null && heldItem != ItemAirStack.AIR_STACK) ? heldItem.copy() : ItemAirStack.AIR_STACK;
-                shelf.setItemStack(slot, newItem);
+                shelfContainer.setItemStack(slot, newItem);
             } else {
                 // Survival/Adventure: directly swap entire hand stack with slot
-                var oldItem = shelf.swapItemStack(slot, heldItem != null ? heldItem : ItemAirStack.AIR_STACK);
+                var oldItem = shelfContainer.getItemStack(slot);
+                shelfContainer.setItemStack(slot, heldItem != null ? heldItem : ItemAirStack.AIR_STACK);
                 player.setItemInHand(oldItem);
             }
             dimension.addSound(MathUtils.center(pos), SimpleSound.SHELF_SWAP_SINGLE);
@@ -264,15 +266,16 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
             var shelf = blockEntityHolderComponent.getBlockEntity(shelfPos.x(), shelfPos.y(), shelfPos.z(), dimension);
             if (shelf == null) continue;
 
-            for (int slotInShelf = 0; slotInShelf < 3; slotInShelf++) {
+            Container shelfContainer = shelf.getContainer();
+            for (int slotInShelf = 0; slotInShelf < ContainerTypes.SHELF.getSize(); slotInShelf++) {
                 int hotbarSlot = hotbarOffset + shelfIdx * 3 + slotInShelf;
                 if (hotbarSlot >= 9) break;
 
-                var shelfItem = shelf.getItemStack(slotInShelf);
+                var shelfItem = shelfContainer.getItemStack(slotInShelf);
                 var hotbarItem = inventory.getItemStack(hotbarSlot);
 
                 // Swap
-                shelf.setItemStack(slotInShelf, hotbarItem);
+                shelfContainer.setItemStack(slotInShelf, hotbarItem);
                 inventory.setItemStack(hotbarSlot, shelfItem);
             }
         }
@@ -290,8 +293,9 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
             return 0;
         }
         int output = 0;
-        for (int i = 0; i < BlockEntityShelfBaseComponent.SLOT_COUNT; i++) {
-            if (shelf.getItemStack(i) != ItemAirStack.AIR_STACK) {
+        Container shelfContainer = shelf.getContainer();
+        for (int i = 0; i < ContainerTypes.SHELF.getSize(); i++) {
+            if (shelfContainer.getItemStack(i) != ItemAirStack.AIR_STACK) {
                 output |= (1 << i);
             }
         }

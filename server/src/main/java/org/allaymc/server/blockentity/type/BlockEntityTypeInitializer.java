@@ -249,7 +249,7 @@ public final class BlockEntityTypeInitializer {
         BlockEntityTypes.SHELF = AllayBlockEntityType
                 .builder(BlockEntityShelfImpl.class)
                 .name(BlockEntityId.SHELF)
-                .addComponent(BlockEntityShelfBaseComponentImpl::new, BlockEntityShelfBaseComponentImpl.class)
+                .addComponent(BlockEntityShelfContainerHolderComponentImpl::new, BlockEntityShelfContainerHolderComponentImpl.class)
                 .build();
     }
 
