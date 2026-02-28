@@ -301,6 +301,15 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initDragonEgg() {
+        BlockTypes.DRAGON_EGG = AllayBlockType
+                .builder(BlockDragonEggBehaviorImpl.class)
+                .vanillaBlock(BlockId.DRAGON_EGG)
+                .setBaseComponentSupplier(BlockDragonEggBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl(SoundNames.LAND_STONE))
+                .build();
+    }
+
     public static void initFallable() {
         BlockTypes.GRAVEL = AllayBlockType
                 .builder(BlockGravelBehaviorImpl.class)

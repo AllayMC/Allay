@@ -103,6 +103,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Amethyst
   - Amethyst bud & cluster
   - Budding amethyst
+  - Dragon egg
 - Implemented the following items:
   - Cocoa beans
   - Sweet berries
