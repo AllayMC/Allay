@@ -12,50 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...HEAD)</small>
 
-## Added
+### Added
 
 - (API) Implemented command block.
-- (API) Added portal-related APIs:
-  - Added `EntityPortalEnterEvent` (cancellable) and `PortalCreateEvent` (cancellable).
-  - Added `NETHER_PORTAL` and `END_PORTAL` reasons to `EntityTeleportEvent`.
-  - Added portal state/cooldown API to `EntityBaseComponent`:
-    - `NETHER_PORTAL_TRANSITION_TICKS`, `PORTAL_COOLDOWN_TICKS`
-    - `get/setPortalTicks()`, `get/setPortalCooldown()`, `is/setInNetherPortal()`
-  - Added POI APIs for portal lookup:
-    - `PoiType`, `PoiTypes`, and `Registries.POI_TYPES`
-    - `Dimension.findNearestPoi(...)`
-    - POI methods on `UnsafeChunk` (`getPoiEntries`, `addPoi`, `removePoi`, `getPoi`)
-  - Added dimension change UI helpers to `Player`:
-    - `isChangingDimension()`
-    - `beginDimensionChange(...)`
-    - `completeDimensionChange()`
-- (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
-- (API) Added liquid physics for entities including buoyancy and drag in water and lava, with configurable parameters per entity type via `EntityPhysicsComponent`.
-- (API) Added `EntityBaseComponent.isTouchingLava()` method.
-- (API) Added `LiquidState` record to `EntityPhysicsComponent` for tracking entity liquid submersion state.
-- (API) Added the following new sounds to `SimpleSound`:
-  - BIG_DRIPLEAF_TILT_UP
-  - BIG_DRIPLEAF_TILT_DOWN
-  - BELL_HIT
-  - MILKING
-  - EGG_LAY
-- (API) Implemented the following world features:
-  - Huge brown mushroom
-  - Huge red mushroom
-  - Huge crimson fungus
-  - Huge warped fungus
-  - Azalea tree
-- (API) Added freeze mechanic for powder snow:
-  - `EntityLivingComponent.getFreezeTicks()` / `setFreezeTicks()` — tracks how long an entity has been inside powder snow (0–140 ticks).
-  - `EntityLivingComponent.isInPowderSnow()` / `setInPowderSnow()` — flag set each tick by the powder snow block component.
-  - `EntityLivingComponent.isFrozen()` — returns `true` when freeze ticks reach the maximum.
-  - `EntityLivingComponent.MAX_FREEZE_TICKS` — constant (140) for the freeze threshold.
-  - `DamageContainer.freezing(float)` — factory method for `DamageType.FREEZING` damage.
-- (API) Refactored `BucketFillSound` and `BucketEmptySound`: replaced `boolean water` parameter with a `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`) to support all bucket content types.
-- (API) Added `NetworkManager` interface for managing multiple network interfaces, allowing plugins to register custom transport protocols (QUIC, TCP, WebSocket, etc.) alongside the built-in RakNet interface.
-- (API) Added `PlayerManager.getNetworkManager()` method.
-- (API) Added cancellable `NetworkInterfaceRegisterEvent` and `NetworkInterfaceUnregisterEvent`.
-- (API) Added entity AI framework with the following components:
+- (API) Added entity AI framework:
   - `EntityAIComponent` — core component providing behavior group, memory storage, movement speed, and look/move targets.
   - `EntityIntelligent` — marker interface for entities with AI.
   - `BehaviorGroup` — orchestrates the AI tick pipeline: sensors, evaluators, executors, route finding, and controllers.
@@ -65,69 +25,35 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `MemoryStorage`, `MemoryType`, `MemoryTypes` — typed memory system for AI state.
   - `RouteFinder`, `Node` — A* pathfinding with flat and 3D route finders.
   - `EntityParallelTickComponent` — parallel tick support for entity AI.
-- (API) Added `EntityAnimalComponent` with breeding item check, `EntityBabyComponent` for baby entity growth, `EntityDyeableComponent` for dyeable entities, and `EntityHeadYawComponent` for head yaw tracking.
-- (API) Added `EntitySheepBaseComponent` and `EntityAnimal` interface.
-- (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
-- (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
 - (API) Added entity property system:
   - `EntityPropertyType<DATATYPE>` sealed interface with `BooleanPropertyType`, `IntPropertyType`, `FloatPropertyType`, and `EnumPropertyType<T>` concrete types.
   - `EntityPropertyTypes` constants class (e.g., `CLIMATE_VARIANT`).
   - `EntityType.getProperties()` / `hasProperty()` for querying property definitions on entity types.
   - `EntityBaseComponent.getPropertyValue()` / `setPropertyValue()` for reading and writing property values at runtime.
   - Entity properties are persisted via NBT and synchronized to clients via `SyncEntityPropertyPacket`.
+- (API) Added portal-related APIs:
+  - Added `EntityPortalEnterEvent` (cancellable) and `PortalCreateEvent` (cancellable).
+  - Added `NETHER_PORTAL` and `END_PORTAL` reasons to `EntityTeleportEvent`.
+  - Added portal state/cooldown API to `EntityBaseComponent`: `get/setPortalTicks()`, `get/setPortalCooldown()`, `is/setInNetherPortal()`, `NETHER_PORTAL_TRANSITION_TICKS`, `PORTAL_COOLDOWN_TICKS`.
+  - Added POI APIs for portal lookup: `PoiType`, `PoiTypes`, `Registries.POI_TYPES`, `Dimension.findNearestPoi(...)`, and POI methods on `UnsafeChunk`.
+  - Added dimension change UI helpers to `Player`: `isChangingDimension()`, `beginDimensionChange(...)`, `completeDimensionChange()`.
+- (API) Added freeze mechanic for powder snow:
+  - `EntityLivingComponent.getFreezeTicks()` / `setFreezeTicks()` — tracks how long an entity has been inside powder snow (0–140 ticks).
+  - `EntityLivingComponent.isInPowderSnow()` / `setInPowderSnow()` — flag set each tick by the powder snow block component.
+  - `EntityLivingComponent.isFrozen()` — returns `true` when freeze ticks reach the maximum.
+  - `EntityLivingComponent.MAX_FREEZE_TICKS` — constant (140) for the freeze threshold.
+  - `DamageContainer.freezing(float)` — factory method for `DamageType.FREEZING` damage.
+- (API) Added `NetworkManager` interface for managing multiple network interfaces, allowing plugins to register custom transport protocols (QUIC, TCP, WebSocket, etc.) alongside the built-in RakNet interface.
+  - Added `PlayerManager.getNetworkManager()` method.
+  - Added cancellable `NetworkInterfaceRegisterEvent` and `NetworkInterfaceUnregisterEvent`.
+- (API) Added liquid physics for entities including buoyancy and drag in water and lava, with configurable parameters per entity type via `EntityPhysicsComponent`.
+  - Added `LiquidState` record to `EntityPhysicsComponent` for tracking entity liquid submersion state.
+  - Added `EntityBaseComponent.isTouchingLava()` method.
+- (API) Added entity-related component interfaces:
+  - `EntityAnimalComponent` with breeding item check, `EntityAnimal` interface.
+  - `EntityBabyComponent` for baby entity growth, `EntityDyeableComponent` for dyeable entities.
+  - `EntityHeadYawComponent` for head yaw tracking, `EntitySheepBaseComponent`.
 - (API) Added `ClimateVariant` enum (`TEMPERATE`, `WARM`, `COLD`) and `BiomeData.getEntityClimateVariant()` for biome-based climate variant resolution.
-- (API) Added new block tag `minecraft:moss_replaceable`.
-- Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
-- Implemented the following blocks:
-  - Bamboo
-  - Bamboo sapling
-  - Cocoa
-  - Brown mushroom
-  - Red mushroom
-  - Sweet berry bush
-  - Cave vines
-  - Kelp
-  - Sea pickle
-  - Nether wart
-  - Crimson fungus
-  - Warped fungus
-  - Seagrass
-  - rail
-  - dripleaf
-  - Torchflower crop
-  - Pitcher crop
-  - Powder snow
-  - Azalea (bone meal → azalea tree growth)
-  - Flowering azalea (bone meal → azalea tree growth)
-  - Moss
-  - Amethyst
-  - Amethyst bud & cluster
-  - Budding amethyst
-  - Dragon egg
-- Implemented the following items:
-  - Cocoa beans
-  - Sweet berries
-  - Glow berries
-  - Kelp
-  - Nether wart
-  - Torchflower seeds
-  - Pitcher pod
-  - Blue egg
-  - Brown egg
-- Implemented the following entities:
-  - Sheep
-  - Cow
-  - Chicken
-  - Pig
-- Implemented nether portal and end portal mechanics:
-  - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
-  - End portal frame completion logic and end portal teleport behavior.
-  - End spawn platform creation during teleport to The End.
-- Implemented climate variant property for pig, cow, chicken, and egg entities, with biome-based initialization on spawn.
-- Implemented Fire Aspect enchantment.
-- Implemented entity item and XP drops on death.
-- Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
-- Updated the chunk version to 42 (1.21.120).
 - (API) Added the following methods to `Player`:
   - `sendHealth(float, float)` — sends health and max health to the client.
   - `sendAbsorption(float)` — sends absorption value to the client.
@@ -136,11 +62,48 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `sendItemChargingFinished()` — notifies the client that item charging has finished.
   - `setMotion(Vector3dc)` — sets the motion of the player.
 - (API) Added `WorldViewer.viewEnchantOptions(List<Pair<Integer, EnchantOption>>)` for sending enchantment table options to the viewer.
+- (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
+- (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
+- (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
+- (API) Added new sounds to `SimpleSound`: `BIG_DRIPLEAF_TILT_UP`, `BIG_DRIPLEAF_TILT_DOWN`, `BELL_HIT`, `MILKING`, `EGG_LAY`.
+- (API) Added new block tag `minecraft:moss_replaceable`.
+- Implemented nether portal and end portal mechanics:
+  - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
+  - End portal frame completion logic and end portal teleport behavior.
+  - End spawn platform creation during teleport to The End.
+- Implemented the following blocks:
+  - Amethyst, amethyst bud & cluster, budding amethyst
+  - Azalea and flowering azalea (bone meal → azalea tree growth)
+  - Bamboo and bamboo sapling
+  - Big dripleaf and small dripleaf
+  - Brown mushroom and red mushroom
+  - Cave vines
+  - Cocoa
+  - Crimson fungus and warped fungus
+  - Dragon egg
+  - Kelp
+  - Moss
+  - Nether wart
+  - Pitcher crop and torchflower crop
+  - Powder snow
+  - Rail, golden rail, detector rail, activator rail
+  - Sea pickle
+  - Seagrass
+  - Sweet berry bush
+- Implemented the following items: cocoa beans, sweet berries, glow berries, kelp, nether wart, torchflower seeds, pitcher pod, blue egg, brown egg.
+- Implemented the following entities: sheep, cow, chicken, pig.
+- Implemented the following world features: huge brown mushroom, huge red mushroom, huge crimson fungus, huge warped fungus, azalea tree.
+- Implemented climate variant property for pig, cow, chicken, and egg entities, with biome-based initialization on spawn.
+- Implemented Fire Aspect enchantment.
+- Implemented entity item and XP drops on death.
+- Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
+- Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
+- Updated the chunk version to 42 (1.21.120).
 
 ### Changed
 
 - (API) Renamed `ItemStuffStorableComponent` to `ItemShulkerBoxBaseComponent` and changed it to extend `ItemBaseComponent`. The API now uses `Map<Integer, ItemStack>` (slot index → item) instead of `List<NbtMap>` for `getStoredItems()`/`setStoredItems()`.
-- (API) Changed `BucketFillSound` and `BucketEmptySound` from `boolean water` to `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`).
+- (API) Replaced `boolean water` parameter in `BucketFillSound` and `BucketEmptySound` with a `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`) to support all bucket content types.
 - (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
 
