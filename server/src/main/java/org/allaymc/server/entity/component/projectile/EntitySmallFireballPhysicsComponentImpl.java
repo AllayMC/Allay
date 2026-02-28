@@ -10,7 +10,7 @@ import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.BlockFireBaseComponentImpl;
+import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
 import org.joml.Vector3dc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;

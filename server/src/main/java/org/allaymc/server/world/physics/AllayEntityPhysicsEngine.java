@@ -22,7 +22,7 @@ import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;
+import org.allaymc.server.block.component.liquid.BlockLiquidBaseComponentImpl;
 import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
