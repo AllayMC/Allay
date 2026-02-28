@@ -251,6 +251,13 @@ public final class BlockTypeInitializer {
         BlockTypes.GREEN_CARPET = buildCarpet(BlockId.GREEN_CARPET);
         BlockTypes.RED_CARPET = buildCarpet(BlockId.RED_CARPET);
         BlockTypes.BLACK_CARPET = buildCarpet(BlockId.BLACK_CARPET);
+        BlockTypes.MOSS_CARPET = buildCarpet(BlockId.MOSS_CARPET);
+        BlockTypes.PALE_MOSS_CARPET = AllayBlockType
+                .builder(BlockCarpetBehaviorImpl.class)
+                .vanillaBlock(BlockId.PALE_MOSS_CARPET)
+                .setProperties(BlockPropertyTypes.PALE_MOSS_CARPET_SIDE_EAST, BlockPropertyTypes.PALE_MOSS_CARPET_SIDE_NORTH, BlockPropertyTypes.PALE_MOSS_CARPET_SIDE_SOUTH, BlockPropertyTypes.PALE_MOSS_CARPET_SIDE_WEST, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBaseComponentSupplier(BlockCarpetBaseComponentImpl::new)
+                .build();
     }
 
     private static BlockType<BlockCarpetBehavior> buildCarpet(BlockId blockId) {

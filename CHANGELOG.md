@@ -83,7 +83,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Dragon egg
   - Kelp
   - Moss
+  - Moss carpet
   - Nether wart
+  - Pale moss
+  - Pale moss carpet
   - Pitcher crop and torchflower crop
   - Powder snow
   - Rail, golden rail, detector rail, activator rail
