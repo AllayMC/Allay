@@ -390,6 +390,55 @@ class EventBusTest {
     }
 
     @Nested
+    class ConcurrentModificationTests {
+
+        @Test
+        void testRegisterLambdaListenerDuringDispatch() {
+            AtomicBoolean newListenerCalled = new AtomicBoolean(false);
+
+            eventBus.registerListenerFor(TestEvent.class, event ->
+                    eventBus.registerListenerFor(TestEvent.class, e -> newListenerCalled.set(true))
+            );
+
+            assertDoesNotThrow(() -> eventBus.callEvent(new TestEvent()));
+            // The newly registered listener should not be called during the same dispatch
+            assertFalse(newListenerCalled.get());
+
+            // But should be called on the next dispatch
+            eventBus.callEvent(new TestEvent());
+            assertTrue(newListenerCalled.get());
+        }
+
+        @Test
+        void testRegisterMethodListenerDuringDispatch() {
+            var newListener = new TestListener();
+
+            eventBus.registerListenerFor(TestEvent.class, event ->
+                    eventBus.registerListener(newListener)
+            );
+
+            assertDoesNotThrow(() -> eventBus.callEvent(new TestEvent()));
+            assertFalse(newListener.called);
+
+            eventBus.callEvent(new TestEvent());
+            assertTrue(newListener.called);
+        }
+
+        @Test
+        void testUnregisterListenerDuringDispatch() {
+            AtomicInteger callCount = new AtomicInteger(0);
+            Consumer<TestEvent> victim = event -> callCount.incrementAndGet();
+
+            eventBus.registerListenerFor(TestEvent.class, victim);
+            eventBus.registerListenerFor(TestEvent.class, event ->
+                    eventBus.unregisterListenerFor(TestEvent.class, victim), false, 100
+            );
+
+            assertDoesNotThrow(() -> eventBus.callEvent(new TestEvent()));
+        }
+    }
+
+    @Nested
     class MixedListenerTests {
 
         @Test

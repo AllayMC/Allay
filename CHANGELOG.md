@@ -115,6 +115,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Fixed
 
+- Fixed `ConcurrentModificationException` when registering or unregistering event listeners during event dispatch. Handler lists in `AllayEventBus` now use `CopyOnWriteArrayList` instead of `ArrayList`.
 - Fixed block collision shapes being clamped to a maximum height of 1.0. Blocks such as fences, fence gates, walls, and border blocks now correctly use their vanilla collision height of 1.5, preventing players from jumping over them.
 - Fixed door collision shapes not changing based on block state. Doors now correctly compute their collision and selection shapes based on cardinal direction, open state, and hinge side.
 - Fixed shulker box losing its stored items when cleaned in a cauldron.
