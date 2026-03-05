@@ -107,6 +107,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
 - Updated the chunk version to 42 (1.21.120).
+- Implemented `SHOW_DEATH_MESSAGES` game rule — death messages are now suppressed when this rule is disabled.
+- Server no longer broadcasts blank join or quit messages when the message text is empty.
 
 ### Changed
 
@@ -127,6 +129,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
 - Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
 - Fixed a bug where boss bar is not shown.
+- Fixed snow layers incorrectly decaying in cold biomes.
+- Fixed default interface methods not being recognized as `@EventHandler` candidates during event handler scanning.
 
 ### Removed
 
