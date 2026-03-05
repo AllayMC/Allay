@@ -74,6 +74,16 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
             return globalSpawnPoint;
         }
 
+        // Block-anchored spawn points (bed/respawn anchor) that no longer have a valid block
+        // should fall back to world spawn with an appropriate message
+        var source = entity.getSpawnPointType();
+        if (source.invalidSpawnKey != null) {
+            entity.sendTranslatable(source.invalidSpawnKey);
+            var globalSpawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            entity.setSpawnPoint(globalSpawnPoint);
+            return globalSpawnPoint;
+        }
+
         return spawnPoint;
     }
 

@@ -68,6 +68,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_PLAYER_GAME_MODE = "PlayerGameMode";
 
     protected static final String TAG_SPAWN_POINT = "SpawnPoint";
+    protected static final String TAG_SPAWN_SOURCE = "SpawnSource";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
 
@@ -95,6 +96,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected Skin skin;
     protected Location3ic spawnPoint;
+    @Getter
+    protected SpawnPointType spawnPointType;
 
     /**
      * Used to solve the desynchronization of data at both ends.
@@ -146,6 +149,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
         this.gameMode = AllayServer.getSettings().genericSettings().defaultGameMode();
+        this.spawnPointType = SpawnPointType.FORCED;
         // Set enchantment seed to a random value, and if the player has enchantment
         // seed previously, this random value will be covered
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
@@ -639,7 +643,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected NbtMap saveSpawnPoint() {
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
-                .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId());
+                .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId())
+                .putByte(TAG_SPAWN_SOURCE, spawnPointType.id);
         AllayNBTUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
     }
@@ -673,12 +678,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var world = Server.getInstance().getWorldPool().getWorld(nbt.getString(TAG_WORLD));
         if (world == null) {
             this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            this.spawnPointType = SpawnPointType.FORCED;
             return;
         }
 
         var dimension = world.getDimension(nbt.getInt(TAG_DIMENSION));
         if (dimension == null) {
             this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            this.spawnPointType = SpawnPointType.FORCED;
             return;
         }
 
@@ -686,6 +693,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 AllayNBTUtils.readVector3i(nbt, TAG_POS),
                 0, 0, dimension
         );
+        // Default to FORCED for old player data that predates this tag
+        var sourceId = nbt.getByte(TAG_SPAWN_SOURCE, SpawnPointType.FORCED.id);
+        this.spawnPointType = SpawnPointType.fromId(sourceId);
     }
 
     @Override
@@ -693,6 +703,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var dimension = spawnPoint.dimension();
         if (dimension == null || dimension.getWorld().getState() != WorldState.RUNNING) {
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            spawnPointType = SpawnPointType.FORCED;
         }
         return spawnPoint;
     }
@@ -704,6 +715,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
         this.spawnPoint = new Location3i(spawnPoint);
+        this.spawnPointType = SpawnPointType.FORCED;
+    }
+
+    @Override
+    public void setBlockSpawnPoint(Location3ic spawnPoint, SpawnPointType type) {
+        if (spawnPoint.dimension().getWorld().getState() != WorldState.RUNNING) {
+            log.warn("Trying to set spawn point to a world which is not running");
+            return;
+        }
+        this.spawnPoint = new Location3i(spawnPoint);
+        this.spawnPointType = type;
     }
 
     @Override

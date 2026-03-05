@@ -23,6 +23,7 @@ import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent.SpawnPointType;
 import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3ic;
 
@@ -112,9 +113,11 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Always set spawn point to the head position
         var spawnPoint = player.validateAndGetSpawnPoint();
-        if (spawnPoint == null || spawnPoint.x() != headPos.x() || spawnPoint.y() != headPos.y() || spawnPoint.z() != headPos.z()
-            || spawnPoint.dimension() != dimension) {
-            player.setSpawnPoint(headBlock.getLocation());
+        var sameLocation = spawnPoint != null
+                && spawnPoint.x() == headPos.x() && spawnPoint.y() == headPos.y() && spawnPoint.z() == headPos.z()
+                && spawnPoint.dimension() == dimension;
+        if (!sameLocation || player.getSpawnPointType() != SpawnPointType.BED) {
+            player.setBlockSpawnPoint(headBlock.getLocation(), SpawnPointType.BED);
             player.sendTranslatable(TrKeys.MC_TILE_BED_RESPAWNSET);
         }
 

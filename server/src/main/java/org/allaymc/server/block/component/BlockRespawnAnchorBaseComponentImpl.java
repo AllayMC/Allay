@@ -7,6 +7,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent.SpawnPointType;
 import org.allaymc.api.eventbus.event.block.BlockExplodeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -73,8 +74,9 @@ public class BlockRespawnAnchorBaseComponentImpl extends BlockBaseComponentImpl 
         }
 
         var spawnPoint = player.validateAndGetSpawnPoint();
-        if (spawnPoint == null || !spawnPoint.equals(block.getLocation())) {
-            player.setSpawnPoint(block.getLocation());
+        var sameLocation = spawnPoint != null && spawnPoint.equals(block.getLocation());
+        if (!sameLocation || player.getSpawnPointType() != SpawnPointType.RESPAWN_ANCHOR) {
+            player.setBlockSpawnPoint(block.getLocation(), SpawnPointType.RESPAWN_ANCHOR);
             block.addSound(SimpleSound.RESPAWN_ANCHOR_SET_SPAWN);
 
             player.sendTranslatable(TrKeys.MC_TILE_RESPAWN_ANCHOR_RESPAWNSET);

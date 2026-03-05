@@ -3,6 +3,7 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
@@ -288,10 +289,70 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     /**
      * Set the spawn point of the player.
+     * <p>
+     * This sets a forced spawn point (e.g., from the {@code /spawnpoint} command) that does not
+     * require a bed or respawn anchor to be present at the location on respawn.
      *
      * @param spawnPoint The spawn point to set
      */
     void setSpawnPoint(Location3ic spawnPoint);
+
+    /**
+     * Set the spawn point of the player as anchored to a block (e.g., a bed or respawn anchor).
+     * <p>
+     * The spawn point is validated on respawn: if the block no longer exists at the stored location,
+     * the spawn point is reset to the world spawn and the player is notified.
+     *
+     * @param spawnPoint The spawn point to set
+     * @param type       The type of block that anchors this spawn point
+     */
+    void setBlockSpawnPoint(Location3ic spawnPoint, SpawnPointType type);
+
+    /**
+     * Returns the type of the player's current spawn point.
+     *
+     * @return the {@link SpawnPointType} of the current spawn point
+     */
+    SpawnPointType getSpawnPointType();
+
+    /**
+     * Describes how a player's personal spawn point was established.
+     */
+    enum SpawnPointType {
+        /** Set by command (e.g., {@code /spawnpoint}). No block validation needed on respawn. */
+        FORCED(0, null),
+        /** Set by sleeping in a bed. Validated against bed existence on respawn. */
+        BED(1, TrKeys.MC_TILE_BED_NOTVALID),
+        /** Set by interacting with a respawn anchor. Validated against anchor existence on respawn. */
+        RESPAWN_ANCHOR(2, TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
+
+        /**
+         * Stable numeric ID used for NBT persistence. Never reuse or reorder these values.
+         */
+        public final byte id;
+
+        /**
+         * The translation key sent to the player when they die and this spawn point block is missing.
+         * {@code null} for {@link #FORCED}, which never triggers the missing-block fallback.
+         */
+        public final String invalidSpawnKey;
+
+        SpawnPointType(int id, String invalidSpawnKey) {
+            this.id = (byte) id;
+            this.invalidSpawnKey = invalidSpawnKey;
+        }
+
+        /**
+         * Looks up a {@code SpawnPointType} by its stable {@link #id}.
+         * Returns {@link #FORCED} if the id is unrecognised (e.g., corrupt NBT).
+         */
+        public static SpawnPointType fromId(byte id) {
+            for (var type : values()) {
+                if (type.id == id) return type;
+            }
+            return FORCED;
+        }
+    }
 
     /**
      * Check if the player can reach a block at the specified position.
