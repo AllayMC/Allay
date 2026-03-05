@@ -147,6 +147,34 @@ public class AllayEntityManager implements EntityManager {
                 var hashXZ = HashUtils.hashXZ(((int) loc.x()) >> 4, ((int) loc.z()) >> 4);
                 return !dimension.getChunkManager().isChunkLoaded(hashXZ);
             }, true);
+            saveLoadedEntities();
+        }
+    }
+
+    protected void saveLoadedEntities() {
+        var entitiesByChunk = new Long2ObjectOpenHashMap<Long2ObjectOpenHashMap<Entity>>();
+        for (var entity : entities.values()) {
+            if (!entity.isPersistent()) {
+                continue;
+            }
+
+            var loc = entity.getLocation();
+            var hashXZ = HashUtils.hashXZ(((int) loc.x()) >> 4, ((int) loc.z()) >> 4);
+            if (!dimension.getChunkManager().isChunkLoaded(hashXZ)) {
+                continue;
+            }
+
+            entitiesByChunk
+                    .computeIfAbsent(hashXZ, $ -> new Long2ObjectOpenHashMap<>())
+                    .put(entity.getUniqueId().getLeastSignificantBits(), entity);
+        }
+
+        for (var entry : entitiesByChunk.long2ObjectEntrySet()) {
+            var hashXZ = entry.getLongKey();
+            worldStorage.writeEntities(
+                    HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
+                    dimension.getDimensionInfo(), entry.getValue()
+            );
         }
     }
 

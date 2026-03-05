@@ -14,6 +14,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Added `WorldGeneratorInitEvent` — fired after a `WorldGenerator` is created but before it is attached to its dimension, allowing plugins to append custom noisers, populators, and post-processors to any generator.
+- (API) Added `WorldGenerator.addNoiser()`, `addPopulator()`, and `addPostProcessor()` for dynamically extending generators during initialization (must be called within `WorldGeneratorInitEvent`).
 - (API) Implemented command block.
 - (API) Added entity AI framework:
   - `EntityAIComponent` — core component providing behavior group, memory storage, movement speed, and look/move targets.
@@ -112,6 +114,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Replaced `boolean water` parameter in `BucketFillSound` and `BucketEmptySound` with a `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`) to support all bucket content types.
 - (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
+- Improved entity auto-save mechanism: entities in loaded chunks are now periodically written to disk on every `entityAutoSaveCycle` tick interval, rather than only being saved when unloaded or on server shutdown.
 
 ### Fixed
 
