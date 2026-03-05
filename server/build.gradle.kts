@@ -87,6 +87,11 @@ tasks {
         archiveFileName = getShadedJarName()
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
+        // Log4j config fix
+        filesMatching("META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat") {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
+
         transform<Log4j2PluginsCacheFileTransformer>()
         mergeServiceFiles()
 
