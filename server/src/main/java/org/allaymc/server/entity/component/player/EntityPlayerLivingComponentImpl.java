@@ -19,6 +19,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityLivingComponentImpl;
@@ -319,7 +320,10 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
                 DamageType.API.getDeathInfo(thisPlayer, null);
 
-        Server.getInstance().getMessageChannel().broadcastTranslatable(deathInfo.left(), (Object[]) deathInfo.right());
+        if (thisPlayer.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES)) {
+            Server.getInstance().getMessageChannel().broadcastTranslatable(deathInfo.left(), (Object[]) deathInfo.right());
+        }
+
         if (thisPlayer.isActualPlayer()) {
             thisPlayer.getController().sendDeathInfo(deathInfo);
         }
