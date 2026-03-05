@@ -144,7 +144,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
+import static org.allaymc.api.utils.AllayNBTUtils.readVector2f;
 import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.writeVector2f;
 import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
 import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
@@ -2959,11 +2961,15 @@ public class AllayPlayer implements Player {
             // The world or dimension where the player logged off doesn't exist, fallback to the global spawn point
             dimension = (AllayDimension) server.getWorldPool().getGlobalSpawnPoint().dimension();
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
+            var currentWorldName = dimension.getWorld().getWorldData().getDisplayName();
+            var currentDimension = dimension.getDimensionInfo().dimensionId();
 
             // The old pos stored in player's nbt is invalid, and we should replace it with the new one!
             var builder = playerData.getNbt().toBuilder();
             writeVector3f(builder, "Pos", currentPos);
             playerData.setNbt(builder.build());
+            playerData.setWorld(currentWorldName);
+            playerData.setDimension(currentDimension);
 
             // Save new player data back to storage
             playerManager.getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
@@ -2988,6 +2994,30 @@ public class AllayPlayer implements Player {
         if (!event.call()) {
             disconnect(event.getDisconnectReason());
             return;
+        }
+
+        var loc = this.controlledEntity.getLocation();
+        dimension = (AllayDimension) loc.dimension();
+        var currentWorldName = dimension.getWorld().getWorldData().getDisplayName();
+        var currentDimension = dimension.getDimensionInfo().dimensionId();
+        var currentRotation = readVector2f(playerData.getNbt(), "Rotation");
+
+        var positionChanged = loc.x() != currentPos.x() || loc.y() != currentPos.y() || loc.z() != currentPos.z();
+        var rotationChanged = (float) loc.yaw() != currentRotation.x() || (float) loc.pitch() != currentRotation.y();
+        var worldChanged = !Objects.equals(playerData.getWorld(), currentWorldName);
+        var dimensionChanged = playerData.getDimension() != currentDimension;
+        if (positionChanged || rotationChanged || worldChanged || dimensionChanged) {
+            if (positionChanged || rotationChanged) {
+                var builder = playerData.getNbt().toBuilder();
+                writeVector3f(builder, "Pos", new org.joml.Vector3f(loc));
+                writeVector2f(builder, "Rotation", (float) loc.yaw(), (float) loc.pitch());
+                playerData.setNbt(builder.build());
+            }
+
+            playerData.setWorld(currentWorldName);
+            playerData.setDimension(currentDimension);
+
+            playerManager.getPlayerStorage().savePlayerData(this.getLoginData().getUuid(), playerData);
         }
 
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
