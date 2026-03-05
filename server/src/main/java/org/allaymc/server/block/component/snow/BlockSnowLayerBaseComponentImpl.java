@@ -31,10 +31,17 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
 
-        if (block.getDimension().getLightEngine().getInternalLight(block.getPosition()) > 11) {
+        var dim = block.getDimension();
+        var pos = block.getPosition();
+
+        var lightLevel = dim.getBiome(pos).getBiomeData().temperature() <= 0.25f
+                ? dim.getLightEngine().getBlockLight(pos)
+                : dim.getLightEngine().getInternalLight(pos);
+
+        if (lightLevel > 11) {
             var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
-                block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
+                dim.setBlockState(pos, event.getNewBlockState());
             }
         }
     }
