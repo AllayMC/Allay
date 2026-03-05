@@ -26,6 +26,7 @@ import org.allaymc.server.network.multiversion.MultiVersion;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
+import org.cloudburstmc.netty.channel.raknet.config.RakServerCookieMode;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
@@ -106,7 +107,8 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
         var bootstrap = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .option(RakChannelOption.RAK_SEND_COOKIE, networkSettings.raknetSendCookie())
+                // I think we don't need other modes
+                .option(RakChannelOption.RAK_SERVER_COOKIE_MODE, networkSettings.raknetSendCookie() ? RakServerCookieMode.ACTIVE : RakServerCookieMode.OFF)
                 .option(RakChannelOption.RAK_MAX_MTU, networkSettings.raknetMaxMtu())
                 .option(RakChannelOption.RAK_GUID, serverId)
                 // Integer.MAX_VALUE fixed localhost blocking address
