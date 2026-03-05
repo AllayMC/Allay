@@ -131,7 +131,7 @@ public class AllayStringUtils {
             if (!part.isEmpty()) {
                 sb.append(Character.toUpperCase(part.charAt(0)));
                 if (part.length() > 1) {
-                    sb.append(part.substring(1).toLowerCase());
+                    sb.append(part.substring(1).toLowerCase(Locale.ROOT));
                 }
             }
             if (i < parts.size() - 1) {
