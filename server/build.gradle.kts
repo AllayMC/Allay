@@ -90,16 +90,21 @@ tasks {
         transform<Log4j2PluginsCacheFileTransformer>()
         mergeServiceFiles()
 
+        exclude("META-INF/maven/**")
+        exclude("META-INF/native-image/**")
+        exclude("META-INF/proguard/**")
+
+        exclude("META-INF/AL2.0")
         exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/*-LICENSE")
+        exclude("META-INF/*-NOTICE")
+        exclude("META-INF/io.netty.versions.properties")
+        exclude("META-INF/LGPL2.1")
         exclude("META-INF/LICENSE")
         exclude("META-INF/LICENSE.txt")
         exclude("META-INF/NOTICE")
         exclude("META-INF/NOTICE.txt")
-        exclude("META-INF/AL2.0")
-        exclude("META-INF/LGPL2.1")
-        exclude("META-INF/io.netty.versions.properties")
-        exclude("META-INF/maven/org.jctools/**")
-        exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+        exclude("META-INF/thirdparty-LICENSE")
     }
 
     runShadow {
