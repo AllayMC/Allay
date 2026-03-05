@@ -109,6 +109,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Updated the chunk version to 42 (1.21.120).
 - Implemented `SHOW_DEATH_MESSAGES` game rule — death messages are now suppressed when this rule is disabled.
 - Server no longer broadcasts blank join or quit messages when the message text is empty.
+- Significantly reduced world save time on shutdown. All chunk and entity writes for each dimension are now accumulated into a single LevelDB `WriteBatch` and flushed in one `db.write()` call, instead of one call per chunk/entity-chunk pair. This also
+  required adding `WorldStorage.startBatchWrite()` and `flushBatchWrite()` API hooks (no-op defaults) for custom storage implementations.
 
 ### Changed
 

@@ -109,10 +109,16 @@ public class AllayDimension implements Dimension {
         // Shutdown light service first, because when unloading chunks, chunk service
         // will send updates to light service which is meaningless
         this.lightEngine.shutdown();
-        this.chunkManager.shutdown();
-        // EntityService should be shutdown after chunk service, because it requires
-        // the callback AllayEntityService.onChunkUnload() to be called
-        this.entityManager.shutdown();
+        // Batch all chunk and entity writes into a single db.write() call for fast shutdown
+        world.getWorldStorage().startBatchWrite();
+        try {
+            this.chunkManager.shutdown();
+            // EntityService should be shutdown after chunk service, because it requires
+            // the callback AllayEntityService.onChunkUnload() to be called
+            this.entityManager.shutdown();
+        } finally {
+            world.getWorldStorage().flushBatchWrite();
+        }
     }
 
     public void addPlayer(Player player) {
