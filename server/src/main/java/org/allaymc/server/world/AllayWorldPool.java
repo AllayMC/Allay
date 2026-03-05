@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.eventbus.event.world.WorldGeneratorInitEvent;
 import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
 import org.allaymc.api.eventbus.event.world.WorldUnloadEvent;
 import org.allaymc.api.message.I18n;
@@ -95,13 +96,16 @@ public final class AllayWorldPool implements WorldPool {
         }
 
         // Load overworld dimension
+        new WorldGeneratorInitEvent(world, overworldSetting.worldGenerator(), DimensionInfo.OVERWORLD).call();
         world.addDimension(new AllayDimension(world, overworldSetting.worldGenerator(), DimensionInfo.OVERWORLD, overworldSetting.enableLightCalculation(), useVirtualThread));
 
         // Load nether and the end dimension if they are not null
         if (netherSetting != null) {
+            new WorldGeneratorInitEvent(world, netherSetting.worldGenerator(), DimensionInfo.NETHER).call();
             world.addDimension(new AllayDimension(world, netherSetting.worldGenerator(), DimensionInfo.NETHER, netherSetting.enableLightCalculation(), useVirtualThread));
         }
         if (theEndSetting != null) {
+            new WorldGeneratorInitEvent(world, theEndSetting.worldGenerator(), DimensionInfo.THE_END).call();
             world.addDimension(new AllayDimension(world, theEndSetting.worldGenerator(), DimensionInfo.THE_END, theEndSetting.enableLightCalculation(), useVirtualThread));
         }
 
