@@ -85,14 +85,20 @@ tasks {
 
     shadowJar {
         archiveFileName = getShadedJarName()
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         transform<Log4j2PluginsCacheFileTransformer>()
         mergeServiceFiles()
 
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
         exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+        exclude("META-INF/io.netty.versions.properties")
+        exclude("META-INF/maven/org.jctools/**")
         exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
     }
 
