@@ -33,7 +33,11 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         player.viewEntityLocation(entity, entity.getLocation(), true);
         // Send debug shapes to the player after the player fully joined
         ((AllayDimension) entity.getDimension()).addDebugShapesTo(player);
-        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), allayPlayer.getLoginData().getXname());
+
+        var joinMessage = event.getJoinMessage();
+        if (joinMessage != null && !joinMessage.isBlank()) {
+            Server.getInstance().getMessageChannel().broadcastTranslatable(joinMessage, allayPlayer.getLoginData().getXname());
+        }
     }
 
     @Override
