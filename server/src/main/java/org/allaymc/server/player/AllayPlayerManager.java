@@ -297,7 +297,10 @@ public class AllayPlayerManager implements PlayerManager {
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
 
-            server.getMessageChannel().broadcastTranslatable(event.getQuitMessage(), player.getOriginName());
+            var quitMessage = event.getQuitMessage();
+            if (quitMessage != null && !quitMessage.isBlank()) {
+                server.getMessageChannel().broadcastTranslatable(quitMessage, player.getOriginName());
+            }
 
             var entity = player.getControlledEntity();
             server.getMessageChannel().removeReceiver(entity);
