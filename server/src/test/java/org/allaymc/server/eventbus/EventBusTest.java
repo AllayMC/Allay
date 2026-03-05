@@ -346,6 +346,16 @@ class EventBusTest {
         }
 
         @Test
+        void testInterfaceDefaultMethodHandler() {
+            var listener = new DefaultMethodListener();
+
+            eventBus.registerListener(listener);
+            eventBus.callEvent(new TestEvent());
+
+            assertTrue(listener.called);
+        }
+
+        @Test
         void testMultiEventListener() {
             var listener = new MultiEventListener();
 
@@ -567,6 +577,24 @@ class EventBusTest {
     public static class InvalidNonEventParamListener {
         @EventHandler
         public void invalidHandler(String notAnEvent) {
+        }
+    }
+
+    public interface HasDefaultEventHandler {
+        void markCalled();
+
+        @EventHandler
+        default void onDefaultEvent(TestEvent event) {
+            markCalled();
+        }
+    }
+
+    public static class DefaultMethodListener implements HasDefaultEventHandler {
+        public boolean called = false;
+
+        @Override
+        public void markCalled() {
+            called = true;
         }
     }
 }
