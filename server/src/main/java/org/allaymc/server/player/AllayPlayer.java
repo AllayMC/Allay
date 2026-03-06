@@ -33,7 +33,6 @@ import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.*;
 import org.allaymc.api.entity.component.*;
-import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
@@ -263,7 +262,7 @@ public class AllayPlayer implements Player {
         this.hiddenHudElements = EnumSet.noneOf(HudElement.class);
     }
 
-    public static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk) {
+    protected static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk) {
         var dimensionInfo = chunk.getDimensionInfo();
         var packet = new LevelChunkPacket();
         packet.setDimension(dimensionInfo.dimensionId());
@@ -288,7 +287,7 @@ public class AllayPlayer implements Player {
         return dimensionInfo.minSectionY();
     }
 
-    public static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk) {
+    protected static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk) {
         var dimensionInfo = chunk.getDimensionInfo();
         var packet = new LevelChunkPacket();
         packet.setDimension(dimensionInfo.dimensionId());
@@ -1766,7 +1765,6 @@ public class AllayPlayer implements Player {
             case CHAIN -> SoundEvent.ARMOR_EQUIP_CHAIN;
             case GOLD -> SoundEvent.ARMOR_EQUIP_GOLD;
             case DIAMOND, NETHERITE -> SoundEvent.ARMOR_EQUIP_DIAMOND;
-            case null -> SoundEvent.ARMOR_EQUIP_GENERIC;
         };
     }
 
