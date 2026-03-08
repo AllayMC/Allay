@@ -71,6 +71,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added cancellable `ShelfUseEvent` with `SINGLE_SWAP` and `MULTI_SWAP` actions.
 - (API) Added new sounds to `SimpleSound`: `BIG_DRIPLEAF_TILT_UP`, `BIG_DRIPLEAF_TILT_DOWN`, `BELL_HIT`, `MILKING`, `EGG_LAY`, `POWER_ON`, `POWER_OFF`, `ACTIVATED`, `DEACTIVATED`, `SHELF_SWAP_SINGLE`, `SHELF_SWAP_MULTI`.
 - (API) Added new block tag `minecraft:moss_replaceable`.
+- (API) Added offline player system for managing player data and identity mappings:
+    - Added `OfflinePlayer` interface representing players whose data exists on server but are not currently online.
+    - Added `OfflinePlayerManager` interface for managing offline player data, nickname changes, and collision resolution.
+    - Added `PlayerNicknameChangeEvent` event that fires when a player's nickname changes.
+    - Added method `LoginData.getParsedXuid()` to get Xbox User ID as a Long value.
+    - Added method `Player.getStorageUuid()` to get the stable storage UUID used for player data files.
+- Implemented persistent player identity system with LevelDB index that maps XUID, nickname UUID, and nickname to storage UUID.
+- Implemented automatic nickname collision handling that preserves all player data while assigning temporary nicknames to previous owners.
 - Implemented nether portal and end portal mechanics:
   - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
   - End portal frame completion logic and end portal teleport behavior.
@@ -106,6 +114,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented entity item and XP drops on death.
 - Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
+- Added automatic migration of legacy player data (pre-0.10.4) to new storage UUID system on first login.
 - Updated the chunk version to 42 (1.21.120).
 - Implemented `SHOW_DEATH_MESSAGES` game rule — death messages are now suppressed when this rule is disabled.
 - Server no longer broadcasts blank join or quit messages when the message text is empty.
@@ -121,6 +130,12 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) `Scoreboard.displayName` and `Scoreboard.criteriaName` are now mutable — added corresponding setter methods.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
 - Improved entity auto-save mechanism: entities in loaded chunks are now periodically written to disk on every `entityAutoSaveCycle` tick interval, rather than only being saved when unloaded or on server shutdown.
+- Player data files are now identified by stable storage UUID instead of login UUID, preventing data loss during nickname changes.
+- Player storage now uses atomic file operations with temporary files to prevent data corruption during saves.
+- Improved player data file handling with cleanup of orphaned temporary files on server startup.
+- `PlayerData` now stores player nickname and XUID for offline player system.
+- Player login flow now processes identity resolution through `OfflinePlayerManager` before authentication checks.
+- Refactored `AllayLoginData` methods for improved code clarity and readability.
 
 ### Fixed
 
@@ -138,6 +153,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed player spawn point not being reset when the bed or respawn anchor it was set by is destroyed. Players with a block-anchored spawn whose block is missing on death now receive the appropriate "not valid" message and respawn at the world spawn.
 - Fixed a typo in `StructureFile.fromNBT`.
 - Fixed cancelled `BlockBreakEvent` occasionally causing the block to disappear from the client's view. The server now correctly reverts the client's predicted block destroy by sending block updates for both layers, and also handles early-rejection cases (insufficient break progress).
+- Fixed potential player data corruption during save operations by implementing atomic file writes with temporary files.
+- Fixed player data loss that could occur when players change their Xbox gamertag.
 
 ### Removed
 
