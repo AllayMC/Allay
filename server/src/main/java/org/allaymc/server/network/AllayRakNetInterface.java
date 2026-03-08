@@ -39,6 +39,7 @@ import org.cloudburstmc.protocol.bedrock.netty.codec.packet.BedrockPacketCodec_v
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
+import java.util.OptionalInt;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -139,6 +140,12 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
     }
 
     @Override
+    public OptionalInt getRakNetProtocolVersion(BedrockServerSession session) {
+        Integer rakVersion = session.getPeer().getChannel().config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION);
+        return rakVersion == null ? OptionalInt.empty() : OptionalInt.of(rakVersion);
+    }
+
+    @Override
     public String getMotd() {
         return pong.motd();
     }
@@ -195,8 +202,6 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
     }
 
     private class AllayServerInitializer extends BedrockServerInitializer {
-
-        private static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
 
         @Override
         @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")

@@ -13,6 +13,8 @@ import org.allaymc.server.eventbus.event.network.NettyPipelineInitEvent;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
+import java.util.OptionalInt;
+
 /**
  * Abstract base class for {@link NetworkInterface} implementations in the server module.
  * <p>
@@ -26,6 +28,11 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
  */
 @Slf4j
 public abstract class AllayNetworkInterface implements NetworkInterface {
+
+    /**
+     * RakNet protocol version used by NetEase clients.
+     */
+    protected static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
 
     /**
      * Start this network interface and begin accepting connections.
@@ -63,6 +70,28 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
      * @return the ping in milliseconds, or {@code -1} if not available
      */
     public abstract int getPing(BedrockServerSession session);
+
+    /**
+     * Get the RakNet protocol version for the given session if the transport exposes it.
+     *
+     * @param session the bedrock server session
+     *
+     * @return the RakNet protocol version, or an empty result if the transport does not provide one
+     */
+    public OptionalInt getRakNetProtocolVersion(BedrockServerSession session) {
+        return OptionalInt.empty();
+    }
+
+    /**
+     * Determine whether the given session belongs to a NetEase client.
+     *
+     * @param session the bedrock server session
+     *
+     * @return {@code true} if the session is identified as a NetEase client, otherwise {@code false}
+     */
+    public boolean isNetEaseClient(BedrockServerSession session) {
+        return getRakNetProtocolVersion(session).orElse(-1) == NETEASE_RAKNET_PROTOCOL_VERSION;
+    }
 
     /**
      * Initialize a player session from a {@link BedrockServerSession}.
