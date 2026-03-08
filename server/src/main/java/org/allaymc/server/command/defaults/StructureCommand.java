@@ -106,7 +106,7 @@ public class StructureCommand extends Command {
                         return context.fail();
                     }
 
-                    var structure = StructureFile.formNBT(nbt);
+                    var structure = StructureFile.fromNBT(nbt);
                     structure.place(player.getDimension(), (int) pos.x, (int) pos.y, (int) pos.z);
 
                     context.addOutput("Structure " + filePath + " is placed");
