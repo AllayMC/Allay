@@ -137,6 +137,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed default interface methods not being recognized as `@EventHandler` candidates during event handler scanning.
 - Fixed player spawn point not being reset when the bed or respawn anchor it was set by is destroyed. Players with a block-anchored spawn whose block is missing on death now receive the appropriate "not valid" message and respawn at the world spawn.
 - Fixed a typo in `StructureFile.fromNBT`.
+- Fixed cancelled `BlockBreakEvent` occasionally causing the block to disappear from the client's view. The server now correctly reverts the client's predicted block destroy by sending block updates for both layers, and also handles early-rejection cases (insufficient break progress).
 
 ### Removed
 

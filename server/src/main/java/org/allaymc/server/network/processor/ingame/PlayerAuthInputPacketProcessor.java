@@ -241,6 +241,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (!mayBreak()) {
             log.debug("Player {} tried to break block too early! Progress: {}, serverSide: {}",
                     player.getOriginName(), this.currentProgress, this.serverSideBlockBreaking);
+            // The client has predicted the block destroy, send block update to restore the client's view
+            revertClientBlockPrediction(player, x, y, z);
             return;
         }
 
@@ -277,8 +279,20 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             }
         } else {
             // Failed to break the block (e.g. BlockBreakEvent cancelled), restore block state
-            player.viewBlockUpdate(new Vector3i(this.breakingPosX, this.breakingPosY, this.breakingPosZ), 0, this.blockToBreak);
+            revertClientBlockPrediction(player, this.breakingPosX, this.breakingPosY, this.breakingPosZ);
         }
+    }
+
+    /**
+     * Sends block updates to the player to revert the client's predicted block destroy.
+     * Restores both block layers (main block and extra block such as water for waterlogged blocks)
+     * using the current server-side block state.
+     */
+    protected void revertClientBlockPrediction(Player player, int x, int y, int z) {
+        var dimension = player.getControlledEntity().getDimension();
+        var pos = new Vector3i(x, y, z);
+        player.viewBlockUpdate(pos, 0, dimension.getBlockState(x, y, z, 0));
+        player.viewBlockUpdate(pos, 1, dimension.getBlockState(x, y, z, 1));
     }
 
     protected boolean checkInteractDistance(Player player) {
