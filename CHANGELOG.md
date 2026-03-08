@@ -118,6 +118,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Replaced `boolean water` parameter in `BucketFillSound` and `BucketEmptySound` with a `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`) to support all bucket content types.
 - (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
 - (API) Added `EntityPlayerBaseComponent.setBlockSpawnPoint(Location3ic, SpawnPointType)` and `getSpawnPointType()` to distinguish block-anchored spawn points (bed, respawn anchor) from forced ones (e.g., `/spawnpoint`). Added `SpawnPointType` enum (`FORCED`, `BED`, `RESPAWN_ANCHOR`) with a stable numeric `id` for NBT persistence and an `invalidSpawnKey` field carrying the appropriate i18n message key per type.
+- (API) `Scoreboard.displayName` and `Scoreboard.criteriaName` are now mutable — added corresponding setter methods.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
 - Improved entity auto-save mechanism: entities in loaded chunks are now periodically written to disk on every `entityAutoSaveCycle` tick interval, rather than only being saved when unloaded or on server shutdown.
 
@@ -135,6 +136,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed snow layers incorrectly decaying in cold biomes.
 - Fixed default interface methods not being recognized as `@EventHandler` candidates during event handler scanning.
 - Fixed player spawn point not being reset when the bed or respawn anchor it was set by is destroyed. Players with a block-anchored spawn whose block is missing on death now receive the appropriate "not valid" message and respawn at the world spawn.
+- Fixed a typo in `StructureFile.fromNBT`.
 
 ### Removed
 
