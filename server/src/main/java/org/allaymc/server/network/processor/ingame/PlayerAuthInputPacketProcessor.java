@@ -15,7 +15,10 @@ import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.ClientPlayMode;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.InputInteractionModel;
+import org.allaymc.api.player.InputMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.AttackSound;
@@ -51,6 +54,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected static final float BLOCK_BREAKING_PROGRESS_TOLERANCE = 0.65f;
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
     protected static final float PLAYER_NETWORK_OFFSET = 1.62f;
+
+    protected static final InputMode[] API_INPUT_MODES = InputMode.values();
+    protected static final ClientPlayMode[] API_PLAY_MODES = ClientPlayMode.values();
+    protected static final InputInteractionModel[] API_INPUT_INTERACTION_MODELS = InputInteractionModel.values();
 
     protected int breakingPosX = Integer.MAX_VALUE;
     protected int breakingPosY = Integer.MAX_VALUE;
@@ -369,6 +376,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
+        updatePlayerInputState(player, packet);
+
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player.getControlledEntity()).getBaseComponent());
         if (baseComponent.getExpectedTeleportPos() != null) {
             var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
@@ -460,6 +469,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
         ((AllayPlayer) player).handlePacketSync(pk, receiveTime);
+    }
+
+    protected void updatePlayerInputState(Player player, PlayerAuthInputPacket packet) {
+        player.setInputMode(API_INPUT_MODES[packet.getInputMode().ordinal()]);
+        player.setPlayMode(API_PLAY_MODES[packet.getPlayMode().ordinal()]);
+        player.setInputInteractionModel(API_INPUT_INTERACTION_MODELS[packet.getInputInteractionModel().ordinal()]);
     }
 
     protected boolean notReadyForInput(Player player) {

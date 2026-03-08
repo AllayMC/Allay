@@ -383,6 +383,51 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void setMotion(Vector3dc motion);
 
     /**
+     * Gets the latest input mode reported by the client.
+     *
+     * @return the current input mode, or {@code null} if not available yet
+     */
+    InputMode getInputMode();
+
+    /**
+     * Sets the latest input mode reported by the client.
+     *
+     * @param inputMode the input mode
+     */
+    @ApiStatus.Internal
+    void setInputMode(InputMode inputMode);
+
+    /**
+     * Gets the latest play mode reported by the client.
+     *
+     * @return the current play mode, or {@code null} if not available yet
+     */
+    ClientPlayMode getPlayMode();
+
+    /**
+     * Sets the latest play mode reported by the client.
+     *
+     * @param playMode the play mode
+     */
+    @ApiStatus.Internal
+    void setPlayMode(ClientPlayMode playMode);
+
+    /**
+     * Gets the latest input interaction model reported by the client.
+     *
+     * @return the current input interaction model, or {@code null} if not available yet
+     */
+    InputInteractionModel getInputInteractionModel();
+
+    /**
+     * Sets the latest input interaction model reported by the client.
+     *
+     * @param inputInteractionModel the input interaction model
+     */
+    @ApiStatus.Internal
+    void setInputInteractionModel(InputInteractionModel inputInteractionModel);
+
+    /**
      * Sets the visibility of a specific HUD element for the player.
      *
      * @param element the {@link HudElement} whose visibility is to be modified

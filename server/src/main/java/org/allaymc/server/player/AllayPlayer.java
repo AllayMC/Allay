@@ -58,7 +58,10 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.*;
+import org.allaymc.api.player.ClientPlayMode;
 import org.allaymc.api.player.HudElement;
+import org.allaymc.api.player.InputInteractionModel;
+import org.allaymc.api.player.InputMode;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
@@ -204,6 +207,15 @@ public class AllayPlayer implements Player {
     protected boolean containerClosedByClient;
     @Getter
     protected Speed speed, flySpeed, verticalFlySpeed;
+    @Getter
+    @Setter
+    protected InputMode inputMode;
+    @Getter
+    @Setter
+    protected ClientPlayMode playMode;
+    @Getter
+    @Setter
+    protected InputInteractionModel inputInteractionModel;
 
     @Getter
     protected volatile boolean changingDimension;
