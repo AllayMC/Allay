@@ -17,6 +17,7 @@ import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
@@ -96,9 +97,8 @@ public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
-
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         var blockState = block.getBlockState();
 
         // Check if water is placed above
@@ -127,5 +127,32 @@ public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
         }
         // Check for fire aspect enchantment
         return itemStack.hasEnchantment(EnchantmentTypes.FIRE_ASPECT);
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        var campfire = blockEntityHolderComponent.getBlockEntity(block.getPosition());
+        if (campfire == null) {
+            return 0;
+        }
+        // Campfire has 4 slots, calculate signal based on filled slots
+        int filledSlots = 0;
+        for (int i = 0; i < 4; i++) {
+            ItemStack item = campfire.getItemStack(i);
+            if (item != null && item != ItemAirStack.AIR_STACK) {
+                filledSlots++;
+            }
+        }
+        // Signal = ceil(filledSlots / 4 * 15)
+        // 0 items = 0, 1 item = 4, 2 items = 8, 3 items = 11, 4 items = 15
+        if (filledSlots == 0) {
+            return 0;
+        }
+        return (int) Math.ceil((double) filledSlots / 4.0 * 15.0);
     }
 }

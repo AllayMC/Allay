@@ -12,6 +12,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
@@ -240,7 +241,7 @@ public class Block {
      *
      * @return {@code true} if this block is receiving redstone power, {@code false} otherwise
      */
-    public boolean isReceivingRedstonePower() {
+    public boolean isPowered() {
         return this.getDimension().isPoweredAt(this.position);
     }
 
@@ -250,7 +251,7 @@ public class Block {
      *
      * @return the maximum redstone power level (0-15)
      */
-    public int getRedstonePower() {
+    public int getPower() {
         return this.getDimension().getPowerAt(this.position);
     }
 
@@ -259,7 +260,7 @@ public class Block {
      *
      * @return the strong redstone power level (0-15)
      */
-    public int getStrongRedstonePower() {
+    public int getStrongPower() {
         return this.getDimension().getStrongPowerAt(this.position);
     }
 
@@ -269,7 +270,7 @@ public class Block {
      * @param excludeFaces the faces to exclude from the check
      * @return the strong redstone power level (0-15)
      */
-    public int getStrongRedstonePower(BlockFace... excludeFaces) {
+    public int getStrongPower(BlockFace... excludeFaces) {
         return this.getDimension().getStrongPowerAt(this.position, excludeFaces);
     }
 
@@ -278,7 +279,7 @@ public class Block {
      *
      * @return the weak redstone power level (0-15)
      */
-    public int getWeakRedstonePower() {
+    public int getWeakPower() {
         return this.getDimension().getWeakPowerAt(this.position);
     }
 
@@ -288,7 +289,7 @@ public class Block {
      * @param excludeFaces the faces to exclude from the check
      * @return the weak redstone power level (0-15)
      */
-    public int getWeakRedstonePower(BlockFace... excludeFaces) {
+    public int getWeakPower(BlockFace... excludeFaces) {
         return this.getDimension().getWeakPowerAt(this.position, excludeFaces);
     }
 
@@ -310,6 +311,15 @@ public class Block {
     @SuppressWarnings("ALL")
     public <T extends BlockEntity> T getBlockEntity() {
         return (T) getDimension().getBlockEntity(position);
+    }
+
+    /**
+     * Creates a new {@link Location3i} from this block's position.
+     *
+     * @return a new location with this block's coordinates and dimension
+     */
+    public Location3i getLocation() {
+        return new Location3i(this.position.x(), this.position.y(), this.position.z(), this.getDimension());
     }
 
     @Override

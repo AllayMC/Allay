@@ -14,6 +14,8 @@ public class EntityArrowImpl extends EntityImpl implements EntityArrow {
     @Delegate
     private EntityArrowBaseComponent arrowBaseComponent;
     @Delegate
+    private EntityPotionComponent potionComponent;
+    @Delegate
     private EntityAgeComponent ageComponent;
     @Delegate
     private EntityProjectileComponent projectileComponent;

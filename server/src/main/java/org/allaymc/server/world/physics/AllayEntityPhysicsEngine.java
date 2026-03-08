@@ -8,6 +8,7 @@ import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent.LiquidState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.MathUtils;
@@ -21,7 +22,7 @@ import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;
+import org.allaymc.server.block.component.liquid.BlockLiquidBaseComponentImpl;
 import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
@@ -31,6 +32,7 @@ import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -108,29 +110,31 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                     computeEntityCollisionMotion(entity);
                 }
 
-                var hasLiquidMotion = false;
+                var liquidState = LiquidState.NONE;
                 if (physicsComponent.computeLiquidMotion()) {
-                    hasLiquidMotion = computeLiquidMotion(entity);
+                    liquidState = computeLiquidMotion(entity);
                 }
 
-                // We should always check the threshold for motion after we modified it
-                physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
-                if (physicsComponent.applyMotion()) {
+                // Only attempt to move the entity if its motion is above the threshold.
+                // The stored motion is NOT zeroed, so small forces (e.g. buoyancy) can
+                // accumulate across ticks via updateMotion.
+                if (isAboveMotionThreshold(physicsComponent.getMotion()) && physicsComponent.applyMotion()) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
 
-                // Update and set motion again
-                physicsComponent.setMotion(checkMotionThreshold(physicsComponent.updateMotion(hasLiquidMotion)));
+                // Calculate the next tick's motion without thresholding
+                physicsComponent.setMotion(physicsComponent.updateMotion(liquidState));
             } else if (physicsComponent.computeBlockCollisionMotion()) {
                 // The entity is stuck in the block. Do not calculate other motions exclude block collision motion
                 computeBlockCollisionMotion(entity, collidedBlocks);
-                physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
-                if (forceApplyMotion(entity)) {
+                if (isAboveMotionThreshold(physicsComponent.getMotion()) && forceApplyMotion(entity)) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
             }
-        });
+        }).join();
         updatedEntities.values().forEach(entityAABBTree::update);
+        // Call afterApplyMotion() sequentially for all updated entities
+        updatedEntities.values().forEach(entity -> ((EntityPhysicsComponent) entity).afterApplyMotion());
     }
 
     protected void cacheEntityCollisionResult() {
@@ -145,7 +149,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 return;
             }
             map.put(entity, collidedEntities);
-        });
+        }).join();
         map.forEach((entity, collidedEntities) -> {
             // These two operations is not thread-safe, so simply do them synchronously
             // as the two operations shouldn't be slow
@@ -158,9 +162,11 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         // 1. Find out the block state which entity collided most
         var aabb = entity.getOffsetAABB();
         var minX = (int) floor(aabb.minX());
-        var minY = (int) floor(aabb.minY());
+        // -1 on Y to match the expanded search range in getCollidingBlockStates()
+        var minY = (int) floor(aabb.minY()) - 1;
         var minZ = (int) floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
+        BlockState targetBlockState = null;
         double volume = 0;
         for (int offsetX = 0, length0 = collidedBlocks.length; offsetX < length0; offsetX++) {
             var sub1 = collidedBlocks[offsetX];
@@ -186,23 +192,39 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                         targetX = currentX;
                         targetY = currentY;
                         targetZ = currentZ;
+                        targetBlockState = blockState;
                     }
                 }
             }
         }
 
-        // 2. Centered on the block pos we found (1), find out the best moving direction
+        // 2. Find the face with minimum penetration depth (shortest escape path)
         BlockFace movingDirection = null;
-        double distanceSqrt = Integer.MAX_VALUE;
-        for (int i = BlockFace.VALUES.length - 1; i >= 0; i--) {
-            var blockFace = BlockFace.VALUES[i];
-            var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
-            var blockState = dimension.getBlockState(offsetVec);
-            if (blockState.getBlockType() == AIR) {
-                var currentDistanceSqrt = entity.getLocation().distanceSquared(offsetVec.x() + 0.5f, offsetVec.y() + 0.5f, offsetVec.z() + 0.5f);
-                if (currentDistanceSqrt < distanceSqrt) {
-                    movingDirection = blockFace;
-                    distanceSqrt = currentDistanceSqrt;
+        if (targetBlockState != null) {
+            var targetAABB = targetBlockState
+                    .getBlockStateData()
+                    .computeOffsetCollisionShape(targetX, targetY, targetZ)
+                    .unionAABB();
+            // Penetration depth for each face: how far the entity must move to clear the block
+            // BlockFace order: DOWN(0), UP(1), NORTH(2), SOUTH(3), WEST(4), EAST(5)
+            double[] penetrations = {
+                    aabb.maxY() - targetAABB.minY(), // DOWN
+                    targetAABB.maxY() - aabb.minY(), // UP
+                    aabb.maxZ() - targetAABB.minZ(), // NORTH
+                    targetAABB.maxZ() - aabb.minZ(), // SOUTH
+                    aabb.maxX() - targetAABB.minX(), // WEST
+                    targetAABB.maxX() - aabb.minX(), // EAST
+            };
+            double minPenetration = Double.MAX_VALUE;
+            for (int i = 0; i < BlockFace.VALUES.length; i++) {
+                var penetration = penetrations[i];
+                if (penetration > 0 && penetration < minPenetration) {
+                    var blockFace = BlockFace.VALUES[i];
+                    var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
+                    if (dimension.getBlockState(offsetVec).getBlockType() == AIR) {
+                        minPenetration = penetration;
+                        movingDirection = blockFace;
+                    }
                 }
             }
         }
@@ -247,11 +269,11 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
      * Compute the liquid motion for the entity.
      *
      * @param entity the entity to compute liquid motion
-     * @return {@code true} if the entity has liquid motion, otherwise {@code false}.
+     * @return the {@link LiquidState} describing which liquids the entity is submerged in.
      */
-    protected boolean computeLiquidMotion(Entity entity) {
-        var hasWaterMotion = new AtomicBoolean(false);
-        var hasLavaMotion = new AtomicBoolean(false);
+    protected LiquidState computeLiquidMotion(Entity entity) {
+        var inWater = new AtomicBoolean(false);
+        var inLava = new AtomicBoolean(false);
         var waterMotion = new Vector3d();
         var lavaMotion = new Vector3d();
         var entityY = entity.getLocation().y();
@@ -259,6 +281,12 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         dimension.forEachBlockStates(entity.getOffsetAABB(), 0, (x, y, z, block) -> {
             if (!(block.getBehavior() instanceof BlockLiquidBehaviorImpl liquidBehavior)) {
                 return;
+            }
+
+            if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.WATER)) {
+                inWater.set(true);
+            } else if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.LAVA)) {
+                inLava.set(true);
             }
 
             var flowVector = ((BlockLiquidBaseComponentImpl) liquidBehavior.getBaseComponent()).calculateFlowVector(dimension, x, y, z, block);
@@ -275,38 +303,34 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
             }
 
             if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.WATER)) {
-                hasWaterMotion.set(true);
                 waterMotion.add(flowVector);
             } else if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.LAVA)) {
-                hasLavaMotion.set(true);
                 lavaMotion.add(flowVector);
             }
         });
 
-        if (!hasWaterMotion.get() && !hasLavaMotion.get()) {
-            return false;
-        }
-
         var finalMotion = new Vector3d();
-        if (hasWaterMotion.get()) {
+        if (waterMotion.lengthSquared() > 0) {
             // Multiple water flow vector may cancel each other out and let the final motion result
             // in zero vector, so we still need to use normalizeIfNotZero() here to prevent NaN
             finalMotion.add(MathUtils.normalizeIfNotZero(waterMotion).mul(WATER_FLOW_MOTION));
         }
-        if (hasLavaMotion.get()) {
+        if (lavaMotion.lengthSquared() > 0) {
             // Same to above
             finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
         }
 
-        ((EntityPhysicsComponent) entity).addMotion(finalMotion);
-        return true;
+        if (finalMotion.lengthSquared() > 0) {
+            ((EntityPhysicsComponent) entity).addMotion(finalMotion);
+        }
+
+        return new LiquidState(inWater.get(), inLava.get());
     }
 
-    protected Vector3d checkMotionThreshold(Vector3d motion) {
-        if (abs(motion.x) < MOTION_THRESHOLD) motion.x = 0;
-        if (abs(motion.y) < MOTION_THRESHOLD) motion.y = 0;
-        if (abs(motion.z) < MOTION_THRESHOLD) motion.z = 0;
-        return motion;
+    protected boolean isAboveMotionThreshold(Vector3dc motion) {
+        return abs(motion.x()) >= MOTION_THRESHOLD ||
+               abs(motion.y()) >= MOTION_THRESHOLD ||
+               abs(motion.z()) >= MOTION_THRESHOLD;
     }
 
     protected boolean forceApplyMotion(Entity entity) {

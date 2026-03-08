@@ -16,7 +16,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class BlockFadeEvent extends BlockEvent implements CancellableEvent {
     protected BlockState newBlockState;
 

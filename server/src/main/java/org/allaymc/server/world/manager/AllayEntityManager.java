@@ -5,9 +5,13 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.component.EntityParallelTickComponent;
+import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
@@ -17,6 +21,7 @@ import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -54,6 +59,10 @@ public class AllayEntityManager implements EntityManager {
         processQueue();
         tickEntities(currentTick);
         this.physicsService.tick();
+    }
+
+    public void idle() {
+        processQueue();
     }
 
     public void shutdown() {
@@ -111,6 +120,19 @@ public class AllayEntityManager implements EntityManager {
     }
 
     protected void tickEntities(long currentTick) {
+        // Parallel AI tick on compute thread pool
+        var parallelTickEntities = entities.values().stream()
+                .filter(e -> e instanceof EntityParallelTickComponent)
+                .toList();
+        if (!parallelTickEntities.isEmpty()) {
+            Utils.forEachInParallel(
+                    parallelTickEntities,
+                    Server.getInstance().getComputeThreadPool(),
+                    entity -> ((EntityParallelTickComponent) entity).parallelTick()
+            ).join();
+        }
+
+        // Normal tick
         for (var entity : entities.values()) {
             ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick);
         }
@@ -125,6 +147,34 @@ public class AllayEntityManager implements EntityManager {
                 var hashXZ = HashUtils.hashXZ(((int) loc.x()) >> 4, ((int) loc.z()) >> 4);
                 return !dimension.getChunkManager().isChunkLoaded(hashXZ);
             }, true);
+            saveLoadedEntities();
+        }
+    }
+
+    protected void saveLoadedEntities() {
+        var entitiesByChunk = new Long2ObjectOpenHashMap<Long2ObjectOpenHashMap<Entity>>();
+        for (var entity : entities.values()) {
+            if (!entity.isPersistent()) {
+                continue;
+            }
+
+            var loc = entity.getLocation();
+            var hashXZ = HashUtils.hashXZ(((int) loc.x()) >> 4, ((int) loc.z()) >> 4);
+            if (!dimension.getChunkManager().isChunkLoaded(hashXZ)) {
+                continue;
+            }
+
+            entitiesByChunk
+                    .computeIfAbsent(hashXZ, $ -> new Long2ObjectOpenHashMap<>())
+                    .put(entity.getUniqueId().getLeastSignificantBits(), entity);
+        }
+
+        for (var entry : entitiesByChunk.long2ObjectEntrySet()) {
+            var hashXZ = entry.getLongKey();
+            worldStorage.writeEntities(
+                    HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
+                    dimension.getDimensionInfo(), entry.getValue()
+            );
         }
     }
 
@@ -172,11 +222,13 @@ public class AllayEntityManager implements EntityManager {
             return;
         }
 
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.SPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.SPAWNED_LATER)) {
             queue.add(() -> {
                 addEntityImmediately(entity);
                 callback.run();
             });
+
+            ((AllayWorld) this.dimension.getWorld()).wakeUp();
         }
     }
 
@@ -202,17 +254,23 @@ public class AllayEntityManager implements EntityManager {
 
     @Override
     public void removeEntity(Entity entity, Runnable callback) {
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED_LATER)) {
             queue.add(() -> {
                 removeEntityImmediately(entity);
                 callback.run();
             });
+
+            ((AllayWorld) this.dimension.getWorld()).wakeUp();
         }
     }
 
     protected void removeEntityImmediately(Entity entity) {
         new EntityDespawnEvent(entity).call();
 
+        // Wake up the entity if they are sleeping, so the bed's occupied state is cleared
+        if (entity instanceof EntitySleepableComponent sleepableComponent && sleepableComponent.isSleeping()) {
+            sleepableComponent.wake();
+        }
         entities.remove(entity.getRuntimeId());
         physicsService.removeEntity(entity);
         entity.despawnFromAll();

@@ -15,7 +15,7 @@ import org.joml.Vector3dc;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.COMPUTE)
+@CallerThread(ThreadType.DIMENSION)
 public class ProjectileHitEvent extends EntityEvent implements CancellableEvent {
 
     protected Vector3dc hitPos;

@@ -247,6 +247,58 @@ public class MyCommand extends Command {
 | `up(n)`    | Go up n levels in the tree  |
 | `parent()` | Get the parent node         |
 
+### Common mistake: Duplicate node creation
+
+!!! warning
+
+    When defining multiple subcommands, avoid calling the same node-creating method (like `.key()`) multiple times on
+    the same parent. Each call creates a **new node** instead of reusing an existing one.
+
+**Incorrect example:**
+
+```java
+// Wrong! This creates TWO separate "test" nodes under root!
+tree.getRoot().key("test").key("sub1");
+tree.getRoot().key("test").key("sub2");  // .key("test") is called on root twice
+```
+
+This code appears to create `/mycommand test sub1` and `/mycommand test sub2`, but actually creates a broken tree
+structure with two separate "test" branches. The command may parse incorrectly even without throwing errors.
+
+**Correct approaches:**
+
+Store the intermediate node reference and reuse it:
+
+```java
+var test = tree.getRoot().key("test");
+test.key("sub1").exec(context -> { /* ... */ });
+test.key("sub2").exec(context -> { /* ... */ });
+```
+
+Or use `.up()` to navigate back:
+
+```java
+tree.getRoot()
+        .key("test")
+        .key("sub1")
+        .exec(context -> { /* ... */ })
+        .up()  // Go back to "test" node
+        .key("sub2")
+        .exec(context -> { /* ... */ });
+```
+
+Or use `.root()` with the full path again only when you need a completely different branch:
+
+```java
+tree.getRoot()
+        .key("test")
+        .key("sub1")
+        .exec(context -> { /* ... */ })
+        .root()  // Go back to root
+        .key("other")  // Different branch, not "test"
+        .exec(context -> { /* ... */ });
+```
+
 ## Restrict command to specific senders
 
 Sometimes you want a command to only be executable by players, or only from the server console.

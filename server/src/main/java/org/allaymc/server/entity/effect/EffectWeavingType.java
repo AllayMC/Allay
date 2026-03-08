@@ -2,7 +2,6 @@ package org.allaymc.server.entity.effect;
 
 import com.google.common.collect.AbstractIterator;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.math.position.Position3i;

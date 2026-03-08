@@ -9,10 +9,6 @@ import org.allaymc.server.container.impl.ShulkerBoxContainerImpl;
 public class BlockEntityShulkerBoxContainerHolderComponentImpl extends BlockEntityContainerHolderComponentImpl {
     public BlockEntityShulkerBoxContainerHolderComponentImpl() {
         super(ShulkerBoxContainerImpl::new);
-    }
-
-    @Override
-    protected boolean dropItemWhenBreak() {
-        return false;
+        this.dropItemOnBreak = false;
     }
 }

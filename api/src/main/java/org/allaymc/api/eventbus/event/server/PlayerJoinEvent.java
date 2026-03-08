@@ -1,6 +1,5 @@
 package org.allaymc.api.eventbus.event.server;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.annotation.CallerThread;
@@ -14,8 +13,8 @@ import org.allaymc.api.player.Player;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.NETWORK)
 @Getter
+@CallerThread(ThreadType.NETWORK)
 public class PlayerJoinEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
      * The message that will be broadcast if the event is not cancelled.

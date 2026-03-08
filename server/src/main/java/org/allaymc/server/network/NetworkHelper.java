@@ -5,6 +5,8 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.debugshape.*;
 import org.allaymc.api.dialog.Button;
 import org.allaymc.api.dialog.ModelSettings;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.property.type.*;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -24,6 +26,9 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityProperties;
+import org.cloudburstmc.protocol.bedrock.data.entity.FloatEntityProperty;
+import org.cloudburstmc.protocol.bedrock.data.entity.IntEntityProperty;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -46,6 +51,36 @@ public final class NetworkHelper {
         return gameRules.entrySet().stream()
                 .map(entry -> new GameRuleData<>(entry.getKey().getName(), entry.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    public static EntityProperties toNetworkProperties(Entity entity) {
+        var result = new EntityProperties();
+        var propertyValues = entity.getPropertyValues();
+
+        int intIndex = 0;
+        int floatIndex = 0;
+        for (var propType : entity.getEntityType().getProperties().values()) {
+            switch (propType) {
+                case EnumPropertyType<?> enumProp -> {
+                    var value = (Enum<?>) propertyValues.getOrDefault(enumProp, enumProp.getDefaultValue());
+                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value.ordinal()));
+                }
+                case IntPropertyType intProp -> {
+                    var value = (int) propertyValues.getOrDefault(intProp, intProp.getDefaultValue());
+                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value));
+                }
+                case BooleanPropertyType boolProp -> {
+                    var value = (boolean) propertyValues.getOrDefault(boolProp, boolProp.getDefaultValue());
+                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value ? 1 : 0));
+                }
+                case FloatPropertyType floatProp -> {
+                    var value = (float) propertyValues.getOrDefault(floatProp, floatProp.getDefaultValue());
+                    result.getFloatProperties().add(new FloatEntityProperty(floatIndex++, value));
+                }
+            }
+        }
+
+        return result;
     }
 
     public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(ItemDescriptor descriptor) {

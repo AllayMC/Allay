@@ -41,6 +41,11 @@ public record ContainerNetworkInfo(
             .mapNetworkSlotIndex(1, 0)
             .build();
 
+    public static final ContainerNetworkInfo ARMOR_STAND_HAND = builder()
+            .type(ContainerTypes.ARMOR_STAND_HAND)
+            .mapAllSlotToType(ContainerSlotType.INVENTORY)
+            .build();
+
     public static final ContainerNetworkInfo PLAYER_INVENTORY = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.INVENTORY)
             .type(ContainerTypes.INVENTORY)
@@ -204,6 +209,18 @@ public record ContainerNetworkInfo(
     public static final ContainerNetworkInfo DOUBLE_CHEST = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CONTAINER)
             .type(ContainerTypes.DOUBLE_CHEST)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
+    public static final ContainerNetworkInfo DISPENSER = builder()
+            .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.DISPENSER)
+            .type(ContainerTypes.DISPENSER)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
+    public static final ContainerNetworkInfo DROPPER = builder()
+            .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.DROPPER)
+            .type(ContainerTypes.DROPPER)
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
             .build();
 

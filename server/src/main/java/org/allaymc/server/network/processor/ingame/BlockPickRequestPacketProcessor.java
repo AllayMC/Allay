@@ -46,7 +46,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         if (event.isIncludeBlockEntity()) {
             var blockEntity = block.getBlockEntity();
             if (blockEntity != null) {
-                item.setBlockEntityNBT(blockEntity.saveNBT());
+                item.setBlockEntityNBT(blockEntity.saveCleanNBT());
                 item.setLore(List.of("+(DATA)"));
             }
         }

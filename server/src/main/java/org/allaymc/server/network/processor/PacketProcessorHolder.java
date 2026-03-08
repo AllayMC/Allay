@@ -8,13 +8,15 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Cool_Loong
  */
 @Slf4j
 public final class PacketProcessorHolder {
-    private final EnumMap<ClientState, EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
+    private final EnumMap<ClientState, Map<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
 
     private ClientState clientState = ClientState.DISCONNECTED;
     private ClientState lastClientState = null;
@@ -22,7 +24,7 @@ public final class PacketProcessorHolder {
     public PacketProcessorHolder() {
         this.processors = new EnumMap<>(ClientState.class);
         for (ClientState state : ClientState.values()) {
-            processors.put(state, new EnumMap<>(BedrockPacketType.class));
+            processors.put(state, new HashMap<>());
         }
 
         registerConnectedPacketProcessors();
@@ -51,6 +53,14 @@ public final class PacketProcessorHolder {
     // We use lock here because this method won't be called frequently
     // Instead, method getClientState() will be called frequently
     public synchronized boolean setClientState(ClientState clientState, boolean warnIfFailed) {
+        // Already in the target state
+        if (this.clientState == clientState) {
+            if (warnIfFailed) {
+                log.warn("Client state is already in {}", this.clientState);
+            }
+            return false;
+        }
+
         // PreviousState != null means that we should check if the previous state is correct
         if (clientState.getPreviousState() != null && this.clientState != clientState.getPreviousState()) {
             if (warnIfFailed) {
@@ -132,6 +142,8 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new ServerboundDiagnosticsPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new RequestAbilityPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new NPCRequestPacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new LecternUpdatePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new CommandBlockUpdatePacketProcessor());
     }
 
     @SuppressWarnings("unchecked")

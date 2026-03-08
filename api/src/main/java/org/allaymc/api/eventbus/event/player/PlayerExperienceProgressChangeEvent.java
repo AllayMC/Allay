@@ -14,6 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerExperienceProgressChangeEvent extends PlayerEvent implements CancellableEvent {
     protected float oldExperienceProgress;
     protected float newExperienceProgress;

@@ -23,7 +23,8 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.eventbus.AllayEventBus;
-import org.allaymc.server.network.AllayNetworkInterface;
+import org.allaymc.server.network.AllayNetworkManager;
+import org.allaymc.server.network.AllayRakNetInterface;
 import org.allaymc.server.player.AllayEmptyPlayerStorage;
 import org.allaymc.server.player.AllayNBTFilePlayerStorage;
 import org.allaymc.server.player.AllayOfflinePlayerManager;
@@ -90,12 +91,14 @@ public final class AllayServer implements Server {
 
     private AllayServer() {
         this.state = new AtomicReference<>(ServerState.STARTING);
+        var rakNetInterface = new AllayRakNetInterface(this);
+        var networkManager = new AllayNetworkManager(rakNetInterface);
         var playersPath = Path.of("players");
         var playerStorage = SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(playersPath) : AllayEmptyPlayerStorage.INSTANCE;
         this.playerManager = new AllayPlayerManager(
                 playerStorage,
                 new AllayOfflinePlayerManager(playersPath.resolve("index"), playerStorage),
-                new AllayNetworkInterface(this)
+                networkManager
         );
         this.worldPool = new AllayWorldPool();
         this.computeThreadPool = createComputeThreadPool();
@@ -189,7 +192,7 @@ public final class AllayServer implements Server {
         this.pluginManager.enablePlugins();
 
         sendTranslatable(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
-        this.playerManager.startNetworkInterface();
+        this.playerManager.startNetworkInterfaces();
 
         this.startTime = System.currentTimeMillis();
         if (SETTINGS.networkSettings().enablev6()) {
@@ -246,7 +249,7 @@ public final class AllayServer implements Server {
         // Disconnect all players
         this.playerManager.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
         // Shutdown network server to prevent new clients connecting to the server
-        this.playerManager.shutdownNetworkInterface();
+        this.playerManager.shutdownNetworkInterfaces();
         this.scheduler.shutdown();
 
         // Disable all plugins

@@ -44,6 +44,10 @@ public enum SimpleSound implements Sound {
     DOOR_CRASH,
     // CLICK is a clicking sound.
     CLICK,
+    // BLOCK_CLICK is a sound played when a dispenser or dropper dispenses an item.
+    BLOCK_CLICK,
+    // BLOCK_CLICK_FAIL is a sound played when a dispenser or dropper fails to dispense.
+    BLOCK_CLICK_FAIL,
     // IGNITE is a sound played when using a flint & steel.
     IGNITE,
     // TNT is a sound played when TNT is ignited.
@@ -98,6 +102,54 @@ public enum SimpleSound implements Sound {
     END_PORTAL_FRAME_FILLED,
     // END_PORTAL_SPAWN is a sound when end portal is activated.
     END_PORTAL_SPAWN,
+    // PISTON_PUSH is a sound played when a piston pushes.
+    PISTON_PUSH,
+    // PISTON_PULL is a sound played when a piston pulls.
+    PISTON_PULL,
+    // POWER_ON is a sound played when a redstone component is powered on.
+    POWER_ON,
+    // POWER_OFF is a sound played when a redstone component is powered off.
+    POWER_OFF,
+    // ACTIVATED is a sound played when a block is activated, such as shelf.
+    ACTIVATED,
+    // DEACTIVATED is a sound played when a block is deactivated, such as shelf.
+    DEACTIVATED,
+    // CAULDRON_FILL_WATER is a sound played when a cauldron is filled with water.
+    CAULDRON_FILL_WATER,
+    // CAULDRON_TAKE_WATER is a sound played when water is taken from a cauldron.
+    CAULDRON_TAKE_WATER,
+    // CAULDRON_FILL_LAVA is a sound played when a cauldron is filled with lava.
+    CAULDRON_FILL_LAVA,
+    // CAULDRON_TAKE_LAVA is a sound played when lava is taken from a cauldron.
+    CAULDRON_TAKE_LAVA,
+    // CAULDRON_FILL_POWDER_SNOW is a sound played when a cauldron is filled with powder snow.
+    CAULDRON_FILL_POWDER_SNOW,
+    // CAULDRON_TAKE_POWDER_SNOW is a sound played when powder snow is taken from a cauldron.
+    CAULDRON_TAKE_POWDER_SNOW,
+    // CAULDRON_FILL_POTION is a sound played when a potion is added to a cauldron.
+    CAULDRON_FILL_POTION,
+    // CAULDRON_TAKE_POTION is a sound played when a potion is taken from a cauldron.
+    CAULDRON_TAKE_POTION,
+    // CAULDRON_ADD_DYE is a sound played when dye is added to a cauldron.
+    CAULDRON_ADD_DYE,
+    // CAULDRON_DYE_ARMOR is a sound played when armor is dyed in a cauldron.
+    CAULDRON_DYE_ARMOR,
+    // CAULDRON_CLEAN_ARMOR is a sound played when armor is cleaned in a cauldron.
+    CAULDRON_CLEAN_ARMOR,
+    // CAULDRON_CLEAN_BANNER is a sound played when a banner pattern is removed in a cauldron.
+    CAULDRON_CLEAN_BANNER,
+    // CAULDRON_EXPLODE is a sound played when different potions are mixed in a cauldron, causing it to explode.
+    CAULDRON_EXPLODE,
+    // RESPAWN_ANCHOR_CHARGE is a sound played when a respawn anchor is charged with glowstone.
+    RESPAWN_ANCHOR_CHARGE,
+    // RESPAWN_ANCHOR_SET_SPAWN is a sound played when a player sets their spawn point at a respawn anchor.
+    RESPAWN_ANCHOR_SET_SPAWN,
+    // RESPAWN_ANCHOR_DEPLETE is a sound played when a respawn anchor loses a charge upon player respawn.
+    RESPAWN_ANCHOR_DEPLETE,
+    // SHELF_SWAP_SINGLE is a sound played when a single item is swapped in a shelf.
+    SHELF_SWAP_SINGLE,
+    // SHELF_SWAP_MULTI is a sound played when multiple items are swapped in a shelf.
+    SHELF_SWAP_MULTI,
 
     /* Item */
 
@@ -121,6 +173,24 @@ public enum SimpleSound implements Sound {
     FIRE_CHARGE,
     // TOTEM is a sound played when a player uses a totem.
     TOTEM,
+    // MACE_SMASH_AIR is a sound played when a player hit an entity in air using mace
+    MACE_SMASH_AIR,
+    // MACE_SMASH_AIR is a sound played when a player hit an entity on the ground using mace
+    MACE_SMASH_GROUND,
+    // MACE_SMASH_AIR is a sound played when a player hit an entity heavily on the ground using mace
+    MACE_SMASH_HEAVY_GROUND,
+    // SHIELD_BLOCK is a sound played when a shield successfully blocks damage.
+    SHIELD_BLOCK,
+    // TRIDENT_THROW is a sound played when a trident is thrown.
+    TRIDENT_THROW,
+    // TRIDENT_HIT is a sound played when a trident hits an entity.
+    TRIDENT_HIT,
+    // TRIDENT_HIT_GROUND is a sound played when a trident hits the ground.
+    TRIDENT_HIT_GROUND,
+    // TRIDENT_RETURN is a sound played when a trident with loyalty returns to the player.
+    TRIDENT_RETURN,
+    // TRIDENT_THUNDER is a sound played when a trident with channeling summons lightning.
+    TRIDENT_THUNDER,
 
     /* Entity */
 
@@ -153,6 +223,28 @@ public enum SimpleSound implements Sound {
     // FIREWORK_FLICKER is a sound played when a firework explodes and should flicker.
     FIREWORK_FLICKER,
     // PAINTING_PLACE is a sound played when a painting is placed.
-    PAINTING_PLACE
+    PAINTING_PLACE,
+    // WIND_CHARGE_BURST is a sound played when a player wind charge explodes.
+    WIND_CHARGE_BURST,
+    // BREEZE_WIND_CHARGE_BURST is a sound played when a breeze wind charge explodes.
+    BREEZE_WIND_CHARGE_BURST,
+    // ARMOR_STAND_PLACE is a sound played when an armor stand is placed.
+    ARMOR_STAND_PLACE,
+    // ARMOR_STAND_HIT is a sound played when an armor stand is hit.
+    ARMOR_STAND_HIT,
+    // ARMOR_STAND_BREAK is a sound played when an armor stand is broken.
+    ARMOR_STAND_BREAK,
+    // ARMOR_STAND_LAND is a sound played when an armor stand drops from a height to the ground.
+    ARMOR_STAND_LAND,
+    // BIG_DRIPLEAF_TILT_DOWN is a sound played when a big dripleaf tilts down.
+    BIG_DRIPLEAF_TILT_DOWN,
+    // BIG_DRIPLEAF_TILT_UP is a sound played when a big dripleaf tilts back up.
+    BIG_DRIPLEAF_TILT_UP,
+    // BELL_HIT is a sound played when a bell is rung.
+    BELL_HIT,
+    // MILKING is a sound played when a player gets a milk bucket from a cow.
+    MILKING,
+    // EGG_LAY is a sound played when a chicken lays an egg.
+    EGG_LAY,
 }
 

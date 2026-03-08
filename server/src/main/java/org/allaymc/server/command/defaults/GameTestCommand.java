@@ -27,7 +27,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.utils.JSONUtils;
 import org.cloudburstmc.nbt.NbtMap;
@@ -80,9 +80,9 @@ public class GameTestCommand extends Command {
                 .key("rfinv")
                 .exec((context, p) -> {
                     var player = p.getController();
-                    player.viewContents(p.getContainer(ContainerTypes.INVENTORY));
-                    player.viewContents(p.getContainer(ContainerTypes.ARMOR));
-                    player.viewContents(p.getContainer(ContainerTypes.OFFHAND));
+                    player.viewContainerContents(p.getContainer(ContainerTypes.INVENTORY));
+                    player.viewContainerContents(p.getContainer(ContainerTypes.ARMOR));
+                    player.viewContainerContents(p.getContainer(ContainerTypes.OFFHAND));
                     context.addOutput("Inventory is refreshed!");
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER)

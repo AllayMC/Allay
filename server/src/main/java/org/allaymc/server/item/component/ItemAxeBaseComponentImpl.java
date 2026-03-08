@@ -25,59 +25,47 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        super.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
-
-        var clickedBlockPos = interactInfo.clickedBlockPos();
-        var clickedBlockState = dimension.getBlockState(clickedBlockPos);
-        if (!(clickedBlockState.getBehavior() instanceof BlockStrippableComponent strippableComponent)) {
-            return;
-        }
-
-        if (strippableComponent.isStripped(clickedBlockState)) {
-            return;
-        }
-
-        var strippedBlockState = strippableComponent.getStrippedBlockState(clickedBlockState);
-        tryFadeBlock(dimension, interactInfo, strippedBlockState, () -> {
-            // Idk why mojang does not use UsingItemOnBlock for player
-            interactInfo.player().applyAction(SimpleEntityAction.SWING_ARM);
-            dimension.addSound(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), new ItemUseOnBlockSound(clickedBlockState));
-        });
-    }
-
-    @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
 
-        var clickedBlockState = interactInfo.getClickedBlock();
-        if (!(clickedBlockState.getBehavior() instanceof BlockOxidationComponent oxidationComponent)) {
-            return false;
-        }
-
         var clickedBlockPos = interactInfo.clickedBlockPos();
+        var clickedBlockState = dimension.getBlockState(clickedBlockPos);
 
-        if (oxidationComponent.isWaxed()) {
-            var nextBlockType = oxidationComponent.getBlockWithWaxed(false);
-            tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
-                dimension.addSound(clickedBlockPos, SimpleSound.WAX_REMOVED);
-            });
-
-            return true;
+        // Try to strip logs
+        if (clickedBlockState.getBehavior() instanceof BlockStrippableComponent strippableComponent) {
+            if (!strippableComponent.isStripped(clickedBlockState)) {
+                var strippedBlockState = strippableComponent.getStrippedBlockState(clickedBlockState);
+                tryFadeBlock(dimension, interactInfo, strippedBlockState, () -> {
+                    // Idk why mojang does not use UsingItemOnBlock for player
+                    interactInfo.player().applyAction(SimpleEntityAction.SWING_ARM);
+                    dimension.addSound(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), new ItemUseOnBlockSound(clickedBlockState));
+                });
+                return true;
+            }
         }
 
-        var oxidationLevel = oxidationComponent.getOxidationLevel();
-        if (oxidationLevel == OxidationLevel.UNAFFECTED) {
-            return false;
+        // Try to remove wax or scrape copper
+        if (clickedBlockState.getBehavior() instanceof BlockOxidationComponent oxidationComponent) {
+            if (oxidationComponent.isWaxed()) {
+                var nextBlockType = oxidationComponent.getBlockWithWaxed(false);
+                tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(clickedBlockState), () -> {
+                    dimension.addSound(clickedBlockPos, SimpleSound.WAX_REMOVED);
+                });
+                return true;
+            }
+
+            var oxidationLevel = oxidationComponent.getOxidationLevel();
+            if (oxidationLevel != OxidationLevel.UNAFFECTED) {
+                oxidationLevel = OxidationLevel.values()[oxidationLevel.ordinal() - 1];
+                var nextBlockType = oxidationComponent.getBlockWithOxidationLevel(oxidationLevel);
+                tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(clickedBlockState), () -> {
+                    dimension.addSound(clickedBlockPos, SimpleSound.COPPER_SCRAPED);
+                });
+                return true;
+            }
         }
 
-        oxidationLevel = OxidationLevel.values()[oxidationLevel.ordinal() - 1];
-        var nextBlockType = oxidationComponent.getBlockWithOxidationLevel(oxidationLevel);
-        tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
-            dimension.addSound(clickedBlockPos, SimpleSound.COPPER_SCRAPED);
-        });
-
-        return true;
+        return false;
     }
 
     private void tryFadeBlock(Dimension dimension, PlayerInteractInfo interactInfo, BlockState newBlockState, Runnable postBlockPlace) {

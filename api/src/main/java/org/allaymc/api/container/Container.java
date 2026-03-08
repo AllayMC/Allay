@@ -238,7 +238,20 @@ public interface Container {
      *
      * @return the NBT list
      */
-    List<NbtMap> saveNBT();
+    default List<NbtMap> saveNBT() {
+        return saveNBT(false);
+    }
+
+    /**
+     * Save the container to NBT.
+     *
+     * @param saveEmptySlots whether to include empty slots in the NBT list.
+     *                       If {@code true}, all slots (including empty ones) are saved.
+     *                       If {@code false}, only non-empty slots are saved.
+     *
+     * @return the NBT list
+     */
+    List<NbtMap> saveNBT(boolean saveEmptySlots);
 
     /**
      * Load the container from NBT.
@@ -253,7 +266,7 @@ public interface Container {
      * @param viewer the viewer
      */
     default void sendContents(ContainerViewer viewer) {
-        viewer.viewContents(this);
+        viewer.viewContainerContents(this);
     }
 
     /**
@@ -263,7 +276,7 @@ public interface Container {
      * @param slot   the slot
      */
     default void sendContent(ContainerViewer viewer, int slot) {
-        viewer.viewSlot(this, slot);
+        viewer.viewContainerSlot(this, slot);
     }
 
     /**
@@ -340,5 +353,40 @@ public interface Container {
      */
     default void sendContainerData(int property, int value) {
         getViewers().forEach(($, viewer) -> viewer.viewContainerData(this, property, value));
+    }
+
+    /**
+     * Calculates the redstone signal strength for this container based on its contents.
+     * <p>
+     * The formula is: floor(averageFullness * 14) + (hasItems ? 1 : 0)
+     * where averageFullness = sum of (itemCount / maxStackSize) / totalSlots
+     * <p>
+     * This matches vanilla Minecraft behavior for comparator signals.
+     *
+     * @return the redstone signal strength (0-15)
+     */
+    default int calculateComparatorSignal() {
+        ItemStack[] items = getItemStackArray();
+        if (items.length == 0) {
+            return 0;
+        }
+
+        int itemCount = 0;
+        float totalFullness = 0.0f;
+
+        for (ItemStack item : items) {
+            if (item != ItemAirStack.AIR_STACK) {
+                int maxStackSize = item.getItemType().getItemData().maxStackSize();
+                totalFullness += (float) item.getCount() / (float) maxStackSize;
+                itemCount++;
+            }
+        }
+
+        if (itemCount == 0) {
+            return 0;
+        }
+
+        float averageFullness = totalFullness / (float) items.length;
+        return (int) Math.floor(averageFullness * 14.0f) + 1;
     }
 }

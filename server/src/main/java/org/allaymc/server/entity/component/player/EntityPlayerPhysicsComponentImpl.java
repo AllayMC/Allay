@@ -51,6 +51,12 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
         return computeMovementServerSide() && (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE);
     }
 
+    @Override
+    public boolean computeLiquidPhysics() {
+        var gameMode = thisPlayer.getGameMode();
+        return computeMovementServerSide() && (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE);
+    }
+
     public void setMotionValueOnly(Vector3dc motion) {
         this.lastMotion = this.motion;
         this.motion = new Vector3d(motion);
@@ -67,11 +73,7 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
             if (event.call()) {
                 // For player, motion effect is calculated by the client rather than the server. We only
                 // need to send SetEntityMotionPacket to the client when we want to apply motion on a player
-                var packet = new SetEntityMotionPacket();
-                var mot = event.getMotion();
-                packet.setMotion(Vector3f.from(mot.x(), mot.y(), mot.z()));
-                packet.setRuntimeEntityId(thisEntity.getRuntimeId());
-                thisPlayer.getController().sendPacket(packet);
+                thisPlayer.getController().setMotion(event.getMotion());
                 return true;
             }
 

@@ -5,6 +5,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayer;
@@ -25,10 +26,12 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
+    @MultiVersion(version = "*-NetEase", details = "NetEase clients allow Chinese player names")
     public void handle(Player player, LoginPacket packet) {
         var allayPlayer = (AllayPlayer) player;
+        boolean isNetEaseClient = allayPlayer.isNetEasePlayer();
 
-        var loginData = AllayLoginData.decode(packet);
+        var loginData = AllayLoginData.decode(packet, isNetEaseClient);
         if (loginData == null) {
             log.warn("Failed to decode login packet from {}", player.getSocketAddress());
             player.disconnect("Invalid login data");
@@ -40,7 +43,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         var server = Server.getInstance();
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
 
-        var offlinePlayer = playerManager.getOfflinePlayerService().handleUpdates(loginData);
+        var offlinePlayer = playerManager.getOfflinePlayerManager().handleUpdates(loginData);
         allayPlayer.setStorageUuid(offlinePlayer.getStorageUuid());
 
         if (AllayServer.getSettings().genericSettings().enableWhitelist() && !playerManager.isWhitelisted(player.getOriginName())) {
@@ -60,7 +63,13 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         }
 
         var name = loginData.getXname();
-        if (!NAME_PATTERN.matcher(name).matches()) {
+        // NetEase clients allow Chinese names, skip the standard name pattern validation
+        if (!isNetEaseClient && !NAME_PATTERN.matcher(name).matches()) {
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDNAME);
+            return;
+        }
+        // For NetEase clients, only check that name is not empty
+        if (isNetEaseClient && (name == null || name.trim().isEmpty())) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDNAME);
             return;
         }

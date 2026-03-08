@@ -1,7 +1,5 @@
 package org.allaymc.api.entity.component;
 
-import org.allaymc.api.item.data.PotionType;
-
 /**
  * @author daoge_cmd
  */
@@ -78,20 +76,6 @@ public interface EntityArrowBaseComponent extends EntityBaseComponent {
      * @param infinite {@code true} to make the arrow infinite, {@code false} otherwise
      */
     void setInfinite(boolean infinite);
-
-    /**
-     * Gets the potion type of this arrow.
-     *
-     * @return the potion type of this arrow. Can be {@code null} if the arrow has no potion effect
-     */
-    PotionType getPotionType();
-
-    /**
-     * Sets the potion type of this arrow.
-     *
-     * @param potionType the potion type to set. Can be {@code null} to remove any potion effect
-     */
-    void setPotionType(PotionType potionType);
 
     /**
      * Checks if the arrow can be picked up by players.

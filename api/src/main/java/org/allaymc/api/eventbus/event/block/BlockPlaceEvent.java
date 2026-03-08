@@ -14,7 +14,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class BlockPlaceEvent extends BlockEvent implements CancellableEvent {
 
     /**

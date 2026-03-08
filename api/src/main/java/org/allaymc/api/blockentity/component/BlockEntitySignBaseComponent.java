@@ -1,6 +1,5 @@
 package org.allaymc.api.blockentity.component;
 
-import org.allaymc.api.player.Player;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -34,14 +33,6 @@ public interface BlockEntitySignBaseComponent extends BlockEntityBaseComponent {
      * @param waxed {@code true} if the sign is waxed, {@code false} otherwise
      */
     void setWaxed(boolean waxed);
-
-    /**
-     * Opens the sign editor for the specified player.
-     *
-     * @param player    the player to open the editor for
-     * @param frontSide {@code true} if the front side of the sign should be edited, {@code false} otherwise
-     */
-    void openSignEditorFor(Player player, boolean frontSide);
 
     /**
      * Represents the text on a sign.

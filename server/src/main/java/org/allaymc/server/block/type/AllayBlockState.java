@@ -76,7 +76,7 @@ public record AllayBlockState(
             }
         }
 
-        throw new IllegalArgumentException("Property " + p + " is not supported by this block");
+        throw new IllegalArgumentException("Property " + p + " is not supported by block " + blockType.getIdentifier());
     }
 
     @Override
@@ -128,7 +128,7 @@ public record AllayBlockState(
                 }
             }
 
-            errorMsgBuilder.append(" are not supported by this block");
+            errorMsgBuilder.append(" are not supported by block " + blockType.getIdentifier());
             throw new IllegalArgumentException(errorMsgBuilder.toString());
         }
 

@@ -5,6 +5,8 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
+import org.allaymc.api.block.interfaces.BlockGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.BlockIronBarsBehavior;
 import org.allaymc.api.block.interfaces.BlockSignBehavior;
 import org.allaymc.api.block.interfaces.BlockTorchBehavior;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
@@ -31,8 +33,8 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         var updatedState = updateConnectionsAndPost(block);
         if (!block.getBlockState().equals(updatedState)) {
@@ -102,13 +104,12 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
             return BlockFace.from(direction).getAxis() != face.getAxis();
         }
 
-        var type = neighbor.getBlockType();
-        return neighbor.getBehavior() instanceof BlockWallBehavior ||
-               type == BlockTypes.IRON_BARS ||
-               type == BlockTypes.GLASS_PANE ||
+        var behavior = neighbor.getBehavior();
+        return behavior instanceof BlockWallBehavior ||
+               behavior instanceof BlockIronBarsBehavior ||
+               behavior instanceof BlockGlassPaneBehavior ||
                neighbor.getBlockStateData().collisionShape().isFull(face.opposite());
     }
-
 
     /**
      * @see <a href="https://joakimthorsen.github.io/MCPropertyEncyclopedia/?selection=variants,tag_wall_post_override&filter=(tag_wall_post_override:No)#">Minecraft Block Property Encyclopedia</a>

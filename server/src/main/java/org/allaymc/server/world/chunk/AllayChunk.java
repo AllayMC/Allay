@@ -9,6 +9,7 @@ import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.poi.PoiType;
 
 import java.util.Collection;
 import java.util.List;
@@ -207,6 +208,14 @@ public class AllayChunk implements Chunk {
         void addScheduledUpdate(int x, int y, int z, long time);
 
         boolean hasScheduledUpdate(int x, int y, int z);
+
+        Map<Integer, PoiType> getPoiEntries();
+
+        void addPoi(int x, int y, int z, PoiType type);
+
+        void removePoi(int x, int y, int z);
+
+        PoiType getPoi(int x, int y, int z);
 
         ChunkSection getSection(int sectionY);
 

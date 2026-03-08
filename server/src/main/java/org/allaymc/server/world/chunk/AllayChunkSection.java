@@ -6,7 +6,7 @@ import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.ChunkSection;
 import org.allaymc.server.datastruct.palette.Palette;
-import org.allaymc.server.world.storage.leveldb.ChunkSectionVersion;
+import org.allaymc.server.world.storage.leveldb.data.ChunkSectionVersion;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 import static org.allaymc.api.utils.hash.HashUtils.hashChunkSectionXYZ;

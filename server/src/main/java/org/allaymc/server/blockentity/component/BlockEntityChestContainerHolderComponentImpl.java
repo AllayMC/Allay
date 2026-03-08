@@ -64,7 +64,7 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
     protected void onInteract(CBlockOnInteractEvent event) {
         var interactInfo = event.getInteractInfo();
         var player = interactInfo.player();
-        if (player == null || player.isSneaking() || !player.isActualPlayer()) {
+        if (player == null || !player.isActualPlayer()) {
             return;
         }
 
@@ -91,6 +91,6 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
     }
 
     protected boolean hasSpaceAbove(Position3ic pos) {
-        return pos.dimension().getBlockState(BlockFace.UP.offsetPos(pos)).getBlockStateData().isTransparent();
+        return !pos.dimension().getBlockState(BlockFace.UP.offsetPos(pos)).getBlockStateData().isSolid();
     }
 }

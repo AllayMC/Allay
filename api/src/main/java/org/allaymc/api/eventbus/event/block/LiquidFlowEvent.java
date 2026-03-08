@@ -16,7 +16,7 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class LiquidFlowEvent extends BlockEvent implements CancellableEvent {
     /**
      * The block position the liquid is flowing into.

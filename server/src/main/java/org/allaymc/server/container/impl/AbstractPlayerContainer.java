@@ -32,7 +32,7 @@ public abstract class AbstractPlayerContainer extends BaseContainer {
             var player = playerSupplier.get();
             // The player object we get may be empty because some container types can be used by non-player entities (e.g. zombie)
             if (player != null && player.isActualPlayer() && !viewers.containsValue(player.getController())) {
-                player.getController().viewSlot(this, slot);
+                player.getController().viewContainerSlot(this, slot);
             }
         }
     }

@@ -161,16 +161,25 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     boolean canBeDamagedThisTime();
 
     /**
-     * Gets the custom name.
+     * Checks if the item has a custom name.
      *
-     * @return the custom name, or empty if none
+     * @return {@code true} if a custom name is set and not empty; {@code false} otherwise.
+     */
+    default boolean hasCustomName() {
+        return !getCustomName().isEmpty();
+    }
+
+    /**
+     * Gets the custom name of the item.
+     *
+     * @return the custom name, or empty if none. Never be {@code null}.
      */
     String getCustomName();
 
     /**
-     * Sets the custom name.
+     * Sets the custom name of the item.
      *
-     * @param customName the new custom name
+     * @param customName the new custom name of the item
      */
     void setCustomName(String customName);
 
@@ -261,23 +270,17 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * Handles right-click on a block.
+     * Called when a player right-clicks on a block with this item.
+     * <p>
+     * If this method returns {@code true}, the block interaction ({@code BlockBehavior::onInteract})
+     * will be skipped. This is used for items with special block interactions such as flint and steel,
+     * spawn eggs, firework rockets, axes (for stripping logs), or paintings.
      *
      * @param dimension     the {@link Dimension}
      * @param placeBlockPos the block position ({@link Vector3ic})
      * @param interactInfo  the {@link PlayerInteractInfo}
-     */
-    @ApiStatus.OverrideOnly
-    void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
-
-    /**
-     * Attempts to use the item on a block. Different from {@link #rightClickItemOnBlock(Dimension, Vector3ic, PlayerInteractInfo)},
-     * this method will only be called when the client thinks he can use the item on the block.
-     *
-     * @param dimension     the {@link Dimension}
-     * @param placeBlockPos the block position ({@link Vector3ic})
-     * @param interactInfo  the {@link PlayerInteractInfo}
-     * @return {@code true} if used, {@code false} otherwise
+     * @return {@code true} if the item was used and block interaction should be skipped,
+     *         {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
     boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
@@ -368,11 +371,42 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     NbtMap saveNBT();
 
     /**
-     * Calculates the attack damage.
+     * Calculates the base attack damage of this item.
+     * <p>
+     * This method returns the static attack damage value defined in the item's data,
+     * without considering any context-dependent factors such as the attacker's state
+     * or enchantments that depend on combat conditions.
+     * <p>
+     * For most weapons, this method and {@link #calculateAttackDamage(Entity, Entity)}
+     * return the same value. However, for weapons like the Mace that have context-dependent
+     * damage bonuses (e.g., smash damage based on fall distance, Density enchantment),
+     * use the overloaded version with attacker and victim parameters to get the actual
+     * combat damage.
      *
-     * @return the attack damage value
+     * @return the base attack damage value
+     * @see #calculateAttackDamage(Entity, Entity)
      */
     float calculateAttackDamage();
+
+    /**
+     * Calculates the attack damage with attacker and victim context.
+     * <p>
+     * This method allows weapons to calculate damage based on combat context,
+     * such as the attacker's current state. For example, the Mace uses this to
+     * calculate smash damage based on the attacker's fall distance and apply
+     * the Density enchantment bonus.
+     * <p>
+     * The default implementation simply delegates to {@link #calculateAttackDamage()}.
+     * Weapons with context-dependent damage should override this method.
+     *
+     * @param attacker the entity performing the attack
+     * @param victim   the entity being attacked
+     * @return the attack damage value including any context-dependent bonuses
+     * @see #calculateAttackDamage()
+     */
+    default float calculateAttackDamage(Entity attacker, Entity victim) {
+        return calculateAttackDamage();
+    }
 
     /**
      * Checks for a specific enchantment.
@@ -582,6 +616,12 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
     /**
      * Sets the block entity NBT data.
+     * <p>
+     * <b>Important:</b> When saving NBT from a block entity, always use
+     * {@link org.allaymc.api.blockentity.BlockEntity#saveCleanNBT()} instead of
+     * {@link org.allaymc.api.blockentity.BlockEntity#saveNBT()}. The {@code saveCleanNBT()}
+     * method removes position fields (x, y, z) which would otherwise corrupt the
+     * block entity's position when the item is placed at a different location.
      *
      * @param blockEntityNBT the {@link NbtMap}, or {@code null} to clear
      */

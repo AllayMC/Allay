@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public abstract class EntityImpl extends ComponentClass implements Entity {
+public class EntityImpl extends ComponentClass implements Entity {
 
     @Getter
     @Delegate

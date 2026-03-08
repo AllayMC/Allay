@@ -15,7 +15,7 @@ You need to put the event listener in a class and annotate the method with `@Eve
 ```java linenums="1"
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 

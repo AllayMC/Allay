@@ -9,35 +9,45 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
+import org.allaymc.api.eventbus.event.world.LightningStrikeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
+import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.light.AllayLightEngine;
+import org.allaymc.server.world.light.NoLightEngine;
 import org.allaymc.server.world.manager.AllayBlockUpdateManager;
 import org.allaymc.server.world.manager.AllayChunkManager;
 import org.allaymc.server.world.manager.AllayEntityManager;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR;
+import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
  * @author daoge_cmd | Cool_Loong
@@ -45,6 +55,12 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 @Slf4j
 @Getter
 public class AllayDimension implements Dimension {
+
+    /**
+     * The probability of lightning striking per chunk per tick during a thunderstorm.
+     * Based on Minecraft: 1/100,000 chance per chunk per tick.
+     */
+    protected static final int LIGHTNING_STRIKE_CHANCE = 100000;
 
     protected final AllayWorld world;
     protected final DimensionInfo dimensionInfo;
@@ -57,7 +73,7 @@ public class AllayDimension implements Dimension {
     protected final Set<Player> players;
     protected final Set<DebugShape> debugShapes;
 
-    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
+    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo, boolean enableLightCalculation, boolean useVirtualThread) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
@@ -65,7 +81,7 @@ public class AllayDimension implements Dimension {
         this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
         this.blockUpdateManager = new AllayBlockUpdateManager(this);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
-        this.lightEngine = new AllayLightEngine(this);
+        this.lightEngine = enableLightCalculation ? new AllayLightEngine(this, useVirtualThread) : new NoLightEngine(this);
         this.players = new NonBlockingHashSet<>();
         this.debugShapes = new NonBlockingHashSet<>();
         worldGenerator.setDimension(this);
@@ -76,6 +92,7 @@ public class AllayDimension implements Dimension {
     }
 
     public void tick(long currentTick) {
+        tickLightning();
         this.scheduler.tick();
         this.entityManager.tick(currentTick);
         this.chunkManager.tick(currentTick);
@@ -92,10 +109,16 @@ public class AllayDimension implements Dimension {
         // Shutdown light service first, because when unloading chunks, chunk service
         // will send updates to light service which is meaningless
         this.lightEngine.shutdown();
-        this.chunkManager.shutdown();
-        // EntityService should be shutdown after chunk service, because it requires
-        // the callback AllayEntityService.onChunkUnload() to be called
-        this.entityManager.shutdown();
+        // Batch all chunk and entity writes into a single db.write() call for fast shutdown
+        world.getWorldStorage().startBatchWrite();
+        try {
+            this.chunkManager.shutdown();
+            // EntityService should be shutdown after chunk service, because it requires
+            // the callback AllayEntityService.onChunkUnload() to be called
+            this.entityManager.shutdown();
+        } finally {
+            world.getWorldStorage().flushBatchWrite();
+        }
     }
 
     public void addPlayer(Player player) {
@@ -214,13 +237,26 @@ public class AllayDimension implements Dimension {
         var blockPos = new Position3i(x, y, z, this);
         var oldBlock = new Block(oldBlockState, blockPos, layer);
         if (callBlockBehavior) {
-            blockState.getBehavior().onPlace(oldBlock, blockState, placementInfo);
+            // onReplace must be called before onPlace to ensure the old block entity
+            // is removed before the new one is created. This prevents block entity type
+            // mismatch issues (e.g., when a piston replaces MovingBlock with the original block)
             oldBlockState.getBehavior().onReplace(oldBlock, blockState, placementInfo);
+            blockState.getBehavior().onPlace(oldBlock, blockState, placementInfo);
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
+        // Update POI index when main-layer blocks change
+        if (layer == 0) {
+            var oldPoi = Registries.POI_TYPES.get(oldBlockState.getBlockType());
+            var newPoi = Registries.POI_TYPES.get(blockState.getBlockType());
+            if (oldPoi != newPoi) {
+                if (oldPoi != null) chunk.removePoi(xIndex, y, zIndex);
+                if (newPoi != null) chunk.addPoi(xIndex, y, zIndex, newPoi);
+            }
+        }
+
         if (update) {
-            updateAround(x, y, z);
+            updateAround(x, y, z, oldBlockState);
         }
 
         if (callBlockBehavior) {
@@ -230,6 +266,33 @@ public class AllayDimension implements Dimension {
         }
 
         return true;
+    }
+
+    @Override
+    public Vector3ic findNearestPoi(PoiType type, int x, int y, int z, int chunkRadius) {
+        int cx = x >> 4, cz = z >> 4;
+        Vector3ic nearest = null;
+        double nearestDistSq = Double.MAX_VALUE;
+
+        for (int dx = -chunkRadius; dx <= chunkRadius; dx++) {
+            for (int dz = -chunkRadius; dz <= chunkRadius; dz++) {
+                var chunk = chunkManager.getChunk(cx + dx, cz + dz);
+                if (chunk == null) continue;
+                for (var entry : chunk.getPoiEntries().entrySet()) {
+                    if (entry.getValue() != type) continue;
+                    int hash = entry.getKey();
+                    int px = HashUtils.getXFromHashChunkXYZ(hash) + ((cx + dx) << 4);
+                    int py = HashUtils.getYFromHashChunkXYZ(hash);
+                    int pz = HashUtils.getZFromHashChunkXYZ(hash) + ((cz + dz) << 4);
+                    double distSq = (double) (px - x) * (px - x) + (double) (py - y) * (py - y) + (double) (pz - z) * (pz - z);
+                    if (distSq < nearestDistSq) {
+                        nearestDistSq = distSq;
+                        nearest = new Vector3i(px, py, pz);
+                    }
+                }
+            }
+        }
+        return nearest;
     }
 
     @Override
@@ -320,6 +383,14 @@ public class AllayDimension implements Dimension {
             Block checkBlock = new Block(state, new Position3i(checkPos, this));
             int weakPower = state.getBehavior().getWeakPower(checkBlock, face.opposite());
             maxPower = Math.max(maxPower, weakPower);
+
+            // Check strong power through solid blocks
+            // A solid block receiving strong power provides weak power to adjacent blocks
+            // Exclude face.opposite() because that's the direction pointing back to pos
+            if (state.getBlockStateData().isSolid()) {
+                int strongPower = this.getStrongPowerAt(checkPos, face.opposite());
+                maxPower = Math.max(maxPower, strongPower);
+            }
         }
 
         return maxPower;
@@ -332,6 +403,110 @@ public class AllayDimension implements Dimension {
             }
         }
         return false;
+    }
+
+    @Override
+    public void updateComparatorOutputLevel(int x, int y, int z) {
+        var sourcePos = new Vector3i(x, y, z);
+        // Check horizontal neighbors for diodes
+        for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
+            var offset = face.getOffset();
+            int nx = x + offset.x();
+            int ny = y + offset.y();
+            int nz = z + offset.z();
+
+            if (!getChunkManager().isChunkLoaded(nx >> 4, nz >> 4)) {
+                continue;
+            }
+
+            BlockState neighborState = getBlockState(nx, ny, nz);
+            var neighborPos = new Vector3i(nx, ny, nz);
+
+            if (isDiode(neighborState)) {
+                // Direct neighbor is a diode, update it
+                blockUpdateManager.neighborBlockUpdate(neighborPos, sourcePos, face.opposite(), null);
+            } else if (neighborState.getBlockStateData().isSolid()) {
+                // Neighbor is solid, check if there's a diode on the other side
+                int nx2 = nx + offset.x();
+                int nz2 = nz + offset.z();
+
+                if (!getChunkManager().isChunkLoaded(nx2 >> 4, nz2 >> 4)) {
+                    continue;
+                }
+
+                BlockState behindState = getBlockState(nx2, ny, nz2);
+                if (isDiode(behindState)) {
+                    var behindPos = new Vector3i(nx2, ny, nz2);
+                    blockUpdateManager.neighborBlockUpdate(behindPos, neighborPos, face.opposite(), null);
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if a block state is a redstone diode (repeater or comparator).
+     */
+    private boolean isDiode(BlockState state) {
+        var type = state.getBlockType();
+        return type == POWERED_REPEATER ||
+               type == UNPOWERED_REPEATER ||
+               type == POWERED_COMPARATOR ||
+               type == UNPOWERED_COMPARATOR;
+    }
+
+    /**
+     * Handles random lightning spawning during thunderstorms.
+     * Lightning has a 1/100,000 chance to strike per loaded chunk per tick.
+     */
+    protected void tickLightning() {
+        if (world.getWeather() != Weather.THUNDER) {
+            return;
+        }
+
+        // Only spawn lightning in overworld
+        if (dimensionInfo.dimensionId() != DimensionInfo.OVERWORLD.dimensionId()) {
+            return;
+        }
+
+        var rand = ThreadLocalRandom.current();
+        var loadedChunks = chunkManager.getLoadedChunks();
+        for (var chunk : loadedChunks) {
+            // 1/100,000 chance per chunk per tick
+            if (rand.nextInt(LIGHTNING_STRIKE_CHANCE) != 0) {
+                continue;
+            }
+
+            // Random position within the chunk
+            int x = (chunk.getX() << 4) + rand.nextInt(16);
+            int z = (chunk.getZ() << 4) + rand.nextInt(16);
+            int y = getHeight(x, z) + 1;
+
+            // Check if the position can see the sky
+            if (!canPosSeeSky(x, y, z)) {
+                continue;
+            }
+
+            // Spawn lightning at the position
+            strikeLightning(x, y, z, LightningStrikeEvent.Cause.WEATHER);
+        }
+    }
+
+    @Override
+    public boolean strikeLightning(double x, double y, double z, LightningStrikeEvent.Cause cause) {
+        var lightningBolt = EntityTypes.LIGHTNING_BOLT.createEntity(
+                EntityInitInfo.builder()
+                        .dimension(this)
+                        .pos(x, y, z)
+                        .build()
+        );
+
+        var event = new LightningStrikeEvent(this, lightningBolt, cause);
+        if (!event.call()) {
+            return false;
+        }
+
+        entityManager.addEntity(lightningBolt);
+        return true;
     }
 
     @Override

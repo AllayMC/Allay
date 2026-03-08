@@ -10,7 +10,7 @@ import org.allaymc.api.world.chunk.Chunk;
  *
  * @author Dhaiven
  */
-@CallerThread(ThreadType.COMPUTE)
+@CallerThread(ThreadType.DIMENSION)
 public class ChunkUnloadEvent extends ChunkEvent {
     public ChunkUnloadEvent(Dimension dimension, Chunk chunk) {
         super(dimension, chunk);

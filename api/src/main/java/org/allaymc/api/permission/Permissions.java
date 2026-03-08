@@ -10,9 +10,17 @@ public interface Permissions {
     /* Ability */
 
     /**
-     * The permission to be able to fly.
+     * Permission to fly in survival mode. Only TRUE allows flying.
      */
-    String ABILITY_FLY = "ability.fly";
+    String ABILITY_FLY_SURVIVAL = "ability.fly.survival";
+    /**
+     * Permission to fly in creative mode. FALSE denies, otherwise allowed.
+     */
+    String ABILITY_FLY_CREATIVE = "ability.fly.creative";
+    /**
+     * Permission to fly in adventure mode. Only TRUE allows flying.
+     */
+    String ABILITY_FLY_ADVENTURE = "ability.fly.adventure";
     /**
      * The permission to chat.
      */
@@ -23,10 +31,20 @@ public interface Permissions {
     String ABILITY_OPERATOR_COMMAND_QUICK_BAR = "ability.operator_command_quick_bar";
 
     // TODO: input permission
-    // TODO: ui rendering
+
+    /* Block */
+
+    /**
+     * The permission to use command blocks (modify and view output).
+     */
+    String BLOCK_USE_COMMAND_BLOCK = "allay.block.use_command_block";
 
     /* Command */
 
+    /**
+     * The permission to view other's command outputs.
+     */
+    String COMMAND_VIEW_OTHER_OUTPUTS = "allay.command.view_other_outputs";
     /**
      * The permission to use /alwaysday command.
      */

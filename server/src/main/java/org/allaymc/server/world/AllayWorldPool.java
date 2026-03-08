@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.eventbus.event.world.WorldGeneratorInitEvent;
 import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
 import org.allaymc.api.eventbus.event.world.WorldUnloadEvent;
 import org.allaymc.api.message.I18n;
@@ -20,8 +21,8 @@ import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.utils.Utils;
+import org.allaymc.server.world.light.NoLightEngine;
 
 import java.nio.file.Path;
 import java.util.Collections;
@@ -78,34 +79,34 @@ public final class AllayWorldPool implements WorldPool {
     }
 
     @Override
-    public void loadWorld(
-            String name, WorldStorage storage,
-            WorldGenerator overworldGenerator,
-            WorldGenerator netherGenerator,
-            WorldGenerator theEndGenerator
-    ) {
+    public void loadWorld(WorldSetting worldSetting, DimensionSetting overworldSetting, DimensionSetting netherSetting, DimensionSetting theEndSetting) {
+        var name = worldSetting.name();
         log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADING, name));
         if (worlds.containsKey(name)) {
             throw new IllegalArgumentException("World " + name + " is already loaded");
         }
 
+        var useVirtualThread = worldSetting.useVirtualThread();
         AllayWorld world;
         try {
-            world = new AllayWorld(name, storage);
+            world = new AllayWorld(name, worldSetting.storage(), useVirtualThread);
         } catch (Throwable t) {
             log.error("Error while initializing world {}", name, t);
             return;
         }
 
         // Load overworld dimension
-        world.addDimension(new AllayDimension(world, overworldGenerator, DimensionInfo.OVERWORLD));
+        new WorldGeneratorInitEvent(world, overworldSetting.worldGenerator(), DimensionInfo.OVERWORLD).call();
+        world.addDimension(new AllayDimension(world, overworldSetting.worldGenerator(), DimensionInfo.OVERWORLD, overworldSetting.enableLightCalculation(), useVirtualThread));
 
         // Load nether and the end dimension if they are not null
-        if (netherGenerator != null) {
-            world.addDimension(new AllayDimension(world, netherGenerator, DimensionInfo.NETHER));
+        if (netherSetting != null) {
+            new WorldGeneratorInitEvent(world, netherSetting.worldGenerator(), DimensionInfo.NETHER).call();
+            world.addDimension(new AllayDimension(world, netherSetting.worldGenerator(), DimensionInfo.NETHER, netherSetting.enableLightCalculation(), useVirtualThread));
         }
-        if (theEndGenerator != null) {
-            world.addDimension(new AllayDimension(world, theEndGenerator, DimensionInfo.THE_END));
+        if (theEndSetting != null) {
+            new WorldGeneratorInitEvent(world, theEndSetting.worldGenerator(), DimensionInfo.THE_END).call();
+            world.addDimension(new AllayDimension(world, theEndSetting.worldGenerator(), DimensionInfo.THE_END, theEndSetting.enableLightCalculation(), useVirtualThread));
         }
 
         var event = new WorldLoadEvent(world);
@@ -163,7 +164,12 @@ public final class AllayWorldPool implements WorldPool {
         var netherGenerator = setting.nether() == null ? null : tryCreateWorldGenerator(setting.nether());
         var theEndGenerator = setting.theEnd() == null ? null : tryCreateWorldGenerator(setting.theEnd());
 
-        loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
+        loadWorld(
+                new WorldSetting(name, storage, setting.useVirtualThread),
+                new DimensionSetting(overworldGenerator, setting.overworld().enableLightCalculation()),
+                netherGenerator != null ? new DimensionSetting(netherGenerator, setting.nether().enableLightCalculation()) : null,
+                theEndGenerator != null ? new DimensionSetting(theEndGenerator, setting.theEnd().enableLightCalculation()) : null
+        );
     }
 
     private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldSetting.DimensionSetting settings) {
@@ -194,11 +200,16 @@ public final class AllayWorldPool implements WorldPool {
             theEndGenerator = world.getTheEnd().getWorldGenerator();
         }
 
+        var overworldLightEnabled = !(((AllayDimension) world.getOverWorld()).getLightEngine() instanceof NoLightEngine);
+        var netherLightEnabled = world.getNether() == null || !(((AllayDimension) world.getNether()).getLightEngine() instanceof NoLightEngine);
+        var theEndLightEnabled = world.getTheEnd() == null || !(((AllayDimension) world.getTheEnd()).getLightEngine() instanceof NoLightEngine);
+
         return new WorldSettings.WorldSetting(
                 world.getWorldStorage().getName(),
-                new WorldSettings.WorldSetting.DimensionSetting(owGenerator.getName(), owGenerator.getPreset()),
-                netherGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(netherGenerator.getName(), netherGenerator.getPreset()) : null,
-                theEndGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(theEndGenerator.getName(), theEndGenerator.getPreset()) : null
+                world.isVirtualTickingThread(),
+                new WorldSettings.WorldSetting.DimensionSetting(owGenerator.getName(), owGenerator.getPreset(), overworldLightEnabled),
+                netherGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(netherGenerator.getName(), netherGenerator.getPreset(), netherLightEnabled) : null,
+                theEndGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(theEndGenerator.getName(), theEndGenerator.getPreset(), theEndLightEnabled) : null
         );
     }
 
@@ -209,7 +220,7 @@ public final class AllayWorldPool implements WorldPool {
         @Setter
         @CustomKey("worlds")
         private Map<String, WorldSetting> worlds = Map.of("world", new WorldSetting(
-                "LEVELDB",
+                "LEVELDB", false,
                 new WorldSetting.DimensionSetting(
                         "FLAT",
                         ""
@@ -226,6 +237,10 @@ public final class AllayWorldPool implements WorldPool {
         public static class WorldSetting extends OkaeriConfig {
             @CustomKey("storage-type")
             private String storageType;
+
+            @Comment("If set to true, virtual thread will be used as the ticking thread of the world and the dimensions in the world")
+            @CustomKey("use-virtual-thread")
+            private boolean useVirtualThread;
 
             private DimensionSetting overworld;
 
@@ -245,6 +260,15 @@ public final class AllayWorldPool implements WorldPool {
 
                 @CustomKey("generator-preset")
                 private String generatorPreset;
+
+                @Comment("If set to false, light calculation will be disabled for this dimension")
+                @Comment("All light queries will return max value (15)")
+                @CustomKey("enable-light-calculation")
+                private boolean enableLightCalculation;
+
+                public DimensionSetting(String generatorType, String generatorPreset) {
+                    this(generatorType, generatorPreset, true);
+                }
             }
         }
     }

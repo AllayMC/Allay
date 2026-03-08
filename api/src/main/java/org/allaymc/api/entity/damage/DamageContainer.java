@@ -2,8 +2,12 @@ package org.allaymc.api.entity.damage;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.EnchantedHit;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.Objects;
 import java.util.function.UnaryOperator;
@@ -60,6 +64,38 @@ public class DamageContainer {
      */
     @Setter
     protected boolean enchanted;
+
+    /**
+     * Horizontal knockback strength. Defaults to {@link EntityPhysicsComponent#DEFAULT_KNOCKBACK}.
+     */
+    @Setter
+    protected double knockback = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
+
+    /**
+     * Vertical knockback strength. Defaults to {@link EntityPhysicsComponent#DEFAULT_KNOCKBACK}.
+     */
+    @Setter
+    protected double knockbackVertical = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
+
+    /**
+     * Additional knockback motion vector (e.g., for knockback enchantment effect).
+     */
+    @Setter
+    protected Vector3dc knockbackAdditional = new Vector3d();
+
+    /**
+     * Source position for calculating knockback direction.
+     * If {@code null}, uses the attacker's position (default behavior).
+     * Projectiles can set this to hitPos - motion for accurate direction.
+     */
+    @Setter
+    protected Vector3dc knockbackSource = null;
+
+    /**
+     * Whether to ignore knockback resistance. Defaults to {@code false}.
+     */
+    @Setter
+    protected boolean ignoreKnockbackResistance = false;
 
     /**
      * Creates a new damage container.
@@ -129,6 +165,17 @@ public class DamageContainer {
     }
 
     /**
+     * Create a lightning damage container.
+     *
+     * @param attacker     the lightning bolt entity
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer lightning(Entity attacker, float sourceDamage) {
+        return new DamageContainer(attacker, LIGHTNING, sourceDamage);
+    }
+
+    /**
      * Create a magic effect damage container.
      *
      * @param sourceDamage the source damage
@@ -179,6 +226,16 @@ public class DamageContainer {
     }
 
     /**
+     * Create a freezing (powder snow) damage container.
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer freezing(float sourceDamage) {
+        return new DamageContainer(null, FREEZING, sourceDamage);
+    }
+
+    /**
      * Create a lava damage container.
      *
      * @param sourceDamage the source damage
@@ -189,13 +246,15 @@ public class DamageContainer {
     }
 
     /**
-     * Create a block explosion damage container.
+     * Create a block explosion damage container with specific block type.
+     * Used for blocks that need custom death messages (e.g., bed, respawn anchor).
      *
+     * @param blockType    the block type that caused the explosion
      * @param sourceDamage the source damage
      * @return the damage container
      */
-    public static DamageContainer blockExplosion(float sourceDamage) {
-        return new DamageContainer(null, BLOCK_EXPLOSION, sourceDamage);
+    public static DamageContainer blockExplosion(BlockType<?> blockType, float sourceDamage) {
+        return new DamageContainer(blockType, BLOCK_EXPLOSION, sourceDamage);
     }
 
     /**
@@ -247,6 +306,26 @@ public class DamageContainer {
      */
     public static DamageContainer api(float sourceDamage) {
         return new DamageContainer(null, API, sourceDamage);
+    }
+
+    /**
+     * Create a stalactite damage container (for falling dripstone hitting entities).
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer stalactite(float sourceDamage) {
+        return new DamageContainer(null, STALACTITE, sourceDamage);
+    }
+
+    /**
+     * Create a stalagmite damage container (for entities falling onto pointed dripstone).
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer stalagmite(float sourceDamage) {
+        return new DamageContainer(null, STALAGMITE, sourceDamage);
     }
 
     /**

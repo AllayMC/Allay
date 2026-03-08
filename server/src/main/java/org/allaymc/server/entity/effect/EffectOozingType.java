@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.effect;
 
 import org.allaymc.api.entity.EntityInitInfo;
-import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.type.EntityTypes;

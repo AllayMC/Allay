@@ -1,6 +1,7 @@
 package org.allaymc.api.world.manager;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
 
 import java.time.Duration;
@@ -70,6 +71,7 @@ public interface BlockUpdateManager {
      * @param pos              The position of the block which will be updated
      * @param changedNeighbour The position of the block which causes the update
      * @param blockFace        The face which will be updated
+     * @param oldNeighborState The previous block state at changedNeighbour position (null if unknown)
      */
-    void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace);
+    void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace, BlockState oldNeighborState);
 }

@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.component.EntitySplashPotionProjectileComponent;
+import org.allaymc.api.entity.component.EntityPotionComponent;
 
-public interface EntitySplashPotion extends EntityProjectile, EntitySplashPotionProjectileComponent {
+public interface EntitySplashPotion extends EntityProjectile, EntityPotionComponent {
 
 }

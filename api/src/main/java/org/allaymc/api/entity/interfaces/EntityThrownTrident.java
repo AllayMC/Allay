@@ -1,7 +1,13 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityThrownTridentBaseComponent;
 
-public interface EntityThrownTrident extends Entity {
-
+/**
+ * Represents a thrown trident entity.
+ *
+ * @author daoge_cmd
+ */
+public interface EntityThrownTrident extends
+        EntityProjectile,
+        EntityThrownTridentBaseComponent {
 }

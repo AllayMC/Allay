@@ -79,6 +79,8 @@ public interface BlockEntityId {
 
     String SCULK_SHRIEKER = "SculkShrieker";
 
+    String SHELF = "Shelf";
+
     String SHULKER_BOX = "ShulkerBox";
 
     String SIGN = "Sign";
@@ -95,5 +97,5 @@ public interface BlockEntityId {
 
     String END_GATEWAY = "EndGateway";
 
-    String TARGET = "Target"; //TODO: check this
+    String TARGET = "Target";
 }

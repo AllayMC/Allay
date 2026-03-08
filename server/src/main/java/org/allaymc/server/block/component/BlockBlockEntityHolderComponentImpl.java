@@ -90,8 +90,11 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
 
         var placementInfo = event.getPlacementInfo();
         if (placementInfo != null) {
-            // Set the block entity's custom name to the item's custom name
-            blockEntity.setCustomName(placementInfo.player().getItemInHand().getCustomName());
+            var itemInHand = placementInfo.player().getItemInHand();
+            if (itemInHand.hasCustomName()) {
+                // Set the block entity's custom name to the item's custom name
+                blockEntity.setCustomName(itemInHand.getCustomName());
+            }
         }
 
         forwardEvent(blockEntity, event);
@@ -102,7 +105,7 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     }
 
     @EventHandler
-    protected void onBlockRemove(CBlockOnReplaceEvent event) {
+    protected void onBlockReplace(CBlockOnReplaceEvent event) {
         var pos = event.getCurrentBlock().getPosition();
         var blockEntity = getBlockEntity(pos);
         if (blockEntity == null) {

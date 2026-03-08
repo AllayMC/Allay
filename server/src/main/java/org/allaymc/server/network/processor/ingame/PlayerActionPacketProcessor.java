@@ -3,6 +3,7 @@ package org.allaymc.server.network.processor.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -36,6 +37,13 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
             }
             default -> PacketSignal.UNHANDLED;
         };
+    }
+
+    @Override
+    public void handleSync(Player player, PlayerActionPacket packet, long receiveTime) {
+        if (packet.getAction() == PlayerActionType.STOP_SLEEP) {
+            player.getControlledEntity().wake();
+        }
     }
 
     @Override

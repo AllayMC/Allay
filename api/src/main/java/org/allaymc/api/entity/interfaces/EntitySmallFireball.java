@@ -1,7 +1,9 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.Entity;
-
-public interface EntitySmallFireball extends Entity {
-
+/**
+ * Represents a small fireball entity, typically shot by blazes or dispensers with fire charges.
+ *
+ * @author daoge_cmd
+ */
+public interface EntitySmallFireball extends EntityProjectile {
 }

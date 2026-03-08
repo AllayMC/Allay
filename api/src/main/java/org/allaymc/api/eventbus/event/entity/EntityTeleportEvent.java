@@ -16,7 +16,7 @@ import org.allaymc.api.math.location.Location3dc;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class EntityTeleportEvent extends EntityEvent implements CancellableEvent {
     protected Location3dc from;
     @Setter
@@ -45,6 +45,10 @@ public class EntityTeleportEvent extends EntityEvent implements CancellableEvent
         // Chorus fruit
         CHORUS_FRUIT,
         // Command
-        COMMAND
+        COMMAND,
+        // Nether portal
+        NETHER_PORTAL,
+        // End portal
+        END_PORTAL
     }
 }

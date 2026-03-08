@@ -1,32 +1,42 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.blockentity.interfaces.BlockEntityItemFrame;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3ic;
 
 /**
  * @author daoge_cmd
  */
 public class BlockFrameBaseComponentImpl extends BlockBaseComponentImpl {
+
+    @Dependency
+    private BlockBlockEntityHolderComponent<BlockEntityItemFrame> blockEntityHolderComponent;
+
     public BlockFrameBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
-        if (face.opposite() != BlockFace.fromIndex(block.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION))) {
+        BlockFace frameFacing = BlockFace.fromIndex(block.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION));
+        if (frameFacing == null || face != frameFacing.opposite()) {
             return;
         }
 
-        if (!neighbor.getBlockStateData().isSolid()) {
+        // Break if attached block no longer has a full surface
+        if (!neighbor.getBlockStateData().collisionShape().isFull(frameFacing)) {
             block.breakBlock();
         }
     }
@@ -37,10 +47,31 @@ public class BlockFrameBaseComponentImpl extends BlockBaseComponentImpl {
             return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
-        if (!placementInfo.getClickedBlock().getBlockStateData().isSolid()) {
+        BlockFace clickedFace = placementInfo.blockFace();
+        // Verify the attachment block has a full surface on the attached face
+        if (!placementInfo.getClickedBlock().getBlockStateData().collisionShape().isFull(clickedFace)) {
             return false;
         }
 
-        return dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.FACING_DIRECTION, placementInfo.blockFace().ordinal()));
+        return dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.FACING_DIRECTION, clickedFace.ordinal()));
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        var itemFrame = blockEntityHolderComponent.getBlockEntity(block.getPosition());
+        if (itemFrame == null) {
+            return 0;
+        }
+        var item = itemFrame.getItemStack();
+        if (item == null || item == ItemAirStack.AIR_STACK) {
+            return 0;
+        }
+        // Signal = item rotation + 1 (range 1-8)
+        return itemFrame.getItemRotation() + 1;
     }
 }

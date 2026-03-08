@@ -21,7 +21,7 @@ public class ItemClassGen extends BaseClassGen {
     public static final MethodSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER =
             MethodSpec.methodBuilder("init")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-    public static final Set<String> IGNORED_FILES = Set.of("ItemStackImpl.java", "ItemBlockImpl.java", "package-info.java");
+    public static final Set<String> IGNORED_FILES = Set.of("ItemStackImpl.java", "package-info.java");
 
     public static Map<Pattern, String> MERGED_ITEMS = new LinkedHashMap<>();
 
@@ -165,11 +165,11 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*AxeStack"), "ItemAxeStack");
         registerMergedItem(Pattern.compile(".*ShulkerBoxStack"), "ItemShulkerBoxStack");
         registerMergedItem(Pattern.compile("^(?!.*MilkBucketStack$).*BucketStack$"), "ItemBucketStack");
-        registerMergedItem(Pattern.compile("^(?!.*TurtleHelmetStack$).*HelmetStack$"), "ItemHelmetStack");
-        registerMergedItem(Pattern.compile(".*ChestplateStack"), "ItemChestplateStack");
-        registerMergedItem(Pattern.compile(".*LeggingsStack"), "ItemLeggingsStack");
-        registerMergedItem(Pattern.compile(".*BootsStack"), "ItemBootsStack");
-        registerMergedItem(Pattern.compile(".*HorseArmorStack"), "ItemHorseArmorStack");
+        registerMergedItem(Pattern.compile("^(?!.*(Turtle|Leather)HelmetStack$).*HelmetStack$"), "ItemHelmetStack");
+        registerMergedItem(Pattern.compile("^(?!.*LeatherChestplateStack$).*ChestplateStack$"), "ItemChestplateStack");
+        registerMergedItem(Pattern.compile("^(?!.*LeatherLeggingsStack$).*LeggingsStack$"), "ItemLeggingsStack");
+        registerMergedItem(Pattern.compile("^(?!.*LeatherBootsStack$).*BootsStack$"), "ItemBootsStack");
+        registerMergedItem(Pattern.compile("^(?!.*LeatherHorseArmorStack$).*HorseArmorStack$"), "ItemHorseArmorStack");
         registerMergedItem(Pattern.compile(".*HangingSignStack"), "ItemHangingSignStack");
         registerMergedItem(Pattern.compile(".*WallSignStack"), "ItemWallSignStack");
         registerMergedItem(Pattern.compile(".*StandingSignStack"), "ItemStandingSignStack");
@@ -242,5 +242,6 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*RepeaterStack"), "ItemRepeaterStack");
         registerMergedItem(Pattern.compile(".*ComparatorStack"), "ItemComparatorStack");
         registerMergedItem(Pattern.compile(".*RedstoneLampStack"), "ItemRedstoneLampStack");
+        registerMergedItem(Pattern.compile("Item(Egg|BlueEgg|BrownEgg)Stack"), "ItemEggStack");
     }
 }

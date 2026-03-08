@@ -8,6 +8,7 @@ import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.api.world.generator.function.PostProcessor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -32,9 +33,9 @@ public class WorldGenerator {
      */
     private final String preset;
 
-    private final List<Noiser> noisers;
-    private final List<Populator> populators;
-    private final List<PostProcessor> postProcessors;
+    private List<Noiser> noisers;
+    private List<Populator> populators;
+    private List<PostProcessor> postProcessors;
 
     @Getter(AccessLevel.NONE)
     private final Consumer<Dimension> dimensionConsumer;
@@ -70,6 +71,63 @@ public class WorldGenerator {
      */
     public static WorldGeneratorBuilder builder() {
         return new WorldGeneratorBuilder();
+    }
+
+    /**
+     * Append a noiser to this generator.
+     * <p>
+     * Can only be called before the dimension is set (i.e., during {@code WorldGeneratorInitEvent}).
+     * {@link GenerateFunction#init(String)} will be called automatically with the generator's preset.
+     *
+     * @param noiser the noiser to add
+     * @throws IllegalStateException if the dimension has already been set
+     */
+    public void addNoiser(Noiser noiser) {
+        checkNotLocked();
+        noiser.init(preset);
+        var list = new ArrayList<>(noisers);
+        list.add(noiser);
+        noisers = Collections.unmodifiableList(list);
+    }
+
+    /**
+     * Append a populator to this generator.
+     * <p>
+     * Can only be called before the dimension is set (i.e., during {@code WorldGeneratorInitEvent}).
+     * {@link GenerateFunction#init(String)} will be called automatically with the generator's preset.
+     *
+     * @param populator the populator to add
+     * @throws IllegalStateException if the dimension has already been set
+     */
+    public void addPopulator(Populator populator) {
+        checkNotLocked();
+        populator.init(preset);
+        var list = new ArrayList<>(populators);
+        list.add(populator);
+        populators = Collections.unmodifiableList(list);
+    }
+
+    /**
+     * Append a post-processor to this generator.
+     * <p>
+     * Can only be called before the dimension is set (i.e., during {@code WorldGeneratorInitEvent}).
+     * {@link GenerateFunction#init(String)} will be called automatically with the generator's preset.
+     *
+     * @param postProcessor the post-processor to add
+     * @throws IllegalStateException if the dimension has already been set
+     */
+    public void addPostProcessor(PostProcessor postProcessor) {
+        checkNotLocked();
+        postProcessor.init(preset);
+        var list = new ArrayList<>(postProcessors);
+        list.add(postProcessor);
+        postProcessors = Collections.unmodifiableList(list);
+    }
+
+    private void checkNotLocked() {
+        if (dimension != null) {
+            throw new IllegalStateException("Cannot modify generator after dimension has been set: " + name);
+        }
     }
 
     /**

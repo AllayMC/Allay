@@ -174,6 +174,18 @@ public abstract class EnchantmentType {
         return false;
     }
 
+    /**
+     * Check if the enchantment can be obtained from fishing.
+     * <p>
+     * Most enchantments are fishable, except Soul Speed, Swift Sneak, and Wind Burst.
+     *
+     * @return {@code true} if the enchantment can be obtained from fishing, {@code false} otherwise.
+     * @see <a href="https://minecraft.wiki/w/Fishing#Treasure">Fishing Treasure</a>
+     */
+    public boolean isFishable() {
+        return true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof EnchantmentType that)) {

@@ -52,7 +52,7 @@ public class BlockTagRegistryLoader implements RegistryLoader<Void, Map<BlockId,
                     var id = BlockId.fromIdentifier(new Identifier(obj.getAsString()));
                     if (id == null) {
                         log.warn("Unknown block id: {}", obj.getAsString());
-                        return;
+                        continue;
                     }
 
                     map.computeIfAbsent(id, k -> new HashSet<>()).add(tag);

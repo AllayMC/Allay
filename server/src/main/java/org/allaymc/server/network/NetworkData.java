@@ -2,17 +2,22 @@ package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.entity.property.type.BooleanPropertyType;
+import org.allaymc.api.entity.property.type.EnumPropertyType;
+import org.allaymc.api.entity.property.type.FloatPropertyType;
+import org.allaymc.api.entity.property.type.IntPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
 import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
 import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
@@ -53,6 +58,7 @@ public final class NetworkData {
 
     public static final Supplier<List<ItemDefinition>> ITEM_DEFINITIONS = Suppliers.memoize(NetworkData::encodeItemDefinitions);
     public static final Supplier<List<BlockDefinition>> BLOCK_DEFINITIONS = Suppliers.memoize(NetworkData::encodeBlockDefinitions);
+    public static final Supplier<List<BlockPropertyData>> CUSTOM_BLOCK_PROPERTIES = Suppliers.memoize(NetworkData::encodeCustomBlockProperties);
     public static final Supplier<List<ExperimentData>> EXPERIMENT_DATA_LIST = Suppliers.memoize(NetworkData::encodeExperimentDataList);
 
     public static final Supplier<ItemComponentPacket> ITEM_REGISTRY_PACKET = Suppliers.memoize(NetworkData::encodeItemRegistryPacket);
@@ -63,6 +69,7 @@ public final class NetworkData {
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
+    public static final Supplier<List<SyncEntityPropertyPacket>> SYNC_ENTITY_PROPERTY_PACKETS = Suppliers.memoize(NetworkData::encodeSyncEntityPropertyPackets);
 
     public static final List<Recipe> INDEXED_RECIPES = new ArrayList<>();
 
@@ -75,6 +82,29 @@ public final class NetworkData {
                 .flatMap(block -> block.getAllStates().stream())
                 .map(blockState -> (BlockDefinition) blockState::blockStateHash)
                 .toList();
+    }
+
+    /**
+     * Encodes custom block property definitions for the StartGamePacket.
+     * This is required for the client to understand custom block components and states.
+     *
+     * @return a list of BlockPropertyData containing custom block definitions
+     */
+    public static List<BlockPropertyData> encodeCustomBlockProperties() {
+        var result = new ArrayList<BlockPropertyData>();
+
+        for (var blockType : Registries.BLOCKS.getContent().values()) {
+            var allayBlockType = (AllayBlockType<?>) blockType;
+            var blockDefinition = allayBlockType.getBlockDefinition();
+            if (blockDefinition == org.allaymc.server.block.type.BlockDefinition.DEFAULT) {
+                // Skip vanilla blocks
+                continue;
+            }
+
+            result.add(new BlockPropertyData(blockType.getIdentifier().toString(), blockDefinition.data()));
+        }
+
+        return result;
     }
 
     public static List<ExperimentData> encodeExperimentDataList() {
@@ -234,14 +264,20 @@ public final class NetworkData {
     }
 
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {
-        // TODO: support custom entity, we just read it from file currently
-        try (var stream = NbtUtils.createNetworkReader(Utils.getResource("entity_identifiers.nbt"))) {
-            var packet = new AvailableEntityIdentifiersPacket();
-            packet.setIdentifiers((NbtMap) stream.readTag());
-            return packet;
-        } catch (Throwable t) {
-            throw new RuntimeException("Failed to load entity_identifiers.nbt", t);
+        var ids = new LinkedList<NbtMap>();
+        for (var type : Registries.ENTITIES.getContent().values()) {
+            ids.add(NbtMap.builder()
+                    .putString("id", type.getIdentifier().toString())
+                    .build()
+            );
         }
+
+        var packet = new AvailableEntityIdentifiersPacket();
+        packet.setIdentifiers(NbtMap.builder()
+                .putList("idlist", NbtType.COMPOUND, ids)
+                .build()
+        );
+        return packet;
     }
 
     public static BiomeDefinitionListPacket encodeBiomeDefinitionListPacket() {
@@ -264,14 +300,28 @@ public final class NetworkData {
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
 
         for (var pack : Registries.PACKS.getContent().values()) {
-            var type = pack.getType();
-            if (type == Pack.Type.RESOURCES) {
-                packet.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(
-                        pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
-                        "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
-                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                        false, null
-                ));
+            var scripting = pack.getType() == Pack.Type.SCRIPT;
+            if (scripting && !packet.isScriptingEnabled()) {
+                // ScriptingEnabled specifies if any of the resource packs contain scripts in them. If set to true, only clients
+                // that support scripts will be able to download them.
+                packet.setScriptingEnabled(true);
+            }
+            var info = switch (pack.getType()) {
+                case RESOURCES -> new ResourcePacksInfoPacket.Entry(
+                        pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
+                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), false, null
+                );
+                case DATA -> {
+                    packet.setHasAddonPacks(true);
+                    yield new ResourcePacksInfoPacket.Entry(
+                            pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
+                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), true, null
+                    );
+                }
+                case null, default -> null;
+            };
+            if (info != null) {
+                packet.getResourcePackInfos().add(info);
             }
         }
 
@@ -289,11 +339,9 @@ public final class NetworkData {
         packet.getExperiments().addAll(EXPERIMENT_DATA_LIST.get());
 
         for (var pack : Registries.PACKS.getContent().values()) {
-            var type = pack.getType();
-            if (type == Pack.Type.RESOURCES) {
-                packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
-                        pack.getId().toString(), pack.getStringVersion(), ""
-                ));
+            switch (pack.getType()) {
+                case RESOURCES -> packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(pack.getId().toString(), pack.getStringVersion(), ""));
+                case DATA -> packet.getBehaviorPacks().add(new ResourcePackStackPacket.Entry(pack.getId().toString(), pack.getStringVersion(), ""));
             }
         }
 
@@ -316,5 +364,52 @@ public final class NetworkData {
                 )
         ).collect(Collectors.toSet()));
         return packet;
+    }
+
+    public static List<SyncEntityPropertyPacket> encodeSyncEntityPropertyPackets() {
+        var result = new ArrayList<SyncEntityPropertyPacket>();
+        for (var entityType : Registries.ENTITIES.getContent().values()) {
+            var propTypes = entityType.getProperties();
+            if (propTypes.isEmpty()) {
+                continue;
+            }
+
+            var properties = new ArrayList<NbtMap>();
+            for (var propType : propTypes.values()) {
+                var propBuilder = NbtMap.builder();
+                propBuilder.putString("name", propType.getName());
+                propBuilder.putBoolean("clientSync", true);
+                propBuilder.putInt("type", propType.getType().ordinal());
+
+                switch (propType) {
+                    case EnumPropertyType<?> enumProp -> {
+                        propBuilder.putList("enum", NbtType.STRING, enumProp.serializedValues());
+                    }
+                    case IntPropertyType intProp -> {
+                        propBuilder.putInt("default", intProp.getDefaultValue());
+                        propBuilder.putInt("min", intProp.getMin());
+                        propBuilder.putInt("max", intProp.getMax());
+                    }
+                    case FloatPropertyType floatProp -> {
+                        propBuilder.putFloat("default", floatProp.getDefaultValue());
+                        propBuilder.putFloat("min", floatProp.getMin());
+                        propBuilder.putFloat("max", floatProp.getMax());
+                    }
+                    case BooleanPropertyType ignored -> {
+                        // no-op
+                    }
+                }
+                properties.add(propBuilder.build());
+            }
+
+            var packet = new SyncEntityPropertyPacket();
+            packet.setData(NbtMap.builder()
+                    .putString("type", entityType.getIdentifier().toString())
+                    .putList("properties", NbtType.COMPOUND, properties)
+                    .build()
+            );
+            result.add(packet);
+        }
+        return result;
     }
 }

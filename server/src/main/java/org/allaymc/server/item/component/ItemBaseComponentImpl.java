@@ -11,6 +11,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.item.ItemDamageEvent;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
@@ -228,11 +229,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        manager.callEvent(new CItemRightClickOnBlockEvent(dimension, placeBlockPos, interactInfo));
-    }
-
-    @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         var event = new CItemUseOnBlockEvent(dimension, placeBlockPos, interactInfo, false);
         manager.callEvent(event);
@@ -384,12 +380,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             return;
         }
 
-        // The position data should be removed
-        var builder = blockEntityNBT.toBuilder();
-        builder.remove("x");
-        builder.remove("y");
-        builder.remove("z");
-        blockEntity.loadNBT(builder.build());
+        blockEntity.loadNBT(this.blockEntityNBT);
     }
 
     protected void tryConsumeItem(EntityPlayer player) {
@@ -489,7 +480,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         if (!canBeDamagedThisTime()) {
             return false;
         }
-        setDamage(getDamage() + increase);
+
+        var event = new ItemDamageEvent(thisItemStack, increase);
+        if (!event.call()) {
+            return false;
+        }
+
+        setDamage(getDamage() + event.getDamage());
         return true;
     }
 

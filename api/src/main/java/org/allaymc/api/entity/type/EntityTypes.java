@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.type;
 
 import org.allaymc.api.entity.interfaces.*;
+import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 
 public final class EntityTypes {
     public static EntityType<EntityAgent> AGENT;
@@ -35,6 +36,8 @@ public final class EntityTypes {
 
     public static EntityType<EntityCamel> CAMEL;
 
+    public static EntityType<EntityCamelHusk> CAMEL_HUSK;
+
     public static EntityType<EntityCat> CAT;
 
     public static EntityType<EntityCaveSpider> CAVE_SPIDER;
@@ -43,6 +46,9 @@ public final class EntityTypes {
 
     public static EntityType<EntityChestMinecart> CHEST_MINECART;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityChicken> CHICKEN;
 
     public static EntityType<EntityCod> COD;
@@ -51,6 +57,9 @@ public final class EntityTypes {
 
     public static EntityType<EntityCopperGolem> COPPER_GOLEM;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityCow> COW;
 
     public static EntityType<EntityCreaking> CREAKING;
@@ -65,6 +74,9 @@ public final class EntityTypes {
 
     public static EntityType<EntityDrowned> DROWNED;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityEgg> EGG;
 
     public static EntityType<EntityElderGuardian> ELDER_GUARDIAN;
@@ -141,6 +153,8 @@ public final class EntityTypes {
 
     public static EntityType<EntityMule> MULE;
 
+    public static EntityType<EntityNautilus> NAUTILUS;
+
     public static EntityType<EntityNpc> NPC;
 
     public static EntityType<EntityOcelot> OCELOT;
@@ -151,10 +165,15 @@ public final class EntityTypes {
 
     public static EntityType<EntityPanda> PANDA;
 
+    public static EntityType<EntityParched> PARCHED;
+
     public static EntityType<EntityParrot> PARROT;
 
     public static EntityType<EntityPhantom> PHANTOM;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityPig> PIG;
 
     public static EntityType<EntityPiglin> PIGLIN;
@@ -258,6 +277,8 @@ public final class EntityTypes {
     public static EntityType<EntityZombie> ZOMBIE;
 
     public static EntityType<EntityZombieHorse> ZOMBIE_HORSE;
+
+    public static EntityType<EntityZombieNautilus> ZOMBIE_NAUTILUS;
 
     public static EntityType<EntityZombiePigman> ZOMBIE_PIGMAN;
 

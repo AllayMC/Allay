@@ -64,7 +64,7 @@ public class JarPluginLoader implements PluginLoader {
         try {
             pluginInstance = (Plugin) mainClass.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new PluginException(I18n.get().tr(TrKeys.ALLAY_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName(), e));
+            throw new PluginException(I18n.get().tr(TrKeys.ALLAY_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName(), e), e);
         }
 
         // Load plugin's lang files

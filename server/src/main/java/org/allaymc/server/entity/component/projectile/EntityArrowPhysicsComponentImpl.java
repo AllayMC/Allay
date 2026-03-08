@@ -5,6 +5,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.EntityPotionComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
@@ -27,6 +28,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     @Dependency
     protected EntityArrowBaseComponent arrowBaseComponent;
     @Dependency
+    protected EntityPotionComponent potionComponent;
+    @Dependency
     protected EntityProjectileComponent projectileComponent;
 
     // Indicates whether the arrow has already hit a block
@@ -40,7 +43,21 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public double getWaterDragFactor() {
+        return 0.4;
+    }
+
+    @Override
+    public double getLavaDragFactor() {
+        return 0.4;
+    }
+
+    @Override
+    public Vector3d updateMotion(LiquidState liquidState) {
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
+        }
+
         if (hitBlock && arrowBaseComponent.checkBlockCollision()) {
             // Set motion to zero if collided with blocks after hit block
             return new Vector3d(0, 0, 0);
@@ -55,7 +72,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 
@@ -67,7 +84,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
         addHitSound(hitPos);
         if (other instanceof EntityLiving living) {
-            var potionType = arrowBaseComponent.getPotionType();
+            var potionType = potionComponent.getPotionType();
             if (potionType != null) {
                 potionType.applyTo(living);
             }
@@ -89,19 +106,17 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             }
 
             var damageContainer = DamageContainer.projectile(thisEntity, (float) damage);
-            damageContainer.setHasKnockback(false);
-            if (living.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
-                var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
-                var additionalMotion = new Vector3d();
-                var punchLevel = arrowBaseComponent.getPunchLevel();
-                if (punchLevel != 0) {
-                    kb /= 2.0;
-                    additionalMotion = MathUtils.normalizeIfNotZero(this.motion).setComponent(1, 0);
-                    additionalMotion.mul(punchLevel * 0.5);
-                }
-                // Use the last location as the knockback source
-                physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()), kb, EntityPhysicsComponent.DEFAULT_KNOCKBACK, additionalMotion);
+            damageContainer.setKnockbackSource(hitPos.sub(this.motion, new Vector3d()));
+
+            var punchLevel = arrowBaseComponent.getPunchLevel();
+            if (punchLevel != 0) {
+                damageContainer.setKnockback(EntityPhysicsComponent.DEFAULT_KNOCKBACK / 2.0);
+                var knockbackAdditional = MathUtils.normalizeIfNotZero(this.motion).setComponent(1, 0);
+                knockbackAdditional.mul(punchLevel * 0.5);
+                damageContainer.setKnockbackAdditional(knockbackAdditional);
             }
+
+            living.attack(damageContainer);
 
             if (this.livingComponent.isOnFire()) {
                 living.setOnFireTicks(20 * 5);
@@ -121,7 +136,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick() || this.hitBlock) {
+        if (thisEntity.willBeDespawnedLater() || this.hitBlock) {
             return;
         }
 

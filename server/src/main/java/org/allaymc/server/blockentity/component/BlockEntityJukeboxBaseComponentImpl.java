@@ -1,7 +1,6 @@
 package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
@@ -24,8 +23,14 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     protected static final String TAG_RECORD_ITEM = "RecordItem";
 
     @Getter
-    @Setter
     private ItemMusicDiscStack musicDiscItem;
+
+    @Override
+    public void setMusicDiscItem(ItemMusicDiscStack musicDiscItem) {
+        this.musicDiscItem = musicDiscItem;
+        // Update comparators that may be reading this jukebox
+        this.getDimension().updateComparatorOutputLevel(this.getPosition());
+    }
 
     public BlockEntityJukeboxBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);

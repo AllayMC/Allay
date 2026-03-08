@@ -29,8 +29,8 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         if (face == BlockFace.DOWN && !isValidWeighBlock(neighbor.getBlockState())) {
             block.breakBlock();
         }
@@ -62,10 +62,6 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         var position = new Position3i(interactInfo.clickedBlockPos(), dimension);
         var flowerPot = blockEntityHolderComponent.getBlockEntity(position);
         var plant = flowerPot.getPlantItem();

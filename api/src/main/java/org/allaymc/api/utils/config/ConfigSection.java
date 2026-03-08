@@ -45,7 +45,7 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
      * @param map the source map (can be null)
      */
     @SuppressWarnings("unchecked")
-    public ConfigSection(@Nullable LinkedHashMap<String, Object> map) {
+    public ConfigSection(LinkedHashMap<String, Object> map) {
         this();
         if (map == null || map.isEmpty()) {
             return;
@@ -68,7 +68,7 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
      * @param map the source map (can be null)
      */
     @SuppressWarnings("unchecked")
-    public ConfigSection(@Nullable Map<String, Object> map) {
+    public ConfigSection(Map<String, Object> map) {
         this();
         if (map == null || map.isEmpty()) {
             return;
@@ -123,9 +123,8 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
      * Gets a value by key.
      *
      * @param key the key (supports dot notation for nested access)
-     * @return the value, or null if not found
+     * @return the value, or {@code null}  if not found
      */
-    @Nullable
     public Object get(String key) {
         return this.get(key, null);
     }
@@ -242,7 +241,7 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
      * @return a ConfigSection containing only section entries
      */
     @NotNull
-    public ConfigSection getSections(@Nullable String key) {
+    public ConfigSection getSections(String key) {
         ConfigSection sections = new ConfigSection();
         ConfigSection parent = (key == null || key.isEmpty()) ? this.getAll() : getSection(key);
         parent.forEach((k, v) -> {
@@ -418,9 +417,8 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
      * Gets a list value.
      *
      * @param key the key
-     * @return the list, or null if not found
+     * @return the list, or {@code null}  if not found
      */
-    @Nullable
     public List<?> getList(String key) {
         return this.getList(key, null);
     }

@@ -30,6 +30,12 @@ class ReflectionUtilsTest {
     }
 
     @Test
+    void testGetAllMethodsIncludesInterfaceDefaultMethods() {
+        var methods = ReflectionUtils.getAllMethods(C.class);
+        assertTrue(methods.stream().anyMatch(m -> m.getName().equals("defaultMethod")));
+    }
+
+    @Test
     void testMapStaticFields() {
         var map = ReflectionUtils.mapStaticFields(EnumA.class, EnumB.class);
         assertEquals(EnumB.A, map.get(EnumA.A));
@@ -61,6 +67,14 @@ class ReflectionUtilsTest {
             return "methodB";
         }
     }
+
+    interface WithDefaultMethod {
+        default String defaultMethod() {
+            return "default";
+        }
+    }
+
+    static class C implements WithDefaultMethod {}
 
     enum EnumA {
         A, B, C

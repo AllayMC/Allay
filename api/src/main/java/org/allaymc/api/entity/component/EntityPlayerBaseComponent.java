@@ -1,11 +1,16 @@
 package org.allaymc.api.entity.component;
 
+import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.world.chunk.ChunkLoader;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -67,6 +72,16 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSneaking(boolean sneaking);
 
     /**
+     * Check if the player is blocking with a shield.
+     * <p>
+     * Blocking state is managed automatically based on sneaking state,
+     * whether the player is holding a shield, and shield cooldown.
+     *
+     * @return {@code true} if the player is blocking, {@code false} otherwise.
+     */
+    boolean isBlocking();
+
+    /**
      * Check if the player is swimming.
      *
      * @return {@code true} if the player is swimming, {@code false} otherwise.
@@ -109,6 +124,27 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setCrawling(boolean crawling);
 
     /**
+     * Check if the player is in a spin attack (riptide).
+     *
+     * @return {@code true} if the player is in a spin attack, {@code false} otherwise.
+     */
+    boolean isSpinAttacking();
+
+    /**
+     * Set the player's spin attack state.
+     *
+     * @param spinAttacking Whether the player should be spin attacking
+     */
+    void setSpinAttacking(boolean spinAttacking);
+
+    /**
+     * Check if the player can use riptide (must be in water or rain).
+     *
+     * @return {@code true} if the player can use riptide, {@code false} otherwise.
+     */
+    boolean canUseRiptide();
+
+    /**
      * Check if the player is using an item on a block.
      *
      * @return {@code true} if the player is using an item on a block, {@code false} otherwise.
@@ -136,41 +172,21 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @param value Whether the player should be using an item in the air
      */
-    default void setUsingItemInAir(boolean value) {
-        setUsingItemInAir(value, getWorld().getTick());
-    }
-
-    /**
-     * Set whether the player is using an item in the air.
-     *
-     * @param value Whether the player should be using an item in the air
-     * @param time  The current tick
-     */
-    void setUsingItemInAir(boolean value, long time);
+    void setUsingItemInAir(boolean value);
 
     /**
      * Get the time when the player most recently started using an item.
      *
-     * @return The time when the player most recently started using an item
+     * @return The time when the player most recently started using an item, in entity ticks
      */
     long getStartUsingItemInAirTime();
 
     /**
-     * Get how long the player has been using the item, in game ticks.
+     * Get how long the player has been using the item, in entity ticks.
      *
-     * @param currentTime The current time
-     * @return How long the player has been using the item in game ticks
+     * @return How long the player has been using the item in entity ticks
      */
-    long getItemUsingInAirTime(long currentTime);
-
-    /**
-     * Retrieves the in-air time of an item based on the current world tick.
-     *
-     * @return the in-air time of the item as a long value
-     */
-    default long getItemUsingInAirTime() {
-        return getItemUsingInAirTime(getWorld().getTick());
-    }
+    long getItemUsingInAirTime();
 
     /**
      * Get the skin of the player.
@@ -215,6 +231,26 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setFlying(boolean flying);
 
     /**
+     * Checks if the player is allowed to fly based on the current game mode and permissions.
+     * <ul>
+     *   <li>Spectator mode: always allowed to fly (hardcoded)</li>
+     *   <li>Creative mode: allowed unless explicitly denied (FALSE)</li>
+     *   <li>Survival/Adventure mode: denied unless explicitly allowed (TRUE)</li>
+     * </ul>
+     *
+     * @return {@code true} if the player can fly, {@code false} otherwise
+     */
+    default boolean canFly() {
+        var gameMode = getGameMode();
+        return switch (gameMode) {
+            case SPECTATOR -> true;
+            case CREATIVE -> hasPermission(Permissions.ABILITY_FLY_CREATIVE) != Tristate.FALSE;
+            case SURVIVAL -> hasPermission(Permissions.ABILITY_FLY_SURVIVAL) == Tristate.TRUE;
+            case ADVENTURE -> hasPermission(Permissions.ABILITY_FLY_ADVENTURE) == Tristate.TRUE;
+        };
+    }
+
+    /**
      * Gets the score tag of the player.
      *
      * @return the score tag of the player
@@ -253,10 +289,70 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     /**
      * Set the spawn point of the player.
+     * <p>
+     * This sets a forced spawn point (e.g., from the {@code /spawnpoint} command) that does not
+     * require a bed or respawn anchor to be present at the location on respawn.
      *
      * @param spawnPoint The spawn point to set
      */
     void setSpawnPoint(Location3ic spawnPoint);
+
+    /**
+     * Set the spawn point of the player as anchored to a block (e.g., a bed or respawn anchor).
+     * <p>
+     * The spawn point is validated on respawn: if the block no longer exists at the stored location,
+     * the spawn point is reset to the world spawn and the player is notified.
+     *
+     * @param spawnPoint The spawn point to set
+     * @param type       The type of block that anchors this spawn point
+     */
+    void setBlockSpawnPoint(Location3ic spawnPoint, SpawnPointType type);
+
+    /**
+     * Returns the type of the player's current spawn point.
+     *
+     * @return the {@link SpawnPointType} of the current spawn point
+     */
+    SpawnPointType getSpawnPointType();
+
+    /**
+     * Describes how a player's personal spawn point was established.
+     */
+    enum SpawnPointType {
+        /** Set by command (e.g., {@code /spawnpoint}). No block validation needed on respawn. */
+        FORCED(0, null),
+        /** Set by sleeping in a bed. Validated against bed existence on respawn. */
+        BED(1, TrKeys.MC_TILE_BED_NOTVALID),
+        /** Set by interacting with a respawn anchor. Validated against anchor existence on respawn. */
+        RESPAWN_ANCHOR(2, TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
+
+        /**
+         * Stable numeric ID used for NBT persistence. Never reuse or reorder these values.
+         */
+        public final byte id;
+
+        /**
+         * The translation key sent to the player when they die and this spawn point block is missing.
+         * {@code null} for {@link #FORCED}, which never triggers the missing-block fallback.
+         */
+        public final String invalidSpawnKey;
+
+        SpawnPointType(int id, String invalidSpawnKey) {
+            this.id = (byte) id;
+            this.invalidSpawnKey = invalidSpawnKey;
+        }
+
+        /**
+         * Looks up a {@code SpawnPointType} by its stable {@link #id}.
+         * Returns {@link #FORCED} if the id is unrecognised (e.g., corrupt NBT).
+         */
+        public static SpawnPointType fromId(byte id) {
+            for (var type : values()) {
+                if (type.id == id) return type;
+            }
+            return FORCED;
+        }
+    }
 
     /**
      * Check if the player can reach a block at the specified position.
@@ -344,9 +440,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Sets cool down for a specific category.
      *
-     * @param category the category to set
-     * @param duration the cool down tick
-     * @param send     whether send packet to the client
+     * @param category the identifier for the cooldown category
+     * @param duration the length of the cooldown in ticks
+     * @param send     whether send packet to the client if the player is an actual player
      */
     void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send);
 
@@ -547,4 +643,27 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @return {@code true} if the player can eat, {@code false} otherwise.
      */
     boolean canEat();
+
+    /**
+     * Gets the fishing hook entity that the player has cast.
+     *
+     * @return the fishing hook, or {@code null} if the player is not fishing or the fishing hook is not alive
+     */
+    EntityFishingHook getFishingHook();
+
+    /**
+     * Sets the fishing hook entity for this player.
+     *
+     * @param fishingHook the fishing hook, or {@code null} to clear
+     */
+    void setFishingHook(EntityFishingHook fishingHook);
+
+    /**
+     * Checks if the player is currently fishing.
+     *
+     * @return {@code true} if the player has a fishing hook out
+     */
+    default boolean isFishing() {
+        return getFishingHook() != null;
+    }
 }

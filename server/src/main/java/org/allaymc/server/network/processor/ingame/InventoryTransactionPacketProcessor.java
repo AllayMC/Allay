@@ -9,6 +9,7 @@ import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -36,25 +37,21 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     public static final int ITEM_RELEASE_RELEASE = 0;
     public static final int ITEM_RELEASE_CONSUME = 1;
 
-    private static final double SPAM_BUG_TIME_THRESHOLD = 100d; // 100ms
-    private static final double SPAM_BUG_POS_THRESHOLD = 0.00001d;
+    private static final long SPAM_CLICK_THRESHOLD_MS = 100;
 
-    private LastRightClickData lastRightClick;
+    private long lastClickTime;
+    private Vector3ic lastBlockPos;
+    private Vector3fc lastClickPos;
 
-    private boolean isSpamClick(Vector3fc clickPos, Vector3ic clickBlockPos, Vector3fc playerPos) {
-        var currentTime = System.currentTimeMillis();
-        if (lastRightClick == null) {
-            lastRightClick = new LastRightClickData(playerPos, clickBlockPos, clickPos, currentTime);
-            return false;
-        }
-
-        boolean isSpam = (currentTime - lastRightClick.time()) < SPAM_BUG_TIME_THRESHOLD &&
-                         lastRightClick.playerPos().distanceSquared(playerPos) < SPAM_BUG_POS_THRESHOLD &&
-                         lastRightClick.blockPos().equals(clickBlockPos) &&
-                         lastRightClick.clickPos().distanceSquared(clickPos) < SPAM_BUG_POS_THRESHOLD;
-
-        lastRightClick = new LastRightClickData(playerPos, clickBlockPos, clickPos, currentTime);
-        return isSpam;
+    private boolean isSpamClick(Vector3ic blockPos, Vector3fc clickPos) {
+        var now = System.currentTimeMillis();
+        var spam = now - this.lastClickTime < SPAM_CLICK_THRESHOLD_MS
+                   && blockPos.equals(this.lastBlockPos)
+                   && clickPos.equals(this.lastClickPos);
+        this.lastClickTime = now;
+        this.lastBlockPos = blockPos;
+        this.lastClickPos = clickPos;
+        return spam;
     }
 
     @Override
@@ -68,10 +65,14 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 var world = entity.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
+                        if (entity.isUsingItemInAir()) {
+                            break;
+                        }
+
                         var clickBlockPos = NetworkHelper.fromNetwork(packet.getBlockPosition());
                         var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
                         // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
-                        if (isSpamClick(clickPos, clickBlockPos, NetworkHelper.fromNetwork(packet.getPlayerPosition()))) {
+                        if (isSpamClick(clickBlockPos, clickPos)) {
                             break;
                         }
 
@@ -92,29 +93,32 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
 
                         entity.setUsingItemInAir(false);
-                        itemInHand.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
-                        if (entity.isUsingItemOnBlock()) {
-                            if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
-                                // Using the item on the block successfully, no need to call BlockBehavior::onInteract()
-                                break;
-                            }
+                        var sneaking = entity.isSneaking();
+                        var useItemOnBlock = !sneaking;
+                        var useBlock = !sneaking || itemInHand.getItemType() == AIR;
 
-                            if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
-                                // Player interaction with the block was unsuccessful, and we need to override the
-                                // client block change by sending a block update
-                                var blockStateClicked = dimension.getBlockState(clickBlockPos);
-                                player.viewBlockUpdate(clickBlockPos, 0, blockStateClicked);
+                        if (useItemOnBlock && itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
+                            // Using the item on the block successfully, no need to call BlockBehavior::onInteract()
+                            break;
+                        }
 
-                                // Player places a block
-                                if (itemInHand.getItemType() == AIR) {
-                                    break;
-                                }
+                        if (useBlock && interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
+                            break;
+                        }
 
-                                if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
-                                    var blockStateReplaced = dimension.getBlockState(placeBlockPos);
-                                    player.viewBlockUpdate(placeBlockPos, 0, blockStateReplaced);
-                                }
-                            }
+                        // Block interaction was unsuccessful or skipped, override
+                        // client block change by sending a block update
+                        var blockStateClicked = dimension.getBlockState(clickBlockPos);
+                        player.viewBlockUpdate(clickBlockPos, 0, blockStateClicked);
+
+                        // Player places a block
+                        if (itemInHand.getItemType() == AIR) {
+                            break;
+                        }
+
+                        if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
+                            var blockStateReplaced = dimension.getBlockState(placeBlockPos);
+                            player.viewBlockUpdate(placeBlockPos, 0, blockStateReplaced);
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
@@ -127,7 +131,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         if (!entity.isUsingItemInAir()) {
                             if (itemInHand.canUseItemInAir(entity)) {
                                 if (new PlayerStartUseItemInAirEvent(entity).call()) {
-                                    entity.setUsingItemInAir(true, receiveTime);
+                                    entity.setUsingItemInAir(true);
                                 }
                             } else {
                                 if (new PlayerRightClickItemInAirEvent(entity).call()) {
@@ -136,7 +140,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             }
                         } else if (entity.isUsingItemInAir()) {
                             entity.setUsingItemInAir(false);
-                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime(receiveTime));
+                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime());
                             if (event.call()) {
                                 itemInHand.useItemInAir(entity, event.getUsingTime());
                             }
@@ -149,7 +153,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     case ITEM_RELEASE_RELEASE -> {
                         if (entity.isUsingItemInAir()) {
                             entity.setUsingItemInAir(false);
-                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime(receiveTime));
+                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime());
                             if (event.call()) {
                                 itemInHand.useItemInAir(entity, event.getUsingTime());
                             }
@@ -190,13 +194,15 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             return;
                         }
 
-                        var damage = itemInHand.calculateAttackDamage();
+                        var damage = itemInHand.calculateAttackDamage(entity, target);
                         if (damage == 0) {
                             damage = 1;
                         }
 
                         var damageContainer = DamageContainer.entityAttack(entity, damage);
-                        if (damageable.attack(damageContainer)) {
+                        var attackSuccess = damageable.attack(damageContainer);
+                        entity.getDimension().addSound(target.getLocation(), new AttackSound(attackSuccess));
+                        if (attackSuccess) {
                             itemInHand.onAttackEntity(entity, target);
                         }
                     }
@@ -245,8 +251,5 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.INVENTORY_TRANSACTION;
-    }
-
-    private record LastRightClickData(Vector3fc playerPos, Vector3ic blockPos, Vector3fc clickPos, double time) {
     }
 }

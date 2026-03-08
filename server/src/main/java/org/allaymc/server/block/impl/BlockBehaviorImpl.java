@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public abstract class BlockBehaviorImpl extends ComponentClass implements BlockBehavior {
+public class BlockBehaviorImpl extends ComponentClass implements BlockBehavior {
 
     private static final ComponentInitInfo EMPTY_INIT_INFO = new ComponentInitInfo() {
     };

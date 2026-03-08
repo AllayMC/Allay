@@ -442,9 +442,8 @@ public class Config {
      * Gets a value by key.
      *
      * @param key the key
-     * @return the value, or null if not found
+     * @return the value, or {@code null}  if not found
      */
-    @Nullable
     public Object get(String key) {
         return this.get(key, null);
     }
@@ -663,9 +662,8 @@ public class Config {
      * Gets a list value.
      *
      * @param key the key
-     * @return the list, or null if not found
+     * @return the list, or {@code null} if not found
      */
-    @Nullable
     public List<?> getList(String key) {
         return this.getList(key, null);
     }

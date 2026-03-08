@@ -13,7 +13,7 @@ import org.allaymc.api.player.Player;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.WORLD)
 public class PlayerKickEvent extends ServerPlayerEvent implements CancellableEvent {
     @Setter
     protected String reason;

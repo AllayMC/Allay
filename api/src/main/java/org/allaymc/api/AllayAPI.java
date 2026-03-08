@@ -186,7 +186,7 @@ public final class AllayAPI {
     @NoArgsConstructor
     public static final class APIInstanceHolder<T> {
 
-        private T instance;
+        private volatile T instance;
 
         /**
          * Create a new empty api instance holder with the specific type.

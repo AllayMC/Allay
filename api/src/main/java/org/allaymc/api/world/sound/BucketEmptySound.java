@@ -3,7 +3,14 @@ package org.allaymc.api.world.sound;
 /**
  * Sound played when a bucket that contains a liquid is emptied into the world.
  *
- * @param water whether the liquid is water. Setting this to {@code false} means the liquid is lava
+ * @param type the liquid/content type of the bucket
  */
-public record BucketEmptySound(boolean water) implements Sound {
+public record BucketEmptySound(Type type) implements Sound {
+
+    public enum Type {
+        WATER,
+        LAVA,
+        POWDER_SNOW,
+        FISH
+    }
 }

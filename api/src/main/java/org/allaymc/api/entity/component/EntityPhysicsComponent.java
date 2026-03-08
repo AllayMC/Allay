@@ -19,7 +19,21 @@ public interface EntityPhysicsComponent extends EntityComponent {
     double DEFAULT_KNOCKBACK = 0.4;
 
     /**
-     * Apply the entity's motion. Similar to {@link #updateMotion(boolean)}, this method
+     * Represents the liquid state of an entity, tracking which liquid types it is submerged in.
+     *
+     * @param inWater whether the entity is in water
+     * @param inLava  whether the entity is in lava
+     */
+    record LiquidState(boolean inWater, boolean inLava) {
+        public static final LiquidState NONE = new LiquidState(false, false);
+
+        public boolean inLiquid() {
+            return inWater || inLava;
+        }
+    }
+
+    /**
+     * Apply the entity's motion. Similar to {@link #updateMotion(LiquidState)}, this method
      * is used by physics engine, and allow entity to customize how its motion being applied.
      * <p>
      * This method is also required to be safe called in multithread environment.
@@ -30,17 +44,29 @@ public interface EntityPhysicsComponent extends EntityComponent {
     boolean applyMotion();
 
     /**
+     * Called after applyMotion() completes for all entities. This method is called
+     * sequentially (not in parallel) and is safe to modify shared state.
+     * <p>
+     * Use this method for operations that cannot be performed safely in a parallel
+     * context, such as collision callbacks that modify world state.
+     */
+    @ApiStatus.OverrideOnly
+    default void afterApplyMotion() {
+        // Default: no-op
+    }
+
+    /**
      * Update the entity's motion. This method is used by physics engine, and allow
      * entity to customize how its motion being updated.
      * <p>
      * This method should be safe to be called in multithread environment since physics
      * engine may use parallel stream to handle all the entities.
      *
-     * @param hasLiquidMotion whether this entity's motion is affected by liquid
+     * @param liquidState the liquid state describing which liquids the entity is submerged in
      * @return the updated motion
      */
     @ApiStatus.OverrideOnly
-    Vector3d updateMotion(boolean hasLiquidMotion);
+    Vector3d updateMotion(LiquidState liquidState);
 
     /**
      * Get the motion of this entity.
@@ -107,21 +133,72 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * <p>
      * If return {@code true}, the physics engine will calculate a specific motion for the entity when
      * it is sticking in blocks to move the entity out of the blocks. When performing the above calculations,
-     * the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods will not be called.
+     * the entity's {@link #applyMotion()} and {@link #updateMotion(LiquidState)} methods will not be called.
      * <p>
-     * If return {@code false}, the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods
+     * If return {@code false}, the entity's {@link #applyMotion()} and {@link #updateMotion(LiquidState)} methods
      * will always being called even if the entity is sticking in blocks.
      *
      * @return {@code true} if the entity has block collision motion.
      */
-    boolean computeBlockCollisionMotion();
+    default boolean computeBlockCollisionMotion() {
+        return true;
+    }
 
     /**
      * Check if the entity has liquid motion.
      *
      * @return {@code true} if the entity has liquid motion.
      */
-    boolean computeLiquidMotion();
+    default boolean computeLiquidMotion() {
+        return true;
+    }
+
+    /**
+     * Check if liquid buoyancy and drag should be applied to this entity.
+     *
+     * @return {@code true} if liquid buoyancy/drag is enabled for this entity.
+     */
+    default boolean computeLiquidPhysics() {
+        return true;
+    }
+
+    /**
+     * Get the upward acceleration per tick when submerged in water.
+     *
+     * @return the water buoyancy value
+     */
+    default double getWaterBuoyancy() {
+        return 0.075;
+    }
+
+    /**
+     * Get the velocity retention reduction when submerged in water.
+     * Velocity is multiplied by {@code (1 - factor)} each tick.
+     *
+     * @return the water drag factor
+     */
+    default double getWaterDragFactor() {
+        return 0.2;
+    }
+
+    /**
+     * Get the upward acceleration per tick when submerged in lava.
+     *
+     * @return the lava buoyancy value
+     */
+    default double getLavaBuoyancy() {
+        return 0.04;
+    }
+
+    /**
+     * Get the velocity retention reduction when submerged in lava.
+     * Velocity is multiplied by {@code (1 - factor)} each tick.
+     *
+     * @return the lava drag factor
+     */
+    default double getLavaDragFactor() {
+        return 0.5;
+    }
 
     /**
      * Check whether the entity's movement should be computed server-side.
@@ -226,41 +303,41 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source) {
-        knockback(source, DEFAULT_KNOCKBACK);
+    default void knockback(Vector3dc knockbackSource) {
+        knockback(knockbackSource, DEFAULT_KNOCKBACK);
     }
 
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source, double kb) {
-        knockback(source, kb, kb);
+    default void knockback(Vector3dc knockbackSource, double knockback) {
+        knockback(knockbackSource, knockback, knockback);
     }
 
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source, double kb, double kby) {
-        knockback(source, kb, kby, new Vector3d());
+    default void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical) {
+        knockback(knockbackSource, knockback, knockbackVertical, new Vector3d());
     }
 
     /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion) {
-        knockback(source, kb, kby, additionalMotion, false);
+    default void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional) {
+        knockback(knockbackSource, knockback, knockbackVertical, knockbackAdditional, false);
     }
 
     /**
-     * Knockback the entity with specified kb value.
+     * Knockback the entity with specified knockback value.
      *
-     * @param source                    the source of the knockback
-     * @param kb                        the knockback strength to apply
-     * @param kby                       the knockback strength in y-axis
-     * @param additionalMotion          the additional motion that will be appiled to the entity
+     * @param knockbackSource           the source position of the knockback
+     * @param knockback                 the horizontal knockback strength to apply
+     * @param knockbackVertical         the vertical knockback strength to apply
+     * @param knockbackAdditional       the additional motion that will be applied to the entity
      * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored
      */
-    void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance);
+    void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional, boolean ignoreKnockbackResistance);
 
     /**
      * Retrieve the knockback resistance of the entity.
@@ -288,21 +365,21 @@ public interface EntityPhysicsComponent extends EntityComponent {
     Block getBlockStateStandingOn();
 
     /**
-     * @see #canStandSafely(int, int, int, Dimension)
+     * @see #canStandSafely(double, double, double, Dimension)
      */
     default boolean canStandSafely(Position3ic pos) {
-        return canStandSafely(pos.x(), pos.y(), pos.z(), pos.dimension());
+        return canStandSafely(pos.x() + 0.5, pos.y(), pos.z() + 0.5, pos.dimension());
     }
 
     /**
      * Check if the specified position is a safe standing position.
      *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
+     * @param x the exact x coordinate (entity center)
+     * @param y the exact y coordinate (entity feet, can be non-integer for partial-height blocks like slabs)
+     * @param z the exact z coordinate (entity center)
      * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
      */
-    boolean canStandSafely(int x, int y, int z, Dimension dimension);
+    boolean canStandSafely(double x, double y, double z, Dimension dimension);
 
     /**
      * Check if the entity can critical attack.

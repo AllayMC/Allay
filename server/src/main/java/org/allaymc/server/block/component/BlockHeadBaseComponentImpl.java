@@ -41,14 +41,14 @@ public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        if (oldBlock.isReceivingRedstonePower()) {
+        if (oldBlock.isPowered()) {
             oldBlock.<BlockEntityHead>getBlockEntity().setPlayingAnimation(true);
         }
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         // Only dragon head and piglin head respond to redstone
         var blockType = block.getBlockType();
@@ -57,7 +57,7 @@ public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var blockEntity = block.<BlockEntityHead>getBlockEntity();
-        var powered = block.isReceivingRedstonePower();
+        var powered = block.isPowered();
         if (blockEntity.isPlayingAnimation() != powered) {
             blockEntity.setPlayingAnimation(powered);
         }

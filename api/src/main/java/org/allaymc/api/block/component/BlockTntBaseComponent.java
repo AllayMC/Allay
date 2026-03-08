@@ -1,6 +1,6 @@
 package org.allaymc.api.block.component;
 
-import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.math.position.Position3ic;
 
 /**
  * @author daoge_cmd
@@ -8,17 +8,17 @@ import org.allaymc.api.block.dto.Block;
 public interface BlockTntBaseComponent extends BlockBaseComponent {
 
     /**
-     * @see #prime(Block, int)
+     * @see #prime(Position3ic, int)
      */
-    default void prime(Block block) {
-        this.prime(block, 80);
+    default void prime(Position3ic pos) {
+        this.prime(pos, 80);
     }
 
     /**
-     * Primes the TNT with a custom fuse duration.
+     * Primes a TNT at the given pos with a custom fuse duration.
      *
-     * @param block the {@link Block} to prime
-     * @param fuse  the fuse duration in ticks
+     * @param pos  the pos to summon TNT entity
+     * @param fuse the fuse duration in ticks
      */
-    void prime(Block block, int fuse);
+    void prime(Position3ic pos, int fuse);
 }

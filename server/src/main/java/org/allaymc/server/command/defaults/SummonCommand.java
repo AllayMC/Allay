@@ -6,6 +6,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.world.LightningStrikeEvent;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permissions;
 import org.joml.Vector3d;
@@ -47,6 +48,12 @@ public class SummonCommand extends Command {
 
                     int count = context.getResult(2);
                     for (var i = 1; i <= count; i++) {
+                        // Special handling for lightning bolt - use strikeLightning with COMMAND cause
+                        if (entityType == EntityTypes.LIGHTNING_BOLT) {
+                            dim.strikeLightning(pos.x(), pos.y(), pos.z(), LightningStrikeEvent.Cause.COMMAND);
+                            continue;
+                        }
+
                         var entity = entityType.createEntity(
                                 EntityInitInfo.builder()
                                         .dimension(dim)

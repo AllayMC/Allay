@@ -7,8 +7,12 @@ import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityThrownTrident;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPickupArrowEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPickupItemEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPickupTridentEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -29,6 +33,8 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 import org.joml.primitives.AABBd;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -44,6 +50,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     @ComponentObject
     private EntityPlayer thisPlayer;
 
+    private final List<Long> enchantOptions;
+
     public EntityPlayerContainerHolderComponentImpl() {
         super(
                 new PlayerCreatedOutputContainerImpl(),
@@ -51,8 +59,10 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new CraftingTableContainerImpl(),
                 new BeaconContainerImpl(),
                 new EnderChestContainerImpl(),
-                new AnvilContainerImpl()
+                new AnvilContainerImpl(),
+                new LoomContainerImpl()
         );
+        this.enchantOptions = new ArrayList<>();
 
         var enchantTableContainer = new EnchantTableContainerImpl();
         enchantTableContainer.addSlotChangeListener(EnchantTableContainerImpl.INPUT_SLOT, item -> {
@@ -61,6 +71,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 onEnchantTableContainerInputItemChange(item, new Position3i(blockPos, thisPlayer.getDimension()));
             }
         });
+        enchantTableContainer.addCloseListener(viewer -> clearEnchantOptions());
         addContainer(enchantTableContainer);
 
         // We shouldn't provide the player object directly, because at that time 'thisPlayer' is null
@@ -72,7 +83,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         if (thisPlayer.isActualPlayer()) {
-            var packet = new PlayerEnchantOptionsPacket();
+            clearEnchantOptions();
             if (item != ItemAirStack.AIR_STACK) {
                 var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
                 var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
@@ -80,10 +91,19 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                     return;
                 }
 
-                packet.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
-            }
+                for (var option : enchantOptions) {
+                    this.enchantOptions.add(Long.valueOf(option.left()));
+                }
 
-            thisPlayer.getController().sendPacket(packet);
+                thisPlayer.getController().viewEnchantOptions(enchantOptions);
+            }
+        }
+    }
+
+    private void clearEnchantOptions() {
+        if (!this.enchantOptions.isEmpty()) {
+            EnchantmentOptionGenerator.removeEnchantOptions(this.enchantOptions);
+            this.enchantOptions.clear();
         }
     }
 
@@ -149,6 +169,12 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 continue;
             }
 
+            var event = new PlayerPickupItemEvent(thisPlayer, entityItem);
+            if (!event.call()) {
+                // Event was cancelled, skip pickup
+                continue;
+            }
+
             var inventory = Objects.requireNonNull(getContainer(ContainerTypes.INVENTORY));
             var slot = inventory.tryAddItem(item);
             if (slot == -1) {
@@ -172,7 +198,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
                 .toList();
         for (var entityArrow : entityArrows) {
-            if (entityArrow.willBeDespawnedNextTick()) {
+            if (entityArrow.willBeDespawnedLater()) {
                 // Have been picked by others
                 continue;
             }
@@ -187,11 +213,53 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 continue;
             }
 
-            var arrow = ItemTypes.ARROW.createItemStack(1);
-            arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrow) != -1) {
+            var arrowItem = ItemTypes.ARROW.createItemStack(1);
+            arrowItem.setPotionType(entityArrow.getPotionType());
+
+            var event = new PlayerPickupArrowEvent(thisPlayer, entityArrow, arrowItem);
+            if (!event.call()) {
+                // Event was cancelled, skip pickup
+                continue;
+            }
+
+            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrowItem) != -1) {
                 entityArrow.applyAction(new PickedUpAction(thisPlayer));
                 entityArrow.remove();
+            }
+        }
+
+        // Pick up tridents
+        var entityTridents = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
+                .stream()
+                .filter(EntityThrownTrident.class::isInstance)
+                .map(EntityThrownTrident.class::cast)
+                // Check motion == 0 to ensure trident is stationary (not falling after block removal)
+                .filter(trident -> trident.getMotion().lengthSquared() == 0 && !trident.isReturning())
+                .toList();
+        for (var entityTrident : entityTridents) {
+            if (entityTrident.willBeDespawnedLater()) {
+                // Have been picked by others
+                continue;
+            }
+
+            var tridentItem = entityTrident.getTridentItem();
+            if (tridentItem == null) {
+                // No item to pick up
+                entityTrident.remove();
+                continue;
+            }
+
+            var event = new PlayerPickupTridentEvent(thisPlayer, entityTrident, tridentItem);
+            if (!event.call()) {
+                // Event was cancelled, skip pickup
+                continue;
+            }
+
+            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(tridentItem) != -1) {
+                entityTrident.applyAction(new PickedUpAction(thisPlayer));
+                // Clear the trident item to prevent double pickup
+                entityTrident.setTridentItem(null);
+                entityTrident.remove();
             }
         }
     }

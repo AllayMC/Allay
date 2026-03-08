@@ -27,4 +27,9 @@ public class EnchantmentSoulSpeedType extends EnchantmentType {
     public int getMaxModifiedLevel(int level) {
         return getMinModifiedLevel(level) + 15;
     }
+
+    @Override
+    public boolean isFishable() {
+        return false;
+    }
 }

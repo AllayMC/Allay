@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
-import org.allaymc.api.item.data.PotionType;
+import org.allaymc.api.entity.component.EntityPotionComponent;
+import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -20,7 +21,6 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected static final String TAG_PUNCH_LEVEL = "enchantPunch";
     protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
     protected static final String TAG_PIERCING_LEVEL = "enchantPiercing";
-    protected static final String TAG_POTION_ID = "auxValue";
     protected static final String TAG_SHOT_BY_PLAYER = "player";
 
     @Getter
@@ -43,8 +43,9 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected boolean pickUpDisabled;
     @Getter
     protected boolean critical;
-    @Getter
-    protected PotionType potionType;
+
+    @Dependency
+    protected EntityPotionComponent potionComponent;
 
     public EntityArrowBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -54,12 +55,6 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     @Override
     public void setCritical(boolean critical) {
         this.critical = critical;
-        broadcastState();
-    }
-
-    @Override
-    public void setPotionType(PotionType potionType) {
-        this.potionType = potionType;
         broadcastState();
     }
 
@@ -87,13 +82,6 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
                 .putByte(TAG_INFINITY_LEVEL, (byte) (infinite ? 1 : 0))
                 .putByte(TAG_PIERCING_LEVEL, (byte) piercingLevel)
                 .putBoolean(TAG_SHOT_BY_PLAYER, !pickUpDisabled);
-
-        // Store this for vanilla map compatibility, although we don't need to save this
-        // again in nbt because it's already saved in metadata
-        var potionType = getPotionType();
-        if (potionType != null) {
-            builder.putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1));
-        }
 
         return builder.build();
     }

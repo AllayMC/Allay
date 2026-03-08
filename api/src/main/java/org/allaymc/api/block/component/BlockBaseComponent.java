@@ -35,12 +35,13 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a neighboring block causes the current block to update.
      *
-     * @param block    the current block that is being updated
-     * @param neighbor the neighboring block that triggered the update
-     * @param face     the face of the current block that is being updated
+     * @param block            the block being updated
+     * @param neighbor         the neighboring block that triggered the update
+     * @param face             the face of the block being updated (direction from block to neighbor)
+     * @param oldNeighborState the previous block state at the neighbor position, may be null if unknown
      */
     @ApiStatus.OverrideOnly
-    void onNeighborUpdate(Block block, Block neighbor, BlockFace face);
+    void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState);
 
     /**
      * Called when the block encounters a random update.
@@ -103,7 +104,7 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called after the block is placed.
      *
-     * @param oldBlock      the block that was replaced
+     * @param oldBlock      the old block that was replaced
      * @param newBlockState the new block that replaced the old block
      * @param placementInfo the player placement information, can be {@code null}
      */
@@ -190,6 +191,16 @@ public interface BlockBaseComponent extends BlockComponent {
      */
     @ApiStatus.OverrideOnly
     default void onScheduledUpdate(Block block) {
+    }
+
+    /**
+     * Called when a block is moved by a piston.
+     * This method is invoked after the block has been placed at its new position.
+     *
+     * @param block the block that was moved (at its new position)
+     */
+    @ApiStatus.OverrideOnly
+    default void onMoved(Block block) {
     }
 
     /**
@@ -357,12 +368,40 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Determines if this block is a redstone power source.
-     * Power sources include levers, buttons, pressure plates, redstone blocks, etc.
+     * Determines if this block has a custom comparator input override.
+     * <p>
+     * When this returns {@code true}, comparators will use {@link #getComparatorInputOverride(Block)}
+     * to determine the input signal strength instead of reading the normal redstone power level.
+     * <p>
+     * <b>Important:</b> This method indicates whether the block <i>supports</i> comparator input,
+     * not whether the current signal is non-zero. For example:
+     * <ul>
+     *   <li>An empty chest should return {@code true} here (it supports comparator input),
+     *       but return {@code 0} from {@link #getComparatorInputOverride(Block)}</li>
+     *   <li>A stone block should return {@code false} here (it doesn't support comparator input)</li>
+     * </ul>
+     * This distinction matters because when {@code hasComparatorInputOverride()} returns {@code false},
+     * the comparator will read the normal redstone signal from behind, which is different from
+     * reading a zero signal from a supported block.
      *
-     * @return {@code true} if the block is a power source, {@code false} otherwise
+     * @return {@code true} if the block supports comparator input override, {@code false} otherwise
+     * @see #getComparatorInputOverride(Block)
      */
-    default boolean isPowerSource() {
+    default boolean hasComparatorInputOverride() {
         return false;
+    }
+
+    /**
+     * Gets the comparator input override signal strength for this block.
+     * <p>
+     * This method is only called when {@link #hasComparatorInputOverride()} returns {@code true}.
+     * The returned signal strength should be between 0 and 15.
+     *
+     * @param block the block to get the signal from
+     * @return the comparator input signal strength (0-15)
+     * @see #hasComparatorInputOverride()
+     */
+    default int getComparatorInputOverride(Block block) {
+        return 0;
     }
 }

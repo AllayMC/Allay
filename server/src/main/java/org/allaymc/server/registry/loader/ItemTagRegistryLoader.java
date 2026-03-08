@@ -51,7 +51,7 @@ public class ItemTagRegistryLoader implements RegistryLoader<Void, Map<ItemId, S
                     var id = ItemId.fromIdentifier(new Identifier(obj.getAsString()));
                     if (id == null) {
                         log.warn("Unknown item id: {}", obj.getAsString());
-                        return;
+                        continue;
                     }
 
                     map.computeIfAbsent(id, k -> new HashSet<>()).add(tag);

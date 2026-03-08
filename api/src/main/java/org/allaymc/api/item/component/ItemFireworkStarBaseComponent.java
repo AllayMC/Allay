@@ -1,6 +1,6 @@
 package org.allaymc.api.item.component;
 
-import org.allaymc.api.world.FireworkExplosion;
+import org.allaymc.api.world.explosion.FireworkExplosion;
 
 /**
  * @author daoge_cmd

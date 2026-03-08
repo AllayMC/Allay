@@ -23,8 +23,21 @@ import org.joml.primitives.Rayd;
  */
 public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponentImpl {
 
+    /**
+     * Stores the result of a ray-cast collision.
+     *
+     * @param hit    the object that was hit (Block or Entity)
+     * @param hitPos the position where the collision occurred
+     */
+    protected record CollisionResult(Object hit, Vector3dc hitPos) {}
+
     @ComponentObject
     protected Entity thisEntity;
+
+    /**
+     * Collision result storage (set in applyMotion, consumed in afterApplyMotion).
+     */
+    protected CollisionResult pendingCollisionResult;
 
     @Dependency
     protected EntityAgeComponent ageComponent;
@@ -52,7 +65,33 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public double getWaterBuoyancy() {
+        // Projectiles don't float
+        return 0;
+    }
+
+    @Override
+    public double getWaterDragFactor() {
+        return 0.2;
+    }
+
+    @Override
+    public double getLavaBuoyancy() {
+        // Projectiles don't float
+        return 0;
+    }
+
+    @Override
+    public double getLavaDragFactor() {
+        return 0.2;
+    }
+
+    @Override
+    public Vector3d updateMotion(LiquidState liquidState) {
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
+        }
+
         return new Vector3d(
                 this.motion.x * (1 - this.getDragFactorInAir()),
                 (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
@@ -89,7 +128,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         var rayCastResult = new RayCastResult();
 
         // Ray cast blocks
-        dimension.forEachBlockStates(aabb, 0, (x, y, z, block) -> {
+        // Expand search range by 1 block downward to include blocks with tall collision shapes (e.g. fences with maxY = 1.5)
+        var blockSearchAABB = new AABBd(aabb);
+        blockSearchAABB.minY -= 1;
+        dimension.forEachBlockStates(blockSearchAABB, 0, (x, y, z, block) -> {
             var result = new Vector2d();
             if (block.getBlockStateData().computeOffsetCollisionShape(x, y, z).intersectsRay(ray, result)) {
                 if (result.x() < rayCastResult.result) {
@@ -131,12 +173,14 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         }
 
         if (!newPos.equals(location) && thisEntity.trySetLocation(newPos)) {
+            this.pendingOnGround = rayCastResult.hit instanceof Block;
+
             if (rayCastResult.hit instanceof Block block && callHitEvent(newPos, null, block)) {
-                block.getBehavior().onProjectileHit(block, (EntityProjectile) thisEntity, newPos);
-                onHitBlock(block, newPos);
+                // Store for later processing in afterApplyMotion()
+                this.pendingCollisionResult = new CollisionResult(block, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
             } else if (rayCastResult.hit instanceof Entity entity && callHitEvent(newPos, entity, null)) {
-                entity.onProjectileHit((EntityProjectile) thisEntity, newPos);
-                onHitEntity(entity, newPos);
+                // Store for later processing in afterApplyMotion()
+                this.pendingCollisionResult = new CollisionResult(entity, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
             }
 
             return true;
@@ -153,6 +197,29 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
     protected boolean callHitEvent(Vector3dc hitPos, Entity victim, Block block) {
         var event = new ProjectileHitEvent((EntityProjectile) thisEntity, hitPos, victim, block);
         return event.call();
+    }
+
+    @Override
+    public void afterApplyMotion() {
+        super.afterApplyMotion();
+
+        if (pendingCollisionResult == null) {
+            return;
+        }
+
+        var hit = pendingCollisionResult.hit();
+        var hitPos = pendingCollisionResult.hitPos();
+
+        if (hit instanceof Block block) {
+            block.getBehavior().onProjectileHit(block, (EntityProjectile) thisEntity, hitPos);
+            onHitBlock(block, hitPos);
+        } else if (hit instanceof Entity entity) {
+            entity.onProjectileHit((EntityProjectile) thisEntity, hitPos);
+            onHitEntity(entity, hitPos);
+        }
+
+        // Clear pending state
+        pendingCollisionResult = null;
     }
 
     protected void onHitBlock(Block block, Vector3dc hitPos) {

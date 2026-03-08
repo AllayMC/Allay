@@ -14,6 +14,7 @@ import org.allaymc.api.item.type.ItemType;
  */
 @Getter
 @CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class ContainerItemMoveEvent extends ContainerEvent implements CancellableEvent {
     protected Container source;
     protected int sourceSlot;

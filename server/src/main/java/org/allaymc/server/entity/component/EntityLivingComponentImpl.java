@@ -2,6 +2,9 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.property.enums.DripstoneThickness;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.ArmorContainer;
@@ -10,6 +13,7 @@ import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.CriticalHit;
 import org.allaymc.api.entity.action.EnchantedHit;
 import org.allaymc.api.entity.action.SimpleEntityAction;
+import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -19,9 +23,11 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -39,7 +45,9 @@ import org.joml.Vector3d;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -61,7 +69,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Manager
     protected ComponentManager manager;
     @Dependency
-    protected EntityBaseComponentImpl baseComponent;
+    protected EntityBaseComponent baseComponent;
     @Dependency(optional = true)
     protected EntityPhysicsComponent physicsComponent;
     @Dependency(optional = true)
@@ -72,10 +80,15 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Getter
     protected DamageContainer lastDamage;
     @Getter
-    protected long lastDamageTime;
+    protected long lastDamageTime = -1;
 
     @Getter
     protected int onFireTicks;
+    @Getter
+    protected int freezeTicks;
+    @Getter
+    @Setter
+    protected boolean inPowderSnow;
     @Getter
     protected int airSupplyTicks, airSupplyMaxTicks;
 
@@ -94,6 +107,39 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         this.health = this.maxHealth = DEFAULT_MAX_HEALTH;
     }
 
+    /**
+     * Calculates knockback values before EntityDamageEvent is fired.
+     * This allows event listeners to modify knockback values.
+     */
+    protected void calculateKnockback(DamageContainer damage) {
+        if (!damage.isHasKnockback()) {
+            return;
+        }
+
+        if (!(damage.getAttacker() instanceof Entity attacker)) {
+            return;
+        }
+
+        // Set default knockback source
+        if (damage.getKnockbackSource() == null) {
+            damage.setKnockbackSource(attacker.getLocation());
+        }
+
+        // Calculate knockback enchantment's additional motion
+        if (attacker instanceof EntityContainerHolderComponent component &&
+            component.hasContainer(ContainerTypes.INVENTORY)) {
+            var kbEnchantmentLevel = component.getContainer(ContainerTypes.INVENTORY)
+                .getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+            if (kbEnchantmentLevel != 0) {
+                damage.setKnockback(damage.getKnockback() / 2.0);
+                var knockbackAdditional = MathUtils.normalizeIfNotZero(
+                    MathUtils.getDirectionVector(attacker.getLocation()).setComponent(1, 0));
+                knockbackAdditional.mul(kbEnchantmentLevel * 0.5);
+                damage.setKnockbackAdditional(knockbackAdditional);
+            }
+        }
+    }
+
     @Override
     public boolean attack(DamageContainer damage, boolean ignoreCoolDown) {
         if (!thisEntity.isAlive() ||
@@ -101,6 +147,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
             !checkAndUpdateCoolDown(damage, ignoreCoolDown)) {
             return false;
         }
+
+        calculateKnockback(damage);
 
         var event = new EntityDamageEvent(thisEntity, damage);
         if (!event.call()) return false;
@@ -128,34 +176,32 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
         if (damage.getAttacker() instanceof Entity entity) {
             ((ComponentClass) entity).getManager().callEvent(CEntityAttackEvent.INSTANCE);
-        } else {
-            return;
         }
-
 
         if (!damage.isHasKnockback()) {
             return;
         }
 
         if (physicsComponent != null) {
-            var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
-            var kby = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
-            var additionalMotion = new Vector3d();
-            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerTypes.INVENTORY)) {
-                var kbEnchantmentLevel = component.getContainer(ContainerTypes.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
-                if (kbEnchantmentLevel != 0) {
-                    kb /= 2.0;
-                    additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
-                    additionalMotion.mul(kbEnchantmentLevel * 0.5);
-                }
+            var knockbackSource = damage.getKnockbackSource();
+            if (knockbackSource == null && damage.getAttacker() instanceof Entity attacker) {
+                knockbackSource = attacker.getLocation();
             }
 
-            physicsComponent.knockback(entity.getLocation(), kb, kby, additionalMotion);
+            if (knockbackSource != null) {
+                physicsComponent.knockback(
+                    knockbackSource,
+                    damage.getKnockback(),
+                    damage.getKnockbackVertical(),
+                    damage.getKnockbackAdditional(),
+                    damage.isIgnoreKnockbackResistance()
+                );
+            }
         }
     }
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {
-        var currentTime = thisEntity.getWorld().getTick();
+        var currentTime = baseComponent.getTick();
         if (!forceToUpdate && lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
             return false;
         }
@@ -170,7 +216,6 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         applyEffects(damage);
     }
 
-    // TODO: Implement breach enchantment
     protected void applyArmor(DamageContainer damage) {
         if (!damage.canBeReducedByArmor() || containerHolderComponent == null) {
             return;
@@ -202,6 +247,15 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         var totalArmorValue = 0f;
         var totalToughnessValue = 0f;
         var enchantmentProtectionFactor = 0;
+        var breachReduction = 0f;
+
+        if (damage.getAttacker() instanceof ContainerHolder holder && holder.hasContainer(ContainerTypes.INVENTORY)) {
+            var item = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand();
+            var breachLevel = item.getEnchantmentLevel(EnchantmentTypes.BREACH);
+            if (breachLevel > 0) {
+                breachReduction = 0.15f * breachLevel;
+            }
+        }
 
         for (var item : armorContainer.getItemStacks()) {
             if (item == ItemAirStack.AIR_STACK) {
@@ -217,13 +271,27 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         // See https://minecraft.wiki/w/Armor#Damage_reduction
         final var v = totalArmorValue;
         final var t = totalToughnessValue;
+        final var breach = breachReduction;
         damage.updateFinalDamage(d -> {
-            if (0 <= d && d <= 1.6f * v + 0.2f * v * t) {
-                return (1f / (6.25f + 50f)) * d * d +
-                       (1f - v / 25f) * d;
-            } else {
-                return (1f - v / 125f) * d;
+            if (d <= 0) {
+                return d;
             }
+
+            float reduced;
+            if (d <= 1.6f * v + 0.2f * v * t) {
+                reduced = (1f / (6.25f + 50f)) * d * d +
+                          (1f - v / 25f) * d;
+            } else {
+                reduced = (1f - v / 125f) * d;
+            }
+
+            if (breach <= 0f) {
+                return reduced;
+            }
+
+            var reduction = (d - reduced) / d;
+            var adjustedReduction = Math.max(0f, reduction - breach);
+            return d * (1f - adjustedReduction);
         });
 
         // See https://minecraft.wiki/w/Armor#Enchantments
@@ -290,6 +358,11 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
                 var sharpnessLevel = item.getEnchantmentLevel(EnchantmentTypes.SHARPNESS);
                 if (sharpnessLevel > 0) {
                     damage.updateFinalDamage(d -> d + sharpnessLevel * 1.25f);
+                    damage.setEnchanted(true);
+                }
+                var fireAspectLevel = item.getEnchantmentLevel(EnchantmentTypes.FIRE_ASPECT);
+                if (fireAspectLevel > 0) {
+                    setOnFireTicks(fireAspectLevel * 80);
                     damage.setEnchanted(true);
                 }
             }
@@ -379,6 +452,12 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         }
 
         return true;
+    }
+
+    @Override
+    public void setFreezeTicks(int freezeTicks) {
+        this.freezeTicks = Math.clamp(freezeTicks, 0, MAX_FREEZE_TICKS);
+        this.baseComponent.broadcastState();
     }
 
     @Override
@@ -490,6 +569,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         var currentTick = event.getCurrentTick();
         tickVoid(currentTick);
         tickFire(currentTick);
+        tickFreeze(currentTick);
         tickBreathe();
         tickEffects();
         tickDead();
@@ -523,6 +603,33 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         if (currentTick % 20 == 0) {
             attack(DamageContainer.fireTick(1));
         }
+    }
+
+    /// Update the {@link #freezeTicks} of the entity. This runs before {@code tickBlockCollision()}, so
+    /// {@link #inPowderSnow} reflects whether the entity was in powder snow during the <em>previous</em>
+    /// tick's block-collision pass. The powder-snow block component only sets the {@link #inPowderSnow} flag
+    /// during the current tick's block-collision pass; the actual increment happens here, guaranteeing
+    /// exactly one change per tick regardless of how many powder snow blocks the entity intersects.
+    ///
+    /// <ul>
+    ///   <li>If {@link #inPowderSnow} was {@code true}: increment freeze ticks by 1 (up to {@link #MAX_FREEZE_TICKS})
+    ///       and apply freezing damage when fully frozen (respects {@code GameRule.FREEZE_DAMAGE}).</li>
+    ///   <li>If {@link #inPowderSnow} was {@code false} and freeze ticks > 0: decrement by 1.</li>
+    /// </ul>
+    protected void tickFreeze(long currentTick) {
+        if (inPowderSnow) {
+            if (freezeTicks < MAX_FREEZE_TICKS) {
+                setFreezeTicks(freezeTicks + 1);
+            }
+            if (freezeTicks >= MAX_FREEZE_TICKS && currentTick % 40 == 0 &&
+                    thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FREEZE_DAMAGE)) {
+                attack(DamageContainer.freezing(1f));
+            }
+        } else if (freezeTicks > 0) {
+            setFreezeTicks(freezeTicks - 1);
+        }
+        // Reset the flag; the block component will set it again during tickBlockCollision() if needed.
+        inPowderSnow = false;
     }
 
     /// Update the {@link #airSupplyTicks} of the entity. Drown damage will be applied to the entity every second
@@ -595,13 +702,60 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         return true;
     }
 
+    @Override
+    public List<ItemStack> getDrops(int lootingLevel) {
+        var event = new CEntityGetDropEvent(lootingLevel);
+        manager.callEvent(event);
+        return event.getDrops();
+    }
+
+    @Override
+    public int getDropXpAmount() {
+        var event = new CEntityGetDropXpEvent(0);
+        manager.callEvent(event);
+        return event.getXp();
+    }
+
     /// Called when the entity dead (health == 0)
     protected void onDie() {
-        manager.callEvent(CEntityDieEvent.INSTANCE);
         new EntityDieEvent(thisEntity).call();
 
+        var pos = baseComponent.getLocation();
+        var dieEvent = new CEntityDieEvent();
+        dieEvent.setDropPosition(new Vector3d(pos.x(), pos.y(), pos.z()));
+        manager.callEvent(dieEvent);
+
+        // Calculate Looting level from killer's weapon
+        int lootingLevel = 0;
+        if (lastDamage != null &&
+            lastDamage.getAttacker() instanceof ContainerHolder holder &&
+            holder.hasContainer(ContainerTypes.INVENTORY)) {
+            lootingLevel = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.LOOTING);
+        }
+
+        // Drop loot items
+        var drops = getDrops(lootingLevel);
+        if (!drops.isEmpty()) {
+            var dimension = baseComponent.getDimension();
+            var dropPos = dieEvent.getDropPosition();
+            var motionFactory = dieEvent.getDropMotionFactory();
+            for (var drop : drops) {
+                dimension.dropItem(drop, dropPos, motionFactory.get(), 40);
+            }
+        }
+
+        // Drop XP if killed by player
+        if (lastDamage != null && lastDamage.getAttacker() instanceof EntityPlayer) {
+            var xpAmount = getDropXpAmount();
+            if (xpAmount > 0) {
+                baseComponent.getDimension().splitAndDropXpOrb(
+                    new Vector3d(pos.x(), pos.y(), pos.z()), xpAmount
+                );
+            }
+        }
+
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
-        this.baseComponent.setState(EntityState.DEAD);
+        ((EntityBaseComponentImpl) this.baseComponent).setState(EntityState.DEAD);
         if (hasDeadTimer()) {
             this.deadTimer = 20;
         }
@@ -657,7 +811,21 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
         // Physics component won't be null here, because CEntityFallEvent is called in physics component
         var blockStateStandingOn = physicsComponent.getBlockStateStandingOn();
-        double rawDamage = (event.getFallDistance() - 3) - getEffectLevel(EffectTypes.JUMP_BOOST);
+        var fallDistance = event.getFallDistance();
+
+        // Check if falling onto a stalagmite (upward-pointing dripstone tip)
+        if (blockStateStandingOn.getBlockType() == BlockTypes.POINTED_DRIPSTONE &&
+            blockStateStandingOn.getPropertyValue(BlockPropertyTypes.DRIPSTONE_THICKNESS) == DripstoneThickness.TIP &&
+            !blockStateStandingOn.getPropertyValue(BlockPropertyTypes.HANGING)) {
+            // Stalagmite damage: ceil(fallDistance * 2 - 2)
+            var damage = (long) Math.ceil(fallDistance * 2 - 2);
+            if (damage > 0) {
+                attack(DamageContainer.stalagmite(damage));
+            }
+            return;
+        }
+
+        double rawDamage = (fallDistance - 3) - getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
         if (damage > 0) {
             attack(DamageContainer.fall(damage));

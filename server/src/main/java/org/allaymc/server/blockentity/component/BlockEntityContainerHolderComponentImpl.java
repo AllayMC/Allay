@@ -1,12 +1,14 @@
 package org.allaymc.server.blockentity.component;
 
 import lombok.Setter;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
@@ -14,10 +16,12 @@ import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -33,8 +37,28 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @Setter
     protected Container container;
 
+    protected boolean dropItemOnBreak;
+    protected boolean openContainerOnInteract;
+    protected boolean saveEmptySlots;
+
+    protected Consumer<ItemStack> comparatorUpdateListener;
+
     public BlockEntityContainerHolderComponentImpl(Supplier<Container> containerSupplier) {
         this.container = containerSupplier.get();
+        this.dropItemOnBreak = true;
+        this.openContainerOnInteract = true;
+    }
+
+    @OnInitFinish
+    public void onInitFinish(BlockEntityInitInfo initInfo) {
+        // Register a listener for all slots to update comparators when container contents change
+        comparatorUpdateListener = itemStack -> {
+            var pos = baseComponent.getPosition();
+            pos.dimension().updateComparatorOutputLevel(pos);
+        };
+        for (int slot = 0; slot < container.getItemStackArray().length; slot++) {
+            container.addSlotChangeListener(slot, comparatorUpdateListener);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -52,13 +76,17 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @EventHandler
     protected void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
-        builder.putList("Items", NbtType.COMPOUND, container.saveNBT());
+        builder.putList("Items", NbtType.COMPOUND, container.saveNBT(saveEmptySlots));
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
+        if (!openContainerOnInteract) {
+            return;
+        }
+
         var player = event.getInteractInfo().player();
-        if (player == null || player.isSneaking()) {
+        if (player == null) {
             return;
         }
 
@@ -72,13 +100,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         event.setSuccess(true);
     }
 
-    protected boolean dropItemWhenBreak() {
-        return true;
-    }
-
     @EventHandler
     protected void onReplace(CBlockOnReplaceEvent event) {
-        if (!dropItemWhenBreak()) {
+        if (!this.dropItemOnBreak) {
             return;
         }
 
@@ -102,5 +126,15 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @Override
     public boolean hasContainer(ContainerType<?> type) {
         return container.getContainerType() == type;
+    }
+
+    @Override
+    public boolean shouldDropItemOnBreak() {
+        return dropItemOnBreak;
+    }
+
+    @Override
+    public void setDropItemOnBreak(boolean drop) {
+        this.dropItemOnBreak = drop;
     }
 }

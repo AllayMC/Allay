@@ -7,6 +7,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
 import org.allaymc.api.eventbus.event.player.PlayerItemHeldEvent;
 import org.allaymc.api.item.ItemStack;
@@ -27,7 +28,8 @@ public interface EntityPlayer extends
         EntityLiving,
         EntityContainerHolderComponent,
         EntityPhysicsComponent,
-        EntityPlayerBaseComponent {
+        EntityPlayerBaseComponent,
+        EntitySleepableComponent {
 
     /**
      * Returns the reachable container for the given full container type. This
@@ -175,9 +177,12 @@ public interface EntityPlayer extends
     default void setHandSlot(int handSlot, boolean serverSide) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
         var container = getContainer(ContainerTypes.INVENTORY);
+        var oldHandSlot = container.getHandSlot();
+        if (oldHandSlot == handSlot) {
+            return;
+        }
 
         var oldItemStack = container.getItemInHand();
-        var oldHandSlot = container.getHandSlot();
         var newItemStack = container.getItemStack(handSlot);
         var event = new PlayerItemHeldEvent(this, oldItemStack, oldHandSlot, newItemStack, handSlot);
         if (!event.call()) {
@@ -197,6 +202,13 @@ public interface EntityPlayer extends
             if (controller != null) {
                 controller.viewEntityHand(this);
             }
+        }
+
+        // Clear fishing hook when switching items
+        var fishingHook = getFishingHook();
+        if (fishingHook != null) {
+            fishingHook.remove();
+            setFishingHook(null);
         }
     }
 

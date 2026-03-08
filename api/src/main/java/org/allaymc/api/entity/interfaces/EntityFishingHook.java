@@ -1,7 +1,13 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityFishingHookBaseComponent;
 
-public interface EntityFishingHook extends Entity {
-
+/**
+ * EntityFishingHook represents a fishing hook entity.
+ *
+ * @author daoge_cmd
+ */
+public interface EntityFishingHook extends
+        EntityProjectile,
+        EntityFishingHookBaseComponent {
 }

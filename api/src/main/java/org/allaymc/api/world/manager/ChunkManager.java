@@ -204,6 +204,16 @@ public interface ChunkManager extends ChunkSource {
     Collection<Chunk> getLoadedChunks();
 
     /**
+     * Check if the specified chunk is within the tick radius of any chunk loader,
+     * meaning entities in this chunk should be considered "active".
+     *
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
+     * @return {@code true} if the chunk is active, otherwise {@code false}.
+     */
+    boolean isChunkActive(int x, int z);
+
+    /**
      * Remove all proto chunks, and full chunks that are unused in the next tick.
      * <p>
      * An unused full chunk is a chunk that is fully loaded but is not holding any chunk

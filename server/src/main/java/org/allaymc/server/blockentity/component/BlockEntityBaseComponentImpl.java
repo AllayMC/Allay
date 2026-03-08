@@ -13,6 +13,7 @@ import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
+import org.allaymc.server.blockentity.component.event.CBlockEntitySaveCleanNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -84,6 +85,18 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         if (!persistentDataContainer.isEmpty()) {
             builder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
+        return builder.build();
+    }
+
+    @Override
+    public NbtMap saveCleanNBT() {
+        var builder = saveNBT().toBuilder();
+        // Remove position
+        builder.remove(TAG_X);
+        builder.remove(TAG_Y);
+        builder.remove(TAG_Z);
+        // Let components remove their own position-related fields
+        manager.callEvent(new CBlockEntitySaveCleanNBTEvent(builder));
         return builder.build();
     }
 
