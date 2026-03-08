@@ -168,7 +168,7 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
         this.setMapping(NAME_PREFIX + normalizedNick, storageUuid.toString());
 
         var playerData = PlayerData.createEmpty();
-        if (this.playerStorage.hasPlayerData(legacyStorageUuid)) { // TODO: remove in 0.13+
+        if (this.playerStorage.hasPlayerData(legacyStorageUuid)) {
             log.info("Migrating legacy player data for {} (legacy storage UUID: {})", nickname, legacyStorageUuid);
             playerData = this.playerStorage.readPlayerData(legacyStorageUuid);
             this.playerStorage.removePlayerData(legacyStorageUuid);
