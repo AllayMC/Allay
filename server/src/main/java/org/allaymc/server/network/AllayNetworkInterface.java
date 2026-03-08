@@ -82,6 +82,13 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
         return OptionalInt.empty();
     }
 
+    /**
+     * Determine whether the given session belongs to a NetEase client.
+     *
+     * @param session the bedrock server session
+     *
+     * @return {@code true} if the session is identified as a NetEase client, otherwise {@code false}
+     */
     public boolean isNetEaseClient(BedrockServerSession session) {
         return getRakNetProtocolVersion(session).orElse(-1) == NETEASE_RAKNET_PROTOCOL_VERSION;
     }
