@@ -29,6 +29,9 @@ import java.util.OptionalInt;
 @Slf4j
 public abstract class AllayNetworkInterface implements NetworkInterface {
 
+    /**
+     * RakNet protocol version used by NetEase clients.
+     */
     protected static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
 
     /**
@@ -68,6 +71,13 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
      */
     public abstract int getPing(BedrockServerSession session);
 
+    /**
+     * Get the RakNet protocol version for the given session if the transport exposes it.
+     *
+     * @param session the bedrock server session
+     *
+     * @return the RakNet protocol version, or an empty result if the transport does not provide one
+     */
     public OptionalInt getRakNetProtocolVersion(BedrockServerSession session) {
         return OptionalInt.empty();
     }
