@@ -185,6 +185,7 @@ public class AllayPlayer implements Player {
     protected final AtomicInteger fullyJoinChunkThreshold;
     @Getter
     protected final BedrockServerSession session;
+    @Getter
     protected final AllayNetworkInterface sourceInterface;
 
     @Getter

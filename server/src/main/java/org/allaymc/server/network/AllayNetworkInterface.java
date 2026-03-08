@@ -13,6 +13,8 @@ import org.allaymc.server.eventbus.event.network.NettyPipelineInitEvent;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
+import java.util.OptionalInt;
+
 /**
  * Abstract base class for {@link NetworkInterface} implementations in the server module.
  * <p>
@@ -26,6 +28,8 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
  */
 @Slf4j
 public abstract class AllayNetworkInterface implements NetworkInterface {
+
+    protected static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
 
     /**
      * Start this network interface and begin accepting connections.
@@ -63,6 +67,14 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
      * @return the ping in milliseconds, or {@code -1} if not available
      */
     public abstract int getPing(BedrockServerSession session);
+
+    public OptionalInt getRakNetProtocolVersion(BedrockServerSession session) {
+        return OptionalInt.empty();
+    }
+
+    public boolean isNetEaseClient(BedrockServerSession session) {
+        return getRakNetProtocolVersion(session).orElse(-1) == NETEASE_RAKNET_PROTOCOL_VERSION;
+    }
 
     /**
      * Initialize a player session from a {@link BedrockServerSession}.
