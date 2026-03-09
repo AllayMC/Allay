@@ -10,9 +10,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 # 0.12.0 (API 0.27.0) - Unreleased
 
+<small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...HEAD)</small>
+
 # 0.11.1 (API 0.26.0) - 2026/3/9
 
-<small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...HEAD)</small>
+<small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...0.11.1)</small>
 
 ### Added
 
