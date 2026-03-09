@@ -55,10 +55,6 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
     protected static final float PLAYER_NETWORK_OFFSET = 1.62f;
 
-    protected static final InputMode[] API_INPUT_MODES = InputMode.values();
-    protected static final ClientPlayMode[] API_PLAY_MODES = ClientPlayMode.values();
-    protected static final InputInteractionModel[] API_INPUT_INTERACTION_MODELS = InputInteractionModel.values();
-
     protected int breakingPosX = Integer.MAX_VALUE;
     protected int breakingPosY = Integer.MAX_VALUE;
     protected int breakingPosZ = Integer.MAX_VALUE;
@@ -472,9 +468,34 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void updatePlayerInputState(Player player, PlayerAuthInputPacket packet) {
-        player.setInputMode(API_INPUT_MODES[packet.getInputMode().ordinal()]);
-        player.setPlayMode(API_PLAY_MODES[packet.getPlayMode().ordinal()]);
-        player.setInputInteractionModel(API_INPUT_INTERACTION_MODELS[packet.getInputInteractionModel().ordinal()]);
+        var inputMode = switch (packet.getInputMode()) {
+            case UNDEFINED -> InputMode.UNDEFINED;
+            case MOUSE -> InputMode.MOUSE;
+            case TOUCH -> InputMode.TOUCH;
+            case GAMEPAD -> InputMode.GAMEPAD;
+            case MOTION_CONTROLLER -> InputMode.MOTION_CONTROLLER;
+        };
+        player.setInputMode(inputMode);
+
+        var playMode = switch (packet.getPlayMode()) {
+            case NORMAL -> ClientPlayMode.NORMAL;
+            case TEASER -> ClientPlayMode.TEASER;
+            case SCREEN -> ClientPlayMode.SCREEN;
+            case VIEWER -> ClientPlayMode.VIEWER;
+            case REALITY -> ClientPlayMode.REALITY;
+            case PLACEMENT -> ClientPlayMode.PLACEMENT;
+            case LIVING_ROOM -> ClientPlayMode.LIVING_ROOM;
+            case EXIT_LEVEL -> ClientPlayMode.EXIT_LEVEL;
+            case EXIT_LEVEL_LIVING_ROOM -> ClientPlayMode.EXIT_LEVEL_LIVING_ROOM;
+        };
+        player.setPlayMode(playMode);
+
+        var interactionModel = switch (packet.getInputInteractionModel()) {
+            case TOUCH -> InputInteractionModel.TOUCH;
+            case CROSSHAIR -> InputInteractionModel.CROSSHAIR;
+            case CLASSIC -> InputInteractionModel.CLASSIC;
+        };
+        player.setInputInteractionModel(interactionModel);
     }
 
     protected boolean notReadyForInput(Player player) {
