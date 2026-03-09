@@ -13,5 +13,6 @@ public enum InputMode {
     /**
      * @deprecated since 1.21.120
      */
+    @Deprecated
     MOTION_CONTROLLER
 }
