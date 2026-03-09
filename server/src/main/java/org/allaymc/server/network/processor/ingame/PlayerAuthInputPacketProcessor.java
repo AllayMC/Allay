@@ -15,7 +15,10 @@ import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.ClientPlayMode;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.InputInteractionModel;
+import org.allaymc.api.player.InputMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.AttackSound;
@@ -383,6 +386,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
+        updatePlayerInputState(player, packet);
+
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player.getControlledEntity()).getBaseComponent());
         if (baseComponent.getExpectedTeleportPos() != null) {
             var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
@@ -474,6 +479,37 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
         ((AllayPlayer) player).handlePacketSync(pk, receiveTime);
+    }
+
+    protected void updatePlayerInputState(Player player, PlayerAuthInputPacket packet) {
+        var inputMode = switch (packet.getInputMode()) {
+            case UNDEFINED -> InputMode.UNDEFINED;
+            case MOUSE -> InputMode.MOUSE;
+            case TOUCH -> InputMode.TOUCH;
+            case GAMEPAD -> InputMode.GAMEPAD;
+            case MOTION_CONTROLLER -> InputMode.MOTION_CONTROLLER;
+        };
+        player.setInputMode(inputMode);
+
+        var playMode = switch (packet.getPlayMode()) {
+            case NORMAL -> ClientPlayMode.NORMAL;
+            case TEASER -> ClientPlayMode.TEASER;
+            case SCREEN -> ClientPlayMode.SCREEN;
+            case VIEWER -> ClientPlayMode.VIEWER;
+            case REALITY -> ClientPlayMode.REALITY;
+            case PLACEMENT -> ClientPlayMode.PLACEMENT;
+            case LIVING_ROOM -> ClientPlayMode.LIVING_ROOM;
+            case EXIT_LEVEL -> ClientPlayMode.EXIT_LEVEL;
+            case EXIT_LEVEL_LIVING_ROOM -> ClientPlayMode.EXIT_LEVEL_LIVING_ROOM;
+        };
+        player.setPlayMode(playMode);
+
+        var interactionModel = switch (packet.getInputInteractionModel()) {
+            case TOUCH -> InputInteractionModel.TOUCH;
+            case CROSSHAIR -> InputInteractionModel.CROSSHAIR;
+            case CLASSIC -> InputInteractionModel.CLASSIC;
+        };
+        player.setInputInteractionModel(interactionModel);
     }
 
     protected boolean notReadyForInput(Player player) {
