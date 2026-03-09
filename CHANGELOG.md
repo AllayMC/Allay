@@ -108,7 +108,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented climate variant property for pig, cow, chicken, and egg entities, with biome-based initialization on spawn.
 - Implemented Fire Aspect enchantment.
 - Implemented entity item and XP drops on death.
-- Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
 - Updated the chunk version to 42 (1.21.120).
 - Implemented `SHOW_DEATH_MESSAGES` game rule — death messages are now suppressed when this rule is disabled.
@@ -124,6 +123,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `EntityPlayerBaseComponent.setBlockSpawnPoint(Location3ic, SpawnPointType)` and `getSpawnPointType()` to distinguish block-anchored spawn points (bed, respawn anchor) from forced ones (e.g., `/spawnpoint`). Added `SpawnPointType` enum (`FORCED`, `BED`, `RESPAWN_ANCHOR`) with a stable numeric `id` for NBT persistence and an `invalidSpawnKey` field carrying the appropriate i18n message key per type.
 - (API) `Scoreboard.displayName` and `Scoreboard.criteriaName` are now mutable — added corresponding setter methods.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
+- Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
+- Made network settings detection transport-aware, allowing each network interface to report its own compression and encryption capabilities.
 - Improved entity auto-save mechanism: entities in loaded chunks are now periodically written to disk on every `entityAutoSaveCycle` tick interval, rather than only being saved when unloaded or on server shutdown.
 
 ### Fixed
@@ -142,6 +143,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed player spawn point not being reset when the bed or respawn anchor it was set by is destroyed. Players with a block-anchored spawn whose block is missing on death now receive the appropriate "not valid" message and respawn at the world spawn.
 - Fixed a typo in `StructureFile.fromNBT`.
 - Fixed cancelled `BlockBreakEvent` occasionally causing the block to disappear from the client's view. The server now correctly reverts the client's predicted block destroy by sending block updates for both layers, and also handles early-rejection cases (insufficient break progress).
+- Fixed missing NBT list entries in vector read methods (`AllayNBTUtils`), which could cause errors when reading incomplete vector data.
+- Fixed player location not being set correctly before spawn, which could cause initial position issues.
+- Fixed `Locale`-sensitive string case conversion in `AllayStringUtils` — now uses `Locale.ROOT` to avoid locale-dependent behavior.
 
 ### Removed
 
