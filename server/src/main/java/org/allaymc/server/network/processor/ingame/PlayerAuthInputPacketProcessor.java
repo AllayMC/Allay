@@ -489,7 +489,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case GAMEPAD -> InputMode.GAMEPAD;
             case MOTION_CONTROLLER -> InputMode.MOTION_CONTROLLER;
         };
-        player.setInputMode(inputMode);
+        ((AllayPlayer) player).setInputMode(inputMode);
 
         var playMode = switch (packet.getPlayMode()) {
             case NORMAL -> ClientPlayMode.NORMAL;
@@ -502,14 +502,14 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case EXIT_LEVEL -> ClientPlayMode.EXIT_LEVEL;
             case EXIT_LEVEL_LIVING_ROOM -> ClientPlayMode.EXIT_LEVEL_LIVING_ROOM;
         };
-        player.setPlayMode(playMode);
+        ((AllayPlayer) player).setPlayMode(playMode);
 
         var interactionModel = switch (packet.getInputInteractionModel()) {
             case TOUCH -> InputInteractionModel.TOUCH;
             case CROSSHAIR -> InputInteractionModel.CROSSHAIR;
             case CLASSIC -> InputInteractionModel.CLASSIC;
         };
-        player.setInputInteractionModel(interactionModel);
+        ((AllayPlayer) player).setInputInteractionModel(interactionModel);
     }
 
     protected boolean notReadyForInput(Player player) {

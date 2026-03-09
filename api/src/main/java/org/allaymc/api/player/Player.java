@@ -390,14 +390,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     InputMode getInputMode();
 
     /**
-     * Sets the latest input mode reported by the client.
-     *
-     * @param inputMode the input mode
-     */
-    @ApiStatus.Internal
-    void setInputMode(InputMode inputMode);
-
-    /**
      * Gets the latest play mode reported by the client.
      *
      * @return the current play mode, or {@code null} if not available yet
@@ -405,27 +397,11 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     ClientPlayMode getPlayMode();
 
     /**
-     * Sets the latest play mode reported by the client.
-     *
-     * @param playMode the play mode
-     */
-    @ApiStatus.Internal
-    void setPlayMode(ClientPlayMode playMode);
-
-    /**
      * Gets the latest input interaction model reported by the client.
      *
      * @return the current input interaction model, or {@code null} if not available yet
      */
     InputInteractionModel getInputInteractionModel();
-
-    /**
-     * Sets the latest input interaction model reported by the client.
-     *
-     * @param inputInteractionModel the input interaction model
-     */
-    @ApiStatus.Internal
-    void setInputInteractionModel(InputInteractionModel inputInteractionModel);
 
     /**
      * Sets the visibility of a specific HUD element for the player.
@@ -477,7 +453,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * Call this after the player has been added to the target dimension,
      * or to dismiss the loading screen if the teleport fails.
      */
-    @ApiStatus.Internal
     void completeDimensionChange();
 
     /**

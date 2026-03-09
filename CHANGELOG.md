@@ -63,6 +63,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `sendDeathInfo(Pair<String, String[]>)` — sends death info to the client.
   - `sendItemChargingFinished()` — notifies the client that item charging has finished.
   - `setMotion(Vector3dc)` — sets the motion of the player.
+  - `getInputMode()` — tracks the player's current input mode (mouse, touch, gamepad, etc.).
+  - `getPlayMode()` — tracks the player's current play mode (normal, screen, etc.).
+  - `getInputInteractionModel()` — tracks the player's current input interaction model (touch, crosshair, classic).
+- (API) Added `InputMode`, `ClientPlayMode`, and `InputInteractionModel` enums for player input state tracking.
 - (API) Added `WorldViewer.viewEnchantOptions(List<Pair<Integer, EnchantOption>>)` for sending enchantment table options to the viewer.
 - (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
 - (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
