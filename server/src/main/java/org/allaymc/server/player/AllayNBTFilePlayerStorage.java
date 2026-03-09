@@ -6,8 +6,10 @@ import org.allaymc.api.player.PlayerData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 /**
@@ -15,23 +17,42 @@ import java.util.UUID;
  */
 @Slf4j
 public class AllayNBTFilePlayerStorage extends AllayPlayerStorage {
+    private static final String NBT_EXTENSION = ".nbt";
+    private static final String TEMP_EXTENSION = NBT_EXTENSION + ".tmp";
+
     protected Path dataFolderPath;
 
     @SneakyThrows
     public AllayNBTFilePlayerStorage(Path dataFolderPath) {
         this.dataFolderPath = dataFolderPath;
-        if (!Files.exists(dataFolderPath)) Files.createDirectory(dataFolderPath);
+
+        Files.createDirectories(dataFolderPath);
+
+        try (var stream = Files.list(dataFolderPath)) {
+            stream.filter(path -> path.toString().endsWith(TEMP_EXTENSION)).forEach(tempFile -> {
+                try {
+                    Files.deleteIfExists(tempFile);
+                    log.warn("Cleaned up orphaned temp file from previous session: {}", tempFile.getFileName());
+                } catch (IOException e) {
+                    log.error("Failed to delete orphaned temp file: {}", tempFile, e);
+                }
+            });
+        } catch (IOException e) {
+            log.error("Failed to cleanup orphaned temp files", e);
+        }
     }
 
     @Override
     public PlayerData readPlayerData(UUID uuid) {
         var path = buildPlayerDataFilePath(uuid);
-        if (!Files.exists(path)) return PlayerData.createEmpty();
+        if (!Files.exists(path)) {
+            return PlayerData.createEmpty();
+        }
 
         try (var reader = NbtUtils.createGZIPReader(Files.newInputStream(path))) {
             return PlayerData.fromNBT((NbtMap) reader.readTag());
         } catch (Throwable e) {
-            log.error("Error while reading player data {}", uuid, e);
+            log.error("Failed to read player data for UUID: {}", uuid, e);
             return PlayerData.createEmpty();
         }
     }
@@ -39,45 +60,41 @@ public class AllayNBTFilePlayerStorage extends AllayPlayerStorage {
     @SneakyThrows
     @Override
     public void savePlayerData(UUID uuid, PlayerData playerData) {
-        var path = buildPlayerDataFilePath(uuid);
+        var finalPath = this.buildPlayerDataFilePath(uuid);
+        var tempPath = this.buildTempPath(uuid);
 
-        var oldPath = path.resolveSibling(uuid + "_old.nbt");
-        if (Files.exists(oldPath)) {
-            // The old file
-            log.warn("Undeleted tmp player data file is found, which may caused by incorrect shutdown. File: {}", oldPath);
-            Files.delete(oldPath);
-        }
-
-        // Rename current file to uuid_old.nbt
-        var currentFileExists = Files.exists(path);
-        if (currentFileExists) Files.move(path, oldPath);
-
-        try (var writer = NbtUtils.createGZIPWriter(Files.newOutputStream(path))) {
-            writer.writeTag(playerData.toNBT());
-        } catch (Throwable e) {
-            if (currentFileExists) {
-                // error, rename uuid_old.nbt file to uuid.nbt
-                Files.move(oldPath, path);
+        try {
+            try (var writer = NbtUtils.createGZIPWriter(Files.newOutputStream(tempPath))) {
+                writer.writeTag(playerData.toNBT());
             }
-            log.error("Error while writing player data {}", uuid, e);
-        }
 
-        // delete uuid_old.nbt file
-        Files.deleteIfExists(oldPath);
+            Files.move(tempPath, finalPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            log.error("Failed to save player data for UUID: {}", uuid, e);
+            Files.deleteIfExists(tempPath);
+        }
     }
 
-    @SneakyThrows
     @Override
     public boolean removePlayerData(UUID uuid) {
-        return Files.deleteIfExists(buildPlayerDataFilePath(uuid));
+        try {
+            return Files.deleteIfExists(this.buildPlayerDataFilePath(uuid));
+        } catch (IOException e) {
+            log.error("Failed to remove player data for UUID: {}", uuid, e);
+            return false;
+        }
     }
 
     @Override
     public boolean hasPlayerData(UUID uuid) {
-        return Files.exists(buildPlayerDataFilePath(uuid));
+        return Files.exists(this.buildPlayerDataFilePath(uuid));
     }
 
     protected Path buildPlayerDataFilePath(UUID uuid) {
-        return dataFolderPath.resolve(uuid.toString() + ".nbt");
+        return this.dataFolderPath.resolve(uuid.toString() + NBT_EXTENSION);
+    }
+
+    private Path buildTempPath(UUID uuid) {
+        return this.dataFolderPath.resolve(uuid.toString() + TEMP_EXTENSION);
     }
 }

@@ -27,6 +27,7 @@ import org.allaymc.server.network.AllayNetworkManager;
 import org.allaymc.server.network.AllayRakNetInterface;
 import org.allaymc.server.player.AllayEmptyPlayerStorage;
 import org.allaymc.server.player.AllayNBTFilePlayerStorage;
+import org.allaymc.server.player.AllayOfflinePlayerManager;
 import org.allaymc.server.player.AllayPlayerManager;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -92,7 +93,13 @@ public final class AllayServer implements Server {
         this.state = new AtomicReference<>(ServerState.STARTING);
         var rakNetInterface = new AllayRakNetInterface(this);
         var networkManager = new AllayNetworkManager(rakNetInterface);
-        this.playerManager = new AllayPlayerManager(SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE, networkManager);
+        var playersPath = Path.of("players");
+        var playerStorage = SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(playersPath) : AllayEmptyPlayerStorage.INSTANCE;
+        this.playerManager = new AllayPlayerManager(
+                playerStorage,
+                new AllayOfflinePlayerManager(playersPath.resolve("index"), playerStorage),
+                networkManager
+        );
         this.worldPool = new AllayWorldPool();
         this.computeThreadPool = createComputeThreadPool();
         this.virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();

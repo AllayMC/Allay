@@ -143,10 +143,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import static org.allaymc.api.utils.AllayNBTUtils.readVector2f;
-import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
-import static org.allaymc.api.utils.AllayNBTUtils.writeVector2f;
-import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.*;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
 import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
 
@@ -227,6 +224,10 @@ public class AllayPlayer implements Player {
     // Hud
     protected Set<HudElement> hiddenHudElements;
     protected boolean shouldSendHudElements;
+
+    @Setter
+    @Getter
+    protected UUID storageUuid;
 
     // NetEase
     @Getter
@@ -2971,7 +2972,7 @@ public class AllayPlayer implements Player {
             playerData.setDimension(currentDimension);
 
             // Save new player data back to storage
-            playerManager.getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
+            playerManager.getPlayerStorage().savePlayerData(this.storageUuid, playerData);
         } else {
             dimension = (AllayDimension) logOffWorld.getDimension(playerData.getDimension());
             currentPos = readVector3f(playerData.getNbt(), "Pos");

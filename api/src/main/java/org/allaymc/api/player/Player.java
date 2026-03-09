@@ -3,7 +3,6 @@ package org.allaymc.api.player;
 import org.allaymc.api.bossbar.BossBarViewer;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.dialog.DialogViewer;
-import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormViewer;
 import org.allaymc.api.message.MayContainTrKey;
@@ -19,6 +18,7 @@ import org.joml.Vector3dc;
 import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * Represents a player in the server. A {@link Player} basically 'control' an {@link EntityPlayer}.
@@ -306,34 +306,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void sendItemChargingFinished();
 
     /**
-     * Represents a speed value controlled by a base speed and a multiplier. The actual
-     * speed value is the multiplication of the base speed with the multiplier.
-     *
-     * @param baseSpeed  the base speed value
-     * @param multiplier the multiplier of the base speed value
-     */
-    record Speed(double baseSpeed, double multiplier) {
-        /**
-         * Calculates the actual speed by multiplying the base speed with the multiplier.
-         *
-         * @return the calculated speed as a product of the base speed and multiplier
-         */
-        public double calculate() {
-            return baseSpeed * multiplier;
-        }
-
-        /**
-         * Creates a new {@code Speed} instance by adding the specified multiplier to the current multiplier.
-         *
-         * @param multiplier the multiplier to be added to the current multiplier
-         * @return a new {@code Speed} instance with the updated multiplier
-         */
-        public Speed addMultiplier(double multiplier) {
-            return new Speed(this.baseSpeed, this.multiplier + multiplier);
-        }
-    }
-
-    /**
      * Get the speed of the player.
      *
      * @return The speed of the player
@@ -450,4 +422,43 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      */
     @ApiStatus.Internal
     void sendPacketImmediately(Object packet);
+
+    /**
+     * Gets the storage UUID for this player.
+     * <p>
+     * The storage UUID is a unique identifier used by {@link PlayerStorage}
+     * to locate this player's data files. It is generated when the player first
+     * joins and never changes, providing a stable identifier across sessions.
+     *
+     * @return The storage UUID, never null
+     */
+    UUID getStorageUuid();
+
+    /**
+     * Represents a speed value controlled by a base speed and a multiplier. The actual
+     * speed value is the multiplication of the base speed with the multiplier.
+     *
+     * @param baseSpeed  the base speed value
+     * @param multiplier the multiplier of the base speed value
+     */
+    record Speed(double baseSpeed, double multiplier) {
+        /**
+         * Calculates the actual speed by multiplying the base speed with the multiplier.
+         *
+         * @return the calculated speed as a product of the base speed and multiplier
+         */
+        public double calculate() {
+            return baseSpeed * multiplier;
+        }
+
+        /**
+         * Creates a new {@code Speed} instance by adding the specified multiplier to the current multiplier.
+         *
+         * @param multiplier the multiplier to be added to the current multiplier
+         * @return a new {@code Speed} instance with the updated multiplier
+         */
+        public Speed addMultiplier(double multiplier) {
+            return new Speed(this.baseSpeed, this.multiplier + multiplier);
+        }
+    }
 }

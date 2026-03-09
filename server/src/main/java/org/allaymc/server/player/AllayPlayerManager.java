@@ -41,6 +41,8 @@ public class AllayPlayerManager implements PlayerManager {
     @Getter
     protected final AllayPlayerStorage playerStorage;
     @Getter
+    protected final AllayOfflinePlayerManager offlinePlayerManager;
+    @Getter
     protected final AllayNetworkManager networkManager;
 
     protected final Map<UUID, Player> players;
@@ -49,12 +51,13 @@ public class AllayPlayerManager implements PlayerManager {
     protected final Operators operators;
     protected int maxPlayerCount;
 
-    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayNetworkManager networkManager) {
+    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayOfflinePlayerManager offlinePlayerManager, AllayNetworkManager networkManager) {
         this.playerStorage = playerStorage;
+        this.offlinePlayerManager = offlinePlayerManager;
         this.networkManager = networkManager;
         this.maxPlayerCount = AllayServer.getSettings().genericSettings().maxPlayerCount();
         this.players = new Object2ObjectOpenHashMap<>();
-        this.banInfo = ConfigManager.create(BanInfo.class, org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
+        this.banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
         this.operators = ConfigManager.create(Operators.class, Utils.createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
     }
@@ -65,7 +68,11 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     public void shutdown() {
+        this.savePlayerData();
+
         this.playerStorage.shutdown();
+        this.offlinePlayerManager.shutdown();
+
         this.banInfo.save();
         this.whitelist.save();
         this.operators.save();
@@ -310,7 +317,7 @@ public class AllayPlayerManager implements PlayerManager {
             if (dimension != null) {
                 ((AllayDimension) dimension).removePlayer(player);
             }
-            
+
             this.playerStorage.savePlayerData(player);
             broadcastPlayerListChange(player, false);
         }
