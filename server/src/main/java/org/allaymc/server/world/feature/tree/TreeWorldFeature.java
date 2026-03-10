@@ -408,10 +408,10 @@ public abstract class TreeWorldFeature extends AbstractWorldFeature {
         boolean shouldSkip(ThreadLocalRandom random, RowCoord coord, int localY, int range, boolean large);
     }
 
-    protected record FoliageAttachment(int x, int y, int z, int radiusOffset, boolean doubleTrunk) {
+    public record FoliageAttachment(int x, int y, int z, int radiusOffset, boolean doubleTrunk) {
     }
 
-    protected record RowCoord(int signedX, int signedZ, int localX, int localZ) {
+    public record RowCoord(int signedX, int signedZ, int localX, int localZ) {
     }
 
     protected enum VineFace {
