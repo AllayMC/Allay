@@ -19,8 +19,9 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.item.data.ItemId;
 
-import java.util.Set;
 import org.allaymc.api.block.type.BlockState;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Base component for candle cake block behavior.
@@ -34,11 +35,15 @@ import org.allaymc.api.block.type.BlockState;
  */
 public class BlockCandleCakeBaseComponentImpl extends BlockBaseComponentImpl {
 
-    private final ItemId candleItemId;
+    private final Supplier<ItemType<?>> candleItemType;
+
+    public BlockCandleCakeBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<ItemType<?>> candleItemTypeSupplier) {
+        super(blockType);
+        this.candleItemType = candleItemTypeSupplier;
+    }
 
     public BlockCandleCakeBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId candleItemId) {
-        super(blockType);
-        this.candleItemId = candleItemId;
+        this(blockType, candleItemId::getItemType);
     }
 
     @Override
@@ -129,7 +134,7 @@ public class BlockCandleCakeBaseComponentImpl extends BlockBaseComponentImpl {
      * Get the candle item type for this candle cake.
      */
     protected ItemType<?> getCandleItemType() {
-        return candleItemId.getItemType();
+        return candleItemType.get();
     }
 
     @Override

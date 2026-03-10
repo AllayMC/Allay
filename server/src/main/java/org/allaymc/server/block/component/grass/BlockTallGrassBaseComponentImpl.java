@@ -8,12 +8,14 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.data.ItemId;
 import org.joml.Vector3ic;
 
 import java.util.Set;
+import java.util.function.Supplier;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
 
@@ -24,11 +26,15 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK
  */
 public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponentImpl {
 
-    protected final ItemId shearDrop;
+    protected final Supplier<ItemType<?>> shearDropItemType;
+
+    public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<ItemType<?>> shearDropItemTypeSupplier) {
+        super(blockType);
+        this.shearDropItemType = shearDropItemTypeSupplier;
+    }
 
     public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId shearDrop) {
-        super(blockType);
-        this.shearDrop = shearDrop;
+        this(blockType, shearDrop::getItemType);
     }
 
     @Override
@@ -74,7 +80,7 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
-            return Set.of(shearDrop.getItemType().createItemStack(2));
+            return Set.of(shearDropItemType.get().createItemStack(2));
         }
 
         return super.getDrops(block, usedItem, entity);

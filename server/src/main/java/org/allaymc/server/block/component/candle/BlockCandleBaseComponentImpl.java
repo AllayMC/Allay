@@ -19,6 +19,7 @@ import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Base component for candle block behavior.
@@ -35,11 +36,15 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
 
     public static final int MAX_CANDLES = 3; // 0-3 means 1-4 candles
 
-    private final BlockId candleCakeId;
+    private final Supplier<BlockType<?>> candleCakeType;
+
+    public BlockCandleBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> candleCakeTypeSupplier) {
+        super(blockType);
+        this.candleCakeType = candleCakeTypeSupplier;
+    }
 
     public BlockCandleBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId candleCakeId) {
-        super(blockType);
-        this.candleCakeId = candleCakeId;
+        this(blockType, candleCakeId::getBlockType);
     }
 
     @Override
@@ -58,7 +63,7 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
             if (bites == 0) {
                 dimension.setBlockState(
                         clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(),
-                        candleCakeId.getBlockType().getDefaultState(), placementInfo
+                        candleCakeType.get().getDefaultState(), placementInfo
                 );
                 return true;
             }

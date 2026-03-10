@@ -11,21 +11,27 @@ import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.joml.Vector3ic;
 
+import java.util.function.Supplier;
+
 /**
  * @author IWareQ
  */
 @Slf4j
 public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl implements ItemSpawnEggBaseComponent {
-    protected EntityId entityId;
+    protected final Supplier<EntityType<?>> entityType;
+
+    public ItemSpawnEggBaseComponentImpl(ItemStackInitInfo initInfo, Supplier<EntityType<?>> entityTypeSupplier) {
+        super(initInfo);
+        this.entityType = entityTypeSupplier;
+    }
 
     public ItemSpawnEggBaseComponentImpl(ItemStackInitInfo initInfo, EntityId entityId) {
-        super(initInfo);
-        this.entityId = entityId;
+        this(initInfo, entityId::getEntityType);
     }
 
     @Override
     public EntityType<?> getEntityType() {
-        return entityId.getEntityType();
+        return entityType.get();
     }
 
     @Override
@@ -36,7 +42,7 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl impleme
 
         var clickedPos = interactInfo.clickedPos();
         var clickedBlockPos = interactInfo.clickedBlockPos();
-        var entity = entityId.getEntityType().createEntity(
+        var entity = getEntityType().createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(

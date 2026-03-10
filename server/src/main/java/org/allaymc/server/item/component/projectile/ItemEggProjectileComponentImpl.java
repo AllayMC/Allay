@@ -4,8 +4,11 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.property.enums.ClimateVariant;
 import org.allaymc.api.entity.property.type.EntityPropertyTypes;
-import org.allaymc.server.entity.data.EntityId;
+import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.joml.Vector3d;
+
+import java.util.function.Supplier;
 
 /**
  * Projectile component for climate-variant eggs (blue egg, brown egg).
@@ -19,7 +22,11 @@ public class ItemEggProjectileComponentImpl extends ItemProjectileComponentImpl 
     protected final ClimateVariant climateVariant;
 
     public ItemEggProjectileComponentImpl(ClimateVariant climateVariant) {
-        super(EntityId.EGG, 1.5);
+        this(() -> EntityTypes.EGG, climateVariant);
+    }
+
+    protected ItemEggProjectileComponentImpl(Supplier<EntityType<?>> projectileEntityTypeSupplier, ClimateVariant climateVariant) {
+        super(projectileEntityTypeSupplier, 1.5);
         this.climateVariant = climateVariant;
     }
 

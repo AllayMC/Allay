@@ -20,18 +20,24 @@ import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 
+import java.util.function.Supplier;
+
 /**
  * @author daoge_cmd
  */
 public class BlockFungusBaseComponentImpl extends BlockBaseComponentImpl {
 
-    protected final BlockId nyliumId;
+    protected final Supplier<BlockType<?>> nyliumBlockType;
     protected final Identifier fungusFeatureId;
 
-    public BlockFungusBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId nyliumId, Identifier fungusFeatureId) {
+    public BlockFungusBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> nyliumBlockTypeSupplier, Identifier fungusFeatureId) {
         super(blockType);
-        this.nyliumId = nyliumId;
+        this.nyliumBlockType = nyliumBlockTypeSupplier;
         this.fungusFeatureId = fungusFeatureId;
+    }
+
+    public BlockFungusBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId nyliumId, Identifier fungusFeatureId) {
+        this(blockType, nyliumId::getBlockType, fungusFeatureId);
     }
 
     @Override
@@ -65,7 +71,7 @@ public class BlockFungusBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Tree growth only on matching nylium
         var downBlockType = dimension.getBlockState(BlockFace.DOWN.offsetPos(interactInfo.clickedBlockPos())).getBlockType();
-        if (downBlockType == nyliumId.getBlockType()) {
+        if (downBlockType == nyliumBlockType.get()) {
             interactInfo.player().tryConsumeItemInHand();
             dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
             growFungus(interactInfo.getClickedBlock());

@@ -9,17 +9,23 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 
+import java.util.function.Supplier;
+
 /**
  * @author daoge_cmd
  */
 public class ItemSignBaseComponentImpl extends ItemBaseComponentImpl implements ItemSignBaseComponent {
-    protected BlockId wallSignId;
-    protected BlockId standingSignId;
+    protected final Supplier<BlockType<?>> wallSignType;
+    protected final Supplier<BlockType<?>> standingSignType;
+
+    public ItemSignBaseComponentImpl(ItemStackInitInfo initInfo, Supplier<BlockType<?>> wallSignTypeSupplier, Supplier<BlockType<?>> standingSignTypeSupplier) {
+        super(initInfo);
+        this.wallSignType = wallSignTypeSupplier;
+        this.standingSignType = standingSignTypeSupplier;
+    }
 
     public ItemSignBaseComponentImpl(ItemStackInitInfo initInfo, BlockId wallSignId, BlockId standingSignId) {
-        super(initInfo);
-        this.wallSignId = wallSignId;
-        this.standingSignId = standingSignId;
+        this(initInfo, wallSignId::getBlockType, standingSignId::getBlockType);
     }
 
     @Override
@@ -33,11 +39,11 @@ public class ItemSignBaseComponentImpl extends ItemBaseComponentImpl implements 
 
     @Override
     public BlockType<?> getWallSignType() {
-        return wallSignId.getBlockType();
+        return wallSignType.get();
     }
 
     @Override
     public BlockType<?> getStandingSignType() {
-        return standingSignId.getBlockType();
+        return standingSignType.get();
     }
 }

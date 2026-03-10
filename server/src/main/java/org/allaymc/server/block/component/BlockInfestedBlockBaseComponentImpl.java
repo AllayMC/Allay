@@ -13,16 +13,21 @@ import org.allaymc.server.block.data.BlockId;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * @author IWareQ
  */
 public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl implements BlockInfestedBlockBaseComponent {
-    protected final BlockId imitatedBlockId;
+    protected final Supplier<BlockType<?>> imitatedBlockType;
+
+    public BlockInfestedBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> imitatedBlockTypeSupplier) {
+        super(blockType);
+        this.imitatedBlockType = imitatedBlockTypeSupplier;
+    }
 
     public BlockInfestedBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId imitatedBlockId) {
-        super(blockType);
-        this.imitatedBlockId = imitatedBlockId;
+        this(blockType, imitatedBlockId::getBlockType);
     }
 
     @Override
@@ -48,6 +53,6 @@ public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl 
 
     @Override
     public BlockType<?> getImitatedBlock() {
-        return imitatedBlockId.getBlockType();
+        return imitatedBlockType.get();
     }
 }

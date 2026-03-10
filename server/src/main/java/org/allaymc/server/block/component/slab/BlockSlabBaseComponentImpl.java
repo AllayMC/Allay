@@ -13,15 +13,21 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 
+import java.util.function.Supplier;
+
 /**
  * @author daoge_cmd
  */
 public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implements BlockSlabBaseComponent {
-    protected BlockId doubleSlabId;
+    protected final Supplier<BlockType<?>> doubleSlabType;
+
+    public BlockSlabBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> doubleSlabTypeSupplier) {
+        super(blockType);
+        this.doubleSlabType = doubleSlabTypeSupplier;
+    }
 
     public BlockSlabBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId doubleSlabId) {
-        super(blockType);
-        this.doubleSlabId = doubleSlabId;
+        this(blockType, doubleSlabId::getBlockType);
     }
 
     @Override
@@ -80,6 +86,6 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
 
     @Override
     public BlockType<?> getDoubleSlabBlockType() {
-        return doubleSlabId.getBlockType();
+        return doubleSlabType.get();
     }
 }

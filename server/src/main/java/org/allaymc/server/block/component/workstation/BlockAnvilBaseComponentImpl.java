@@ -6,6 +6,7 @@ import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
@@ -14,17 +15,23 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 
+import java.util.function.Supplier;
+
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
 
 /**
  * @author IWareQ
  */
 public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implements BlockAnvilBaseComponent {
-    protected final BlockId nextAnvil;
+    protected final Supplier<BlockType<?>> nextAnvilType;
+
+    public BlockAnvilBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> nextAnvilTypeSupplier) {
+        super(blockType);
+        this.nextAnvilType = nextAnvilTypeSupplier;
+    }
 
     public BlockAnvilBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId nextAnvil) {
-        super(blockType);
-        this.nextAnvil = nextAnvil;
+        this(blockType, nextAnvil::getBlockType);
     }
 
     @Override
@@ -59,10 +66,11 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
 
     @Override
     public BlockState damage(BlockState current) {
-        if (nextAnvil == BlockId.AIR) {
-            return BlockId.AIR.getBlockType().getDefaultState();
+        var nextAnvil = nextAnvilType.get();
+        if (nextAnvil == BlockTypes.AIR) {
+            return BlockTypes.AIR.getDefaultState();
         }
 
-        return nextAnvil.getBlockType().copyPropertyValuesFrom(current);
+        return nextAnvil.copyPropertyValuesFrom(current);
     }
 }

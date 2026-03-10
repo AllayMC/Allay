@@ -13,6 +13,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.block.FortuneDropHelper;
 import org.allaymc.server.item.data.ItemId;
@@ -20,6 +21,7 @@ import org.allaymc.server.item.data.ItemId;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPDATE_BIT;
 import org.allaymc.api.block.type.BlockState;
@@ -33,15 +35,19 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN, BlockFace.UP
     };
 
-    protected final ItemId saplingId; // Nullable
+    protected final Supplier<ItemType<?>> saplingType; // Nullable
     protected final boolean canDropApple;
     protected final boolean dropMoreSaplings;
 
-    public BlockLeavesBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId saplingId, boolean canDropApple, boolean dropMoreSaplings) {
+    public BlockLeavesBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<ItemType<?>> saplingTypeSupplier, boolean canDropApple, boolean dropMoreSaplings) {
         super(blockType);
-        this.saplingId = saplingId;
+        this.saplingType = saplingTypeSupplier;
         this.canDropApple = canDropApple;
         this.dropMoreSaplings = dropMoreSaplings;
+    }
+
+    public BlockLeavesBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId saplingId, boolean canDropApple, boolean dropMoreSaplings) {
+        this(blockType, saplingId == null ? null : saplingId::getItemType, canDropApple, dropMoreSaplings);
     }
 
     protected static long hashBlockXYZ(int x, int y, int z) {
@@ -144,8 +150,9 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             drops.add(ItemTypes.STICK.createItemStack(ThreadLocalRandom.current().nextInt(1, 3)));
         }
 
-        if (saplingId != null && FortuneDropHelper.bonusChanceDivisor(usedItem, dropMoreSaplings ? 40 : 20, 4)) {
-            drops.add(saplingId.getItemType().createItemStack());
+        var saplingItemType = saplingType == null ? null : saplingType.get();
+        if (saplingItemType != null && FortuneDropHelper.bonusChanceDivisor(usedItem, dropMoreSaplings ? 40 : 20, 4)) {
+            drops.add(saplingItemType.createItemStack());
         }
 
         return drops;
