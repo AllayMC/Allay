@@ -213,6 +213,14 @@ public record BlockStateDefinition(
             return of(texture, RenderMethod.OPAQUE);
         }
 
+        public static MaterialInstance blend(String texture) {
+            return of(texture, RenderMethod.BLEND);
+        }
+
+        public static MaterialInstance doubleSided(String texture) {
+            return of(texture, RenderMethod.DOUBLE_SIDED);
+        }
+
         public static MaterialInstance alphaTest(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST);
         }
@@ -221,12 +229,16 @@ public record BlockStateDefinition(
             return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED);
         }
 
-        public static MaterialInstance blend(String texture) {
-            return of(texture, RenderMethod.BLEND);
+        public static MaterialInstance alphaTestToOpaque(String texture) {
+            return of(texture, RenderMethod.ALPHA_TEST_TO_OPAQUE);
         }
 
-        public static MaterialInstance doubleSided(String texture) {
-            return of(texture, RenderMethod.DOUBLE_SIDED);
+        public static MaterialInstance alphaTestSingleSidedToOpaque(String texture) {
+            return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE);
+        }
+
+        public static MaterialInstance blendToOpaque(String texture) {
+            return of(texture, RenderMethod.BLEND_TO_OPAQUE);
         }
 
         public NbtMap toNBT(TintMethod tintMethod) {
