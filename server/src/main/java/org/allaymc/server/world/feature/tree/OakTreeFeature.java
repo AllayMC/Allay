@@ -21,9 +21,7 @@ public class OakTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.OAK_LOG,
-                BlockTypes.OAK_LEAVES,
-                BlockTypes.OAK_SAPLING,
-                4, 6
+                BlockTypes.OAK_LEAVES
         );
     }
 

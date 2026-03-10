@@ -3,8 +3,10 @@ package org.allaymc.server.world.feature.tree;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -21,9 +23,7 @@ public class SpruceTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.SPRUCE_LOG,
-                BlockTypes.SPRUCE_LEAVES,
-                BlockTypes.SPRUCE_SAPLING,
-                6, 9
+                BlockTypes.SPRUCE_LEAVES
         );
     }
 
@@ -55,8 +55,45 @@ public class SpruceTreeFeature extends TreeWorldFeature {
                 foliageHeight,
                 foliageRadius,
                 offset,
-                new ArrayList<>()
+                new ArrayList<Vector3i>()
         );
         return true;
+    }
+
+    private void placeSpruceFoliage(
+            WorldFeatureContext context,
+            FoliageAttachment attachment,
+            int foliageHeight,
+            int foliageRadius,
+            int offset,
+            List<Vector3i> placedLeaves
+    ) {
+        var random = ThreadLocalRandom.current();
+        int range = random.nextInt(2);
+        int maxRange = 1;
+        int resetRange = 0;
+        for (int localY = offset; localY >= -foliageHeight; localY--) {
+            int currentRange = range;
+            placeLeavesRow(
+                    context,
+                    attachment.x(),
+                    attachment.y(),
+                    attachment.z(),
+                    currentRange,
+                    localY,
+                    attachment.doubleTrunk(),
+                    (ignored, coord, rowY, rowRange, large) ->
+                            coord.localX() == rowRange && coord.localZ() == rowRange && rowRange > 0,
+                    placedLeaves
+            );
+
+            if (range >= maxRange) {
+                range = resetRange;
+                resetRange = 1;
+                maxRange = Math.min(maxRange + 1, foliageRadius + attachment.radiusOffset());
+            } else {
+                range++;
+            }
+        }
     }
 }

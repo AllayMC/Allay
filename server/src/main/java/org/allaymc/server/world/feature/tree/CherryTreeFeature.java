@@ -4,8 +4,10 @@ import org.allaymc.api.block.property.enums.PillarAxis;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -21,9 +23,7 @@ public class CherryTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.CHERRY_LOG,
-                BlockTypes.CHERRY_LEAVES,
-                BlockTypes.CHERRY_SAPLING,
-                7, 8
+                BlockTypes.CHERRY_LEAVES
         );
     }
 
@@ -75,11 +75,130 @@ public class CherryTreeFeature extends TreeWorldFeature {
             attachments.add(generateBranch(context, x, y, z, maxFreeTreeHeight, opposite(branchDirection), secondBranchStart, secondBranchStart < trunkHeight - 1));
         }
 
-        var placedLeaves = new ArrayList<TreePos>();
+        var placedLeaves = new ArrayList<Vector3i>();
         for (var attachment : attachments) {
             placeCherryFoliage(context, attachment, 5, 4, 0, 0.25f, 0.5f, 0.16666667f, 0.33333334f, placedLeaves);
         }
         return true;
+    }
+
+    private void placeCherryFoliage(
+            WorldFeatureContext context,
+            FoliageAttachment attachment,
+            int foliageHeight,
+            int foliageRadius,
+            int offset,
+            float wideBottomLayerHoleChance,
+            float cornerHoleChance,
+            float hangingLeavesChance,
+            float hangingLeavesExtensionChance,
+            List<Vector3i> placedLeaves
+    ) {
+        int baseX = attachment.x();
+        int baseY = attachment.y() + offset;
+        int baseZ = attachment.z();
+        int range = foliageRadius + attachment.radiusOffset() - 1;
+
+        RowSkipper cherrySkipper = (random, coord, localY, rowRange, large) -> {
+            if (localY == -1 &&
+                (coord.localX() == rowRange || coord.localZ() == rowRange) &&
+                random.nextFloat() < wideBottomLayerHoleChance) {
+                return true;
+            }
+            boolean isCorner = coord.localX() == rowRange && coord.localZ() == rowRange;
+            if (rowRange > 2) {
+                return isCorner ||
+                       (coord.localX() + coord.localZ() > rowRange * 2 - 2 && random.nextFloat() < cornerHoleChance);
+            }
+            return isCorner && random.nextFloat() < cornerHoleChance;
+        };
+
+        placeLeavesRow(context, baseX, baseY, baseZ, range - 2, foliageHeight - 3, attachment.doubleTrunk(), cherrySkipper, placedLeaves);
+        placeLeavesRow(context, baseX, baseY, baseZ, range - 1, foliageHeight - 4, attachment.doubleTrunk(), cherrySkipper, placedLeaves);
+        for (int localY = foliageHeight - 5; localY >= 0; localY--) {
+            placeLeavesRow(context, baseX, baseY, baseZ, range, localY, attachment.doubleTrunk(), cherrySkipper, placedLeaves);
+        }
+        placeLeavesRowWithHangingLeavesBelow(
+                context,
+                baseX,
+                baseY,
+                baseZ,
+                range,
+                -1,
+                attachment.doubleTrunk(),
+                cherrySkipper,
+                hangingLeavesChance,
+                hangingLeavesExtensionChance,
+                placedLeaves
+        );
+        placeLeavesRowWithHangingLeavesBelow(
+                context,
+                baseX,
+                baseY,
+                baseZ,
+                range - 1,
+                -2,
+                attachment.doubleTrunk(),
+                cherrySkipper,
+                hangingLeavesChance,
+                hangingLeavesExtensionChance,
+                placedLeaves
+        );
+    }
+
+    private void placeLeavesRowWithHangingLeavesBelow(
+            WorldFeatureContext context,
+            int x,
+            int y,
+            int z,
+            int range,
+            int localY,
+            boolean large,
+            RowSkipper skipper,
+            float hangingLeavesChance,
+            float hangingLeavesExtensionChance,
+            List<Vector3i> placedLeaves
+    ) {
+        placeLeavesRow(context, x, y, z, range, localY, large, skipper, placedLeaves);
+
+        int extra = large ? 1 : 0;
+        int leafY = y + localY;
+        int baseBelowY = y - 1;
+        var random = ThreadLocalRandom.current();
+        for (var direction : HorizontalDirection.values()) {
+            int edge = direction.clockWiseAxisPositive() ? range + extra : range;
+            int cursorX = x + direction.clockWiseStepX() * edge + direction.stepX() * -range;
+            int cursorZ = z + direction.clockWiseStepZ() * edge + direction.stepZ() * -range;
+            for (int i = -range; i < range + extra; i++) {
+                if (isLeaves(context, cursorX, leafY, cursorZ) &&
+                    tryPlaceLeafExtension(context, random, cursorX, leafY - 1, cursorZ, x, baseBelowY, z, hangingLeavesChance, placedLeaves)) {
+                    tryPlaceLeafExtension(context, random, cursorX, leafY - 2, cursorZ, x, baseBelowY, z, hangingLeavesExtensionChance, placedLeaves);
+                }
+                cursorX += direction.stepX();
+                cursorZ += direction.stepZ();
+            }
+        }
+    }
+
+    private boolean tryPlaceLeafExtension(
+            WorldFeatureContext context,
+            ThreadLocalRandom random,
+            int x,
+            int y,
+            int z,
+            int originX,
+            int originY,
+            int originZ,
+            float chance,
+            List<Vector3i> placedLeaves
+    ) {
+        if (Math.abs(x - originX) + Math.abs(y - originY) + Math.abs(z - originZ) >= 7) {
+            return false;
+        }
+        if (random.nextFloat() > chance) {
+            return false;
+        }
+        return tryPlaceLeaves(context, x, y, z, placedLeaves);
     }
 
     private FoliageAttachment generateBranch(

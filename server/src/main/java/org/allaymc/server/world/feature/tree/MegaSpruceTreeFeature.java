@@ -3,6 +3,7 @@ package org.allaymc.server.world.feature.tree;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,9 +21,7 @@ public class MegaSpruceTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.SPRUCE_LOG,
-                BlockTypes.SPRUCE_LEAVES,
-                BlockTypes.SPRUCE_SAPLING,
-                13, 29
+                BlockTypes.SPRUCE_LEAVES
         );
     }
 
@@ -58,7 +57,7 @@ public class MegaSpruceTreeFeature extends TreeWorldFeature {
             }
         }
 
-        var placedLogs = new ArrayList<TreePos>();
+        var placedLogs = new ArrayList<Vector3i>();
         for (int dy = 0; dy < maxFreeTreeHeight; dy++) {
             placeLogIfValid(context, x, y + dy, z, placedLogs);
             if (dy < maxFreeTreeHeight - 1) {
@@ -68,7 +67,7 @@ public class MegaSpruceTreeFeature extends TreeWorldFeature {
             }
         }
 
-        var placedLeaves = new ArrayList<TreePos>();
+        var placedLeaves = new ArrayList<Vector3i>();
         placeMegaPineFoliage(
                 context,
                 new FoliageAttachment(x, y + maxFreeTreeHeight, z, 0, true),

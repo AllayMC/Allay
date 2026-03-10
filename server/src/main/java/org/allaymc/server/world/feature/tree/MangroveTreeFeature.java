@@ -2,10 +2,13 @@ package org.allaymc.server.world.feature.tree;
 
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,9 +25,7 @@ public class MangroveTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.MANGROVE_LOG,
-                BlockTypes.MANGROVE_LEAVES,
-                BlockTypes.MANGROVE_PROPAGULE,
-                3, 21
+                BlockTypes.MANGROVE_LEAVES
         );
     }
 
@@ -63,7 +64,7 @@ public class MangroveTreeFeature extends TreeWorldFeature {
         var attachments = new ArrayList<FoliageAttachment>();
         placeMangroveTrunk(context, x, trunkY, z, maxFreeTreeHeight, tall, attachments);
 
-        var placedLeaves = new ArrayList<TreePos>();
+        var placedLeaves = new ArrayList<Vector3i>();
         for (var attachment : attachments) {
             placeRandomSpreadFoliage(
                     context,
@@ -87,13 +88,13 @@ public class MangroveTreeFeature extends TreeWorldFeature {
             }
         }
 
-        TreePos trunkOrigin = new TreePos(x, trunkY, z);
-        var roots = new ArrayList<TreePos>();
-        roots.add(new TreePos(x, trunkY - 1, z));
+        var trunkOrigin = new Vector3i(x, trunkY, z);
+        var roots = new ArrayList<Vector3i>();
+        roots.add(new Vector3i(x, trunkY - 1, z));
 
         for (var direction : HorizontalDirection.values()) {
-            var directionalRoots = new ArrayList<TreePos>();
-            TreePos sidePos = new TreePos(x + direction.stepX(), trunkY, z + direction.stepZ());
+            var directionalRoots = new ArrayList<Vector3i>();
+            var sidePos = new Vector3i(x + direction.stepX(), trunkY, z + direction.stepZ());
             if (!simulateRoots(context, sidePos, direction, trunkOrigin, directionalRoots, 0)) {
                 return false;
             }
@@ -109,10 +110,10 @@ public class MangroveTreeFeature extends TreeWorldFeature {
 
     private boolean simulateRoots(
             WorldFeatureContext context,
-            TreePos pos,
+            Vector3i pos,
             HorizontalDirection direction,
-            TreePos trunkOrigin,
-            List<TreePos> roots,
+            Vector3i trunkOrigin,
+            List<Vector3i> roots,
             int length
     ) {
         if (length == 15 || roots.size() > 15) {
@@ -130,14 +131,14 @@ public class MangroveTreeFeature extends TreeWorldFeature {
         return true;
     }
 
-    private List<TreePos> potentialRootPositions(TreePos pos, HorizontalDirection direction, TreePos trunkOrigin) {
+    private List<Vector3i> potentialRootPositions(Vector3i pos, HorizontalDirection direction, Vector3i trunkOrigin) {
         var random = ThreadLocalRandom.current();
-        TreePos below = new TreePos(pos.x(), pos.y() - 1, pos.z());
-        TreePos forward = new TreePos(pos.x() + direction.stepX(), pos.y(), pos.z() + direction.stepZ());
+        var below = new Vector3i(pos.x(), pos.y() - 1, pos.z());
+        var forward = new Vector3i(pos.x() + direction.stepX(), pos.y(), pos.z() + direction.stepZ());
         int distance = Math.abs(pos.x() - trunkOrigin.x()) + Math.abs(pos.y() - trunkOrigin.y()) + Math.abs(pos.z() - trunkOrigin.z());
         if (distance > 5 && distance <= 8) {
             if (random.nextFloat() < 0.2f) {
-                return List.of(below, new TreePos(forward.x(), forward.y() - 1, forward.z()));
+                return List.of(below, new Vector3i(forward.x(), forward.y() - 1, forward.z()));
             }
             return List.of(below);
         }
@@ -264,5 +265,59 @@ public class MangroveTreeFeature extends TreeWorldFeature {
 
     private int sampleUniform(ThreadLocalRandom random, int min, int max) {
         return random.nextInt(max - min + 1) + min;
+    }
+
+    private void placeRandomSpreadFoliage(
+            WorldFeatureContext context,
+            FoliageAttachment attachment,
+            int foliageHeight,
+            int foliageRadius,
+            int leafPlacementAttempts,
+            BlockState leavesState,
+            List<Vector3i> placedLeaves
+    ) {
+        var random = ThreadLocalRandom.current();
+        for (int i = 0; i < leafPlacementAttempts; i++) {
+            int targetX = attachment.x() + random.nextInt(foliageRadius) - random.nextInt(foliageRadius);
+            int targetY = attachment.y() + random.nextInt(foliageHeight) - random.nextInt(foliageHeight);
+            int targetZ = attachment.z() + random.nextInt(foliageRadius) - random.nextInt(foliageRadius);
+            tryPlaceLeaves(context, targetX, targetY, targetZ, leavesState, placedLeaves);
+        }
+    }
+
+    private void placeMangrovePropagules(WorldFeatureContext context, List<Vector3i> placedLeaves) {
+        var shuffledLeaves = new ArrayList<>(placedLeaves);
+        Collections.shuffle(shuffledLeaves, ThreadLocalRandom.current());
+        var random = ThreadLocalRandom.current();
+        var exclusion = new ArrayList<Vector3i>();
+
+        for (var leaf : shuffledLeaves) {
+            int propX = leaf.x();
+            int propY = leaf.y() - 1;
+            int propZ = leaf.z();
+            if (random.nextFloat() >= 0.14f ||
+                isExcluded(propX, propY, propZ, exclusion, 1, 0) ||
+                !isAir(context, propX, propY, propZ) ||
+                !isAir(context, propX, propY - 1, propZ)) {
+                continue;
+            }
+
+            exclusion.add(new Vector3i(propX, propY, propZ));
+            var propagule = BlockTypes.MANGROVE_PROPAGULE.getDefaultState()
+                    .setPropertyValue(BlockPropertyTypes.HANGING, true)
+                    .setPropertyValue(BlockPropertyTypes.PROPAGULE_STAGE, random.nextInt(5));
+            context.setBlockState(propX, propY, propZ, propagule);
+        }
+    }
+
+    private boolean isExcluded(int x, int y, int z, List<Vector3i> exclusionCenters, int radiusXZ, int radiusY) {
+        for (var center : exclusionCenters) {
+            if (Math.abs(center.x() - x) <= radiusXZ &&
+                Math.abs(center.y() - y) <= radiusY &&
+                Math.abs(center.z() - z) <= radiusXZ) {
+                return true;
+            }
+        }
+        return false;
     }
 }

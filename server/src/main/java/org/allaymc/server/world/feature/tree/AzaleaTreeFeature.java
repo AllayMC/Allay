@@ -4,6 +4,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -21,9 +22,7 @@ public class AzaleaTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.OAK_LOG,
-                BlockTypes.AZALEA_LEAVES,
-                null,
-                4, 6
+                BlockTypes.AZALEA_LEAVES
         );
     }
 
@@ -69,7 +68,7 @@ public class AzaleaTreeFeature extends TreeWorldFeature {
             currentZ += bendDirection.stepZ();
         }
 
-        var placedLeaves = new ArrayList<TreePos>();
+        var placedLeaves = new ArrayList<Vector3i>();
         for (var attachment : attachments) {
             for (int i = 0; i < 50; i++) {
                 int targetX = attachment.x() + random.nextInt(3) - random.nextInt(3);

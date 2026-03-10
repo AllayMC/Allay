@@ -3,8 +3,10 @@ package org.allaymc.server.world.feature.tree;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -20,9 +22,7 @@ public class MegaJungleTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.JUNGLE_LOG,
-                BlockTypes.JUNGLE_LEAVES,
-                BlockTypes.JUNGLE_SAPLING,
-                10, 31
+                BlockTypes.JUNGLE_LEAVES
         );
     }
 
@@ -58,7 +58,7 @@ public class MegaJungleTreeFeature extends TreeWorldFeature {
             }
         }
 
-        var placedLogs = new ArrayList<TreePos>();
+        var placedLogs = new ArrayList<Vector3i>();
         var attachments = new ArrayList<FoliageAttachment>();
 
         for (int dy = 0; dy < maxFreeTreeHeight; dy++) {
@@ -85,12 +85,57 @@ public class MegaJungleTreeFeature extends TreeWorldFeature {
             attachments.add(new FoliageAttachment(x + branchX, y + branchStart, z + branchZ, -2, false));
         }
 
-        var placedLeaves = new ArrayList<TreePos>();
+        var placedLeaves = new ArrayList<Vector3i>();
         for (var attachment : attachments) {
             placeMegaJungleFoliage(context, attachment, 2, 2, 0, placedLeaves);
         }
         placeTrunkVines(context, placedLogs);
         placeLeafVines(context, placedLeaves, 0.25f);
         return true;
+    }
+
+    private void placeMegaJungleFoliage(
+            WorldFeatureContext context,
+            FoliageAttachment attachment,
+            int foliageHeight,
+            int foliageRadius,
+            int offset,
+            List<Vector3i> placedLeaves
+    ) {
+        int foliageLayers = attachment.doubleTrunk() ? foliageHeight : 1 + ThreadLocalRandom.current().nextInt(2);
+        for (int localY = offset; localY >= offset - foliageLayers; localY--) {
+            int range = foliageRadius + attachment.radiusOffset() + 1 - localY;
+            placeLeavesRow(
+                    context,
+                    attachment.x(),
+                    attachment.y(),
+                    attachment.z(),
+                    range,
+                    localY,
+                    attachment.doubleTrunk(),
+                    (ignored, coord, rowY, rowRange, large) ->
+                            coord.localX() + coord.localZ() >= 7 ||
+                            coord.localX() * coord.localX() + coord.localZ() * coord.localZ() > rowRange * rowRange,
+                    placedLeaves
+            );
+        }
+    }
+
+    private void placeTrunkVines(WorldFeatureContext context, List<Vector3i> placedLogs) {
+        var random = ThreadLocalRandom.current();
+        for (var log : placedLogs) {
+            if (random.nextInt(3) > 0 && isAir(context, log.x() - 1, log.y(), log.z())) {
+                placeVine(context, log.x() - 1, log.y(), log.z(), VineFace.EAST);
+            }
+            if (random.nextInt(3) > 0 && isAir(context, log.x() + 1, log.y(), log.z())) {
+                placeVine(context, log.x() + 1, log.y(), log.z(), VineFace.WEST);
+            }
+            if (random.nextInt(3) > 0 && isAir(context, log.x(), log.y(), log.z() - 1)) {
+                placeVine(context, log.x(), log.y(), log.z() - 1, VineFace.SOUTH);
+            }
+            if (random.nextInt(3) > 0 && isAir(context, log.x(), log.y(), log.z() + 1)) {
+                placeVine(context, log.x(), log.y(), log.z() + 1, VineFace.NORTH);
+            }
+        }
     }
 }

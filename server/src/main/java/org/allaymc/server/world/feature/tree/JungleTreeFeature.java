@@ -21,9 +21,7 @@ public class JungleTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.JUNGLE_LOG,
-                BlockTypes.JUNGLE_LEAVES,
-                BlockTypes.JUNGLE_SAPLING,
-                4, 8
+                BlockTypes.JUNGLE_LEAVES
         );
     }
 

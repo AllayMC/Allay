@@ -3,6 +3,7 @@ package org.allaymc.server.world.feature.tree;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,9 +21,7 @@ public class DarkOakTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.DARK_OAK_LOG,
-                BlockTypes.DARK_OAK_LEAVES,
-                BlockTypes.DARK_OAK_SAPLING,
-                6, 9
+                BlockTypes.DARK_OAK_LEAVES
         );
     }
 
@@ -63,7 +62,7 @@ public class DarkOakTreeFeature extends TreeWorldFeature {
             }
         }
 
-        var placedLogs = new ArrayList<TreePos>();
+        var placedLogs = new ArrayList<Vector3i>();
         var attachments = new ArrayList<FoliageAttachment>();
         HorizontalDirection bendDirection = HorizontalDirection.values()[random.nextInt(HorizontalDirection.values().length)];
         int bendStart = maxFreeTreeHeight - random.nextInt(4);
@@ -101,7 +100,7 @@ public class DarkOakTreeFeature extends TreeWorldFeature {
             }
         }
 
-        var placedLeaves = new ArrayList<TreePos>();
+        var placedLeaves = new ArrayList<Vector3i>();
         for (var attachment : attachments) {
             placeDarkOakFoliage(context, attachment, 0, 0, placedLeaves);
         }

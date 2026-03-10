@@ -21,9 +21,7 @@ public class BirchTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.BIRCH_LOG,
-                BlockTypes.BIRCH_LEAVES,
-                BlockTypes.BIRCH_SAPLING,
-                5, 6
+                BlockTypes.BIRCH_LEAVES
         );
     }
 

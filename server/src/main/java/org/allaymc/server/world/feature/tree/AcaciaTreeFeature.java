@@ -3,6 +3,7 @@ package org.allaymc.server.world.feature.tree;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,7 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
         super(
                 IDENTIFIER,
                 BlockTypes.ACACIA_LOG,
-                BlockTypes.ACACIA_LEAVES,
-                BlockTypes.ACACIA_SAPLING,
-                5, 10
+                BlockTypes.ACACIA_LEAVES
         );
     }
 
@@ -89,10 +88,60 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
             }
         }
 
-        var placedLeaves = new ArrayList<TreePos>();
+        var placedLeaves = new ArrayList<Vector3i>();
         for (var attachment : attachments) {
             placeAcaciaFoliage(context, attachment, 2, 0, placedLeaves);
         }
         return true;
+    }
+
+    private void placeAcaciaFoliage(
+            WorldFeatureContext context,
+            FoliageAttachment attachment,
+            int foliageRadius,
+            int offset,
+            List<Vector3i> placedLeaves
+    ) {
+        int baseX = attachment.x();
+        int baseY = attachment.y() + offset;
+        int baseZ = attachment.z();
+        boolean large = attachment.doubleTrunk();
+
+        placeLeavesRow(
+                context,
+                baseX,
+                baseY,
+                baseZ,
+                foliageRadius + attachment.radiusOffset(),
+                -1,
+                large,
+                (ignored, coord, rowY, rowRange, isLarge) ->
+                        coord.localX() == rowRange && coord.localZ() == rowRange && rowRange > 0,
+                placedLeaves
+        );
+        placeLeavesRow(
+                context,
+                baseX,
+                baseY,
+                baseZ,
+                foliageRadius - 1,
+                0,
+                large,
+                (ignored, coord, rowY, rowRange, isLarge) ->
+                        (coord.localX() > 1 || coord.localZ() > 1) && coord.localX() != 0 && coord.localZ() != 0,
+                placedLeaves
+        );
+        placeLeavesRow(
+                context,
+                baseX,
+                baseY,
+                baseZ,
+                foliageRadius + attachment.radiusOffset() - 1,
+                0,
+                large,
+                (ignored, coord, rowY, rowRange, isLarge) ->
+                        (coord.localX() > 1 || coord.localZ() > 1) && coord.localX() != 0 && coord.localZ() != 0,
+                placedLeaves
+        );
     }
 }

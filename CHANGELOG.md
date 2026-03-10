@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...HEAD)</small>
 
+### Fixed
+
+- Aligned multiple tree world features more closely with vanilla/Paper generation behavior, including trunk, foliage, root, vine, podzol, and propagule placement across oak-family, birch-family, spruce-family, jungle-family, cherry, azalea, pale oak, and mangrove trees.
+
 # 0.11.1 (API 0.26.0) - 2026/3/9
 
 <small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...0.11.1)</small>
