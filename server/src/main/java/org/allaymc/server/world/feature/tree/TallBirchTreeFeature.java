@@ -4,6 +4,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -28,56 +29,23 @@ public class TallBirchTreeFeature extends TreeWorldFeature {
 
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
-        var random = ThreadLocalRandom.current();
-        int height = calculateHeight();
-
-        // Check if tree can generate
-        if (!canGenerate(context, x, y, z, height)) {
+        int height = calculateHeight(5, 2, 6);
+        if (!canGrowOn(context.getBlockState(x, y - 1, z))) {
             return false;
         }
 
-        // Place dirt under the tree
+        int maxFreeTreeHeight = getMaxFreeTreeHeight(context, height, x, y, z, (treeHeight, currentHeight) -> currentHeight < 1 ? 0 : 1, true);
+        if (maxFreeTreeHeight < height) {
+            return false;
+        }
+
         placeDirtUnder(context, x, y - 1, z);
 
-        // Place trunk
-        for (int dy = 0; dy < height; dy++) {
+        for (int dy = 0; dy < maxFreeTreeHeight; dy++) {
             placeLog(context, x, y + dy, z);
         }
 
-        // Place leaves - taller tree has more leaf layers
-        int leafStart = height - 4;
-        for (int dy = leafStart; dy <= height; dy++) {
-            int radius;
-            if (dy == height) {
-                radius = 1;
-            } else if (dy == leafStart) {
-                radius = 1;
-            } else if (dy == leafStart + 1) {
-                radius = 2;
-            } else {
-                radius = 2;
-            }
-
-            for (int dx = -radius; dx <= radius; dx++) {
-                for (int dz = -radius; dz <= radius; dz++) {
-                    // Skip corners
-                    if (Math.abs(dx) == radius && Math.abs(dz) == radius) {
-                        if (random.nextBoolean()) {
-                            continue;
-                        }
-                    }
-                    // Don't replace log blocks
-                    if (dx == 0 && dz == 0 && dy < height) {
-                        continue;
-                    }
-                    placeLeaves(context, x + dx, y + dy, z + dz);
-                }
-            }
-        }
-
-        // Top leaves
-        placeLeaves(context, x, y + height, z);
-
+        placeBlobFoliage(context, new FoliageAttachment(x, y + maxFreeTreeHeight, z, 0, false), 3, 2, 0, new ArrayList<>());
         return true;
     }
 }

@@ -2503,7 +2503,14 @@ public final class BlockTypeInitializer {
                 .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, SpruceTreeFeature.IDENTIFIER, null, MegaSpruceTreeFeature.IDENTIFIER))
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(
+                        blockType,
+                        SpruceTreeFeature.IDENTIFIER,
+                        null,
+                        MegaSpruceTreeFeature.IDENTIFIER,
+                        MegaPineTreeFeature.IDENTIFIER,
+                        0.5f
+                ))
                 .build();
         BlockTypes.JUNGLE_SAPLING = AllayBlockType
                 .builder(BlockSaplingBehaviorImpl.class)

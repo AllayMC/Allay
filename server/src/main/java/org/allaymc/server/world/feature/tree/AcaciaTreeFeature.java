@@ -4,6 +4,8 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -29,65 +31,68 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
         var random = ThreadLocalRandom.current();
-        int height = calculateHeight();
-
-        // Check if tree can generate
-        if (!canGenerate(context, x, y, z, height)) {
+        int height = calculateHeight(5, 2, 2);
+        if (!canGrowOn(context.getBlockState(x, y - 1, z))) {
             return false;
         }
 
-        // Place dirt under the tree
+        int maxFreeTreeHeight = getMaxFreeTreeHeight(context, height, x, y, z, (treeHeight, currentHeight) -> currentHeight < 1 ? 0 : 2, true);
+        if (maxFreeTreeHeight < height) {
+            return false;
+        }
+
         placeDirtUnder(context, x, y - 1, z);
 
-        // Direction for diagonal trunk
-        int dirX = random.nextBoolean() ? 1 : -1;
-        int dirZ = random.nextBoolean() ? 1 : -1;
-
-        // Place trunk (with bend)
-        int bendHeight = 2 + random.nextInt(2);
+        var attachments = new ArrayList<FoliageAttachment>();
         int currentX = x;
         int currentZ = z;
+        HorizontalDirection primaryDirection = List.of(HorizontalDirection.values()).get(random.nextInt(4));
+        int bendStart = maxFreeTreeHeight - random.nextInt(4) - 1;
+        int bendLength = 3 - random.nextInt(3);
+        int lastPlacedY = y;
 
-        for (int dy = 0; dy < height; dy++) {
-            placeLog(context, currentX, y + dy, currentZ);
-
-            // Add bend after certain height
-            if (dy == bendHeight) {
-                currentX += dirX;
-                placeLog(context, currentX, y + dy, currentZ);
+        for (int dy = 0; dy < maxFreeTreeHeight; dy++) {
+            int logY = y + dy;
+            if (dy >= bendStart && bendLength > 0) {
+                currentX += primaryDirection.stepX();
+                currentZ += primaryDirection.stepZ();
+                bendLength--;
             }
-            if (dy == bendHeight + 1) {
-                currentZ += dirZ;
-                placeLog(context, currentX, y + dy, currentZ);
-            }
-        }
 
-        // Place flat canopy at the top
-        int canopyY = y + height - 1;
-        for (int dx = -2; dx <= 2; dx++) {
-            for (int dz = -2; dz <= 2; dz++) {
-                // Create circular flat top
-                if (Math.abs(dx) == 2 && Math.abs(dz) == 2) {
-                    continue;
-                }
-                placeLeaves(context, currentX + dx, canopyY, currentZ + dz);
-                // Add some leaves below on edges
-                if ((Math.abs(dx) == 2 || Math.abs(dz) == 2) && random.nextBoolean()) {
-                    placeLeaves(context, currentX + dx, canopyY - 1, currentZ + dz);
-                }
+            if (placeLogIfValid(context, currentX, logY, currentZ)) {
+                lastPlacedY = logY + 1;
             }
         }
 
-        // Top layer
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                if (Math.abs(dx) == 1 && Math.abs(dz) == 1 && random.nextBoolean()) {
-                    continue;
+        attachments.add(new FoliageAttachment(currentX, lastPlacedY, currentZ, 1, false));
+
+        HorizontalDirection secondaryDirection = List.of(HorizontalDirection.values()).get(random.nextInt(4));
+        if (secondaryDirection != primaryDirection) {
+            int secondaryStart = bendStart - random.nextInt(2) - 1;
+            int secondaryLength = 1 + random.nextInt(3);
+            currentX = x;
+            currentZ = z;
+            int secondaryTopY = -1;
+
+            for (int dy = secondaryStart; dy < maxFreeTreeHeight && secondaryLength > 0; secondaryLength--, dy++) {
+                if (dy >= 1) {
+                    int logY = y + dy;
+                    currentX += secondaryDirection.stepX();
+                    currentZ += secondaryDirection.stepZ();
+                    if (placeLogIfValid(context, currentX, logY, currentZ)) {
+                        secondaryTopY = logY + 1;
+                    }
                 }
-                placeLeaves(context, currentX + dx, canopyY + 1, currentZ + dz);
+            }
+            if (secondaryTopY >= 0) {
+                attachments.add(new FoliageAttachment(currentX, secondaryTopY, currentZ, 0, false));
             }
         }
 
+        var placedLeaves = new ArrayList<TreePos>();
+        for (var attachment : attachments) {
+            placeAcaciaFoliage(context, attachment, 2, 0, placedLeaves);
+        }
         return true;
     }
 }
