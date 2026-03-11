@@ -206,7 +206,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         this.identifier,
                         properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
                 ));
-        protected BlockDefinitionGenerator blockDefinitionGenerator = $ -> BlockDefinition.DEFAULT;
+        protected BlockDefinitionGenerator blockDefinitionGenerator;
 
         /**
          * Creates a new block type builder.
@@ -495,8 +495,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }
 
-            // Generate block definition after we initialized the block behavior instance
-            type.blockDefinition = blockDefinitionGenerator.generate(type);
+            // Generate block definition
+            if (isCustomBlock) {
+                type.blockDefinition = Objects.requireNonNull(blockDefinitionGenerator, "Block definition generator for custom block " + identifier + " is null!").generate(type);
+            } else {
+                type.blockDefinition = BlockDefinition.DEFAULT;
+            }
+            type.blockDefinition = blockDefinitionGenerator != null ? blockDefinitionGenerator.generate(type) : BlockDefinition.DEFAULT;
 
             Registries.BLOCKS.register(type.getIdentifier(), type);
             for (var blockState : type.blockStateHashMap.values()) {
