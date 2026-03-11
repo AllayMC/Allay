@@ -496,11 +496,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             }
 
             // Generate block definition
-            if (isCustomBlock) {
-                type.blockDefinition = Objects.requireNonNull(blockDefinitionGenerator, "Block definition generator for custom block " + identifier + " is null!").generate(type);
-            } else {
-                type.blockDefinition = BlockDefinition.DEFAULT;
-            }
             type.blockDefinition = blockDefinitionGenerator != null ? blockDefinitionGenerator.generate(type) : BlockDefinition.DEFAULT;
 
             Registries.BLOCKS.register(type.getIdentifier(), type);
