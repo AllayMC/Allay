@@ -94,6 +94,10 @@ public interface Permissions {
      */
     String COMMAND_FILL = "allay.command.fill";
     /**
+     * The permission to use /fog command.
+     */
+    String COMMAND_FOG = "allay.command.fog";
+    /**
      * The permission to use /gamemode command.
      */
     String COMMAND_GAMEMODE = "allay.command.gamemode";

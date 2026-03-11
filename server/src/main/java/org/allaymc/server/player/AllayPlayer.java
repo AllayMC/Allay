@@ -241,6 +241,9 @@ public class AllayPlayer implements Player {
     protected Set<HudElement> hiddenHudElements;
     protected boolean shouldSendHudElements;
 
+    // Fog
+    protected final List<String> fogStack = new ArrayList<>();
+
     // NetEase
     @Getter
     @Setter
@@ -2643,6 +2646,59 @@ public class AllayPlayer implements Player {
         pk.setShakeType(org.cloudburstmc.protocol.bedrock.data.CameraShakeType.POSITIONAL);
         pk.setIntensity(-1);
         pk.setDuration(-1);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void pushFog(String fogId) {
+        fogStack.add(fogId);
+        sendFogStack();
+    }
+
+    @Override
+    public boolean popFog(String fogId) {
+        for (int i = fogStack.size() - 1; i >= 0; i--) {
+            if (fogStack.get(i).equals(fogId)) {
+                fogStack.remove(i);
+                sendFogStack();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int removeFog(String fogId) {
+        int count = 0;
+        var iterator = fogStack.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(fogId)) {
+                iterator.remove();
+                count++;
+            }
+        }
+        if (count > 0) {
+            sendFogStack();
+        }
+        return count;
+    }
+
+    @Override
+    public List<String> getFogs() {
+        return Collections.unmodifiableList(fogStack);
+    }
+
+    @Override
+    public void removeAllFogs() {
+        if (!fogStack.isEmpty()) {
+            fogStack.clear();
+            sendFogStack();
+        }
+    }
+
+    protected void sendFogStack() {
+        var pk = new PlayerFogPacket();
+        pk.getFogStack().addAll(fogStack);
         sendPacket(pk);
     }
 

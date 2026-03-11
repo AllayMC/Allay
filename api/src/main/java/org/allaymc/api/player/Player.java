@@ -14,11 +14,13 @@ import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3dc;
 
 import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a player in the server. A {@link Player} basically 'control' an {@link EntityPlayer}.
@@ -239,6 +241,44 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * Stop all camera shakes for this player.
      */
     void stopCameraShake();
+
+    /**
+     * Push a fog setting onto this player's fog stack.
+     *
+     * @param fogId the fog identifier (e.g. {@link FogIds#FOG_DEFAULT})
+     */
+    void pushFog(String fogId);
+
+    /**
+     * Pop (remove) the last occurrence of the given fog ID from this player's fog stack.
+     *
+     * @param fogId the fog identifier to match
+     *
+     * @return {@code true} if a fog setting was removed
+     */
+    boolean popFog(String fogId);
+
+    /**
+     * Remove all occurrences of the given fog ID from this player's fog stack.
+     *
+     * @param fogId the fog identifier to match
+     *
+     * @return the number of fog settings removed
+     */
+    int removeFog(String fogId);
+
+    /**
+     * Get an unmodifiable view of this player's fog stack.
+     *
+     * @return the fog stack
+     */
+    @UnmodifiableView
+    List<String> getFogs();
+
+    /**
+     * Remove all fog settings from this player's fog stack.
+     */
+    void removeAllFogs();
 
     /**
      * Sends the experience level to the client.

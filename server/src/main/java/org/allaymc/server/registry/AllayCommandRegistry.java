@@ -75,6 +75,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new HudCommand());
         register(new StructureCommand());
         register(new FillCommand());
+        register(new FogCommand());
         register(new TitleCommand());
         register(new ParticleCommand());
         register(new PermissionCommand());
