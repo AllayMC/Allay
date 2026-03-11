@@ -227,6 +227,20 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void clearTitle();
 
     /**
+     * Shake the player's camera with the specified type, intensity and duration.
+     *
+     * @param shakeType the type of shake (positional or rotational)
+     * @param intensity the intensity of the shake
+     * @param duration  the duration of the shake in seconds
+     */
+    void shakeCamera(CameraShakeType shakeType, float intensity, float duration);
+
+    /**
+     * Stop all camera shakes for this player.
+     */
+    void stopCameraShake();
+
+    /**
      * Sends the experience level to the client.
      *
      * @param value the experience level to be sent.

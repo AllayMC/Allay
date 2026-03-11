@@ -58,6 +58,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.*;
+import org.allaymc.api.player.CameraShakeType;
 import org.allaymc.api.player.ClientPlayMode;
 import org.allaymc.api.player.HudElement;
 import org.allaymc.api.player.InputInteractionModel;
@@ -2619,6 +2620,29 @@ public class AllayPlayer implements Player {
     public void clearTitle() {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.CLEAR);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void shakeCamera(CameraShakeType shakeType, float intensity, float duration) {
+        var pk = new CameraShakePacket();
+        pk.setShakeType(switch (shakeType) {
+            case POSITIONAL -> org.cloudburstmc.protocol.bedrock.data.CameraShakeType.POSITIONAL;
+            case ROTATIONAL -> org.cloudburstmc.protocol.bedrock.data.CameraShakeType.ROTATIONAL;
+        });
+        pk.setIntensity(intensity);
+        pk.setDuration(duration);
+        pk.setShakeAction(CameraShakeAction.ADD);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void stopCameraShake() {
+        var pk = new CameraShakePacket();
+        pk.setShakeAction(CameraShakeAction.STOP);
+        pk.setShakeType(org.cloudburstmc.protocol.bedrock.data.CameraShakeType.POSITIONAL);
+        pk.setIntensity(-1);
+        pk.setDuration(-1);
         sendPacket(pk);
     }
 
