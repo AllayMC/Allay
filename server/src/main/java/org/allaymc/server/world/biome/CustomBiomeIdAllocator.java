@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class CustomBiomeIdAllocator {
 
     private static final int CUSTOM_BIOME_ID_START = 30000;
-    private static final String FILE_NAME = "biome_ids.yml";
+    private static final String FILE_NAME = "biome-ids.yml";
 
     private static CustomBiomeIdAllocator instance;
 
