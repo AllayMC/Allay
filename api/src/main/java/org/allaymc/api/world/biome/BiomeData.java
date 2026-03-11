@@ -1,5 +1,6 @@
 package org.allaymc.api.world.biome;
 
+import lombok.Builder;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.entity.property.enums.ClimateVariant;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 /**
  * BiomeData contains the data of a {@link BiomeType}.
  */
+@Builder
 @MinecraftVersionSensitive
 public record BiomeData(
         float temperature, float downfall,

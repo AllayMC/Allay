@@ -29,6 +29,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.feature.WorldFeature;
 import org.allaymc.server.bossbar.AllayBossBar;
+import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
@@ -238,6 +239,7 @@ public final class Allay {
                 r -> Registries.BIOMES = r,
                 new BiomeTypeRegistryPopulator()
         );
+        CustomBiomeIdAllocator.init();
 
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
