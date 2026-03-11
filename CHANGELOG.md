@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Fixed
 
 - Aligned multiple tree world features more closely with vanilla/Paper generation behavior, including trunk, foliage, root, vine, podzol, and propagule placement across oak-family, birch-family, spruce-family, jungle-family, cherry, azalea, pale oak, and mangrove trees.
+- Fixed custom item tags sending.
 
 # 0.11.1 (API 0.26.0) - 2026/3/9
 
