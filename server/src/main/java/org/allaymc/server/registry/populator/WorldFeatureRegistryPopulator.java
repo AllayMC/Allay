@@ -18,24 +18,24 @@ public class WorldFeatureRegistryPopulator implements Runnable {
     @Override
     public void run() {
         // Basic tree types
-        WorldFeatures.OAK_TREE = new OakTreeFeature();
-        WorldFeatures.BIRCH_TREE = new BirchTreeFeature();
+        WorldFeatures.OAK_TREE = new StraightBlobTreeFeature(StraightBlobTreeFeature.OAK_IDENTIFIER, BlockTypes.OAK_LOG, BlockTypes.OAK_LEAVES, 4, 2, 0);
+        WorldFeatures.BIRCH_TREE = new StraightBlobTreeFeature(StraightBlobTreeFeature.BIRCH_IDENTIFIER, BlockTypes.BIRCH_LOG, BlockTypes.BIRCH_LEAVES, 5, 2, 0);
         WorldFeatures.SPRUCE_TREE = new SpruceTreeFeature();
-        WorldFeatures.JUNGLE_TREE = new JungleTreeFeature();
+        WorldFeatures.JUNGLE_TREE = new StraightBlobTreeFeature(StraightBlobTreeFeature.JUNGLE_IDENTIFIER, BlockTypes.JUNGLE_LOG, BlockTypes.JUNGLE_LEAVES, 4, 8, 0);
         WorldFeatures.ACACIA_TREE = new AcaciaTreeFeature();
-        WorldFeatures.DARK_OAK_TREE = new DarkOakTreeFeature();
+        WorldFeatures.DARK_OAK_TREE = new DoubleTrunkTreeFeature(DoubleTrunkTreeFeature.DARK_OAK_IDENTIFIER, BlockTypes.DARK_OAK_LOG, BlockTypes.DARK_OAK_LEAVES);
         WorldFeatures.CHERRY_TREE = new CherryTreeFeature();
         WorldFeatures.MANGROVE_TREE = new MangroveTreeFeature();
-        WorldFeatures.PALE_OAK_TREE = new PaleOakTreeFeature();
+        WorldFeatures.PALE_OAK_TREE = new DoubleTrunkTreeFeature(DoubleTrunkTreeFeature.PALE_OAK_IDENTIFIER, BlockTypes.PALE_OAK_LOG, BlockTypes.PALE_OAK_LEAVES);
 
         // Azalea tree
         WorldFeatures.AZALEA_TREE = new AzaleaTreeFeature();
 
         // Large tree variants
-        WorldFeatures.MEGA_SPRUCE_TREE = new MegaSpruceTreeFeature();
-        WorldFeatures.MEGA_PINE_TREE = new MegaPineTreeFeature();
+        WorldFeatures.MEGA_SPRUCE_TREE = new MegaConicalTreeFeature(MegaConicalTreeFeature.MEGA_SPRUCE_IDENTIFIER, BlockTypes.SPRUCE_LOG, BlockTypes.SPRUCE_LEAVES, 13, 5);
+        WorldFeatures.MEGA_PINE_TREE = new MegaConicalTreeFeature(MegaConicalTreeFeature.MEGA_PINE_IDENTIFIER, BlockTypes.SPRUCE_LOG, BlockTypes.SPRUCE_LEAVES, 3, 5);
         WorldFeatures.MEGA_JUNGLE_TREE = new MegaJungleTreeFeature();
-        WorldFeatures.TALL_BIRCH_TREE = new TallBirchTreeFeature();
+        WorldFeatures.TALL_BIRCH_TREE = new StraightBlobTreeFeature(StraightBlobTreeFeature.TALL_BIRCH_IDENTIFIER, BlockTypes.BIRCH_LOG, BlockTypes.BIRCH_LEAVES, 5, 2, 6);
         WorldFeatures.FANCY_OAK_TREE = new FancyOakTreeFeature();
 
         // Huge mushrooms

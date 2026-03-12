@@ -2491,13 +2491,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, OakTreeFeature.IDENTIFIER, FancyOakTreeFeature.IDENTIFIER, null))
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, StraightBlobTreeFeature.OAK_IDENTIFIER, FancyOakTreeFeature.IDENTIFIER, null))
                 .build();
         BlockTypes.BIRCH_SAPLING = AllayBlockType
                 .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, BirchTreeFeature.IDENTIFIER, null, null))
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, StraightBlobTreeFeature.BIRCH_IDENTIFIER, null, null))
                 .build();
         BlockTypes.SPRUCE_SAPLING = AllayBlockType
                 .builder(BlockSaplingBehaviorImpl.class)
@@ -2507,8 +2507,8 @@ public final class BlockTypeInitializer {
                         blockType,
                         SpruceTreeFeature.IDENTIFIER,
                         null,
-                        MegaSpruceTreeFeature.IDENTIFIER,
-                        MegaPineTreeFeature.IDENTIFIER,
+                        MegaConicalTreeFeature.MEGA_SPRUCE_IDENTIFIER,
+                        MegaConicalTreeFeature.MEGA_PINE_IDENTIFIER,
                         0.5f
                 ))
                 .build();
@@ -2516,7 +2516,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, JungleTreeFeature.IDENTIFIER, null, MegaJungleTreeFeature.IDENTIFIER))
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, StraightBlobTreeFeature.JUNGLE_IDENTIFIER, null, MegaJungleTreeFeature.IDENTIFIER))
                 .build();
         BlockTypes.ACACIA_SAPLING = AllayBlockType
                 .builder(BlockSaplingBehaviorImpl.class)
@@ -2528,7 +2528,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, null, null, DarkOakTreeFeature.IDENTIFIER))
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, null, null, DoubleTrunkTreeFeature.DARK_OAK_IDENTIFIER))
                 .build();
         BlockTypes.CHERRY_SAPLING = AllayBlockType
                 .builder(BlockSaplingBehaviorImpl.class)
@@ -2540,7 +2540,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.PALE_OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, PaleOakTreeFeature.IDENTIFIER, null, null))
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, DoubleTrunkTreeFeature.PALE_OAK_IDENTIFIER, null, null))
                 .build();
         BlockTypes.MANGROVE_PROPAGULE = AllayBlockType
                 .builder(BlockSaplingBehaviorImpl.class)

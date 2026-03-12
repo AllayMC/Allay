@@ -367,7 +367,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case MISSED_SWING -> {
                     var event = new PlayerPunchAirEvent(entity);
                     if (event.call()) {
-                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false));
+                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false), false);
                     }
                 }
             }

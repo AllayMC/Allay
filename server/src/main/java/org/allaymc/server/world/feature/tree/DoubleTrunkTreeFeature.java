@@ -1,6 +1,7 @@
 package org.allaymc.server.world.feature.tree;
 
-import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
 import org.joml.Vector3i;
@@ -9,20 +10,18 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Pale oak tree feature implementation.
+ * Double-trunk (2x2) tree with dark-oak-style foliage and bending branches.
+ * Used for dark oak and pale oak trees.
  *
  * @author daoge_cmd
  */
-public class PaleOakTreeFeature extends TreeWorldFeature {
+public class DoubleTrunkTreeFeature extends TreeWorldFeature {
 
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:pale_oak_tree");
+    public static final Identifier DARK_OAK_IDENTIFIER = new Identifier("minecraft:dark_oak_tree");
+    public static final Identifier PALE_OAK_IDENTIFIER = new Identifier("minecraft:pale_oak_tree");
 
-    public PaleOakTreeFeature() {
-        super(
-                IDENTIFIER,
-                BlockTypes.PALE_OAK_LOG,
-                BlockTypes.PALE_OAK_LEAVES
-        );
+    public DoubleTrunkTreeFeature(Identifier identifier, BlockType<?> logType, BlockType<?> leavesType) {
+        super(identifier, logType, leavesType);
     }
 
     @Override
@@ -64,7 +63,8 @@ public class PaleOakTreeFeature extends TreeWorldFeature {
 
         var placedLogs = new ArrayList<Vector3i>();
         var attachments = new ArrayList<FoliageAttachment>();
-        HorizontalDirection bendDirection = HorizontalDirection.values()[random.nextInt(HorizontalDirection.values().length)];
+        var horizontalFaces = BlockFace.getHorizontalBlockFaces();
+        BlockFace bendDirection = horizontalFaces[random.nextInt(horizontalFaces.length)];
         int bendStart = maxFreeTreeHeight - random.nextInt(4);
         int bendLength = 2 - random.nextInt(3);
         int currentX = x;
@@ -73,8 +73,8 @@ public class PaleOakTreeFeature extends TreeWorldFeature {
 
         for (int dy = 0; dy < maxFreeTreeHeight; dy++) {
             if (dy >= bendStart && bendLength > 0) {
-                currentX += bendDirection.stepX();
-                currentZ += bendDirection.stepZ();
+                currentX += bendDirection.getOffset().x();
+                currentZ += bendDirection.getOffset().z();
                 bendLength--;
             }
 

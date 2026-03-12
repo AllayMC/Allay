@@ -1,5 +1,6 @@
 package org.allaymc.server.world.feature.tree;
 
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -42,15 +43,16 @@ public class AzaleaTreeFeature extends TreeWorldFeature {
         context.setBlockState(x, y - 1, z, BlockTypes.DIRT_WITH_ROOTS.getDefaultState());
 
         var attachments = new ArrayList<FoliageAttachment>();
-        HorizontalDirection bendDirection = HorizontalDirection.values()[random.nextInt(HorizontalDirection.values().length)];
+        var horizontalFaces = BlockFace.getHorizontalBlockFaces();
+        BlockFace bendDirection = horizontalFaces[random.nextInt(horizontalFaces.length)];
         int topIndex = maxFreeTreeHeight - 1;
         int currentX = x;
         int currentZ = z;
 
         for (int i = 0; i <= topIndex; i++) {
             if (i + 1 >= topIndex + random.nextInt(2)) {
-                currentX += bendDirection.stepX();
-                currentZ += bendDirection.stepZ();
+                currentX += bendDirection.getOffset().x();
+                currentZ += bendDirection.getOffset().z();
             }
 
             placeLogIfValid(context, currentX, y + i, currentZ);
@@ -64,8 +66,8 @@ public class AzaleaTreeFeature extends TreeWorldFeature {
         for (int i = 0; i <= bendLength; i++) {
             placeLogIfValid(context, currentX, bendY, currentZ);
             attachments.add(new FoliageAttachment(currentX, bendY, currentZ, 0, false));
-            currentX += bendDirection.stepX();
-            currentZ += bendDirection.stepZ();
+            currentX += bendDirection.getOffset().x();
+            currentZ += bendDirection.getOffset().z();
         }
 
         var placedLeaves = new ArrayList<Vector3i>();

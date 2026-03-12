@@ -1,6 +1,6 @@
 package org.allaymc.server.world.feature.tree;
 
-import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
 import org.joml.Vector3i;
@@ -9,20 +9,29 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Mega spruce tree feature implementation.
+ * Mega (2x2 trunk) tree with conical pine/spruce-style foliage and podzol.
+ * Used for mega pine and mega spruce trees.
  *
  * @author daoge_cmd
  */
-public class MegaSpruceTreeFeature extends TreeWorldFeature {
+public class MegaConicalTreeFeature extends TreeWorldFeature {
 
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:mega_spruce_tree");
+    public static final Identifier MEGA_PINE_IDENTIFIER = new Identifier("minecraft:mega_pine_tree");
+    public static final Identifier MEGA_SPRUCE_IDENTIFIER = new Identifier("minecraft:mega_spruce_tree");
 
-    public MegaSpruceTreeFeature() {
-        super(
-                IDENTIFIER,
-                BlockTypes.SPRUCE_LOG,
-                BlockTypes.SPRUCE_LEAVES
-        );
+    private final int foliageHeightBase;
+    private final int foliageHeightRand;
+
+    public MegaConicalTreeFeature(
+            Identifier identifier,
+            BlockType<?> logType,
+            BlockType<?> leavesType,
+            int foliageHeightBase,
+            int foliageHeightRand
+    ) {
+        super(identifier, logType, leavesType);
+        this.foliageHeightBase = foliageHeightBase;
+        this.foliageHeightRand = foliageHeightRand;
     }
 
     @Override
@@ -71,7 +80,7 @@ public class MegaSpruceTreeFeature extends TreeWorldFeature {
         placeMegaPineFoliage(
                 context,
                 new FoliageAttachment(x, y + maxFreeTreeHeight, z, 0, true),
-                13 + random.nextInt(5),
+                foliageHeightBase + random.nextInt(foliageHeightRand),
                 0,
                 0,
                 placedLeaves

@@ -184,6 +184,24 @@ public abstract class TreeWorldFeature extends AbstractWorldFeature {
         }
     }
 
+    protected void placeTrunkVines(WorldFeatureContext context, List<Vector3i> placedLogs) {
+        var random = ThreadLocalRandom.current();
+        for (var log : placedLogs) {
+            if (random.nextInt(3) > 0 && isAir(context, log.x() - 1, log.y(), log.z())) {
+                placeVine(context, log.x() - 1, log.y(), log.z(), VineFace.EAST);
+            }
+            if (random.nextInt(3) > 0 && isAir(context, log.x() + 1, log.y(), log.z())) {
+                placeVine(context, log.x() + 1, log.y(), log.z(), VineFace.WEST);
+            }
+            if (random.nextInt(3) > 0 && isAir(context, log.x(), log.y(), log.z() - 1)) {
+                placeVine(context, log.x(), log.y(), log.z() - 1, VineFace.SOUTH);
+            }
+            if (random.nextInt(3) > 0 && isAir(context, log.x(), log.y(), log.z() + 1)) {
+                placeVine(context, log.x(), log.y(), log.z() + 1, VineFace.NORTH);
+            }
+        }
+    }
+
     protected void placeLeafVines(WorldFeatureContext context, List<Vector3i> placedLeaves, float probability) {
         var random = ThreadLocalRandom.current();
         for (var leaf : placedLeaves) {
@@ -431,44 +449,4 @@ public abstract class TreeWorldFeature extends AbstractWorldFeature {
         }
     }
 
-    protected enum HorizontalDirection {
-        WEST(-1, 0, 0, -1, false),
-        EAST(1, 0, 0, 1, true),
-        NORTH(0, -1, 1, 0, true),
-        SOUTH(0, 1, -1, 0, false);
-
-        private final int stepX;
-        private final int stepZ;
-        private final int clockWiseStepX;
-        private final int clockWiseStepZ;
-        private final boolean clockWiseAxisPositive;
-
-        HorizontalDirection(int stepX, int stepZ, int clockWiseStepX, int clockWiseStepZ, boolean clockWiseAxisPositive) {
-            this.stepX = stepX;
-            this.stepZ = stepZ;
-            this.clockWiseStepX = clockWiseStepX;
-            this.clockWiseStepZ = clockWiseStepZ;
-            this.clockWiseAxisPositive = clockWiseAxisPositive;
-        }
-
-        public int stepX() {
-            return stepX;
-        }
-
-        public int stepZ() {
-            return stepZ;
-        }
-
-        public int clockWiseStepX() {
-            return clockWiseStepX;
-        }
-
-        public int clockWiseStepZ() {
-            return clockWiseStepZ;
-        }
-
-        public boolean clockWiseAxisPositive() {
-            return clockWiseAxisPositive;
-        }
-    }
 }
