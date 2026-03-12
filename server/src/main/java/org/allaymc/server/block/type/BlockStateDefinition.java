@@ -178,11 +178,10 @@ public record BlockStateDefinition(
      *
      * @param texture          the texture shortname from terrain_texture.json
      * @param renderMethod     controls transparency and culling behavior
-     * @param faceDimming      whether faces receive directional shading (default: true)
-     * @param ambientOcclusion whether smooth lighting is applied (default: true)
-     * @param randomUVRotation whether texture randomly rotates based on world position,
-     *                         corresponds to "isotropic" in Bedrock documentation (default: false)
-     * @param textureVariation whether texture variation is enabled (default: false)
+     * @param faceDimming      whether faces using the material instance are dimmed by their direction (default: {@code true})
+     * @param ambientOcclusionIntensity the intensity of ambient occlusion which should be in (0.0, 10.0) (default: {@code 1.0})
+     * @param randomUVRotation whether texture randomly rotates based on world position, corresponds to "isotropic" in Bedrock documentation (default: {@code false})
+     * @param textureVariation whether texture variation is enabled (default: {@code false})
      * @see RenderMethod
      * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
      */
@@ -191,7 +190,7 @@ public record BlockStateDefinition(
             String texture,
             RenderMethod renderMethod,
             boolean faceDimming,
-            boolean ambientOcclusion,
+            float ambientOcclusionIntensity,
             boolean randomUVRotation,
             boolean textureVariation
     ) {
@@ -202,11 +201,11 @@ public record BlockStateDefinition(
         }
 
         public static MaterialInstance of(String texture) {
-            return new MaterialInstance(texture, RenderMethod.OPAQUE, true, true, false, false);
+            return new MaterialInstance(texture, RenderMethod.OPAQUE, true, 1.0f, false, false);
         }
 
         public static MaterialInstance of(String texture, RenderMethod renderMethod) {
-            return new MaterialInstance(texture, renderMethod, true, true, false, false);
+            return new MaterialInstance(texture, renderMethod, true, 1.0f, false, false);
         }
 
         public static MaterialInstance opaque(String texture) {
@@ -250,11 +249,18 @@ public record BlockStateDefinition(
             var builder = NbtMap.builder()
                     .putString("texture", texture)
                     .putString("render_method", renderMethod.getId())
-                    .putBoolean("ambient_occlusion", ambientOcclusion)
+                    .putFloat("ambient_occlusion", ambientOcclusionIntensity)
                     .putByte("packed_bools", packedBools)
                     .putString("tint_method", tintMethod.name().toLowerCase(Locale.ROOT));
 
             return builder.build();
+        }
+
+        public static class MaterialInstanceBuilder {
+            public MaterialInstanceBuilder ambientOcclusion(boolean value) {
+                this.ambientOcclusionIntensity = value ? 1.0f : 0.0f;
+                return this;
+            }
         }
     }
 

@@ -283,7 +283,7 @@ public final class NetworkData {
     public static BiomeDefinitionListPacket encodeBiomeDefinitionListPacket() {
         Map<String, BiomeDefinitionData> definitions = new HashMap<>();
         for (var biome : Registries.BIOMES.getContent().m1().values()) {
-            definitions.put(biome.getIdentifier().path(), NetworkHelper.toNetwork(biome));
+            definitions.put(biome.getIdentifier().toString(), NetworkHelper.toNetwork(biome));
         }
         var packet = new BiomeDefinitionListPacket();
         packet.setBiomes(new BiomeDefinitions(definitions));

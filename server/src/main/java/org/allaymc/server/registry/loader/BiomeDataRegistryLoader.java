@@ -8,6 +8,8 @@ import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeData;
+import org.allaymc.api.world.biome.BiomeTag;
+import org.allaymc.api.world.biome.BiomeTags;
 import org.allaymc.server.world.biome.BiomeId;
 
 import java.awt.*;
@@ -29,6 +31,10 @@ public class BiomeDataRegistryLoader implements RegistryLoader<Void, Map<BiomeId
                         obj.get("b").getAsInt(),
                         obj.get("a").getAsInt()
                 );
+            })
+            .registerTypeAdapter(BiomeTag.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
+                var name = json.getAsString();
+                return BiomeTags.getTagByName(name);
             })
             .create();
 

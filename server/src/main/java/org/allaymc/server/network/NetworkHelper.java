@@ -18,9 +18,11 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.HudElement;
 import org.allaymc.api.utils.tuple.Pair;
+import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
@@ -97,13 +99,23 @@ public final class NetworkHelper {
 
     public static BiomeDefinitionData toNetwork(BiomeType biome) {
         var data = biome.getBiomeData();
-        // NOTICE: `id` is not the same as the biome's identifier, left it null here
-        // otherwise the client will be unable to join the server
-        return new BiomeDefinitionData(
-                null, data.temperature(), data.downfall(), data.redSporeDensity(),
-                data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
-                data.depth(), data.scale(), data.mapWaterColor(), data.rain(), data.tags(), null
-        );
+        var tags = data.tags().stream().map(BiomeTag::name).toList();
+        if (biome.getId() < CustomBiomeIdAllocator.CUSTOM_BIOME_ID_START) {
+            // Vanilla biome
+            // NOTICE: is field is only set for custom biome
+            return new BiomeDefinitionData(
+                    null, data.temperature(), data.downfall(), data.redSporeDensity(),
+                    data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
+                    data.depth(), data.scale(), data.mapWaterColor(), data.rain(), tags, null
+            );
+        } else {
+            // Custom biome
+            return new BiomeDefinitionData(
+                    biome.getId(), data.temperature(), data.downfall(), data.redSporeDensity(),
+                    data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
+                    data.depth(), data.scale(), data.mapWaterColor(), data.rain(), tags, null
+            );
+        }
     }
 
     public static EnchantData toNetwork(EnchantmentInstance instance) {
