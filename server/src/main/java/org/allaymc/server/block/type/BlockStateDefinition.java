@@ -178,10 +178,10 @@ public record BlockStateDefinition(
      *
      * @param texture          the texture shortname from terrain_texture.json
      * @param renderMethod     controls transparency and culling behavior
-     * @param faceDimming      whether faces using the material instance are dimmed by their direction (default: {@code true})
-     * @param ambientOcclusionIntensity the intensity of ambient occlusion which should be in (0.0, 10.0) (default: {@code 1.0})
-     * @param randomUVRotation whether texture randomly rotates based on world position, corresponds to "isotropic" in Bedrock documentation (default: {@code false})
-     * @param textureVariation whether texture variation is enabled (default: {@code false})
+     * @param faceDimming      whether faces using the material instance are dimmed by their direction
+     * @param ambientOcclusionIntensity the intensity of ambient occlusion which should be in (0.0, 10.0)
+     * @param randomUVRotation whether texture randomly rotates based on world position, corresponds to "isotropic" in Bedrock documentation
+     * @param textureVariation whether texture variation is enabled
      * @see RenderMethod
      * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
      */
