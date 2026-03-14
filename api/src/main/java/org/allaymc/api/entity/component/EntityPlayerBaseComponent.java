@@ -251,6 +251,25 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
+     * Sets whether this player should be treated as phantom.
+     * <p>
+     * Players in phantom mode are completely removed from all viewers and cannot be interacted
+     * with by the world, while still being able to interact with the world itself.
+     *
+     * @param phantom whether to enable phantom mode
+     */
+    void setPhantom(boolean phantom);
+
+    /**
+     * Checks whether this player is currently phantom.
+     * <p>
+     * Spectator players always return {@code true}.
+     *
+     * @return {@code true} if the player is phantom
+     */
+    boolean isPhantom();
+
+    /**
      * Gets the score tag of the player.
      *
      * @return the score tag of the player

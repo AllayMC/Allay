@@ -50,9 +50,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.server.network.NetworkHelper.fromNetwork;
@@ -93,6 +94,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Player controller;
     @Getter
     protected GameMode gameMode;
+    protected boolean phantom;
     @Getter
     protected Skin skin;
     protected Location3ic spawnPoint;
@@ -205,6 +207,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         gameMode = event.getNewGameMode();
+        var oldGameMode = this.gameMode;
         this.gameMode = gameMode;
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
@@ -222,6 +225,47 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             this.controller.viewPlayerPermission(this.controller);
         }
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
+
+        if (isActualPlayer() && (oldGameMode == GameMode.SPECTATOR || this.gameMode == GameMode.SPECTATOR)) {
+            refreshPhantom();
+        }
+    }
+
+    @Override
+    public void setPhantom(boolean phantom) {
+        if (this.phantom == phantom) {
+            return;
+        }
+
+        this.phantom = phantom;
+        refreshPhantom();
+    }
+
+    @Override
+    public boolean isPhantom() {
+        return this.gameMode == GameMode.SPECTATOR || this.phantom;
+    }
+
+    protected void refreshPhantom() {
+        if (!isActualPlayer() || !isAlive()) {
+            return;
+        }
+
+        if (isPhantom()) {
+            despawnFrom(new ArrayList<>(getViewers()));
+            return;
+        }
+
+        var chunk = thisPlayer.getCurrentChunk();
+        if (chunk == null) {
+            return;
+        }
+
+        chunk.getChunkLoaders().stream()
+                .filter(loader -> loader != thisPlayer)
+                .map(loader -> loader.toWorldViewer())
+                .filter(Objects::nonNull)
+                .forEach(this::spawnTo);
     }
 
     @Override
@@ -458,7 +502,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     protected void tickBlockCollision() {
-        if (this.gameMode == GameMode.SPECTATOR) {
+        if (isPhantom()) {
             return;
         }
 
@@ -561,7 +605,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void spawnTo(WorldViewer viewer) {
-        if (this.controller != viewer) {
+        if (this.controller != viewer && !isPhantom()) {
             super.spawnTo(viewer);
             viewer.viewEntityArmors(thisPlayer);
             viewer.viewEntityHand(thisPlayer);
@@ -965,7 +1009,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public boolean hasEntityCollision() {
-        return this.gameMode != GameMode.SPECTATOR;
+        return !isPhantom();
     }
 
     @Override

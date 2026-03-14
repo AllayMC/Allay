@@ -37,8 +37,12 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
+        if (thisPlayer.isPhantom()) {
+            return damage.getDamageType() == DamageType.API;
+        }
+
         var gameMode = thisPlayer.getGameMode();
-        if (gameMode == GameMode.SPECTATOR || gameMode == GameMode.CREATIVE) {
+        if (gameMode == GameMode.CREATIVE) {
             return damage.getDamageType() == DamageType.API;
         }
 
