@@ -8,6 +8,12 @@
 .idea/**
 !/.idea/codeStyles/Project.xml
 !/.idea/inspectionProfiles/Project_Default.xml
+.classpath
+.project
+.settings/
+**/.classpath
+**/.project
+**/.settings/
 
 # Files because of building the project
 **/build
