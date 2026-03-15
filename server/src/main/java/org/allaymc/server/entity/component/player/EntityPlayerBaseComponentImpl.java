@@ -51,6 +51,7 @@ import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -228,6 +229,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         if (isActualPlayer() && (oldGameMode == GameMode.SPECTATOR || this.gameMode == GameMode.SPECTATOR)) {
             refreshPhantom();
+            refreshObservedPlayers();
         }
     }
 
@@ -251,9 +253,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
 
-        if (isPhantom()) {
-            despawnFrom(new ArrayList<>(getViewers()));
-            return;
+        for (var viewer : new ArrayList<>(getViewers())) {
+            if (!shouldBeVisibleTo(viewer)) {
+                despawnFrom(viewer);
+            }
         }
 
         var chunk = thisPlayer.getCurrentChunk();
@@ -265,7 +268,62 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .filter(loader -> loader != thisPlayer)
                 .map(loader -> loader.toWorldViewer())
                 .filter(Objects::nonNull)
+                .filter(viewer -> !getViewers().contains(viewer))
                 .forEach(this::spawnTo);
+    }
+
+    protected boolean shouldBeVisibleTo(WorldViewer viewer) {
+        if (this.phantom) {
+            return false;
+        }
+
+        if (this.gameMode != GameMode.SPECTATOR) {
+            return true;
+        }
+
+        if (!(viewer instanceof Player player)) {
+            return false;
+        }
+
+        var viewerEntity = player.getControlledEntity();
+        return viewerEntity != null && viewerEntity.getGameMode() == GameMode.SPECTATOR;
+    }
+
+    protected void refreshObservedPlayers() {
+        if (!isActualPlayer()) {
+            return;
+        }
+
+        var location = thisPlayer.getLocation();
+        var centerChunkX = (int) location.x() >> 4;
+        var centerChunkZ = (int) location.z() >> 4;
+        var radius = thisPlayer.getChunkLoadingRadius();
+        var refreshed = new HashSet<Long>();
+
+        for (int rx = -radius; rx <= radius; rx++) {
+            for (int rz = -radius; rz <= radius; rz++) {
+                if (rx * rx + rz * rz > radius * radius) {
+                    continue;
+                }
+
+                thisPlayer.getDimension().getEntityManager().forEachEntitiesInChunkImmediately(centerChunkX + rx, centerChunkZ + rz, entity -> {
+                    if (!(entity instanceof EntityPlayer player) || player == thisPlayer) {
+                        return;
+                    }
+
+                    if (player.getGameMode() != GameMode.SPECTATOR && !player.isPhantom()) {
+                        return;
+                    }
+
+                    if (!refreshed.add(player.getRuntimeId())) {
+                        return;
+                    }
+
+                    player.despawnFrom(this.controller);
+                    player.spawnTo(this.controller);
+                });
+            }
+        }
     }
 
     @Override
@@ -605,7 +663,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void spawnTo(WorldViewer viewer) {
-        if (this.controller != viewer && !isPhantom()) {
+        if (this.controller != viewer && shouldBeVisibleTo(viewer)) {
             super.spawnTo(viewer);
             viewer.viewEntityArmors(thisPlayer);
             viewer.viewEntityHand(thisPlayer);

@@ -388,10 +388,6 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewEntity(Entity entity) {
-        if (entity instanceof EntityPlayer player && player != this.controlledEntity && player.isPhantom()) {
-            return;
-        }
-
         var l = entity.getLocation();
         var position = Vector3f.from(l.x(), l.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), l.z());
         var motion = switch (entity) {
