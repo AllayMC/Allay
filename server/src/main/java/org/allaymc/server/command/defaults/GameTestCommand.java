@@ -22,6 +22,7 @@ import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.HudElement;
+import org.allaymc.api.player.PlayerAbility;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -609,6 +610,14 @@ public class GameTestCommand extends Command {
                 .exec((context, sender) -> {
                     boolean value = context.getResult(1);
                     sender.getController().setImmutableWorld(value);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setnoblocksconsumption")
+                .bool("value")
+                .exec((context, sender) -> {
+                    boolean value = context.getResult(1);
+                    sender.getController().setAbility(PlayerAbility.NO_BLOCK_CONSUMPTION, value);
                     return context.success();
                 }, SenderType.PLAYER);
 

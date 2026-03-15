@@ -3030,7 +3030,7 @@ public class AllayPlayer implements Player {
             case ATTACK_MOB -> Ability.ATTACK_MOBS;
             case FLYING -> Ability.FLYING;
             case MAY_FLY -> Ability.MAY_FLY;
-            case INSTABUILD -> Ability.INSTABUILD;
+            case NO_BLOCK_CONSUMPTION -> Ability.INSTABUILD;
             case NO_CLIP -> Ability.NO_CLIP;
         };
     }
@@ -3172,6 +3172,11 @@ public class AllayPlayer implements Player {
     @Override
     public boolean canFly() {
         return this.controlledEntity != null && (isAlwaysFlying() || hasAbility(PlayerAbility.MAY_FLY));
+    }
+
+    @Override
+    public boolean hasNoBlockConsumption() {
+        return hasAbility(PlayerAbility.NO_BLOCK_CONSUMPTION);
     }
 
     @Override

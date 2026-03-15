@@ -367,6 +367,24 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     }
 
     /**
+     * Checks whether placed blocks should not be consumed from inventory.
+     * <p>
+     * Usually true for creative mode, actual ability value otherwise.
+     *
+     * @return {@code true} if placed blocks are not consumed, {@code false} otherwise
+     */
+    boolean hasNoBlockConsumption();
+
+    /**
+     * Sets the no-block-consumption ability.
+     *
+     * @param noBlockConsumption {@code true} to disable block consumption on placement, {@code false} otherwise
+     */
+    default void setNoBlockConsumption(boolean noBlockConsumption) {
+        setAbility(PlayerAbility.NO_BLOCK_CONSUMPTION, noBlockConsumption);
+    }
+
+    /**
      * Checks whether the player is currently in no clip mode.
      * <p>
      * Always true for spectator mode, actual ability value otherwise.

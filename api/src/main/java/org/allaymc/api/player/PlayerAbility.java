@@ -53,11 +53,12 @@ public enum PlayerAbility {
     MAY_FLY,
 
     /**
-     * Whether placed blocks are consumed from inventory.
+     * Whether blocks are not consumed when placed down.
      * <p>
-     * Usually expected for smooth creative mode behavior client-side.
+     * Generally enabled for creative mode, but may also be enabled for any other gamemode, resulting 
+     * in the same infinite block behavior client-side.
      */
-    INSTABUILD,
+    NO_BLOCK_CONSUMPTION,
 
     /**
      * Whether the player can move through blocks.
