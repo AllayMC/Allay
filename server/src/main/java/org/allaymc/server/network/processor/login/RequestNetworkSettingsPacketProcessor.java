@@ -11,6 +11,7 @@ import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.SimpleCompressionStrategy;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -82,6 +83,9 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
 
         var session = allayPlayer.getSession();
         session.setCodec(codec);
+        if (!AllayServer.getSettings().networkSettings().enableEncodingProtection()) {
+            session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
+        }
 
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(settings.compressionAlgorithm().name()));

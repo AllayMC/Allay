@@ -6,6 +6,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -147,10 +148,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import static org.allaymc.api.utils.AllayNBTUtils.readVector2f;
-import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
-import static org.allaymc.api.utils.AllayNBTUtils.writeVector2f;
-import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.*;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
 import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
 
@@ -191,6 +189,8 @@ public class AllayPlayer implements Player {
     protected final BedrockServerSession session;
     @Getter
     protected final AllayNetworkInterface sourceInterface;
+    @Getter
+    protected final ChunkCache chunkCache;
 
     @Getter
     protected EntityPlayer controlledEntity;
@@ -252,6 +252,7 @@ public class AllayPlayer implements Player {
     public AllayPlayer(BedrockServerSession session, AllayNetworkInterface sourceInterface) {
         this.session = session;
         this.sourceInterface = sourceInterface;
+        this.chunkCache = new ChunkCache();
         this.session.setPacketHandler(new AllayPacketHandler());
         this.packetProcessorHolder = new PacketProcessorHolder();
         this.packetProcessorHolder.setClientState(ClientState.CONNECTED);
@@ -279,16 +280,32 @@ public class AllayPlayer implements Player {
         this.hiddenHudElements = EnumSet.noneOf(HudElement.class);
     }
 
-    protected static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk) {
+    protected static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk, ChunkCache cache, int cacheGen) {
         var dimensionInfo = chunk.getDimensionInfo();
         var packet = new LevelChunkPacket();
         packet.setDimension(dimensionInfo.dimensionId());
         packet.setChunkX(chunk.getX());
         packet.setChunkZ(chunk.getZ());
-        packet.setCachingEnabled(false);
         packet.setRequestSubChunks(true);
         // NOTICE: Sub chunk limit is bigger than zero
         packet.setSubChunkLimit(findHighestNonAirSectionY(chunk) - dimensionInfo.minSectionY());
+
+        if (cache != null) {
+            // Encode biomes blob
+            byte[] biomesBlob = ChunkEncoder.encodeBiomesBlob(chunk);
+            long[] hashes = cache.tryStoreBlobsAndOpenTransaction(cacheGen, biomesBlob);
+
+            if (hashes != null) {
+                // Cached path
+                packet.setCachingEnabled(true);
+                packet.getBlobIds().add(hashes[0]);
+                packet.setData(Unpooled.wrappedBuffer(new byte[]{0}));
+                return packet;
+            }
+        }
+
+        // Non-cached path
+        packet.setCachingEnabled(false);
         packet.setData(ChunkEncoder.writeToNetworkBiomeOnly(chunk));
         return packet;
     }
@@ -304,15 +321,39 @@ public class AllayPlayer implements Player {
         return dimensionInfo.minSectionY();
     }
 
-    protected static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk) {
+    protected static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk, ChunkCache cache, int cacheGen) {
         var dimensionInfo = chunk.getDimensionInfo();
         var packet = new LevelChunkPacket();
         packet.setDimension(dimensionInfo.dimensionId());
         packet.setChunkX(chunk.getX());
         packet.setChunkZ(chunk.getZ());
-        packet.setCachingEnabled(false);
         packet.setRequestSubChunks(false);
         packet.setSubChunksLength(dimensionInfo.chunkSectionCount());
+
+        if (cache != null) {
+            // Encode all section blobs + biomes blob
+            int sectionCount = dimensionInfo.chunkSectionCount();
+            byte[][] allBlobs = new byte[sectionCount + 1][];
+            for (int i = 0; i < sectionCount; i++) {
+                allBlobs[i] = ChunkEncoder.encodeSectionBlob(chunk.getSection(dimensionInfo.minSectionY() + i));
+            }
+            allBlobs[sectionCount] = ChunkEncoder.encodeBiomesBlob(chunk);
+
+            long[] hashes = cache.tryStoreBlobsAndOpenTransaction(cacheGen, allBlobs);
+
+            if (hashes != null) {
+                // Cached path
+                packet.setCachingEnabled(true);
+                for (long hash : hashes) {
+                    packet.getBlobIds().add(hash);
+                }
+                packet.setData(ChunkEncoder.writeCachedChunkData(chunk));
+                return packet;
+            }
+        }
+
+        // Non-cached path
+        packet.setCachingEnabled(false);
         packet.setData(ChunkEncoder.writeToNetwork(chunk));
         return packet;
     }
@@ -1128,15 +1169,21 @@ public class AllayPlayer implements Player {
     }
 
     protected LevelChunkPacket createLevelChunkPacket(Chunk chunk) {
+        var cache = isCacheEffectivelyEnabled() ? this.chunkCache : null;
+        int cacheGen = cache != null ? cache.generation() : 0;
         var lcp = new LevelChunkPacket[1];
         chunk.applyOperation(unsafeChunk -> {
             if (AllayServer.getSettings().worldSettings().useSubChunkSendingSystem()) {
-                lcp[0] = createSubChunkLevelChunkPacket((AllayUnsafeChunk) unsafeChunk);
+                lcp[0] = createSubChunkLevelChunkPacket((AllayUnsafeChunk) unsafeChunk, cache, cacheGen);
             } else {
-                lcp[0] = createFullLevelChunkPacketChunk((AllayUnsafeChunk) unsafeChunk);
+                lcp[0] = createFullLevelChunkPacketChunk((AllayUnsafeChunk) unsafeChunk, cache, cacheGen);
             }
         }, OperationType.READ, OperationType.READ);
         return lcp[0];
+    }
+
+    public boolean isCacheEffectivelyEnabled() {
+        return this.clientCacheEnabled && AllayServer.getSettings().worldSettings().enableClientChunkCache();
     }
 
     @Override
@@ -2704,7 +2751,8 @@ public class AllayPlayer implements Player {
 
     @Override
     public void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z) {
-        changingDimension = true;
+        this.changingDimension = true;
+        this.chunkCache.clear();
 
         var packet = new ChangeDimensionPacket();
         packet.setDimension(targetDimInfo.dimensionId());
@@ -2714,7 +2762,7 @@ public class AllayPlayer implements Player {
 
     @Override
     public void completeDimensionChange() {
-        changingDimension = false;
+        this.changingDimension = false;
 
         // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server.
         // Send it after the player has been added to the target dimension.
@@ -2860,6 +2908,7 @@ public class AllayPlayer implements Player {
     protected void onDisconnect(String disconnectReason) {
         new PlayerDisconnectEvent(this, disconnectReason).call();
         closeAllOpenedContainers();
+        this.chunkCache.clear();
         ((AllayPlayerManager) Server.getInstance().getPlayerManager()).removePlayer(this);
     }
 

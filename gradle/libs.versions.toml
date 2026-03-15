@@ -96,6 +96,8 @@ sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.35.0" }
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.6" }
 # bStats
 bstats = { group = "org.bstats", name = "bstats-base", version = "3.2.1" }
+# LZ4 compression
+lz4-java = { group = "at.yawk.lz4", name = "lz4-java", version = "1.10.4" }
 
 [bundles]
 protocol = ["protocol-connection", "protocol-common", "protocol-codec", "protocol-extension"]

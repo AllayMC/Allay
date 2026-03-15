@@ -219,11 +219,12 @@ public final class ChunkLoaderHolder {
 
         private final BlockingQueue<Chunk> chunkSendingQueue;
         private final AtomicBoolean isRunning;
+        private final Thread senderThread;
 
         public AsyncChunkSender() {
             this.chunkSendingQueue = new LinkedBlockingQueue<>();
             this.isRunning = new AtomicBoolean(true);
-            Thread.ofVirtual().start(() -> {
+            this.senderThread = Thread.ofVirtual().start(() -> {
                 while (isRunning.get()) {
                     try {
                         player.viewChunk(chunkSendingQueue.take());
@@ -240,6 +241,8 @@ public final class ChunkLoaderHolder {
 
         public void stop() {
             isRunning.set(false);
+            chunkSendingQueue.clear();
+            senderThread.interrupt();
         }
     }
 

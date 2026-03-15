@@ -30,7 +30,6 @@ import org.cloudburstmc.netty.channel.raknet.config.RakServerCookieMode;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.CompressionCodec;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.NoopCompression;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.SimpleCompressionStrategy;
@@ -39,8 +38,8 @@ import org.cloudburstmc.protocol.bedrock.netty.codec.packet.BedrockPacketCodec_v
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
-import java.util.OptionalInt;
 import java.util.HashSet;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -242,10 +241,6 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
 
         @Override
         protected void initSession(BedrockServerSession session) {
-            if (!AllayServer.getSettings().networkSettings().enableEncodingProtection()) {
-                session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
-            }
-
             initPlayerSession(session);
         }
     }

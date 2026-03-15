@@ -236,6 +236,11 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("max-light-update-count")
         private int maxLightUpdateCountPerDimension = 1280000;
 
+        @Comment("Whether to enable client-side chunk caching using blob hashes, which can significantly reduce bandwidth when players revisit areas")
+        @Comment("Please note that you should set network-settings.enable-encoding-protection to false to use this feature")
+        @CustomKey("enable-client-chunk-cache")
+        private boolean enableClientChunkCache = false;
+
         public enum ChunkSendingStrategy {
             ASYNC,
             SYNC
