@@ -38,6 +38,9 @@
     "minecraft:shield",
     "minecraft:arrow",
     "minecraft:firework_rocket",
-    "minecraft:totem_of_undying"
+    "minecraft:totem_of_undying",
+    "minecraft:filled_map",
+    "minecraft:nautilus_shell",
+    "minecraft:sparkler"
   ]
 }
