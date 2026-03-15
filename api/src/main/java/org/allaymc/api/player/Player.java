@@ -243,15 +243,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean canPlaceBlocks();
 
     /**
-     * Sets the place-block ability.
-     *
-     * @param canPlaceBlocks {@code true} to enable block placement, {@code false} to disable it
-     */
-    default void setCanPlaceBlocks(boolean canPlaceBlocks) {
-        setAbility(PlayerAbility.PLACE_BLOCK, canPlaceBlocks);
-    }
-
-    /**
      * Checks whether the player may currently break blocks.
      * <p>
      * Always true for operators, always false for spectator, adventure modes and immutableWorld,
@@ -262,15 +253,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * @return {@code true} if breaking blocks is currently allowed, {@code false} otherwise
      */
     boolean canBreakBlocks();
-
-    /**
-     * Sets the break-block ability.
-     *
-     * @param canBreakBlocks {@code true} to enable block breaking, {@code false} to disable it
-     */
-    default void setCanBreakBlocks(boolean canBreakBlocks) {
-        setAbility(PlayerAbility.BREAK_BLOCK, canBreakBlocks);
-    }
 
     /**
      * Checks whether the player may currently interact with blocks.
@@ -285,15 +267,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean canInteractWithBlocks();
 
     /**
-     * Sets the interact-block ability.
-     *
-     * @param canInteractBlocks {@code true} to enable block interaction, {@code false} to disable it
-     */
-    default void setCanInteractWithBlocks(boolean canInteractBlocks) {
-        setAbility(PlayerAbility.INTERACT_BLOCK, canInteractBlocks);
-    }
-
-    /**
      * Checks whether the player may currently open containers.
      * <p>
      * Always true for operators, always false for spectator mode and immutable world, actual ability
@@ -302,15 +275,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * @return {@code true} if opening containers is currently allowed, {@code false} otherwise
      */
     boolean canOpenContainers();
-
-    /**
-     * Sets the open-container ability.
-     *
-     * @param canOpenContainers {@code true} to enable container access, {@code false} to disable it
-     */
-    default void setCanOpenContainers(boolean canOpenContainers) {
-        setAbility(PlayerAbility.OPEN_CONTAINER, canOpenContainers);
-    }
 
     /**
      * Checks whether the player may currently attack other players.
@@ -322,15 +286,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean canAttackPlayers();
 
     /**
-     * Sets the attack-player ability.
-     *
-     * @param canAttackPlayers {@code true} to enable PvP attacks, {@code false} to disable it
-     */
-    default void setCanAttackPlayers(boolean canAttackPlayers) {
-        setAbility(PlayerAbility.ATTACK_PLAYER, canAttackPlayers);
-    }
-
-    /**
      * Checks whether the player may currently attack mobs.
      * <p>
      * Always true for operators, always false for spectator mode, actual ability value otherwise.
@@ -338,15 +293,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * @return {@code true} if attacking mobs is currently allowed, {@code false} otherwise
      */
     boolean canAttackMobs();
-
-    /**
-     * Sets the attack-mob ability.
-     *
-     * @param canAttackMobs {@code true} to enable mob attacks, {@code false} to disable it
-     */
-    default void setCanAttackMobs(boolean canAttackMobs) {
-        setAbility(PlayerAbility.ATTACK_MOB, canAttackMobs);
-    }
 
     /**
      * Checks whether the player may currently fly.
@@ -358,15 +304,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean canFly();
 
     /**
-     * Sets the ability of player to fly.
-     *
-     * @param canFly {@code true} to enable flying possibility, {@code false} to disable it
-     */
-    default void setCanFly(boolean canFly) {
-        setAbility(PlayerAbility.MAY_FLY, canFly);
-    }
-
-    /**
      * Checks whether placed blocks should not be consumed from inventory.
      * <p>
      * Usually true for creative mode, actual ability value otherwise.
@@ -376,15 +313,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean hasNoBlockConsumption();
 
     /**
-     * Sets the no-block-consumption ability.
-     *
-     * @param noBlockConsumption {@code true} to disable block consumption on placement, {@code false} otherwise
-     */
-    default void setNoBlockConsumption(boolean noBlockConsumption) {
-        setAbility(PlayerAbility.NO_BLOCK_CONSUMPTION, noBlockConsumption);
-    }
-
-    /**
      * Checks whether the player is currently in no clip mode.
      * <p>
      * Always true for spectator mode, actual ability value otherwise.
@@ -392,15 +320,6 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * @return {@code true} if player is in no clip mode, {@code false} otherwise.
      */
     boolean isNoClip();
-
-    /**
-     * Sets the no-clip ability.
-     *
-     * @param noClip {@code true} to enable no-clip, {@code false} to disable it
-     */
-    default void setNoClip(boolean noClip) {
-        setAbility(PlayerAbility.NO_CLIP, noClip);
-    }
 
     /**
      * Checks whether the player is currently treated as having immutable world enabled.
