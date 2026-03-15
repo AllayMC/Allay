@@ -1,6 +1,11 @@
 package org.allaymc.server.container.processor;
 
 import org.allaymc.api.container.Container;
+import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.component.ItemArmorBaseComponent;
+import org.allaymc.api.item.data.ArmorType;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.FakeContainerImpl;
@@ -106,5 +111,31 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
         }
 
         return false;
+    }
+
+    static boolean canPlaceItemToSlot(Container container, int slot, ItemStack item) {
+        if (item.getItemType() == ItemTypes.AIR) {
+            return true;
+        }
+
+        if (container.getContainerType() == ContainerTypes.ARMOR) {
+            if (slot == ArmorType.HELMET.ordinal() && item.getItemType() == ItemTypes.CARVED_PUMPKIN) {
+                return true;
+            }
+
+            if (!(item instanceof ItemArmorBaseComponent armorComponent)) {
+                return false;
+            }
+
+            return switch (slot) {
+                case 0 -> armorComponent.getArmorType() == ArmorType.HELMET;
+                case 1 -> armorComponent.getArmorType() == ArmorType.CHESTPLATE;
+                case 2 -> armorComponent.getArmorType() == ArmorType.LEGGINGS;
+                case 3 -> armorComponent.getArmorType() == ArmorType.BOOTS;
+                default -> false;
+            };
+        }
+
+        return true;
     }
 }
