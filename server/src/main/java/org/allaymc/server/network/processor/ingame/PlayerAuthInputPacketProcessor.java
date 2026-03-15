@@ -38,6 +38,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import java.util.List;
@@ -102,7 +103,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
             switch (action.getAction()) {
                 case START_BREAK -> {
-                    if (isInvalidGameType(player)) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         continue;
                     }
 
@@ -110,7 +111,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
                     // When a player switches to breaking another block halfway through breaking one
-                    if (isInvalidGameType(player)) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         continue;
                     }
 
@@ -123,7 +124,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_PREDICT_DESTROY -> {
-                    if (isInvalidGameType(player)) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
+                        var state = player.getControlledEntity().getLocation().dimension().getBlockState(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+                        player.viewBlockUpdate(new Vector3i(pos.getX(), pos.getY(), pos.getZ()), 0, state);
                         continue;
                     }
 
@@ -352,10 +355,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     entity.exhaust(entity.isSprinting() ? 0.2f : 0.05f);
                 }
                 case START_FLYING -> {
-                    if (!entity.canFly()) {
+                    if (!player.canFly()) {
                         // Reset client-side flying state
                         var controller = entity.getController();
-                        controller.viewPlayerPermission(controller);
+                        controller.viewPlayerAbilities(controller);
 
                         log.warn("Player {} tried to start flying without permission", player.getOriginName());
                         return;
@@ -363,7 +366,15 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
                     entity.setFlying(true);
                 }
-                case STOP_FLYING -> entity.setFlying(false);
+                case STOP_FLYING -> {
+                    entity.setFlying(player.isAlwaysFlying());
+                    if (player.isAlwaysFlying()) {
+                        entity.setFlying(true);
+                        player.viewPlayerAbilities(player);
+                    } else {
+                        entity.setFlying(false);
+                    }
+                }
                 case MISSED_SWING -> {
                     var event = new PlayerPunchAirEvent(entity);
                     if (event.call()) {

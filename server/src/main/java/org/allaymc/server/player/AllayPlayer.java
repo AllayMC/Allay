@@ -39,6 +39,7 @@ import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.server.PlayerDisconnectEvent;
+import org.allaymc.api.eventbus.event.server.PlayerAbilitiesUpdateEvent;
 import org.allaymc.api.eventbus.event.server.PlayerLoginEvent;
 import org.allaymc.api.eventbus.event.server.PlayerSpawnEvent;
 import org.allaymc.api.form.type.CustomForm;
@@ -244,6 +245,12 @@ public class AllayPlayer implements Player {
     // Fog
     protected final List<String> fogStack = new ArrayList<>();
 
+    // Abilities
+    protected final EnumSet<PlayerAbility> abilities;
+    protected boolean shouldSendAbilities;
+    protected boolean immutableWorld;
+    protected boolean alwaysFlying;
+
     // NetEase
     @Getter
     @Setter
@@ -277,6 +284,9 @@ public class AllayPlayer implements Player {
 
         // Hud
         this.hiddenHudElements = EnumSet.noneOf(HudElement.class);
+
+        // Abilities
+        this.abilities = EnumSet.noneOf(PlayerAbility.class);
     }
 
     protected static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk) {
@@ -332,6 +342,13 @@ public class AllayPlayer implements Player {
             this.sendHudElements();
             this.shouldSendHudElements = false;
         }
+
+        if (this.shouldSendAbilities &&
+            this.controlledEntity != null &&
+            getClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
+            broadcastPlayerAbilities();
+            this.shouldSendAbilities = false;
+        }
     }
 
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
@@ -370,8 +387,12 @@ public class AllayPlayer implements Player {
         viewContainerContents(this.controlledEntity.getContainer(ContainerTypes.INVENTORY));
         viewContainerContents(this.controlledEntity.getContainer(ContainerTypes.OFFHAND));
         viewContainerContents(this.controlledEntity.getContainer(ContainerTypes.ARMOR));
-        viewPlayerPermission(this);
+        viewPlayerAbilities(this);
         viewPlayerListChange(playerManager.getPlayers().values(), true);
+        playerManager.getPlayers().values().stream()
+                .filter(player -> player != this && player.getControlledEntity() != null)
+                .forEach(this::viewPlayerAbilities);
+        broadcastPlayerAbilities();
 
         sendSpeed(this.speed);
         sendExperienceLevel(this.controlledEntity.getExperienceLevel());
@@ -475,17 +496,11 @@ public class AllayPlayer implements Player {
     public void viewPlayerGameMode(EntityPlayer player) {
         var gameMode = player.getGameMode();
         if (this.controlledEntity == player) {
-            var packet1 = new SetPlayerGameTypePacket();
-            packet1.setGamemode(toNetwork(player.getGameMode()).ordinal());
-            sendPacket(packet1);
+            var packet = new SetPlayerGameTypePacket();
+            packet.setGamemode(toNetwork(player.getGameMode()).ordinal());
+            sendPacket(packet);
 
-            var packet2 = new UpdateAdventureSettingsPacket();
-            packet2.setNoPvM(gameMode == GameMode.SPECTATOR);
-            packet2.setNoMvP(gameMode == GameMode.SPECTATOR);
-            packet2.setShowNameTags(gameMode != GameMode.SPECTATOR);
-            packet2.setImmutableWorld(gameMode == GameMode.SPECTATOR);
-            packet2.setAutoJump(true);
-            sendPacket(packet2);
+            sendAdventureSettings();
         } else {
             var packet = new UpdatePlayerGameTypePacket();
             packet.setGameType(toNetwork(player.getGameMode()));
@@ -2869,7 +2884,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewPlayerPermission(Player player) {
+    public void viewPlayerAbilities(Player player) {
         var packet = new UpdateAbilitiesPacket();
 
         var entity = Preconditions.checkNotNull(player.getControlledEntity());
@@ -2878,12 +2893,12 @@ public class AllayPlayer implements Player {
         // If this player does not have specific command permissions, the command description won't even be sent to the client
         packet.setCommandPermission(entity.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
         // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
-        packet.setPlayerPermission(calculatePlayerPermission(entity));
+        packet.setPlayerPermission(calculatePlayerPermission(player));
 
         var layer = new AbilityLayer();
         layer.setLayerType(AbilityLayer.Type.BASE);
         layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
-        layer.getAbilityValues().addAll(calculateAbilities(entity));
+        layer.getAbilityValues().addAll(calculateAbilities(player));
         // NOTICE: this shouldn't be changed
         layer.setWalkSpeed((float) DEFAULT_SPEED.calculate());
         layer.setFlySpeed((float) player.getFlySpeed().calculate());
@@ -2893,56 +2908,316 @@ public class AllayPlayer implements Player {
         sendPacket(packet);
 
         if (player == this) {
+            sendAdventureSettings();
             this.shouldSendCommands = true;
+            this.shouldSendAbilities = false;
         }
     }
 
-    protected EnumSet<Ability> calculateAbilities(EntityPlayer player) {
-        var gameMode = player.getGameMode();
+    protected void broadcastPlayerAbilities() {
+        if (this.controlledEntity == null) {
+            return;
+        }
 
+        viewPlayerAbilities(this);
+        this.controlledEntity.forEachViewers(viewer -> {
+            if (viewer instanceof Player playerViewer && playerViewer != this) {
+                playerViewer.viewPlayerAbilities(this);
+            }
+        });
+    }
+
+    protected EnumSet<Ability> calculateAbilities(Player player) {
         var abilities = EnumSet.noneOf(Ability.class);
-        abilities.add(Ability.TELEPORT);
-        abilities.add(Ability.WALK_SPEED);
-        abilities.add(Ability.FLY_SPEED);
-        abilities.add(Ability.VERTICAL_FLY_SPEED);
-
-        if (gameMode != GameMode.SPECTATOR) {
-            abilities.add(Ability.BUILD);
-            abilities.add(Ability.MINE);
-            abilities.add(Ability.DOORS_AND_SWITCHES);
-            abilities.add(Ability.OPEN_CONTAINERS);
-            abilities.add(Ability.ATTACK_PLAYERS);
-            abilities.add(Ability.ATTACK_MOBS);
-        } else {
-            abilities.add(Ability.NO_CLIP);
-            abilities.add(Ability.FLYING);
+        for (var ability : player.getAbilities()) {
+            abilities.add(toNetworkAbility(ability));
         }
 
-        if (gameMode == GameMode.CREATIVE) {
-            abilities.add(Ability.INSTABUILD);
-        }
-
-        if (player.canFly()) {
-            abilities.add(Ability.MAY_FLY);
-        }
-
-        if (player.isFlying() && abilities.contains(Ability.MAY_FLY)) {
-            abilities.add(Ability.FLYING);
-        }
-
-        if (player.isActualPlayer() && Server.getInstance().getPlayerManager().isOperator(player.getController())) {
+        if (player.getControlledEntity() != null && player.getControlledEntity().hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean()) {
             abilities.add(Ability.OPERATOR_COMMANDS);
+        }
+
+        if (!player.canFly()) {
+            abilities.remove(Ability.MAY_FLY);
+            abilities.remove(Ability.FLYING);
+        }
+
+        if (player.isAlwaysFlying()) {
+            abilities.add(Ability.MAY_FLY);
+            abilities.add(Ability.FLYING);
         }
 
         return abilities;
     }
 
-    protected PlayerPermission calculatePlayerPermission(EntityPlayer player) {
-        if (player.isActualPlayer() && Server.getInstance().getPlayerManager().isOperator(player.getController())) {
+    protected PlayerPermission calculatePlayerPermission(Player player) {
+        var build = player.canPlaceBlocks();
+        var mine = player.canBreakBlocks();
+        var doorsAndSwitches = player.canInteractWithBlocks();
+        var openContainers = player.canOpenContainers();
+        var attackPlayers = player.canAttackPlayers();
+        var attackMobs = player.canAttackMobs();
+
+        if (
+            Server.getInstance().getPlayerManager().isOperator(player) &&
+            build && mine && doorsAndSwitches && openContainers && attackPlayers && attackMobs
+        ) {
             return PlayerPermission.OPERATOR;
         }
 
-        return PlayerPermission.MEMBER;
+        if (build && mine && doorsAndSwitches && openContainers && attackPlayers && attackMobs) {
+            return PlayerPermission.MEMBER;
+        }
+
+        if (!build && !mine && !doorsAndSwitches && !openContainers && !attackPlayers && !attackMobs) {
+            return PlayerPermission.VISITOR;
+        }
+
+        return PlayerPermission.CUSTOM;
+    }
+
+    protected void sendAdventureSettings() {
+        if (this.controlledEntity == null || getClientState().ordinal() < ClientState.SPAWNED.ordinal()) {
+            return;
+        }
+
+        var packet = new UpdateAdventureSettingsPacket();
+        packet.setNoPvM(!canAttackMobs());
+        packet.setNoMvP(!canAttackMobs());
+        packet.setShowNameTags(this.controlledEntity.getGameMode() != GameMode.SPECTATOR);
+        packet.setImmutableWorld(isImmutableWorld());
+        packet.setAutoJump(true);
+        sendPacket(packet);
+    }
+
+    protected static EnumSet<PlayerAbility> createBaseAbilitySet() {
+        return EnumSet.noneOf(PlayerAbility.class);
+    }
+
+    protected static EnumSet<PlayerAbility> abilitiesFromPermission(PlayerPermission permission) {
+        var abilities = createBaseAbilitySet();
+        switch (permission) {
+            case OPERATOR -> abilities.addAll(EnumSet.of(
+                    PlayerAbility.PLACE_BLOCK,
+                    PlayerAbility.BREAK_BLOCK,
+                    PlayerAbility.INTERACT_BLOCK,
+                    PlayerAbility.OPEN_CONTAINER,
+                    PlayerAbility.ATTACK_PLAYER,
+                    PlayerAbility.ATTACK_MOB
+            ));
+            case MEMBER -> abilities.addAll(EnumSet.of(
+                    PlayerAbility.PLACE_BLOCK,
+                    PlayerAbility.BREAK_BLOCK,
+                    PlayerAbility.INTERACT_BLOCK,
+                    PlayerAbility.OPEN_CONTAINER,
+                    PlayerAbility.ATTACK_PLAYER,
+                    PlayerAbility.ATTACK_MOB
+            ));
+            case VISITOR, CUSTOM -> {
+                // Keep only the common non-permission abilities.
+            }
+        }
+        return abilities;
+    }
+
+    protected Ability toNetworkAbility(PlayerAbility ability) {
+        return switch (ability) {
+            case PLACE_BLOCK -> Ability.BUILD;
+            case BREAK_BLOCK -> Ability.MINE;
+            case INTERACT_BLOCK -> Ability.DOORS_AND_SWITCHES;
+            case OPEN_CONTAINER -> Ability.OPEN_CONTAINERS;
+            case ATTACK_PLAYER -> Ability.ATTACK_PLAYERS;
+            case ATTACK_MOB -> Ability.ATTACK_MOBS;
+            case FLYING -> Ability.FLYING;
+            case MAY_FLY -> Ability.MAY_FLY;
+            case INFINITE_BLOCK -> Ability.INSTABUILD;
+            case NO_CLIP -> Ability.NO_CLIP;
+        };
+    }
+
+    protected void scheduleAbilitiesUpdate(Set<PlayerAbility> previous) {
+        if (this.controlledEntity != null) {
+            new PlayerAbilitiesUpdateEvent(this, previous, this.abilities).call();
+        }
+        this.shouldSendAbilities = true;
+    }
+
+    @Override
+    public @UnmodifiableView Set<PlayerAbility> getAbilities() {
+        return Collections.unmodifiableSet(abilities);
+    }
+
+    @Override
+    public boolean hasAbility(PlayerAbility ability) {
+        return this.abilities.contains(ability);
+    }
+
+    @Override
+    public void setAbility(PlayerAbility ability, boolean value) {
+        if (this.abilities.contains(ability) == value) {
+            return;
+        }
+
+        var snap = EnumSet.copyOf(this.abilities);
+        if (value) {
+            this.abilities.add(ability);
+        } else {
+            this.abilities.remove(ability);
+        }
+        scheduleAbilitiesUpdate(snap);
+    }
+
+    @Override
+    public void setAbilities(Set<PlayerAbility> abilities, boolean value) {
+        if ((value && this.abilities.containsAll(abilities)) || (!value && Collections.disjoint(this.abilities, abilities))) {
+            return;
+        }
+
+        var snap = EnumSet.copyOf(this.abilities);
+        if (value) {
+            this.abilities.addAll(abilities);
+        } else {
+            this.abilities.removeAll(abilities);
+        }
+        scheduleAbilitiesUpdate(snap);
+    }
+
+    @Override
+    public void setAbilities(Set<PlayerAbility> abilities) {
+        if (this.abilities.equals(abilities)) {
+            return;
+        }
+
+        var snap = EnumSet.copyOf(this.abilities);
+        this.abilities.clear();
+        this.abilities.addAll(abilities);
+        scheduleAbilitiesUpdate(snap);
+    }
+
+    @Override
+    public boolean canPlaceBlocks() {
+        if (isImmutableWorld()) {
+            return false;
+        }
+        if (this.controlledEntity != null && this.controlledEntity.getGameMode() == GameMode.ADVENTURE) {
+            return false;
+        }
+        if (Server.getInstance().getPlayerManager().isOperator(this)) {
+            return true;
+        }
+        return hasAbility(PlayerAbility.PLACE_BLOCK);
+    }
+
+    @Override
+    public boolean canBreakBlocks() {
+        if (isImmutableWorld()) {
+            return false;
+        }
+        if (this.controlledEntity != null && this.controlledEntity.getGameMode() == GameMode.ADVENTURE) {
+            return false;
+        }
+        if (Server.getInstance().getPlayerManager().isOperator(this)) {
+            return true;
+        }
+        return hasAbility(PlayerAbility.BREAK_BLOCK);
+    }
+
+    @Override
+    public boolean canInteractWithBlocks() {
+        if (isImmutableWorld()) {
+            return false;
+        }
+        if (this.controlledEntity != null && this.controlledEntity.getGameMode() == GameMode.SPECTATOR) {
+            return false;
+        }
+        if (Server.getInstance().getPlayerManager().isOperator(this)) {
+            return true;
+        }
+        return hasAbility(PlayerAbility.INTERACT_BLOCK);
+    }
+
+    @Override
+    public boolean canOpenContainers() {
+        if (this.controlledEntity != null && this.controlledEntity.getGameMode() == GameMode.SPECTATOR) {
+            return false;
+        }
+        if (Server.getInstance().getPlayerManager().isOperator(this)) {
+            return true;
+        }
+        return hasAbility(PlayerAbility.OPEN_CONTAINER);
+    }
+
+    @Override
+    public boolean canAttackPlayers() {
+        if (this.controlledEntity != null && this.controlledEntity.getGameMode() == GameMode.SPECTATOR) {
+            return false;
+        }
+        if (Server.getInstance().getPlayerManager().isOperator(this)) {
+            return true;
+        }
+        return hasAbility(PlayerAbility.ATTACK_PLAYER);
+    }
+
+    @Override
+    public boolean canAttackMobs() {
+        if (this.controlledEntity != null && this.controlledEntity.getGameMode() == GameMode.SPECTATOR) {
+            return false;
+        }
+        if (Server.getInstance().getPlayerManager().isOperator(this)) {
+            return true;
+        }
+        return hasAbility(PlayerAbility.ATTACK_MOB);
+    }
+
+    @Override
+    public boolean canFly() {
+        return this.controlledEntity != null && (isAlwaysFlying() || hasAbility(PlayerAbility.MAY_FLY));
+    }
+
+    @Override
+    public boolean hasInfiniteBlock() {
+        return hasAbility(PlayerAbility.INFINITE_BLOCK);
+    }
+
+    @Override
+    public boolean isNoClip() {
+        return this.controlledEntity != null && (hasAbility(PlayerAbility.NO_CLIP) || this.controlledEntity.getGameMode() == GameMode.SPECTATOR);
+    }
+
+    @Override
+    public boolean isImmutableWorld() {
+        if (Server.getInstance().getPlayerManager().isOperator(this)) {
+            return false;
+        }
+
+        if (this.immutableWorld) {
+            return true;
+        }
+
+        if (this.controlledEntity != null) {
+            return this.controlledEntity.getGameMode() == GameMode.SPECTATOR || this.controlledEntity.getGameMode() == GameMode.ADVENTURE;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void setImmutableWorld(boolean immutableWorld) {
+        if (this.immutableWorld != immutableWorld) {
+            this.immutableWorld = immutableWorld;
+            this.shouldSendAbilities = true;
+        }
+    }
+
+    @Override
+    public boolean isAlwaysFlying() {
+        return this.alwaysFlying || hasAbility(PlayerAbility.NO_CLIP) || (this.controlledEntity != null && this.controlledEntity.getGameMode() == GameMode.SPECTATOR);
+    }
+
+    @Override
+    public void setAlwaysFlying(boolean alwaysFlying) {
+        this.alwaysFlying = alwaysFlying;
+        this.shouldSendAbilities = true;
     }
 
     @Override
@@ -2983,7 +3258,7 @@ public class AllayPlayer implements Player {
     public void setFlySpeed(Speed flySpeed) {
         if (!this.flySpeed.equals(flySpeed)) {
             this.flySpeed = flySpeed;
-            viewPlayerPermission(this);
+            viewPlayerAbilities(this);
         }
     }
 
@@ -2991,7 +3266,7 @@ public class AllayPlayer implements Player {
     public void setVerticalFlySpeed(Speed verticalFlySpeed) {
         if (!this.verticalFlySpeed.equals(verticalFlySpeed)) {
             this.verticalFlySpeed = verticalFlySpeed;
-            viewPlayerPermission(this);
+            viewPlayerAbilities(this);
         }
     }
 
@@ -3067,6 +3342,17 @@ public class AllayPlayer implements Player {
         } else {
             dimension = (AllayDimension) logOffWorld.getDimension(playerData.getDimension());
             currentPos = readVector3f(playerData.getNbt(), "Pos");
+        }
+
+        var storedAbilities = playerData.getAbilities();
+        if (storedAbilities == null) {
+            var permissionName = AllayServer.getSettings().genericSettings().defaultPermission().toUpperCase();
+            this.abilities.addAll(abilitiesFromPermission(PlayerPermission.valueOf(permissionName)));
+
+            var gameMode = GameMode.from(playerData.getNbt().getInt("PlayerGameMode", NetworkHelper.toNetwork(dimension.getWorld().getWorldData().getGameMode()).ordinal()));
+            this.abilities.addAll(gameMode.getAbilities());
+        } else {
+            this.abilities.addAll(storedAbilities);
         }
 
         this.controlledEntity = EntityTypes.PLAYER.createEntity();
@@ -3150,7 +3436,7 @@ public class AllayPlayer implements Player {
         packet.getGamerules().addAll(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameRules().getGameRules()));
         packet.setUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
         packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
-        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()).ordinal())));
+        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("PlayerGameMode", NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()).ordinal())));
         var loc = this.controlledEntity.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));

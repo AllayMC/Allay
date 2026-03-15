@@ -22,6 +22,7 @@ import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.HudElement;
+import org.allaymc.api.player.PlayerAbility;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -601,6 +602,22 @@ public class GameTestCommand extends Command {
                     for (var entity : entities) {
                         entity.setScale(scale);
                     }
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setimmutableworld")
+                .bool("value")
+                .exec((context, sender) -> {
+                    boolean value = context.getResult(1);
+                    sender.getController().setImmutableWorld(value);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setnoblocksconsumption")
+                .bool("value")
+                .exec((context, sender) -> {
+                    boolean value = context.getResult(1);
+                    sender.getController().setAbility(PlayerAbility.INFINITE_BLOCK, value);
                     return context.success();
                 }, SenderType.PLAYER);
 
