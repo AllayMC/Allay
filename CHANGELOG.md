@@ -21,9 +21,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added `AllayBlockType.Builder.customizeItemType(Consumer<AllayItemType.Builder>)` to customize automatically generated block item types for custom blocks.
 - Added `BlockStateDefinition.MaterialInstance.alphaTestToOpaque(String)`, `alphaTestSingleSidedToOpaque(String)`, and `blendToOpaque(String)` convenience factories for custom block material instances.
 - Added `CustomBlockDefinitionGenerator.setRotationOffset(float)` to configure the `minecraft:placement_direction` `y_rotation_offset` for custom blocks that use directional state properties.
+- Added terminal command prompt tab completion backed by the command tree, including command names, aliases, enum values, and online player targets.
+- Added inventory transaction validation for restricted container slots to reject invalid item moves and swaps, such as non-armor items being placed into armor slots.
 
 ### Fixed
 
+- Fixed NBT read errors for players joining with newly created player data by writing a default `Rotation` field.
+- Fixed non-living entities lingering below the world; they are now removed when they fall into the void.
+- Fixed `/kick` message templating so command feedback includes the target player name and custom kick reasons are formatted correctly.
 - Aligned multiple tree world features more closely with vanilla/Paper generation behavior, including trunk, foliage, root, vine, podzol, and propagule placement across oak-family, birch-family, spruce-family, jungle-family, cherry, azalea, pale oak, and mangrove trees.
 - Fixed custom item tags sending.
 
