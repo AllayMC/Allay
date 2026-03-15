@@ -5,6 +5,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemWearableComponent;
 import org.allaymc.api.item.data.ArmorType;
+import org.allaymc.api.item.data.ItemTags;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.container.ContainerNetworkInfo;
@@ -116,6 +117,10 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
     static boolean canPlaceItemToSlot(Container container, int slot, ItemStack item) {
         if (item.getItemType() == ItemTypes.AIR) {
             return true;
+        }
+
+        if (container.getContainerType() == ContainerTypes.OFFHAND && !item.getItemType().hasItemTag(ItemTags.ALLOW_OFFHAND)) {
+            return false;
         }
 
         if (container.getContainerType() == ContainerTypes.ARMOR) {

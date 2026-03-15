@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added camera shake API (`Player.shakeCamera()`, `Player.stopCameraShake()`) and implemented `/camerashake` command.
 - (API) Added fog API (`Player.pushFog()`, `Player.popFog()`, `Player.removeFog()`, `Player.removeAllFogs()`, `Player.getFogs()`) with `FogIds` constants, and implemented `/fog` command.
 - (API) Added `BiomeTags` constants interface with code-generated biome tag definitions.
+- (API) Added `ItemTags.ALLOW_OFFHAND` for marking items that are allowed in the offhand slot.
 - (API) Added `ItemWearableComponent` as the shared wearable contract for armor, elytra, carved pumpkins, and heads.
 - Added custom biome support. Plugins can register custom biomes via `new AllayBiomeType(Identifier, BiomeData)` with auto-allocated persistent IDs (starting from 30000, saved to `biome_ids.yml`).
 - Added `AllayBlockType.Builder.customizeItemType(Consumer<AllayItemType.Builder>)` to customize automatically generated block item types for custom blocks.
@@ -32,6 +33,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed `/kick` message templating so command feedback includes the target player name and custom kick reasons are formatted correctly.
 - Aligned multiple tree world features more closely with vanilla/Paper generation behavior, including trunk, foliage, root, vine, podzol, and propagule placement across oak-family, birch-family, spruce-family, jungle-family, cherry, azalea, pale oak, and mangrove trees.
 - Fixed custom item tags sending.
+
+### Removed
+
+- Removed field `CustomItemDefinitionGenerator.allowOffHand`, use new item tag `ItemTags.ALLOW_OFFHAND` instead.
 
 # 0.11.1 (API 0.26.0) - 2026/3/9
 

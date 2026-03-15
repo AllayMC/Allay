@@ -1,8 +1,9 @@
 package org.allaymc.api.item.data;
 
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface ItemTags {
@@ -103,6 +104,8 @@ public interface ItemTags {
     ItemTag IS_ARMOR = create("minecraft:is_armor");
 
     ItemTag LOGS = create("minecraft:logs");
+
+    ItemTag ALLOW_OFFHAND = create("minecraft:allow_offhand");
 
     ItemTag HANGING_SIGN = create("minecraft:hanging_sign");
 

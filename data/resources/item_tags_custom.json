@@ -33,5 +33,11 @@
     "minecraft:green_dye",
     "minecraft:red_dye",
     "minecraft:black_dye"
+  ],
+  "minecraft:allow_offhand": [
+    "minecraft:shield",
+    "minecraft:arrow",
+    "minecraft:firework_rocket",
+    "minecraft:totem_of_undying"
   ]
 }

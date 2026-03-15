@@ -6,6 +6,7 @@ import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.item.component.ItemToolComponent;
 import org.allaymc.api.item.component.ItemWearableComponent;
 import org.allaymc.api.item.data.ItemTag;
+import org.allaymc.api.item.data.ItemTags;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.message.MayContainTrKey;
 import org.cloudburstmc.nbt.NbtMap;
@@ -20,32 +21,6 @@ import java.util.Map;
 
 /**
  * Default implementation of {@link ItemDefinitionGenerator} for custom items.
- * <p>
- * Generates NBT-based item definitions with the following structure:
- * <ul>
- *   <li><b>item_properties</b> - Legacy properties container
- *     <ul>
- *       <li>{@code max_stack_size} - Maximum stack size (int)</li>
- *       <li>{@code allow_off_hand} - Whether item can be held in off-hand (boolean)</li>
- *       <li>{@code can_destroy_in_creative} - Whether item destroys blocks in creative (boolean)</li>
- *       <li>{@code minecraft:icon} - Texture configuration with {@code textures.default}</li>
- *       <li>{@code foil} - Enchantment glint effect (boolean, optional)</li>
- *       <li>{@code hand_equipped} - Tool-style rendering (boolean, optional)</li>
- *       <li>{@code damage} - Attack damage bonus (int, optional)</li>
- *       <li>{@code use_duration} - Use time in ticks (int, optional)</li>
- *       <li>{@code use_animation} - Animation type: 1=eat, 2=drink (int, optional)</li>
- *       <li>{@code wearable_slot} - Armor slot (string, optional)</li>
- *     </ul>
- *   </li>
- *   <li><b>minecraft:display_name</b> - Display name with {@code value} field</li>
- *   <li><b>minecraft:tags</b> - Item tags with {@code tags} array</li>
- *   <li><b>minecraft:durability</b> - Durability with {@code max_durability}</li>
- *   <li><b>minecraft:armor</b> - Protection value (for armor items)</li>
- *   <li><b>minecraft:wearable</b> - Equipment slot (for armor items)</li>
- *   <li><b>minecraft:food</b> - Food properties with {@code can_always_eat}</li>
- *   <li><b>minecraft:cooldown</b> - Cooldown with {@code category} and {@code duration}</li>
- *   <li><b>minecraft:render_offsets</b> - Visual offsets for different viewpoints</li>
- * </ul>
  *
  * @author daoge_cmd
  * @see ItemDefinition
@@ -77,10 +52,6 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
     @Builder.Default
     protected final boolean canDestroyInCreative = true;
     /**
-     * Whether the item can be held in the off-hand slot.
-     */
-    protected final boolean allowOffHand;
-    /**
      * Cooldown duration in seconds.
      * <p>
      * When set, adds {@code minecraft:cooldown} component with the item's identifier
@@ -102,7 +73,7 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
         var components = NbtMap.builder();
 
         properties.putInt("max_stack_size", itemData.maxStackSize())
-                .putBoolean("allow_off_hand", this.allowOffHand)
+                .putBoolean("allow_off_hand", itemType.hasItemTag(ItemTags.ALLOW_OFFHAND))
                 .putBoolean("can_destroy_in_creative", this.canDestroyInCreative);
 
         properties.putCompound("minecraft:icon",
