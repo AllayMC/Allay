@@ -103,7 +103,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
             switch (action.getAction()) {
                 case START_BREAK -> {
-                    if (isInvalidGameType(player) || !player.canMine()) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         continue;
                     }
 
@@ -111,7 +111,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
                     // When a player switches to breaking another block halfway through breaking one
-                    if (isInvalidGameType(player) || !player.canMine()) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         continue;
                     }
 
@@ -124,7 +124,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_PREDICT_DESTROY -> {
-                    if (isInvalidGameType(player) || !player.canMine()) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         var state = player.getControlledEntity().getLocation().dimension().getBlockState(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
                         player.viewBlockUpdate(new Vector3i(pos.getX(), pos.getY(), pos.getZ()), 0, state);
                         continue;

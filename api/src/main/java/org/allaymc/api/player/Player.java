@@ -231,49 +231,49 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     }
 
     /**
-     * Checks whether the player may currently build.
+     * Checks whether the player may currently place blocks.
      * <p>
      * Always true for operators, always false for spectator, adventure modes and immutableWorld,
      * actual ability value otherwise.
      * <p>
      * Directly reflects client-side placement behavior.
      *
-     * @return {@code true} if building is currently allowed, {@code false} otherwise
+     * @return {@code true} if placing blocks is currently allowed, {@code false} otherwise
      */
-    boolean canBuild();
+    boolean canPlaceBlocks();
 
     /**
-     * Sets the build ability.
+     * Sets the place-block ability.
      *
-     * @param canBuild {@code true} to enable building, {@code false} to disable it
+     * @param canPlaceBlocks {@code true} to enable block placement, {@code false} to disable it
      */
-    default void setCanBuild(boolean canBuild) {
-        setAbility(PlayerAbility.PLACE_BLOCK, canBuild);
+    default void setCanPlaceBlocks(boolean canPlaceBlocks) {
+        setAbility(PlayerAbility.PLACE_BLOCK, canPlaceBlocks);
     }
 
     /**
-     * Checks whether the player may currently mine.
+     * Checks whether the player may currently break blocks.
      * <p>
      * Always true for operators, always false for spectator, adventure modes and immutableWorld,
      * actual ability value otherwise.
      * <p>
      * Directly reflects client-side mining behavior.
      *
-     * @return {@code true} if mining is currently allowed, {@code false} otherwise
+     * @return {@code true} if breaking blocks is currently allowed, {@code false} otherwise
      */
-    boolean canMine();
+    boolean canBreakBlocks();
 
     /**
-     * Sets the mine ability.
+     * Sets the break-block ability.
      *
-     * @param canMine {@code true} to enable mining, {@code false} to disable it
+     * @param canBreakBlocks {@code true} to enable block breaking, {@code false} to disable it
      */
-    default void setCanMine(boolean canMine) {
-        setAbility(PlayerAbility.BREAK_BLOCK, canMine);
+    default void setCanBreakBlocks(boolean canBreakBlocks) {
+        setAbility(PlayerAbility.BREAK_BLOCK, canBreakBlocks);
     }
 
     /**
-     * Checks whether the player may currently interact with blocks such as doors and switches.
+     * Checks whether the player may currently interact with blocks.
      * <p>
      * Always true for operators, always false for spectator mode and immutable world, actual ability
      * value otherwise.
@@ -282,15 +282,15 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      *
      * @return {@code true} if block interaction is currently allowed, {@code false} otherwise
      */
-    boolean canUseDoorsAndSwitches();
+    boolean canInteractWithBlocks();
 
     /**
-     * Sets the doors-and-switches ability.
+     * Sets the interact-block ability.
      *
-     * @param canUseDoorsAndSwitches {@code true} to enable interaction, {@code false} to disable it
+     * @param canInteractBlocks {@code true} to enable block interaction, {@code false} to disable it
      */
-    default void setCanUseDoorsAndSwitches(boolean canUseDoorsAndSwitches) {
-        setAbility(PlayerAbility.INTERACT_BLOCK, canUseDoorsAndSwitches);
+    default void setCanInteractWithBlocks(boolean canInteractBlocks) {
+        setAbility(PlayerAbility.INTERACT_BLOCK, canInteractBlocks);
     }
 
     /**
@@ -304,7 +304,7 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean canOpenContainers();
 
     /**
-     * Sets the open-containers ability.
+     * Sets the open-container ability.
      *
      * @param canOpenContainers {@code true} to enable container access, {@code false} to disable it
      */
@@ -322,7 +322,7 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean canAttackPlayers();
 
     /**
-     * Sets the player-attack ability.
+     * Sets the attack-player ability.
      *
      * @param canAttackPlayers {@code true} to enable PvP attacks, {@code false} to disable it
      */
@@ -340,7 +340,7 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean canAttackMobs();
 
     /**
-     * Sets the mob-attack ability.
+     * Sets the attack-mob ability.
      *
      * @param canAttackMobs {@code true} to enable mob attacks, {@code false} to disable it
      */

@@ -2951,9 +2951,9 @@ public class AllayPlayer implements Player {
     }
 
     protected PlayerPermission calculatePlayerPermission(Player player) {
-        var build = player.canBuild();
-        var mine = player.canMine();
-        var doorsAndSwitches = player.canUseDoorsAndSwitches();
+        var build = player.canPlaceBlocks();
+        var mine = player.canBreakBlocks();
+        var doorsAndSwitches = player.canInteractWithBlocks();
         var openContainers = player.canOpenContainers();
         var attackPlayers = player.canAttackPlayers();
         var attackMobs = player.canAttackMobs();
@@ -3095,7 +3095,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public boolean canBuild() {
+    public boolean canPlaceBlocks() {
         if (isImmutableWorld()) {
             return false;
         }
@@ -3109,7 +3109,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public boolean canMine() {
+    public boolean canBreakBlocks() {
         if (isImmutableWorld()) {
             return false;
         }
@@ -3123,7 +3123,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public boolean canUseDoorsAndSwitches() {
+    public boolean canInteractWithBlocks() {
         if (isImmutableWorld()) {
             return false;
         }

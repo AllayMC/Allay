@@ -86,7 +86,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 clickPos, blockFace
                         );
 
-                        if (!player.canUseDoorsAndSwitches()) {
+                        if (!player.canInteractWithBlocks()) {
                             player.viewBlockUpdate(clickBlockPos, 0, dimension.getBlockState(clickBlockPos));
                             player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
                             break;
@@ -123,7 +123,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             break;
                         }
 
-                        if (!player.canBuild()) {
+                        if (!player.canPlaceBlocks()) {
                             player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
                             break;
                         }
