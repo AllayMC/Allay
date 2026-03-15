@@ -20,9 +20,7 @@ public class RequestPermissionsPacketProcessor extends PacketProcessor<RequestPe
             PlayerAbility.INTERACT_BLOCK,
             PlayerAbility.OPEN_CONTAINER,
             PlayerAbility.ATTACK_PLAYER,
-            PlayerAbility.ATTACK_MOB,
-            PlayerAbility.OPERATOR_COMMAND,
-            PlayerAbility.TELEPORT
+            PlayerAbility.ATTACK_MOB
     };
 
     @Override

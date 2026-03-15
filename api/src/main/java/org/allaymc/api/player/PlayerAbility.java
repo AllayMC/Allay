@@ -43,20 +43,6 @@ public enum PlayerAbility {
     ATTACK_MOB,
 
     /**
-     * Whether the player can use operator commands.
-     * <p>
-     * Usually only affects operator UI client-side.
-     */
-    OPERATOR_COMMAND,
-
-    /**
-     * Whether the player can teleport.
-     * <p>
-     * Usually only affects operator UI client-side.
-     */
-    TELEPORT,
-
-    /**
      * Whether the player is currently flying.
      */
     FLYING,

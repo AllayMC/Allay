@@ -2933,7 +2933,7 @@ public class AllayPlayer implements Player {
             abilities.add(toNetworkAbility(ability));
         }
 
-        if (Server.getInstance().getPlayerManager().isOperator(player)) {
+        if (player.getControlledEntity() != null && player.getControlledEntity().hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean()) {
             abilities.add(Ability.OPERATOR_COMMANDS);
         }
 
@@ -2957,12 +2957,10 @@ public class AllayPlayer implements Player {
         var openContainers = player.canOpenContainers();
         var attackPlayers = player.canAttackPlayers();
         var attackMobs = player.canAttackMobs();
-        var operatorCommands = Server.getInstance().getPlayerManager().isOperator(player) || player.hasAbility(PlayerAbility.OPERATOR_COMMAND);
-        var teleport = player.hasAbility(PlayerAbility.TELEPORT);
 
         if (
             Server.getInstance().getPlayerManager().isOperator(player) &&
-            build && mine && doorsAndSwitches && openContainers && attackPlayers && attackMobs && operatorCommands && teleport
+            build && mine && doorsAndSwitches && openContainers && attackPlayers && attackMobs
         ) {
             return PlayerPermission.OPERATOR;
         }
@@ -2971,7 +2969,7 @@ public class AllayPlayer implements Player {
             return PlayerPermission.MEMBER;
         }
 
-        if (!build && !mine && !doorsAndSwitches && !openContainers && !attackPlayers && !attackMobs && !operatorCommands && !teleport) {
+        if (!build && !mine && !doorsAndSwitches && !openContainers && !attackPlayers && !attackMobs) {
             return PlayerPermission.VISITOR;
         }
 
@@ -2993,7 +2991,7 @@ public class AllayPlayer implements Player {
     }
 
     protected static EnumSet<PlayerAbility> createBaseAbilitySet() {
-        return EnumSet.of(PlayerAbility.TELEPORT);
+        return EnumSet.noneOf(PlayerAbility.class);
     }
 
     protected static EnumSet<PlayerAbility> abilitiesFromPermission(PlayerPermission permission) {
@@ -3005,8 +3003,7 @@ public class AllayPlayer implements Player {
                     PlayerAbility.INTERACT_BLOCK,
                     PlayerAbility.OPEN_CONTAINER,
                     PlayerAbility.ATTACK_PLAYER,
-                    PlayerAbility.ATTACK_MOB,
-                    PlayerAbility.OPERATOR_COMMAND
+                    PlayerAbility.ATTACK_MOB
             ));
             case MEMBER -> abilities.addAll(EnumSet.of(
                     PlayerAbility.PLACE_BLOCK,
@@ -3031,8 +3028,6 @@ public class AllayPlayer implements Player {
             case OPEN_CONTAINER -> Ability.OPEN_CONTAINERS;
             case ATTACK_PLAYER -> Ability.ATTACK_PLAYERS;
             case ATTACK_MOB -> Ability.ATTACK_MOBS;
-            case OPERATOR_COMMAND -> Ability.OPERATOR_COMMANDS;
-            case TELEPORT -> Ability.TELEPORT;
             case FLYING -> Ability.FLYING;
             case MAY_FLY -> Ability.MAY_FLY;
             case INSTABUILD -> Ability.INSTABUILD;
@@ -3172,10 +3167,6 @@ public class AllayPlayer implements Player {
             return true;
         }
         return hasAbility(PlayerAbility.ATTACK_MOB);
-    }
-
-    public boolean canUseOperatorCommands() {
-        return hasAbility(PlayerAbility.OPERATOR_COMMAND) || Server.getInstance().getPlayerManager().isOperator(this);
     }
 
     @Override

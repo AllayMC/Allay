@@ -12,7 +12,6 @@ import org.allaymc.api.eventbus.event.server.*;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.Player;
-import org.allaymc.api.player.PlayerAbility;
 import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -26,7 +25,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Path;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -267,7 +265,7 @@ public class AllayPlayerManager implements PlayerManager {
         players.values().stream()
                 .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
                 .findFirst()
-                .ifPresent(player -> player.setAbilities(EnumSet.of(PlayerAbility.OPERATOR_COMMAND, PlayerAbility.TELEPORT), value));
+                .ifPresent(player -> this.players.values().forEach(viewer -> viewer.viewPlayerAbilities(player)));
     }
 
     public void startNetworkInterfaces() {
