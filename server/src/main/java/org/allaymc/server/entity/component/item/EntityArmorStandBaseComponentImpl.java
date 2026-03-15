@@ -8,7 +8,7 @@ import org.allaymc.api.entity.component.EntityArmorStandBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemArmorBaseComponent;
+import org.allaymc.api.item.component.ItemWearableComponent;
 import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -80,8 +80,8 @@ public class EntityArmorStandBaseComponentImpl extends EntityBaseComponentImpl i
 
         if (itemStack != null && itemStack != ItemAirStack.AIR_STACK) {
             // Try to equip the item
-            if (itemStack instanceof ItemArmorBaseComponent armorComponent) {
-                ArmorType armorType = armorComponent.getArmorType();
+            if (itemStack instanceof ItemWearableComponent wearableComponent) {
+                ArmorType armorType = wearableComponent.getArmorType();
                 int slot = armorType.ordinal();
                 return trySwapItem(player, itemStack, armorContainer, slot);
             }

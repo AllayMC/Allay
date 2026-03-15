@@ -10,6 +10,6 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 @AllArgsConstructor
-public class CItemClickInAirEvent extends Event {
+public class CItemRightClickInAirEvent extends Event {
     protected EntityPlayer player;
 }

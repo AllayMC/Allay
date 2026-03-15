@@ -312,7 +312,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void rightClickItemInAir(EntityPlayer player) {
-        manager.callEvent(new CItemClickInAirEvent(player));
+        manager.callEvent(new CItemRightClickInAirEvent(player));
     }
 
     @Override

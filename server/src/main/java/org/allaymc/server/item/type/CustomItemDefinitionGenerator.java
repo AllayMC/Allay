@@ -2,9 +2,9 @@ package org.allaymc.server.item.type;
 
 import com.google.common.base.Preconditions;
 import lombok.Builder;
-import org.allaymc.api.item.component.ItemArmorBaseComponent;
 import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.item.component.ItemToolComponent;
+import org.allaymc.api.item.component.ItemWearableComponent;
 import org.allaymc.api.item.data.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.message.MayContainTrKey;
@@ -128,9 +128,9 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
             components.putCompound("minecraft:durability", NbtMap.builder().putInt("max_durability", itemData.maxDamage()).build());
         }
 
-        if (itemStack instanceof ItemArmorBaseComponent armorBaseComponent) {
+        if (itemStack instanceof ItemWearableComponent wearableComponent) {
             components.putCompound("minecraft:armor", NbtMap.builder().putInt("protection", itemData.armorValue()).build());
-            switch (armorBaseComponent.getArmorType()) {
+            switch (wearableComponent.getArmorType()) {
                 case HELMET -> {
                     properties.putString("wearable_slot", "slot.armor.head");
                     components.putCompound("minecraft:wearable", NbtMap.builder().putString("slot", "slot.armor.head").build());
