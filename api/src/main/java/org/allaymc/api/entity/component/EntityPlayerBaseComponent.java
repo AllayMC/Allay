@@ -231,23 +231,12 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setFlying(boolean flying);
 
     /**
-     * Checks if the player is allowed to fly based on the current game mode and permissions.
-     * <ul>
-     *   <li>Spectator mode: always allowed to fly (hardcoded)</li>
-     *   <li>Creative mode: allowed unless explicitly denied (FALSE)</li>
-     *   <li>Survival/Adventure mode: denied unless explicitly allowed (TRUE)</li>
-     * </ul>
+     * Checks if the player is allowed to fly based on the current game mode and abilities.
      *
      * @return {@code true} if the player can fly, {@code false} otherwise
      */
     default boolean canFly() {
-        var gameMode = getGameMode();
-        return switch (gameMode) {
-            case SPECTATOR -> true;
-            case CREATIVE -> hasPermission(Permissions.ABILITY_FLY_CREATIVE) != Tristate.FALSE;
-            case SURVIVAL -> hasPermission(Permissions.ABILITY_FLY_SURVIVAL) == Tristate.TRUE;
-            case ADVENTURE -> hasPermission(Permissions.ABILITY_FLY_ADVENTURE) == Tristate.TRUE;
-        };
+        return isActualPlayer() ? getController().canFly() : false;
     }
 
     /**

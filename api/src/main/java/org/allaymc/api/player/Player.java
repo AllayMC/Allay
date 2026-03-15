@@ -3,7 +3,6 @@ package org.allaymc.api.player;
 import org.allaymc.api.bossbar.BossBarViewer;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.dialog.DialogViewer;
-import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormViewer;
 import org.allaymc.api.message.MayContainTrKey;
@@ -21,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a player in the server. A {@link Player} basically 'control' an {@link EntityPlayer}.
@@ -148,12 +148,276 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     int getPing();
 
     /**
-     * Views the specified player's permission. This will update the permission level shown in the player list and some
+     * Views the specified player's abilities. This will update the permission level shown in the player list and some
      * in-game permissions/properties like whether the player can fly, chat, and the player's (vertical) fly speed etc.
      *
      * @param player the player to view
      */
-    void viewPlayerPermission(Player player);
+    void viewPlayerAbilities(Player player);
+
+    /**
+     * Returns the player's current abilities.
+     *
+     * @return an immutable view of the current abilities
+     */
+    @UnmodifiableView
+    Set<PlayerAbility> getAbilities();
+
+    /**
+     * Checks whether the player has the given ability enabled.
+     *
+     * @param ability the ability to check
+     * @return {@code true} if the ability is enabled, {@code false} otherwise
+     */
+    boolean hasAbility(PlayerAbility ability);
+
+    /**
+     * Sets whether the given ability is enabled.
+     *
+     * @param ability the ability to change
+     * @param value   {@code true} to enable the ability, {@code false} to disable it
+     */
+    void setAbility(PlayerAbility ability, boolean value);
+
+    /**
+     * Sets whether the given abilities are enabled.
+     *
+     * @param abilities the abilities to change
+     * @param value     {@code true} to enable the ability, {@code false} to disable it
+     */
+    void setAbilities(Set<PlayerAbility> abilities, boolean value);
+
+    /**
+     * Replaces the player's abilities with the provided set.
+     *
+     * @param abilities the new abilities
+     */
+    void setAbilities(Set<PlayerAbility> abilities);
+
+    /**
+     * Enables the given ability.
+     *
+     * @param ability the ability to enable
+     */
+    default void addAbility(PlayerAbility ability) {
+        setAbility(ability, true);
+    }
+
+    /**
+     * Enables the given abilities.
+     *
+     * @param abilities the abilities to enable
+     */
+    default void addAbilities(PlayerAbility... abilities) {
+        setAbilities(Set.of(abilities), true);
+    }
+
+    /**
+     * Disables the given ability.
+     *
+     * @param ability the abilities to disable
+     */
+    default void removeAbility(PlayerAbility ability) {
+        setAbility(ability, false);
+    }
+
+    /**
+     * Disables the given abilities.
+     *
+     * @param abilities the abilities to disable
+     */
+    default void removeAbilities(PlayerAbility... abilities) {
+        setAbilities(Set.of(abilities), false);
+    }
+
+    /**
+     * Checks whether the player may currently build.
+     * <p>
+     * Always true for operators, always false for spectator, adventure modes and immutableWorld,
+     * actual ability value otherwise.
+     * <p>
+     * Directly reflects client-side placement behavior.
+     *
+     * @return {@code true} if building is currently allowed, {@code false} otherwise
+     */
+    boolean canBuild();
+
+    /**
+     * Sets the build ability.
+     *
+     * @param canBuild {@code true} to enable building, {@code false} to disable it
+     */
+    default void setCanBuild(boolean canBuild) {
+        setAbility(PlayerAbility.PLACE_BLOCK, canBuild);
+    }
+
+    /**
+     * Checks whether the player may currently mine.
+     * <p>
+     * Always true for operators, always false for spectator, adventure modes and immutableWorld,
+     * actual ability value otherwise.
+     * <p>
+     * Directly reflects client-side mining behavior.
+     *
+     * @return {@code true} if mining is currently allowed, {@code false} otherwise
+     */
+    boolean canMine();
+
+    /**
+     * Sets the mine ability.
+     *
+     * @param canMine {@code true} to enable mining, {@code false} to disable it
+     */
+    default void setCanMine(boolean canMine) {
+        setAbility(PlayerAbility.BREAK_BLOCK, canMine);
+    }
+
+    /**
+     * Checks whether the player may currently interact with blocks such as doors and switches.
+     * <p>
+     * Always true for operators, always false for spectator mode and immutable world, actual ability
+     * value otherwise.
+     * <p>
+     * Directly reflects client-side interaction behavior.
+     *
+     * @return {@code true} if block interaction is currently allowed, {@code false} otherwise
+     */
+    boolean canUseDoorsAndSwitches();
+
+    /**
+     * Sets the doors-and-switches ability.
+     *
+     * @param canUseDoorsAndSwitches {@code true} to enable interaction, {@code false} to disable it
+     */
+    default void setCanUseDoorsAndSwitches(boolean canUseDoorsAndSwitches) {
+        setAbility(PlayerAbility.INTERACT_BLOCK, canUseDoorsAndSwitches);
+    }
+
+    /**
+     * Checks whether the player may currently open containers.
+     * <p>
+     * Always true for operators, always false for spectator mode and immutable world, actual ability
+     * value otherwise.
+     *
+     * @return {@code true} if opening containers is currently allowed, {@code false} otherwise
+     */
+    boolean canOpenContainers();
+
+    /**
+     * Sets the open-containers ability.
+     *
+     * @param canOpenContainers {@code true} to enable container access, {@code false} to disable it
+     */
+    default void setCanOpenContainers(boolean canOpenContainers) {
+        setAbility(PlayerAbility.OPEN_CONTAINER, canOpenContainers);
+    }
+
+    /**
+     * Checks whether the player may currently attack other players.
+     * <p>
+     * Always true for operators, always false for spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if attacking players is currently allowed, {@code false} otherwise
+     */
+    boolean canAttackPlayers();
+
+    /**
+     * Sets the player-attack ability.
+     *
+     * @param canAttackPlayers {@code true} to enable PvP attacks, {@code false} to disable it
+     */
+    default void setCanAttackPlayers(boolean canAttackPlayers) {
+        setAbility(PlayerAbility.ATTACK_PLAYER, canAttackPlayers);
+    }
+
+    /**
+     * Checks whether the player may currently attack mobs.
+     * <p>
+     * Always true for operators, always false for spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if attacking mobs is currently allowed, {@code false} otherwise
+     */
+    boolean canAttackMobs();
+
+    /**
+     * Sets the mob-attack ability.
+     *
+     * @param canAttackMobs {@code true} to enable mob attacks, {@code false} to disable it
+     */
+    default void setCanAttackMobs(boolean canAttackMobs) {
+        setAbility(PlayerAbility.ATTACK_MOB, canAttackMobs);
+    }
+
+    /**
+     * Checks whether the player may currently fly.
+     * <p>
+     * Always true if isAlwaysFlying and spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if flying is currently allowed, {@code false} otherwise
+     */
+    boolean canFly();
+
+    /**
+     * Sets the ability of player to fly.
+     *
+     * @param canFly {@code true} to enable flying possibility, {@code false} to disable it
+     */
+    default void setCanFly(boolean canFly) {
+        setAbility(PlayerAbility.MAY_FLY, canFly);
+    }
+
+    /**
+     * Checks whether the player is currently in no clip mode.
+     * <p>
+     * Always true for spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if player is in no clip mode, {@code false} otherwise.
+     */
+    boolean isNoClip();
+
+    /**
+     * Sets the no-clip ability.
+     *
+     * @param noClip {@code true} to enable no-clip, {@code false} to disable it
+     */
+    default void setNoClip(boolean noClip) {
+        setAbility(PlayerAbility.NO_CLIP, noClip);
+    }
+
+    /**
+     * Checks whether the player is currently treated as having immutable world enabled.
+     * <p>
+     * Always false for operators, always true for adventure and spectator modes, actual value
+     * otherwise.
+     *
+     * @return {@code true} if immutable world is currently active, {@code false} otherwise
+     */
+    boolean isImmutableWorld();
+
+    /**
+     * Sets whether immutable world should be enabled for the player.
+     * <p>
+     * Forces the client to treat the world as non-interactive, similar to adventure mode.
+     *
+     * @param immutableWorld {@code true} to enable immutable world, {@code false} to disable it
+     */
+    void setImmutableWorld(boolean immutableWorld);
+
+    /**
+     * Checks whether the player is currently forced to be always flying.
+     * <p>
+     * Always true for spectator mode and no clip, actual value otherwise.
+     *
+     * @return {@code true} if always flying is currently active, {@code false} otherwise
+     */
+    boolean isAlwaysFlying();
+
+    /**
+     * Sets whether always flying should be active for the player.
+     *
+     * @param alwaysFlying {@code true} to enable always flying, {@code false} to disable it
+     */
+    void setAlwaysFlying(boolean alwaysFlying);
 
     /**
      * Views a player list change. The provided players will be added to the player list.

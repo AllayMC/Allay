@@ -6,6 +6,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
+
+import java.util.EnumSet;
 
 import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
 
@@ -24,6 +27,7 @@ public class PlayerData {
     protected static final String TAG_NBT = "NBT";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
+    protected static final String TAG_ABILITIES = "Abilities";
 
     // EntityPlayer's nbt, which can be generated through the method EntityPlayer#saveNBT()
     protected NbtMap nbt;
@@ -34,6 +38,7 @@ public class PlayerData {
     // world and dimension the player is in.
     protected String world;
     protected int dimension;
+    protected EnumSet<PlayerAbility> abilities;
 
     public static PlayerData save(Player player) {
         var entity = player.getControlledEntity();
@@ -46,6 +51,7 @@ public class PlayerData {
                 .nbt(entity.saveNBT())
                 .world(entity.getWorld().getWorldData().getDisplayName())
                 .dimension(entity.getDimension().getDimensionInfo().dimensionId())
+                .abilities(player.getAbilities().isEmpty() ? EnumSet.noneOf(PlayerAbility.class) : EnumSet.copyOf(player.getAbilities()))
                 .build();
     }
 
@@ -79,6 +85,19 @@ public class PlayerData {
         builder.nbt(nbt.getCompound(TAG_NBT))
                 .world(nbt.getString(TAG_WORLD))
                 .dimension(nbt.getInt(TAG_DIMENSION));
+
+        if (nbt.containsKey(TAG_ABILITIES)) {
+            var abilities = EnumSet.noneOf(PlayerAbility.class);
+            for (var abilityName : nbt.getList(TAG_ABILITIES, NbtType.STRING)) {
+                try {
+                    abilities.add(PlayerAbility.valueOf(abilityName));
+                } catch (IllegalArgumentException e) {
+                    log.warn("Unknown stored player ability {}, ignoring it", abilityName);
+                }
+            }
+            builder.abilities(abilities);
+        }
+
         return builder.build();
     }
 
@@ -92,6 +111,11 @@ public class PlayerData {
                 .putCompound(TAG_NBT, nbt)
                 .putString(TAG_WORLD, world)
                 .putInt(TAG_DIMENSION, dimension);
+
+        if (abilities != null) {
+            builder.putList(TAG_ABILITIES, NbtType.STRING, abilities.stream().map(Enum::name).toList());
+        }
+
         return builder.build();
     }
 }

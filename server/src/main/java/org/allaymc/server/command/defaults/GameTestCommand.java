@@ -602,6 +602,14 @@ public class GameTestCommand extends Command {
                         entity.setScale(scale);
                     }
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setimmutableworld")
+                .bool("value")
+                .exec((context, sender) -> {
+                    boolean value = context.getResult(1);
+                    sender.getController().setImmutableWorld(value);
+                    return context.success();
                 }, SenderType.PLAYER);
 
     }
