@@ -42,6 +42,16 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
             return error();
         }
 
+        if (!ContainerActionProcessor.canPlaceItemToSlot(destinationContainer, destinationSlot, sourceItem)) {
+            log.warn("cannot place item {} into restricted slot {}", sourceItem.getItemType().getIdentifier(), destinationSlot);
+            return error();
+        }
+
+        if (!ContainerActionProcessor.canPlaceItemToSlot(sourceContainer, sourceSlot, destinationItem)) {
+            log.warn("cannot place item {} into restricted slot {}", destinationItem.getItemType().getIdentifier(), sourceSlot);
+            return error();
+        }
+
         sourceContainer.setItemStack(sourceSlot, destinationItem, false);
         destinationContainer.setItemStack(destinationSlot, sourceItem, false);
         return new ActionResponse(
