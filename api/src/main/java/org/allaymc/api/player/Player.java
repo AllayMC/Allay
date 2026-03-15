@@ -306,11 +306,11 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     /**
      * Checks whether placed blocks should not be consumed from inventory.
      * <p>
-     * Usually true for creative mode, actual ability value otherwise.
+     * Usually {@code true} in creative mode, but always reflects the actual ability value.
      *
      * @return {@code true} if placed blocks are not consumed, {@code false} otherwise
      */
-    boolean hasNoBlockConsumption();
+    boolean hasInfiniteBlock();
 
     /**
      * Checks whether the player is currently in no clip mode.

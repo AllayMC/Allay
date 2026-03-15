@@ -28,6 +28,14 @@ public enum PlayerAbility {
     INTERACT_BLOCK,
 
     /**
+     * Whether blocks are not consumed when placed down.
+     * <p>
+     * Generally enabled for creative mode, but may also be enabled for any other gamemode, resulting
+     * in the same infinite block behavior client-side.
+     */
+    INFINITE_BLOCK,
+
+    /**
      * Whether the player can open containers.
      */
     OPEN_CONTAINER,
@@ -51,14 +59,6 @@ public enum PlayerAbility {
      * Whether the player may start flying.
      */
     MAY_FLY,
-
-    /**
-     * Whether blocks are not consumed when placed down.
-     * <p>
-     * Generally enabled for creative mode, but may also be enabled for any other gamemode, resulting 
-     * in the same infinite block behavior client-side.
-     */
-    NO_BLOCK_CONSUMPTION,
 
     /**
      * Whether the player can move through blocks.

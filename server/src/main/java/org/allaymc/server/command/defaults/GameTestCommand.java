@@ -617,7 +617,7 @@ public class GameTestCommand extends Command {
                 .bool("value")
                 .exec((context, sender) -> {
                     boolean value = context.getResult(1);
-                    sender.getController().setAbility(PlayerAbility.NO_BLOCK_CONSUMPTION, value);
+                    sender.getController().setAbility(PlayerAbility.INFINITE_BLOCK, value);
                     return context.success();
                 }, SenderType.PLAYER);
 

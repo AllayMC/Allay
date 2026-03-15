@@ -3030,7 +3030,7 @@ public class AllayPlayer implements Player {
             case ATTACK_MOB -> Ability.ATTACK_MOBS;
             case FLYING -> Ability.FLYING;
             case MAY_FLY -> Ability.MAY_FLY;
-            case NO_BLOCK_CONSUMPTION -> Ability.INSTABUILD;
+            case INFINITE_BLOCK -> Ability.INSTABUILD;
             case NO_CLIP -> Ability.NO_CLIP;
         };
     }
@@ -3175,8 +3175,8 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public boolean hasNoBlockConsumption() {
-        return hasAbility(PlayerAbility.NO_BLOCK_CONSUMPTION);
+    public boolean hasInfiniteBlock() {
+        return hasAbility(PlayerAbility.INFINITE_BLOCK);
     }
 
     @Override

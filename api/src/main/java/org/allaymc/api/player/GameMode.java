@@ -26,7 +26,7 @@ public enum GameMode {
      * CREATIVE represents the creative game mode: Players with this game mode have infinite blocks and
      * items and can break blocks instantly. Players with creative mode can also fly.
      */
-    CREATIVE(TrKeys.MC_GAMEMODE_CREATIVE, EnumSet.of(PlayerAbility.MAY_FLY, PlayerAbility.NO_BLOCK_CONSUMPTION)),
+    CREATIVE(TrKeys.MC_GAMEMODE_CREATIVE, EnumSet.of(PlayerAbility.MAY_FLY, PlayerAbility.INFINITE_BLOCK)),
     /**
      * ADVENTURE represents the adventure game mode: Players with this game mode cannot edit the world
      * (placing or breaking blocks).

@@ -384,7 +384,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected void tryConsumeItem(EntityPlayer player) {
-        if (player == null || !player.getController().hasNoBlockConsumption()) {
+        if (player == null || !player.getController().hasInfiniteBlock()) {
             thisItemStack.reduceCount(1);
         }
     }
