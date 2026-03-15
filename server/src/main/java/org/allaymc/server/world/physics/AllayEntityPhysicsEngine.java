@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent.LiquidState;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.MathUtils;
@@ -100,6 +101,12 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 !entity.isCurrentChunkLoaded() ||
                 // Invisible bedrock is present at minHeight - 40
                 entity.getLocation().y() < dimension.getDimensionInfo().minHeight() - 40) {
+
+                // Living entities handle void via damage ticks; remove non-living entities directly.
+                if (!(entity instanceof EntityLiving)) {
+                    entity.remove();
+                }
+
                 return;
             }
 
