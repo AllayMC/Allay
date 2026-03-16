@@ -26,6 +26,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added terminal command prompt tab completion backed by the command tree, including command names, aliases, enum values, and online player targets.
 - Added inventory transaction validation for restricted container slots to reject invalid item moves and swaps, such as non-armor items being placed into armor slots.
 - Added support for client blob cache.
+- Added handler for AutoCraftRecipeAction. Now the player can craft items through the recipe book directly.
 
 ### Fixed
 
