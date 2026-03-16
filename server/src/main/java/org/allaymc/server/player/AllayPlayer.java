@@ -2917,7 +2917,9 @@ public class AllayPlayer implements Player {
     protected void onDisconnect(String disconnectReason) {
         new PlayerDisconnectEvent(this, disconnectReason).call();
         closeAllOpenedContainers();
-        ChunkCache.getInstance().removePlayer(this.loginData.getUuid());
+        if (getLastClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
+            ChunkCache.getInstance().removePlayer(this.loginData.getUuid());
+        }
         ((AllayPlayerManager) Server.getInstance().getPlayerManager()).removePlayer(this);
     }
 

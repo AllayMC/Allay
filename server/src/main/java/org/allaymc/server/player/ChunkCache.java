@@ -68,8 +68,12 @@ public final class ChunkCache {
      */
     public static ChunkCache getInstance() {
         if (instance == null) {
-            // Fallback initialization with default size
-            initialize(AllayServer.getSettings().networkSettings().maxChunkCacheBlobs());
+            synchronized (ChunkCache.class) {
+                if (instance == null) {
+                    // Fallback initialization with default size
+                    instance = new ChunkCache(AllayServer.getSettings().networkSettings().maxChunkCacheBlobs());
+                }
+            }
         }
         return instance;
     }

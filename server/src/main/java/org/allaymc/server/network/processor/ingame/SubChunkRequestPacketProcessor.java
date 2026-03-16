@@ -106,15 +106,16 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 subChunkData.setResult(info.result);
 
                 // Height maps
+                subChunkData.setHeightMapType(info.hMapType);
+                subChunkData.setRenderHeightMapType(info.hMapType);
                 if (info.hMapData != null) {
                     ByteBuf hMapBuf = Unpooled.wrappedBuffer(info.hMapData);
-                    subChunkData.setHeightMapType(info.hMapType);
                     subChunkData.setHeightMapData(hMapBuf);
-                    subChunkData.setRenderHeightMapType(info.hMapType);
                     subChunkData.setRenderHeightMapData(hMapBuf);
                 } else {
-                    subChunkData.setHeightMapType(HeightMapDataType.NO_DATA);
-                    subChunkData.setRenderHeightMapType(HeightMapDataType.NO_DATA);
+                    // TOO_HIGH, TOO_LOW, or NO_DATA - no data buffer needed
+                    subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
+                    subChunkData.setRenderHeightMapData(Unpooled.EMPTY_BUFFER);
                 }
 
                 // Data
@@ -146,15 +147,16 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 subChunkData.setResult(info.result);
 
                 // Height maps
+                subChunkData.setHeightMapType(info.hMapType);
+                subChunkData.setRenderHeightMapType(info.hMapType);
                 if (info.hMapData != null) {
                     ByteBuf hMapBuf = Unpooled.wrappedBuffer(info.hMapData);
-                    subChunkData.setHeightMapType(info.hMapType);
                     subChunkData.setHeightMapData(hMapBuf);
-                    subChunkData.setRenderHeightMapType(info.hMapType);
                     subChunkData.setRenderHeightMapData(hMapBuf);
                 } else {
-                    subChunkData.setHeightMapType(HeightMapDataType.NO_DATA);
-                    subChunkData.setRenderHeightMapType(HeightMapDataType.NO_DATA);
+                    // TOO_HIGH, TOO_LOW, or NO_DATA - no data buffer needed
+                    subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
+                    subChunkData.setRenderHeightMapData(Unpooled.EMPTY_BUFFER);
                 }
 
                 // Data - combine section blob + block entities
