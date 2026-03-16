@@ -3,6 +3,7 @@ package org.allaymc.server.network.processor.ingame;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
+import org.allaymc.server.player.ChunkCache;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ClientCacheBlobStatusPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -15,11 +16,11 @@ public class ClientCacheBlobStatusPacketProcessor extends PacketProcessor<Client
     @Override
     public PacketSignal handleAsync(Player player, ClientCacheBlobStatusPacket packet, long receiveTime) {
         var allayPlayer = (AllayPlayer) player;
-        var cache = allayPlayer.getChunkCache();
+        var cache = ChunkCache.getInstance();
 
         var acks = packet.getAcks().toLongArray();
         var naks = packet.getNaks().toLongArray();
-        var missResponse = cache.handleBlobStatus(acks, naks);
+        var missResponse = cache.handleBlobStatus(allayPlayer.getLoginData().getUuid(), acks, naks);
 
         if (missResponse != null) {
             allayPlayer.sendPacket(missResponse);

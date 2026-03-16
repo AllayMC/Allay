@@ -10,6 +10,7 @@ import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
+import org.allaymc.server.player.ChunkCache;
 import org.allaymc.server.world.chunk.AllayChunkSection;
 import org.allaymc.server.world.chunk.ChunkEncoder;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author Cool_Loong | daoge_cmd
@@ -56,8 +58,15 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         }
 
         var allayPlayer = (AllayPlayer) player;
-        var cache = allayPlayer.isCacheEffectivelyEnabled() ? allayPlayer.getChunkCache() : null;
-        int cacheGen = cache != null ? cache.generation() : 0;
+        ChunkCache cache = null;
+        UUID playerId = null;
+        int cacheGen = 0;
+
+        if (allayPlayer.isCacheEffectivelyEnabled()) {
+            cache = ChunkCache.getInstance();
+            playerId = allayPlayer.getLoginData().getUuid();
+            cacheGen = cache.getGeneration(playerId);
+        }
 
         var centerPosition = packet.getSubChunkPosition();
 
@@ -82,7 +91,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
         long[] hashes = null;
         if (cache != null && !nonAirBlobs.isEmpty()) {
-            hashes = cache.tryStoreBlobsAndOpenTransaction(cacheGen, nonAirBlobs.toArray(new byte[0][]));
+            hashes = cache.tryStoreBlobsAndOpenTransaction(playerId, cacheGen, nonAirBlobs.toArray(new byte[0][]));
         }
 
         if (hashes != null) {

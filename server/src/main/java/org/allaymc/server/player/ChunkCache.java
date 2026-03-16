@@ -1,102 +1,169 @@
 package org.allaymc.server.player;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.jpountz.xxhash.XXHash64;
 import net.jpountz.xxhash.XXHashFactory;
+import org.allaymc.server.AllayServer;
 import org.cloudburstmc.protocol.bedrock.packet.ClientCacheMissResponsePacket;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Per-player blob cache for client-side chunk caching.
- * All methods are synchronized for thread-safety (async chunk sending + network thread).
+ * Global chunk blob cache with LRU eviction for client-side chunk caching.
+ * <p>
+ * This cache is shared across all players for memory efficiency and automatic blob deduplication.
+ * When multiple players visit the same chunks, the blob data is stored only once in memory.
+ * <p>
+ * The cache uses Caffeine's LRU eviction policy to automatically remove least-recently-used blobs
+ * when the cache reaches its maximum size (configured via {@code max-chunk-cache-blobs} in server settings).
+ * <p>
+ * Thread-safety: This class is thread-safe. The global blob cache is lock-free (Caffeine handles concurrency),
+ * while per-player state is protected by synchronized blocks.
  *
  * @author daoge_cmd
  */
 public final class ChunkCache {
 
     private static final XXHash64 XXHASH64 = XXHashFactory.fastestJavaInstance().hash64();
-    private static final int MAX_BLOBS = 4096;
+    private static ChunkCache instance;
 
-    private final Long2ObjectOpenHashMap<byte[]> blobs = new Long2ObjectOpenHashMap<>();
-    private final List<LongOpenHashSet> openTransactions = new ArrayList<>();
-    private volatile int generation = 0;
+    private final Cache<Long, byte[]> blobs;
+    private final ConcurrentHashMap<UUID, PlayerCacheState> playerStates;
+
+    private ChunkCache(int maxBlobs) {
+        this.blobs = Caffeine.newBuilder()
+                .maximumSize(maxBlobs)
+                .build();
+        this.playerStates = new ConcurrentHashMap<>();
+    }
 
     /**
-     * Compute xxhash64 of blob data.
+     * Initialize the global cache instance.
+     * <p>
+     * Must be called before any player uses the cache, typically during server startup.
+     *
+     * @param maxBlobs maximum number of blobs to cache globally
+     * @throws IllegalStateException if the cache is already initialized
+     */
+    public static synchronized void initialize(int maxBlobs) {
+        if (instance != null) {
+            throw new IllegalStateException("ChunkCache already initialized");
+        }
+        instance = new ChunkCache(maxBlobs);
+    }
+
+    /**
+     * Get the global cache instance.
+     * <p>
+     * If not yet initialized, performs fallback initialization using the configured max blob count
+     * from server settings.
+     *
+     * @return the global cache instance
+     */
+    public static ChunkCache getInstance() {
+        if (instance == null) {
+            // Fallback initialization with default size
+            initialize(AllayServer.getSettings().networkSettings().maxChunkCacheBlobs());
+        }
+        return instance;
+    }
+
+    /**
+     * Compute xxhash64 hash of blob data.
+     *
+     * @param data the blob data to hash
+     * @return the 64-bit hash value
      */
     public static long computeHash(byte[] data) {
         return XXHASH64.hash(data, 0, data.length, 0);
     }
 
     /**
-     * Get current generation (volatile read, no lock needed).
+     * Get or create player cache state.
+     *
+     * @param playerId the player's UUID
+     * @return the player's cache state
      */
-    public int generation() {
-        return generation;
+    private PlayerCacheState getPlayerState(UUID playerId) {
+        return playerStates.computeIfAbsent(playerId, id -> new PlayerCacheState());
     }
 
     /**
-     * Atomically store blobs and open a transaction.
-     * Returns null if generation mismatch, transaction cap reached, or insufficient capacity.
-     * On success, stores all blobs, opens transaction, and returns hash array.
+     * Try to store blobs and open a transaction for a player.
+     * <p>
+     * This method atomically:
+     * <ol>
+     *   <li>Validates the generation matches (prevents stale callers after dimension change)</li>
+     *   <li>Checks the per-player transaction limit (512 max)</li>
+     *   <li>Computes hashes and stores all blobs in the global cache (deduplicated)</li>
+     *   <li>Opens a transaction tracking these blobs for this player</li>
+     * </ol>
+     *
+     * @param playerId the player's UUID
+     * @param expectedGeneration the expected generation number (for staleness detection)
+     * @param blobData the blob data to store
+     * @return array of blob hashes if successful, {@code null} if generation mismatch or transaction cap reached
      */
-    public synchronized long[] tryStoreBlobsAndOpenTransaction(int expectedGeneration, byte[]... blobData) {
-        // Generation check - stale caller
-        if (generation != expectedGeneration) {
-            return null;
-        }
+    public long[] tryStoreBlobsAndOpenTransaction(UUID playerId, int expectedGeneration, byte[]... blobData) {
+        PlayerCacheState state = getPlayerState(playerId);
 
-        // Transaction cap check
-        if (openTransactions.size() >= MAX_BLOBS) {
-            return null;
-        }
-
-        // Compute hashes and count new unique blobs
-        long[] hashes = new long[blobData.length];
-        int newBlobCount = 0;
-        for (int i = 0; i < blobData.length; i++) {
-            hashes[i] = computeHash(blobData[i]);
-            if (!blobs.containsKey(hashes[i])) {
-                newBlobCount++;
+        synchronized (state) {
+            // Generation check - stale caller
+            if (state.generation != expectedGeneration) {
+                return null;
             }
+
+            // Transaction cap check (per-player limit to prevent one player from hogging all transactions)
+            if (state.openTransactions.size() >= 512) {
+                return null;
+            }
+
+            // Compute hashes and store blobs in global cache
+            long[] hashes = new long[blobData.length];
+            for (int i = 0; i < blobData.length; i++) {
+                hashes[i] = computeHash(blobData[i]);
+                // Store in global cache (deduplicated automatically)
+                blobs.put(hashes[i], blobData[i]);
+            }
+
+            // Open transaction for this player
+            var transaction = new LongOpenHashSet(hashes);
+            state.openTransactions.add(transaction);
+
+            return hashes;
         }
-
-        // Capacity check - only count NEW blobs
-        if (blobs.size() + newBlobCount > MAX_BLOBS) {
-            return null;
-        }
-
-        // Store all blobs
-        for (int i = 0; i < blobData.length; i++) {
-            blobs.putIfAbsent(hashes[i], blobData[i]);
-        }
-
-        // Open transaction
-        var transaction = new LongOpenHashSet(hashes);
-        openTransactions.add(transaction);
-
-        return hashes;
     }
 
     /**
      * Handle blob status from client.
-     * Resolve acks, build miss response for naks.
-     * Returns null if no NAK blobs found in cache (stale NAKs after clear).
+     * <p>
+     * Processes acknowledgments (ACKs) by removing resolved blobs from the player's open transactions.
+     * For negative acknowledgments (NAKs), builds a miss response packet containing the requested blob data.
+     *
+     * @param playerId the player's UUID
+     * @param acks array of acknowledged blob hashes
+     * @param naks array of missing blob hashes (client requests these)
+     * @return miss response packet if any NAK blobs were found in cache, {@code null} otherwise
      */
-    public synchronized ClientCacheMissResponsePacket handleBlobStatus(long[] acks, long[] naks) {
-        // Resolve acks - remove from all open transactions
-        for (long ack : acks) {
-            openTransactions.removeIf(transaction -> {
-                transaction.remove(ack);
-                return transaction.isEmpty();
-            });
+    public ClientCacheMissResponsePacket handleBlobStatus(UUID playerId, long[] acks, long[] naks) {
+        PlayerCacheState state = getPlayerState(playerId);
+
+        synchronized (state) {
+            // Resolve acks - remove from player's open transactions
+            for (long ack : acks) {
+                state.openTransactions.removeIf(transaction -> {
+                    transaction.remove(ack);
+                    return transaction.isEmpty();
+                });
+            }
         }
 
-        // Build miss response for naks
+        // Build miss response for naks (read from global cache, no lock needed)
         if (naks.length == 0) {
             return null;
         }
@@ -106,26 +173,96 @@ public final class ChunkCache {
         boolean foundAny = false;
 
         for (long nak : naks) {
-            byte[] blobData = blobs.get(nak);
+            byte[] blobData = blobs.getIfPresent(nak);
             if (blobData != null) {
                 missBlobs.put(nak, Unpooled.wrappedBuffer(blobData));
                 foundAny = true;
             }
         }
 
-        if (!foundAny) {
-            return null;
-        }
-
-        return missResponse;
+        return foundAny ? missResponse : null;
     }
 
     /**
-     * Clear all blobs and transactions, increment generation.
+     * Clear player-specific state (transactions and generation).
+     * <p>
+     * Called when a player changes dimensions or worlds. Increments the generation counter
+     * to invalidate any in-flight chunk encoding operations.
+     * <p>
+     * Note: This does NOT remove blobs from the global cache, as they may be shared with other players.
+     *
+     * @param playerId the player's UUID
      */
-    public synchronized void clear() {
-        blobs.clear();
-        openTransactions.clear();
-        generation++;
+    public void clearPlayer(UUID playerId) {
+        PlayerCacheState state = playerStates.get(playerId);
+        if (state != null) {
+            synchronized (state) {
+                state.openTransactions.clear();
+                state.generation++;
+            }
+        }
     }
+
+    /**
+     * Remove player state entirely.
+     * <p>
+     * Called when a player disconnects. Removes all per-player tracking data.
+     * <p>
+     * Note: This does NOT remove blobs from the global cache, as they may be shared with other players.
+     *
+     * @param playerId the player's UUID
+     */
+    public void removePlayer(UUID playerId) {
+        playerStates.remove(playerId);
+    }
+
+    /**
+     * Get current generation for a player.
+     * <p>
+     * The generation counter is incremented each time {@link #clearPlayer(UUID)} is called,
+     * allowing detection of stale chunk encoding operations after dimension/world changes.
+     *
+     * @param playerId the player's UUID
+     * @return the current generation number
+     */
+    public int getGeneration(UUID playerId) {
+        return getPlayerState(playerId).generation;
+    }
+
+    /**
+     * Get cache statistics.
+     *
+     * @return cache statistics including blob count, player count, and Caffeine stats
+     */
+    public CacheStats getStats() {
+        return new CacheStats(
+                blobs.estimatedSize(),
+                playerStates.size(),
+                blobs.stats()
+        );
+    }
+
+    /**
+     * Per-player cache state.
+     * <p>
+     * Tracks open transactions (blobs sent but not yet acknowledged) and generation counter
+     * for staleness detection.
+     */
+    private static class PlayerCacheState {
+        final List<LongOpenHashSet> openTransactions = new java.util.ArrayList<>();
+        int generation = 0;
+    }
+
+    /**
+     * Cache statistics.
+     *
+     * @param blobCount estimated number of blobs in the global cache
+     * @param playerCount number of players with active cache state
+     * @param caffeineStats detailed Caffeine cache statistics
+     */
+    public record CacheStats(
+            long blobCount,
+            int playerCount,
+            com.github.benmanes.caffeine.cache.stats.CacheStats caffeineStats
+    ) {}
 }
