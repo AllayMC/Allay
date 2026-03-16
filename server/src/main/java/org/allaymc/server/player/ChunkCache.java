@@ -9,6 +9,7 @@ import net.jpountz.xxhash.XXHashFactory;
 import org.allaymc.server.AllayServer;
 import org.cloudburstmc.protocol.bedrock.packet.ClientCacheMissResponsePacket;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -249,7 +250,7 @@ public final class ChunkCache {
      * for staleness detection.
      */
     private static class PlayerCacheState {
-        final List<LongOpenHashSet> openTransactions = new java.util.ArrayList<>();
+        final List<LongOpenHashSet> openTransactions = new ArrayList<>();
         int generation = 0;
     }
 
