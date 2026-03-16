@@ -29,18 +29,16 @@ import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Difficulty;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.NetherPortalHelper;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
-import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
-import org.allaymc.server.entity.component.event.CEntityAttackEvent;
-import org.allaymc.server.entity.component.event.CEntityDieEvent;
-import org.allaymc.server.entity.component.event.CEntityGetDropXpEvent;
-import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
+import org.allaymc.server.entity.component.event.*;
+import org.allaymc.server.player.AllayPlayer;
+import org.allaymc.server.player.ChunkCache;
 import org.allaymc.server.world.AllayDimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -540,6 +538,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 this.controller.viewWeather(targetDim.getWorld().getWeather());
             }
             boolean dimensionChanged = currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId();
+            // Clear cache on dimension or world change
+            ChunkCache.getInstance().clearPlayer(((AllayPlayer) this.controller).getLoginData().getUuid());
             currentDim.removePlayer(this.controller, () -> {
                 setLocationBeforeSpawn(target);
                 if (dimensionChanged && !this.controller.isChangingDimension()) {

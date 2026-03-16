@@ -94,6 +94,7 @@ public final class PacketProcessorHolder {
         // Client will send sub chunk request packets during spawned stage if the sub chunk
         // sending system is enabled
         registerProcessor(ClientState.SPAWNED, new SubChunkRequestPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new ClientCacheBlobStatusPacketProcessor());
 
         // Client will start sending the auth input packet after spawned, however, these packets will be ignored.
         // See PlayerAuthInputPacketProcessor#notReadyForInput()
@@ -124,6 +125,7 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new SetPlayerGameTypePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SetDifficultyPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SubChunkRequestPacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ClientCacheBlobStatusPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new TextPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SettingsCommandPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new ModalFormResponsePacketProcessor());

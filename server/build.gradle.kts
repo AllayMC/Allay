@@ -45,6 +45,7 @@ dependencies {
         exclude(group = "org.yaml", module = "snakeyaml") // Use the latest version
     }
     api(libs.bstats)
+    api(libs.lz4.java)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)

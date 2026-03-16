@@ -175,6 +175,17 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("max-decompressed-bytes")
         private int maxDecompressedBytes = 1024 * 1024 * 50;
 
+        @Comment("Whether to enable client-side chunk caching using blob hashes, which can significantly reduce bandwidth when players revisit areas")
+        @Comment("Please note that you should set network-settings.enable-encoding-protection to false to use this feature")
+        @CustomKey("enable-client-chunk-cache")
+        private boolean enableClientChunkCache = false;
+
+        @Comment("Maximum number of chunk blobs to cache globally across all players")
+        @Comment("Each blob is typically 1-4KB. Higher values use more memory but improve cache hit rate")
+        @Comment("Recommended: 4096 for small servers, 8192-16384 for larger servers")
+        @CustomKey("max-chunk-cache-blobs")
+        private int maxChunkCacheBlobs = 4096;
+
         public enum CompressionAlgorithm {
             ZLIB,
             SNAPPY
