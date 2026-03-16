@@ -1,9 +1,7 @@
-import com.github.monosoul.yadegrap.DelombokTask
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 
 plugins {
     id("java-library")
-    alias(libs.plugins.delombok) apply false
     alias(libs.plugins.publish) apply false
 }
 
@@ -51,33 +49,13 @@ subprojects {
     }
 
     if (project.name in listOf("api", "server")) {
-        apply(plugin = "com.github.monosoul.yadegrap")
         apply(plugin = "com.vanniktech.maven.publish")
 
         project.version = rootProject.property(project.name + ".version").toString() +
                 if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
 
-        tasks {
-            withType<DelombokTask>().configureEach {
-                formatOptions.set(
-                    mapOf(
-                        "generateDelombokComment" to "skip",
-                        "javaLangAsFQN" to "skip",
-                        "generated" to "skip",
-                        "suppressWarnings" to "skip",
-                        "finalParams" to "skip",
-                        "constructorProperties" to "skip",
-                    )
-                )
-            }
-
-            register<Jar>("sourcesJar").configure {
-                group = "build"
-                archiveClassifier.set("sources")
-                val delombokTask = named<DelombokTask>("delombok")
-                dependsOn(delombokTask)
-                from(delombokTask.map { it.outputDir })
-            }
+        java {
+            withSourcesJar()
         }
 
         configure<MavenPublishBaseExtension> {
