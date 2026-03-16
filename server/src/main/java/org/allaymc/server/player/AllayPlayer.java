@@ -2761,7 +2761,6 @@ public class AllayPlayer implements Player {
     @Override
     public void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z) {
         this.changingDimension = true;
-        ChunkCache.getInstance().clearPlayer(this.loginData.getUuid());
 
         var packet = new ChangeDimensionPacket();
         packet.setDimension(targetDimInfo.dimensionId());

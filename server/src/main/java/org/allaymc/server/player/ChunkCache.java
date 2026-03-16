@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ChunkCache {
 
     private static final XXHash64 XXHASH64 = XXHashFactory.fastestJavaInstance().hash64();
-    private static ChunkCache instance;
+    private static volatile ChunkCache instance;
 
     private final Cache<Long, byte[]> blobs;
     private final ConcurrentHashMap<UUID, PlayerCacheState> playerStates;
@@ -39,6 +39,7 @@ public final class ChunkCache {
     private ChunkCache(int maxBlobs) {
         this.blobs = Caffeine.newBuilder()
                 .maximumSize(maxBlobs)
+                .recordStats()
                 .build();
         this.playerStates = new ConcurrentHashMap<>();
     }
