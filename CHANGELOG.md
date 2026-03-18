@@ -34,6 +34,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed non-living entities lingering below the world; they are now removed when they fall into the void.
 - Fixed `/kick` message templating so command feedback includes the target player name and custom kick reasons are formatted correctly.
 - Aligned multiple tree world features more closely with vanilla/Paper generation behavior, including trunk, foliage, root, vine, podzol, and propagule placement across oak-family, birch-family, spruce-family, jungle-family, cherry, azalea, pale oak, and mangrove trees.
+- Fixed mega spruce tree foliage generation by no longer treating existing leaves as free space during tree placement.
 - Fixed a bug where custom item tags are not correctly sent.
 - Fixed a bug where turn off option `network-settings.enable-encoding-protection` doesn't have effect.
 

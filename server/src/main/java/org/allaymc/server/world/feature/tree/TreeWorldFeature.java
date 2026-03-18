@@ -33,9 +33,7 @@ public abstract class TreeWorldFeature extends AbstractWorldFeature {
 
     protected boolean canReplace(BlockState blockState) {
         var blockType = blockState.getBlockType();
-        return blockType == BlockTypes.AIR ||
-               blockType.hasBlockTag(BlockTags.REPLACEABLE) ||
-               blockType.hasBlockTag(BlockTags.LEAVES);
+        return blockType.hasBlockTag(BlockTags.REPLACEABLE);
     }
 
     protected boolean canGrowOn(BlockState blockState) {
