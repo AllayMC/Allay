@@ -8,13 +8,15 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Cool_Loong
  */
 @Slf4j
 public final class PacketProcessorHolder {
-    private final EnumMap<ClientState, EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
+    private final EnumMap<ClientState, Map<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
 
     private ClientState clientState = ClientState.DISCONNECTED;
     private ClientState lastClientState = null;
@@ -22,7 +24,7 @@ public final class PacketProcessorHolder {
     public PacketProcessorHolder() {
         this.processors = new EnumMap<>(ClientState.class);
         for (ClientState state : ClientState.values()) {
-            processors.put(state, new EnumMap<>(BedrockPacketType.class));
+            processors.put(state, new HashMap<>());
         }
 
         registerConnectedPacketProcessors();
@@ -92,6 +94,7 @@ public final class PacketProcessorHolder {
         // Client will send sub chunk request packets during spawned stage if the sub chunk
         // sending system is enabled
         registerProcessor(ClientState.SPAWNED, new SubChunkRequestPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new ClientCacheBlobStatusPacketProcessor());
 
         // Client will start sending the auth input packet after spawned, however, these packets will be ignored.
         // See PlayerAuthInputPacketProcessor#notReadyForInput()
@@ -122,6 +125,7 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new SetPlayerGameTypePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SetDifficultyPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SubChunkRequestPacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ClientCacheBlobStatusPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new TextPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SettingsCommandPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new ModalFormResponsePacketProcessor());
@@ -141,6 +145,7 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new RequestAbilityPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new NPCRequestPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new LecternUpdatePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new CommandBlockUpdatePacketProcessor());
     }
 
     @SuppressWarnings("unchecked")

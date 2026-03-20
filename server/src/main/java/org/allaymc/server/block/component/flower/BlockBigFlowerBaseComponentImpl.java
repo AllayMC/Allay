@@ -29,7 +29,7 @@ public class BlockBigFlowerBaseComponentImpl extends BlockSmallFlowerBaseCompone
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         var keep = true;
         if (face == BlockFace.UP) {
             if (!block.getPropertyValue(UPPER_BLOCK_BIT)) {

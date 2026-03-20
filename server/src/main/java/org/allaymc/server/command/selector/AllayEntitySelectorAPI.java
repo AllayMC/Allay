@@ -173,7 +173,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
 
     @Override
     public boolean checkValid(String token) {
-        return Boolean.TRUE.equals(MATCHES_CACHE.get(token, k -> ENTITY_SELECTOR.matcher(token).matches()));
+        return MATCHES_CACHE.get(token, k -> ENTITY_SELECTOR.matcher(token).matches());
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.block.component.BlockFireBaseComponentImpl;
+import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**

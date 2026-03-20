@@ -64,7 +64,7 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
     protected void onInteract(CBlockOnInteractEvent event) {
         var interactInfo = event.getInteractInfo();
         var player = interactInfo.player();
-        if (player == null || player.isSneaking() || !player.isActualPlayer()) {
+        if (player == null || !player.isActualPlayer()) {
             return;
         }
 

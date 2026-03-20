@@ -41,6 +41,11 @@ public record ContainerNetworkInfo(
             .mapNetworkSlotIndex(1, 0)
             .build();
 
+    public static final ContainerNetworkInfo ARMOR_STAND_HAND = builder()
+            .type(ContainerTypes.ARMOR_STAND_HAND)
+            .mapAllSlotToType(ContainerSlotType.INVENTORY)
+            .build();
+
     public static final ContainerNetworkInfo PLAYER_INVENTORY = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.INVENTORY)
             .type(ContainerTypes.INVENTORY)

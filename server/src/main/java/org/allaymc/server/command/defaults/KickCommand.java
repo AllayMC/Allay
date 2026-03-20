@@ -44,12 +44,13 @@ public class KickCommand extends Command {
                         }
 
                         reason = event.getReason();
+                        var playerName = player.getDisplayName();
                         if (reason.isBlank()) {
                             controller.disconnect(I18n.get().tr(TrKeys.MC_DISCONNECT_KICKED));
-                            context.addOutput(TrKeys.MC_COMMANDS_KICK_SUCCESS);
+                            context.addOutput(TrKeys.MC_COMMANDS_KICK_SUCCESS, playerName);
                         } else {
-                            controller.disconnect(I18n.get().tr(TrKeys.MC_DISCONNECT_KICKED_REASON, reason));
-                            context.addOutput(TrKeys.MC_COMMANDS_KICK_SUCCESS_REASON, reason);
+                            controller.disconnect(I18n.get().tr(TrKeys.MC_DISCONNECT_KICKED_REASON) + "\n" + reason);
+                            context.addOutput(TrKeys.MC_COMMANDS_KICK_SUCCESS_REASON, playerName, reason);
                         }
                     }
                     return context.success();

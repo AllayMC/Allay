@@ -65,7 +65,33 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public double getWaterBuoyancy() {
+        // Projectiles don't float
+        return 0;
+    }
+
+    @Override
+    public double getWaterDragFactor() {
+        return 0.2;
+    }
+
+    @Override
+    public double getLavaBuoyancy() {
+        // Projectiles don't float
+        return 0;
+    }
+
+    @Override
+    public double getLavaDragFactor() {
+        return 0.2;
+    }
+
+    @Override
+    public Vector3d updateMotion(LiquidState liquidState) {
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
+        }
+
         return new Vector3d(
                 this.motion.x * (1 - this.getDragFactorInAir()),
                 (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
@@ -102,7 +128,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         var rayCastResult = new RayCastResult();
 
         // Ray cast blocks
-        dimension.forEachBlockStates(aabb, 0, (x, y, z, block) -> {
+        // Expand search range by 1 block downward to include blocks with tall collision shapes (e.g. fences with maxY = 1.5)
+        var blockSearchAABB = new AABBd(aabb);
+        blockSearchAABB.minY -= 1;
+        dimension.forEachBlockStates(blockSearchAABB, 0, (x, y, z, block) -> {
             var result = new Vector2d();
             if (block.getBlockStateData().computeOffsetCollisionShape(x, y, z).intersectsRay(ray, result)) {
                 if (result.x() < rayCastResult.result) {
@@ -144,6 +173,8 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         }
 
         if (!newPos.equals(location) && thisEntity.trySetLocation(newPos)) {
+            this.pendingOnGround = rayCastResult.hit instanceof Block;
+
             if (rayCastResult.hit instanceof Block block && callHitEvent(newPos, null, block)) {
                 // Store for later processing in afterApplyMotion()
                 this.pendingCollisionResult = new CollisionResult(block, new Vector3d(newPos.x(), newPos.y(), newPos.z()));
@@ -170,6 +201,8 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
 
     @Override
     public void afterApplyMotion() {
+        super.afterApplyMotion();
+
         if (pendingCollisionResult == null) {
             return;
         }

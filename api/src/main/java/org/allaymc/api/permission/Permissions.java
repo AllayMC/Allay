@@ -13,12 +13,10 @@ public interface Permissions {
      * Permission to fly in survival mode. Only TRUE allows flying.
      */
     String ABILITY_FLY_SURVIVAL = "ability.fly.survival";
-
     /**
      * Permission to fly in creative mode. FALSE denies, otherwise allowed.
      */
     String ABILITY_FLY_CREATIVE = "ability.fly.creative";
-
     /**
      * Permission to fly in adventure mode. Only TRUE allows flying.
      */
@@ -34,8 +32,19 @@ public interface Permissions {
 
     // TODO: input permission
 
+    /* Block */
+
+    /**
+     * The permission to use command blocks (modify and view output).
+     */
+    String BLOCK_USE_COMMAND_BLOCK = "allay.block.use_command_block";
+
     /* Command */
 
+    /**
+     * The permission to view other's command outputs.
+     */
+    String COMMAND_VIEW_OTHER_OUTPUTS = "allay.command.view_other_outputs";
     /**
      * The permission to use /alwaysday command.
      */
@@ -48,6 +57,10 @@ public interface Permissions {
      * The permission to use /ban-ip command.
      */
     String COMMAND_BAN_IP = "allay.command.ban-ip";
+    /**
+     * The permission to use /camerashake command.
+     */
+    String COMMAND_CAMERASHAKE = "allay.command.camerashake";
     /**
      * The permission to use /clear command.
      */
@@ -80,6 +93,10 @@ public interface Permissions {
      * The permission to use /fill command.
      */
     String COMMAND_FILL = "allay.command.fill";
+    /**
+     * The permission to use /fog command.
+     */
+    String COMMAND_FOG = "allay.command.fog";
     /**
      * The permission to use /gamemode command.
      */

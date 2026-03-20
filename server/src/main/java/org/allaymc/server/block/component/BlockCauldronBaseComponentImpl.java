@@ -21,6 +21,7 @@ import org.allaymc.api.item.component.ItemBannerBaseComponent;
 import org.allaymc.api.item.component.ItemDyeComponent;
 import org.allaymc.api.item.component.ItemDyeableComponent;
 import org.allaymc.api.item.component.ItemPotionComponent;
+import org.allaymc.api.item.component.ItemShulkerBoxBaseComponent;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.item.interfaces.ItemLingeringPotionStack;
@@ -408,7 +409,7 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
             BlockState clickedBlock, ItemStack itemStack,
             CauldronLiquid liquid, int fillLevel, boolean isEmpty
     ) {
-        if (!(itemStack instanceof ItemShulkerBoxStack)) return false;
+        if (!(itemStack instanceof ItemShulkerBoxStack shulkerBox)) return false;
         if (isEmpty || liquid != CauldronLiquid.WATER) return false;
         if (fillLevel < 1) return false;
 
@@ -424,7 +425,7 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Convert to undyed shulker box
         var undyedBox = ItemTypes.UNDYED_SHULKER_BOX.createItemStack(1);
-        // TODO: Copy stored items when ItemStuffStorableComponent is fully implemented
+        undyedBox.setStoredItems(shulkerBox.getStoredItems());
 
         player.setItemInHand(undyedBox);
 

@@ -247,7 +247,7 @@ public class DoubleChestContainerImpl implements BlockContainer {
     }
 
     @Override
-    public List<NbtMap> saveNBT() {
+    public List<NbtMap> saveNBT(boolean saveEmptySlots) {
         throw new UnsupportedOperationException();
     }
 

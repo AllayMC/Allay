@@ -6,6 +6,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.poi.PoiType;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -293,6 +294,42 @@ public interface UnsafeChunk {
     default long computeChunkHash() {
         return HashUtils.hashXZ(getX(), getZ());
     }
+
+    /**
+     * Get all POI entries in this chunk.
+     *
+     * @return all POI entries, keyed by {@link HashUtils#hashChunkXYZ(int, int, int)}
+     */
+    Map<Integer, PoiType> getPoiEntries();
+
+    /**
+     * Add a POI entry to this chunk.
+     *
+     * @param x    the chunk-local x coordinate (0-15)
+     * @param y    the world y coordinate
+     * @param z    the chunk-local z coordinate (0-15)
+     * @param type the POI type
+     */
+    void addPoi(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, PoiType type);
+
+    /**
+     * Remove a POI entry from this chunk.
+     *
+     * @param x the chunk-local x coordinate (0-15)
+     * @param y the world y coordinate
+     * @param z the chunk-local z coordinate (0-15)
+     */
+    void removePoi(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
+
+    /**
+     * Get the POI type at the given position, or {@code null} if none.
+     *
+     * @param x the chunk-local x coordinate (0-15)
+     * @param y the world y coordinate
+     * @param z the chunk-local z coordinate (0-15)
+     * @return the POI type, or {@code null}
+     */
+    PoiType getPoi(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
      * Convert this unsafe chunk to a {@link Chunk} which is safe in multithreaded environment.

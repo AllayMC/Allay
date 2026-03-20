@@ -9,6 +9,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.message.MayContainTrKey;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -138,6 +139,12 @@ public class BlockStateData {
      */
     @Builder.Default
     protected float translucency = 0.0f;
+    /**
+     * The translation key of the block state.
+     */
+    @MayContainTrKey
+    @Builder.Default
+    protected String translationKey = "";
 
     public boolean hasCollision() {
         return !collisionShape.getSolids().isEmpty();

@@ -16,7 +16,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.entity.component.EntityTntBaseComponentImpl;
+import org.allaymc.server.entity.component.item.EntityTntBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3d;
 
@@ -62,8 +62,8 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         // Ignite TNT when receiving redstone power
         if (block.isPowered()) {

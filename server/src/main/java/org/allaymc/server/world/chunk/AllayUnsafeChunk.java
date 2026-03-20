@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -22,6 +23,7 @@ import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
@@ -53,6 +55,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
     protected final NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
     protected final NonBlockingHashMap<Integer, BlockEntity> blockEntities;
+    protected final NonBlockingHashMap<Integer, PoiType> poiEntries;
     protected final ChunkBitMap heightMapDirtyFlags;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<WorldViewer.BlockUpdate> blockUpdates;
@@ -85,7 +88,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             int x, int z, DimensionInfo dimensionInfo,
             AllayChunkSection[] sections, HeightMap heightMap,
             NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates,
-            ChunkState state, NonBlockingHashMap<Integer, BlockEntity> blockEntities) {
+            ChunkState state, NonBlockingHashMap<Integer, BlockEntity> blockEntities,
+            NonBlockingHashMap<Integer, PoiType> poiEntries) {
         this.x = x;
         this.z = z;
         this.dimensionInfo = dimensionInfo;
@@ -94,6 +98,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.scheduledUpdates = scheduledUpdates;
         this.state = state;
         this.blockEntities = blockEntities;
+        this.poiEntries = poiEntries;
         this.heightMapDirtyFlags = new ChunkBitMap();
         this.chunkLoaders = Sets.newConcurrentHashSet();
         this.blockUpdates = PlatformDependent.newMpscQueue();
@@ -158,6 +163,16 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             }
 
             blockState.getBehavior().onScheduledUpdate(block);
+
+            // Also update liquid on layer 1 if present, so that waterlogged blocks
+            // (e.g. sea pickle, kelp) properly trigger liquid flow.
+            var layer1State = getBlockState(pos.x() & 15, pos.y(), pos.z() & 15, 1);
+            if (layer1State.getBehavior() instanceof BlockLiquidBehavior) {
+                var layer1Block = new Block(layer1State, new Position3i(pos, dimension), 1);
+                if (new BlockScheduleUpdateEvent(layer1Block).call()) {
+                    layer1State.getBehavior().onScheduledUpdate(layer1Block);
+                }
+            }
         });
     }
 
@@ -404,6 +419,29 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public Map<Integer, BlockEntity> getBlockEntities() {
         return Collections.unmodifiableMap(blockEntities);
+    }
+
+    @Override
+    public Map<Integer, PoiType> getPoiEntries() {
+        return Collections.unmodifiableMap(poiEntries);
+    }
+
+    @Override
+    public void addPoi(int x, int y, int z, PoiType type) {
+        checkXYZ(x, y, z);
+        poiEntries.put(HashUtils.hashChunkXYZ(x, y, z), type);
+    }
+
+    @Override
+    public void removePoi(int x, int y, int z) {
+        checkXYZ(x, y, z);
+        poiEntries.remove(HashUtils.hashChunkXYZ(x, y, z));
+    }
+
+    @Override
+    public PoiType getPoi(int x, int y, int z) {
+        checkXYZ(x, y, z);
+        return poiEntries.get(HashUtils.hashChunkXYZ(x, y, z));
     }
 
     @Override

@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.poi.PoiType;
 import org.jctools.maps.NonBlockingHashMap;
 
 /**
@@ -21,11 +22,13 @@ public class AllayChunkBuilder {
     private HeightMap heightMap;
     private NonBlockingHashMap<Integer, BlockEntity> blockEntities;
     private NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
+    private NonBlockingHashMap<Integer, PoiType> poiEntries;
 
     public AllayChunkBuilder() {
         this.state = ChunkState.FULL;
         this.blockEntities = new NonBlockingHashMap<>();
         this.scheduledUpdates = new NonBlockingHashMap<>();
+        this.poiEntries = new NonBlockingHashMap<>();
     }
 
     private static AllayChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
@@ -84,6 +87,11 @@ public class AllayChunkBuilder {
         return this;
     }
 
+    public AllayChunkBuilder poiEntries(NonBlockingHashMap<Integer, PoiType> poiEntries) {
+        this.poiEntries = poiEntries;
+        return this;
+    }
+
     public AllayUnsafeChunk build() {
         Preconditions.checkNotNull(dimensionInfo);
 
@@ -93,7 +101,7 @@ public class AllayChunkBuilder {
         return new AllayUnsafeChunk(
                 chunkX, chunkZ, dimensionInfo,
                 sections, heightMap, scheduledUpdates,
-                state, blockEntities
+                state, blockEntities, poiEntries
         );
     }
 
@@ -103,7 +111,8 @@ public class AllayChunkBuilder {
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
                 new NonBlockingHashMap<>(),
-                ChunkState.NEW, new NonBlockingHashMap<>()
+                ChunkState.NEW, new NonBlockingHashMap<>(),
+                new NonBlockingHashMap<>()
         );
     }
 
@@ -113,7 +122,8 @@ public class AllayChunkBuilder {
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
                 new NonBlockingHashMap<>(),
-                ChunkState.FULL, new NonBlockingHashMap<>()
+                ChunkState.FULL, new NonBlockingHashMap<>(),
+                new NonBlockingHashMap<>()
         );
     }
 }

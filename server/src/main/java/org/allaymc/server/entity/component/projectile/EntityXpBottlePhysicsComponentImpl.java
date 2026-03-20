@@ -24,7 +24,7 @@ public class EntityXpBottlePhysicsComponentImpl extends EntityProjectilePhysicsC
     }
 
     protected void onHit() {
-        if (thisEntity.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 

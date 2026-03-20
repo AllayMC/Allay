@@ -5,6 +5,7 @@ import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
@@ -17,10 +18,12 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class BlockNeighborUpdateEvent extends BlockEvent implements CancellableEvent {
     protected Block neighbor;
     protected BlockFace blockFace;
+    protected BlockState oldNeighborState;
 
-    public BlockNeighborUpdateEvent(Block block, Block neighbor, BlockFace blockFace) {
+    public BlockNeighborUpdateEvent(Block block, Block neighbor, BlockFace blockFace, BlockState oldNeighborState) {
         super(block);
         this.neighbor = neighbor;
         this.blockFace = blockFace;
+        this.oldNeighborState = oldNeighborState;
     }
 }

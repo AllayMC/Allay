@@ -11,18 +11,22 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.api.world.sound.Sound;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -49,12 +53,10 @@ public interface WorldViewer extends DebugShapeViewer {
      * Views the location of the entity passed.
      *
      * @param entity           the entity to view
-     * @param locationLastSent the location that is sent in the last method call. Changes will be applied to this parameter when the difference in a
-     *                         specific field (e.g. x-axis) exceeds the threshold.
      * @param newLocation      the new location of the entity
      * @param teleporting      whether the entity is being teleported to the new location
      */
-    void viewEntityLocation(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting);
+    void viewEntityLocation(Entity entity, Location3dc newLocation, boolean teleporting);
 
     /**
      * Views the motion of the entity passed.
@@ -272,4 +274,35 @@ public interface WorldViewer extends DebugShapeViewer {
      * @param pos the position of the lectern block
      */
     void viewLectern(Vector3ic pos);
+
+    /**
+     * Opens the sign editor interface for the viewer.
+     *
+     * @param pos       the position of the sign block
+     * @param frontSide {@code true} if the front side of the sign should be edited, {@code false} otherwise
+     */
+    void viewSignEditor(Vector3ic pos, boolean frontSide);
+
+    /**
+     * Views the sleeping indicator showing how many players are currently sleeping.
+     *
+     * @param sleepingCount the number of players currently sleeping
+     * @param totalCount    the total number of players that can sleep
+     */
+    void viewSleepingIndicator(int sleepingCount, int totalCount);
+
+    /**
+     * Open the command block editor interface for the viewer.
+     *
+     * @param pos the pos of the command block
+     */
+    void viewCommandBlockEditor(Vector3ic pos);
+
+    /**
+     * Views the enchantment options available to the viewer from an enchanting table.
+     *
+     * @param enchantOptions the list of enchant options, where each pair contains
+     *                       the network id (used to identify the selected option) and the enchant option
+     */
+    void viewEnchantOptions(List<Pair<Integer, EnchantOption>> enchantOptions);
 }

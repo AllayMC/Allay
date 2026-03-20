@@ -8,17 +8,245 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.10.8 (API 0.25.0) - Unreleased
+# 0.12.0 (API 0.27.0) - Unreleased
 
-<small>[Compare with 0.10.7](https://github.com/AllayMC/Allay/compare/0.10.7...HEAD)</small>
+<small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...HEAD)</small>
 
 ### Added
 
-- Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
+- (API) Added camera shake API (`Player.shakeCamera()`, `Player.stopCameraShake()`) and implemented `/camerashake` command.
+- (API) Added fog API (`Player.pushFog()`, `Player.popFog()`, `Player.removeFog()`, `Player.removeAllFogs()`, `Player.getFogs()`) with `FogIds` constants, and implemented `/fog` command.
+- (API) Added `BiomeTags` constants interface with code-generated biome tag definitions.
+- (API) Added `ItemTags.ALLOW_OFFHAND` for marking items that are allowed in the offhand slot.
+- (API) Added `ItemWearableComponent` as the shared wearable contract for armor, elytra, carved pumpkins, and heads.
+- Added custom biome support. Plugins can register custom biomes via `new AllayBiomeType(Identifier, BiomeData)` with auto-allocated persistent IDs (starting from 30000, saved to `biome_ids.yml`).
+- Added `AllayBlockType.Builder.customizeItemType(Consumer<AllayItemType.Builder>)` to customize automatically generated block item types for custom blocks.
+- Added `BlockStateDefinition.MaterialInstance.alphaTestToOpaque(String)`, `alphaTestSingleSidedToOpaque(String)`, and `blendToOpaque(String)` convenience factories for custom block material instances.
+- Added `CustomBlockDefinitionGenerator.setRotationOffset(float)` to configure the `minecraft:placement_direction` `y_rotation_offset` for custom blocks that use directional state properties.
+- Added terminal command prompt tab completion backed by the command tree, including command names, aliases, enum values, and online player targets.
+- Added inventory transaction validation for restricted container slots to reject invalid item moves and swaps, such as non-armor items being placed into armor slots.
+- Added support for client blob cache.
+- Added handler for AutoCraftRecipeAction. Now the player can craft items through the recipe book directly.
 
 ### Fixed
 
+- Fixed NBT read errors for players joining with newly created player data by writing a default `Rotation` field.
+- Fixed non-living entities lingering below the world; they are now removed when they fall into the void.
+- Fixed `/kick` message templating so command feedback includes the target player name and custom kick reasons are formatted correctly.
+- Aligned multiple tree world features more closely with vanilla/Paper generation behavior, including trunk, foliage, root, vine, podzol, and propagule placement across oak-family, birch-family, spruce-family, jungle-family, cherry, azalea, pale oak, and mangrove trees.
+- Fixed mega spruce tree foliage generation by no longer treating existing leaves as free space during tree placement.
+- Fixed a bug where custom item tags are not correctly sent.
+- Fixed a bug where turn off option `network-settings.enable-encoding-protection` doesn't have effect.
+
+### Removed
+
+- Removed field `CustomItemDefinitionGenerator.allowOffHand`, use new item tag `ItemTags.ALLOW_OFFHAND` instead.
+
+# 0.11.1 (API 0.26.0) - 2026/3/9
+
+<small>[Compare with 0.11.0](https://github.com/AllayMC/Allay/compare/0.11.0...0.11.1)</small>
+
+### Added
+
+- (API) Added `WorldGeneratorInitEvent` — fired after a `WorldGenerator` is created but before it is attached to its dimension, allowing plugins to append custom noisers, populators, and post-processors to any generator.
+- (API) Added `WorldGenerator.addNoiser()`, `addPopulator()`, and `addPostProcessor()` for dynamically extending generators during initialization (must be called within `WorldGeneratorInitEvent`).
+- (API) Implemented command block.
+- (API) Added entity AI framework:
+  - `EntityAIComponent` — core component providing behavior group, memory storage, movement speed, and look/move targets.
+  - `EntityIntelligent` — marker interface for entities with AI.
+  - `BehaviorGroup` — orchestrates the AI tick pipeline: sensors, evaluators, executors, route finding, and controllers.
+  - `Behavior`, `BehaviorEvaluator`, `BehaviorExecutor`, `BehaviorState` — behavior definition and lifecycle.
+  - `Controller` — AI controllers (walk, look, fluctuate).
+  - `Sensor` — environment sensing (nearest player, nearest feeding player).
+  - `MemoryStorage`, `MemoryType`, `MemoryTypes` — typed memory system for AI state.
+  - `RouteFinder`, `Node` — A* pathfinding with flat and 3D route finders.
+  - `EntityParallelTickComponent` — parallel tick support for entity AI.
+- (API) Added entity property system:
+  - `EntityPropertyType<DATATYPE>` sealed interface with `BooleanPropertyType`, `IntPropertyType`, `FloatPropertyType`, and `EnumPropertyType<T>` concrete types.
+  - `EntityPropertyTypes` constants class (e.g., `CLIMATE_VARIANT`).
+  - `EntityType.getProperties()` / `hasProperty()` for querying property definitions on entity types.
+  - `EntityBaseComponent.getPropertyValue()` / `setPropertyValue()` for reading and writing property values at runtime.
+  - Entity properties are persisted via NBT and synchronized to clients via `SyncEntityPropertyPacket`.
+- (API) Added portal-related APIs:
+  - Added `EntityPortalEnterEvent` (cancellable) and `PortalCreateEvent` (cancellable).
+  - Added `NETHER_PORTAL` and `END_PORTAL` reasons to `EntityTeleportEvent`.
+  - Added portal state/cooldown API to `EntityBaseComponent`: `get/setPortalTicks()`, `get/setPortalCooldown()`, `is/setInNetherPortal()`, `NETHER_PORTAL_TRANSITION_TICKS`, `PORTAL_COOLDOWN_TICKS`.
+  - Added POI APIs for portal lookup: `PoiType`, `PoiTypes`, `Registries.POI_TYPES`, `Dimension.findNearestPoi(...)`, and POI methods on `UnsafeChunk`.
+  - Added dimension change UI helpers to `Player`: `isChangingDimension()`, `beginDimensionChange(...)`, `completeDimensionChange()`.
+- (API) Added freeze mechanic for powder snow:
+  - `EntityLivingComponent.getFreezeTicks()` / `setFreezeTicks()` — tracks how long an entity has been inside powder snow (0–140 ticks).
+  - `EntityLivingComponent.isInPowderSnow()` / `setInPowderSnow()` — flag set each tick by the powder snow block component.
+  - `EntityLivingComponent.isFrozen()` — returns `true` when freeze ticks reach the maximum.
+  - `EntityLivingComponent.MAX_FREEZE_TICKS` — constant (140) for the freeze threshold.
+  - `DamageContainer.freezing(float)` — factory method for `DamageType.FREEZING` damage.
+- (API) Added `NetworkManager` interface for managing multiple network interfaces, allowing plugins to register custom transport protocols (QUIC, TCP, WebSocket, etc.) alongside the built-in RakNet interface.
+  - Added `PlayerManager.getNetworkManager()` method.
+  - Added cancellable `NetworkInterfaceRegisterEvent` and `NetworkInterfaceUnregisterEvent`.
+- (API) Added liquid physics for entities including buoyancy and drag in water and lava, with configurable parameters per entity type via `EntityPhysicsComponent`.
+  - Added `LiquidState` record to `EntityPhysicsComponent` for tracking entity liquid submersion state.
+  - Added `EntityBaseComponent.isTouchingLava()` method.
+- (API) Added entity-related component interfaces:
+  - `EntityAnimalComponent` with breeding item check, `EntityAnimal` interface.
+  - `EntityBabyComponent` for baby entity growth, `EntityDyeableComponent` for dyeable entities.
+  - `EntityHeadYawComponent` for head yaw tracking, `EntitySheepBaseComponent`.
+- (API) Added `ClimateVariant` enum (`TEMPERATE`, `WARM`, `COLD`) and `BiomeData.getEntityClimateVariant()` for biome-based climate variant resolution.
+- (API) Added the following methods to `Player`:
+  - `sendHealth(float, float)` — sends health and max health to the client.
+  - `sendAbsorption(float)` — sends absorption value to the client.
+  - `sendMapData(long, BufferedImage)` — sends map image data to the client.
+  - `sendDeathInfo(Pair<String, String[]>)` — sends death info to the client.
+  - `sendItemChargingFinished()` — notifies the client that item charging has finished.
+  - `setMotion(Vector3dc)` — sets the motion of the player.
+  - `getInputMode()` — tracks the player's current input mode (mouse, touch, gamepad, etc.).
+  - `getPlayMode()` — tracks the player's current play mode (normal, screen, etc.).
+  - `getInputInteractionModel()` — tracks the player's current input interaction model (touch, crosshair, classic).
+- (API) Added `InputMode`, `ClientPlayMode`, and `InputInteractionModel` enums for player input state tracking.
+- (API) Added `WorldViewer.viewEnchantOptions(List<Pair<Integer, EnchantOption>>)` for sending enchantment table options to the viewer.
+- (API) Added `EntityLivingComponent.getLastDamageTime()` / `setLastDamageTime()`.
+- (API) Added `EntityBaseComponent.getEntityTick()` for per-entity tick counter.
+- (API) Added `translationKey` field to `BlockStateData` and `ItemData` for block/item translation key support.
+- (API) Added `ContainerTypes.SHELF` container type and `Container.saveNBT(boolean saveEmptySlots)` overload.
+- (API) Added cancellable `ShelfUseEvent` with `SINGLE_SWAP` and `MULTI_SWAP` actions.
+- (API) Added new sounds to `SimpleSound`: `BIG_DRIPLEAF_TILT_UP`, `BIG_DRIPLEAF_TILT_DOWN`, `BELL_HIT`, `MILKING`, `EGG_LAY`, `POWER_ON`, `POWER_OFF`, `ACTIVATED`, `DEACTIVATED`, `SHELF_SWAP_SINGLE`, `SHELF_SWAP_MULTI`.
+- (API) Added new block tag `minecraft:moss_replaceable`.
+- Implemented nether portal and end portal mechanics:
+  - Nether portal frame detection, activation, portal pairing, and cross-dimension teleport.
+  - End portal frame completion logic and end portal teleport behavior.
+  - End spawn platform creation during teleport to The End.
+- Implemented the following blocks:
+  - Amethyst, amethyst bud & cluster, budding amethyst
+  - Azalea and flowering azalea (bone meal → azalea tree growth)
+  - Bamboo and bamboo sapling
+  - Big dripleaf and small dripleaf
+  - Brown mushroom and red mushroom
+  - Cave vines
+  - Cocoa
+  - Crimson fungus and warped fungus
+  - Dragon egg
+  - Kelp
+  - Moss
+  - Moss carpet
+  - Nether wart
+  - Pale moss
+  - Pale moss carpet
+  - Pitcher crop and torchflower crop
+  - Powder snow
+  - Rail, golden rail, detector rail, activator rail
+  - Shelf
+  - Sea pickle
+  - Seagrass
+  - Sweet berry bush
+- Implemented the following items: cocoa beans, sweet berries, glow berries, kelp, nether wart, torchflower seeds, pitcher pod, blue egg, brown egg.
+- Implemented the following entities: sheep, cow, chicken, pig.
+- Implemented the following world features: huge brown mushroom, huge red mushroom, huge crimson fungus, huge warped fungus, azalea tree.
+- Implemented climate variant property for pig, cow, chicken, and egg entities, with biome-based initialization on spawn.
+- Implemented Fire Aspect enchantment.
+- Implemented entity item and XP drops on death.
+- Added per-chunk POI persistence (LevelDB) and runtime indexing for fast nearest-portal lookup.
+- Updated the chunk version to 42 (1.21.120).
+- Implemented `SHOW_DEATH_MESSAGES` game rule — death messages are now suppressed when this rule is disabled.
+- Server no longer broadcasts blank join or quit messages when the message text is empty.
+- Significantly reduced world save time on shutdown. All chunk and entity writes for each dimension are now accumulated into a single LevelDB `WriteBatch` and flushed in one `db.write()` call, instead of one call per chunk/entity-chunk pair. This also
+  required adding `WorldStorage.startBatchWrite()` and `flushBatchWrite()` API hooks (no-op defaults) for custom storage implementations.
+
+### Changed
+
+- (API) Renamed `ItemStuffStorableComponent` to `ItemShulkerBoxBaseComponent` and changed it to extend `ItemBaseComponent`. The API now uses `Map<Integer, ItemStack>` (slot index → item) instead of `List<NbtMap>` for `getStoredItems()`/`setStoredItems()`.
+- (API) Replaced `boolean water` parameter in `BucketFillSound` and `BucketEmptySound` with a `Type` enum (`WATER`, `LAVA`, `POWDER_SNOW`, `FISH`) to support all bucket content types.
+- (API) Changed `EntityPhysicsComponent.updateMotion(boolean)` to `updateMotion(LiquidState)` for richer liquid state information.
+- (API) Added `EntityPlayerBaseComponent.setBlockSpawnPoint(Location3ic, SpawnPointType)` and `getSpawnPointType()` to distinguish block-anchored spawn points (bed, respawn anchor) from forced ones (e.g., `/spawnpoint`). Added `SpawnPointType` enum (`FORCED`, `BED`, `RESPAWN_ANCHOR`) with a stable numeric `id` for NBT persistence and an `invalidSpawnKey` field carrying the appropriate i18n message key per type.
+- (API) `Scoreboard.displayName` and `Scoreboard.criteriaName` are now mutable — added corresponding setter methods.
+- Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
+- Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
+- Made network settings detection transport-aware, allowing each network interface to report its own compression and encryption capabilities.
+- Improved entity auto-save mechanism: entities in loaded chunks are now periodically written to disk on every `entityAutoSaveCycle` tick interval, rather than only being saved when unloaded or on server shutdown.
+
+### Fixed
+
+- Fixed `ConcurrentModificationException` when registering or unregistering event listeners during event dispatch. Handler lists in `AllayEventBus` now use `CopyOnWriteArrayList` instead of `ArrayList`.
+- Fixed block collision shapes being clamped to a maximum height of 1.0. Blocks such as fences, fence gates, walls, and border blocks now correctly use their vanilla collision height of 1.5, preventing players from jumping over them.
+- Fixed door collision shapes not changing based on block state. Doors now correctly compute their collision and selection shapes based on cardinal direction, open state, and hinge side.
+- Fixed shulker box losing its stored items when cleaned in a cauldron.
+- Fixed players without `COMMAND_VIEW_OTHER_OUTPUTS` permission being unable to view their own command output.
+- Fixed incorrect permissions used for gamemode and plugin commands.
+- Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
+- Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
+- Fixed a bug where boss bar is not shown.
+- Fixed snow layers incorrectly decaying in cold biomes.
+- Fixed default interface methods not being recognized as `@EventHandler` candidates during event handler scanning.
+- Fixed player spawn point not being reset when the bed or respawn anchor it was set by is destroyed. Players with a block-anchored spawn whose block is missing on death now receive the appropriate "not valid" message and respawn at the world spawn.
+- Fixed a typo in `StructureFile.fromNBT`.
+- Fixed cancelled `BlockBreakEvent` occasionally causing the block to disappear from the client's view. The server now correctly reverts the client's predicted block destroy by sending block updates for both layers, and also handles early-rejection cases (insufficient break progress).
+- Fixed missing NBT list entries in vector read methods (`AllayNBTUtils`), which could cause errors when reading incomplete vector data.
+- Fixed player location not being set correctly before spawn, which could cause initial position issues.
+- Fixed `Locale`-sensitive string case conversion in `AllayStringUtils` — now uses `Locale.ROOT` to avoid locale-dependent behavior.
+
+### Removed
+
+- (API) Removed deprecated `viewEntityLocation` overload from `WorldViewer`.
+- (API) Removed `PowerSound` record. Use `SimpleSound.POWER_ON` / `SimpleSound.POWER_OFF` instead.
+- (API) Removed `PlayerManager.getNetworkInterface()`. Use `PlayerManager.getNetworkManager().getDefaultInterface()` instead.
+
+# 0.11.0 (API 0.25.0) - 2026/2/12
+
+<small>[Compare with 0.10.7](https://github.com/AllayMC/Allay/compare/0.10.7...0.11.0)</small>
+
+### Added
+
+- (API) Added `EntitySleepableComponent` interface for entities that can sleep in beds (players, villagers, etc.).
+- (API) Added `EntitySleepEvent` (cancellable) and `EntityWakeEvent` for entity sleep lifecycle.
+- (API) Added `WAKE_UP` action to `SimpleEntityAction` for broadcasting wake-up animations.
+- (API) Added `World.setRequiredSleepTicks()` method for controlling sleep-to-day-advance countdown.
+- (API) Added `PLAYERS_SLEEPING_PERCENTAGE` game rule (default 100).
+- (API) Added new permission `Permissions.COMMAND_VIEW_OTHER_OUTPUTS`, player now must have that permission to be able to view other's command outputs.
+- (API) Added event `PlayerStartFishEvent` that will be called when a player tries to throw a fishing rod.
+- (API) Added method `WorldViewer.viewSleepingIndicator()`.
+- (API) Added method `WorldViewer.viewSignEditor()` for opening the sign editor interface.
+- (API) Added method `World.isVirtualTickingThread()`.
+- Implemented bed sleeping: time/weather validation, occupied state, sleeping indicator UI, day advancement after 5-second countdown, and wake-up animation.
+- Added `max-decompressed-bytes` network setting to `server-settings.yml` to control the maximum decompressed packet size (default 50 MB).
+- Added `NettyPipelineInitEvent` for packet level middleware support. The `AllayPlayer` instance is attached to the channel attribute.
+- Added pitch and yaw parameters to the teleport command.
+- Added support for loading and sending behavior packs (NetEase client requires sending behavior packs to the client).
+- Implemented tripwire hook and tripwire.
+- Implemented armor stand.
+- Implemented mangrove propagule growth mechanics (hanging/non-hanging states, bone meal interaction, tree growth).
+- Implemented stonecutter recipe crafting support.
+- Implemented nether vines including twisting vines and weeping vines.
+- Implemented copper bulb.
+- Added op/deop options to the Dashboard player list context menu.
+- Added per-dimension line charts to the Dashboard chunk and entity graphs, with a right-click context menu to select which world to view. Each dimension (Overworld, Nether, The End) is displayed as a separate colored line with a legend.
+- Improved entity tasks handling. Now the Entity Manager task queue uses the same handling strategy as the synced packets, and the entity will be spawned/removed as soon as possible, rather than waiting for the next game tick.
+- Added `use-virtual-thread` world setting to `server-settings.yml`, allowing worlds to use virtual threads instead of platform threads for world and the dimensions in the world.
+
+### Changed
+
+- Changed server module dependencies from `implementation` to `api` scope in `build.gradle.kts`, allowing plugins that depend on the server module to access its transitive dependencies.
+- Refactored `AllayLevelDBWorldStorage` by extracting serialization/deserialization logic into independent codec classes under `org.allaymc.server.world.storage.leveldb.codec` (`ChunkSectionCodec`, `HeightAndBiomeCodec`, `BlockEntityCodec`,
+  `ScheduledUpdateCodec`, `WorldDataCodec`, `LevelDBUtils`), and moved data enums (`LevelDBKey`, `ChunkVersion`, etc.) to the `data` subpackage.
+- (API) Refactored `WorldPool.loadWorld()` to accept `WorldSetting` and `DimensionSetting` records instead of individual parameters.
+- (API) Added `WorldPool.WorldSetting` record containing world name, storage, and virtual ticking thread option.
+- (API) Added `WorldPool.DimensionSetting` record containing world generator and light calculation toggle.
+- (API) `EntityPlayer` now extends `EntitySleepableComponent`.
+- (API) Removed parameter `locationLastSent` in method `WorldViewer.viewEntityLocation()` since the use of delta move packet have been removed.
+- (API) Moved `BlockEntitySignBaseComponent.openSignEditorFor()` to `WorldViewer.viewSignEditor()`.
+- (API) Renamed `EntityState.SPAWNED_NEXT_TICK` and `EntityState.DESPAWNED_NEXT_TICK` to `EntityState.SPAWNED_LATER` and `EntityState.DESPAWNED_LATER` to match the code behavior.
+
+### Fixed
+
+- Fixed a bug where doors, trapdoors and fence gates would close when placing or breaking normal blocks next to them. Now redstone power is only checked when a power source is placed or removed.
 - Fixed a bug where item is used twice when facing a villager.
+- Fixed a bug where stonecutter is unusable.
+- Fixed a bug where player pitch and yaw could not be specified during teleporting.
+- Fixed a bug where in some cases the client will stick at `Locating Server` stage when joining the server.
+- Fixed a bug where player collision box was not updated on the client side after stopping gliding (elytra).
+- Fixed a bug where sneaking players could interact with blocks (e.g. opening doors, sleeping in beds) while holding an item, instead of placing the block.
+- Fixed a bug where other players' skins would become Steve after the viewer respawns. The old chunk loader was not properly cleaned up during respawn, causing duplicate `AddPlayerPacket` to be sent without prior `RemoveEntityPacket`.
+- Event `EntityDieEvent` now will be called before the player's items being dropped.
+
+### Removed
+
+- Removed options `diff-position-threshold`, `diff-rotation-threshold` and `use-delta-move-packet` since we no longer use `MoveEntityDeltaPacket`.
 
 # 0.10.7 (API 0.24.0) - 2026/1/29
 

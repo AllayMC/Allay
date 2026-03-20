@@ -147,7 +147,7 @@ public final class AllayNBTUtils {
      */
     public static Vector3f readVector3f(NbtMap nbt, String rootName) {
         var pos = nbt.getList(rootName, NbtType.FLOAT);
-        if (pos == null) {
+        if (pos == null || pos.isEmpty()) {
             return new Vector3f(0, 0, 0);
         }
         return new Vector3f(pos.get(0), pos.get(1), pos.get(2));
@@ -186,7 +186,7 @@ public final class AllayNBTUtils {
      */
     public static Vector3i readVector3i(NbtMap nbt, String rootName) {
         var pos = nbt.getList(rootName, NbtType.INT);
-        if (pos == null) {
+        if (pos == null || pos.isEmpty()) {
             return new Vector3i(0, 0, 0);
         }
         return new Vector3i(pos.get(0), pos.get(1), pos.get(2));
@@ -212,7 +212,7 @@ public final class AllayNBTUtils {
      */
     public static Vector2f readVector2f(NbtMap nbt, String rootName) {
         var pos = nbt.getList(rootName, NbtType.FLOAT);
-        if (pos == null) {
+        if (pos == null || pos.isEmpty()) {
             return new Vector2f(0, 0);
         }
         return new Vector2f(pos.get(0), pos.get(1));

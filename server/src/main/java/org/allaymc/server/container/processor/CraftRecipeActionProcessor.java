@@ -1,14 +1,15 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.RecipeContainer;
+import org.allaymc.api.container.interfaces.StonecutterContainer;
 import org.allaymc.api.eventbus.event.player.PlayerCraftItemEvent;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.recipe.ShapedRecipe;
 import org.allaymc.api.item.recipe.ShapelessRecipe;
 import org.allaymc.api.item.recipe.SmithingRecipe;
@@ -28,7 +29,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 /**
  * @author daoge_cmd
@@ -55,9 +55,9 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         }
 
         // Check if the player opened a valid recipe container
-        var recipeContainer = findFirstRecipeContainer(player);
+        var recipeContainer = findRecipeContainer(player, recipe);
         if (recipeContainer == null) {
-            log.warn("Received a CraftRecipeAction without an opened recipe container!");
+            log.warn("Received a CraftRecipeAction without an opened recipe container for recipe {}!", recipe.getIdentifier());
             return error();
         }
 
@@ -71,7 +71,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
         ActionResponse error = null;
         if (isCraftingRecipe) {
-            error = handleCraftingTable(player, numberOfRequestedCrafts, currentActionIndex, actions);
+            error = handleCraftingContainer(recipeContainer, numberOfRequestedCrafts, currentActionIndex, actions);
         } else if (recipe instanceof SmithingTrimRecipe) {
             error = handleSmithingTableTrim(player);
         }
@@ -163,17 +163,17 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         return null;
     }
 
-    protected ActionResponse handleCraftingTable(Player player, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
-        RecipeContainer craftingContainer = player.getOpenedContainer(ContainerTypes.CRAFTING_TABLE);
+    protected ActionResponse handleCraftingContainer(RecipeContainer craftingContainer, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
         if (craftingContainer == null) {
-            // The player is not opening a crafting table, using the crafting grid instead
-            craftingContainer = player.getControlledEntity().getContainer(ContainerTypes.CRAFTING_GRID);
+            log.warn("Received a CraftRecipeAction without an opened crafting container!");
+            return error();
         }
 
+        var inputSlots = getCraftingInputSlots(craftingContainer);
+
         // Validate if the player has provided enough ingredients
-        var itemStackArray = craftingContainer.getItemStackArray();
-        for (int slot = 0; slot < itemStackArray.length; slot++) {
-            var ingredient = itemStackArray[slot];
+        for (int slot : inputSlots) {
+            var ingredient = craftingContainer.getItemStack(slot);
             // Skip the empty slot because we have checked the item type above
             if (ingredient == ItemAirStack.AIR_STACK) {
                 continue;
@@ -188,7 +188,12 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         // Validate the consume action count which the client sent
         // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
         var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
-        var consumeActionCountNeeded = calculateNonEmptySlotCount(craftingContainer);
+        int consumeActionCountNeeded = 0;
+        for (int slot : inputSlots) {
+            if (!craftingContainer.isEmpty(slot)) {
+                consumeActionCountNeeded++;
+            }
+        }
         if (consumeActions.size() != consumeActionCountNeeded) {
             log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
             return error();
@@ -197,8 +202,17 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         return null;
     }
 
-    protected int calculateNonEmptySlotCount(Container container) {
-        return (int) IntStream.range(0, container.getContainerType().getSize()).filter(i -> !container.isEmpty(i)).count();
+    protected int[] getCraftingInputSlots(RecipeContainer container) {
+        if (container.getContainerType() == ContainerTypes.STONECUTTER) {
+            return new int[]{StonecutterContainer.INPUT_SLOT};
+        }
+
+        int size = container.getContainerType().getSize();
+        int[] slots = new int[size];
+        for (int i = 0; i < size; i++) {
+            slots[i] = i;
+        }
+        return slots;
     }
 
     protected ActionResponse handleSmithingTableTrim(Player player) {
@@ -252,6 +266,36 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                 .filter(action -> action instanceof ConsumeAction)
                 .map(action -> (ConsumeAction) action)
                 .toList();
+    }
+
+    protected RecipeContainer findRecipeContainer(Player player, Recipe recipe) {
+        if (recipe instanceof ShapelessRecipe shapeless) {
+            return switch (shapeless.getType()) {
+                case STONECUTTER -> player.getOpenedContainer(ContainerTypes.STONECUTTER);
+                case CRAFTING -> getCraftingContainer(player);
+                case CARTOGRAPHY_TABLE -> null;
+            };
+        }
+
+        if (recipe instanceof ShapedRecipe || recipe instanceof ComplexRecipe) {
+            return getCraftingContainer(player);
+        }
+
+        if (recipe instanceof SmithingRecipe) {
+            return player.getOpenedContainer(ContainerTypes.SMITHING_TABLE);
+        }
+
+        return findFirstRecipeContainer(player);
+    }
+
+    protected RecipeContainer getCraftingContainer(Player player) {
+        RecipeContainer craftingContainer = player.getOpenedContainer(ContainerTypes.CRAFTING_TABLE);
+        if (craftingContainer != null) {
+            return craftingContainer;
+        }
+
+        // The player is not opening a crafting table, using the crafting grid instead
+        return player.getControlledEntity().getContainer(ContainerTypes.CRAFTING_GRID);
     }
 
     protected RecipeContainer findFirstRecipeContainer(Player player) {

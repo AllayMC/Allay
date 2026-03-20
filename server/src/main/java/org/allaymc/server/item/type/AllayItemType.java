@@ -44,20 +44,17 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final ItemData itemData;
 
     private final Supplier<BlockType<?>> blockType;
-    @Getter
-    private final ItemDefinition itemDefinition;
 
-    private AllayItemType(
-            Function<ItemStackInitInfo, T> instanceCreator, Identifier identifier, int runtimeId,
-            Set<ItemTag> itemTags, ItemData itemData, ItemDefinitionGenerator itemDefinitionGenerator
-    ) {
+    @Getter
+    private ItemDefinition itemDefinition;
+
+    private AllayItemType(Function<ItemStackInitInfo, T> instanceCreator, Identifier identifier, int runtimeId, Set<ItemTag> itemTags, ItemData itemData) {
         this.instanceCreator = instanceCreator;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
         this.itemTags = itemTags;
         this.itemData = itemData;
         this.blockType = Suppliers.memoize(() -> Registries.BLOCKS.get(BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier)));
-        this.itemDefinition = itemDefinitionGenerator.generate(this);
     }
 
     public static <T extends ItemStack> Builder builder(Class<T> clazz) {
@@ -86,6 +83,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected Class<?> clazz;
         protected Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
+        protected boolean isCustomItem = true;
         protected int runtimeId = Integer.MAX_VALUE;
         protected Set<ItemTag> itemTags = Set.of();
         protected ItemData itemData = ItemData.DEFAULT;
@@ -98,7 +96,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
          */
         public Builder(Class<?> clazz) {
             this.clazz = clazz;
-            this.itemDefinitionGenerator = $ -> ItemDefinition.DEFAULT;
         }
 
         /**
@@ -133,6 +130,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
          * @throws ItemTypeBuildException if item data is not found for the vanilla item
          */
         public Builder vanillaItem(ItemId itemId) {
+            this.isCustomItem = false;
             this.identifier = itemId.getIdentifier();
             this.runtimeId = itemId.getRuntimeId();
 
@@ -334,7 +332,16 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("Failed to create item type!", e);
             }
 
-            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags, itemData, itemDefinitionGenerator);
+            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags, itemData);
+
+            // Generate item definition
+            if (itemDefinitionGenerator != null) {
+                type.itemDefinition = itemDefinitionGenerator.generate(type);
+            } else {
+                // If not specified, the default item definition is also used for custom block item
+                type.itemDefinition = ItemDefinition.DEFAULT;
+            }
+
             Registries.ITEMS.register(identifier, type);
             return type;
         }

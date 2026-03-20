@@ -4,13 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
 import org.allaymc.protocol.extension.NetEaseCompression;
-import org.allaymc.protocol.extension.v766.Bedrock_v766_NetEase;
+import org.allaymc.protocol.extension.codec.v766.Bedrock_v766_NetEase;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.SimpleCompressionStrategy;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -24,11 +25,6 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestNetworkSettingsPacket;
 @Slf4j
 public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor<RequestNetworkSettingsPacket> {
 
-    /**
-     * NetEase clients use RakNet protocol version 8, while international clients use version 11.
-     */
-    private static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
-
     @Override
     @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients are detected via RakNet protocol version 8 and use raw deflate compression")
     @MultiVersion(version = "1.21.50-NetEase", details = "Packet codec is replaced for NetEase clients")
@@ -37,8 +33,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         var protocolVersion = packet.getProtocolVersion();
         var settings = AllayServer.getSettings().networkSettings();
 
-        // Detect if this is a NetEase client based on RakNet protocol version
-        boolean netEasePlayer = allayPlayer.getSession().getPeer().getRakVersion() == NETEASE_RAKNET_PROTOCOL_VERSION;
+        boolean netEasePlayer = isNetEaseClient(allayPlayer);
         allayPlayer.setNetEasePlayer(netEasePlayer);
 
         // Check NetEase client support configuration
@@ -88,6 +83,9 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
 
         var session = allayPlayer.getSession();
         session.setCodec(codec);
+        if (!AllayServer.getSettings().networkSettings().enableEncodingProtection()) {
+            session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
+        }
 
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(settings.compressionAlgorithm().name()));
@@ -106,6 +104,10 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.REQUEST_NETWORK_SETTINGS;
+    }
+
+    boolean isNetEaseClient(AllayPlayer allayPlayer) {
+        return allayPlayer.getSourceInterface().isNetEaseClient(allayPlayer.getSession());
     }
 
     /**

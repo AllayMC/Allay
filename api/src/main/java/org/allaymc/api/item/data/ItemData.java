@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.allaymc.api.message.MayContainTrKey;
 
 
 /**
@@ -104,6 +105,12 @@ public class ItemData {
      */
     @Builder.Default
     protected float furnaceXPMultiplier = 0;
+    /**
+     * The translation key of the item.
+     */
+    @MayContainTrKey
+    @Builder.Default
+    protected String translationKey = "";
 
     /**
      * Converts a JSON string into an ItemData object.

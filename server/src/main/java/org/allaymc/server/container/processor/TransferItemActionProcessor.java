@@ -61,6 +61,11 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return error();
         }
 
+        if (!ContainerActionProcessor.canPlaceItemToSlot(destinationContainer, destinationSlot, sourItem)) {
+            log.warn("cannot place item {} into restricted slot {}", sourItem.getItemType().getIdentifier(), destinationSlot);
+            return error();
+        }
+
         if (failToValidateStackUniqueId(destItem.getUniqueId(), destinationStackNetworkId)) {
             log.warn("mismatch destination stack unique id!");
             return error();

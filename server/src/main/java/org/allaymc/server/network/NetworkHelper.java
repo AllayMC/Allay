@@ -5,6 +5,8 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.debugshape.*;
 import org.allaymc.api.dialog.Button;
 import org.allaymc.api.dialog.ModelSettings;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.property.type.*;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -16,14 +18,19 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.HudElement;
 import org.allaymc.api.utils.tuple.Pair;
+import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityProperties;
+import org.cloudburstmc.protocol.bedrock.data.entity.FloatEntityProperty;
+import org.cloudburstmc.protocol.bedrock.data.entity.IntEntityProperty;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -48,6 +55,36 @@ public final class NetworkHelper {
                 .collect(Collectors.toList());
     }
 
+    public static EntityProperties toNetworkProperties(Entity entity) {
+        var result = new EntityProperties();
+        var propertyValues = entity.getPropertyValues();
+
+        int intIndex = 0;
+        int floatIndex = 0;
+        for (var propType : entity.getEntityType().getProperties().values()) {
+            switch (propType) {
+                case EnumPropertyType<?> enumProp -> {
+                    var value = (Enum<?>) propertyValues.getOrDefault(enumProp, enumProp.getDefaultValue());
+                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value.ordinal()));
+                }
+                case IntPropertyType intProp -> {
+                    var value = (int) propertyValues.getOrDefault(intProp, intProp.getDefaultValue());
+                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value));
+                }
+                case BooleanPropertyType boolProp -> {
+                    var value = (boolean) propertyValues.getOrDefault(boolProp, boolProp.getDefaultValue());
+                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value ? 1 : 0));
+                }
+                case FloatPropertyType floatProp -> {
+                    var value = (float) propertyValues.getOrDefault(floatProp, floatProp.getDefaultValue());
+                    result.getFloatProperties().add(new FloatEntityProperty(floatIndex++, value));
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(ItemDescriptor descriptor) {
         return switch (descriptor) {
             case ItemTypeDescriptor type -> new DefaultDescriptor(toNetwork(type.getItemType()), type.getMeta());
@@ -62,13 +99,23 @@ public final class NetworkHelper {
 
     public static BiomeDefinitionData toNetwork(BiomeType biome) {
         var data = biome.getBiomeData();
-        // NOTICE: `id` is not the same as the biome's identifier, left it null here
-        // otherwise the client will be unable to join the server
-        return new BiomeDefinitionData(
-                null, data.temperature(), data.downfall(), data.redSporeDensity(),
-                data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
-                data.depth(), data.scale(), data.mapWaterColor(), data.rain(), data.tags(), null
-        );
+        var tags = data.tags().stream().map(BiomeTag::name).toList();
+        if (biome.getId() < CustomBiomeIdAllocator.CUSTOM_BIOME_ID_START) {
+            // Vanilla biome
+            // NOTICE: is field is only set for custom biome
+            return new BiomeDefinitionData(
+                    null, data.temperature(), data.downfall(), data.redSporeDensity(),
+                    data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
+                    data.depth(), data.scale(), data.mapWaterColor(), data.rain(), tags, null
+            );
+        } else {
+            // Custom biome
+            return new BiomeDefinitionData(
+                    biome.getId(), data.temperature(), data.downfall(), data.redSporeDensity(),
+                    data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
+                    data.depth(), data.scale(), data.mapWaterColor(), data.rain(), tags, null
+            );
+        }
     }
 
     public static EnchantData toNetwork(EnchantmentInstance instance) {

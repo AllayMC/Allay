@@ -45,10 +45,6 @@ public class BlockDecoratedPotBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) {
-            return false;
-        }
-
         if (itemStack.isEmptyOrAir()) {
             return false;
         }

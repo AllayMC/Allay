@@ -17,21 +17,21 @@ public enum EntityState {
      */
     DESPAWNED(false),
     /**
-     * The entity will be spawn in the next tick.
+     * The entity will be spawned later.
      */
-    SPAWNED_NEXT_TICK(false, DESPAWNED),
+    SPAWNED_LATER(false, DESPAWNED),
     /**
      * The entity is alive.
      */
-    ALIVE(true, SPAWNED_NEXT_TICK),
+    ALIVE(true, SPAWNED_LATER),
     /**
      * The entity is dead.
      */
     DEAD(true, ALIVE),
     /**
-     * The entity will be despawned in the next tick.
+     * The entity will be despawned later.
      */
-    DESPAWNED_NEXT_TICK(false, DEAD, ALIVE);
+    DESPAWNED_LATER(false, DEAD, ALIVE);
 
     /**
      * Whether the entity is spawned.

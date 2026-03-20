@@ -24,9 +24,13 @@ public class TeleportCommand extends Command {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .pos("pos")
+                .doubleNum("pitch").optional()
+                .doubleNum("yaw").optional()
                 .exec((context, sender) -> {
                     Vector3d pos = context.getResult(0);
-                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCommandExecuteLocation().dimension());
+                    double pitch = context.getResult(1);
+                    double yaw = context.getResult(2);
+                    var loc = new Location3d(pos.x, pos.y, pos.z, pitch, yaw, context.getSender().getCommandExecuteLocation().dimension());
 
                     sender.teleport(loc);
                     context.addOutput(TrKeys.MC_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
@@ -57,10 +61,14 @@ public class TeleportCommand extends Command {
                 .root()
                 .target("victims")
                 .pos("pos")
+                .doubleNum("pitch").optional()
+                .doubleNum("yaw").optional()
                 .exec(context -> {
                     List<Entity> victims = context.getResult(0);
                     Vector3d pos = context.getResult(1);
-                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCommandExecuteLocation().dimension());
+                    double pitch = context.getResult(2);
+                    double yaw = context.getResult(3);
+                    var loc = new Location3d(pos.x, pos.y, pos.z, pitch, yaw, context.getSender().getCommandExecuteLocation().dimension());
                     for (Entity victim : victims) {
                         victim.teleport(loc);
                         context.addOutput(TrKeys.MC_COMMANDS_TP_SUCCESS_COORDINATES, victim.getDisplayName(), pos.x, pos.y, pos.z);
@@ -68,7 +76,7 @@ public class TeleportCommand extends Command {
 
                     return context.success();
                 })
-                .up()
+                .up(3)
                 .target("destination")
                 .exec(context -> {
                     List<Entity> victims = context.getResult(0);

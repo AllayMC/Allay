@@ -6,6 +6,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -44,6 +45,7 @@ import org.allaymc.api.eventbus.event.server.PlayerSpawnEvent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.ItemHelper;
+import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
@@ -57,7 +59,11 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.*;
+import org.allaymc.api.player.CameraShakeType;
+import org.allaymc.api.player.ClientPlayMode;
 import org.allaymc.api.player.HudElement;
+import org.allaymc.api.player.InputInteractionModel;
+import org.allaymc.api.player.InputMode;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
@@ -74,11 +80,13 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
+import org.allaymc.protocol.extension.packet.ConfirmSkinPacket;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
@@ -92,6 +100,7 @@ import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
+import org.allaymc.server.network.AllayNetworkInterface;
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.multiversion.MultiVersion;
@@ -108,8 +117,6 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
-import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
@@ -133,6 +140,7 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.*;
 import java.util.List;
@@ -140,11 +148,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
-import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.*;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
 import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
  * @author daoge_cmd
@@ -181,6 +187,8 @@ public class AllayPlayer implements Player {
     protected final AtomicInteger fullyJoinChunkThreshold;
     @Getter
     protected final BedrockServerSession session;
+    @Getter
+    protected final AllayNetworkInterface sourceInterface;
 
     @Getter
     protected EntityPlayer controlledEntity;
@@ -199,6 +207,18 @@ public class AllayPlayer implements Player {
     protected boolean containerClosedByClient;
     @Getter
     protected Speed speed, flySpeed, verticalFlySpeed;
+    @Getter
+    @Setter
+    protected InputMode inputMode;
+    @Getter
+    @Setter
+    protected ClientPlayMode playMode;
+    @Getter
+    @Setter
+    protected InputInteractionModel inputInteractionModel;
+
+    @Getter
+    protected volatile boolean changingDimension;
 
     // Container
     protected byte containerIdCounter;
@@ -219,13 +239,17 @@ public class AllayPlayer implements Player {
     protected Set<HudElement> hiddenHudElements;
     protected boolean shouldSendHudElements;
 
+    // Fog
+    protected final List<String> fogStack = new ArrayList<>();
+
     // NetEase
     @Getter
     @Setter
     protected boolean netEasePlayer;
 
-    public AllayPlayer(BedrockServerSession session) {
+    public AllayPlayer(BedrockServerSession session, AllayNetworkInterface sourceInterface) {
         this.session = session;
+        this.sourceInterface = sourceInterface;
         this.session.setPacketHandler(new AllayPacketHandler());
         this.packetProcessorHolder = new PacketProcessorHolder();
         this.packetProcessorHolder.setClientState(ClientState.CONNECTED);
@@ -253,16 +277,32 @@ public class AllayPlayer implements Player {
         this.hiddenHudElements = EnumSet.noneOf(HudElement.class);
     }
 
-    public static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk) {
+    protected static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk, ChunkCache cache, UUID playerId, int cacheGen) {
         var dimensionInfo = chunk.getDimensionInfo();
         var packet = new LevelChunkPacket();
         packet.setDimension(dimensionInfo.dimensionId());
         packet.setChunkX(chunk.getX());
         packet.setChunkZ(chunk.getZ());
-        packet.setCachingEnabled(false);
         packet.setRequestSubChunks(true);
         // NOTICE: Sub chunk limit is bigger than zero
         packet.setSubChunkLimit(findHighestNonAirSectionY(chunk) - dimensionInfo.minSectionY());
+
+        if (cache != null) {
+            // Encode biomes blob
+            byte[] biomesBlob = ChunkEncoder.encodeBiomesBlob(chunk);
+            long[] hashes = cache.tryStoreBlobsAndOpenTransaction(playerId, cacheGen, biomesBlob);
+
+            if (hashes != null) {
+                // Cached path
+                packet.setCachingEnabled(true);
+                packet.getBlobIds().add(hashes[0]);
+                packet.setData(Unpooled.wrappedBuffer(new byte[]{0}));
+                return packet;
+            }
+        }
+
+        // Non-cached path
+        packet.setCachingEnabled(false);
         packet.setData(ChunkEncoder.writeToNetworkBiomeOnly(chunk));
         return packet;
     }
@@ -278,15 +318,39 @@ public class AllayPlayer implements Player {
         return dimensionInfo.minSectionY();
     }
 
-    public static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk) {
+    protected static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk, ChunkCache cache, UUID playerId, int cacheGen) {
         var dimensionInfo = chunk.getDimensionInfo();
         var packet = new LevelChunkPacket();
         packet.setDimension(dimensionInfo.dimensionId());
         packet.setChunkX(chunk.getX());
         packet.setChunkZ(chunk.getZ());
-        packet.setCachingEnabled(false);
         packet.setRequestSubChunks(false);
         packet.setSubChunksLength(dimensionInfo.chunkSectionCount());
+
+        if (cache != null) {
+            // Encode all section blobs + biomes blob
+            int sectionCount = dimensionInfo.chunkSectionCount();
+            byte[][] allBlobs = new byte[sectionCount + 1][];
+            for (int i = 0; i < sectionCount; i++) {
+                allBlobs[i] = ChunkEncoder.encodeSectionBlob(chunk.getSection(dimensionInfo.minSectionY() + i));
+            }
+            allBlobs[sectionCount] = ChunkEncoder.encodeBiomesBlob(chunk);
+
+            long[] hashes = cache.tryStoreBlobsAndOpenTransaction(playerId, cacheGen, allBlobs);
+
+            if (hashes != null) {
+                // Cached path
+                packet.setCachingEnabled(true);
+                for (long hash : hashes) {
+                    packet.getBlobIds().add(hash);
+                }
+                packet.setData(ChunkEncoder.writeCachedChunkData(chunk));
+                return packet;
+            }
+        }
+
+        // Non-cached path
+        packet.setCachingEnabled(false);
         packet.setData(ChunkEncoder.writeToNetwork(chunk));
         return packet;
     }
@@ -383,10 +447,13 @@ public class AllayPlayer implements Player {
                 // NOTICE: Player network offset is not used in AddPlayerPacket
                 p.setPosition(Vector3f.from(l.x(), l.y(), l.z()));
                 p.setMotion(motion);
-                p.setRotation(Vector3f.from(l.pitch(), l.yaw(), l.yaw()));
+                p.setRotation(Vector3f.from(l.pitch(), l.yaw(), getHeadYaw(entity, l.yaw())));
                 p.setGameType(toNetwork(player.getGameMode()));
                 p.getMetadata().putAll(parseMetadata(entity));
                 p.setHand(toNetwork(player.getContainer(ContainerTypes.INVENTORY).getItemInHand()));
+                var properties = NetworkHelper.toNetworkProperties(entity);
+                p.getProperties().getIntProperties().addAll(properties.getIntProperties());
+                p.getProperties().getFloatProperties().addAll(properties.getFloatProperties());
                 yield p;
             }
             case EntityItem item -> {
@@ -423,9 +490,12 @@ public class AllayPlayer implements Player {
                 p.setPosition(position);
                 p.setMotion(motion);
                 p.setRotation(Vector2f.from(l.pitch(), l.yaw()));
-                p.setHeadRotation((float) l.yaw());
+                p.setHeadRotation((float) getHeadYaw(entity, l.yaw()));
                 p.setBodyRotation((float) l.yaw());
                 p.getMetadata().putAll(parseMetadata(entity));
+                var properties = NetworkHelper.toNetworkProperties(entity);
+                p.getProperties().getIntProperties().addAll(properties.getIntProperties());
+                p.getProperties().getFloatProperties().addAll(properties.getFloatProperties());
                 yield p;
             }
         };
@@ -463,79 +533,49 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewEntityLocation(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
+    public void viewEntityLocation(Entity entity, Location3dc newLocation, boolean teleporting) {
         BedrockPacket packet;
-        if (AllayServer.getSettings().entitySettings().physicsEngineSettings().useDeltaMovePacket()) {
-            packet = createDeltaMovePacket(entity, locationLastSent, newLocation, teleporting);
+        if (this.controlledEntity == entity) {
+            // If the entity is actually the player himself, use MovePlayerPacket instead since
+            // the client has some bugs in handling MoveEntityAbsolutePacket in that case
+            packet = createMovePlayerPacket(entity, newLocation, teleporting);
         } else {
-            packet = createAbsoluteMovePacket(entity, locationLastSent, newLocation, teleporting);
+            packet = createAbsoluteMovePacket(entity, newLocation, teleporting);
         }
         sendPacket(packet);
     }
 
-    protected BedrockPacket createDeltaMovePacket(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
-        var packet = new MoveEntityDeltaPacket();
+    protected BedrockPacket createMovePlayerPacket(Entity entity, Location3dc newLocation, boolean teleporting) {
+        var packet = new MovePlayerPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        var moveFlags = computeMoveFlags(entity, locationLastSent, newLocation);
-        packet.getFlags().addAll(moveFlags);
-        if (moveFlags.contains(HAS_X)) {
-            packet.setX((float) newLocation.x());
-            locationLastSent.x = newLocation.x();
-        }
-        if (moveFlags.contains(HAS_Y)) {
-            packet.setY((float) newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f));
-            locationLastSent.y = newLocation.y();
-        }
-        if (moveFlags.contains(HAS_Z)) {
-            packet.setZ((float) newLocation.z());
-            locationLastSent.z = newLocation.z();
-        }
-        if (moveFlags.contains(HAS_PITCH)) {
-            packet.setPitch((float) newLocation.pitch());
-            locationLastSent.pitch = newLocation.pitch();
-        }
-        if (moveFlags.contains(HAS_YAW)) {
-            packet.setYaw((float) newLocation.yaw());
-            packet.setHeadYaw((float) newLocation.yaw());
-            locationLastSent.yaw = newLocation.yaw();
-        }
+        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
+        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
+        packet.setTeleportationCause(MovePlayerPacket.TeleportationCause.UNKNOWN);
         if (teleporting) {
-            packet.getFlags().add(TELEPORTING);
-        }
-        if (entity instanceof EntityPhysicsComponent physicsComponent && physicsComponent.isOnGround()) {
-            packet.getFlags().add(ON_GROUND);
+            packet.setMode(MovePlayerPacket.Mode.TELEPORT);
         }
         return packet;
     }
 
-    protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Entity entity, Location3d locationLastSent, Location3dc newLocation) {
-        var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
-        var settings = AllayServer.getSettings().entitySettings().physicsEngineSettings();
-        var diffPositionThreshold = settings.diffPositionThreshold();
-        var diffRotationThreshold = settings.diffRotationThreshold();
-        if (Math.abs(locationLastSent.x() - newLocation.x()) > diffPositionThreshold) flags.add(HAS_X);
-        if (Math.abs(locationLastSent.y() - newLocation.y()) > diffPositionThreshold) flags.add(HAS_Y);
-        if (Math.abs(locationLastSent.z() - newLocation.z()) > diffPositionThreshold) flags.add(HAS_Z);
-        if (Math.abs(locationLastSent.yaw() - newLocation.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
-        if (Math.abs(locationLastSent.pitch() - newLocation.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
-        return flags;
-    }
-
-    protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
-        locationLastSent.set(newLocation);
-        locationLastSent.setPitch(newLocation.pitch());
-        locationLastSent.setYaw(newLocation.yaw());
-
+    protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3dc newLocation, boolean teleporting) {
         var packet = new MoveEntityAbsolutePacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
-        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), newLocation.yaw()));
+        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
         packet.setTeleported(teleporting);
         if (entity instanceof EntityPhysicsComponent physicsComponent) {
             packet.setOnGround(physicsComponent.isOnGround());
         }
 
         return packet;
+    }
+
+    /**
+     * Returns the entity's head yaw if it has the {@link EntityHeadYawComponent},
+     * otherwise falls back to the body yaw from the location.
+     */
+    protected static double getHeadYaw(Entity entity, double yaw) {
+        return entity instanceof EntityHeadYawComponent headYawComponent ? headYawComponent.getHeadYaw() : yaw;
     }
 
     @Override
@@ -551,6 +591,7 @@ public class AllayPlayer implements Player {
         var packet = new SetEntityDataPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setMetadata(parseMetadata(entity));
+        packet.setProperties(NetworkHelper.toNetworkProperties(entity));
         sendPacket(packet);
     }
 
@@ -589,6 +630,10 @@ public class AllayPlayer implements Player {
                 (float) (aabb.maxY() - aabb.minY()),
                 (float) (aabb.maxZ() - aabb.minZ())
         ));
+        // WIDTH and HEIGHT are required for the client to update the collision box correctly
+        // COLLISION_BOX alone does not affect actual collisions according to protocol documentation
+        map.put(EntityDataTypes.WIDTH, (float) (aabb.maxX() - aabb.minX()));
+        map.put(EntityDataTypes.HEIGHT, (float) (aabb.maxY() - aabb.minY()));
         map.put(EntityDataTypes.SCALE, (float) entity.getScale());
         // Minecraft 1.21.101 client crashes if HAS_NPC is set to true for EntityItem.
         // Other entity types are not affected. The issue is fixed in newer client versions.
@@ -617,6 +662,7 @@ public class AllayPlayer implements Player {
             map.put(EntityDataTypes.AIR_SUPPLY, (short) livingComponent.getAirSupplyTicks());
             map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) livingComponent.getAirSupplyMaxTicks());
             map.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
+            map.put(EntityDataTypes.FREEZING_EFFECT_STRENGTH, livingComponent.getFreezeTicks() / (float) EntityLivingComponent.MAX_FREEZE_TICKS);
         }
         if (entity instanceof EntityPotionComponent potionComponent) {
             var potionType = potionComponent.getPotionType();
@@ -627,6 +673,21 @@ public class AllayPlayer implements Player {
                     map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) (data + 1));
                 }
             }
+        }
+        if (entity instanceof EntitySleepableComponent sleepableComponent && sleepableComponent.isSleeping()) {
+            var bedPos = sleepableComponent.getSleepingPos();
+            map.setFlag(EntityFlag.SLEEPING, true);
+            map.put(EntityDataTypes.BED_POSITION, Vector3i.from(bedPos.x(), bedPos.y(), bedPos.z()));
+            map.put(EntityDataTypes.PLAYER_FLAGS, (byte) 2);
+        }
+        if (entity instanceof EntityBabyComponent babyComponent) {
+            map.setFlag(EntityFlag.BABY, babyComponent.isBaby());
+            if (babyComponent.isBaby()) {
+                map.put(EntityDataTypes.SCALE, 0.5f);
+            }
+        }
+        if (entity instanceof EntityDyeableComponent dyeableComponent) {
+            map.put(EntityDataTypes.COLOR, (byte) dyeableComponent.getColor().ordinal());
         }
     }
 
@@ -650,9 +711,6 @@ public class AllayPlayer implements Player {
                 map.setFlag(EntityFlag.CRAWLING, player.isCrawling());
                 map.setFlag(EntityFlag.DAMAGE_NEARBY_MOBS, player.isSpinAttacking());
                 map.setFlag(EntityFlag.USING_ITEM, player.isUsingItemInAir());
-                map.setFlag(EntityFlag.BREATHING, player.canBreathe());
-                map.put(EntityDataTypes.AIR_SUPPLY, (short) player.getAirSupplyTicks());
-                map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) player.getAirSupplyMaxTicks());
                 if (player.hasScoreTag()) {
                     map.put(EntityDataTypes.SCORE, player.getScoreTag());
                 }
@@ -669,7 +727,6 @@ public class AllayPlayer implements Player {
             }
             case EntityThrownTrident trident -> {
                 map.setFlag(EntityFlag.RETURN_TRIDENT, trident.isReturning());
-                // TODO: find out why the rope is not shown although we have set OWNER_EID and RETURN_TRIDENT to true
                 if (trident.isReturning()) {
                     var shooter = trident.getShooter();
                     map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getUniqueId().getLeastSignificantBits() : -1L);
@@ -714,6 +771,18 @@ public class AllayPlayer implements Player {
                 var hookedEntity = fishingHook.getHookedEntity();
                 map.put(EntityDataTypes.TARGET_EID, hookedEntity != null ? hookedEntity.getUniqueId().getLeastSignificantBits() : -1L);
             }
+            case EntityArmorStand armorStand -> {
+                map.put(EntityDataTypes.ARMOR_STAND_POSE_INDEX, armorStand.getPoseIndex());
+                if (armorStand.getLastDamage() != null) {
+                    var interval = armorStand.getTick() - armorStand.getLastDamageTime();
+                    if (interval <= 5) {
+                        map.put(EntityDataTypes.HURT_TICKS, (int) interval);
+                    }
+                }
+            }
+            case EntitySheep sheep -> {
+                map.setFlag(EntityFlag.SHEARED, sheep.isSheared());
+            }
             default -> {
             }
         }
@@ -733,14 +802,23 @@ public class AllayPlayer implements Player {
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityHand(T entity) {
-        var container = entity.getContainer(ContainerTypes.INVENTORY);
-        var handSlot = container.getHandSlot();
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
-        packet.setItem(toNetwork(container.getItemInHand()));
-        packet.setInventorySlot(handSlot);
-        packet.setHotbarSlot(handSlot);
+
+        var handContainer = entity.getContainer(ContainerTypes.ARMOR_STAND_HAND);
+        if (handContainer != null) {
+            packet.setItem(toNetwork(handContainer.getItemInHand()));
+            packet.setInventorySlot(0);
+            packet.setHotbarSlot(0);
+        } else {
+            var container = entity.getContainer(ContainerTypes.INVENTORY);
+            var handSlot = container.getHandSlot();
+            packet.setItem(toNetwork(container.getItemInHand()));
+            packet.setInventorySlot(handSlot);
+            packet.setHotbarSlot(handSlot);
+        }
+
         sendPacket(packet);
     }
 
@@ -750,8 +828,8 @@ public class AllayPlayer implements Player {
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.OFFHAND);
-        // Network slot index for offhand is 1, see FullContainerType.OFFHAND. Field `hotbarSlot` is unused
         packet.setInventorySlot(1);
+        packet.setHotbarSlot(1);
         packet.setItem(toNetwork(container.getOffhand()));
         sendPacket(packet);
     }
@@ -781,8 +859,40 @@ public class AllayPlayer implements Player {
     }
 
     @Override
+    public void viewSleepingIndicator(int sleepingCount, int totalCount) {
+        var nbt = NbtMap.builder()
+                .putInt("ableToSleep", totalCount)
+                .putInt("overworldPlayerCount", totalCount)
+                .putInt("sleepingPlayerCount", sleepingCount)
+                .build();
+        var packet = new LevelEventGenericPacket();
+        packet.setType(LevelEvent.SLEEPING_PLAYERS);
+        packet.setTag(nbt);
+        sendPacket(packet);
+    }
+
+    @Override
+    public void viewCommandBlockEditor(Vector3ic pos) {
+        var packet = new ContainerOpenPacket();
+        packet.setId((byte) -1);
+        packet.setType(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.COMMAND_BLOCK);
+        packet.setBlockPosition(toNetwork(pos));
+        sendPacket(packet);
+    }
+
+    @Override
+    public void viewEnchantOptions(List<Pair<Integer, EnchantOption>> enchantOptions) {
+        var packet = new PlayerEnchantOptionsPacket();
+        for (var option : enchantOptions) {
+            packet.getOptions().add(NetworkHelper.toNetwork(option));
+        }
+        sendPacket(packet);
+    }
+
+    @Override
     public void viewPlayerSkin(EntityPlayer player) {
-        if (player.getSkin() == null) {
+        var skin = player.getSkin();
+        if (skin == null) {
             return;
         }
 
@@ -790,6 +900,37 @@ public class AllayPlayer implements Player {
             viewActualPlayerSkin(player);
         } else {
             viewFakePlayerSkin(player);
+        }
+
+        // For NetEase player, we should send an extra ConfirmSkinPacket; otherwise the skin won't be displayed
+        if (this.netEasePlayer) {
+            var entry = new ConfirmSkinPacket.SkinEntry();
+            entry.setValid(true);
+            entry.setUuid(player.getUniqueId());
+            entry.setGeoStr(skin.skinGeometry());
+            entry.setSkinBytes(skin.skinData().data());
+            entry.setUidStr(String.valueOf(getNetEaseUid(player)));
+
+            var packet = new ConfirmSkinPacket();
+            packet.setEntries(List.of(entry));
+            sendPacket(packet);
+        }
+    }
+
+    // Return the player's NetEase uid if it is an actual NetEase player, or generate an uid from the player entity's
+    // unique id if the player is a fake player or a normal bedrock player
+    protected long getNetEaseUid(EntityPlayer player) {
+        if (player.isActualPlayer() && player.getController().isNetEasePlayer()) {
+            return player.getController().getLoginData().getNetEaseData().uid();
+        } else {
+            // For fake or normal bedrock player, let's generate the NetEase uid from the uuid
+            var uid = player.getUniqueId().toString().replace("-", "").hashCode();
+            if (uid < 0) {
+                // The NetEase uid should always be positive, and if the hash code is negative, let's simply invert it
+                uid = -uid;
+            }
+
+            return uid;
         }
     }
 
@@ -819,7 +960,7 @@ public class AllayPlayer implements Player {
         var skin = SkinConvertor.toSerializedSkin(player.getSkin());
 
         var entry = new PlayerListPacket.Entry(player.getUniqueId());
-        entry.setEntityId(player.getRuntimeId());
+        entry.setEntityId(player.getUniqueId().getLeastSignificantBits());
         entry.setName(player.getUniqueId().toString());
         entry.setXuid("");
         entry.setPlatformChatId("");
@@ -948,6 +1089,24 @@ public class AllayPlayer implements Player {
                 teasePacket.setRuntimeEntityId(entity.getRuntimeId());
                 sendPacket(teasePacket);
             }
+            case SimpleEntityAction.WAKE_UP -> {
+                var packet = new AnimatePacket();
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                packet.setAction(AnimatePacket.Action.WAKE_UP);
+                sendPacket(packet);
+            }
+            case SimpleEntityAction.IN_LOVE -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.LOVE_PARTICLES);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                sendPacket(packet);
+            }
+            case SimpleEntityAction.EAT_GRASS -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.EAT_GRASS);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                sendPacket(packet);
+            }
             default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
         }
     }
@@ -1007,15 +1166,33 @@ public class AllayPlayer implements Player {
     }
 
     protected LevelChunkPacket createLevelChunkPacket(Chunk chunk) {
+        ChunkCache cache = null;
+        UUID playerId = null;
+        int cacheGen = 0;
+
+        if (isCacheEffectivelyEnabled()) {
+            cache = ChunkCache.getInstance();
+            playerId = this.loginData.getUuid();
+            cacheGen = cache.getGeneration(playerId);
+        }
+
+        var finalCache = cache;
+        var finalPlayerId = playerId;
+        var finalCacheGen = cacheGen;
+
         var lcp = new LevelChunkPacket[1];
         chunk.applyOperation(unsafeChunk -> {
             if (AllayServer.getSettings().worldSettings().useSubChunkSendingSystem()) {
-                lcp[0] = createSubChunkLevelChunkPacket((AllayUnsafeChunk) unsafeChunk);
+                lcp[0] = createSubChunkLevelChunkPacket((AllayUnsafeChunk) unsafeChunk, finalCache, finalPlayerId, finalCacheGen);
             } else {
-                lcp[0] = createFullLevelChunkPacketChunk((AllayUnsafeChunk) unsafeChunk);
+                lcp[0] = createFullLevelChunkPacketChunk((AllayUnsafeChunk) unsafeChunk, finalCache, finalPlayerId, finalCacheGen);
             }
         }, OperationType.READ, OperationType.READ);
         return lcp[0];
+    }
+
+    public boolean isCacheEffectivelyEnabled() {
+        return this.clientCacheEnabled && AllayServer.getSettings().networkSettings().enableClientChunkCache();
     }
 
     @Override
@@ -1211,15 +1388,26 @@ public class AllayPlayer implements Player {
             case SimpleSound.TRIDENT_HIT_GROUND -> packet.setSound(SoundEvent.ITEM_TRIDENT_HIT_GROUND);
             case SimpleSound.TRIDENT_RETURN -> packet.setSound(SoundEvent.ITEM_TRIDENT_RETURN);
             case SimpleSound.TRIDENT_THUNDER -> packet.setSound(SoundEvent.ITEM_TRIDENT_THUNDER);
+            case SimpleSound.BIG_DRIPLEAF_TILT_DOWN -> packet.setSound(SoundEvent.BIG_DRIPLEAF_TILT_DOWN);
+            case SimpleSound.BIG_DRIPLEAF_TILT_UP -> packet.setSound(SoundEvent.BIG_DRIPLEAF_TILT_UP);
+            case SimpleSound.BELL_HIT -> packet.setSound(SoundEvent.BELL);
+            case SimpleSound.MILKING -> packet.setSound(SoundEvent.MILK);
+            case SimpleSound.EGG_LAY -> packet.setSound(SoundEvent.PLOP);
+            case SimpleSound.POWER_ON -> packet.setSound(SoundEvent.POWER_ON);
+            case SimpleSound.POWER_OFF -> packet.setSound(SoundEvent.POWER_OFF);
+            case SimpleSound.ACTIVATED -> packet.setSound(SoundEvent.ACTIVATE);
+            case SimpleSound.DEACTIVATED -> packet.setSound(SoundEvent.DEACTIVATE);
+            case SimpleSound.RESPAWN_ANCHOR_SET_SPAWN -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_SET_SPAWN);
+            case SimpleSound.RESPAWN_ANCHOR_DEPLETE -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_DEPLETE);
+            case SimpleSound.SHELF_SWAP_SINGLE -> packet.setSound(SoundEvent.SINGLE_ITEM_SWAP);
+            case SimpleSound.SHELF_SWAP_MULTI -> packet.setSound(SoundEvent.MULTI_ITEM_SWAP);
+            case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case TridentRiptideSound riptide -> packet.setSound(switch (riptide.level()) {
                 case 1 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_1;
                 case 2 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_2;
                 case 3 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_3;
                 default -> throw new IllegalArgumentException("Invalid riptide level: " + riptide.level());
             });
-            case SimpleSound.RESPAWN_ANCHOR_SET_SPAWN -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_SET_SPAWN);
-            case SimpleSound.RESPAWN_ANCHOR_DEPLETE -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_DEPLETE);
-            case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case SimpleSound.PAINTING_PLACE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_PLACE);
@@ -1487,9 +1675,6 @@ public class AllayPlayer implements Player {
                 packet.setSound(SoundEvent.BUTTON_CLICK_OFF);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
-            case PowerSound so -> {
-                packet.setSound(so.powered() ? SoundEvent.POWER_ON : SoundEvent.POWER_OFF);
-            }
             case PressurePlateSound so -> {
                 packet.setSound(so.activated() ? SoundEvent.PRESSURE_PLATE_CLICK_ON : SoundEvent.PRESSURE_PLATE_CLICK_OFF);
                 packet.setExtraData(so.blockState().blockStateHash());
@@ -1523,18 +1708,20 @@ public class AllayPlayer implements Player {
                 }
             }
             case BucketFillSound so -> {
-                if (so.water()) {
-                    packet.setSound(SoundEvent.BUCKET_FILL_WATER);
-                } else {
-                    packet.setSound(SoundEvent.BUCKET_FILL_LAVA);
-                }
+                packet.setSound(switch (so.type()) {
+                    case WATER -> SoundEvent.BUCKET_FILL_WATER;
+                    case LAVA -> SoundEvent.BUCKET_FILL_LAVA;
+                    case POWDER_SNOW -> SoundEvent.BUCKET_FILL_POWDER_SNOW;
+                    case FISH -> SoundEvent.BUCKET_FILL_FISH;
+                });
             }
             case BucketEmptySound so -> {
-                if (so.water()) {
-                    packet.setSound(SoundEvent.BUCKET_EMPTY_WATER);
-                } else {
-                    packet.setSound(SoundEvent.BUCKET_EMPTY_LAVA);
-                }
+                packet.setSound(switch (so.type()) {
+                    case WATER -> SoundEvent.BUCKET_EMPTY_WATER;
+                    case LAVA -> SoundEvent.BUCKET_EMPTY_LAVA;
+                    case POWDER_SNOW -> SoundEvent.BUCKET_EMPTY_POWDER_SNOW;
+                    case FISH -> SoundEvent.BUCKET_EMPTY_FISH;
+                });
             }
             case CrossbowLoadSound so -> {
                 switch (so.stage()) {
@@ -1589,6 +1776,34 @@ public class AllayPlayer implements Player {
                 sendPacket(playSound);
                 return;
             }
+            case SimpleSound.ARMOR_STAND_PLACE -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_PLACE);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.ARMOR_STAND_HIT -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_HIT);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.ARMOR_STAND_BREAK -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_BREAK);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.ARMOR_STAND_LAND -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_LAND);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
             case CustomSound so -> {
                 PlaySoundPacket playSound = new PlaySoundPacket();
                 playSound.setSound(so.soundName());
@@ -1623,7 +1838,6 @@ public class AllayPlayer implements Player {
             case CHAIN -> SoundEvent.ARMOR_EQUIP_CHAIN;
             case GOLD -> SoundEvent.ARMOR_EQUIP_GOLD;
             case DIAMOND, NETHERITE -> SoundEvent.ARMOR_EQUIP_DIAMOND;
-            case null -> SoundEvent.ARMOR_EQUIP_GENERIC;
         };
     }
 
@@ -1824,6 +2038,14 @@ public class AllayPlayer implements Player {
         packet.setId((byte) -1);
         packet.setType(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.LECTERN);
         packet.setBlockPosition(toNetwork(pos));
+        sendPacket(packet);
+    }
+
+    @Override
+    public void viewSignEditor(Vector3ic pos, boolean frontSide) {
+        var packet = new OpenSignPacket();
+        packet.setPosition(toNetwork(pos));
+        packet.setFrontSide(frontSide);
         sendPacket(packet);
     }
 
@@ -2045,7 +2267,7 @@ public class AllayPlayer implements Player {
         // easier to implement by creating a new one.
         clearBossBar();
         var packet = new BossEventPacket();
-        packet.setBossUniqueEntityId(this.controlledEntity.getRuntimeId());
+        packet.setBossUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
         packet.setAction(BossEventPacket.Action.CREATE);
         packet.setTitle(bossBar.getTitle());
         packet.setHealthPercentage(bossBar.getProgress());
@@ -2058,7 +2280,7 @@ public class AllayPlayer implements Player {
     @Override
     public void clearBossBar() {
         var packet = new BossEventPacket();
-        packet.setBossUniqueEntityId(this.controlledEntity.getRuntimeId());
+        packet.setBossUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
         packet.setAction(BossEventPacket.Action.REMOVE);
         sendPacket(packet);
     }
@@ -2271,11 +2493,76 @@ public class AllayPlayer implements Player {
     }
 
     @Override
+    public void sendHealth(float health, float maxHealth) {
+        var defaultMax = EntityLivingComponent.DEFAULT_MAX_HEALTH;
+        sendAttribute(new AttributeData(
+                "minecraft:health", 0, maxHealth,
+                health, 0, defaultMax, defaultMax,
+                Collections.emptyList()
+        ));
+    }
+
+    @Override
+    public void sendAbsorption(float absorption) {
+        var maxAbsorption = 16.0f;
+        sendAttribute(new AttributeData(
+                "minecraft:absorption", 0, maxAbsorption,
+                absorption, 0, maxAbsorption, 0,
+                Collections.emptyList()
+        ));
+    }
+
+    @Override
     public void sendCooldown(String category, int duration) {
         var packet = new PlayerStartItemCooldownPacket();
         packet.setItemCategory(category);
         packet.setCooldownDuration(duration);
         sendPacket(packet);
+    }
+
+    @Override
+    public void sendMapData(long mapId, BufferedImage image) {
+        int imageHW = 128;
+
+        var packet = new ClientboundMapItemDataPacket();
+        packet.setUniqueMapId(mapId);
+        // Required since 1.19.20
+        packet.setOrigin(Vector3i.ZERO);
+        // Required as of 1.19.50
+        packet.getTrackedEntityIds().add(mapId);
+        packet.setHeight(imageHW);
+        packet.setWidth(imageHW);
+        var colors = new int[imageHW * imageHW];
+        int index = 0;
+        for (int y = 0; y < imageHW; y++) {
+            for (int x = 0; x < imageHW; x++) {
+                colors[index++] = toABGR(image.getRGB(x, y));
+            }
+        }
+        packet.setColors(colors);
+        sendPacket(packet);
+    }
+
+    @Override
+    public void sendDeathInfo(Pair<String, String[]> deathInfo) {
+        var packet = new DeathInfoPacket();
+        packet.setCauseAttackName(I18n.get().tr(this.loginData.getLangCode(), deathInfo.left(), (Object[]) deathInfo.right()));
+        sendPacket(packet);
+    }
+
+    @Override
+    public void sendItemChargingFinished() {
+        var packet = new EntityEventPacket();
+        packet.setType(EntityEventType.FINISHED_CHARGING_ITEM);
+        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
+        sendPacket(packet);
+    }
+
+    protected static int toABGR(int argb) {
+        return ((argb >> 16) & 0xFF) |      // Blue
+               ((argb >> 8) & 0xFF) << 8 |  // Green
+               ((argb) & 0xFF) << 16 |      // Red
+               ((argb >> 24) & 0xFF) << 24; // Alpha
     }
 
     protected void sendAttribute(AttributeData attributeData) {
@@ -2312,7 +2599,7 @@ public class AllayPlayer implements Player {
             for (var output : outputs) {
                 sendMessage(I18n.get().tr(this.loginData.getLangCode(), output.str(), output.args()));
             }
-        } else {
+        } else if (this.controlledEntity.hasPermission(Permissions.COMMAND_VIEW_OTHER_OUTPUTS).asBoolean()) {
             for (var output : outputs) {
                 var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(this.loginData.getLangCode(), output.str(), output.args()) + "]";
                 sendMessage(str);
@@ -2393,6 +2680,106 @@ public class AllayPlayer implements Player {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.CLEAR);
         sendPacket(pk);
+    }
+
+    @Override
+    public void shakeCamera(CameraShakeType shakeType, float intensity, float duration) {
+        var pk = new CameraShakePacket();
+        pk.setShakeType(switch (shakeType) {
+            case POSITIONAL -> org.cloudburstmc.protocol.bedrock.data.CameraShakeType.POSITIONAL;
+            case ROTATIONAL -> org.cloudburstmc.protocol.bedrock.data.CameraShakeType.ROTATIONAL;
+        });
+        pk.setIntensity(intensity);
+        pk.setDuration(duration);
+        pk.setShakeAction(CameraShakeAction.ADD);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void stopCameraShake() {
+        var pk = new CameraShakePacket();
+        pk.setShakeAction(CameraShakeAction.STOP);
+        pk.setShakeType(org.cloudburstmc.protocol.bedrock.data.CameraShakeType.POSITIONAL);
+        pk.setIntensity(-1);
+        pk.setDuration(-1);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void pushFog(String fogId) {
+        fogStack.add(fogId);
+        sendFogStack();
+    }
+
+    @Override
+    public boolean popFog(String fogId) {
+        for (int i = fogStack.size() - 1; i >= 0; i--) {
+            if (fogStack.get(i).equals(fogId)) {
+                fogStack.remove(i);
+                sendFogStack();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int removeFog(String fogId) {
+        int count = 0;
+        var iterator = fogStack.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(fogId)) {
+                iterator.remove();
+                count++;
+            }
+        }
+        if (count > 0) {
+            sendFogStack();
+        }
+        return count;
+    }
+
+    @Override
+    public List<String> getFogs() {
+        return Collections.unmodifiableList(fogStack);
+    }
+
+    @Override
+    public void removeAllFogs() {
+        if (!fogStack.isEmpty()) {
+            fogStack.clear();
+            sendFogStack();
+        }
+    }
+
+    protected void sendFogStack() {
+        var pk = new PlayerFogPacket();
+        pk.getFogStack().addAll(fogStack);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z) {
+        this.changingDimension = true;
+
+        var packet = new ChangeDimensionPacket();
+        packet.setDimension(targetDimInfo.dimensionId());
+        packet.setPosition(Vector3f.from((float) x, (float) y + 1.62f, (float) z));
+        sendPacket(packet);
+    }
+
+    @Override
+    public void completeDimensionChange() {
+        this.changingDimension = false;
+
+        // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server.
+        // Send it after the player has been added to the target dimension.
+        var packet = new PlayerActionPacket();
+        packet.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
+        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
+        packet.setBlockPosition(Vector3i.ZERO);
+        packet.setResultPosition(Vector3i.ZERO);
+        sendPacket(packet);
     }
 
     @Override
@@ -2529,15 +2916,15 @@ public class AllayPlayer implements Player {
     protected void onDisconnect(String disconnectReason) {
         new PlayerDisconnectEvent(this, disconnectReason).call();
         closeAllOpenedContainers();
+        if (getLastClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
+            ChunkCache.getInstance().removePlayer(this.loginData.getUuid());
+        }
         ((AllayPlayerManager) Server.getInstance().getPlayerManager()).removePlayer(this);
     }
 
     @Override
     public int getPing() {
-        var rakServerChannel = (RakServerChannel) session.getPeer().getChannel().parent();
-        var childChannel = rakServerChannel.getChildChannel(session.getSocketAddress());
-        var rakSessionCodec = childChannel.rakPipeline().get(RakSessionCodec.class);
-        return (int) rakSessionCodec.getPing();
+        return sourceInterface.getPing(session);
     }
 
     @Override
@@ -2545,7 +2932,7 @@ public class AllayPlayer implements Player {
         var packet = new UpdateAbilitiesPacket();
 
         var entity = Preconditions.checkNotNull(player.getControlledEntity());
-        packet.setUniqueEntityId(entity.getRuntimeId());
+        packet.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
         // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
         // If this player does not have specific command permissions, the command description won't even be sent to the client
         packet.setCommandPermission(entity.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
@@ -2602,11 +2989,15 @@ public class AllayPlayer implements Player {
             abilities.add(Ability.FLYING);
         }
 
+        if (player.isActualPlayer() && Server.getInstance().getPlayerManager().isOperator(player.getController())) {
+            abilities.add(Ability.OPERATOR_COMMANDS);
+        }
+
         return abilities;
     }
 
     protected PlayerPermission calculatePlayerPermission(EntityPlayer player) {
-        if (!player.isActualPlayer() || Server.getInstance().getPlayerManager().isOperator(player.getController())) {
+        if (player.isActualPlayer() && Server.getInstance().getPlayerManager().isOperator(player.getController())) {
             return PlayerPermission.OPERATOR;
         }
 
@@ -2619,7 +3010,7 @@ public class AllayPlayer implements Player {
         packet.setAction(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE);
         for (var player : players) {
             var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
-            entry.setEntityId(Preconditions.checkNotNull(player.getControlledEntity()).getRuntimeId());
+            entry.setEntityId(Preconditions.checkNotNull(player.getControlledEntity()).getUniqueId().getLeastSignificantBits());
             entry.setName(player.getOriginName());
             entry.setXuid(player.getLoginData().getXuid());
             entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
@@ -2661,6 +3052,14 @@ public class AllayPlayer implements Player {
             this.verticalFlySpeed = verticalFlySpeed;
             viewPlayerPermission(this);
         }
+    }
+
+    @Override
+    public void setMotion(Vector3dc m) {
+        var packet = new SetEntityMotionPacket();
+        packet.setMotion(Vector3f.from(m.x(), m.y(), m.z()));
+        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
+        sendPacket(packet);
     }
 
     @Override
@@ -2712,11 +3111,15 @@ public class AllayPlayer implements Player {
             // The world or dimension where the player logged off doesn't exist, fallback to the global spawn point
             dimension = (AllayDimension) server.getWorldPool().getGlobalSpawnPoint().dimension();
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
+            var currentWorldName = dimension.getWorld().getWorldData().getDisplayName();
+            var currentDimension = dimension.getDimensionInfo().dimensionId();
 
             // The old pos stored in player's nbt is invalid, and we should replace it with the new one!
             var builder = playerData.getNbt().toBuilder();
             writeVector3f(builder, "Pos", currentPos);
             playerData.setNbt(builder.build());
+            playerData.setWorld(currentWorldName);
+            playerData.setDimension(currentDimension);
 
             // Save new player data back to storage
             playerManager.getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
@@ -2743,11 +3146,38 @@ public class AllayPlayer implements Player {
             return;
         }
 
+        var loc = this.controlledEntity.getLocation();
+        dimension = (AllayDimension) loc.dimension();
+        var currentWorldName = dimension.getWorld().getWorldData().getDisplayName();
+        var currentDimension = dimension.getDimensionInfo().dimensionId();
+        var currentRotation = readVector2f(playerData.getNbt(), "Rotation");
+
+        var positionChanged = loc.x() != currentPos.x() || loc.y() != currentPos.y() || loc.z() != currentPos.z();
+        var rotationChanged = (float) loc.yaw() != currentRotation.x() || (float) loc.pitch() != currentRotation.y();
+        var worldChanged = !Objects.equals(playerData.getWorld(), currentWorldName);
+        var dimensionChanged = playerData.getDimension() != currentDimension;
+        if (positionChanged || rotationChanged || worldChanged || dimensionChanged) {
+            if (positionChanged || rotationChanged) {
+                var builder = playerData.getNbt().toBuilder();
+                writeVector3f(builder, "Pos", new org.joml.Vector3f(loc));
+                writeVector2f(builder, "Rotation", (float) loc.yaw(), (float) loc.pitch());
+                playerData.setNbt(builder.build());
+            }
+
+            playerData.setWorld(currentWorldName);
+            playerData.setDimension(currentDimension);
+
+            playerManager.getPlayerStorage().savePlayerData(this.getLoginData().getUuid(), playerData);
+        }
+
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
+
+        // Send StartGamePacket to the client first before we start sending chunks, otherwise
+        // the chunks will be ignored by the client, and the client will be unable to join the server
+        startGame(dimension.getWorld(), playerData, dimension);
+
         dimension.addPlayer(this);
         playerManager.addPlayer(this);
-
-        startGame(dimension.getWorld(), playerData, dimension);
 
         if (!MultiVersionHelper.is1_21_50(this)) {
             // ItemRegistryPacket is only sent in 1.21.60+
@@ -2755,6 +3185,9 @@ public class AllayPlayer implements Player {
         }
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
+        for (var pkt : NetworkData.SYNC_ENTITY_PROPERTY_PACKETS.get()) {
+            sendPacket(pkt);
+        }
         sendPacket(MultiVersionHelper.adaptBiomeDefinitionListPacket(this, NetworkData.BIOME_DEFINITION_LIST_PACKET.get()));
         sendPacket(MultiVersionHelper.adaptCraftingDataPacket(this, NetworkData.CRAFTING_DATA_PACKET.get()));
         sendPacket(NetworkData.TRIM_DATA_PACKET.get());
@@ -2972,8 +3405,8 @@ public class AllayPlayer implements Player {
             if (controlledEntity != null) {
                 world = controlledEntity.getWorld();
                 if (world != null) {
-                    // If the player is in any world, use world tick instead
-                    time = world.getTick();
+                    // If the player is in any world, use entity tick instead
+                    time = controlledEntity.getTick();
                 }
             }
 
@@ -2981,7 +3414,7 @@ public class AllayPlayer implements Player {
                 if (world == null) {
                     // Packet processors should make sure that PacketProcessor.handleSync()
                     // method won't be called if the player is not in any world
-                    log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().name(), AllayPlayer.this);
+                    log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().getName(), AllayPlayer.this);
                     processor.handleSync(AllayPlayer.this, packet, time);
                 } else {
                     ((AllayWorld) world).addSyncPacketToQueue(AllayPlayer.this, packet, time);

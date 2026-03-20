@@ -13,6 +13,7 @@ import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.CriticalHit;
 import org.allaymc.api.entity.action.EnchantedHit;
 import org.allaymc.api.entity.action.SimpleEntityAction;
+import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -22,9 +23,11 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -42,7 +45,9 @@ import org.joml.Vector3d;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -64,7 +69,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Manager
     protected ComponentManager manager;
     @Dependency
-    protected EntityBaseComponentImpl baseComponent;
+    protected EntityBaseComponent baseComponent;
     @Dependency(optional = true)
     protected EntityPhysicsComponent physicsComponent;
     @Dependency(optional = true)
@@ -75,10 +80,15 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Getter
     protected DamageContainer lastDamage;
     @Getter
-    protected long lastDamageTime;
+    protected long lastDamageTime = -1;
 
     @Getter
     protected int onFireTicks;
+    @Getter
+    protected int freezeTicks;
+    @Getter
+    @Setter
+    protected boolean inPowderSnow;
     @Getter
     protected int airSupplyTicks, airSupplyMaxTicks;
 
@@ -191,7 +201,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     }
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {
-        var currentTime = thisEntity.getWorld().getTick();
+        var currentTime = baseComponent.getTick();
         if (!forceToUpdate && lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
             return false;
         }
@@ -350,6 +360,11 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
                     damage.updateFinalDamage(d -> d + sharpnessLevel * 1.25f);
                     damage.setEnchanted(true);
                 }
+                var fireAspectLevel = item.getEnchantmentLevel(EnchantmentTypes.FIRE_ASPECT);
+                if (fireAspectLevel > 0) {
+                    setOnFireTicks(fireAspectLevel * 80);
+                    damage.setEnchanted(true);
+                }
             }
 
             if (attacker instanceof EntityPhysicsComponent component) {
@@ -437,6 +452,12 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         }
 
         return true;
+    }
+
+    @Override
+    public void setFreezeTicks(int freezeTicks) {
+        this.freezeTicks = Math.clamp(freezeTicks, 0, MAX_FREEZE_TICKS);
+        this.baseComponent.broadcastState();
     }
 
     @Override
@@ -548,6 +569,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         var currentTick = event.getCurrentTick();
         tickVoid(currentTick);
         tickFire(currentTick);
+        tickFreeze(currentTick);
         tickBreathe();
         tickEffects();
         tickDead();
@@ -581,6 +603,33 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         if (currentTick % 20 == 0) {
             attack(DamageContainer.fireTick(1));
         }
+    }
+
+    /// Update the {@link #freezeTicks} of the entity. This runs before {@code tickBlockCollision()}, so
+    /// {@link #inPowderSnow} reflects whether the entity was in powder snow during the <em>previous</em>
+    /// tick's block-collision pass. The powder-snow block component only sets the {@link #inPowderSnow} flag
+    /// during the current tick's block-collision pass; the actual increment happens here, guaranteeing
+    /// exactly one change per tick regardless of how many powder snow blocks the entity intersects.
+    ///
+    /// <ul>
+    ///   <li>If {@link #inPowderSnow} was {@code true}: increment freeze ticks by 1 (up to {@link #MAX_FREEZE_TICKS})
+    ///       and apply freezing damage when fully frozen (respects {@code GameRule.FREEZE_DAMAGE}).</li>
+    ///   <li>If {@link #inPowderSnow} was {@code false} and freeze ticks > 0: decrement by 1.</li>
+    /// </ul>
+    protected void tickFreeze(long currentTick) {
+        if (inPowderSnow) {
+            if (freezeTicks < MAX_FREEZE_TICKS) {
+                setFreezeTicks(freezeTicks + 1);
+            }
+            if (freezeTicks >= MAX_FREEZE_TICKS && currentTick % 40 == 0 &&
+                    thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FREEZE_DAMAGE)) {
+                attack(DamageContainer.freezing(1f));
+            }
+        } else if (freezeTicks > 0) {
+            setFreezeTicks(freezeTicks - 1);
+        }
+        // Reset the flag; the block component will set it again during tickBlockCollision() if needed.
+        inPowderSnow = false;
     }
 
     /// Update the {@link #airSupplyTicks} of the entity. Drown damage will be applied to the entity every second
@@ -653,13 +702,60 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         return true;
     }
 
+    @Override
+    public List<ItemStack> getDrops(int lootingLevel) {
+        var event = new CEntityGetDropEvent(lootingLevel);
+        manager.callEvent(event);
+        return event.getDrops();
+    }
+
+    @Override
+    public int getDropXpAmount() {
+        var event = new CEntityGetDropXpEvent(0);
+        manager.callEvent(event);
+        return event.getXp();
+    }
+
     /// Called when the entity dead (health == 0)
     protected void onDie() {
-        manager.callEvent(CEntityDieEvent.INSTANCE);
         new EntityDieEvent(thisEntity).call();
 
+        var pos = baseComponent.getLocation();
+        var dieEvent = new CEntityDieEvent();
+        dieEvent.setDropPosition(new Vector3d(pos.x(), pos.y(), pos.z()));
+        manager.callEvent(dieEvent);
+
+        // Calculate Looting level from killer's weapon
+        int lootingLevel = 0;
+        if (lastDamage != null &&
+            lastDamage.getAttacker() instanceof ContainerHolder holder &&
+            holder.hasContainer(ContainerTypes.INVENTORY)) {
+            lootingLevel = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.LOOTING);
+        }
+
+        // Drop loot items
+        var drops = getDrops(lootingLevel);
+        if (!drops.isEmpty()) {
+            var dimension = baseComponent.getDimension();
+            var dropPos = dieEvent.getDropPosition();
+            var motionFactory = dieEvent.getDropMotionFactory();
+            for (var drop : drops) {
+                dimension.dropItem(drop, dropPos, motionFactory.get(), 40);
+            }
+        }
+
+        // Drop XP if killed by player
+        if (lastDamage != null && lastDamage.getAttacker() instanceof EntityPlayer) {
+            var xpAmount = getDropXpAmount();
+            if (xpAmount > 0) {
+                baseComponent.getDimension().splitAndDropXpOrb(
+                    new Vector3d(pos.x(), pos.y(), pos.z()), xpAmount
+                );
+            }
+        }
+
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
-        this.baseComponent.setState(EntityState.DEAD);
+        ((EntityBaseComponentImpl) this.baseComponent).setState(EntityState.DEAD);
         if (hasDeadTimer()) {
             this.deadTimer = 20;
         }

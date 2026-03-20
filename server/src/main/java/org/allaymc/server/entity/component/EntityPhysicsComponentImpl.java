@@ -6,6 +6,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
@@ -58,7 +59,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @ComponentObject
     protected Entity thisEntity;
     @Dependency
-    protected EntityBaseComponentImpl baseComponent;
+    protected EntityBaseComponent baseComponent;
     @Dependency(optional = true)
     protected EntityLivingComponent livingComponent;
     @Manager
@@ -226,7 +227,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
         // The first time directly moves
         var result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
-        if (Boolean.TRUE.equals(result.right())) {
+        if (result.right()) {
             // There is a collision, try to step over
             // Calculate the remaining speed
             motion -= axis.getComponent(resultPos) - axis.getComponent(pos);
@@ -366,7 +367,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
                         continue;
                     }
 
-                    var shape = blockState.getBlockStateData().computeOffsetCollisionShape(floor(extAABBInAxis.minX()) + ox, floor(extAABBInAxis.minY()) + oy, floor(extAABBInAxis.minZ()) + oz);
+                    // -1 on Y to match the expanded search range in getCollidingBlockStates()
+                    var shape = blockState.getBlockStateData().computeOffsetCollisionShape(floor(extAABBInAxis.minX()) + ox, floor(extAABBInAxis.minY()) - 1 + oy, floor(extAABBInAxis.minZ()) + oz);
                     if (shape.intersectsAABB(entityAABB)) {
                         // Ignore the blocks that collided with the entity
                         continue;
@@ -392,12 +394,16 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public Vector3d updateMotion(LiquidState liquidState) {
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
+        }
+
         var blockStateStandingOn = getBlockStateStandingOn();
         var isOnGround = blockStateStandingOn.getBlockType() != BlockTypes.AIR;
         var slipperinessMultiplier = 1.0;
         // Entity that has liquid motion won't be affected by the friction of the block it stands on
-        if (!hasLiquidMotion && isOnGround) {
+        if (!liquidState.inLiquid() && isOnGround) {
             slipperinessMultiplier = blockStateStandingOn.getBlockStateData().friction();
         }
 
@@ -406,6 +412,26 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
                 motion.x() * horizontalFactor,
                 (motion.y() - (hasGravity() ? getGravity() : 0f)) * (1 - getDragFactorInAir()),
                 motion.z() * horizontalFactor
+        );
+    }
+
+    /**
+     * Compute updated motion when the entity is submerged in liquid.
+     * Applies liquid-specific buoyancy and drag.
+     *
+     * @param liquidState the liquid state describing which liquids the entity is in
+     * @return the updated motion
+     */
+    protected Vector3d updateMotionInLiquid(LiquidState liquidState) {
+        var dragFactor = liquidState.inWater() ? getWaterDragFactor() : getLavaDragFactor();
+        var buoyancy = liquidState.inWater() ? getWaterBuoyancy() : getLavaBuoyancy();
+        var retain = 1.0 - dragFactor;
+        var gravity = hasGravity() ? getGravity() : 0.0;
+
+        return new Vector3d(
+                motion.x() * retain,
+                (motion.y() - gravity + buoyancy) * retain,
+                motion.z() * retain
         );
     }
 
@@ -503,12 +529,15 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     @Override
-    public boolean canStandSafely(int x, int y, int z, Dimension dimension) {
-        var blockUnder = dimension.getBlockState(x, y - 1, z);
-        if (!blockUnder.getBlockStateData().isSolid()) {
+    public boolean canStandSafely(double x, double y, double z, Dimension dimension) {
+        int blockX = (int) Math.floor(x);
+        int groundY = (int) Math.ceil(y) - 1;
+        int blockZ = (int) Math.floor(z);
+        var blockUnder = dimension.getBlockState(blockX, groundY, blockZ);
+        if (!blockUnder.getBlockStateData().hasCollision()) {
             return false;
         }
-        var aabb = thisEntity.getAABB().translate(x + 0.5, y + 0.5, z + 0.5, new AABBd());
+        var aabb = thisEntity.getAABB().translate(x, y + FAT_AABB_MARGIN, z, new AABBd());
         return dimension.getCollidingBlockStates(aabb) == null;
     }
 
@@ -533,16 +562,6 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @Override
     public boolean computeEntityCollisionMotion() {
         return thisEntity.hasEntityCollision();
-    }
-
-    @Override
-    public boolean computeBlockCollisionMotion() {
-        return true;
-    }
-
-    @Override
-    public boolean computeLiquidMotion() {
-        return true;
     }
 
     private enum Axis {

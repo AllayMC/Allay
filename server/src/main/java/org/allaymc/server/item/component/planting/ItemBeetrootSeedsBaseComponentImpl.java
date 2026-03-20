@@ -1,0 +1,22 @@
+package org.allaymc.server.item.component.planting;
+
+import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.item.ItemStackInitInfo;
+import org.allaymc.api.world.Dimension;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
+import org.joml.Vector3ic;
+
+/**
+ * @author daoge_cmd
+ */
+public class ItemBeetrootSeedsBaseComponentImpl extends ItemBaseComponentImpl {
+    public ItemBeetrootSeedsBaseComponentImpl(ItemStackInitInfo initInfo) {
+        super(initInfo);
+    }
+
+    @Override
+    public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        return tryPlaceBlockState(dimension, BlockTypes.BEETROOT.getDefaultState(), placeBlockPos, placementInfo);
+    }
+}

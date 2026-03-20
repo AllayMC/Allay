@@ -12,7 +12,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.particle.ShootParticle;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.block.component.BlockFireBaseComponentImpl;
+import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
 
 /**
  * Dispense behavior for flint and steel items.
@@ -51,7 +51,7 @@ public class FlintAndSteelDispenseBehavior implements DispenseBehavior {
             }
         }
 
-        // TODO: Nether portal creation not yet implemented
+        // Nether portal creation is now handled by fire block's onPlace()
 
         // Failed to do anything, fall back to default behavior
         return DefaultDispenseBehavior.INSTANCE.dispense(block, face, item);

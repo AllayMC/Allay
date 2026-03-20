@@ -1,13 +1,19 @@
 package org.allaymc.codegen;
 
+import com.google.gson.JsonParser;
 import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Locale;
+import java.util.Set;
+import java.util.function.Function;
 
 import static org.allaymc.codegen.TypeNames.*;
 
@@ -18,9 +24,45 @@ public class TagGen {
     public static void main(String[] args) throws IOException {
         generate("api/src/main/java/org/allaymc/api/item/data/ItemTags.java", ITEM_TAG, "unpacked/item_tags.json", "item_tags_custom.json");
         generate("api/src/main/java/org/allaymc/api/block/data/BlockTags.java", BLOCK_TAG, "unpacked/block_tags.json", "block_tags_custom.json");
+        generateBiomeTags("api/src/main/java/org/allaymc/api/world/biome/BiomeTags.java", BIOME_TAG, "biome_definitions.json");
     }
 
     public static void generate(String writeTo, ClassName tagClass, String... tagFiles) throws IOException {
+        var keys = new HashSet<String>();
+        for (var tagFile : tagFiles) {
+            for (var key : Utils.parseKeys(Path.of(CodeGenConstants.DATA_PATH + tagFile))) {
+                if (keys.contains(key)) {
+                    throw new IllegalStateException("Duplicate key: " + key);
+                }
+                keys.add(key);
+            }
+        }
+        generate(writeTo, tagClass, keys, key -> key.split(":")[1].toUpperCase(Locale.ROOT));
+    }
+
+    public static void generateBiomeTags(String writeTo, ClassName tagClass, String biomeDefinitionsFile) throws IOException {
+        var keys = parseBiomeTagKeys(Path.of(CodeGenConstants.DATA_PATH + biomeDefinitionsFile));
+        generate(writeTo, tagClass, keys, key -> key.toUpperCase(Locale.ROOT));
+    }
+
+    private static Set<String> parseBiomeTagKeys(Path path) {
+        Set<String> keys = new LinkedHashSet<>();
+        try (var reader = new InputStreamReader(Files.newInputStream(path))) {
+            JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
+                var biome = entry.getValue().getAsJsonObject();
+                if (!biome.has("tags") || biome.get("tags").isJsonNull()) {
+                    return;
+                }
+
+                biome.getAsJsonArray("tags").forEach(tag -> keys.add(tag.getAsString()));
+            });
+            return keys;
+        } catch (IOException e) {
+            throw new CodeGenException(e);
+        }
+    }
+
+    private static void generate(String writeTo, ClassName tagClass, Set<String> keys, Function<String, String> fieldNameMapper) throws IOException {
         Path path = Path.of(writeTo);
         var interfaceName = path.getFileName().toString().replace(".java", "");
         var interfaceBuilder = TypeSpec.interfaceBuilder(interfaceName)
@@ -33,18 +75,8 @@ public class TagGen {
                                 .build()
                 );
 
-        var keys = new HashSet<String>();
-        for (var tagFile : tagFiles) {
-            for (var key : Utils.parseKeys(Path.of(CodeGenConstants.DATA_PATH + tagFile))) {
-                if (keys.contains(key)) {
-                    throw new IllegalStateException("Duplicate key: " + key);
-                }
-                keys.add(key);
-            }
-        }
-
         for (var key : keys) {
-            var fieldName = key.split(":")[1].toUpperCase(Locale.ROOT);
+            var fieldName = fieldNameMapper.apply(key);
             interfaceBuilder.addField(
                     FieldSpec.builder(tagClass, fieldName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

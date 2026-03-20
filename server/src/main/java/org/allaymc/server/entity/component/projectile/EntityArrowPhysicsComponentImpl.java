@@ -43,7 +43,21 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     }
 
     @Override
-    public Vector3d updateMotion(boolean hasLiquidMotion) {
+    public double getWaterDragFactor() {
+        return 0.4;
+    }
+
+    @Override
+    public double getLavaDragFactor() {
+        return 0.4;
+    }
+
+    @Override
+    public Vector3d updateMotion(LiquidState liquidState) {
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
+        }
+
         if (hitBlock && arrowBaseComponent.checkBlockCollision()) {
             // Set motion to zero if collided with blocks after hit block
             return new Vector3d(0, 0, 0);
@@ -58,7 +72,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 
@@ -122,7 +136,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick() || this.hitBlock) {
+        if (thisEntity.willBeDespawnedLater() || this.hitBlock) {
             return;
         }
 

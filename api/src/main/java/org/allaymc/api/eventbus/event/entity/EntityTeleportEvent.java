@@ -45,6 +45,10 @@ public class EntityTeleportEvent extends EntityEvent implements CancellableEvent
         // Chorus fruit
         CHORUS_FRUIT,
         // Command
-        COMMAND
+        COMMAND,
+        // Nether portal
+        NETHER_PORTAL,
+        // End portal
+        END_PORTAL
     }
 }

@@ -19,11 +19,15 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.sound.BucketEmptySound;
+import org.allaymc.api.world.sound.BucketFillSound;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 import org.joml.Vector3ic;
+
+import java.util.function.Supplier;
 
 /**
  * @author daoge_cmd
@@ -34,25 +38,29 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_bucket_component");
 
-    protected final BlockId liquidId;
-    protected final EntityId entityId;
+    protected final Supplier<BlockType<?>> liquidType;
+    protected final Supplier<EntityType<?>> entityType;
 
     @ComponentObject
     protected ItemBucketStack thisBucketStack;
 
+    public ItemBucketComponentImpl(Supplier<BlockType<?>> liquidTypeSupplier, Supplier<EntityType<?>> entityTypeSupplier) {
+        this.liquidType = liquidTypeSupplier;
+        this.entityType = entityTypeSupplier;
+    }
+
     public ItemBucketComponentImpl(BlockId liquidId, EntityId entityId) {
-        this.liquidId = liquidId;
-        this.entityId = entityId;
+        this(liquidId::getBlockType, entityId == null ? null : entityId::getEntityType);
     }
 
     @Override
     public BlockType<?> getLiquidType() {
-        return liquidId.getBlockType();
+        return liquidType == null ? BlockTypes.AIR : liquidType.get();
     }
 
     @Override
     public EntityType<?> getEntityType() {
-        return entityId == null ? null : entityId.getEntityType();
+        return entityType == null ? null : entityType.get();
     }
 
     @EventHandler
@@ -87,10 +95,12 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
                 player.tryConsumeItemInHand();
                 player.getContainer(ContainerTypes.INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
+                dimension.addSound(interactInfo.clickedBlockPos(), new BucketFillSound(BucketFillSound.Type.WATER));
             } else if (blockType == BlockTypes.LAVA || blockType == BlockTypes.FLOWING_LAVA) {
                 player.tryConsumeItemInHand();
                 player.getContainer(ContainerTypes.INVENTORY).tryAddItem(ItemTypes.LAVA_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
+                dimension.addSound(interactInfo.clickedBlockPos(), new BucketFillSound(BucketFillSound.Type.LAVA));
             }
             event.setCanBeUsed(true);
             return;
@@ -119,6 +129,8 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             dimension.getEntityManager().addEntity(entityInstance);
         }
 
+        dimension.addSound(liquidPlacedPos, new BucketEmptySound(getEmptySoundType()));
+
         player.tryConsumeItemInHand();
         if (player.getGameMode() != GameMode.CREATIVE) {
             // Because the max stack size of bucket is 1
@@ -126,5 +138,20 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             player.setItemInHand(ItemTypes.BUCKET.createItemStack(1));
         }
         event.setCanBeUsed(true);
+    }
+
+    protected BucketEmptySound.Type getEmptySoundType() {
+        if (getEntityType() != null) {
+            return BucketEmptySound.Type.FISH;
+        }
+
+        var liquidType = getLiquidType();
+        if (liquidType == BlockTypes.LAVA) {
+            return BucketEmptySound.Type.LAVA;
+        }
+        if (liquidType == BlockTypes.POWDER_SNOW) {
+            return BucketEmptySound.Type.POWDER_SNOW;
+        }
+        return BucketEmptySound.Type.WATER;
     }
 }

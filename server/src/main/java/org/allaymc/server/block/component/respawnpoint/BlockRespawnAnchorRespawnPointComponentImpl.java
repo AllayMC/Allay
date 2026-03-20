@@ -1,13 +1,11 @@
 package org.allaymc.server.block.component.respawnpoint;
 
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
 
 /**
@@ -54,49 +52,35 @@ public class BlockRespawnAnchorRespawnPointComponentImpl extends BlockRespawnPoi
      * @return a safe spawn location, or {@code null} if no safe position found
      */
     protected Location3ic findSafeRespawnPosition(Block block) {
-        var pos = block.getPosition();
-        var dimension = block.getDimension();
-
         // Check layer 1 (y=0) and layer 2 (y=-1) for each column
         for (var offset : RESPAWN_OFFSETS) {
-            var x = pos.x() + offset[0];
-            var z = pos.z() + offset[1];
-
             // Layer 1: same Y level
-            if (isSafeStandingPos(dimension, x, pos.y(), z)) {
-                return createSpawnLocation(dimension, x, pos.y(), z);
+            var layer1 = block.offsetPos(offset[0], 0, offset[1]);
+            if (isSafeStandingPos(layer1)) {
+                return layer1.getLocation();
             }
 
             // Layer 2: one block below
-            if (isSafeStandingPos(dimension, x, pos.y() - 1, z)) {
-                return createSpawnLocation(dimension, x, pos.y() - 1, z);
+            var layer2 = block.offsetPos(offset[0], -1, offset[1]);
+            if (isSafeStandingPos(layer2)) {
+                return layer2.getLocation();
             }
         }
 
         // Check layer 3 (y=+1) for each column
         for (var offset : RESPAWN_OFFSETS) {
-            var x = pos.x() + offset[0];
-            var z = pos.z() + offset[1];
-
-            if (isSafeStandingPos(dimension, x, pos.y() + 1, z)) {
-                return createSpawnLocation(dimension, x, pos.y() + 1, z);
+            var layer3 = block.offsetPos(offset[0], 1, offset[1]);
+            if (isSafeStandingPos(layer3)) {
+                return layer3.getLocation();
             }
         }
 
         return null;
     }
 
-    protected boolean isSafeStandingPos(Dimension dimension, int x, int y, int z) {
-        var blockUnder = dimension.getBlockState(x, y - 1, z);
-        if (!blockUnder.getBlockStateData().isSolid()) {
-            return false;
-        }
-
-        return dimension.getBlockState(x, y, z).getBlockType() == BlockTypes.AIR &&
-               dimension.getBlockState(x, y + 1, z).getBlockType() == BlockTypes.AIR;
-    }
-
-    protected Location3ic createSpawnLocation(Dimension dimension, int x, int y, int z) {
-        return new Location3i(x, y, z, dimension);
+    protected boolean isSafeStandingPos(Block block) {
+        return block.offsetPos(BlockFace.DOWN).getBlockStateData().isSolid() &&
+               block.isAir() &&
+               block.offsetPos(BlockFace.UP).isAir();
     }
 }

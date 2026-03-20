@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBellBaseComponent;
-import org.allaymc.api.world.sound.CustomSound;
+import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -62,7 +63,7 @@ public class BlockEntityBellBaseComponentImpl extends BlockEntityBaseComponentIm
 
         // Play bell hit sound
         var pos = getPosition();
-        pos.dimension().addSound(pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5, new CustomSound("block.bell.hit"));
+        pos.dimension().addSound(MathUtils.center(pos), SimpleSound.BELL_HIT);
 
         // Send block entity update to clients
         sendBlockEntityToViewers();

@@ -84,7 +84,6 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         if (thisPlayer.isActualPlayer()) {
             clearEnchantOptions();
-            var packet = new PlayerEnchantOptionsPacket();
             if (item != ItemAirStack.AIR_STACK) {
                 var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
                 var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
@@ -93,12 +92,11 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 }
 
                 for (var option : enchantOptions) {
-                    packet.getOptions().add(NetworkHelper.toNetwork(option));
                     this.enchantOptions.add(Long.valueOf(option.left()));
                 }
-            }
 
-            thisPlayer.getController().sendPacket(packet);
+                thisPlayer.getController().viewEnchantOptions(enchantOptions);
+            }
         }
     }
 
@@ -200,7 +198,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
                 .toList();
         for (var entityArrow : entityArrows) {
-            if (entityArrow.willBeDespawnedNextTick()) {
+            if (entityArrow.willBeDespawnedLater()) {
                 // Have been picked by others
                 continue;
             }
@@ -239,7 +237,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 .filter(trident -> trident.getMotion().lengthSquared() == 0 && !trident.isReturning())
                 .toList();
         for (var entityTrident : entityTridents) {
-            if (entityTrident.willBeDespawnedNextTick()) {
+            if (entityTrident.willBeDespawnedLater()) {
                 // Have been picked by others
                 continue;
             }

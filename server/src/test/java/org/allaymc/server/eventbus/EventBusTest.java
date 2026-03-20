@@ -346,6 +346,16 @@ class EventBusTest {
         }
 
         @Test
+        void testInterfaceDefaultMethodHandler() {
+            var listener = new DefaultMethodListener();
+
+            eventBus.registerListener(listener);
+            eventBus.callEvent(new TestEvent());
+
+            assertTrue(listener.called);
+        }
+
+        @Test
         void testMultiEventListener() {
             var listener = new MultiEventListener();
 
@@ -386,6 +396,55 @@ class EventBusTest {
         void testHandlerWithNonEventParameter() {
             var listener = new InvalidNonEventParamListener();
             assertThrows(EventException.class, () -> eventBus.registerListener(listener));
+        }
+    }
+
+    @Nested
+    class ConcurrentModificationTests {
+
+        @Test
+        void testRegisterLambdaListenerDuringDispatch() {
+            AtomicBoolean newListenerCalled = new AtomicBoolean(false);
+
+            eventBus.registerListenerFor(TestEvent.class, event ->
+                    eventBus.registerListenerFor(TestEvent.class, e -> newListenerCalled.set(true))
+            );
+
+            assertDoesNotThrow(() -> eventBus.callEvent(new TestEvent()));
+            // The newly registered listener should not be called during the same dispatch
+            assertFalse(newListenerCalled.get());
+
+            // But should be called on the next dispatch
+            eventBus.callEvent(new TestEvent());
+            assertTrue(newListenerCalled.get());
+        }
+
+        @Test
+        void testRegisterMethodListenerDuringDispatch() {
+            var newListener = new TestListener();
+
+            eventBus.registerListenerFor(TestEvent.class, event ->
+                    eventBus.registerListener(newListener)
+            );
+
+            assertDoesNotThrow(() -> eventBus.callEvent(new TestEvent()));
+            assertFalse(newListener.called);
+
+            eventBus.callEvent(new TestEvent());
+            assertTrue(newListener.called);
+        }
+
+        @Test
+        void testUnregisterListenerDuringDispatch() {
+            AtomicInteger callCount = new AtomicInteger(0);
+            Consumer<TestEvent> victim = event -> callCount.incrementAndGet();
+
+            eventBus.registerListenerFor(TestEvent.class, victim);
+            eventBus.registerListenerFor(TestEvent.class, event ->
+                    eventBus.unregisterListenerFor(TestEvent.class, victim), false, 100
+            );
+
+            assertDoesNotThrow(() -> eventBus.callEvent(new TestEvent()));
         }
     }
 
@@ -518,6 +577,24 @@ class EventBusTest {
     public static class InvalidNonEventParamListener {
         @EventHandler
         public void invalidHandler(String notAnEvent) {
+        }
+    }
+
+    public interface HasDefaultEventHandler {
+        void markCalled();
+
+        @EventHandler
+        default void onDefaultEvent(TestEvent event) {
+            markCalled();
+        }
+    }
+
+    public static class DefaultMethodListener implements HasDefaultEventHandler {
+        public boolean called = false;
+
+        @Override
+        public void markCalled() {
+            called = true;
         }
     }
 }

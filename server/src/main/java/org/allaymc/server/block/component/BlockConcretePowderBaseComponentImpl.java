@@ -11,20 +11,26 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 
+import java.util.function.Supplier;
+
 /**
  * @author IWareQ
  */
 public class BlockConcretePowderBaseComponentImpl extends BlockBaseComponentImpl implements BlockConcretePowderBaseComponent {
-    protected BlockId solidBlockId;
+    protected final Supplier<BlockType<?>> solidBlockType;
+
+    public BlockConcretePowderBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> solidBlockTypeSupplier) {
+        super(blockType);
+        this.solidBlockType = solidBlockTypeSupplier;
+    }
 
     public BlockConcretePowderBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId solidBlockId) {
-        super(blockType);
-        this.solidBlockId = solidBlockId;
+        this(blockType, solidBlockId::getBlockType);
     }
 
     @Override
-    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        super.onNeighborUpdate(block, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
+        super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         if (hasAdjacentWater(block.getDimension(), block.getPosition())) {
             block.getDimension().setBlockState(block.getPosition(), getSolidBlock().getDefaultState());
@@ -42,6 +48,6 @@ public class BlockConcretePowderBaseComponentImpl extends BlockBaseComponentImpl
 
     @Override
     public BlockType<?> getSolidBlock() {
-        return solidBlockId.getBlockType();
+        return solidBlockType.get();
     }
 }

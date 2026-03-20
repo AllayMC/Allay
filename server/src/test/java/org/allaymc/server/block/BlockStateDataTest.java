@@ -46,7 +46,8 @@ class BlockStateDataTest {
                     "thickness": 0.0,
                     "requiresCorrectToolForDrops": true,
                     "isSolid": true,
-                    "translucency": 0.5
+                    "translucency": 0.5,
+                    "translationKey": "abc"
             }
             """;
 
@@ -73,6 +74,7 @@ class BlockStateDataTest {
         assertTrue(blockStateData.requiresCorrectToolForDrops());
         assertTrue(blockStateData.isSolid());
         assertEquals(0.5f, blockStateData.translucency());
+        assertEquals("abc", blockStateData.translationKey());
     }
 
     @Test

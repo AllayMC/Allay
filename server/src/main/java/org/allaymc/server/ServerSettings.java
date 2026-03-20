@@ -175,6 +175,17 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("max-decompressed-bytes")
         private int maxDecompressedBytes = 1024 * 1024 * 50;
 
+        @Comment("Whether to enable client-side chunk caching using blob hashes, which can significantly reduce bandwidth when players revisit areas")
+        @Comment("Please note that you should set network-settings.enable-encoding-protection to false to use this feature")
+        @CustomKey("enable-client-chunk-cache")
+        private boolean enableClientChunkCache = false;
+
+        @Comment("Maximum number of chunk blobs to cache globally across all players")
+        @Comment("Each blob is typically 1-4KB. Higher values use more memory but improve cache hit rate")
+        @Comment("Recommended: 4096 for small servers, 8192-16384 for larger servers")
+        @CustomKey("max-chunk-cache-blobs")
+        private int maxChunkCacheBlobs = 4096;
+
         public enum CompressionAlgorithm {
             ZLIB,
             SNAPPY
@@ -254,16 +265,6 @@ public class ServerSettings extends OkaeriConfig {
         @Getter
         @Accessors(fluent = true)
         public static class PhysicsEngineSettings extends OkaeriConfig {
-            @Comment("Send packets to the client when the amount of position change accumulates")
-            @Comment("This threshold acts on each axis individually")
-            @Comment("Increasing this threshold will reduce bandwidth pressure, but may result in untimely motion updates")
-            @CustomKey("diff-position-threshold")
-            private float diffPositionThreshold = 0.0001f;
-
-            @Comment("Similar to \"diffPositionThreshold\"")
-            @CustomKey("diff-rotation-threshold")
-            private float diffRotationThreshold = 0.1f;
-
             @Comment("When the motion falls below this value, its motion is zeroed")
             @CustomKey("motion-threshold")
             private float motionThreshold = 0.003f;
@@ -271,10 +272,6 @@ public class ServerSettings extends OkaeriConfig {
             @Comment("This usually determines how quickly an entity item is moved when getting stuck in a block")
             @CustomKey("block-collision-motion")
             private float blockCollisionMotion = 0.2f;
-
-            @Comment("Delta move packet will reduce the network pressure if there are a lot of entities")
-            @CustomKey("use-delta-move-packet")
-            private boolean useDeltaMovePacket = false;
         }
     }
 

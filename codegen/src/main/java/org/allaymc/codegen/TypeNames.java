@@ -40,6 +40,7 @@ public interface TypeNames {
     ClassName INT_PROPERTY = ClassName.get("org.allaymc.api.block.property.type", "IntPropertyType");
 
     ClassName BIOME_TYPE = ClassName.get("org.allaymc.api.world.biome", "BiomeType");
+    ClassName BIOME_TAG = ClassName.get("org.allaymc.api.world.biome", "BiomeTag");
     ClassName BIOME_ID = ClassName.get("org.allaymc.server.world.biome", "BiomeId");
     ArrayTypeName BIOME_ID_ARRAY = ArrayTypeName.of(BIOME_ID.box());
 

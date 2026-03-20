@@ -90,7 +90,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Sets the custom name of the block entity.
      *
-     * @param customName The custom name of the block entity, can be null to remove the custom name
+     * @param customName The custom name of the block entity, can be {@code null} to remove the custom name
      */
     void setCustomName(String customName);
 

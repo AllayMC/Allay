@@ -176,10 +176,13 @@ public class BaseContainer implements Container {
     }
 
     @Override
-    public List<NbtMap> saveNBT() {
+    public List<NbtMap> saveNBT(boolean saveEmptySlots) {
         var list = new ArrayList<NbtMap>(content.length);
         for (int slot = 0; slot < content.length; slot++) {
-            if (isEmpty(slot)) continue;
+            if (!saveEmptySlots && isEmpty(slot)) {
+                continue;
+            }
+
             var itemStack = content[slot];
             // TODO: WasPickedUp?
             var nbt = itemStack.saveNBT()

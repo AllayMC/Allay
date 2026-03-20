@@ -12,14 +12,11 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 
 /**
  * @author daoge_cmd
@@ -68,14 +65,6 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     }
 
     @Override
-    public void openSignEditorFor(Player player, boolean frontSide) {
-        var packet = new OpenSignPacket();
-        packet.setPosition(NetworkHelper.toNetwork(getPosition()));
-        packet.setFrontSide(frontSide);
-        player.sendPacket(packet);
-    }
-
-    @Override
     public void applyPlayerChange(EntityPlayer player, NbtMap nbt) {
         String[] newText;
         boolean isFrontSide = true;
@@ -117,7 +106,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     @EventHandler
     protected void onBlockInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
-        if (player == null || player.isSneaking()) return;
+        if (player == null) return;
         // If a sign is waxed, it cannot be modified.
         if (waxed) return;
 
@@ -160,7 +149,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         }
 
         if (player.isActualPlayer()) {
-            openSignEditorFor(player.getController(), isFrontSideInteracted);
+            player.getController().viewSignEditor(getPosition(), isFrontSideInteracted);
             event.setSuccess(true);
         }
     }
@@ -263,7 +252,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
         var player = event.getPlacementInfo().player();
         if (player.isActualPlayer()) {
-            openSignEditorFor(player.getController(), true);
+            player.getController().viewSignEditor(getPosition(), true);
         }
     }
 }

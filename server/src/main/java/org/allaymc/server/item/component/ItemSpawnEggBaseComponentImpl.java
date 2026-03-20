@@ -8,23 +8,30 @@ import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemSpawnEggBaseComponent;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.entity.data.EntityId;
+import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.joml.Vector3ic;
+
+import java.util.function.Supplier;
 
 /**
  * @author IWareQ
  */
 @Slf4j
 public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl implements ItemSpawnEggBaseComponent {
-    protected EntityId entityId;
+    protected final Supplier<EntityType<?>> entityType;
+
+    public ItemSpawnEggBaseComponentImpl(ItemStackInitInfo initInfo, Supplier<EntityType<?>> entityTypeSupplier) {
+        super(initInfo);
+        this.entityType = entityTypeSupplier;
+    }
 
     public ItemSpawnEggBaseComponentImpl(ItemStackInitInfo initInfo, EntityId entityId) {
-        super(initInfo);
-        this.entityId = entityId;
+        this(initInfo, entityId::getEntityType);
     }
 
     @Override
     public EntityType<?> getEntityType() {
-        return entityId.getEntityType();
+        return entityType.get();
     }
 
     @Override
@@ -35,12 +42,13 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl impleme
 
         var clickedPos = interactInfo.clickedPos();
         var clickedBlockPos = interactInfo.clickedBlockPos();
-        var entity = entityId.getEntityType().createEntity(
+        var entity = getEntityType().createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(
                                 (double) clickedPos.x() + clickedBlockPos.x(),
-                                (double) clickedPos.y() + clickedBlockPos.y(),
+                                // Add FAT_AABB_MARGIN to prevent the spawned entity from clipping into the ground
+                                (double) clickedPos.y() + clickedBlockPos.y() + AllayEntityPhysicsEngine.FAT_AABB_MARGIN,
                                 (double) clickedPos.z() + clickedBlockPos.z()
                         )
                         .build()

@@ -41,6 +41,23 @@ public interface WorldStorage {
     }
 
     /**
+     * Start batch write mode. In this mode, chunk writes via {@link #writeChunk(Chunk)} will be
+     * accumulated and flushed in a single I/O operation when {@link #flushBatchWrite()} is called.
+     * This significantly reduces write overhead when saving many chunks at once (e.g., on shutdown).
+     */
+    @ApiStatus.OverrideOnly
+    default void startBatchWrite() {
+    }
+
+    /**
+     * Flush all accumulated chunk writes in a single batch operation and exit batch write mode.
+     * Must be called after {@link #startBatchWrite()}.
+     */
+    @ApiStatus.OverrideOnly
+    default void flushBatchWrite() {
+    }
+
+    /**
      * Shutdown the storage.
      */
     default void shutdown() {

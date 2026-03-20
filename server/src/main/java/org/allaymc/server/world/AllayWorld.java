@@ -20,6 +20,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.FakeChunkLoader;
 import org.allaymc.api.world.data.Weather;
@@ -29,6 +30,7 @@ import org.allaymc.server.AllayServer;
 import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
+import org.allaymc.server.world.manager.AllayEntityManager;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
@@ -54,6 +56,8 @@ public class AllayWorld implements World {
     @Getter
     protected final WorldStorage worldStorage;
     @Getter
+    protected final boolean virtualTickingThread;
+    @Getter
     protected final AllayWorldData worldData;
 
     protected final Queue<PacketQueueEntry> packetQueue;
@@ -78,10 +82,15 @@ public class AllayWorld implements World {
     @Setter
     protected boolean runtimeOnly;
 
-    public AllayWorld(String name, WorldStorage worldStorage) {
+    // Number of ticks remaining before day advancement is attempted
+    @Setter
+    protected int requiredSleepTicks;
+
+    public AllayWorld(String name, WorldStorage worldStorage, boolean virtualTickingThread) {
         this.name = name;
         this.worldStorage = worldStorage;
         this.worldStorage.setWorld(this);
+        this.virtualTickingThread = virtualTickingThread;
         this.worldData = (AllayWorldData) worldStorage.readWorldData();
         this.worldData.setWorld(this);
         this.worldData.increaseWorldStartCount();
@@ -93,10 +102,10 @@ public class AllayWorld implements World {
                 .currentTick(this.worldData.getTotalTime())
                 .onStart(this::onWorldStart)
                 .onTick(this::worldThreadMain)
-                .onIdle(this::handleSyncPackets)
+                .onIdle(this::idle)
                 .onStop(this::shutdownReally)
                 .build();
-        this.worldThread = Thread.ofPlatform()
+        this.worldThread = (virtualTickingThread ? Thread.ofVirtual() : Thread.ofPlatform())
                 .name("World Thread #" + this.getName())
                 .unstarted(gameLoop::startLoop);
         this.weather = Weather.CLEAR;
@@ -121,6 +130,17 @@ public class AllayWorld implements World {
         } catch (Throwable throwable) {
             log.error("Error while ticking world {}", name, throwable);
         }
+    }
+
+    private void idle() {
+        handleSyncPackets();
+        for (var dimension : this.dimensionMap.values()) {
+            ((AllayEntityManager) dimension.getEntityManager()).idle();
+        }
+    }
+
+    public void wakeUp() {
+        this.gameLoop.wakeUp();
     }
 
     public void addSyncPacketToQueue(Player player, BedrockPacket packet, long time) {
@@ -159,12 +179,14 @@ public class AllayWorld implements World {
 
         tickTime(currentTick);
         tickWeather();
+        tickSleep();
         scheduler.tick();
 
         var dimensions = dimensionMap.values();
         if (TICK_DIMENSION_IN_PARALLEL && dimensions.size() > 1) {
+            var server = Server.getInstance();
             Utils.forEachInParallel(
-                    dimensions, Server.getInstance().getComputeThreadPool(),
+                    dimensions, virtualTickingThread ? server.getVirtualThreadPool() : server.getComputeThreadPool(),
                     dimension -> ((AllayDimension) dimension).tick(currentTick)
             ).join();
         } else {
@@ -264,6 +286,84 @@ public class AllayWorld implements World {
         }
 
         setWeather(newWeather);
+    }
+
+    protected void tickSleep() {
+        var players = getPlayers();
+        if (players.isEmpty()) {
+            return;
+        }
+
+        // Only overworld players can sleep
+        var overworldPlayers = players.stream()
+                .filter(p -> p.getControlledEntity().getDimension().getDimensionInfo().dimensionId() == 0)
+                .toList();
+
+        if (overworldPlayers.isEmpty()) {
+            return;
+        }
+
+        var sleepingCount = 0;
+        for (var player : overworldPlayers) {
+            if (player.getControlledEntity().isSleeping()) {
+                sleepingCount++;
+            }
+        }
+
+        // Send sleeping indicator to all sleeping players
+        if (sleepingCount > 0) {
+            for (var player : overworldPlayers) {
+                if (player.getControlledEntity().isSleeping()) {
+                    player.viewSleepingIndicator(sleepingCount, overworldPlayers.size());
+                }
+            }
+        }
+
+        // Countdown mechanism: only attempt day advancement after the countdown expires
+        if (this.requiredSleepTicks > 0) {
+            this.requiredSleepTicks--;
+            if (this.requiredSleepTicks > 0) {
+                return;
+            }
+        } else {
+            // No countdown active, nothing to do
+            return;
+        }
+
+        // Countdown just reached zero — try to advance day
+        tryAdvanceDay(overworldPlayers);
+    }
+
+    protected void tryAdvanceDay(java.util.List<Player> overworldPlayers) {
+        // Check time - ensure it's actually night
+        int time = this.worldData.getTimeOfDay() % WorldData.TIME_FULL;
+        if (this.weather != Weather.THUNDER) {
+            if (this.weather != Weather.RAIN && (time <= WorldData.TIME_SLEEP || time >= WorldData.TIME_WAKE)) {
+                return;
+            }
+            if (time <= WorldData.TIME_SLEEP_WITH_RAIN || time >= WorldData.TIME_WAKE_WITH_RAIN) {
+                return;
+            }
+        }
+
+        // Check if all sleeping players are still sleeping
+        for (var player : overworldPlayers) {
+            if (!player.getControlledEntity().isSleeping()) {
+                return;
+            }
+        }
+
+        // Advance day: wake all players, set time to day, stop raining
+        for (var player : overworldPlayers) {
+            player.getControlledEntity().wake();
+        }
+
+        if (this.worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
+            int newTime = this.worldData.getTimeOfDay() + (WorldData.TIME_FULL - time);
+            this.worldData.setTimeOfDay(newTime);
+        }
+
+        setWeather(Weather.CLEAR);
     }
 
     @Override

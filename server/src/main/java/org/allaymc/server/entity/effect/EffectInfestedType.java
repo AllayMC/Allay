@@ -8,6 +8,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.CustomSound;
+import org.allaymc.api.world.sound.SoundNames;
 
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -42,8 +43,7 @@ public class EffectInfestedType extends AbstractEffectType {
                     .build();
             var silverFishEntity = EntityTypes.SILVERFISH.createEntity(entityInfo);
             dimension.getEntityManager().addEntity(silverFishEntity);
-            // TODO: replace this with SimpleSound after find out the usage
-            dimension.addSound(location, new CustomSound("entity.silverfish.hurt"));
+            dimension.addSound(location, new CustomSound(SoundNames.MOB_SILVERFISH_HIT));
         }
     }
 }

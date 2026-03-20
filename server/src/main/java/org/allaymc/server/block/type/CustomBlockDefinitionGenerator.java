@@ -1,22 +1,27 @@
 package org.allaymc.server.block.type;
 
+import lombok.Setter;
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.data.TintMethod;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.type.BlockStateDefinition.MaterialInstance;
 import org.allaymc.server.block.type.BlockStateDefinition.Materials;
 import org.allaymc.server.utils.MolangUtils;
+import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * CustomBlockDefinitionGenerator generates client-side block definitions following the Bedrock protocol.
@@ -74,7 +79,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
     private static final AtomicInteger CUSTOM_BLOCK_ID = new AtomicInteger(10000);
 
     /**
-     * Function that generates a BlockStateDefinition for each BlockState.
+     * Function that generates a BlockStateDefinition for each block state.
      */
     private final Function<BlockState, BlockStateDefinition> stateDefinitionFunction;
 
@@ -83,6 +88,20 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
      * These are merged into the global components section.
      */
     private final Map<String, NbtMap> customComponents;
+
+    /**
+     * Specify a value to rotate the stored cardinal direction counter-clockwise from the direction the player had been facing.
+     * A value of 90.0, for example, would cause a block placed when the player faced south to store the state of east, a 90-degree
+     * rotation from south.
+     * <p>
+     * The valid values for y_rotation_offset are 0.0 (the default, no rotation), 90.0, 180.0, and 270.0. The offset only applies to
+     * horizontal (Y-axis) directions. Only have effect when property {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION} or
+     * {@link BlockPropertyTypes#FACING_DIRECTION} is used for the block type.
+     *
+     * @see <a href="https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/traits/placement_direction?view=minecraft-bedrock-stable#rotation-offset">Rotation Offset</a>
+     */
+    @Setter
+    private float rotationOffset = 0f;
 
     /**
      * Creates a new generator with the specified state definition function.
@@ -195,6 +214,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                         .putInt("block_id", CUSTOM_BLOCK_ID.getAndIncrement())
                         .build())
                 .putList("properties", NbtType.COMPOUND, buildPropertyDefinitions(blockType))
+                .putList("traits", NbtType.COMPOUND, buildTraits(blockType))
                 .putInt("molangVersion", MolangUtils.MOLANG_VERSION);
 
         var permutations = new LinkedList<NbtMap>();
@@ -329,12 +349,55 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .build();
     }
 
+    private NbtList<NbtMap> buildTraits(BlockType<?> blockType) {
+        var placementDirection = NbtMap.builder()
+                .putBoolean(
+                        "cardinal_direction",
+                        blockType.hasProperty(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                )
+                .putBoolean(
+                        "facing_direction",
+                        blockType.hasProperty(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION)
+                )
+                // TODO: minecraft:corner_and_cardinal_direction
+                .putBoolean("corner_and_cardinal_direction", false);
+
+        var placementPosition = NbtMap.builder()
+                .putBoolean(
+                        "block_face",
+                        blockType.hasProperty(BlockPropertyTypes.MINECRAFT_BLOCK_FACE)
+                )
+                .putBoolean(
+                        "vertical_half",
+                        blockType.hasProperty(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+                );
+
+        return new NbtList<>(NbtType.COMPOUND, List.of(
+                NbtMap.builder()
+                        .putString("name", "minecraft:placement_direction")
+                        .putCompound("enabled_states", placementDirection.build())
+                        .putFloat("y_rotation_offset", rotationOffset)
+                        // TODO: this should work together with minecraft:corner_and_cardinal_direction
+                        .putList("blocks_to_corner_with", NbtType.COMPOUND, List.of())
+                        .build(),
+                NbtMap.builder()
+                        .putString("name", "minecraft:placement_position")
+                        .putCompound("enabled_states", placementPosition.build())
+                        .build()
+        ));
+    }
+
     /**
      * Builds property definitions from the block type's properties.
      */
     private List<NbtMap> buildPropertyDefinitions(BlockType<?> blockType) {
         var properties = new ArrayList<NbtMap>();
         for (var property : blockType.getProperties().values()) {
+            if (property.getName().startsWith("minecraft:")) {
+                // Will be handled as traits
+                continue;
+            }
+
             properties.add(buildPropertyDefinition(property));
         }
         return properties;

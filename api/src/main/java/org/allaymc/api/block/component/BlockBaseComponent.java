@@ -35,12 +35,13 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a neighboring block causes the current block to update.
      *
-     * @param block    the current block that is being updated
-     * @param neighbor the neighboring block that triggered the update
-     * @param face     the face of the current block that is being updated
+     * @param block            the block being updated
+     * @param neighbor         the neighboring block that triggered the update
+     * @param face             the face of the block being updated (direction from block to neighbor)
+     * @param oldNeighborState the previous block state at the neighbor position, may be null if unknown
      */
     @ApiStatus.OverrideOnly
-    void onNeighborUpdate(Block block, Block neighbor, BlockFace face);
+    void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState);
 
     /**
      * Called when the block encounters a random update.

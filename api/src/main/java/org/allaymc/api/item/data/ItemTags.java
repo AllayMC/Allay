@@ -99,9 +99,13 @@ public interface ItemTags {
 
     ItemTag TRANSFORM_TEMPLATES = create("minecraft:transform_templates");
 
+    ItemTag METAL_NUGGETS = create("minecraft:metal_nuggets");
+
     ItemTag IS_ARMOR = create("minecraft:is_armor");
 
     ItemTag LOGS = create("minecraft:logs");
+
+    ItemTag ALLOW_OFFHAND = create("minecraft:allow_offhand");
 
     ItemTag HANGING_SIGN = create("minecraft:hanging_sign");
 

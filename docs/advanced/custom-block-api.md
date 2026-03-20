@@ -12,7 +12,6 @@ such as custom geometry, textures, transformations, and state-dependent appearan
 - How to create custom blocks with the function-based API
 - Configuring geometry, materials, and transformations
 - Creating state-dependent rendering (different appearances per block state)
-- Understanding automatic optimization
 
 !!! warning "Server Module Required"
     The Custom Block API requires access to the **server module**. In your `build.gradle.kts`, you must set
@@ -39,8 +38,6 @@ to its rendering properties via `BlockStateDefinition`. The system automatically
 
 - Iterates all possible block state combinations
 - Collects rendering properties for each state
-- Optimizes by extracting common properties to global components
-- Merges states with identical properties into single permutations
 
 ## Quick Start
 
@@ -522,35 +519,6 @@ AllayBlockType.builder(ReinforcedBlockImpl.class)
     .build();
 ```
 
-## Automatic Optimization
-
-The system automatically optimizes your definitions:
-
-1. **Global Component Extraction**: Properties shared by all states become global components
-2. **Permutation Merging**: States with identical rendering are merged into single permutations
-3. **Molang Condition Generation**: Efficient conditions for state-based switching
-
-### Example of Optimization
-
-If you define:
-
-```java linenums="1"
-// Only geometry changes based on OPEN_BIT, materials are the same
-CustomBlockDefinitionGenerator.of(state -> {
-    boolean open = state.getPropertyValue(OPEN_BIT);
-    return BlockStateDefinition.builder()
-        .geometry(Geometry.of(open ? "geometry.open" : "geometry.closed"))
-        .materials(Materials.builder().any("door_texture"))  // Same for all
-        .build();
-});
-```
-
-The system will:
-
-- Extract `materials` as a global component (same for all states)
-- Create only 2 permutations for the geometry (open vs closed)
-- Generate efficient Molang conditions: `q.block_state('open_bit') == 1`
-
 ## Physical Properties
 
 Physical properties like collision shape, light emission, and friction are **automatically read** from
@@ -588,10 +556,6 @@ AllayBlockType.builder(CustomFlowerImpl.class)
 
 !!! tip "Start Simple"
     Begin with `ofTexture()` or `ofConstant()` and only use `of()` when you need state-dependent rendering.
-
-!!! tip "Reuse Definitions"
-    If multiple states share the same appearance, the optimizer will merge them automatically.
-    You don't need to optimize manually.
 
 !!! tip "Use Descriptive Geometry Names"
     Name your geometry files clearly: `geometry.my_block_open`, `geometry.my_block_closed`.

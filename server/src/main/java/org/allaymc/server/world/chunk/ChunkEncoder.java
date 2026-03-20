@@ -57,6 +57,54 @@ public final class ChunkEncoder {
         }
     }
 
+    /**
+     * Encode a single section as byte[] blob (blocks only, no block entities).
+     */
+    public static byte[] encodeSectionBlob(AllayChunkSection section) {
+        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        try {
+            writeToNetwork(section, byteBuf);
+            byte[] data = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(data);
+            return data;
+        } finally {
+            byteBuf.release();
+        }
+    }
+
+    /**
+     * Encode biomes as byte[] blob (PURE biomes only, NO border block count).
+     */
+    public static byte[] encodeBiomesBlob(AllayUnsafeChunk chunk) {
+        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        try {
+            writeBiomes(chunk, byteBuf);
+            byte[] data = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(data);
+            return data;
+        } finally {
+            byteBuf.release();
+        }
+    }
+
+    /**
+     * Encode border block count (0) + block entities as ByteBuf.
+     * Used as LevelChunkPacket.data in full-chunk cache mode.
+     */
+    public static ByteBuf writeCachedChunkData(AllayUnsafeChunk chunk) {
+        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        try {
+            // Border block count
+            byteBuf.writeByte(0);
+            writeBlockEntities(chunk, byteBuf);
+            return byteBuf;
+        } catch (Throwable t) {
+            log.error("Error while encoding cached chunk data(x={}, z={})!", chunk.getX(), chunk.getZ(), t);
+            byteBuf.release();
+            return Unpooled.EMPTY_BUFFER;
+        }
+    }
+
     private static void writeBlocks(AllayUnsafeChunk chunk, ByteBuf byteBuf) {
         var dimensionInfo = chunk.getDimensionInfo();
         for (int i = dimensionInfo.minSectionY(); i <= dimensionInfo.maxSectionY(); i++) {
@@ -64,7 +112,7 @@ public final class ChunkEncoder {
         }
     }
 
-    private static void writeBiomes(AllayUnsafeChunk chunk, ByteBuf byteBuf) {
+    static void writeBiomes(AllayUnsafeChunk chunk, ByteBuf byteBuf) {
         Palette<BiomeType> last = null;
         for (var s : chunk.getSections()) {
             var section = (AllayChunkSection) s;
@@ -74,7 +122,7 @@ public final class ChunkEncoder {
         }
     }
 
-    private static void writeBlockEntities(AllayUnsafeChunk chunk, ByteBuf byteBuf) {
+    static void writeBlockEntities(AllayUnsafeChunk chunk, ByteBuf byteBuf) {
         var blockEntities = chunk.getBlockEntities().values();
         if (!blockEntities.isEmpty()) {
             try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {

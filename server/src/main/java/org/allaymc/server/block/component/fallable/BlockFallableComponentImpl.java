@@ -40,7 +40,7 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
     }
 
     @EventHandler
-    public void onBlockOnNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
+    public void onBlockOnNeighborUpdateContext(CBlockOnNeighborUpdateEvent event) {
         var current = event.getCurrent();
         tryFall(current.getDimension(), current.getPosition(), current.getBlockState());
     }

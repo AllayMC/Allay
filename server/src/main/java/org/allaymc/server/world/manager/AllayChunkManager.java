@@ -91,7 +91,7 @@ public final class AllayChunkManager implements ChunkManager {
 
     private void tickChunks(long currentTick) {
         forEachLoadedChunks(chunk -> {
-            if (!shouldTickChunk(chunk)) {
+            if (!isChunkActive(chunk.getX(), chunk.getZ())) {
                 return;
             }
 
@@ -104,19 +104,19 @@ public final class AllayChunkManager implements ChunkManager {
         });
     }
 
-    private boolean shouldTickChunk(Chunk chunk) {
-        var cx = chunk.getX();
-        var cz = chunk.getZ();
-        var shouldTick = false;
+    @Override
+    public boolean isChunkActive(int x, int z) {
+        var chunk = getChunk(x, z);
+        if (chunk == null) return false;
+
         for (var chunkLoader : chunk.getChunkLoaders()) {
             var lcx = ((int) Math.floor(chunkLoader.getLocation().x())) >> 4;
             var lcz = ((int) Math.floor(chunkLoader.getLocation().z())) >> 4;
-            if (Math.pow(lcx - cx, 2) + Math.pow(lcz - cz, 2) <= Math.pow(AllayServer.getSettings().worldSettings().tickRadius(), 2)) {
-                shouldTick = true;
-                break;
+            if (Math.pow(lcx - x, 2) + Math.pow(lcz - z, 2) <= Math.pow(AllayServer.getSettings().worldSettings().tickRadius(), 2)) {
+                return true;
             }
         }
-        return shouldTick;
+        return false;
     }
 
     @Override
@@ -218,7 +218,8 @@ public final class AllayChunkManager implements ChunkManager {
 
     @Override
     public void addChunkLoader(ChunkLoader chunkLoader) {
-        this.chunkLoaders.put(chunkLoader, new ChunkLoaderHolder(this, chunkLoader));
+        var old = this.chunkLoaders.put(chunkLoader, new ChunkLoaderHolder(this, chunkLoader));
+        if (old != null) old.onRemoved();
     }
 
     @Override

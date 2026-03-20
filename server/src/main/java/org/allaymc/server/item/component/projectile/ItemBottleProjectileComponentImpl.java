@@ -3,8 +3,11 @@ package org.allaymc.server.item.component.projectile;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.server.entity.data.EntityId;
 import org.joml.Vector3dc;
+
+import java.util.function.Supplier;
 
 import static java.lang.Math.*;
 
@@ -12,8 +15,12 @@ import static java.lang.Math.*;
  * @author daoge_cmd
  */
 public class ItemBottleProjectileComponentImpl extends ItemProjectileComponentImpl {
+    public ItemBottleProjectileComponentImpl(Supplier<EntityType<?>> projectileEntityTypeSupplier, double throwForce) {
+        super(projectileEntityTypeSupplier, throwForce);
+    }
+
     public ItemBottleProjectileComponentImpl(EntityId projectileEntityId, double throwForce) {
-        super(projectileEntityId, throwForce);
+        this(projectileEntityId::getEntityType, throwForce);
     }
 
     @Override

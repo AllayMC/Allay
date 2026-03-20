@@ -3,7 +3,6 @@ package org.allaymc.server.item.component.projectile;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
-import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.type.EntityType;
@@ -19,10 +18,11 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.data.EntityId;
-import org.allaymc.server.item.component.event.CItemClickInAirEvent;
-import org.allaymc.server.item.component.event.CItemInteractEntityEvent;
+import org.allaymc.server.item.component.event.CItemRightClickInAirEvent;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.function.Supplier;
 
 /**
  * @author daoge_cmd
@@ -32,20 +32,24 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_projectile_component");
 
-    protected EntityId projectileEntityId;
-    protected double throwForce;
+    protected final Supplier<EntityType<?>> projectileEntityType;
+    protected final double throwForce;
 
     @ComponentObject
     protected ItemStack thisItemStack;
 
-    public ItemProjectileComponentImpl(EntityId projectileEntityId, double throwForce) {
-        this.projectileEntityId = projectileEntityId;
+    public ItemProjectileComponentImpl(Supplier<EntityType<?>> projectileEntityTypeSupplier, double throwForce) {
+        this.projectileEntityType = projectileEntityTypeSupplier;
         this.throwForce = throwForce;
+    }
+
+    public ItemProjectileComponentImpl(EntityId projectileEntityId, double throwForce) {
+        this(projectileEntityId::getEntityType, throwForce);
     }
 
     @Override
     public EntityType<?> getProjectileEntityType() {
-        return this.projectileEntityId.getEntityType();
+        return this.projectileEntityType.get();
     }
 
     @Override
@@ -78,9 +82,10 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
     }
 
     protected EntityProjectile createProjectile(Entity shooter, Vector3d shootPos) {
-        var entity = getProjectileEntityType().createEntity(EntityInitInfo.builder().dimension(shooter.getDimension()).pos(shootPos).build());
+        var projectileEntityType = getProjectileEntityType();
+        var entity = projectileEntityType.createEntity(EntityInitInfo.builder().dimension(shooter.getDimension()).pos(shootPos).build());
         if (!(entity instanceof EntityProjectile projectile)) {
-            log.error("Entity {} is not a projectile entity", projectileEntityId);
+            log.error("Entity {} is not a projectile entity", projectileEntityType.getIdentifier());
             return null;
         }
 
@@ -93,7 +98,7 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
     }
 
     @EventHandler
-    protected void onClickItemInAir(CItemClickInAirEvent event) {
+    protected void onClickItemInAir(CItemRightClickInAirEvent event) {
         shoot(event.getPlayer());
     }
 

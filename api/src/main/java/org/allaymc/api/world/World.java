@@ -46,6 +46,13 @@ public interface World extends TaskCreator {
     WorldStorage getWorldStorage();
 
     /**
+     * Whether the world is using virtual thread as the ticking thread of the world and the dimension in the world.
+     *
+     * @return {@code true} if the world is using virtual thread, otherwise {@code false}
+     */
+    boolean isVirtualTickingThread();
+
+    /**
      * Get the tick of the world.
      *
      * @return the tick of the world
@@ -163,6 +170,14 @@ public interface World extends TaskCreator {
      * @param weather the weather to set
      */
     void setWeather(Weather weather);
+
+    /**
+     * Set the required sleep duration (in ticks) before day advancement is attempted.
+     * Called when a player starts sleeping.
+     *
+     * @param ticks the number of ticks to wait
+     */
+    void setRequiredSleepTicks(int ticks);
 
     /**
      * Set the weather to {@link Weather#CLEAR}.

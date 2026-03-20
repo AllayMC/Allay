@@ -8,6 +8,7 @@ import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
 
 import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.writeVector2f;
 
 /**
  * PlayerData represents the entry stores in {@link PlayerStorage}. It includes the player's nbt, the world, and
@@ -59,6 +60,7 @@ public class PlayerData {
         var globalSpawnPoint = server.getWorldPool().getGlobalSpawnPoint();
         var builder = NbtMap.builder();
         writeVector3f(builder, "Pos", globalSpawnPoint.x(), globalSpawnPoint.y(), globalSpawnPoint.z());
+        writeVector2f(builder, "Rotation", 0f, 0f);
         var worldName = globalSpawnPoint.dimension().getWorld().getWorldData().getDisplayName();
         var dimId = globalSpawnPoint.dimension().getDimensionInfo().dimensionId();
         return builder()

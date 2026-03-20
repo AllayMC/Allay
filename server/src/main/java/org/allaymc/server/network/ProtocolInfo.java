@@ -16,6 +16,7 @@ import org.cloudburstmc.protocol.bedrock.codec.v844.Bedrock_v844;
 import org.cloudburstmc.protocol.bedrock.codec.v859.Bedrock_v859;
 import org.cloudburstmc.protocol.bedrock.codec.v860.Bedrock_v860;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
+import org.cloudburstmc.protocol.bedrock.codec.v924.Bedrock_v924;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public final class ProtocolInfo {
      */
     public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
             // Order is important. The first codec is the latest supported version.
+            Bedrock_v924.CODEC,
             Bedrock_v898.CODEC,
             Bedrock_v860.CODEC,
             Bedrock_v859.CODEC,
@@ -46,7 +48,7 @@ public final class ProtocolInfo {
     /**
      * Feature version is the version of the game from which vanilla features will be used.
      */
-    public static final BedrockCodec FEATURE_VERSION = Bedrock_v898.CODEC;
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v924.CODEC;
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.

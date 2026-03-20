@@ -43,7 +43,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     protected void tickFalling() {
-        if (this.willBeDespawnedNextTick() || physicsComponent.isOnGround()) {
+        if (this.willBeDespawnedLater() || physicsComponent.isOnGround()) {
             // The falling block entity already became block
             return;
         }

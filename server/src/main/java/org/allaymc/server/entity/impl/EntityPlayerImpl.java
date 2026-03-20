@@ -8,6 +8,7 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.component.ComponentProvider;
 
@@ -25,6 +26,8 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Getter
     @Delegate
     private EntityPhysicsComponent physicsComponent;
+    @Delegate
+    private EntitySleepableComponent sleepableComponent;
 
     public EntityPlayerImpl(EntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

@@ -19,14 +19,17 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
+import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -70,7 +73,7 @@ public class AllayDimension implements Dimension {
     protected final Set<Player> players;
     protected final Set<DebugShape> debugShapes;
 
-    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo, boolean enableLightCalculation) {
+    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo, boolean enableLightCalculation, boolean useVirtualThread) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
@@ -78,7 +81,7 @@ public class AllayDimension implements Dimension {
         this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
         this.blockUpdateManager = new AllayBlockUpdateManager(this);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
-        this.lightEngine = enableLightCalculation ? new AllayLightEngine(this) : new NoLightEngine(this);
+        this.lightEngine = enableLightCalculation ? new AllayLightEngine(this, useVirtualThread) : new NoLightEngine(this);
         this.players = new NonBlockingHashSet<>();
         this.debugShapes = new NonBlockingHashSet<>();
         worldGenerator.setDimension(this);
@@ -106,10 +109,16 @@ public class AllayDimension implements Dimension {
         // Shutdown light service first, because when unloading chunks, chunk service
         // will send updates to light service which is meaningless
         this.lightEngine.shutdown();
-        this.chunkManager.shutdown();
-        // EntityService should be shutdown after chunk service, because it requires
-        // the callback AllayEntityService.onChunkUnload() to be called
-        this.entityManager.shutdown();
+        // Batch all chunk and entity writes into a single db.write() call for fast shutdown
+        world.getWorldStorage().startBatchWrite();
+        try {
+            this.chunkManager.shutdown();
+            // EntityService should be shutdown after chunk service, because it requires
+            // the callback AllayEntityService.onChunkUnload() to be called
+            this.entityManager.shutdown();
+        } finally {
+            world.getWorldStorage().flushBatchWrite();
+        }
     }
 
     public void addPlayer(Player player) {
@@ -236,8 +245,18 @@ public class AllayDimension implements Dimension {
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
+        // Update POI index when main-layer blocks change
+        if (layer == 0) {
+            var oldPoi = Registries.POI_TYPES.get(oldBlockState.getBlockType());
+            var newPoi = Registries.POI_TYPES.get(blockState.getBlockType());
+            if (oldPoi != newPoi) {
+                if (oldPoi != null) chunk.removePoi(xIndex, y, zIndex);
+                if (newPoi != null) chunk.addPoi(xIndex, y, zIndex, newPoi);
+            }
+        }
+
         if (update) {
-            updateAround(x, y, z);
+            updateAround(x, y, z, oldBlockState);
         }
 
         if (callBlockBehavior) {
@@ -247,6 +266,33 @@ public class AllayDimension implements Dimension {
         }
 
         return true;
+    }
+
+    @Override
+    public Vector3ic findNearestPoi(PoiType type, int x, int y, int z, int chunkRadius) {
+        int cx = x >> 4, cz = z >> 4;
+        Vector3ic nearest = null;
+        double nearestDistSq = Double.MAX_VALUE;
+
+        for (int dx = -chunkRadius; dx <= chunkRadius; dx++) {
+            for (int dz = -chunkRadius; dz <= chunkRadius; dz++) {
+                var chunk = chunkManager.getChunk(cx + dx, cz + dz);
+                if (chunk == null) continue;
+                for (var entry : chunk.getPoiEntries().entrySet()) {
+                    if (entry.getValue() != type) continue;
+                    int hash = entry.getKey();
+                    int px = HashUtils.getXFromHashChunkXYZ(hash) + ((cx + dx) << 4);
+                    int py = HashUtils.getYFromHashChunkXYZ(hash);
+                    int pz = HashUtils.getZFromHashChunkXYZ(hash) + ((cz + dz) << 4);
+                    double distSq = (double) (px - x) * (px - x) + (double) (py - y) * (py - y) + (double) (pz - z) * (pz - z);
+                    if (distSq < nearestDistSq) {
+                        nearestDistSq = distSq;
+                        nearest = new Vector3i(px, py, pz);
+                    }
+                }
+            }
+        }
+        return nearest;
     }
 
     @Override
@@ -378,7 +424,7 @@ public class AllayDimension implements Dimension {
 
             if (isDiode(neighborState)) {
                 // Direct neighbor is a diode, update it
-                blockUpdateManager.neighborBlockUpdate(neighborPos, sourcePos, face.opposite());
+                blockUpdateManager.neighborBlockUpdate(neighborPos, sourcePos, face.opposite(), null);
             } else if (neighborState.getBlockStateData().isSolid()) {
                 // Neighbor is solid, check if there's a diode on the other side
                 int nx2 = nx + offset.x();
@@ -391,7 +437,7 @@ public class AllayDimension implements Dimension {
                 BlockState behindState = getBlockState(nx2, ny, nz2);
                 if (isDiode(behindState)) {
                     var behindPos = new Vector3i(nx2, ny, nz2);
-                    blockUpdateManager.neighborBlockUpdate(behindPos, neighborPos, face.opposite());
+                    blockUpdateManager.neighborBlockUpdate(behindPos, neighborPos, face.opposite(), null);
                 }
             }
         }

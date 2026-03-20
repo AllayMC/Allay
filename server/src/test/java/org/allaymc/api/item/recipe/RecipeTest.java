@@ -205,6 +205,20 @@ class RecipeTest {
     }
 
     @Test
+    void testStonecutterRecipeInput() {
+        var stonecutterRecipe = new ShapelessRecipe(
+                new Identifier("minecraft:stonecutter_test"),
+                new ItemStack[]{diamond()},
+                0,
+                new ItemDescriptor[]{new ItemTypeDescriptor(GRASS_BLOCK)},
+                ShapelessRecipe.Type.STONECUTTER
+        );
+
+        var input = new CraftingRecipeInput(grass());
+        assertTrue(stonecutterRecipe.match(input));
+    }
+
+    @Test
     void testFurnaceRecipe() {
         var grassMagic1 = new FurnaceRecipe(
                 new ItemTypeDescriptor(GRASS_BLOCK).createItemStack(),

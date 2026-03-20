@@ -10,21 +10,26 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.data.BlockId;
 
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * @author daoge_cmd
  */
 public class BlockDoubleSlabBaseComponentImpl extends BlockBaseComponentImpl implements BlockDoubleSlabBaseComponent {
-    protected BlockId singleSlabId;
+    protected final Supplier<BlockType<?>> singleSlabType;
+
+    public BlockDoubleSlabBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> singleSlabTypeSupplier) {
+        super(blockType);
+        this.singleSlabType = singleSlabTypeSupplier;
+    }
 
     public BlockDoubleSlabBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId singleSlabId) {
-        super(blockType);
-        this.singleSlabId = singleSlabId;
+        this(blockType, singleSlabId::getBlockType);
     }
 
     @Override
     public BlockType<?> getSingleSlabBlockType() {
-        return singleSlabId.getBlockType();
+        return singleSlabType.get();
     }
 
     @Override

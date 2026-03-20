@@ -9,6 +9,7 @@ import org.allaymc.api.entity.Entity;
  *
  * @author daoge_cmd
  */
+@CallerThread(ThreadType.WORLD)
 @CallerThread(ThreadType.DIMENSION)
 public class EntitySpawnEvent extends EntityEvent {
     public EntitySpawnEvent(Entity entity) {

@@ -22,4 +22,21 @@ public class AllayBiomeType implements BiomeType {
         this.biomeData = InternalRegistries.BIOME_DATA.get(biomeId);
         Registries.BIOMES.register(this.id, this.identifier, this);
     }
+
+    /**
+     * Create a custom biome type with auto-allocated ID.
+     * <p>
+     * The ID is automatically allocated by {@link CustomBiomeIdAllocator} and
+     * persisted to {@code biome_ids.yml}. The biome is automatically registered
+     * in {@link Registries#BIOMES}.
+     *
+     * @param identifier the biome identifier
+     * @param biomeData  the biome data
+     */
+    public AllayBiomeType(Identifier identifier, BiomeData biomeData) {
+        this.identifier = identifier;
+        this.id = CustomBiomeIdAllocator.getInstance().allocateId(identifier);
+        this.biomeData = biomeData;
+        Registries.BIOMES.register(this.id, this.identifier, this);
+    }
 }

@@ -53,6 +53,7 @@ public class BlockStateDataProcessor {
         public float translucency;
 
         public String name;
+        public String translationKey;
         public long blockStateHash;
     }
 
@@ -76,6 +77,7 @@ public class BlockStateDataProcessor {
         public float translucency;
 
         public String name;
+        public String translationKey;
         public long blockStateHash;
 
         public static NewBlockStateData fromRaw(RawBlockStateData raw) {
@@ -98,6 +100,7 @@ public class BlockStateDataProcessor {
             data.translucency = raw.translucency;
 
             data.name = raw.name;
+            data.translationKey = "minecraft:" + raw.translationKey;
             data.blockStateHash = raw.blockStateHash;
 
             if (raw.collisionShape.length == 0) {
@@ -119,8 +122,9 @@ public class BlockStateDataProcessor {
 
         private static float[] clampShape(float[] shape) {
             for (var i = 0; i < shape.length; i++) {
-                // Clamp the value between 0 and 1 because bigger than 1 is not allowed in allay
-                shape[i] = Math.max(0, Math.min(1, shape[i]));
+                // Only clamp the lower bound. Values > 1 are allowed because some blocks
+                // (fences, walls, fence gates, border_block) have collision shapes with maxY = 1.5
+                shape[i] = Math.max(0, shape[i]);
             }
 
             return shape;

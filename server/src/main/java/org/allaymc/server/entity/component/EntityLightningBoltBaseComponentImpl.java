@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.block.component.BlockFireBaseComponentImpl;
+import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
