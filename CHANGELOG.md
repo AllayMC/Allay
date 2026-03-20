@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added camera shake API (`Player.shakeCamera()`, `Player.stopCameraShake()`) and implemented `/camerashake` command.
 - (API) Added fog API (`Player.pushFog()`, `Player.popFog()`, `Player.removeFog()`, `Player.removeAllFogs()`, `Player.getFogs()`) with `FogIds` constants, and implemented `/fog` command.
 - (API) Added `BiomeTags` constants interface with code-generated biome tag definitions.
+- (API) Added `BlockEntityChiseledBookshelf`, `BlockEntityChiseledBookshelfContainerHolderComponent`, `ContainerTypes.CHISELED_BOOKSHELF`, `ItemTags.CHISELED_BOOKSHELF_BOOK`, and `ChiseledBookshelfSound`.
 - (API) Added `ItemTags.ALLOW_OFFHAND` for marking items that are allowed in the offhand slot.
 - (API) Added `ItemWearableComponent` as the shared wearable contract for armor, elytra, carved pumpkins, and heads.
 - Added custom biome support. Plugins can register custom biomes via `new AllayBiomeType(Identifier, BiomeData)` with auto-allocated persistent IDs (starting from 30000, saved to `biome_ids.yml`).
@@ -27,6 +28,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added inventory transaction validation for restricted container slots to reject invalid item moves and swaps, such as non-armor items being placed into armor slots.
 - Added support for client blob cache.
 - Added handler for AutoCraftRecipeAction. Now the player can craft items through the recipe book directly.
+- Implemented chiseled bookshelf.
 
 ### Fixed
 

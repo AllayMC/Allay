@@ -16,19 +16,6 @@ import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.block.component.*;
-import org.allaymc.server.block.component.candle.*;
-import org.allaymc.server.block.component.chorus.*;
-import org.allaymc.server.block.component.container.*;
-import org.allaymc.server.block.component.dripleaf.*;
-import org.allaymc.server.block.component.fire.*;
-import org.allaymc.server.block.component.liquid.*;
-import org.allaymc.server.block.component.plant.*;
-import org.allaymc.server.block.component.portal.*;
-import org.allaymc.server.block.component.redstone.*;
-import org.allaymc.server.block.component.snow.*;
-import org.allaymc.server.block.component.sponge.*;
-import org.allaymc.server.block.component.vine.*;
-import org.allaymc.server.block.component.workstation.*;
 import org.allaymc.server.block.component.amethyst.BlockAmethystClusterBaseComponentImpl;
 import org.allaymc.server.block.component.amethyst.BlockBuddingAmethystBaseComponentImpl;
 import org.allaymc.server.block.component.bamboo.BlockBambooBaseComponentImpl;
@@ -39,14 +26,23 @@ import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
 import org.allaymc.server.block.component.campfire.BlockCampfireBaseComponentImpl;
 import org.allaymc.server.block.component.campfire.BlockSoulCampfireBaseComponentImpl;
+import org.allaymc.server.block.component.candle.BlockCandleBaseComponentImpl;
+import org.allaymc.server.block.component.candle.BlockCandleCakeBaseComponentImpl;
+import org.allaymc.server.block.component.chorus.BlockChorusFlowerBaseComponentImpl;
+import org.allaymc.server.block.component.chorus.BlockChorusPlantBaseComponentImpl;
+import org.allaymc.server.block.component.container.*;
 import org.allaymc.server.block.component.crops.*;
 import org.allaymc.server.block.component.door.BlockCopperDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
+import org.allaymc.server.block.component.dripleaf.BlockBigDripleafBaseComponentImpl;
+import org.allaymc.server.block.component.dripleaf.BlockSmallDripleafBaseComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockConcretePowderFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockPointedDripstoneFallableComponentImpl;
+import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
+import org.allaymc.server.block.component.fire.BlockSoulFireBaseComponentImpl;
 import org.allaymc.server.block.component.flower.BlockBigFlowerBaseComponentImpl;
 import org.allaymc.server.block.component.flower.BlockSmallFlowerBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockDryGrassBaseComponentImpl;
@@ -54,20 +50,26 @@ import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockHardIceBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
+import org.allaymc.server.block.component.liquid.BlockLavaBaseComponentImpl;
+import org.allaymc.server.block.component.liquid.BlockWaterBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockPistonArmCollisionBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockPistonBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockStickyPistonBaseComponentImpl;
-import org.allaymc.server.block.component.rail.BlockDetectorRailBaseComponentImpl;
-import org.allaymc.server.block.component.rail.BlockNormalRailBaseComponentImpl;
-import org.allaymc.server.block.component.rail.BlockPoweredRailBaseComponentImpl;
+import org.allaymc.server.block.component.plant.*;
+import org.allaymc.server.block.component.portal.BlockEndPortalBaseComponentImpl;
+import org.allaymc.server.block.component.portal.BlockEndPortalFrameBaseComponentImpl;
+import org.allaymc.server.block.component.portal.BlockPortalBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
+import org.allaymc.server.block.component.rail.BlockDetectorRailBaseComponentImpl;
+import org.allaymc.server.block.component.rail.BlockNormalRailBaseComponentImpl;
+import org.allaymc.server.block.component.rail.BlockPoweredRailBaseComponentImpl;
+import org.allaymc.server.block.component.redstone.*;
 import org.allaymc.server.block.component.respawnpoint.BlockBedRespawnPointComponentImpl;
 import org.allaymc.server.block.component.respawnpoint.BlockRespawnAnchorRespawnPointComponentImpl;
-import org.allaymc.server.block.component.plant.BlockAzaleaBaseComponentImpl;
 import org.allaymc.server.block.component.sapling.BlockMangrovePropaguleBaseComponentImpl;
 import org.allaymc.server.block.component.sapling.BlockSaplingBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
@@ -75,11 +77,20 @@ import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImp
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.slab.BlockDoubleSlabBaseComponentImpl;
 import org.allaymc.server.block.component.slab.BlockSlabBaseComponentImpl;
+import org.allaymc.server.block.component.snow.BlockPowderSnowBaseComponentImpl;
+import org.allaymc.server.block.component.snow.BlockSnowBaseComponentImpl;
+import org.allaymc.server.block.component.snow.BlockSnowLayerBaseComponentImpl;
+import org.allaymc.server.block.component.sponge.BlockSpongeBaseComponentImpl;
+import org.allaymc.server.block.component.sponge.BlockWetSpongeBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.tripwire.BlockTripWireBaseComponentImpl;
 import org.allaymc.server.block.component.tripwire.BlockTripwireHookBaseComponentImpl;
+import org.allaymc.server.block.component.vine.BlockCaveVinesBaseComponentImpl;
+import org.allaymc.server.block.component.vine.BlockKelpBaseComponentImpl;
 import org.allaymc.server.block.component.vine.BlockNetherVinesBaseComponentImpl;
+import org.allaymc.server.block.component.vine.BlockSeagrassBaseComponentImpl;
+import org.allaymc.server.block.component.workstation.*;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.impl.*;
 import org.allaymc.server.item.data.ItemId;
@@ -3085,6 +3096,16 @@ public final class BlockTypeInitializer {
         BlockTypes.PALE_OAK_SHELF = buildShelf(BlockId.PALE_OAK_SHELF);
         BlockTypes.SPRUCE_SHELF = buildShelf(BlockId.SPRUCE_SHELF);
         BlockTypes.WARPED_SHELF = buildShelf(BlockId.WARPED_SHELF);
+    }
+
+    public static void initChiseledBookshelf() {
+        BlockTypes.CHISELED_BOOKSHELF = AllayBlockType
+                .builder(BlockChiseledBookshelfBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHISELED_BOOKSHELF)
+                .bindBlockEntity(BlockEntityTypes.CHISELED_BOOKSHELF)
+                .setProperties(BlockPropertyTypes.BOOKS_STORED, BlockPropertyTypes.DIRECTION_4)
+                .setBaseComponentSupplier(BlockChiseledBookshelfBaseComponentImpl::new)
+                .build();
     }
 
     private static BlockType<BlockShelfBehavior> buildShelf(BlockId blockId) {

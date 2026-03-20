@@ -20,6 +20,7 @@ public interface ContainerTypes {
     ContainerType<BlockContainer> HOPPER = new ContainerType<>(5);
     ContainerType<BlockContainer> DISPENSER = new ContainerType<>(9);
     ContainerType<BlockContainer> DROPPER = new ContainerType<>(9);
+    ContainerType<Container> CHISELED_BOOKSHELF = new ContainerType<>(6);
     ContainerType<RecipeContainer> CRAFTING_GRID = new ContainerType<>(4);
     ContainerType<CraftingTableContainer> CRAFTING_TABLE = new ContainerType<>(9);
     ContainerType<Container> CREATED_OUTPUT = new ContainerType<>(1);

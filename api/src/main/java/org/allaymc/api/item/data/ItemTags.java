@@ -117,6 +117,8 @@ public interface ItemTags {
 
     ItemTag CHAINMAIL_TIER = create("minecraft:chainmail_tier");
 
+    ItemTag CHISELED_BOOKSHELF_BOOK = create("minecraft:chiseled_bookshelf_book");
+
     ItemTag HANGING_ACTOR = create("minecraft:hanging_actor");
 
     ItemTag IS_MINECART = create("minecraft:is_minecart");

@@ -1767,6 +1767,18 @@ public class AllayPlayer implements Player {
                 packet.setSound(SoundEvent.RESPAWN_ANCHOR_CHARGE);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
+            case ChiseledBookshelfSound so -> {
+                PlaySoundPacket playSound = new PlaySoundPacket();
+                playSound.setSound(switch (so.type()) {
+                    case INSERT -> so.enchanted() ? SoundNames.INSERT_ENCHANTED_CHISELED_BOOKSHELF : SoundNames.INSERT_CHISELED_BOOKSHELF;
+                    case PICKUP -> so.enchanted() ? SoundNames.PICKUP_ENCHANTED_CHISELED_BOOKSHELF : SoundNames.PICKUP_CHISELED_BOOKSHELF;
+                });
+                playSound.setPosition(pos);
+                playSound.setVolume(1.0f);
+                playSound.setPitch(1.0f);
+                sendPacket(playSound);
+                return;
+            }
             case DecoratedPotInsertedSound so -> {
                 PlaySoundPacket playSound = new PlaySoundPacket();
                 playSound.setSound(SoundNames.BLOCK_DECORATED_POT_INSERT);
