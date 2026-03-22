@@ -1610,8 +1610,8 @@ public final class BlockTypeInitializer {
         BlockTypes.LAPIS_ORE = buildOre(BlockId.LAPIS_ORE, ItemId.LAPIS_LAZULI, 4, 9, 2, 5);
         BlockTypes.NETHER_GOLD_ORE = buildOre(BlockId.NETHER_GOLD_ORE, ItemId.GOLD_NUGGET, 2, 6, 0, 1);
         BlockTypes.QUARTZ_ORE = buildOre(BlockId.QUARTZ_ORE, ItemId.QUARTZ, 1, 1, 2, 5);
-        BlockTypes.REDSTONE_ORE = buildRedstoneOre(BlockId.REDSTONE_ORE);
-        BlockTypes.LIT_REDSTONE_ORE = buildRedstoneOre(BlockId.LIT_REDSTONE_ORE);
+        BlockTypes.REDSTONE_ORE = buildRedstoneOre(BlockId.REDSTONE_ORE, BlockId.LIT_REDSTONE_ORE, BlockId.REDSTONE_ORE);
+        BlockTypes.LIT_REDSTONE_ORE = buildRedstoneOre(BlockId.LIT_REDSTONE_ORE, BlockId.LIT_REDSTONE_ORE, BlockId.REDSTONE_ORE);
 
         BlockTypes.DEEPSLATE_COAL_ORE = buildOre(BlockId.DEEPSLATE_COAL_ORE, ItemId.COAL, 1, 1, 0, 2);
         BlockTypes.DEEPSLATE_COPPER_ORE = buildOre(BlockId.DEEPSLATE_COPPER_ORE, ItemId.RAW_COPPER, 2, 5, 0, 0);
@@ -1620,8 +1620,8 @@ public final class BlockTypeInitializer {
         BlockTypes.DEEPSLATE_GOLD_ORE = buildOre(BlockId.DEEPSLATE_GOLD_ORE, ItemId.RAW_GOLD, 1, 1, 0, 0);
         BlockTypes.DEEPSLATE_IRON_ORE = buildOre(BlockId.DEEPSLATE_IRON_ORE, ItemId.RAW_IRON, 1, 1, 0, 0);
         BlockTypes.DEEPSLATE_LAPIS_ORE = buildOre(BlockId.DEEPSLATE_LAPIS_ORE, ItemId.LAPIS_LAZULI, 4, 9, 2, 5);
-        BlockTypes.DEEPSLATE_REDSTONE_ORE = buildRedstoneOre(BlockId.DEEPSLATE_REDSTONE_ORE);
-        BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = buildRedstoneOre(BlockId.LIT_DEEPSLATE_REDSTONE_ORE);
+        BlockTypes.DEEPSLATE_REDSTONE_ORE = buildRedstoneOre(BlockId.DEEPSLATE_REDSTONE_ORE, BlockId.LIT_DEEPSLATE_REDSTONE_ORE, BlockId.DEEPSLATE_REDSTONE_ORE);
+        BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = buildRedstoneOre(BlockId.LIT_DEEPSLATE_REDSTONE_ORE, BlockId.LIT_DEEPSLATE_REDSTONE_ORE, BlockId.DEEPSLATE_REDSTONE_ORE);
     }
 
     public static BlockType<BlockOreBehavior> buildOre(BlockId blockId, ItemId dropItem, int minDropItem, int maxDropItem, int minDropXp, int maxDropXp) {
@@ -1631,10 +1631,10 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    private static BlockType<BlockOreBehavior> buildRedstoneOre(BlockId blockId) {
+    private static BlockType<BlockOreBehavior> buildRedstoneOre(BlockId blockId, BlockId litBlockId, BlockId unlitBlockId) {
         return AllayBlockType.builder(BlockOreBehaviorImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneOreBaseComponentImpl(blockType, litBlockId.getIdentifier(), unlitBlockId.getIdentifier()))
                 .build();
     }
 

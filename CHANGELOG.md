@@ -29,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for client blob cache.
 - Added handler for AutoCraftRecipeAction. Now the player can craft items through the recipe book directly.
 - Implemented chiseled bookshelf.
+- Implemented redstone ore.
 
 ### Fixed
 
