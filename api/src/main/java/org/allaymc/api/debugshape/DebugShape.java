@@ -42,6 +42,7 @@ public abstract class DebugShape {
      * be relative and follow the entity's position. Can be {@code null} if this shape is not attached
      * to any entity.
      */
+    @Getter
     protected Entity attachedEntity;
     /**
      * The color of the shape.
@@ -80,15 +81,6 @@ public abstract class DebugShape {
     public void setPosition(Vector3fc position) {
         this.position = position;
         this.onChange();
-    }
-
-    /**
-     * Retrieves the entity this debug shape attached to.
-     *
-     * @return the attached entity, or null if no entity is attached
-     */
-    public Entity getAttachedEntity() {
-        return this.attachedEntity;
     }
 
     /**
