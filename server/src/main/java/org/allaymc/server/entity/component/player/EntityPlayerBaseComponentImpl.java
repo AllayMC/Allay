@@ -23,6 +23,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.player.PlayerAbility;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
@@ -175,7 +176,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void onPermissionChange() {
         if (isActualPlayer()) {
-            this.controller.viewPlayerPermission(this.controller);
+            this.controller.viewPlayerAbilities(this.controller);
         }
     }
 
@@ -203,6 +204,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         gameMode = event.getNewGameMode();
+        var oldGameMode = this.gameMode;
         this.gameMode = gameMode;
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
@@ -214,10 +216,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             thisPlayer.setAirSupplyTicks(thisPlayer.getAirSupplyMaxTicks());
         }
 
+        // Update abilities
+        if (isActualPlayer()) {
+            this.controller.setAbilities(oldGameMode.getAbilities(), false);
+            this.controller.setAbilities(gameMode.getAbilities(), true);
+        }
+
         if (isActualPlayer()) {
             this.controller.viewPlayerGameMode(thisPlayer);
             // Send permission after game mode to make overriding client's state (e.g., mayfly) possible
-            this.controller.viewPlayerPermission(this.controller);
+            this.controller.viewPlayerAbilities(this.controller);
         }
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
@@ -227,7 +235,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.flying != flying) {
             this.flying = flying;
             if (isActualPlayer()) {
-                this.controller.viewPlayerPermission(this.controller);
+                this.controller.setAbility(PlayerAbility.FLYING, flying);
             }
         }
     }
