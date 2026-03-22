@@ -362,105 +362,29 @@ public final class BlockTypeInitializer {
     }
 
     public static void initShulkerBox() {
-        BlockTypes.YELLOW_SHULKER_BOX = AllayBlockType
+        BlockTypes.YELLOW_SHULKER_BOX = buildShulkerBox(BlockId.YELLOW_SHULKER_BOX);
+        BlockTypes.WHITE_SHULKER_BOX = buildShulkerBox(BlockId.WHITE_SHULKER_BOX);
+        BlockTypes.UNDYED_SHULKER_BOX = buildShulkerBox(BlockId.UNDYED_SHULKER_BOX);
+        BlockTypes.RED_SHULKER_BOX = buildShulkerBox(BlockId.RED_SHULKER_BOX);
+        BlockTypes.PURPLE_SHULKER_BOX = buildShulkerBox(BlockId.PURPLE_SHULKER_BOX);
+        BlockTypes.PINK_SHULKER_BOX = buildShulkerBox(BlockId.PINK_SHULKER_BOX);
+        BlockTypes.ORANGE_SHULKER_BOX = buildShulkerBox(BlockId.ORANGE_SHULKER_BOX);
+        BlockTypes.MAGENTA_SHULKER_BOX = buildShulkerBox(BlockId.MAGENTA_SHULKER_BOX);
+        BlockTypes.LIME_SHULKER_BOX = buildShulkerBox(BlockId.LIME_SHULKER_BOX);
+        BlockTypes.LIGHT_GRAY_SHULKER_BOX = buildShulkerBox(BlockId.LIGHT_GRAY_SHULKER_BOX);
+        BlockTypes.LIGHT_BLUE_SHULKER_BOX = buildShulkerBox(BlockId.LIGHT_BLUE_SHULKER_BOX);
+        BlockTypes.GREEN_SHULKER_BOX = buildShulkerBox(BlockId.GREEN_SHULKER_BOX);
+        BlockTypes.GRAY_SHULKER_BOX = buildShulkerBox(BlockId.GRAY_SHULKER_BOX);
+        BlockTypes.CYAN_SHULKER_BOX = buildShulkerBox(BlockId.CYAN_SHULKER_BOX);
+        BlockTypes.BROWN_SHULKER_BOX = buildShulkerBox(BlockId.BROWN_SHULKER_BOX);
+        BlockTypes.BLUE_SHULKER_BOX = buildShulkerBox(BlockId.BLUE_SHULKER_BOX);
+        BlockTypes.BLACK_SHULKER_BOX = buildShulkerBox(BlockId.BLACK_SHULKER_BOX);
+    }
+
+    private static BlockType<BlockShulkerBoxBehavior> buildShulkerBox(BlockId blockId) {
+        return AllayBlockType
                 .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.YELLOW_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.WHITE_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.WHITE_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.UNDYED_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.UNDYED_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.RED_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.RED_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.PURPLE_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.PURPLE_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.PINK_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.PINK_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.ORANGE_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.ORANGE_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.MAGENTA_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.MAGENTA_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.LIME_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIME_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.LIGHT_GRAY_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIGHT_GRAY_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.LIGHT_BLUE_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIGHT_BLUE_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.GREEN_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.GREEN_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.GRAY_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.GRAY_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.CYAN_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.CYAN_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.BROWN_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.BROWN_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.BLUE_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLUE_SHULKER_BOX)
-                .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
-                .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
-                .build();
-        BlockTypes.BLACK_SHULKER_BOX = AllayBlockType
-                .builder(BlockShulkerBoxBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLACK_SHULKER_BOX)
+                .vanillaBlock(blockId)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
@@ -872,14 +796,7 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF);
     }
 
-    public static void initColoredTorch() {
-        BlockTypes.COLORED_TORCH_RED = buildColoredTorch(BlockId.COLORED_TORCH_RED);
-        BlockTypes.COLORED_TORCH_BLUE = buildColoredTorch(BlockId.COLORED_TORCH_BLUE);
-        BlockTypes.COLORED_TORCH_GREEN = buildColoredTorch(BlockId.COLORED_TORCH_GREEN);
-        BlockTypes.COLORED_TORCH_PURPLE = buildColoredTorch(BlockId.COLORED_TORCH_PURPLE);
-    }
-
-    private static BlockType<BlockTorchBehavior> buildColoredTorch(BlockId blockId) {
+    private static BlockType<BlockTorchBehavior> buildTorch(BlockId blockId) {
         return AllayBlockType
                 .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(blockId)
@@ -889,68 +806,49 @@ public final class BlockTypeInitializer {
     }
 
     public static void initTorch() {
-        // Note: REDSTONE_TORCH and UNLIT_REDSTONE_TORCH are registered in initRedstoneTorch()
-
-        BlockTypes.SOUL_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.SOUL_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
-        BlockTypes.TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
-        BlockTypes.UNDERWATER_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.UNDERWATER_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
-        BlockTypes.COPPER_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.COPPER_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
+        BlockTypes.COLORED_TORCH_RED = buildTorch(BlockId.COLORED_TORCH_RED);
+        BlockTypes.COLORED_TORCH_BLUE = buildTorch(BlockId.COLORED_TORCH_BLUE);
+        BlockTypes.COLORED_TORCH_GREEN = buildTorch(BlockId.COLORED_TORCH_GREEN);
+        BlockTypes.COLORED_TORCH_PURPLE = buildTorch(BlockId.COLORED_TORCH_PURPLE);
+        BlockTypes.SOUL_TORCH = buildTorch(BlockId.SOUL_TORCH);
+        BlockTypes.TORCH = buildTorch(BlockId.TORCH);
+        BlockTypes.UNDERWATER_TORCH = buildTorch(BlockId.UNDERWATER_TORCH);
+        BlockTypes.COPPER_TORCH = buildTorch(BlockId.COPPER_TORCH);
+        BlockTypes.REDSTONE_TORCH = buildRedstoneTorch(BlockId.REDSTONE_TORCH, true);
+        BlockTypes.UNLIT_REDSTONE_TORCH = buildRedstoneTorch(BlockId.UNLIT_REDSTONE_TORCH, false);
     }
 
     public static void initFurnace() {
-        BlockTypes.FURNACE = AllayBlockType
+        BlockTypes.FURNACE = buildFurnace(BlockId.FURNACE);
+        BlockTypes.LIT_FURNACE = buildFurnace(BlockId.LIT_FURNACE);
+        BlockTypes.BLAST_FURNACE = buildBlastFurnace(BlockId.BLAST_FURNACE);
+        BlockTypes.LIT_BLAST_FURNACE = buildBlastFurnace(BlockId.LIT_BLAST_FURNACE);
+        BlockTypes.SMOKER = buildSmoker(BlockId.SMOKER);
+        BlockTypes.LIT_SMOKER = buildSmoker(BlockId.LIT_SMOKER);
+    }
+
+    private static BlockType<BlockFurnaceBehavior> buildFurnace(BlockId blockId) {
+        return AllayBlockType
                 .builder(BlockFurnaceBehaviorImpl.class)
-                .vanillaBlock(BlockId.FURNACE)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.FURNACE)
                 .build();
-        BlockTypes.LIT_FURNACE = AllayBlockType
-                .builder(BlockFurnaceBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIT_FURNACE)
-                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .bindBlockEntity(BlockEntityTypes.FURNACE)
-                .build();
-        BlockTypes.BLAST_FURNACE = AllayBlockType
+    }
+
+    private static BlockType<BlockBlastFurnaceBehavior> buildBlastFurnace(BlockId blockId) {
+        return AllayBlockType
                 .builder(BlockBlastFurnaceBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLAST_FURNACE)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
-        BlockTypes.LIT_BLAST_FURNACE = AllayBlockType
-                .builder(BlockBlastFurnaceBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIT_BLAST_FURNACE)
-                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
-                .build();
-        BlockTypes.SMOKER = AllayBlockType
+    }
+
+    private static BlockType<BlockSmokerBehavior> buildSmoker(BlockId blockId) {
+        return AllayBlockType
                 .builder(BlockSmokerBehaviorImpl.class)
-                .vanillaBlock(BlockId.SMOKER)
-                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .bindBlockEntity(BlockEntityTypes.SMOKER)
-                .build();
-        BlockTypes.LIT_SMOKER = AllayBlockType
-                .builder(BlockSmokerBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIT_SMOKER)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.SMOKER)
                 .build();
@@ -1442,7 +1340,7 @@ public final class BlockTypeInitializer {
             BlockId id, OxidationLevel oxidationLevel,
             BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction
     ) {
-        return trapdoorBuilder(BlockCopperStairsBehaviorImpl.class, id)
+        return trapdoorBuilder(BlockCopperTrapdoorBehaviorImpl.class, id)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
@@ -1712,14 +1610,8 @@ public final class BlockTypeInitializer {
         BlockTypes.LAPIS_ORE = buildOre(BlockId.LAPIS_ORE, ItemId.LAPIS_LAZULI, 4, 9, 2, 5);
         BlockTypes.NETHER_GOLD_ORE = buildOre(BlockId.NETHER_GOLD_ORE, ItemId.GOLD_NUGGET, 2, 6, 0, 1);
         BlockTypes.QUARTZ_ORE = buildOre(BlockId.QUARTZ_ORE, ItemId.QUARTZ, 1, 1, 2, 5);
-        BlockTypes.REDSTONE_ORE = AllayBlockType.builder(BlockOreBehaviorImpl.class)
-                .vanillaBlock(BlockId.REDSTONE_ORE)
-                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
-                .build();
-        BlockTypes.LIT_REDSTONE_ORE = AllayBlockType.builder(BlockOreBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIT_REDSTONE_ORE)
-                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
-                .build();
+        BlockTypes.REDSTONE_ORE = buildRedstoneOre(BlockId.REDSTONE_ORE);
+        BlockTypes.LIT_REDSTONE_ORE = buildRedstoneOre(BlockId.LIT_REDSTONE_ORE);
 
         BlockTypes.DEEPSLATE_COAL_ORE = buildOre(BlockId.DEEPSLATE_COAL_ORE, ItemId.COAL, 1, 1, 0, 2);
         BlockTypes.DEEPSLATE_COPPER_ORE = buildOre(BlockId.DEEPSLATE_COPPER_ORE, ItemId.RAW_COPPER, 2, 5, 0, 0);
@@ -1728,20 +1620,21 @@ public final class BlockTypeInitializer {
         BlockTypes.DEEPSLATE_GOLD_ORE = buildOre(BlockId.DEEPSLATE_GOLD_ORE, ItemId.RAW_GOLD, 1, 1, 0, 0);
         BlockTypes.DEEPSLATE_IRON_ORE = buildOre(BlockId.DEEPSLATE_IRON_ORE, ItemId.RAW_IRON, 1, 1, 0, 0);
         BlockTypes.DEEPSLATE_LAPIS_ORE = buildOre(BlockId.DEEPSLATE_LAPIS_ORE, ItemId.LAPIS_LAZULI, 4, 9, 2, 5);
-        BlockTypes.DEEPSLATE_REDSTONE_ORE = AllayBlockType.builder(BlockOreBehaviorImpl.class)
-                .vanillaBlock(BlockId.DEEPSLATE_REDSTONE_ORE)
-                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
-                .build();
-        BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = AllayBlockType.builder(BlockOreBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIT_DEEPSLATE_REDSTONE_ORE)
-                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
-                .build();
+        BlockTypes.DEEPSLATE_REDSTONE_ORE = buildRedstoneOre(BlockId.DEEPSLATE_REDSTONE_ORE);
+        BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = buildRedstoneOre(BlockId.LIT_DEEPSLATE_REDSTONE_ORE);
     }
 
     public static BlockType<BlockOreBehavior> buildOre(BlockId blockId, ItemId dropItem, int minDropItem, int maxDropItem, int minDropXp, int maxDropXp) {
         return AllayBlockType.builder(BlockOreBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setBaseComponentSupplier(type -> new BlockOreBaseComponentImpl(type, dropItem, minDropItem, maxDropItem, minDropXp, maxDropXp))
+                .build();
+    }
+
+    private static BlockType<BlockOreBehavior> buildRedstoneOre(BlockId blockId) {
+        return AllayBlockType.builder(BlockOreBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
                 .build();
     }
 
@@ -2396,78 +2289,59 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initRedstoneLamp() {
-        BlockTypes.REDSTONE_LAMP = AllayBlockType
+    public static void initRedstone() {
+        BlockTypes.REDSTONE_LAMP = buildRedstoneLamp(BlockId.REDSTONE_LAMP, false);
+        BlockTypes.LIT_REDSTONE_LAMP = buildRedstoneLamp(BlockId.LIT_REDSTONE_LAMP, true);
+        BlockTypes.DAYLIGHT_DETECTOR = buildDaylightDetector(BlockId.DAYLIGHT_DETECTOR, false);
+        BlockTypes.DAYLIGHT_DETECTOR_INVERTED = buildDaylightDetector(BlockId.DAYLIGHT_DETECTOR_INVERTED, true);
+        BlockTypes.POWERED_REPEATER = buildRedstoneRepeater(BlockId.POWERED_REPEATER, true);
+        BlockTypes.UNPOWERED_REPEATER = buildRedstoneRepeater(BlockId.UNPOWERED_REPEATER, false);
+        BlockTypes.POWERED_COMPARATOR = buildRedstoneComparator(BlockId.POWERED_COMPARATOR, true);
+        BlockTypes.UNPOWERED_COMPARATOR = buildRedstoneComparator(BlockId.UNPOWERED_COMPARATOR, false);
+    }
+
+    private static BlockType<BlockRedstoneLampBehavior> buildRedstoneLamp(BlockId blockId, boolean lit) {
+        return AllayBlockType
                 .builder(BlockRedstoneLampBehaviorImpl.class)
-                .vanillaBlock(BlockId.REDSTONE_LAMP)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, false))
-                .build();
-        BlockTypes.LIT_REDSTONE_LAMP = AllayBlockType
-                .builder(BlockRedstoneLampBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIT_REDSTONE_LAMP)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, true))
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, lit))
                 .build();
     }
 
-    public static void initRedstoneTorch() {
-        BlockTypes.REDSTONE_TORCH = AllayBlockType
+    private static BlockType<BlockTorchBehavior> buildRedstoneTorch(BlockId blockId, boolean lit) {
+        return AllayBlockType
                 .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.REDSTONE_TORCH)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, true))
-                .build();
-        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, false))
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, lit))
                 .build();
     }
 
-    public static void initDaylightDetector() {
-        BlockTypes.DAYLIGHT_DETECTOR = AllayBlockType
+    private static BlockType<BlockDaylightDetectorBehavior> buildDaylightDetector(BlockId blockId, boolean inverted) {
+        return AllayBlockType
                 .builder(BlockDaylightDetectorBehaviorImpl.class)
-                .vanillaBlock(BlockId.DAYLIGHT_DETECTOR)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
-                .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, false))
-                .build();
-        BlockTypes.DAYLIGHT_DETECTOR_INVERTED = AllayBlockType
-                .builder(BlockDaylightDetectorBehaviorImpl.class)
-                .vanillaBlock(BlockId.DAYLIGHT_DETECTOR_INVERTED)
-                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
-                .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, true))
+                .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, inverted))
                 .build();
     }
 
-    public static void initRedstoneRepeater() {
-        BlockTypes.POWERED_REPEATER = AllayBlockType
+    private static BlockType<BlockRepeaterBehavior> buildRedstoneRepeater(BlockId blockId, boolean powered) {
+        return AllayBlockType
                 .builder(BlockRepeaterBehaviorImpl.class)
-                .vanillaBlock(BlockId.POWERED_REPEATER)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, true))
-                .build();
-        BlockTypes.UNPOWERED_REPEATER = AllayBlockType
-                .builder(BlockRepeaterBehaviorImpl.class)
-                .vanillaBlock(BlockId.UNPOWERED_REPEATER)
-                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, false))
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, powered))
                 .build();
     }
 
-    public static void initRedstoneComparator() {
-        BlockTypes.POWERED_COMPARATOR = AllayBlockType
+    private static BlockType<BlockComparatorBehavior> buildRedstoneComparator(BlockId blockId, boolean powered) {
+        return AllayBlockType
                 .builder(BlockComparatorBehaviorImpl.class)
-                .vanillaBlock(BlockId.POWERED_COMPARATOR)
+                .vanillaBlock(blockId)
                 .bindBlockEntity(BlockEntityTypes.COMPARATOR)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, true))
-                .build();
-        BlockTypes.UNPOWERED_COMPARATOR = AllayBlockType
-                .builder(BlockComparatorBehaviorImpl.class)
-                .vanillaBlock(BlockId.UNPOWERED_COMPARATOR)
-                .bindBlockEntity(BlockEntityTypes.COMPARATOR)
-                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, false))
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, powered))
                 .build();
     }
 
@@ -2605,212 +2479,57 @@ public final class BlockTypeInitializer {
     }
 
     public static void initCandles() {
-        BlockTypes.CANDLE = AllayBlockType
+        BlockTypes.CANDLE = buildCandle(BlockId.CANDLE, BlockId.CANDLE_CAKE);
+        BlockTypes.WHITE_CANDLE = buildCandle(BlockId.WHITE_CANDLE, BlockId.WHITE_CANDLE_CAKE);
+        BlockTypes.ORANGE_CANDLE = buildCandle(BlockId.ORANGE_CANDLE, BlockId.ORANGE_CANDLE_CAKE);
+        BlockTypes.MAGENTA_CANDLE = buildCandle(BlockId.MAGENTA_CANDLE, BlockId.MAGENTA_CANDLE_CAKE);
+        BlockTypes.LIGHT_BLUE_CANDLE = buildCandle(BlockId.LIGHT_BLUE_CANDLE, BlockId.LIGHT_BLUE_CANDLE_CAKE);
+        BlockTypes.YELLOW_CANDLE = buildCandle(BlockId.YELLOW_CANDLE, BlockId.YELLOW_CANDLE_CAKE);
+        BlockTypes.LIME_CANDLE = buildCandle(BlockId.LIME_CANDLE, BlockId.LIME_CANDLE_CAKE);
+        BlockTypes.PINK_CANDLE = buildCandle(BlockId.PINK_CANDLE, BlockId.PINK_CANDLE_CAKE);
+        BlockTypes.GRAY_CANDLE = buildCandle(BlockId.GRAY_CANDLE, BlockId.GRAY_CANDLE_CAKE);
+        BlockTypes.LIGHT_GRAY_CANDLE = buildCandle(BlockId.LIGHT_GRAY_CANDLE, BlockId.LIGHT_GRAY_CANDLE_CAKE);
+        BlockTypes.CYAN_CANDLE = buildCandle(BlockId.CYAN_CANDLE, BlockId.CYAN_CANDLE_CAKE);
+        BlockTypes.PURPLE_CANDLE = buildCandle(BlockId.PURPLE_CANDLE, BlockId.PURPLE_CANDLE_CAKE);
+        BlockTypes.BLUE_CANDLE = buildCandle(BlockId.BLUE_CANDLE, BlockId.BLUE_CANDLE_CAKE);
+        BlockTypes.BROWN_CANDLE = buildCandle(BlockId.BROWN_CANDLE, BlockId.BROWN_CANDLE_CAKE);
+        BlockTypes.GREEN_CANDLE = buildCandle(BlockId.GREEN_CANDLE, BlockId.GREEN_CANDLE_CAKE);
+        BlockTypes.RED_CANDLE = buildCandle(BlockId.RED_CANDLE, BlockId.RED_CANDLE_CAKE);
+        BlockTypes.BLACK_CANDLE = buildCandle(BlockId.BLACK_CANDLE, BlockId.BLACK_CANDLE_CAKE);
+        BlockTypes.CANDLE_CAKE = buildCandleCake(BlockId.CANDLE_CAKE, ItemId.CANDLE);
+        BlockTypes.WHITE_CANDLE_CAKE = buildCandleCake(BlockId.WHITE_CANDLE_CAKE, ItemId.WHITE_CANDLE);
+        BlockTypes.ORANGE_CANDLE_CAKE = buildCandleCake(BlockId.ORANGE_CANDLE_CAKE, ItemId.ORANGE_CANDLE);
+        BlockTypes.MAGENTA_CANDLE_CAKE = buildCandleCake(BlockId.MAGENTA_CANDLE_CAKE, ItemId.MAGENTA_CANDLE);
+        BlockTypes.LIGHT_BLUE_CANDLE_CAKE = buildCandleCake(BlockId.LIGHT_BLUE_CANDLE_CAKE, ItemId.LIGHT_BLUE_CANDLE);
+        BlockTypes.YELLOW_CANDLE_CAKE = buildCandleCake(BlockId.YELLOW_CANDLE_CAKE, ItemId.YELLOW_CANDLE);
+        BlockTypes.LIME_CANDLE_CAKE = buildCandleCake(BlockId.LIME_CANDLE_CAKE, ItemId.LIME_CANDLE);
+        BlockTypes.PINK_CANDLE_CAKE = buildCandleCake(BlockId.PINK_CANDLE_CAKE, ItemId.PINK_CANDLE);
+        BlockTypes.GRAY_CANDLE_CAKE = buildCandleCake(BlockId.GRAY_CANDLE_CAKE, ItemId.GRAY_CANDLE);
+        BlockTypes.LIGHT_GRAY_CANDLE_CAKE = buildCandleCake(BlockId.LIGHT_GRAY_CANDLE_CAKE, ItemId.LIGHT_GRAY_CANDLE);
+        BlockTypes.CYAN_CANDLE_CAKE = buildCandleCake(BlockId.CYAN_CANDLE_CAKE, ItemId.CYAN_CANDLE);
+        BlockTypes.PURPLE_CANDLE_CAKE = buildCandleCake(BlockId.PURPLE_CANDLE_CAKE, ItemId.PURPLE_CANDLE);
+        BlockTypes.BLUE_CANDLE_CAKE = buildCandleCake(BlockId.BLUE_CANDLE_CAKE, ItemId.BLUE_CANDLE);
+        BlockTypes.BROWN_CANDLE_CAKE = buildCandleCake(BlockId.BROWN_CANDLE_CAKE, ItemId.BROWN_CANDLE);
+        BlockTypes.GREEN_CANDLE_CAKE = buildCandleCake(BlockId.GREEN_CANDLE_CAKE, ItemId.GREEN_CANDLE);
+        BlockTypes.RED_CANDLE_CAKE = buildCandleCake(BlockId.RED_CANDLE_CAKE, ItemId.RED_CANDLE);
+        BlockTypes.BLACK_CANDLE_CAKE = buildCandleCake(BlockId.BLACK_CANDLE_CAKE, ItemId.BLACK_CANDLE);
+    }
+
+    private static BlockType<BlockCandleBehavior> buildCandle(BlockId blockId, BlockId candleCakeId) {
+        return AllayBlockType
                 .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.CANDLE)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.CANDLE_CAKE))
-                .build();
-        BlockTypes.WHITE_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.WHITE_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.WHITE_CANDLE_CAKE))
-                .build();
-        BlockTypes.ORANGE_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.ORANGE_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.ORANGE_CANDLE_CAKE))
-                .build();
-        BlockTypes.MAGENTA_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.MAGENTA_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.MAGENTA_CANDLE_CAKE))
-                .build();
-        BlockTypes.LIGHT_BLUE_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIGHT_BLUE_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.LIGHT_BLUE_CANDLE_CAKE))
-                .build();
-        BlockTypes.YELLOW_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.YELLOW_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.YELLOW_CANDLE_CAKE))
-                .build();
-        BlockTypes.LIME_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIME_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.LIME_CANDLE_CAKE))
-                .build();
-        BlockTypes.PINK_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.PINK_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.PINK_CANDLE_CAKE))
-                .build();
-        BlockTypes.GRAY_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.GRAY_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.GRAY_CANDLE_CAKE))
-                .build();
-        BlockTypes.LIGHT_GRAY_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIGHT_GRAY_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.LIGHT_GRAY_CANDLE_CAKE))
-                .build();
-        BlockTypes.CYAN_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.CYAN_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.CYAN_CANDLE_CAKE))
-                .build();
-        BlockTypes.PURPLE_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.PURPLE_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.PURPLE_CANDLE_CAKE))
-                .build();
-        BlockTypes.BLUE_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLUE_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.BLUE_CANDLE_CAKE))
-                .build();
-        BlockTypes.BROWN_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.BROWN_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.BROWN_CANDLE_CAKE))
-                .build();
-        BlockTypes.GREEN_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.GREEN_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.GREEN_CANDLE_CAKE))
-                .build();
-        BlockTypes.RED_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.RED_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.RED_CANDLE_CAKE))
-                .build();
-        BlockTypes.BLACK_CANDLE = AllayBlockType
-                .builder(BlockCandleBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLACK_CANDLE)
-                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.BLACK_CANDLE_CAKE))
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, candleCakeId))
                 .build();
     }
 
-    public static void initCandleCakes() {
-        BlockTypes.CANDLE_CAKE = AllayBlockType
+    private static BlockType<BlockCandleCakeBehavior> buildCandleCake(BlockId blockId, ItemId candleItemId) {
+        return AllayBlockType
                 .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.CANDLE_CAKE)
+                .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.CANDLE))
-                .build();
-        BlockTypes.WHITE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.WHITE_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.WHITE_CANDLE))
-                .build();
-        BlockTypes.ORANGE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.ORANGE_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.ORANGE_CANDLE))
-                .build();
-        BlockTypes.MAGENTA_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.MAGENTA_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.MAGENTA_CANDLE))
-                .build();
-        BlockTypes.LIGHT_BLUE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIGHT_BLUE_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.LIGHT_BLUE_CANDLE))
-                .build();
-        BlockTypes.YELLOW_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.YELLOW_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.YELLOW_CANDLE))
-                .build();
-        BlockTypes.LIME_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIME_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.LIME_CANDLE))
-                .build();
-        BlockTypes.PINK_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.PINK_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.PINK_CANDLE))
-                .build();
-        BlockTypes.GRAY_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.GRAY_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.GRAY_CANDLE))
-                .build();
-        BlockTypes.LIGHT_GRAY_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIGHT_GRAY_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.LIGHT_GRAY_CANDLE))
-                .build();
-        BlockTypes.CYAN_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.CYAN_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.CYAN_CANDLE))
-                .build();
-        BlockTypes.PURPLE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.PURPLE_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.PURPLE_CANDLE))
-                .build();
-        BlockTypes.BLUE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLUE_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.BLUE_CANDLE))
-                .build();
-        BlockTypes.BROWN_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.BROWN_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.BROWN_CANDLE))
-                .build();
-        BlockTypes.GREEN_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.GREEN_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.GREEN_CANDLE))
-                .build();
-        BlockTypes.RED_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.RED_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.RED_CANDLE))
-                .build();
-        BlockTypes.BLACK_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCandleCakeBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLACK_CANDLE_CAKE)
-                .setProperties(BlockPropertyTypes.LIT)
-                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.BLACK_CANDLE))
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, candleItemId))
                 .build();
     }
 
