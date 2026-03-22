@@ -14,6 +14,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Added entity-attached debug shape support via `DebugShape.get/setAttachedEntity()` and `EntityBaseComponent.attachDebugShape()`, `getAttachedDebugShapes()`, `detachDebugShape()`, allowing debug shapes to follow entities client-side.
 - (API) Added camera shake API (`Player.shakeCamera()`, `Player.stopCameraShake()`) and implemented `/camerashake` command.
 - (API) Added fog API (`Player.pushFog()`, `Player.popFog()`, `Player.removeFog()`, `Player.removeAllFogs()`, `Player.getFogs()`) with `FogIds` constants, and implemented `/fog` command.
 - (API) Added `BiomeTags` constants interface with code-generated biome tag definitions.

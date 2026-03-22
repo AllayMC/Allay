@@ -4,6 +4,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.EntityAction;
@@ -827,6 +828,28 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     @UnmodifiableView
     Map<EntityPropertyType<?>, Object> getPropertyValues();
+
+    /**
+     * Attaches a debug shape to this entity.
+     *
+     * @param debugShape the debug shape to be attached
+     */
+    void attachDebugShape(DebugShape debugShape);
+
+    /**
+     * Gets all the attached debug shapes of this entity.
+     *
+     * @return all the attached debug shapes of this entity
+     */
+    @UnmodifiableView
+    Set<DebugShape> getAttachedDebugShapes();
+
+    /**
+     * Detaches a debug shape from this entity.
+     *
+     * @param debugShape the debug shape to be detached
+     */
+    void detachDebugShape(DebugShape debugShape);
 
     @Override
     default boolean isValid() {

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.EntityState;
@@ -13,11 +14,7 @@ import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.property.type.BooleanPropertyType;
-import org.allaymc.api.entity.property.type.EntityPropertyType;
-import org.allaymc.api.entity.property.type.EnumPropertyType;
-import org.allaymc.api.entity.property.type.FloatPropertyType;
-import org.allaymc.api.entity.property.type.IntPropertyType;
+import org.allaymc.api.entity.property.type.*;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityPortalEnterEvent;
@@ -103,6 +100,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected EntityType<? extends Entity> entityType;
     protected Set<WorldViewer> viewers;
+    protected Set<DebugShape> debugShapes;
     @Getter
     protected EntityState state;
     @Getter
@@ -149,6 +147,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.propertyValues = new HashMap<>();
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
+        this.debugShapes = new HashSet<>();
         this.state = EntityState.DESPAWNED;
         this.displayName = AllayStringUtils.snakeCaseToTitleCase(entityType.getIdentifier().path());
         this.scale = 1.0;
@@ -707,5 +706,28 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public <DATATYPE> void setPropertyValue(EntityPropertyType<DATATYPE> propertyType, DATATYPE value) {
         propertyValues.put(propertyType, value);
+    }
+
+    @Override
+    public void attachDebugShape(DebugShape debugShape) {
+        this.debugShapes.add(debugShape);
+        debugShape.setAttachedEntity(thisEntity);
+        for (var viewer : this.viewers) {
+            debugShape.addViewer(viewer);
+        }
+    }
+
+    @Override
+    public Set<DebugShape> getAttachedDebugShapes() {
+        return Collections.unmodifiableSet(this.debugShapes);
+    }
+
+    @Override
+    public void detachDebugShape(DebugShape debugShape) {
+        for (var viewer : this.viewers) {
+            debugShape.removeViewer(viewer);
+        }
+        debugShape.setAttachedEntity(null);
+        this.debugShapes.remove(debugShape);
     }
 }

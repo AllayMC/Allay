@@ -7,6 +7,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.debugshape.DebugLine;
+import org.allaymc.api.debugshape.DebugText;
 import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
@@ -601,6 +602,17 @@ public class GameTestCommand extends Command {
                     for (var entity : entities) {
                         entity.setScale(scale);
                     }
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("attachdebugshape")
+                .target("target")
+                .optional()
+                .exec((context, sender) -> {
+                    List<Entity> entities = context.getResult(1);
+                    var entity = entities != null && !entities.isEmpty() ? entities.getFirst() : sender;
+                    var debugText = new DebugText(new Vector3f(0f, 3f, 0f), null, "test");
+                    entity.attachDebugShape(debugText);
                     return context.success();
                 }, SenderType.PLAYER);
 

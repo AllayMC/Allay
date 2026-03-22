@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
@@ -989,6 +990,22 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         return null;
+    }
+
+    @Override
+    public void attachDebugShape(DebugShape debugShape) {
+        super.attachDebugShape(debugShape);
+        if (isActualPlayer()) {
+            debugShape.addViewer(this.controller);
+        }
+    }
+
+    @Override
+    public void detachDebugShape(DebugShape debugShape) {
+        if (isActualPlayer()) {
+            debugShape.removeViewer(this.controller);
+        }
+        super.detachDebugShape(debugShape);
     }
 
     @EventHandler
