@@ -3,6 +3,8 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.math.position.Position3ic;
 
 /**
+ * Shared component for TNT-like blocks that can be primed into an explosive entity.
+ *
  * @author daoge_cmd
  */
 public interface BlockTntBaseComponent extends BlockBaseComponent {

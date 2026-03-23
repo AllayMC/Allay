@@ -6,6 +6,9 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
 
 /**
+ * Represents a block component that owns and retrieves a block entity at a block position.
+ *
+ * @param <T> the block entity type managed by this component
  * @author daoge_cmd
  */
 public interface BlockBlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {

@@ -8,7 +8,7 @@ import org.allaymc.api.world.data.DimensionInfo;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * BlockLiquidBaseComponent is the base component for liquid blocks.
+ * Shared component for liquid blocks, covering depth, source, hardening, and flow characteristics.
  *
  * @author daoge_cmd
  */

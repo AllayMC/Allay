@@ -6,6 +6,8 @@ import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
+ * Shared component for concrete powder blocks that can harden into solid concrete when touching water.
+ *
  * @author IWareQ
  */
 public interface BlockConcretePowderBaseComponent extends BlockBaseComponent {

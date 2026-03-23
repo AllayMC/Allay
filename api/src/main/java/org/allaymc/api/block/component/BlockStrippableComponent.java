@@ -3,6 +3,8 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.type.BlockState;
 
 /**
+ * Component for blocks that can be stripped into a different block state.
+ *
  * @author IWareQ
  */
 public interface BlockStrippableComponent extends BlockComponent {
