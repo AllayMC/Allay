@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Shared component for entities that can be picked up after a pickup delay expires.
+ *
  * @author IWareQ
  */
 public interface EntityPickableBaseComponent extends EntityBaseComponent {

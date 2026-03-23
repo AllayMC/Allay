@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Shared component for lightning bolt entities that control whether strike effects are applied.
+ *
  * @author daoge_cmd
  */
 public interface EntityLightningBoltBaseComponent extends EntityBaseComponent {

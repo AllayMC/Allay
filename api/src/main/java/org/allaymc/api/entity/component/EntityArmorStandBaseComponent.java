@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.component;
 
 /**
- * EntityArmorStandBaseComponent defines the specific behavior for armor stand entities.
+ * Shared component for armor stand entities that manage their pose selection.
  *
  * @author daoge_cmd
  */

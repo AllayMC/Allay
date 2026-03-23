@@ -4,7 +4,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Component interface for fishing hook entity specific functionality.
+ * Shared component for fishing hook entities, covering hook state, catch state, and reeling behavior.
  *
  * @author daoge_cmd
  */

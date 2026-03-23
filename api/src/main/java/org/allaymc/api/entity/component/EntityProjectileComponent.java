@@ -3,6 +3,8 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.entity.Entity;
 
 /**
+ * Component for projectile entities that keep track of their shooter.
+ *
  * @author daoge_cmd
  */
 public interface EntityProjectileComponent extends EntityComponent {

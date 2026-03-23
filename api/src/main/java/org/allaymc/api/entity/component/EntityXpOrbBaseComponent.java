@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Shared component for experience orb entities that store the granted experience value.
+ *
  * @author daoge_cmd
  */
 public interface EntityXpOrbBaseComponent extends EntityPickableBaseComponent {

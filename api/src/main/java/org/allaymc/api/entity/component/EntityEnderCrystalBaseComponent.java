@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Shared component for ender crystal entities that expose base visibility state.
+ *
  * @author daoge_cmd
  */
 public interface EntityEnderCrystalBaseComponent extends EntityBaseComponent {

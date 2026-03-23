@@ -48,6 +48,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
+ * Defines the core lifecycle, state, movement, persistence, and viewer interaction hooks shared by entities.
+ *
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder, TaskCreator {

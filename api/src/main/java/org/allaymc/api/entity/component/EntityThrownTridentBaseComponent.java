@@ -4,7 +4,7 @@ import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemTridentStack;
 
 /**
- * Component interface for thrown trident entities.
+ * Shared component for thrown trident entities, including stored trident data and loyalty return state.
  *
  * @author daoge_cmd
  */

@@ -9,6 +9,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 /**
+ * Component for entities that participate in physics simulation, including motion, gravity, and knockback.
+ *
  * @author daoge_cmd
  */
 public interface EntityPhysicsComponent extends EntityComponent {

@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Component for entities that can have a baby state.
+ * Component for entities that can switch between baby and adult states.
  *
  * @author daoge_cmd
  */

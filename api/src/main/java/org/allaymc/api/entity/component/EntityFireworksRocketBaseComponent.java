@@ -7,6 +7,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Set;
 
 /**
+ * Shared component for firework rocket entities, including explosion data and optional player attachment.
+ *
  * @author daoge_cmd
  */
 public interface EntityFireworksRocketBaseComponent extends EntityBaseComponent {

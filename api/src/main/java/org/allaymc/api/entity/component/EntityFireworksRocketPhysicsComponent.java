@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Physics component for firework rockets with configurable upward thrust and sideways acceleration.
+ *
  * @author daoge_cmd
  */
 public interface EntityFireworksRocketPhysicsComponent extends EntityPhysicsComponent {
