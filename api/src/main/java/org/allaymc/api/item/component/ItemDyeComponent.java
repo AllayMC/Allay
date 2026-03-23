@@ -3,7 +3,7 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.utils.DyeColor;
 
 /**
- * ItemDyeComponent is used in items that can be used as dye.
+ * Component for items that can act as a dye with a fixed dye color.
  *
  * @author daoge_cmd
  */

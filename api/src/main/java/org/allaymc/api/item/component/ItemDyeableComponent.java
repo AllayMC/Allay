@@ -3,10 +3,7 @@ package org.allaymc.api.item.component;
 import java.awt.*;
 
 /**
- * Component for items that can be dyed with custom colors.
- * <p>
- * This includes leather armor pieces and wolf armor that can be
- * colored using dyes in a cauldron.
+ * Component for items that support a custom dye-applied color.
  *
  * @author daoge_cmd
  */

@@ -4,6 +4,8 @@ import org.allaymc.api.item.data.TrimMaterial;
 import org.allaymc.api.item.data.TrimPattern;
 
 /**
+ * Component for items that support armor trim pattern and material data.
+ *
  * @author IWareQ | daoge_cmd
  */
 public interface ItemTrimmableComponent extends ItemComponent {

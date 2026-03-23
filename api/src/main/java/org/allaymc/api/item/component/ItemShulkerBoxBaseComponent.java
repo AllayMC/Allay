@@ -6,7 +6,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * ItemShulkerBoxBaseComponent is the base component for shulker box items.
+ * Shared component for shulker box items that persist stored inventory contents.
  *
  * @author daoge_cmd
  */

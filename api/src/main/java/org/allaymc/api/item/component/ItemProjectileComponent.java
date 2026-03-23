@@ -5,9 +5,7 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.ProjectileLaunchEvent;
 
 /**
- * ItemProjectileComponent is used in item that can be shot by entity. When right click,
- * the item will be consumed and an entity specified by {@link #getProjectileEntityType()}
- * will be created with the motion specified by {@link #getThrowForce()}.
+ * Component for items that can launch a projectile entity when used.
  *
  * @author daoge_cmd
  */

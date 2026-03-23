@@ -3,7 +3,7 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Component interface for crossbow items.
+ * Shared component for crossbow items that manage a loaded projectile.
  *
  * @author daoge_cmd
  */
