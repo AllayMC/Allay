@@ -57,6 +57,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed mega spruce tree foliage generation by no longer treating existing leaves as free space during tree placement.
 - Fixed a bug where custom item tags are not correctly sent.
 - Fixed a bug where turn off option `network-settings.enable-encoding-protection` doesn't have effect.
+- Fixed the exception when sending `SimpleSound.SHIELD_BLOCK`.
 
 ### Removed
 
