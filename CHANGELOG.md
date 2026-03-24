@@ -42,6 +42,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Redstone ore
 - Implemented the following entities:
   - Zombie
+- Added support for bedrock 1.26.10.
 
 ### Changed
 

@@ -17,6 +17,7 @@ import org.cloudburstmc.protocol.bedrock.codec.v859.Bedrock_v859;
 import org.cloudburstmc.protocol.bedrock.codec.v860.Bedrock_v860;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
 import org.cloudburstmc.protocol.bedrock.codec.v924.Bedrock_v924;
+import org.cloudburstmc.protocol.bedrock.codec.v944.Bedrock_v944;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public final class ProtocolInfo {
      */
     public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
             // Order is important. The first codec is the latest supported version.
+            Bedrock_v944.CODEC,
             Bedrock_v924.CODEC,
             Bedrock_v898.CODEC,
             Bedrock_v860.CODEC,

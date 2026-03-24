@@ -4,14 +4,15 @@ commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.1.0"
 netty = "4.2.10.Final"
+protocol = "3.0.0.Beta12-20260324.161234-12"
 
 [libraries]
 # NBT
 nbt = { group = "org.allaymc", name = "nbt", version = "3.0.12" }
 # Protocol
-protocol-connection = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta12-20260312.192948-7" }
-protocol-common = { group = "org.cloudburstmc.protocol", name = "common", version = "3.0.0.Beta12-20260312.192948-7" }
-protocol-codec = { group = "org.cloudburstmc.protocol", name = "bedrock-codec", version = "3.0.0.Beta12-20260312.192948-7" }
+protocol-connection = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version.ref = "protocol" }
+protocol-common = { group = "org.cloudburstmc.protocol", name = "common", version.ref = "protocol" }
+protocol-codec = { group = "org.cloudburstmc.protocol", name = "bedrock-codec", version.ref = "protocol" }
 protocol-extension = {group = "org.allaymc", name = "protocol-extension", version = "0.1.6" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
