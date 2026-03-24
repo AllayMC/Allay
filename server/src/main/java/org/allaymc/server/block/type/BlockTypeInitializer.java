@@ -50,6 +50,7 @@ import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockHardIceBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
+import org.allaymc.server.block.component.lichen.BlockLichenBaseComponentImpl;
 import org.allaymc.server.block.component.liquid.BlockLavaBaseComponentImpl;
 import org.allaymc.server.block.component.liquid.BlockWaterBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
@@ -2759,6 +2760,24 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.VINE)
                 .setProperties(BlockPropertyTypes.VINE_DIRECTION_BITS)
                 .setBaseComponentSupplier(BlockVineBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initGlowLichen() {
+        BlockTypes.GLOW_LICHEN = AllayBlockType
+                .builder(BlockGlowLichenBehaviorImpl.class)
+                .vanillaBlock(BlockId.GLOW_LICHEN)
+                .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+                .setBaseComponentSupplier(BlockLichenBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSculkVein() {
+        BlockTypes.SCULK_VEIN = AllayBlockType
+                .builder(BlockSculkVeinBehaviorImpl.class)
+                .vanillaBlock(BlockId.SCULK_VEIN)
+                .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+                .setBaseComponentSupplier(BlockLichenBaseComponentImpl::new)
                 .build();
     }
 

@@ -29,10 +29,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added inventory transaction validation for restricted container slots to reject invalid item moves and swaps, such as non-armor items being placed into armor slots.
 - Added support for client blob cache.
 - Added handler for AutoCraftRecipeAction. Now the player can craft items through the recipe book directly.
-- Implemented chiseled bookshelf.
-- Implemented waterlily.
-- Implemented vine.
-- Implemented redstone ore.
+- Implemented the following blocks:
+  - Chiseled bookshelf
+  - Waterlily
+  - Vine
+  - Glow lichen
+  - Sculk vein
+  - Redstone ore
 
 ### Fixed
 
