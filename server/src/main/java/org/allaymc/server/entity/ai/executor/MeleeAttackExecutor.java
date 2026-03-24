@@ -1,13 +1,15 @@
 package org.allaymc.server.entity.ai.executor;
 
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.ai.behavior.BehaviorExecutor;
 import org.allaymc.api.entity.ai.memory.MemoryType;
 import org.allaymc.api.entity.ai.memory.MemoryTypes;
-import org.allaymc.api.entity.component.EntityLivingComponent;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.sound.AttackSound;
@@ -108,7 +110,7 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
         }
 
         var targetEntity = entity.getDimension().getEntityManager().getEntity(targetId);
-        if (!(targetEntity instanceof EntityLivingComponent targetLiving) || !isTargetValid(targetEntity)) {
+        if (!(targetEntity instanceof EntityLiving targetLiving) || !isTargetValid(targetEntity)) {
             return false;
         }
 
@@ -137,7 +139,7 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
         ));
 
         if (distanceSquared <= attackRangeSquared && attackTick > coolDown) {
-            var damage = getAttackDamage(entity);
+            var damage = getAttackDamage(entity, targetLiving);
             if (damage <= 0) {
                 return false;
             }
@@ -189,12 +191,19 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
         return true;
     }
 
-    protected float getAttackDamage(EntityIntelligent entity) {
-        return switch (entity.getWorld().getWorldData().getDifficulty()) {
+    protected float getAttackDamage(EntityIntelligent entity, EntityLiving victim) {
+        var damage = switch (entity.getWorld().getWorldData().getDifficulty()) {
             case PEACEFUL -> 0f;
             case EASY -> 2.5f;
             case NORMAL -> 3f;
             case HARD -> 4.5f;
         };
+
+        if (entity instanceof EntityContainerHolderComponent containerHolderComponent) {
+            var itemDamage = containerHolderComponent.getContainer(ContainerTypes.ENTITY_HAND).getItemInHand().calculateAttackDamage(entity, victim);
+            damage = Math.max(damage, itemDamage);
+        }
+
+        return damage;
     }
 }

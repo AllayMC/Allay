@@ -29,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added inventory transaction validation for restricted container slots to reject invalid item moves and swaps, such as non-armor items being placed into armor slots.
 - Added support for client blob cache.
 - Added handler for AutoCraftRecipeAction. Now the player can craft items through the recipe book directly.
+- Added shared human-like equipment containers for zombies and armor stands, including armor, offhand, and main-hand item synchronization.
 - Implemented the following blocks:
   - Chiseled bookshelf
   - Waterlily
@@ -40,10 +41,15 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Resin clump
   - Redstone ore
 - Implemented the following entities:
-  - Zombie 
+  - Zombie
+
+### Changed
+
+- (API) Renamed `ArmorStandHandContainer` / `ContainerTypes.ARMOR_STAND_HAND` to `EntityHandContainer` / `ContainerTypes.ENTITY_HAND` for shared non-player entity main-hand equipment.
 
 ### Fixed
 
+- Fixed netherite armor knockback resistance on players and entity equipment containers not being restored after loading from NBT.
 - Fixed NBT read errors for players joining with newly created player data by writing a default `Rotation` field.
 - Fixed non-living entities lingering below the world; they are now removed when they fall into the void.
 - Fixed `/kick` message templating so command feedback includes the target player name and custom kick reasons are formatted correctly.

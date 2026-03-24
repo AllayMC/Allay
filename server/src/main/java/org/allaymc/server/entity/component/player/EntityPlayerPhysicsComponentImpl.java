@@ -7,10 +7,8 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.entity.component.EntityHumanPhysicsComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.packet.SetEntityMotionPacket;
+import org.allaymc.server.entity.component.humanlike.EntityHumanPhysicsComponentImpl;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 

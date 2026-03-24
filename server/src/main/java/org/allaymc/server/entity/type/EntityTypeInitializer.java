@@ -32,6 +32,9 @@ import org.allaymc.server.entity.ai.sensor.NearestFeedingPlayerSensor;
 import org.allaymc.server.entity.ai.sensor.NearestPlayerSensor;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.animal.*;
+import org.allaymc.server.entity.component.humanlike.EntityHumanLikeBaseComponentImpl;
+import org.allaymc.server.entity.component.humanlike.EntityHumanLikeContainerHolderComponentImpl;
+import org.allaymc.server.entity.component.humanlike.EntityHumanPhysicsComponentImpl;
 import org.allaymc.server.entity.component.item.*;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
@@ -175,6 +178,9 @@ public final class EntityTypeInitializer {
         EntityTypes.ZOMBIE = AllayEntityType
                 .builder(EntityZombieImpl.class)
                 .vanillaEntity(EntityId.ZOMBIE)
+                .addComponent(EntityHumanLikeBaseComponentImpl::new, EntityHumanLikeBaseComponentImpl.class)
+                .addComponent(EntityHumanLikeContainerHolderComponentImpl::new, EntityHumanLikeContainerHolderComponentImpl.class)
+                .addComponent(EntityUndeadComponentImpl::new, EntityUndeadComponentImpl.class)
                 .addComponent(EntityZombieLivingComponentImpl::new, EntityZombieLivingComponentImpl.class)
                 .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
                 .addComponent(EntityHeadYawComponentImpl::new, EntityHeadYawComponentImpl.class)
@@ -204,6 +210,7 @@ public final class EntityTypeInitializer {
                                     .priority(1)
                                     .build())
                             .controller(new WalkController())
+                            .controller(new FluctuateController())
                             .controller(new LookController(true, true))
                             .routeFinder(new FlatAStarRouteFinder(new WalkingPosEvaluator()))
                             .build();
@@ -761,7 +768,7 @@ public final class EntityTypeInitializer {
                 .builder(EntityArmorStandImpl.class)
                 .vanillaEntity(EntityId.ARMOR_STAND)
                 .addComponent(EntityArmorStandBaseComponentImpl::new, EntityArmorStandBaseComponentImpl.class)
-                .addComponent(EntityArmorStandContainerHolderComponentImpl::new, EntityArmorStandContainerHolderComponentImpl.class)
+                .addComponent(EntityHumanLikeContainerHolderComponentImpl::new, EntityHumanLikeContainerHolderComponentImpl.class)
                 .addComponent(EntityArmorStandLivingComponentImpl::new, EntityArmorStandLivingComponentImpl.class)
                 .addComponent(() -> new EntityHumanPhysicsComponentImpl() {
                     @Override
@@ -887,11 +894,7 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
-    private static boolean isValidZombieTarget(EntityIntelligent entity, Long targetId) {
-        if (targetId == null) {
-            return false;
-        }
-
+    private static boolean isValidZombieTarget(EntityIntelligent entity, long targetId) {
         var target = entity.getDimension().getEntityManager().getEntity(targetId);
         if (!(target instanceof EntityLivingComponent) || target == entity || !target.isAlive()) {
             return false;

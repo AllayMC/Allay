@@ -9,10 +9,12 @@ import org.allaymc.server.component.ComponentProvider;
 
 import java.util.List;
 
-public class EntityZombieImpl extends EntityImpl implements EntityZombie {
+public class EntityZombieImpl extends EntityImpl implements EntityZombie, EntityContainerHolderComponent {
 
     @Delegate
     private EntityLivingComponent livingComponent;
+    @Delegate
+    private EntityContainerHolderComponent containerHolderComponent;
     @Delegate
     private EntityPhysicsComponent physicsComponent;
     @Delegate

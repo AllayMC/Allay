@@ -27,7 +27,7 @@ public class EntityZombieLivingComponentImpl extends EntityLivingComponentImpl {
         }
 
         var attacker = resolveAttacker(damage.getAttacker());
-        if (attacker == thisEntity || !attacker.isAlive() || !(attacker instanceof EntityLivingComponent)) {
+        if (attacker == null || attacker == thisEntity || !attacker.isAlive() || !(attacker instanceof EntityLivingComponent)) {
             return true;
         }
 

@@ -780,7 +780,7 @@ public class AllayPlayer implements Player {
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
 
-        var handContainer = entity.getContainer(ContainerTypes.ARMOR_STAND_HAND);
+        var handContainer = entity.getContainer(ContainerTypes.ENTITY_HAND);
         if (handContainer != null) {
             packet.setItem(toNetwork(handContainer.getItemInHand()));
             packet.setInventorySlot(0);

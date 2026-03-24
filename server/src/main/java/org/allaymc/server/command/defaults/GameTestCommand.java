@@ -614,6 +614,25 @@ public class GameTestCommand extends Command {
                     var debugText = new DebugText(new Vector3f(0f, 3f, 0f), null, "test");
                     entity.attachDebugShape(debugText);
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("spawnsuperzombie")
+                .exec((context, sender) -> {
+                    var zombie = EntityTypes.ZOMBIE.createEntity(EntityInitInfo.builder()
+                            .loc(sender.getLocation())
+                            .build());
+                    var armor = zombie.getContainer(ContainerTypes.ARMOR);
+                    var hand = zombie.getContainer(ContainerTypes.ENTITY_HAND);
+                    var offhand = zombie.getContainer(ContainerTypes.OFFHAND);
+                    armor.setHelmet(ItemTypes.DIAMOND_HELMET.createItemStack());
+                    armor.setChestplate(ItemTypes.DIAMOND_CHESTPLATE.createItemStack());
+                    armor.setLeggings(ItemTypes.DIAMOND_LEGGINGS.createItemStack());
+                    armor.setBoots(ItemTypes.DIAMOND_BOOTS.createItemStack());
+                    hand.setItemInHand(ItemTypes.DIAMOND_SWORD.createItemStack());
+                    offhand.setOffhand(ItemTypes.SHIELD.createItemStack());
+                    sender.getDimension().getEntityManager().addEntity(zombie);
+                    context.addOutput("Done.");
+                    return context.success();
                 }, SenderType.PLAYER);
 
     }
