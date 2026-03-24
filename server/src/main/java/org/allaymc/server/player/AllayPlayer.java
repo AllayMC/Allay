@@ -1303,6 +1303,7 @@ public class AllayPlayer implements Player {
         packet.setRelativeVolumeDisabled(!relative);
 
         switch (sound) {
+            case SimpleSound.SHIELD_BLOCK -> packet.setSound(SoundEvent.SHIELD_BLOCK);
             case SimpleSound.FIREWORK_LAUNCH -> packet.setSound(SoundEvent.LAUNCH);
             case SimpleSound.FIREWORK_HUGE_BLAST -> packet.setSound(SoundEvent.LARGE_BLAST);
             case SimpleSound.FIREWORK_BLAST -> packet.setSound(SoundEvent.BLAST);
