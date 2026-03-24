@@ -16,16 +16,12 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemShieldBaseComponent;
 import org.allaymc.api.item.interfaces.ItemShieldStack;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.message.I18n;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityLivingComponentImpl;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
-import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
 import org.joml.Vector3d;
 
 /**
@@ -69,7 +65,9 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
             return;
         }
         // Process shield blocking before applying damage
-        processShieldBlocking(damage);
+        if (processShieldBlocking(damage)) {
+            return;
+        }
         super.applyDamage(damage);
     }
 
@@ -123,22 +121,23 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
      * </ul>
      *
      * @param damage the incoming damage container
+     * @return {@code true} if the damage was blocked and normal damage handling should stop
      */
-    private void processShieldBlocking(DamageContainer damage) {
+    private boolean processShieldBlocking(DamageContainer damage) {
         var shield = findActiveShield();
         if (shield == null) {
-            return;
+            return false;
         }
 
         // Check if blocking is possible (directional check)
         if (!shield.tryBlockDamage(thisPlayer, damage)) {
-            return;
+            return false;
         }
 
         // Fire event - allows plugins to modify or cancel blocking
         var event = new EntityDamageBlockedEvent(thisPlayer, damage, shield);
         if (!event.call()) {
-            return;
+            return false;
         }
 
         // Store original damage for durability calculation
@@ -176,6 +175,8 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
                 dimension.addSound(location, SimpleSound.SHIELD_BLOCK);
             }
         }
+
+        return true;
     }
 
     /**
