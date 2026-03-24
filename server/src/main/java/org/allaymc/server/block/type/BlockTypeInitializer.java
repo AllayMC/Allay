@@ -50,9 +50,10 @@ import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockHardIceBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
-import org.allaymc.server.block.component.lichen.BlockLichenBaseComponentImpl;
 import org.allaymc.server.block.component.liquid.BlockLavaBaseComponentImpl;
 import org.allaymc.server.block.component.liquid.BlockWaterBaseComponentImpl;
+import org.allaymc.server.block.component.multiface.BlockMultiFaceBaseComponentImpl;
+import org.allaymc.server.block.component.multiface.BlockResinClumpBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockPistonArmCollisionBaseComponentImpl;
@@ -2776,7 +2777,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockGlowLichenBehaviorImpl.class)
                 .vanillaBlock(BlockId.GLOW_LICHEN)
                 .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
-                .setBaseComponentSupplier(BlockLichenBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockMultiFaceBaseComponentImpl::new)
                 .build();
     }
 
@@ -2785,7 +2786,16 @@ public final class BlockTypeInitializer {
                 .builder(BlockSculkVeinBehaviorImpl.class)
                 .vanillaBlock(BlockId.SCULK_VEIN)
                 .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
-                .setBaseComponentSupplier(BlockLichenBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockMultiFaceBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initResinClump() {
+        BlockTypes.RESIN_CLUMP = AllayBlockType
+                .builder(BlockResinClumpBehaviorImpl.class)
+                .vanillaBlock(BlockId.RESIN_CLUMP)
+                .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+                .setBaseComponentSupplier(BlockResinClumpBaseComponentImpl::new)
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.lichen;
+package org.allaymc.server.block.component.multiface;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
@@ -11,9 +11,18 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-public class BlockLichenBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockLichenBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockMultiFaceBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockMultiFaceBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
+    }
+
+    @Override
+    public boolean combine(Dimension dimension, BlockState blockState, Vector3ic combineBlockPos, PlayerInteractInfo placementInfo) {
+        if (dimension.getBlockState(combineBlockPos).getBlockType() != blockType) {
+            return false;
+        }
+
+        return place(dimension, blockState, combineBlockPos, placementInfo);
     }
 
     @Override

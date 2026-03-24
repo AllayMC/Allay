@@ -37,6 +37,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Sculk vein
   - Firefly bush
   - Spore blossom
+  - Resin clump
   - Redstone ore
 
 ### Fixed
