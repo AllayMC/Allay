@@ -36,7 +36,7 @@ public class EntityUndeadComponentImpl implements EntityUndeadComponent {
 
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
-        if (!thisEntity.isAlive() || livingComponent.isOnFire() || !ignitedBySunlight()) {
+        if (!thisEntity.isAlive() || thisEntity.isTouchingWater() || livingComponent.isOnFire() || !ignitedBySunlight()) {
             return;
         }
 
