@@ -2712,6 +2712,14 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initFireflyBush() {
+        BlockTypes.FIREFLY_BUSH = AllayBlockType
+                .builder(BlockFireflyBushBehaviorImpl.class)
+                .vanillaBlock(BlockId.FIREFLY_BUSH)
+                .setBaseComponentSupplier(BlockFireflyBushBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initCocoa() {
         BlockTypes.COCOA = AllayBlockType
                 .builder(BlockCocoaBehaviorImpl.class)
@@ -2786,6 +2794,14 @@ public final class BlockTypeInitializer {
                 .builder(BlockWaterlilyBehaviorImpl.class)
                 .vanillaBlock(BlockId.WATERLILY)
                 .setBaseComponentSupplier(BlockWaterlilyBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSporeBlossom() {
+        BlockTypes.SPORE_BLOSSOM = AllayBlockType
+                .builder(BlockSporeBlossomBehaviorImpl.class)
+                .vanillaBlock(BlockId.SPORE_BLOSSOM)
+                .setBaseComponentSupplier(BlockSporeBlossomBaseComponentImpl::new)
                 .build();
     }
 

@@ -35,6 +35,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Vine
   - Glow lichen
   - Sculk vein
+  - Firefly bush
+  - Spore blossom
   - Redstone ore
 
 ### Fixed
