@@ -39,6 +39,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Spore blossom
   - Resin clump
   - Redstone ore
+- Implemented the following entities:
+  - Zombie 
 
 ### Fixed
 

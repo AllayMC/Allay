@@ -4,11 +4,13 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.ai.memory.MemoryTypes;
 import org.allaymc.api.entity.component.EntityBabyComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityAnimal;
 import org.allaymc.api.entity.interfaces.EntityEnderDragon;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemTypes;
@@ -29,19 +31,13 @@ import org.allaymc.server.entity.ai.route.posevaluator.WalkingPosEvaluator;
 import org.allaymc.server.entity.ai.sensor.NearestFeedingPlayerSensor;
 import org.allaymc.server.entity.ai.sensor.NearestPlayerSensor;
 import org.allaymc.server.entity.component.*;
-import org.allaymc.server.entity.component.animal.EntityAnimalComponentImpl;
-import org.allaymc.server.entity.component.animal.EntityAnimalPhysicsComponentImpl;
+import org.allaymc.server.entity.component.animal.*;
 import org.allaymc.server.entity.component.item.*;
-import org.allaymc.server.entity.component.animal.EntityChickenBaseComponentImpl;
-import org.allaymc.server.entity.component.animal.EntityChickenPhysicsComponentImpl;
-import org.allaymc.server.entity.component.animal.EntityCowBaseComponentImpl;
-import org.allaymc.server.entity.component.animal.EntityPigBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerLivingComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.component.projectile.*;
-import org.allaymc.server.entity.component.animal.EntitySheepBaseComponentImpl;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 import org.joml.Vector3i;
@@ -172,6 +168,48 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.VILLAGER_V2)
                 .addComponent(EntityLivingComponentImpl::new, EntityLivingComponentImpl.class)
                 .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
+                .build();
+    }
+
+    public static void initZombie() {
+        EntityTypes.ZOMBIE = AllayEntityType
+                .builder(EntityZombieImpl.class)
+                .vanillaEntity(EntityId.ZOMBIE)
+                .addComponent(EntityZombieLivingComponentImpl::new, EntityZombieLivingComponentImpl.class)
+                .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
+                .addComponent(EntityHeadYawComponentImpl::new, EntityHeadYawComponentImpl.class)
+                .addComponent(EntityParallelTickComponentImpl::new, EntityParallelTickComponentImpl.class)
+                .addComponent(() -> {
+                    var behaviorGroup = BehaviorGroupImpl.builder()
+                            .sensor(new NearestPlayerSensor(40, 0, 20))
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new MeleeAttackExecutor(MemoryTypes.ATTACK_TARGET, 0.1f, 40, true, 30))
+                                    .evaluator(all(
+                                            new MemoryCheckNotEmptyEvaluator(MemoryTypes.ATTACK_TARGET),
+                                            entity -> isValidZombieTarget(entity, entity.getMemoryStorage().get(MemoryTypes.ATTACK_TARGET))
+                                    ))
+                                    .priority(3)
+                                    .build())
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new MeleeAttackExecutor(MemoryTypes.NEAREST_PLAYER, 0.1f, 40, 30))
+                                    .evaluator(all(
+                                            new MemoryCheckNotEmptyEvaluator(MemoryTypes.NEAREST_PLAYER),
+                                            entity -> isValidZombieTarget(entity, entity.getMemoryStorage().get(MemoryTypes.NEAREST_PLAYER))
+                                    ))
+                                    .priority(2)
+                                    .build())
+                            .behavior(BehaviorImpl.builder()
+                                    .executor(new FlatRandomRoamExecutor(0.1f, 12, 100, false, -1, true, 10))
+                                    .evaluator(entity -> true)
+                                    .priority(1)
+                                    .build())
+                            .controller(new WalkController())
+                            .controller(new LookController(true, true))
+                            .routeFinder(new FlatAStarRouteFinder(new WalkingPosEvaluator()))
+                            .build();
+
+                    return new EntityAIComponentImpl(behaviorGroup);
+                }, EntityAIComponentImpl.class)
                 .build();
     }
 
@@ -847,5 +885,25 @@ public final class EntityTypeInitializer {
                     return new EntityAIComponentImpl(behaviorGroup);
                 }, EntityAIComponentImpl.class)
                 .build();
+    }
+
+    private static boolean isValidZombieTarget(EntityIntelligent entity, Long targetId) {
+        if (targetId == null) {
+            return false;
+        }
+
+        var target = entity.getDimension().getEntityManager().getEntity(targetId);
+        if (!(target instanceof EntityLivingComponent) || target == entity || !target.isAlive()) {
+            return false;
+        }
+
+        if (target instanceof EntityPlayer player) {
+            return switch (player.getGameMode()) {
+                case SURVIVAL, ADVENTURE -> true;
+                case CREATIVE, SPECTATOR -> false;
+            };
+        }
+
+        return true;
     }
 }
