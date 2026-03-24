@@ -5,6 +5,8 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.math.location.Location3d;
 
 /**
+ * Component for blocks that can fall as entities and apply impact effects after landing.
+ *
  * @author IWareQ
  */
 public interface BlockFallableComponent extends BlockComponent {

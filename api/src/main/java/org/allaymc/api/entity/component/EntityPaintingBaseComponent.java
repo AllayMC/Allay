@@ -3,6 +3,8 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.entity.data.PaintingType;
 
 /**
+ * Shared component for painting entities that store their selected painting variant.
+ *
  * @author daoge_cmd
  */
 public interface EntityPaintingBaseComponent extends EntityBaseComponent {

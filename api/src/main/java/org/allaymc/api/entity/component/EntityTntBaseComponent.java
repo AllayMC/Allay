@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Shared component for primed TNT entities that expose their remaining fuse time.
+ *
  * @author daoge_cmd
  */
 public interface EntityTntBaseComponent extends EntityBaseComponent {

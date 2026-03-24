@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Component for living entities with health, damage, effects, air supply, fire, freeze, and drop behavior.
+ *
  * @author daoge_cmd
  */
 public interface EntityLivingComponent extends EntityComponent {

@@ -11,6 +11,9 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 public abstract class BlockEvent extends Event {
+    /**
+     * The block involved in the event.
+     */
     protected Block block;
 
     public BlockEvent(Block block) {

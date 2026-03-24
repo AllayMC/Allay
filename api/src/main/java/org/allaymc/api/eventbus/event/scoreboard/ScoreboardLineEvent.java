@@ -11,6 +11,9 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
  */
 @Getter
 public abstract class ScoreboardLineEvent extends ScoreboardEvent {
+    /**
+     * The scoreboard line involved in the event.
+     */
     protected ScoreboardLine line;
 
     public ScoreboardLineEvent(Scoreboard scoreboard, ScoreboardLine line) {

@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Component for sheep-specific behavior.
+ * Shared component for sheep entities that track whether the sheep has been sheared.
  *
  * @author daoge_cmd
  */

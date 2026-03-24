@@ -15,6 +15,9 @@ import org.allaymc.api.player.Player;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerKickEvent extends ServerPlayerEvent implements CancellableEvent {
+    /**
+     * The kick reason.
+     */
     @Setter
     protected String reason;
 

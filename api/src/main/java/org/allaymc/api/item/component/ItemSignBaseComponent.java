@@ -3,7 +3,7 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Represents a sign base component.
+ * Shared component for sign items that resolve their standing and wall sign block variants.
  *
  * @author daoge_cmd
  */

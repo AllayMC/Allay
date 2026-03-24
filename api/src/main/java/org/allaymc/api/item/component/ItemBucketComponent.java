@@ -5,8 +5,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.type.EntityType;
 
 /**
- * ItemBucketComponent is used in item that can hold liquid with an optional entity,
- * such as the normal bucket, the powder snow bucket and the tropical fish bucket.
+ * Component for bucket items that can store a liquid and optionally a captured entity.
  *
  * @author daoge_cmd
  */

@@ -1,8 +1,7 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Component interface for fireball (large fireball / ghast fireball) entities.
- * Unlike small fireballs, large fireballs create explosions on impact.
+ * Shared component for explosive fireball entities with configurable explosion power.
  *
  * @author daoge_cmd
  */

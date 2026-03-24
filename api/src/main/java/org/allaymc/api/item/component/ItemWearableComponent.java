@@ -3,7 +3,7 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.data.ArmorType;
 
 /**
- * Component for wearable items.
+ * Component for items that can be equipped as wearable armor.
  *
  * @author daoge_cmd
  */

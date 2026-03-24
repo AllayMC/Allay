@@ -14,9 +14,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Added entity-attached debug shape support via `DebugShape.get/setAttachedEntity()` and `EntityBaseComponent.attachDebugShape()`, `getAttachedDebugShapes()`, `detachDebugShape()`, allowing debug shapes to follow entities client-side.
 - (API) Added camera shake API (`Player.shakeCamera()`, `Player.stopCameraShake()`) and implemented `/camerashake` command.
 - (API) Added fog API (`Player.pushFog()`, `Player.popFog()`, `Player.removeFog()`, `Player.removeAllFogs()`, `Player.getFogs()`) with `FogIds` constants, and implemented `/fog` command.
 - (API) Added `BiomeTags` constants interface with code-generated biome tag definitions.
+- (API) Added `BlockEntityChiseledBookshelf`, `BlockEntityChiseledBookshelfContainerHolderComponent`, `ContainerTypes.CHISELED_BOOKSHELF`, `ItemTags.CHISELED_BOOKSHELF_BOOK`, and `ChiseledBookshelfSound`.
 - (API) Added `ItemTags.ALLOW_OFFHAND` for marking items that are allowed in the offhand slot.
 - (API) Added `ItemWearableComponent` as the shared wearable contract for armor, elytra, carved pumpkins, and heads.
 - Added custom biome support. Plugins can register custom biomes via `new AllayBiomeType(Identifier, BiomeData)` with auto-allocated persistent IDs (starting from 30000, saved to `biome_ids.yml`).
@@ -27,9 +29,27 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added inventory transaction validation for restricted container slots to reject invalid item moves and swaps, such as non-armor items being placed into armor slots.
 - Added support for client blob cache.
 - Added handler for AutoCraftRecipeAction. Now the player can craft items through the recipe book directly.
+- Added shared human-like equipment containers for zombies and armor stands, including armor, offhand, and main-hand item synchronization.
+- Implemented the following blocks:
+  - Chiseled bookshelf
+  - Waterlily
+  - Vine
+  - Glow lichen
+  - Sculk vein
+  - Firefly bush
+  - Spore blossom
+  - Resin clump
+  - Redstone ore
+- Implemented the following entities:
+  - Zombie
+
+### Changed
+
+- (API) Renamed `ArmorStandHandContainer` / `ContainerTypes.ARMOR_STAND_HAND` to `EntityHandContainer` / `ContainerTypes.ENTITY_HAND` for shared non-player entity main-hand equipment.
 
 ### Fixed
 
+- Fixed netherite armor knockback resistance on players and entity equipment containers not being restored after loading from NBT.
 - Fixed NBT read errors for players joining with newly created player data by writing a default `Rotation` field.
 - Fixed non-living entities lingering below the world; they are now removed when they fall into the void.
 - Fixed `/kick` message templating so command feedback includes the target player name and custom kick reasons are formatted correctly.
@@ -37,6 +57,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed mega spruce tree foliage generation by no longer treating existing leaves as free space during tree placement.
 - Fixed a bug where custom item tags are not correctly sent.
 - Fixed a bug where turn off option `network-settings.enable-encoding-protection` doesn't have effect.
+- Fixed the exception when sending `SimpleSound.SHIELD_BLOCK`.
 
 ### Removed
 

@@ -16,6 +16,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Setter
 @CallerThread(ThreadType.WORLD)
 public class PlayerCommandEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The command being executed.
+     */
     protected String command;
 
     public PlayerCommandEvent(EntityPlayer player, String command) {

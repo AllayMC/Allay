@@ -16,7 +16,13 @@ import org.allaymc.api.player.GameMode;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerGameModeChangeEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The old game mode.
+     */
     protected GameMode oldGameMode;
+    /**
+     * The new game mode.
+     */
     @Setter
     protected GameMode newGameMode;
 

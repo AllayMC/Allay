@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Component for entities that track an age value and a maximum age threshold.
+ *
  * @author daoge_cmd
  */
 public interface EntityAgeComponent extends EntityComponent {

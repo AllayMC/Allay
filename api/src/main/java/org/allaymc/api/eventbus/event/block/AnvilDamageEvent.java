@@ -17,6 +17,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.DIMENSION)
 public class AnvilDamageEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The new anvil block state.
+     */
     protected BlockState newState;
 
     public AnvilDamageEvent(Block block, BlockState newState) {

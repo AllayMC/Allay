@@ -6,7 +6,7 @@ import org.allaymc.api.entity.ai.memory.MemoryTypes;
 import org.joml.Vector3dc;
 
 /**
- * Component that provides AI behavior to entities.
+ * Component for AI-controlled entities that expose a behavior group and shared AI memory.
  *
  * @author daoge_cmd
  */

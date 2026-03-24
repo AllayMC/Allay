@@ -5,6 +5,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3ic;
 
 /**
+ * Component for blocks that can provide a custom respawn point for players.
+ *
  * @author IWareQ
  */
 public interface BlockRespawnPointComponent extends BlockComponent {

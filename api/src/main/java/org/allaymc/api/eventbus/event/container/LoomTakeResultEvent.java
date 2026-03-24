@@ -19,8 +19,17 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 @CallerThread(ThreadType.WORLD)
 public class LoomTakeResultEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The viewer taking the loom result.
+     */
     protected ContainerViewer viewer;
+    /**
+     * The loom container.
+     */
     protected LoomContainer container;
+    /**
+     * The result item being taken.
+     */
     @Setter
     protected ItemStack resultItem;
 }

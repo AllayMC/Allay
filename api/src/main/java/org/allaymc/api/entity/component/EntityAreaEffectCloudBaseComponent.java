@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Shared component for area effect cloud entities with configurable radius and lifetime behavior.
+ *
  * @author daoge_cmd
  */
 public interface EntityAreaEffectCloudBaseComponent extends EntityBaseComponent {

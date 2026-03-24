@@ -17,6 +17,8 @@ import org.joml.Vector3ic;
 import java.util.Set;
 
 /**
+ * Defines the core lifecycle, interaction, drop, and redstone hooks shared by block components.
+ *
  * @author daoge_cmd
  */
 public interface BlockBaseComponent extends BlockComponent {

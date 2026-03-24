@@ -17,6 +17,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class BlockSpreadEvent extends BlockEvent implements CancellableEvent {
 
+    /**
+     * The block from which the spread originates.
+     */
     protected Block spreadBlock;
 
     public BlockSpreadEvent(Block block, Block spreadBlock) {

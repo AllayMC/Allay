@@ -42,5 +42,11 @@
     "minecraft:filled_map",
     "minecraft:nautilus_shell",
     "minecraft:sparkler"
+  ],
+  "minecraft:chiseled_bookshelf_book": [
+    "minecraft:book",
+    "minecraft:enchanted_book",
+    "minecraft:writable_book",
+    "minecraft:written_book"
   ]
 }

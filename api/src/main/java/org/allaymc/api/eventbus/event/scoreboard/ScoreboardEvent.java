@@ -13,5 +13,8 @@ import org.allaymc.api.scoreboard.Scoreboard;
 @Getter
 @AllArgsConstructor
 public abstract class ScoreboardEvent extends Event {
+    /**
+     * The scoreboard involved in the event.
+     */
     protected Scoreboard scoreboard;
 }

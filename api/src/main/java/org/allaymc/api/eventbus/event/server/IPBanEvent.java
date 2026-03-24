@@ -15,5 +15,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.SERVER)
 public class IPBanEvent extends ServerEvent implements CancellableEvent {
+    /**
+     * The IP address being banned.
+     */
     protected String ip;
 }

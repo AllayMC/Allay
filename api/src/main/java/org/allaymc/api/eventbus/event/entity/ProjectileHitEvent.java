@@ -18,6 +18,9 @@ import org.joml.Vector3dc;
 @CallerThread(ThreadType.DIMENSION)
 public class ProjectileHitEvent extends EntityEvent implements CancellableEvent {
 
+    /**
+     * The hit position.
+     */
     protected Vector3dc hitPos;
     /**
      * The block being hit, can be {@code null}.

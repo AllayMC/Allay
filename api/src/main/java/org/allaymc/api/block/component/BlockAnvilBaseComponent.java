@@ -3,6 +3,8 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.type.BlockState;
 
 /**
+ * Shared component for anvils that can transition between damage states.
+ *
  * @author IWareQ
  */
 public interface BlockAnvilBaseComponent extends BlockBaseComponent {

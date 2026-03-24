@@ -16,6 +16,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class EntityTrampleFarmlandEvent extends EntityEvent implements CancellableEvent {
 
+    /**
+     * The farmland block being trampled.
+     */
     protected Block block;
 
     public EntityTrampleFarmlandEvent(Entity entity, Block block) {

@@ -15,7 +15,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.humanlike.EntityHumanLikeBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -27,7 +27,7 @@ import static org.allaymc.api.item.data.ItemTags.HEAD;
  *
  * @author daoge_cmd
  */
-public class EntityArmorStandBaseComponentImpl extends EntityBaseComponentImpl implements EntityArmorStandBaseComponent {
+public class EntityArmorStandBaseComponentImpl extends EntityHumanLikeBaseComponentImpl implements EntityArmorStandBaseComponent {
 
     protected static final String TAG_POSE_INDEX = "PoseIndex";
 
@@ -75,7 +75,7 @@ public class EntityArmorStandBaseComponentImpl extends EntityBaseComponentImpl i
 
     protected boolean tryEquipmentInteraction(EntityPlayer player, ItemStack itemStack) {
         var armorContainer = containerHolder.getContainer(ContainerTypes.ARMOR);
-        var handContainer = containerHolder.getContainer(ContainerTypes.ARMOR_STAND_HAND);
+        var handContainer = containerHolder.getContainer(ContainerTypes.ENTITY_HAND);
         var offhandContainer = containerHolder.getContainer(ContainerTypes.OFFHAND);
 
         if (itemStack != null && itemStack != ItemAirStack.AIR_STACK) {

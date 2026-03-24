@@ -13,5 +13,8 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @AllArgsConstructor
 public abstract class PlayerEvent extends Event {
+    /**
+     * The player involved in the event.
+     */
     protected EntityPlayer player;
 }

@@ -13,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleSwimEvent extends PlayerEvent {
+    /**
+     * Whether swimming is enabled.
+     */
     protected boolean value;
 
     public PlayerToggleSwimEvent(EntityPlayer player, boolean value) {

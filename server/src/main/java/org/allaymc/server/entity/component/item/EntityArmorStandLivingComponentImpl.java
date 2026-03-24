@@ -50,7 +50,7 @@ public class EntityArmorStandLivingComponentImpl extends EntityLivingComponentIm
             var dropPos = thisEntity.getLocation().add(0, 1, 0, new Vector3d());
             var dimension = thisEntity.getDimension();
             dropItemInContainer(ContainerTypes.ARMOR, dimension, dropPos);
-            dropItemInContainer(ContainerTypes.ARMOR_STAND_HAND, dimension, dropPos);
+            dropItemInContainer(ContainerTypes.ENTITY_HAND, dimension, dropPos);
             dropItemInContainer(ContainerTypes.OFFHAND, dimension, dropPos);
             dimension.dropItem(ItemTypes.ARMOR_STAND.createItemStack(1), dropPos);
 

@@ -54,9 +54,7 @@ Get the latest release from the [**GitHub Releases**](https://github.com/AllayMC
 For the bleeding-edge version with the latest features, you can also try the
 [**Nightly Build**](https://github.com/AllayMC/Allay/releases/tag/nightly), which is built from the `master` branch.
 
-### Run Allay
-
-You should now have a file named like:
+You should get a file named like:
 
 ```
 allay-server-<version>-<commit-hash>[-dev]-shaded.jar

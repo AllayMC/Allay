@@ -16,6 +16,12 @@ import org.allaymc.api.container.ContainerViewer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class ContainerCloseEvent extends ContainerEvent {
+    /**
+     * The viewer closing the container.
+     */
     protected ContainerViewer viewer;
+    /**
+     * The container being closed.
+     */
     protected Container container;
 }

@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component;
 
 /**
+ * Shared component for arrow entities, including damage, pickup, and enchantment-derived flags.
+ *
  * @author daoge_cmd
  */
 public interface EntityArrowBaseComponent extends EntityBaseComponent {

@@ -3,6 +3,8 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.type.ItemType;
 
 /**
+ * Component for items that define which materials can be used to repair them.
+ *
  * @author IWareQ
  */
 public interface ItemRepairableComponent extends ItemComponent {

@@ -3,6 +3,8 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.data.DiscType;
 
 /**
+ * Shared component for music disc items that expose their disc type and jukebox signal strength.
+ *
  * @author IWareQ
  */
 public interface ItemMusicDiscBaseComponent extends ItemBaseComponent {

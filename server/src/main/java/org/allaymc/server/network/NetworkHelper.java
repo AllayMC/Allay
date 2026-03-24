@@ -6,7 +6,10 @@ import org.allaymc.api.debugshape.*;
 import org.allaymc.api.dialog.Button;
 import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.property.type.*;
+import org.allaymc.api.entity.property.type.BooleanPropertyType;
+import org.allaymc.api.entity.property.type.EnumPropertyType;
+import org.allaymc.api.entity.property.type.FloatPropertyType;
+import org.allaymc.api.entity.property.type.IntPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -17,10 +20,12 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.HudElement;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
@@ -37,6 +42,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
 import org.joml.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +54,29 @@ import java.util.stream.Collectors;
  */
 @UtilityClass
 public final class NetworkHelper {
+
+    // Constants used in UpdateSubChunkBlocksPacket
+    public static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
+    public static final int BLOCK_UPDATE_NETWORK = 0b0010;
+    public static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
+    public static final int BLOCK_UPDATE_PRIORITY = 0b1000;
+
+    // Constants used in BlockEventPacket
+    public static final int BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE = 1;
+    public static final int BLOCK_EVENT_DATA_OPEN_CHEST = 1;
+    public static final int BLOCK_EVENT_DATA_CLOSE_CHEST = 0;
+
+    /**
+     * A map which contains the network offset of some entities. The network offset is the additional offset in
+     * y coordinate when sent over network. This is mostly the case for older entities such as player and TNT.
+     */
+    public static final Map<Identifier, Float> NETWORK_OFFSETS = new HashMap<>() {{
+        put(EntityId.PLAYER.getIdentifier(), 1.62f);
+        put(EntityId.FALLING_BLOCK.getIdentifier(), 0.49f);
+        put(EntityId.ITEM.getIdentifier(), 0.125f);
+        put(EntityId.TNT.getIdentifier(), 0.49f);
+        put(EntityId.FIREWORKS_ROCKET.getIdentifier(), 0.49f);
+    }};
 
     public static List<GameRuleData<?>> toNetwork(Map<GameRule, Object> gameRules) {
         return gameRules.entrySet().stream()
@@ -231,33 +260,37 @@ public final class NetworkHelper {
         };
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetwork(DebugShape shape, int dimension) {
+    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetwork(DebugShape shape, int dimension, Entity attachedEntity) {
+        var entityId = attachedEntity != null ? attachedEntity.getRuntimeId() : null;
+        var networkPos = toNetwork(shape.getPosition());
+        if (attachedEntity != null) {
+            networkPos = networkPos.add(0, -NETWORK_OFFSETS.getOrDefault(attachedEntity.getEntityType().getIdentifier(), 0.0f), 0);
+        }
         return switch (shape) {
             case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugArrow(
-                    arrow.getId(), dimension, toNetwork(arrow.getPosition()), arrow.getArrowHeadScale(),
-                    null, null, arrow.getColor(), toNetwork(arrow.getEndPosition()),
-                    arrow.getArrowHeadLength(), arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments()
+                    arrow.getId(), dimension, networkPos, arrow.getArrowHeadScale(), null,
+                    null, arrow.getColor(), toNetwork(arrow.getEndPosition()), arrow.getArrowHeadLength(),
+                    arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments(), entityId
             );
             case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugBox(
-                    box.getId(), dimension, toNetwork(box.getPosition()), box.getScale(),
-                    null, null, box.getColor(), toNetwork(box.getBoxBounds())
+                    box.getId(), dimension, networkPos, box.getScale(), null,
+                    null, box.getColor(), toNetwork(box.getBoxBounds()), entityId
             );
             case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugCircle(
-                    circle.getId(), dimension, toNetwork(circle.getPosition()), circle.getScale(),
-                    null, null, circle.getColor(), circle.getSegments()
+                    circle.getId(), dimension, networkPos, circle.getScale(), null,
+                    null, circle.getColor(), circle.getSegments(), entityId
             );
             case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugLine(
-                    line.getId(), dimension, toNetwork(line.getPosition()), null,
-                    null, null, line.getColor(), toNetwork(line.getEndPosition())
+                    line.getId(), dimension, networkPos, null, null,
+                    null, line.getColor(), toNetwork(line.getEndPosition()), entityId
             );
             case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugSphere(
-                    sphere.getId(), dimension, toNetwork(sphere.getPosition()), sphere.getScale(),
-                    null, null, sphere.getColor(), sphere.getSegments()
+                    sphere.getId(), dimension, networkPos, sphere.getScale(), null,
+                    null, sphere.getColor(), sphere.getSegments(), entityId
             );
             case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugText(
-                    text.getId(), dimension, toNetwork(text.getPosition()), null,
-                    null, null, text.getColor(),
-                    text.getText()
+                    text.getId(), dimension, networkPos, null, null,
+                    null, text.getColor(), text.getText(), entityId
             );
             default -> throw new IllegalStateException("Unexpected value: " + shape);
         };

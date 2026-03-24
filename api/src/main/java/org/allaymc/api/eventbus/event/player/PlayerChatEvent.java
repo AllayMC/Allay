@@ -16,7 +16,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Setter
 @CallerThread(ThreadType.WORLD)
 public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The chat header.
+     */
     protected String header;
+    /**
+     * The chat message.
+     */
     protected String message;
 
     public PlayerChatEvent(EntityPlayer player, String header, String message) {

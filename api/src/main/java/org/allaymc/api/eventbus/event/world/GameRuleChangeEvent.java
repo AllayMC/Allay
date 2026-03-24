@@ -16,8 +16,17 @@ import org.allaymc.api.world.gamerule.GameRule;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class GameRuleChangeEvent extends WorldEvent implements CancellableEvent {
+    /**
+     * The game rule being changed.
+     */
     protected GameRule gameRule;
+    /**
+     * The old game rule value.
+     */
     protected Object oldValue;
+    /**
+     * The new game rule value.
+     */
     @Setter
     protected Object newValue;
 

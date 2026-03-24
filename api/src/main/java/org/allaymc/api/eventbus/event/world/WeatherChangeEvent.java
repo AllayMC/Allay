@@ -15,7 +15,13 @@ import org.allaymc.api.world.data.Weather;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class WeatherChangeEvent extends WorldEvent implements CancellableEvent {
+    /**
+     * The old weather.
+     */
     protected Weather oldWeather;
+    /**
+     * The new weather.
+     */
     protected Weather newWeather;
 
     public WeatherChangeEvent(World world, Weather oldWeather, Weather newWeather) {

@@ -1,6 +1,7 @@
 package org.allaymc.api.debugshape;
 
 import lombok.Getter;
+import org.allaymc.api.entity.Entity;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -37,6 +38,13 @@ public abstract class DebugShape {
      */
     protected Vector3fc position;
     /**
+     * The entity this shape attached to. When the shape is attached to an entity, its position will
+     * be relative and follow the entity's position. Can be {@code null} if this shape is not attached
+     * to any entity.
+     */
+    @Getter
+    protected Entity attachedEntity;
+    /**
      * The color of the shape.
      * <p>
      * Can be {@code null}, and in that case that the color will be set to white client-side.
@@ -72,6 +80,17 @@ public abstract class DebugShape {
      */
     public void setPosition(Vector3fc position) {
         this.position = position;
+        this.onChange();
+    }
+
+    /**
+     * Sets the entity to which this debug shape is attached.
+     *
+     * @param attachedEntity the entity to attach this debug shape to; can be {@code null} to detach
+     *                       from any currently attached entity
+     */
+    public void setAttachedEntity(Entity attachedEntity) {
+        this.attachedEntity = attachedEntity;
         this.onChange();
     }
 

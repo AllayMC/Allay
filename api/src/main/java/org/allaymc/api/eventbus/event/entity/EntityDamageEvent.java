@@ -17,6 +17,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class EntityDamageEvent extends EntityEvent implements CancellableEvent {
 
+    /**
+     * The damage data for this event.
+     */
     protected DamageContainer damageContainer;
 
     public EntityDamageEvent(Entity entity, DamageContainer damageContainer) {

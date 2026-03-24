@@ -3,7 +3,7 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.item.data.PotionType;
 
 /**
- * Represents an entity that can hold a potion type.
+ * Component for entities whose behavior or appearance is tied to a potion type.
  *
  * @author daoge_cmd
  */

@@ -7,7 +7,7 @@ import org.allaymc.api.utils.DyeColor;
 import java.util.List;
 
 /**
- * Component interface for banner items.
+ * Shared component for banner items, including base color, banner type, and pattern data.
  *
  * @author daoge_cmd
  */

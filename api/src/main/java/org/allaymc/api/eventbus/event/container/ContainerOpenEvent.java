@@ -17,6 +17,12 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class ContainerOpenEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The viewer opening the container.
+     */
     protected ContainerViewer viewer;
+    /**
+     * The container being opened.
+     */
     protected Container container;
 }

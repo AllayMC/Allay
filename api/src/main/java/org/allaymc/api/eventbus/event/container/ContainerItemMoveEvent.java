@@ -16,11 +16,29 @@ import org.allaymc.api.item.type.ItemType;
 @CallerThread(ThreadType.WORLD)
 @CallerThread(ThreadType.DIMENSION)
 public class ContainerItemMoveEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The source container.
+     */
     protected Container source;
+    /**
+     * The source slot index.
+     */
     protected int sourceSlot;
+    /**
+     * The destination container.
+     */
     protected Container destination;
+    /**
+     * The destination slot index.
+     */
     protected int destinationSlot;
+    /**
+     * The type of item being moved.
+     */
     protected ItemType<?> itemType;
+    /**
+     * The number of items being moved.
+     */
     protected int count;
 
     public ContainerItemMoveEvent(Container source, int sourceSlot, Container destination, int destinationSlot, ItemType<?> itemType, int count) {

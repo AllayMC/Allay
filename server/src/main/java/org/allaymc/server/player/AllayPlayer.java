@@ -3,7 +3,6 @@ package org.allaymc.server.player;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import io.netty.buffer.Unpooled;
@@ -37,7 +36,6 @@ import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
-import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.server.PlayerDisconnectEvent;
 import org.allaymc.api.eventbus.event.server.PlayerLoginEvent;
@@ -146,7 +144,6 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 
 import static org.allaymc.api.utils.AllayNBTUtils.*;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
@@ -157,31 +154,6 @@ import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
  */
 @Slf4j
 public class AllayPlayer implements Player {
-
-    // Constants used in UpdateSubChunkBlocksPacket
-    protected static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
-    protected static final int BLOCK_UPDATE_NETWORK = 0b0010;
-    protected static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
-    protected static final int BLOCK_UPDATE_PRIORITY = 0b1000;
-
-    // Constants used in BlockEventPacket
-    protected static final int BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE = 1;
-    protected static final int BLOCK_EVENT_DATA_OPEN_CHEST = 1;
-    protected static final int BLOCK_EVENT_DATA_CLOSE_CHEST = 0;
-
-    /**
-     * A map which contains the network offset of some entities. The network offset is the additional offset in
-     * y coordinate when sent over network. This is mostly the case for older entities such as player and TNT.
-     */
-    protected static final Supplier<Map<EntityType<?>, Float>> NETWORK_OFFSETS = Suppliers.memoize(() -> {
-        var map = new HashMap<EntityType<?>, Float>();
-        map.put(EntityTypes.PLAYER, 1.62f);
-        map.put(EntityTypes.FALLING_BLOCK, 0.49f);
-        map.put(EntityTypes.ITEM, 0.125f);
-        map.put(EntityTypes.TNT, 0.49f);
-        map.put(EntityTypes.FIREWORKS_ROCKET, 0.49f);
-        return map;
-    });
 
     protected final PacketProcessorHolder packetProcessorHolder;
     protected final AtomicInteger fullyJoinChunkThreshold;
@@ -427,7 +399,7 @@ public class AllayPlayer implements Player {
     @Override
     public void viewEntity(Entity entity) {
         var l = entity.getLocation();
-        var position = Vector3f.from(l.x(), l.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), l.z());
+        var position = Vector3f.from(l.x(), l.y() + NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), l.z());
         var motion = switch (entity) {
             case EntityPhysicsComponent physicsComponent -> {
                 var m = physicsComponent.getMotion();
@@ -500,10 +472,12 @@ public class AllayPlayer implements Player {
             }
         };
         sendPacket(packet);
+        viewDebugShapes(entity.getAttachedDebugShapes());
     }
 
     @Override
     public void removeEntity(Entity entity) {
+        removeDebugShapes(entity.getAttachedDebugShapes());
         var packet = new RemoveEntityPacket();
         packet.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
         sendPacket(packet);
@@ -548,7 +522,7 @@ public class AllayPlayer implements Player {
     protected BedrockPacket createMovePlayerPacket(Entity entity, Location3dc newLocation, boolean teleporting) {
         var packet = new MovePlayerPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
+        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), newLocation.z()));
         packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
         packet.setTeleportationCause(MovePlayerPacket.TeleportationCause.UNKNOWN);
         if (teleporting) {
@@ -560,7 +534,7 @@ public class AllayPlayer implements Player {
     protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3dc newLocation, boolean teleporting) {
         var packet = new MoveEntityAbsolutePacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
+        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), newLocation.z()));
         packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
         packet.setTeleported(teleporting);
         if (entity instanceof EntityPhysicsComponent physicsComponent) {
@@ -806,7 +780,7 @@ public class AllayPlayer implements Player {
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
 
-        var handContainer = entity.getContainer(ContainerTypes.ARMOR_STAND_HAND);
+        var handContainer = entity.getContainer(ContainerTypes.ENTITY_HAND);
         if (handContainer != null) {
             packet.setItem(toNetwork(handContainer.getItemInHand()));
             packet.setInventorySlot(0);
@@ -1251,15 +1225,15 @@ public class AllayPlayer implements Player {
             case SimpleBlockAction.OPEN -> {
                 var packet = new BlockEventPacket();
                 packet.setBlockPosition(pos);
-                packet.setEventType(BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
-                packet.setEventData(BLOCK_EVENT_DATA_OPEN_CHEST);
+                packet.setEventType(NetworkHelper.BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
+                packet.setEventData(NetworkHelper.BLOCK_EVENT_DATA_OPEN_CHEST);
                 sendPacket(packet);
             }
             case SimpleBlockAction.CLOSE -> {
                 var packet = new BlockEventPacket();
                 packet.setBlockPosition(pos);
-                packet.setEventType(BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
-                packet.setEventData(BLOCK_EVENT_DATA_CLOSE_CHEST);
+                packet.setEventType(NetworkHelper.BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
+                packet.setEventData(NetworkHelper.BLOCK_EVENT_DATA_CLOSE_CHEST);
                 sendPacket(packet);
             }
             case StartBreakAction(double breakTime) -> {
@@ -1308,7 +1282,7 @@ public class AllayPlayer implements Player {
             // combination of the flags above, but typically sending only the BLOCK_UPDATE_NETWORK flag is sufficient.
             var entry = new BlockChangeEntry(
                     Vector3i.from(update.x(), update.y(), update.z()), update.blockState()::blockStateHash,
-                    BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
+                    NetworkHelper.BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
             );
 
             if (isExtraLayer) {
@@ -1329,6 +1303,7 @@ public class AllayPlayer implements Player {
         packet.setRelativeVolumeDisabled(!relative);
 
         switch (sound) {
+            case SimpleSound.SHIELD_BLOCK -> packet.setSound(SoundEvent.SHIELD_BLOCK);
             case SimpleSound.FIREWORK_LAUNCH -> packet.setSound(SoundEvent.LAUNCH);
             case SimpleSound.FIREWORK_HUGE_BLAST -> packet.setSound(SoundEvent.LARGE_BLAST);
             case SimpleSound.FIREWORK_BLAST -> packet.setSound(SoundEvent.BLAST);
@@ -1767,6 +1742,18 @@ public class AllayPlayer implements Player {
                 packet.setSound(SoundEvent.RESPAWN_ANCHOR_CHARGE);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
+            case ChiseledBookshelfSound so -> {
+                PlaySoundPacket playSound = new PlaySoundPacket();
+                playSound.setSound(switch (so.type()) {
+                    case INSERT -> so.enchanted() ? SoundNames.INSERT_ENCHANTED_CHISELED_BOOKSHELF : SoundNames.INSERT_CHISELED_BOOKSHELF;
+                    case PICKUP -> so.enchanted() ? SoundNames.PICKUP_ENCHANTED_CHISELED_BOOKSHELF : SoundNames.PICKUP_CHISELED_BOOKSHELF;
+                });
+                playSound.setPosition(pos);
+                playSound.setVolume(1.0f);
+                playSound.setPitch(1.0f);
+                sendPacket(playSound);
+                return;
+            }
             case DecoratedPotInsertedSound so -> {
                 PlaySoundPacket playSound = new PlaySoundPacket();
                 playSound.setSound(SoundNames.BLOCK_DECORATED_POT_INSERT);
@@ -1990,7 +1977,7 @@ public class AllayPlayer implements Player {
     @Override
     public void viewDebugShape(DebugShape debugShape) {
         var packet = new DebugDrawerPacket();
-        packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionInfo().dimensionId()));
+        packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionInfo().dimensionId(), debugShape.getAttachedEntity()));
         sendPacket(packet);
     }
 
@@ -1998,7 +1985,7 @@ public class AllayPlayer implements Player {
     public void viewDebugShapes(Set<DebugShape> debugShapes) {
         var packet = new DebugDrawerPacket();
         for (var debugShape : debugShapes) {
-            packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionInfo().dimensionId()));
+            packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionInfo().dimensionId(), debugShape.getAttachedEntity()));
         }
         sendPacket(packet);
     }
@@ -3330,7 +3317,7 @@ public class AllayPlayer implements Player {
         var modelSettings = dialog.getModelSettings();
         var portraitOffsetJson = JSONUtils.to(Map.of("portrait_offsets", toNetwork(new ModelSettings(
                 modelSettings.scale(),
-                modelSettings.offset().add(0, NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), 0, new Vector3d()),
+                modelSettings.offset().add(0, NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), 0, new Vector3d()),
                 modelSettings.rotation()
         ))));
 

@@ -10,7 +10,6 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.world.chunk.ChunkLoader;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -18,6 +17,9 @@ import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Shared component for player entities, covering movement states, respawn data, cooldowns, food, experience, and fishing.
+ */
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
     int MAX_FOOD_LEVEL = 20;

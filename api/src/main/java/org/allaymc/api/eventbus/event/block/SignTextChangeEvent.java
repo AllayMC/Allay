@@ -15,7 +15,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class SignTextChangeEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The new sign text.
+     */
     protected String[] text;
+    /**
+     * The player editing the sign.
+     */
     protected EntityPlayer editor;
 
     public SignTextChangeEvent(Block block, String[] text, EntityPlayer editor) {
@@ -31,4 +37,3 @@ public class SignTextChangeEvent extends BlockEvent implements CancellableEvent 
         this.text = text;
     }
 }
-

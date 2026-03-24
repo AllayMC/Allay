@@ -4,6 +4,8 @@ import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.type.BlockState;
 
 /**
+ * Component that exposes the static state data associated with a block state.
+ *
  * @author daoge_cmd | CoolLoong
  */
 public interface BlockStateDataComponent extends BlockComponent {

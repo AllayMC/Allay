@@ -3,6 +3,8 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.block.data.PotSherds;
 
 /**
+ * Shared component for decorated pot items that store their sherd layout.
+ *
  * @author IWareQ
  */
 public interface ItemDecoratedPotBaseComponent extends ItemBaseComponent {

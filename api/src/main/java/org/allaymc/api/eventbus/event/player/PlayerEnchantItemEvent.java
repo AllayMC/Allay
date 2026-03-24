@@ -20,9 +20,18 @@ import java.util.List;
 @CallerThread(ThreadType.WORLD)
 public class PlayerEnchantItemEvent extends PlayerEvent implements CancellableEvent {
 
+    /**
+     * The item stack being enchanted.
+     */
     protected ItemStack itemStack;
+    /**
+     * The enchantments to apply.
+     */
     @Setter
     protected List<EnchantmentInstance> enchantments;
+    /**
+     * The required amount of lapis lazuli.
+     */
     @Setter
     protected int requiredLapisLazuliCount;
 

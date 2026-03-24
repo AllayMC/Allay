@@ -13,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleFlightEvent extends PlayerEvent {
+    /**
+     * Whether flight is enabled.
+     */
     protected boolean value;
 
     public PlayerToggleFlightEvent(EntityPlayer player, boolean value) {

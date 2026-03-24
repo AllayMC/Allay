@@ -16,7 +16,13 @@ import org.allaymc.api.item.interfaces.ItemWritableBookStack;
 @CallerThread(ThreadType.WORLD)
 public class PlayerBookEditEvent extends PlayerEvent implements CancellableEvent {
 
+    /**
+     * The book being edited.
+     */
     protected final ItemWritableBookStack book;
+    /**
+     * The edit action being performed.
+     */
     protected final Action action;
 
     public PlayerBookEditEvent(EntityPlayer player, ItemWritableBookStack book, Action action) {
@@ -25,6 +31,9 @@ public class PlayerBookEditEvent extends PlayerEvent implements CancellableEvent
         this.action = action;
     }
 
+    /**
+     * The type of book edit operation.
+     */
     public enum Action {
         REPLACE_PAGE,
         ADD_PAGE,

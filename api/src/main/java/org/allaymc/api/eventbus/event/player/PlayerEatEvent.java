@@ -15,6 +15,9 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerEatEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The edible item stack.
+     */
     protected ItemStack edible;
 
     public PlayerEatEvent(EntityPlayer player, ItemStack edible) {

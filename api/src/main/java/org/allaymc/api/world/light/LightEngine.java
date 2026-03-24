@@ -11,12 +11,16 @@ import org.joml.Vector3ic;
 public interface LightEngine {
 
     /**
-     * Get the skylight level at the specified position.
+     * Get the raw skylight level at the specified position.
+     * <p>
+     * This value only represents sky light propagation in the dimension. It is not reduced by
+     * the current time of day or weather, so a position that is directly exposed to the sky
+     * can still return {@code 15} at night.
      *
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     * @return the skylight level at the specified position
+     * @return the raw skylight level at the specified position
      */
     int getSkyLight(int x, int y, int z);
 
@@ -28,12 +32,17 @@ public interface LightEngine {
     }
 
     /**
-     * Get the internal light level at the specified position.
+     * Get the effective light level at the specified position for internal game logic.
+     * <p>
+     * This is the combined light level used by most light-dependent behavior. In dimensions with
+     * skylight, it is the greater of {@linkplain #getInternalSkyLight(int, int, int) internal sky
+     * light} and {@linkplain #getBlockLight(int, int, int) block light}. In dimensions without
+     * skylight, this is equal to block light.
      *
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     * @return the internal light level at the specified position
+     * @return the effective internal light level at the specified position
      */
     int getInternalLight(int x, int y, int z);
 
@@ -45,12 +54,16 @@ public interface LightEngine {
     }
 
     /**
-     * Get the internal skylight level at the specified position.
+     * Get the effective skylight level at the specified position for internal game logic.
+     * <p>
+     * Unlike {@link #getSkyLight(int, int, int)}, this value includes the reduction caused by the
+     * current time of day and weather. It represents how much sky light is actually available to
+     * gameplay systems after day-night and weather attenuation is applied.
      *
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     * @return the internal skylight level at the specified position
+     * @return the effective internal skylight level at the specified position
      */
     int getInternalSkyLight(int x, int y, int z);
 
@@ -63,6 +76,9 @@ public interface LightEngine {
 
     /**
      * Get the block light level at the specified position.
+     * <p>
+     * Block light is emitted by blocks or other local light sources and is independent of sky
+     * access, time of day, and weather.
      *
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
@@ -79,9 +95,12 @@ public interface LightEngine {
     }
 
     /**
-     * Get the queued update count.
+     * Get the number of light update tasks that are currently waiting to be processed.
+     * <p>
+     * This includes queued recalculation work such as chunk light initialization or block-triggered
+     * light propagation updates. It can be used to estimate the current backlog of the light engine.
      *
-     * @return the queued update count
+     * @return the number of queued light update tasks
      */
     int getQueuedUpdateCount();
 }

@@ -7,6 +7,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.List;
 
 /**
+ * Shared component for written books that store signed metadata and immutable page content.
+ *
  * @author daoge_cmd
  */
 public interface ItemWrittenBookBaseComponent extends ItemBaseComponent {

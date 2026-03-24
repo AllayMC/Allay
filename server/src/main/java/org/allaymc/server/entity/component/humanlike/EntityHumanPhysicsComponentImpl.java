@@ -1,6 +1,7 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.humanlike;
 
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.server.entity.component.EntityPhysicsComponentImpl;
 import org.joml.Vector3d;
 
 /**

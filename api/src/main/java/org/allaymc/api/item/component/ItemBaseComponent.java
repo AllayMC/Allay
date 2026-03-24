@@ -28,6 +28,8 @@ import static org.allaymc.api.item.data.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
 /**
+ * Defines the core state and behavior of an item stack, including use, durability, enchantments, and NBT data.
+ *
  * @author daoge_cmd
  */
 public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {

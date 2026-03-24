@@ -3,6 +3,8 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.type.BlockType;
 
 /**
+ * Shared component for double slab blocks that can resolve their single slab counterpart.
+ *
  * @author daoge_cmd
  */
 public interface BlockDoubleSlabBaseComponent extends BlockBaseComponent {

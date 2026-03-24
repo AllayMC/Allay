@@ -16,7 +16,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class CommandBlockExecuteEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The command block executing the command.
+     */
     protected BlockEntityCommandBlock commandBlock;
+    /**
+     * The command being executed.
+     */
     @Setter
     protected String command;
 

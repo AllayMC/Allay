@@ -3,7 +3,7 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.utils.DyeColor;
 
 /**
- * Component for entities that can be dyed (sheep, cat collar, etc.).
+ * Component for entities whose appearance includes a mutable dye color.
  *
  * @author daoge_cmd
  */
