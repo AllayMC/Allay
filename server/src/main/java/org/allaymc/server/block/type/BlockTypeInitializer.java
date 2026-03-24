@@ -86,10 +86,7 @@ import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponen
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.tripwire.BlockTripWireBaseComponentImpl;
 import org.allaymc.server.block.component.tripwire.BlockTripwireHookBaseComponentImpl;
-import org.allaymc.server.block.component.vine.BlockCaveVinesBaseComponentImpl;
-import org.allaymc.server.block.component.vine.BlockKelpBaseComponentImpl;
-import org.allaymc.server.block.component.vine.BlockNetherVinesBaseComponentImpl;
-import org.allaymc.server.block.component.vine.BlockSeagrassBaseComponentImpl;
+import org.allaymc.server.block.component.vine.*;
 import org.allaymc.server.block.component.workstation.*;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.impl.*;
@@ -2753,6 +2750,23 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.KELP)
                 .setProperties(BlockPropertyTypes.KELP_AGE)
                 .setBaseComponentSupplier(BlockKelpBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initVine() {
+        BlockTypes.VINE = AllayBlockType
+                .builder(BlockVineBehaviorImpl.class)
+                .vanillaBlock(BlockId.VINE)
+                .setProperties(BlockPropertyTypes.VINE_DIRECTION_BITS)
+                .setBaseComponentSupplier(BlockVineBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initWaterlily() {
+        BlockTypes.WATERLILY = AllayBlockType
+                .builder(BlockWaterlilyBehaviorImpl.class)
+                .vanillaBlock(BlockId.WATERLILY)
+                .setBaseComponentSupplier(BlockWaterlilyBaseComponentImpl::new)
                 .build();
     }
 

@@ -1147,6 +1147,14 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    public static void initWaterlily() {
+        ItemTypes.WATERLILY = AllayItemType
+                .builder(ItemWaterlilyStackImpl.class)
+                .vanillaItem(ItemId.WATERLILY)
+                .addComponent(ItemWaterlilyBaseComponentImpl::new, ItemWaterlilyBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initCarvedPumpkin() {
         ItemTypes.CARVED_PUMPKIN = AllayItemType
                 .builder(ItemCarvedPumpkinStackImpl.class)
