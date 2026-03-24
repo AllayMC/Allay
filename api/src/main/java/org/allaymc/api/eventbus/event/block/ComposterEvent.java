@@ -17,8 +17,17 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class ComposterEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The player interacting with the composter.
+     */
     protected EntityPlayer player;
+    /**
+     * The item being added to the composter.
+     */
     protected ItemStack item;
+    /**
+     * The current composter fill level.
+     */
     @Setter
     protected int currentFillLevel;
 

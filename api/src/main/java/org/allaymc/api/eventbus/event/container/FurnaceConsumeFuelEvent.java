@@ -17,6 +17,12 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 @CallerThread(ThreadType.DIMENSION)
 public class FurnaceConsumeFuelEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The furnace consuming the fuel.
+     */
     protected BlockEntityFurnace furnace;
+    /**
+     * The fuel item stack being consumed.
+     */
     protected ItemStack fuel;
 }

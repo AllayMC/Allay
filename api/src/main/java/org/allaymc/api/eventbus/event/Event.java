@@ -11,6 +11,9 @@ import org.allaymc.api.server.Server;
  * @author daoge_cmd
  */
 public abstract class Event {
+    /**
+     * Whether the event has been cancelled.
+     */
     @Getter
     private boolean cancelled = false;
 

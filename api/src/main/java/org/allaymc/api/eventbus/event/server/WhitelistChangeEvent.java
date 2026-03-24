@@ -15,5 +15,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.SERVER)
 public class WhitelistChangeEvent extends ServerEvent implements CancellableEvent {
+    /**
+     * Whether the whitelist is enabled.
+     */
     protected boolean enable;
 }

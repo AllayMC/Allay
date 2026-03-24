@@ -38,6 +38,9 @@ public class BlockIgniteEvent extends BlockEvent implements CancellableEvent {
         this.cause = cause;
     }
 
+    /**
+     * The cause of a block ignition.
+     */
     public enum BlockIgniteCause {
         EXPLOSION,
         FIREBALL,

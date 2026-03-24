@@ -17,9 +17,18 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerBlockPickEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The clicked block.
+     */
     protected Block clickedBlock;
+    /**
+     * Whether block entity data should be included in the picked item.
+     */
     @Setter
     protected boolean includeBlockEntity;
+    /**
+     * The item stack to give to the player.
+     */
     @Setter
     protected ItemStack itemBlock;
 

@@ -18,6 +18,9 @@ import org.joml.Vector3dc;
 @CallerThread(ThreadType.DIMENSION)
 @CallerThread(ThreadType.COMPUTE)
 public class EntitySetMotionEvent extends EntityEvent implements CancellableEvent {
+    /**
+     * The motion to apply to the entity.
+     */
     protected Vector3dc motion;
 
     public EntitySetMotionEvent(Entity entity, Vector3dc motion) {

@@ -16,7 +16,13 @@ import org.joml.Vector3ic;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class SpawnPointChangeEvent extends WorldEvent implements CancellableEvent {
+    /**
+     * The old spawn point position.
+     */
     protected Vector3ic oldPos;
+    /**
+     * The new spawn point position.
+     */
     @Setter
     protected Vector3ic newPos;
 

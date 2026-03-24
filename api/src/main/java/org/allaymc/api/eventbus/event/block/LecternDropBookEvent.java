@@ -16,7 +16,13 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class LecternDropBookEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The player dropping the book.
+     */
     protected EntityPlayer player;
+    /**
+     * The book being dropped from the lectern.
+     */
     protected ItemStack book;
 
     public LecternDropBookEvent(Block block, EntityPlayer player, ItemStack book) {

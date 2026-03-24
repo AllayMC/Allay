@@ -19,10 +19,22 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 @CallerThread(ThreadType.WORLD)
 public class GrindstoneTakeResultEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The viewer taking the grindstone result.
+     */
     protected ContainerViewer viewer;
+    /**
+     * The grindstone container.
+     */
     protected GrindstoneContainer container;
+    /**
+     * The result item being taken.
+     */
     @Setter
     protected ItemStack resultItem;
+    /**
+     * The amount of experience to award.
+     */
     @Setter
     protected int experienceAmount;
 }

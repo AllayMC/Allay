@@ -17,7 +17,16 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 @CallerThread(ThreadType.DIMENSION)
 public class FurnaceSmeltEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The furnace performing the smelt.
+     */
     protected BlockEntityFurnace furnace;
+    /**
+     * The ingredient item stack being smelted.
+     */
     protected ItemStack ingredient;
+    /**
+     * The output item stack.
+     */
     protected ItemStack output;
 }

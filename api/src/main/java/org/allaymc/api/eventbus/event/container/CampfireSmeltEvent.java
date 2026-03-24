@@ -18,8 +18,17 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 @CallerThread(ThreadType.DIMENSION)
 public class CampfireSmeltEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The campfire performing the smelt.
+     */
     protected BlockEntityCampfire campfire;
+    /**
+     * The ingredient item stack being smelted.
+     */
     protected ItemStack ingredient;
+    /**
+     * The output item stack.
+     */
     @Setter
     protected ItemStack output;
 }

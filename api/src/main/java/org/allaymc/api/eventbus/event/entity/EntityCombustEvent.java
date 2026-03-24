@@ -16,9 +16,18 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class EntityCombustEvent extends EntityEvent implements CancellableEvent {
 
+    /**
+     * The type of the combuster.
+     */
     protected final CombusterType combusterType;
+    /**
+     * The block or entity that caused the combustion.
+     */
     protected final Object combuster;
 
+    /**
+     * The number of ticks the entity should remain on fire.
+     */
     @Setter
     protected int onFireTicks;
 
@@ -29,6 +38,9 @@ public class EntityCombustEvent extends EntityEvent implements CancellableEvent 
         this.onFireTicks = onFireTicks;
     }
 
+    /**
+     * The type of source that caused the combustion.
+     */
     public enum CombusterType {
         BLOCK,
         ENTITY

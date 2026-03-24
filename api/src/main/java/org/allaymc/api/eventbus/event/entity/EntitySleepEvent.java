@@ -14,6 +14,9 @@ import org.joml.Vector3ic;
 @CallerThread(ThreadType.WORLD)
 public class EntitySleepEvent extends EntityEvent implements CancellableEvent {
 
+    /**
+     * The position of the bed.
+     */
     protected final Vector3ic bedPos;
 
     public EntitySleepEvent(Entity entity, Vector3ic bedPos) {

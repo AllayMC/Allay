@@ -13,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleGlideEvent extends PlayerEvent {
+    /**
+     * Whether gliding is enabled.
+     */
     protected boolean value;
 
     public PlayerToggleGlideEvent(EntityPlayer player, boolean value) {

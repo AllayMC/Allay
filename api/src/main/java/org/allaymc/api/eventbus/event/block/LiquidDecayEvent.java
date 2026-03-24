@@ -20,6 +20,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class LiquidDecayEvent extends BlockEvent implements CancellableEvent {
 
+    /**
+     * The new block state after the liquid decays.
+     */
     protected BlockState newBlockState;
 
     public LiquidDecayEvent(Block block, BlockState newBlockState) {

@@ -16,7 +16,13 @@ import org.allaymc.api.player.Skin;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerChangeSkinEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The old skin.
+     */
     protected Skin oldSkin;
+    /**
+     * The new skin.
+     */
     @Setter
     protected Skin newSkin;
 

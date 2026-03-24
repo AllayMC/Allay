@@ -31,6 +31,9 @@ public class ShelfUseEvent extends BlockEvent implements CancellableEvent {
         this.action = action;
     }
 
+    /**
+     * The type of chiseled bookshelf interaction.
+     */
     public enum Action {
         SINGLE_SWAP,
         MULTI_SWAP

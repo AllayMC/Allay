@@ -15,6 +15,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class SignWaxEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The player waxing or unwaxing the sign.
+     */
     protected EntityPlayer player;
 
     public SignWaxEvent(Block block, EntityPlayer player) {

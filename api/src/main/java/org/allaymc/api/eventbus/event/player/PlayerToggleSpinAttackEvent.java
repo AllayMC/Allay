@@ -13,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleSpinAttackEvent extends PlayerEvent {
+    /**
+     * Whether spin attack is enabled.
+     */
     protected boolean value;
 
     public PlayerToggleSpinAttackEvent(EntityPlayer player, boolean value) {

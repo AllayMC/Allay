@@ -15,6 +15,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.DIMENSION)
 public class BlockGrowEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The new block state after the growth.
+     */
     protected BlockState newBlockState;
 
     public BlockGrowEvent(Block block, BlockState newBlockState) {

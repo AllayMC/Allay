@@ -13,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleCrawlEvent extends PlayerEvent {
+    /**
+     * Whether crawling is enabled.
+     */
     protected boolean value;
 
     public PlayerToggleCrawlEvent(EntityPlayer player, boolean value) {

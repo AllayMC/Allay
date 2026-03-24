@@ -16,7 +16,13 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class LecternPlaceBookEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The player placing the book.
+     */
     protected EntityPlayer player;
+    /**
+     * The book being placed on the lectern.
+     */
     protected ItemStack book;
 
     public LecternPlaceBookEvent(Block block, EntityPlayer player, ItemStack book) {
