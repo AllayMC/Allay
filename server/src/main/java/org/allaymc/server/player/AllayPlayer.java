@@ -3058,6 +3058,9 @@ public class AllayPlayer implements Player {
             return;
         }
 
+        var wasAlwaysFlying = isAlwaysFlying();
+        var couldFly = canFly();
+
         var snap = EnumSet.copyOf(this.abilities);
         if (value) {
             this.abilities.add(ability);
@@ -3065,6 +3068,8 @@ public class AllayPlayer implements Player {
             this.abilities.remove(ability);
         }
         scheduleAbilitiesUpdate(snap);
+
+        syncFlyingState(wasAlwaysFlying, couldFly);
     }
 
     @Override
@@ -3073,6 +3078,9 @@ public class AllayPlayer implements Player {
             return;
         }
 
+        var wasAlwaysFlying = isAlwaysFlying();
+        var couldFly = canFly();
+
         var snap = EnumSet.copyOf(this.abilities);
         if (value) {
             this.abilities.addAll(abilities);
@@ -3080,6 +3088,8 @@ public class AllayPlayer implements Player {
             this.abilities.removeAll(abilities);
         }
         scheduleAbilitiesUpdate(snap);
+
+        syncFlyingState(wasAlwaysFlying, couldFly);
     }
 
     @Override
@@ -3088,10 +3098,15 @@ public class AllayPlayer implements Player {
             return;
         }
 
+        var wasAlwaysFlying = isAlwaysFlying();
+        var couldFly = canFly();
+
         var snap = EnumSet.copyOf(this.abilities);
         this.abilities.clear();
         this.abilities.addAll(abilities);
         scheduleAbilitiesUpdate(snap);
+
+        syncFlyingState(wasAlwaysFlying, couldFly);
     }
 
     @Override
@@ -3216,8 +3231,18 @@ public class AllayPlayer implements Player {
 
     @Override
     public void setAlwaysFlying(boolean alwaysFlying) {
+        var wasAlwaysFlying = this.alwaysFlying;
         this.alwaysFlying = alwaysFlying;
         this.shouldSendAbilities = true;
+        syncFlyingState(wasAlwaysFlying, canFly());
+    }
+
+    protected void syncFlyingState(boolean wasAlwaysFlying, boolean couldFly) {
+        if (!wasAlwaysFlying && isAlwaysFlying()) {
+            this.controlledEntity.setFlying(true);
+        } else if (couldFly && !canFly()) {
+            this.controlledEntity.setFlying(false);
+        }
     }
 
     @Override
