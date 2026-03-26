@@ -61,7 +61,13 @@ public class ReflectionUtils {
     }
 
     public static String buildMethodSignature(Method method) {
-        return method.getName() + Arrays.toString(method.getParameterTypes());
+        var signature = method.getName() + Arrays.toString(method.getParameterTypes());
+
+        if (method.getDeclaringClass().isInterface() && Modifier.isPrivate(method.getModifiers())) {
+            return method.getDeclaringClass().getName() + "#" + signature;
+        }
+
+        return signature;
     }
 
     public static List<Method> getAllStaticVoidParameterlessMethods(Class<?> clazz) {
@@ -115,4 +121,3 @@ public class ReflectionUtils {
         return result;
     }
 }
-
