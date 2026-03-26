@@ -131,7 +131,7 @@ public final class NetworkHelper {
         var tags = data.tags().stream().map(BiomeTag::name).toList();
         if (biome.getId() < CustomBiomeIdAllocator.CUSTOM_BIOME_ID_START) {
             // Vanilla biome
-            // NOTICE: is field is only set for custom biome
+            // NOTICE: id field is only set for custom biome
             return new BiomeDefinitionData(
                     null, data.temperature(), data.downfall(), data.redSporeDensity(),
                     data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
