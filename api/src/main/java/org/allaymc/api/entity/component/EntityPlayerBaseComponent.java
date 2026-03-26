@@ -322,16 +322,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     enum SpawnPointType {
         /** Set by command (e.g., {@code /spawnpoint}). No block validation needed on respawn. */
-        FORCED(0, null),
+        FORCED(null),
         /** Set by sleeping in a bed. Validated against bed existence on respawn. */
-        BED(1, TrKeys.MC_TILE_BED_NOTVALID),
+        BED(TrKeys.MC_TILE_BED_NOTVALID),
         /** Set by interacting with a respawn anchor. Validated against anchor existence on respawn. */
-        RESPAWN_ANCHOR(2, TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
-
-        /**
-         * Stable numeric ID used for NBT persistence. Never reuse or reorder these values.
-         */
-        public final byte id;
+        RESPAWN_ANCHOR(TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
 
         /**
          * The translation key sent to the player when they die and this spawn point block is missing.
@@ -339,20 +334,14 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
          */
         public final String invalidSpawnKey;
 
-        SpawnPointType(int id, String invalidSpawnKey) {
-            this.id = (byte) id;
+        public static final SpawnPointType[] VALUES = values();
+
+        SpawnPointType(String invalidSpawnKey) {
             this.invalidSpawnKey = invalidSpawnKey;
         }
 
-        /**
-         * Looks up a {@code SpawnPointType} by its stable {@link #id}.
-         * Returns {@link #FORCED} if the id is unrecognised (e.g., corrupt NBT).
-         */
-        public static SpawnPointType fromId(byte id) {
-            for (var type : values()) {
-                if (type.id == id) return type;
-            }
-            return FORCED;
+        public static SpawnPointType fromId(int id) {
+            return VALUES[id];
         }
     }
 

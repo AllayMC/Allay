@@ -67,7 +67,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_PLAYER_GAME_MODE = "PlayerGameMode";
 
     protected static final String TAG_SPAWN_POINT = "SpawnPoint";
-    protected static final String TAG_SPAWN_SOURCE = "SpawnSource";
+    protected static final String TAG_SPAWN_POINT_TYPE = "SpawnPointType";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
 
@@ -645,7 +645,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
                 .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId())
-                .putByte(TAG_SPAWN_SOURCE, spawnPointType.id);
+                .putInt(TAG_SPAWN_POINT_TYPE, spawnPointType.ordinal());
         AllayNBTUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
     }
@@ -695,8 +695,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 0, 0, dimension
         );
         // Default to FORCED for old player data that predates this tag
-        var sourceId = nbt.getByte(TAG_SPAWN_SOURCE, SpawnPointType.FORCED.id);
-        this.spawnPointType = SpawnPointType.fromId(sourceId);
+        this.spawnPointType = SpawnPointType.fromId(nbt.getInt(TAG_SPAWN_POINT_TYPE, SpawnPointType.FORCED.ordinal()));
     }
 
     @Override
