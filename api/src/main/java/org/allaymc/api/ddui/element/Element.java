@@ -9,6 +9,7 @@ import org.allaymc.api.ddui.internal.StringProperty;
  * Base DDUI element that exposes common label, visibility and disabled state bindings.
  *
  * @author Miroshka
+ * @author xRookieFight
  */
 public abstract class Element extends ObjectProperty<Object> {
 

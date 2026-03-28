@@ -12,6 +12,7 @@ import java.util.function.Consumer;
  * DDUI button element used by message box screens.
  *
  * @author Miroshka
+ * @author xRookieFight
  */
 public final class MessageBoxButtonElement extends Element {
 

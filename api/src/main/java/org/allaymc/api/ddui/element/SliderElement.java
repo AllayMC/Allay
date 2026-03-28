@@ -10,7 +10,7 @@ import org.allaymc.api.player.Player;
 /**
  * DDUI slider element for selecting a numeric value.
  *
- * @author Miroshka
+ * @author xRookieFight
  */
 public final class SliderElement extends CustomFormElement {
 

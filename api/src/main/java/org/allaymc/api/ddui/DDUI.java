@@ -4,7 +4,6 @@ package org.allaymc.api.ddui;
  * Factory entry point for creating DDUI screens and observables in Allay.
  *
  * @author Miroshka
- * @author xRookieFight
  */
 public final class DDUI {
 

@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 /**
  * DDUI button element for custom form screens.
  *
+ * @author xRookieFight
  * @author Miroshka
  */
 public class ButtonElement extends CustomFormElement {

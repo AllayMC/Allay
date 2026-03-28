@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  * DDUI object property that stores named child properties.
  *
+ * @author xRookieFight
  * @author Miroshka
  */
 @ApiStatus.Internal

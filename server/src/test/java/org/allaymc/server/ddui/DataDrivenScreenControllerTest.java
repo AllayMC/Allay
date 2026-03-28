@@ -29,6 +29,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+/**
+ * Tests for DDUI screen controller lifecycle and batched updates.
+ *
+ * @author Miroshka
+ */
 @ExtendWith(MockitoExtension.class)
 class DataDrivenScreenControllerTest {
 

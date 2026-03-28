@@ -13,6 +13,7 @@ import java.util.List;
  * DDUI dropdown element for selecting one item from a list.
  *
  * @author Miroshka
+ * @author xRookieFight
  */
 public final class DropdownElement extends CustomFormElement {
 

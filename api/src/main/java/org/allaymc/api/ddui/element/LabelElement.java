@@ -8,7 +8,7 @@ import org.allaymc.api.ddui.internal.StringProperty;
 /**
  * DDUI label element for static or reactive text output.
  *
- * @author Miroshka
+ * @author xRookieFight
  */
 public final class LabelElement extends CustomFormElement {
 

@@ -11,8 +11,8 @@ import java.util.Set;
 /**
  * Base type for all DDUI screens backed by a Bedrock data store payload.
  *
- * @author Miroshka
  * @author xRookieFight
+ * @author Miroshka
  */
 public abstract class DataDrivenScreen extends ObjectProperty<Object> {
 

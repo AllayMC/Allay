@@ -9,7 +9,7 @@ import org.allaymc.api.player.Player;
 /**
  * DDUI text field element for string input.
  *
- * @author Miroshka
+ * @author xRookieFight
  */
 public final class TextFieldElement extends CustomFormElement {
 

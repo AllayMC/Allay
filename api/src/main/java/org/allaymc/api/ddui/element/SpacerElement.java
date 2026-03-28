@@ -5,7 +5,7 @@ import org.allaymc.api.ddui.internal.ObjectProperty;
 /**
  * DDUI spacer element used to separate sections in custom forms.
  *
- * @author Miroshka
+ * @author xRookieFight
  */
 public final class SpacerElement extends CustomFormElement {
 

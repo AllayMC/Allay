@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * DDUI close button element bound to a screen close action.
  *
- * @author Miroshka
+ * @author xRookieFight
  */
 public final class CloseButtonElement extends Element {
 

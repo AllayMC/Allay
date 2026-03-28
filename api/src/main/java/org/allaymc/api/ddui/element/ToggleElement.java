@@ -9,6 +9,7 @@ import org.allaymc.api.player.Player;
 /**
  * DDUI toggle element for boolean input.
  *
+ * @author xRookieFight
  * @author Miroshka
  */
 public final class ToggleElement extends CustomFormElement {

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 /**
  * DDUI property wrapper for string values.
  *
+ * @author xRookieFight
  * @author Miroshka
  */
 @ApiStatus.Internal

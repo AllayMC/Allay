@@ -14,6 +14,7 @@ import java.util.function.BiConsumer;
  *
  * @param <T> property value type
  *
+ * @author xRookieFight
  * @author Miroshka
  */
 @ApiStatus.Internal

@@ -10,6 +10,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.verify;
 
+/**
+ * Tests for serverbound DDUI data store packet routing.
+ *
+ * @author Miroshka
+ * @author tunikakeks
+ */
 @ExtendWith(MockitoExtension.class)
 class ServerboundDataStorePacketProcessorTest {
 

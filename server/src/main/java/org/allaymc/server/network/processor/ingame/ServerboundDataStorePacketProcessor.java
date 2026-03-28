@@ -8,8 +8,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ServerboundDataStorePacket;
 /**
  * Processes incoming Bedrock data store updates and forwards them to the active DDUI screen.
  *
- * @author Miroshka
- * @author xRookieFight
+ * @author tunikakeks
  */
 public final class ServerboundDataStorePacketProcessor extends PacketProcessor<ServerboundDataStorePacket> {
 

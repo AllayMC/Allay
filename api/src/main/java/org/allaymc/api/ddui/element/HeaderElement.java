@@ -8,7 +8,7 @@ import org.allaymc.api.ddui.internal.StringProperty;
 /**
  * DDUI header element for prominent section titles inside custom forms.
  *
- * @author Miroshka
+ * @author xRookieFight
  */
 public final class HeaderElement extends CustomFormElement {
 
