@@ -19,6 +19,7 @@ import java.util.Objects;
  * Per-player DDUI session implementation responsible for show, flush and input routing.
  *
  * @author Miroshka
+ * @author xRookieFight
  */
 final class DataDrivenScreenSessionImpl implements DataDrivenScreenSession {
 

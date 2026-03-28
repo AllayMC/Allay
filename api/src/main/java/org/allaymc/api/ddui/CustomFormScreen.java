@@ -19,6 +19,7 @@ import java.util.function.Consumer;
  * DDUI implementation of the Bedrock custom form screen.
  *
  * @author Miroshka
+ * @author xRookieFight
  */
 public final class CustomFormScreen extends DataDrivenScreen {
 

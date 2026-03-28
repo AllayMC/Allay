@@ -10,6 +10,7 @@ import java.util.function.Consumer;
  * DDUI implementation of the Bedrock message box screen.
  *
  * @author Miroshka
+ * @author xRookieFight
  */
 public final class MessageBoxScreen extends DataDrivenScreen {
 

@@ -10,6 +10,7 @@ import java.util.function.Consumer;
  * @param <T> value type
  *
  * @author Miroshka
+ * @author xRookieFight
  */
 public final class Observable<T> {
 
