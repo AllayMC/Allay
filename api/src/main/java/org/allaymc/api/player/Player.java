@@ -2,6 +2,7 @@ package org.allaymc.api.player;
 
 import org.allaymc.api.bossbar.BossBarViewer;
 import org.allaymc.api.container.ContainerViewer;
+import org.allaymc.api.ddui.DataDrivenScreenViewer;
 import org.allaymc.api.dialog.DialogViewer;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -27,7 +28,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, ScoreboardViewer, DialogViewer {
+public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, ScoreboardViewer, DialogViewer, DataDrivenScreenViewer {
 
     Speed DEFAULT_SPEED = new Speed(0.1, 1.0);
     Speed DEFAULT_FLY_SPEED = new Speed(0.05, 1.0);

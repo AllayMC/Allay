@@ -28,6 +28,7 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.ddui.DataDrivenScreen;
 import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
@@ -94,6 +95,7 @@ import org.allaymc.server.container.impl.AbstractPlayerContainer;
 import org.allaymc.server.container.impl.FakeContainerImpl;
 import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
+import org.allaymc.server.ddui.DataDrivenScreenController;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
@@ -206,6 +208,7 @@ public class AllayPlayer implements Player {
 
     // Dialog
     protected Pair<Dialog, Entity> dialog;
+    protected final DataDrivenScreenController dataDrivenScreenController;
 
     // Hud
     protected Set<HudElement> hiddenHudElements;
@@ -244,6 +247,7 @@ public class AllayPlayer implements Player {
                 // Opened form will be expired after 10 minutes
                 .expireAfterWrite(10, TimeUnit.MINUTES)
                 .build();
+        this.dataDrivenScreenController = new DataDrivenScreenController(this);
 
         // Hud
         this.hiddenHudElements = EnumSet.noneOf(HudElement.class);
@@ -342,6 +346,8 @@ public class AllayPlayer implements Player {
             this.sendHudElements();
             this.shouldSendHudElements = false;
         }
+
+        this.dataDrivenScreenController.tick();
     }
 
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
@@ -2318,6 +2324,32 @@ public class AllayPlayer implements Player {
     public void closeAllForms() {
         sendPacket(new ClientboundCloseFormPacket());
         this.forms.invalidateAll();
+        closeDataDrivenScreens();
+    }
+
+    @Override
+    public void viewDataDrivenScreen(DataDrivenScreen screen) {
+        this.dataDrivenScreenController.view(screen);
+    }
+
+    @Override
+    public DataDrivenScreen getDataDrivenScreen() {
+        return this.dataDrivenScreenController.getActiveScreen();
+    }
+
+    @Override
+    public DataDrivenScreen removeDataDrivenScreen() {
+        return this.dataDrivenScreenController.removeActiveScreen();
+    }
+
+    @Override
+    public void closeDataDrivenScreens() {
+        this.dataDrivenScreenController.closeAll();
+    }
+
+    @Override
+    public boolean handleDataDrivenScreenInput(String dataStore, String property, String path, Object data) {
+        return this.dataDrivenScreenController.handleInput(dataStore, property, path, data);
     }
 
     @Override
@@ -2902,6 +2934,7 @@ public class AllayPlayer implements Player {
 
     protected void onDisconnect(String disconnectReason) {
         new PlayerDisconnectEvent(this, disconnectReason).call();
+        this.dataDrivenScreenController.removeActiveScreen();
         closeAllOpenedContainers();
         if (getLastClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
             ChunkCache.getInstance().removePlayer(this.loginData.getUuid());
