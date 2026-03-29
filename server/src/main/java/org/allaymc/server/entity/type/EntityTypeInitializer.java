@@ -180,6 +180,7 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.ZOMBIE)
                 .addComponent(EntityHumanLikeBaseComponentImpl::new, EntityHumanLikeBaseComponentImpl.class)
                 .addComponent(EntityHumanLikeContainerHolderComponentImpl::new, EntityHumanLikeContainerHolderComponentImpl.class)
+                .addComponent(EntityBabyComponentImpl::new, EntityBabyComponentImpl.class)
                 .addComponent(EntityUndeadComponentImpl::new, EntityUndeadComponentImpl.class)
                 .addComponent(EntityZombieLivingComponentImpl::new, EntityZombieLivingComponentImpl.class)
                 .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
