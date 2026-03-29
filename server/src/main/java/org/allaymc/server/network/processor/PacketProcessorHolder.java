@@ -146,6 +146,8 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new NPCRequestPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new LecternUpdatePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new CommandBlockUpdatePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ServerboundDataStorePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ServerboundDataDrivenScreenClosedPacketProcessor());
     }
 
     @SuppressWarnings("unchecked")
