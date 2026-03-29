@@ -27,8 +27,12 @@ public class ObjectProperty<T> extends DataDrivenProperty<Map<String, DataDriven
     }
 
     public void setProperty(DataDrivenProperty<?> property) {
-        getValue().put(property.getName(), property);
         var screen = getRootScreen();
+        if (screen != null && screen.hasSessions()) {
+            throw new IllegalStateException("Cannot mutate DDUI structure after the screen has been attached");
+        }
+
+        getValue().put(property.getName(), property);
         if (screen != null) {
             screen.propertyChanged(this);
         }

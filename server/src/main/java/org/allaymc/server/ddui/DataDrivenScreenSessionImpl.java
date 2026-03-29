@@ -122,11 +122,19 @@ final class DataDrivenScreenSessionImpl implements DataDrivenScreenSession {
     public void markDirty(DataDrivenProperty<?> property) {
         var path = property.getPath();
         var value = property.toWireValue();
-        if (path.equals(handledInputPath) && Objects.equals(value, handledInputData)) {
+        if (path.equals(handledInputPath) && isSameHandledInputValue(value, handledInputData)) {
             dirtyProperties.remove(path);
             return;
         }
 
         dirtyProperties.put(path, value);
+    }
+
+    private boolean isSameHandledInputValue(Object left, Object right) {
+        if (left instanceof Number leftNumber && right instanceof Number rightNumber) {
+            return leftNumber.doubleValue() == rightNumber.doubleValue();
+        }
+
+        return Objects.equals(left, right);
     }
 }

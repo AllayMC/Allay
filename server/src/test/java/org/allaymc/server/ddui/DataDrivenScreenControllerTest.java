@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.times;
@@ -131,6 +132,31 @@ class DataDrivenScreenControllerTest {
     }
 
     @Test
+    void shouldRouteNumericInputWithoutEchoingWireDoubleValue() {
+        var clicks = new AtomicInteger();
+        var screen = DDUI.messageBox()
+                .title("Confirm")
+                .body("Proceed")
+                .button1("Yes", it -> clicks.incrementAndGet())
+                .screen();
+        controller.view(screen);
+        clearInvocations(player);
+
+        var update = new DataStoreUpdate();
+        update.setDataStoreName("minecraft");
+        update.setProperty("message_box_data");
+        update.setPath("button1.onClick");
+        update.setData(1.0D);
+
+        assertTrue(controller.handleInput(update));
+        assertEquals(1, clicks.get());
+
+        controller.tick();
+
+        verifyNoMoreInteractions(player);
+    }
+
+    @Test
     void shouldCloseAndDetachActiveScreen() {
         var title = DDUI.observable("Initial");
         var screen = DDUI.customForm().title(title);
@@ -217,5 +243,22 @@ class DataDrivenScreenControllerTest {
         var payload = assertInstanceOf(Map.class, action.getNewValue());
         assertEquals("Second", payload.get("title"));
         verifyNoMoreInteractions(player);
+    }
+
+    @Test
+    void shouldRejectAddingElementAfterScreenIsAttached() {
+        var screen = DDUI.customForm().title("Profile");
+        controller.view(screen);
+
+        assertThrows(IllegalStateException.class, () -> screen.button("Late", it -> {
+        }));
+    }
+
+    @Test
+    void shouldRejectRebindingPropertyAfterScreenIsAttached() {
+        var screen = DDUI.customForm().title("Profile");
+        controller.view(screen);
+
+        assertThrows(IllegalStateException.class, () -> screen.title("Updated"));
     }
 }

@@ -121,6 +121,11 @@ public abstract class DataDrivenScreen extends ObjectProperty<Object> {
     }
 
     @ApiStatus.Internal
+    public boolean hasSessions() {
+        return !sessions.isEmpty();
+    }
+
+    @ApiStatus.Internal
     public void propertyChanged(DataDrivenProperty<?> property) {
         sessions.forEach(session -> session.markDirty(property));
     }
