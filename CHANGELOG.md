@@ -8,9 +8,13 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.12.0 (API 0.27.0) - Unreleased
+# 0.12.1 (API 0.28.0) - Unreleased
 
-<small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...HEAD)</small>
+<small>[Compare with 0.12.0](https://github.com/AllayMC/Allay/compare/0.12.0...HEAD)</small>
+
+# 0.12.0 (API 0.27.0) - 2026/3/29
+
+<small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...0.12.0)</small>
 
 ### Added
 
