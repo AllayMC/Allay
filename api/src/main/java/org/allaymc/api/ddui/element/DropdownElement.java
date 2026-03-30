@@ -30,11 +30,10 @@ public final class DropdownElement extends CustomFormElement {
         }
     }
 
-    private final Observable<Long> selectedIndex;
+    private Observable<Long> selectedIndexBinding;
 
     public DropdownElement(String label, List<Item> items, Observable<Long> selectedIndex, ObjectProperty<?> parent) {
         super("dropdown", parent);
-        this.selectedIndex = selectedIndex;
         var availableItems = List.copyOf(items);
         setLabel(label);
         setVisibility(true);
@@ -51,12 +50,14 @@ public final class DropdownElement extends CustomFormElement {
 
     public DropdownElement setSelectedIndex(long index) {
         unbind(SELECTED_INDEX_BINDING);
+        selectedIndexBinding = null;
         selectedIndexProperty().setValue(index);
         return this;
     }
 
     public DropdownElement setSelectedIndex(Observable<Long> selectedIndex) {
         var longProperty = selectedIndexProperty();
+        selectedIndexBinding = selectedIndex;
         longProperty.setValue(selectedIndex.getValue());
         bind(SELECTED_INDEX_BINDING, selectedIndex, longProperty::setValue);
         return this;
@@ -79,8 +80,10 @@ public final class DropdownElement extends CustomFormElement {
         super.triggerListeners(player, data);
         if (data instanceof Number number) {
             var value = number.longValue();
-            setSelectedIndex(value);
-            BindingScope.suppressed(() -> selectedIndex.setValue(value));
+            var currentBinding = selectedIndexBinding;
+            if (currentBinding != null) {
+                BindingScope.suppressed(() -> currentBinding.setValue(value));
+            }
         }
     }
 

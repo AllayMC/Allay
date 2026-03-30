@@ -166,6 +166,7 @@ final class DataDrivenScreenSessionImpl {
         change.setProperty(screen.getPropertyName());
         change.setUpdateCount(nextUpdateVersion());
         change.setNewValue(screen.toWireValue());
+        dirtyProperties.clear();
         fullRefreshRequired = false;
         return change;
     }

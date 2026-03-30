@@ -16,11 +16,10 @@ public final class TextFieldElement extends CustomFormElement {
 
     private static final String TEXT_BINDING = "binding:text";
     private static final String DESCRIPTION_BINDING = "binding:description";
-    private final Observable<String> text;
+    private Observable<String> textBinding;
 
     public TextFieldElement(String label, Observable<String> text, ObjectProperty<?> parent) {
         super("textField", parent);
-        this.text = text;
         setLabel(label);
         setVisibility(true);
         setTextFieldVisible(true);
@@ -46,12 +45,14 @@ public final class TextFieldElement extends CustomFormElement {
 
     public TextFieldElement setText(String text) {
         unbind(TEXT_BINDING);
+        textBinding = null;
         textProperty().setValue(text);
         return this;
     }
 
     public TextFieldElement setText(Observable<String> text) {
         var stringProperty = textProperty();
+        textBinding = text;
         stringProperty.setValue(text.getValue());
         bind(TEXT_BINDING, text, stringProperty::setValue);
         return this;
@@ -72,8 +73,10 @@ public final class TextFieldElement extends CustomFormElement {
     public void triggerListeners(Player player, Object data) {
         super.triggerListeners(player, data);
         if (data instanceof String string) {
-            setText(string);
-            BindingScope.suppressed(() -> text.setValue(string));
+            var currentBinding = textBinding;
+            if (currentBinding != null) {
+                BindingScope.suppressed(() -> currentBinding.setValue(string));
+            }
         }
     }
 

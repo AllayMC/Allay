@@ -223,6 +223,134 @@ class DataDrivenScreenControllerTest {
     }
 
     @Test
+    void shouldRouteTextFieldInputToReboundObservable() {
+        var first = DDUI.observable("value");
+        var second = DDUI.observable("value");
+        var screen = DDUI.customForm();
+        var textField = screen.textField("Name", first);
+        controller.view(screen);
+        clearInvocations(player);
+
+        textField.setText(second);
+
+        var update = new DataStoreUpdate();
+        update.setDataStoreName("minecraft");
+        update.setProperty("custom_form_data");
+        update.setPath("layout[0].text");
+        update.setData("Alex");
+
+        assertTrue(controller.handleInput(update));
+        assertEquals("value", first.getValue());
+        assertEquals("Alex", second.getValue());
+
+        controller.tick();
+
+        verifyNoMoreInteractions(player);
+        clearInvocations(player);
+
+        second.setValue("Bob");
+
+        assertEquals("Bob", textField.getText());
+    }
+
+    @Test
+    void shouldRouteToggleInputToReboundObservable() {
+        var first = DDUI.observable(false);
+        var second = DDUI.observable(false);
+        var screen = DDUI.customForm();
+        var toggle = screen.toggle("Enabled", first);
+        controller.view(screen);
+        clearInvocations(player);
+
+        toggle.setToggled(second);
+
+        var update = new DataStoreUpdate();
+        update.setDataStoreName("minecraft");
+        update.setProperty("custom_form_data");
+        update.setPath("layout[0].toggled");
+        update.setData(true);
+
+        assertTrue(controller.handleInput(update));
+        assertEquals(false, first.getValue());
+        assertEquals(true, second.getValue());
+
+        controller.tick();
+
+        verifyNoMoreInteractions(player);
+        clearInvocations(player);
+
+        second.setValue(false);
+
+        assertEquals(false, toggle.isToggled());
+    }
+
+    @Test
+    void shouldRouteSliderInputToReboundObservable() {
+        var first = DDUI.observable(0L);
+        var second = DDUI.observable(0L);
+        var screen = DDUI.customForm();
+        var slider = screen.slider("Volume", 0L, 10L, first);
+        controller.view(screen);
+        clearInvocations(player);
+
+        slider.setValue(second);
+
+        var update = new DataStoreUpdate();
+        update.setDataStoreName("minecraft");
+        update.setProperty("custom_form_data");
+        update.setPath("layout[0].value");
+        update.setData(5.0D);
+
+        assertTrue(controller.handleInput(update));
+        assertEquals(0L, first.getValue());
+        assertEquals(5L, second.getValue());
+
+        controller.tick();
+
+        verifyNoMoreInteractions(player);
+        clearInvocations(player);
+
+        second.setValue(7L);
+
+        assertEquals(7L, slider.getValueLong());
+    }
+
+    @Test
+    void shouldRouteDropdownInputToReboundObservable() {
+        var first = DDUI.observable(0L);
+        var second = DDUI.observable(0L);
+        var screen = DDUI.customForm();
+        var dropdown = screen.dropdown("Choice", List.of(
+                new org.allaymc.api.ddui.element.DropdownElement.Item("A"),
+                new org.allaymc.api.ddui.element.DropdownElement.Item("B"),
+                new org.allaymc.api.ddui.element.DropdownElement.Item("C")
+        ), first);
+        controller.view(screen);
+        clearInvocations(player);
+
+        dropdown.setSelectedIndex(second);
+
+        var update = new DataStoreUpdate();
+        update.setDataStoreName("minecraft");
+        update.setProperty("custom_form_data");
+        update.setPath("layout[0].value");
+        update.setData(2.0D);
+
+        assertTrue(controller.handleInput(update));
+        assertEquals(0L, first.getValue());
+        assertEquals(2L, second.getValue());
+
+        controller.tick();
+
+        verifyNoMoreInteractions(player);
+        clearInvocations(player);
+
+        second.setValue(1L);
+
+        assertEquals(1L, dropdown.getSelectedIndex());
+    }
+
+    @Test
     void shouldRouteTextFieldInputWithoutEchoingSameValue() {
         Observable<String> name = DDUI.observable("");
         var screen = DDUI.customForm();
@@ -238,6 +366,39 @@ class DataDrivenScreenControllerTest {
 
         assertTrue(controller.handleInput(update));
         assertEquals("Alex", name.getValue());
+
+        controller.tick();
+
+        verifyNoMoreInteractions(player);
+    }
+
+    @Test
+    void shouldClearLeafUpdatesAfterSendingFullRefresh() {
+        var title = DDUI.observable("Initial");
+        var frame = DDUI.observable("Frame A\nLine 2");
+        var screen = DDUI.customForm().title(title);
+        screen.label(frame);
+        controller.view(screen);
+        clearInvocations(player);
+
+        frame.setValue("Frame B\nLine 2");
+        title.setValue("Updated");
+        controller.tick();
+
+        var captor = ArgumentCaptor.forClass(Object.class);
+        verify(player).sendPacket(captor.capture());
+
+        var packet = assertInstanceOf(ClientboundDataStorePacket.class, captor.getValue());
+        assertEquals(1, packet.getUpdates().size());
+
+        var change = assertInstanceOf(DataStoreChange.class, packet.getUpdates().getFirst());
+        var payload = assertInstanceOf(Map.class, change.getNewValue());
+        assertEquals("Updated", payload.get("title"));
+        var layout = assertInstanceOf(Map.class, payload.get("layout"));
+        var label = assertInstanceOf(Map.class, layout.get("0"));
+        assertEquals("Frame B\nLine 2", label.get("text"));
+
+        clearInvocations(player);
 
         controller.tick();
 
@@ -344,6 +505,52 @@ class DataDrivenScreenControllerTest {
 
         controller.tick();
         verifyNoMoreInteractions(player);
+    }
+
+    @Test
+    void shouldAllowSettingMissingMessageBoxTextAfterAttach() {
+        var screen = DDUI.messageBox();
+        screen.button1("Yes", it -> {
+        });
+        controller.view(screen);
+        clearInvocations(player);
+
+        screen.title("Confirm");
+        screen.body("Proceed");
+        controller.tick();
+
+        var captor = ArgumentCaptor.forClass(Object.class);
+        verify(player).sendPacket(captor.capture());
+
+        var packet = assertInstanceOf(ClientboundDataStorePacket.class, captor.getValue());
+        assertEquals(2, packet.getUpdates().size());
+
+        var titleUpdate = assertInstanceOf(DataStoreUpdate.class, packet.getUpdates().get(0));
+        var bodyUpdate = assertInstanceOf(DataStoreUpdate.class, packet.getUpdates().get(1));
+        assertEquals("title", titleUpdate.getPath());
+        assertEquals("Confirm", titleUpdate.getData());
+        assertEquals("body", bodyUpdate.getPath());
+        assertEquals("Proceed", bodyUpdate.getData());
+    }
+
+    @Test
+    void shouldAllowSettingMissingMessageBoxTooltipAfterAttach() {
+        var screen = DDUI.messageBox();
+        var button = screen.button1("Yes", it -> {
+        });
+        controller.view(screen);
+        clearInvocations(player);
+
+        button.setToolTip("More info");
+        controller.tick();
+
+        var captor = ArgumentCaptor.forClass(Object.class);
+        verify(player).sendPacket(captor.capture());
+
+        var packet = assertInstanceOf(ClientboundDataStorePacket.class, captor.getValue());
+        var update = assertInstanceOf(DataStoreUpdate.class, packet.getUpdates().getFirst());
+        assertEquals("button1.tooltip", update.getPath());
+        assertEquals("More info", update.getData());
     }
 
     @Test

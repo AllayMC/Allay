@@ -2324,7 +2324,6 @@ public class AllayPlayer implements Player {
     public void closeAllForms() {
         sendPacket(new ClientboundCloseFormPacket());
         this.forms.invalidateAll();
-        closeDataDrivenScreens();
     }
 
     @Override

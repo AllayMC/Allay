@@ -16,11 +16,10 @@ public final class ToggleElement extends CustomFormElement {
 
     private static final String TOGGLED_BINDING = "binding:toggled";
     private static final String DESCRIPTION_BINDING = "binding:description";
-    private final Observable<Boolean> toggled;
+    private Observable<Boolean> toggledBinding;
 
     public ToggleElement(String label, Observable<Boolean> toggled, ObjectProperty<?> parent) {
         super("toggle", parent);
-        this.toggled = toggled;
         setLabel(label);
         setVisibility(true);
         setDisabled(false);
@@ -35,12 +34,14 @@ public final class ToggleElement extends CustomFormElement {
 
     public ToggleElement setToggled(boolean toggled) {
         unbind(TOGGLED_BINDING);
+        toggledBinding = null;
         toggledProperty().setValue(toggled);
         return this;
     }
 
     public ToggleElement setToggled(Observable<Boolean> toggled) {
         var booleanProperty = toggledProperty();
+        toggledBinding = toggled;
         booleanProperty.setValue(toggled.getValue());
         bind(TOGGLED_BINDING, toggled, booleanProperty::setValue);
         return this;
@@ -67,8 +68,10 @@ public final class ToggleElement extends CustomFormElement {
     public void triggerListeners(Player player, Object data) {
         super.triggerListeners(player, data);
         if (data instanceof Boolean bool) {
-            setToggled(bool);
-            BindingScope.suppressed(() -> toggled.setValue(bool));
+            var currentBinding = toggledBinding;
+            if (currentBinding != null) {
+                BindingScope.suppressed(() -> currentBinding.setValue(bool));
+            }
         }
     }
 

@@ -70,7 +70,7 @@ public class ObjectProperty<T> extends DataDrivenProperty<Map<String, DataDriven
     }
 
     protected final StringProperty writeStringProperty(String propertyName, String value) {
-        var property = ensureProperty(propertyName, () -> new StringProperty(propertyName, value, this));
+        var property = ensureWritableLeafProperty(propertyName, () -> new StringProperty(propertyName, value, this));
         property.setValue(value);
         return property;
     }
@@ -82,7 +82,7 @@ public class ObjectProperty<T> extends DataDrivenProperty<Map<String, DataDriven
     }
 
     protected final DisplayTextProperty writeDisplayTextProperty(String propertyName, String value) {
-        var property = ensureProperty(propertyName, () -> new DisplayTextProperty(propertyName, value, this));
+        var property = ensureWritableLeafProperty(propertyName, () -> new DisplayTextProperty(propertyName, value, this));
         property.setValue(value);
         return property;
     }
@@ -94,7 +94,7 @@ public class ObjectProperty<T> extends DataDrivenProperty<Map<String, DataDriven
     }
 
     protected final BooleanProperty writeBooleanProperty(String propertyName, boolean value) {
-        var property = ensureProperty(propertyName, () -> new BooleanProperty(propertyName, value, this));
+        var property = ensureWritableLeafProperty(propertyName, () -> new BooleanProperty(propertyName, value, this));
         property.setValue(value);
         return property;
     }
@@ -106,9 +106,29 @@ public class ObjectProperty<T> extends DataDrivenProperty<Map<String, DataDriven
     }
 
     protected final LongProperty writeLongProperty(String propertyName, long value) {
-        var property = ensureProperty(propertyName, () -> new LongProperty(propertyName, value, this));
+        var property = ensureWritableLeafProperty(propertyName, () -> new LongProperty(propertyName, value, this));
         property.setValue(value);
         return property;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <P extends DataDrivenProperty<?>> P ensureWritableLeafProperty(String name, Supplier<P> factory) {
+        var existing = getProperty(name);
+        if (existing != null) {
+            return (P) existing;
+        }
+
+        var created = factory.get();
+        var screen = getRootScreen();
+        if (screen != null && screen.hasSessions()) {
+            getValue().put(name, created);
+            screen.structureChanged();
+            screen.propertyChanged(created);
+            return created;
+        }
+
+        setProperty(created);
+        return created;
     }
 
     protected final LongProperty bindLongProperty(String bindingKey, String propertyName, Observable<Long> source) {

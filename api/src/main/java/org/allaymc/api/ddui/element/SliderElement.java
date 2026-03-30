@@ -16,11 +16,10 @@ public final class SliderElement extends CustomFormElement {
 
     private static final String VALUE_BINDING = "binding:value";
     private static final String DESCRIPTION_BINDING = "binding:description";
-    private final Observable<Long> currentValue;
+    private Observable<Long> valueBinding;
 
     public SliderElement(String label, Observable<Long> currentValue, long minValue, long maxValue, ObjectProperty<?> parent) {
         super("slider", parent);
-        this.currentValue = currentValue;
         setLabel(label);
         setVisibility(true);
         setDisabled(false);
@@ -53,12 +52,14 @@ public final class SliderElement extends CustomFormElement {
 
     public SliderElement setValue(long value) {
         unbind(VALUE_BINDING);
+        valueBinding = null;
         valueProperty().setValue(value);
         return this;
     }
 
     public SliderElement setValue(Observable<Long> value) {
         var longProperty = valueProperty();
+        valueBinding = value;
         longProperty.setValue(value.getValue());
         bind(VALUE_BINDING, value, longProperty::setValue);
         return this;
@@ -81,8 +82,10 @@ public final class SliderElement extends CustomFormElement {
         super.triggerListeners(player, data);
         if (data instanceof Number number) {
             var value = number.longValue();
-            setValue(value);
-            BindingScope.suppressed(() -> currentValue.setValue(value));
+            var currentBinding = valueBinding;
+            if (currentBinding != null) {
+                BindingScope.suppressed(() -> currentBinding.setValue(value));
+            }
         }
     }
 
