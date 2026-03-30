@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
@@ -172,7 +171,6 @@ public final class AllayAPI {
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
 
         // Misc
-        requireImpl(BossBar.Factory.class, BossBar.FACTORY::set);
         requireImpl(NBTIO.class, NBTIO.API::set);
         requireImpl(FakeContainerFactory.class, FakeContainerFactory.FACTORY::set);
     }

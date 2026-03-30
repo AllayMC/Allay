@@ -1,10 +1,13 @@
 package org.allaymc.api.bossbar;
 
-import org.allaymc.api.AllayAPI;
+import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a boss bar, a visual element often used in games to display progress, health, or status.
@@ -12,17 +15,34 @@ import java.util.Collection;
  *
  * @author daoge_cmd
  */
-public interface BossBar {
+public class BossBar {
 
-    AllayAPI.APIInstanceHolder<Factory> FACTORY = AllayAPI.APIInstanceHolder.create();
+    protected Set<BossBarViewer> viewers;
+    protected String title;
+    protected float progress;
+    protected BossBarColor color;
+    protected BossBarStyle style;
+    protected boolean darkenSky;
+
+    /**
+     * Create a new boss bar.
+     */
+    public BossBar() {
+        this.viewers = new HashSet<>();
+        this.title = "";
+        this.progress = 1.0f;
+        this.color = BossBarColor.PINK;
+        this.style = BossBarStyle.SOLID;
+        this.darkenSky = false;
+    }
 
     /**
      * Create a new boss bar.
      *
      * @return the boss bar
      */
-    static BossBar create() {
-        return FACTORY.get().create();
+    public static BossBar create() {
+        return new BossBar();
     }
 
     /**
@@ -30,19 +50,27 @@ public interface BossBar {
      *
      * @param viewer the viewer to add
      */
-    void addViewer(BossBarViewer viewer);
+    public void addViewer(BossBarViewer viewer) {
+        if (viewers.add(viewer)) {
+            viewer.viewBossBar(this);
+        }
+    }
 
     /**
      * Remove a viewer from the boss bar.
      *
      * @param viewer the viewer to remove
      */
-    void removeViewer(BossBarViewer viewer);
+    public void removeViewer(BossBarViewer viewer) {
+        if (viewers.remove(viewer)) {
+            viewer.clearBossBar();
+        }
+    }
 
     /**
      * Remove all viewers from the boss bar.
      */
-    default void removeAllViewers() {
+    public void removeAllViewers() {
         getViewers().forEach(this::removeViewer);
     }
 
@@ -52,49 +80,66 @@ public interface BossBar {
      * @return the viewers of the boss bar
      */
     @UnmodifiableView
-    Collection<BossBarViewer> getViewers();
+    public Collection<BossBarViewer> getViewers() {
+        return Collections.unmodifiableSet(viewers);
+    }
 
     /**
      * Get the color of the boss bar.
      *
      * @return the color of the boss bar
      */
-    BossBarColor getColor();
+    public BossBarColor getColor() {
+        return color;
+    }
 
     /**
      * Set the color of the boss bar.
      *
      * @param color the color to set
      */
-    void setColor(BossBarColor color);
+    public void setColor(BossBarColor color) {
+        this.color = color;
+        update();
+    }
 
     /**
      * Get the style of the boss bar.
      *
      * @return the style of the boss bar
      */
-    BossBarStyle getStyle();
+    public BossBarStyle getStyle() {
+        return style;
+    }
 
     /**
      * Set the style of the boss bar.
      *
      * @param style the style to set
      */
-    void setStyle(BossBarStyle style);
+    public void setStyle(BossBarStyle style) {
+        this.style = style;
+        update();
+    }
 
     /**
      * Check if the boss bar will darken the sky
      *
      * @return {@code true} if the boss bar will darken the sky, otherwise {@code false}.
      */
-    boolean isDarkenSky();
+    public boolean isDarkenSky() {
+        return darkenSky;
+    }
 
     /**
      * Set if the boss bar will darken the sky.
      *
      * @param darkenSky {@code true} if the boss bar will darken the sky, otherwise {@code false}
      */
-    void setDarkenSky(boolean darkenSky);
+    public void setDarkenSky(boolean darkenSky) {
+        this.darkenSky = darkenSky;
+        update();
+    }
 
     /**
      * Get the progress of the boss bar.
@@ -102,30 +147,41 @@ public interface BossBar {
      * @return the progress of the boss bar, between 0 and 1
      */
     @Range(from = 0, to = 1)
-    float getProgress();
+    public float getProgress() {
+        return progress;
+    }
 
     /**
      * Set the progress of the boss bar.
      *
      * @param progress the progress to set, between 0 and 1
      */
-    void setProgress(@Range(from = 0, to = 1) float progress);
+    public void setProgress(@Range(from = 0, to = 1) float progress) {
+        Preconditions.checkArgument(progress >= 0 && progress <= 1, "Progress must be between 0 and 1");
+        this.progress = progress;
+        update();
+    }
 
     /**
      * Get the title of the boss bar.
      *
      * @return the title of the boss bar
      */
-    String getTitle();
+    public String getTitle() {
+        return title;
+    }
 
     /**
      * Set the title of the boss bar.
      *
      * @param name the title to set
      */
-    void setTitle(String name);
+    public void setTitle(String name) {
+        this.title = name;
+        update();
+    }
 
-    interface Factory {
-        BossBar create();
+    protected void update() {
+        viewers.forEach(viewer -> viewer.viewBossBar(this));
     }
 }

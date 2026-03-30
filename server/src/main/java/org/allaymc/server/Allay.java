@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
@@ -28,8 +27,6 @@ import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.feature.WorldFeature;
-import org.allaymc.server.bossbar.AllayBossBar;
-import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
@@ -50,6 +47,7 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.AllayNBTIO;
 import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
+import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -163,7 +161,6 @@ public final class Allay {
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
         // Misc
-        api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
         api.bind(NBTIO.class, AllayNBTIO::new);
         api.bind(FakeContainerFactory.class, AllayFakeContainerFactory::new);
 

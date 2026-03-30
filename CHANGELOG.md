@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.12.0](https://github.com/AllayMC/Allay/compare/0.12.0...HEAD)</small>
 
+### Changed
+
+- (API) Merged `org.allaymc.server.bossbar.AllayBossBar` into the concrete `org.allaymc.api.bossbar.BossBar` class, so boss bars no longer use separate API interface and server implementation types.
+
 # 0.12.0 (API 0.27.0) - 2026/3/29
 
 <small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...0.12.0)</small>
