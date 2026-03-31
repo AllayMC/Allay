@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 /**
  * A DDUI custom-form screen.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class CustomFormScreen extends DDUIScreen {
     private final List<DDUIElement> elements = new ArrayList<>();

@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
  * @param <E> the concrete element type
  * @param <T> the value type
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> extends ElementBase<E> implements ValueElement<T> {
     private final BindableValue<String> label = new BindableValue<>("");

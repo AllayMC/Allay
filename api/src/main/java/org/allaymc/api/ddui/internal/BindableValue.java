@@ -8,7 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
  *
  * @param <T> the property value type
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 @ApiStatus.Internal
 public final class BindableValue<T> {

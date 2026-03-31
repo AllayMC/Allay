@@ -3,7 +3,7 @@ package org.allaymc.api.ddui.element;
 /**
  * A DDUI divider element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Divider extends ElementBase<Divider> {
     /**

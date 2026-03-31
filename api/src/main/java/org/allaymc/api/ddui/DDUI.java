@@ -6,7 +6,7 @@ import org.allaymc.api.ddui.type.MessageBoxScreen;
 /**
  * Factory methods for data-driven UI screens and observables.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public interface DDUI {
     /**

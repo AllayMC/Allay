@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 /**
  * A DDUI message-box screen.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class MessageBoxScreen extends DDUIScreen {
     private final BindableValue<String> title = new BindableValue<>("");

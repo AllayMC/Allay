@@ -6,7 +6,7 @@ import org.allaymc.api.ddui.internal.BindableValue;
 /**
  * A DDUI button element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Button extends ButtonElementBase<Button> {
     private final BindableValue<String> tooltip = new BindableValue<>("");

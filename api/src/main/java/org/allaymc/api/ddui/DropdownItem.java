@@ -3,7 +3,7 @@ package org.allaymc.api.ddui;
 /**
  * Represents a selectable dropdown item.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class DropdownItem {
     private final String label;

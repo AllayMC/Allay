@@ -3,7 +3,7 @@ package org.allaymc.api.ddui;
 /**
  * Represents the reason why a DDUI screen session was closed.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public enum DDUIScreenCloseReason {
     /**

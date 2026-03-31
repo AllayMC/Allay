@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 /**
  * The base type of all DDUI screens.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public abstract class DDUIScreen {
     private BiConsumer<DDUIScreenSession, DDUIScreenCloseReason> onClose = (session, reason) -> {

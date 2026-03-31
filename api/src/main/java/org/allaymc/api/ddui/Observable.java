@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  *
  * @param <T> the value type
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Observable<T> {
     private final Set<Consumer<T>> listeners = new CopyOnWriteArraySet<>();

@@ -5,7 +5,7 @@ package org.allaymc.api.ddui.element;
  *
  * @param <T> the value type
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public sealed interface ValueElement<T> extends DDUIElement permits ValueElementBase {
 }

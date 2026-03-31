@@ -6,7 +6,7 @@ import org.allaymc.api.ddui.type.DDUIScreen;
 /**
  * Represents an object that can view a DDUI screen.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public interface DDUIViewer {
     /**

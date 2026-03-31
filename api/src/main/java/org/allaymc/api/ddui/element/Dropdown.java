@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A DDUI dropdown element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Dropdown extends ValueElementBase<Dropdown, Long> {
     private final List<DropdownItem> items;

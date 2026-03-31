@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 /**
  * Marker interface for DDUI custom-form elements.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public sealed interface DDUIElement permits ValueElement, ElementBase {
     /**

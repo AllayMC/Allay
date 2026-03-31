@@ -5,7 +5,7 @@ import org.allaymc.api.ddui.Observable;
 /**
  * A DDUI close-button element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class CloseButton extends ButtonElementBase<CloseButton> {
     /**

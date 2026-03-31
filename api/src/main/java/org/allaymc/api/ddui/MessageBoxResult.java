@@ -3,7 +3,7 @@ package org.allaymc.api.ddui;
 /**
  * Represents the button selected in a DDUI message box.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public enum MessageBoxResult {
     /**

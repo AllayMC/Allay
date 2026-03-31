@@ -9,7 +9,7 @@ import org.allaymc.api.ddui.type.CustomFormScreen;
  *
  * @param <E> the concrete element type
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIElement {
     private CustomFormScreen screen;

@@ -8,7 +8,7 @@ import org.allaymc.api.ddui.internal.BindableValue;
  *
  * @param <E> the concrete element type
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase<E> {
     private final BindableValue<String> text = new BindableValue<>("");

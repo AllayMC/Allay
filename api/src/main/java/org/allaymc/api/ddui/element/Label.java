@@ -5,7 +5,7 @@ import org.allaymc.api.ddui.Observable;
 /**
  * A DDUI label element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Label extends TextElementBase<Label> {
     /**

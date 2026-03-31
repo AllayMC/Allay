@@ -8,7 +8,7 @@ import org.allaymc.api.player.Player;
 /**
  * Represents one opened DDUI screen instance for one viewer.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public interface DDUIScreenSession {
     /**

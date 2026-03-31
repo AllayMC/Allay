@@ -5,7 +5,7 @@ import org.allaymc.api.ddui.Observable;
 /**
  * A DDUI text-field element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class TextField extends ValueElementBase<TextField, String> {
     /**

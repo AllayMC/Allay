@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 /**
  * Server-side DDUI session implementation.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class AllayDDUIScreenSession implements DDUIScreenSession {
     private static final String DATA_STORE_NAME = "minecraft";

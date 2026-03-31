@@ -5,7 +5,7 @@ import org.allaymc.api.ddui.Observable;
 /**
  * A DDUI header element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Header extends TextElementBase<Header> {
     /**

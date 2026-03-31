@@ -5,7 +5,7 @@ import org.allaymc.api.ddui.Observable;
 /**
  * A DDUI toggle element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Toggle extends ValueElementBase<Toggle, Boolean> {
     /**

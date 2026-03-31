@@ -6,7 +6,7 @@ import org.allaymc.api.ddui.internal.BindableValue;
 /**
  * A DDUI slider element.
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 public final class Slider extends ValueElementBase<Slider, Long> {
     private final BindableValue<Long> min = new BindableValue<>(0L);

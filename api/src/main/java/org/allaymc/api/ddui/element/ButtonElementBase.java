@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  *
  * @param <E> the concrete element type
  *
- * @author OpenAI
+ * @author daoge_cmd | SerenityJS
  */
 abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends ElementBase<E> {
     private final BindableValue<String> label = new BindableValue<>("");
