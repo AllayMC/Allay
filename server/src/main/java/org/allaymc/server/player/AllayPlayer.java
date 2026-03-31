@@ -2355,8 +2355,8 @@ public class AllayPlayer implements Player {
 
     @Override
     public void closeScreen() {
-        if (this.activeScreen instanceof AllayDDUIScreenSession session) {
-            session.closeAll();
+        if (this.activeScreen instanceof AllayDDUIScreenSession screenSession) {
+            screenSession.close();
         } else if (this.activeScreen != null) {
             this.activeScreen.close();
         }

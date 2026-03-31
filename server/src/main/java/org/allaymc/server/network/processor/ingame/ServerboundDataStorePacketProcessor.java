@@ -8,7 +8,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ServerboundDataStorePacket;
 
 /**
- * @author OpenAI
+ * @author daoge_cmd
  */
 @Slf4j
 public final class ServerboundDataStorePacketProcessor extends PacketProcessor<ServerboundDataStorePacket> {

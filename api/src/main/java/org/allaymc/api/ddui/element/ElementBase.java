@@ -61,7 +61,7 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     /**
      * Gets the layout index assigned to this element.
      *
-     * @return the assigned index, or {@code -1} if this element has not been attached yet
+     * @return the assigned index, or {@code -1} if this element has not been attached yet or does not occupy a layout slot
      */
     @Override
     public int getIndex() {

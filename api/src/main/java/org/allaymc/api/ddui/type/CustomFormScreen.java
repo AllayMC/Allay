@@ -72,7 +72,8 @@ public final class CustomFormScreen extends DDUIScreen {
      * @return this screen
      */
     public CustomFormScreen element(DDUIElement element) {
-        element.bind(this, elements.size());
+        var index = element instanceof CloseButton ? -1 : (int) elements.stream().filter(existing -> !(existing instanceof CloseButton)).count();
+        element.bind(this, index);
         elements.add(element);
         return this;
     }

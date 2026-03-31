@@ -8,7 +8,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ServerboundDataDrivenScreenClosedPacket;
 
 /**
- * @author OpenAI
+ * @author daoge_cmd
  */
 @Slf4j
 public final class ServerboundDataDrivenScreenClosedPacketProcessor extends PacketProcessor<ServerboundDataDrivenScreenClosedPacket> {
