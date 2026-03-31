@@ -4,7 +4,7 @@ import org.allaymc.api.ddui.Observable;
 import org.allaymc.api.ddui.Property;
 
 /**
- * A DDUI slider element.
+ * Integer slider element with configurable minimum and maximum bounds.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -67,7 +67,7 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Gets the bindable minimum slider value property.
+     * Gets the minimum-value property of this slider.
      *
      * @return the minimum-value property
      */
@@ -98,7 +98,7 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Gets the bindable maximum slider value property.
+     * Gets the maximum-value property of this slider.
      *
      * @return the maximum-value property
      */

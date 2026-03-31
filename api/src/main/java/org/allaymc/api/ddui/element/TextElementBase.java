@@ -4,7 +4,7 @@ import org.allaymc.api.ddui.Observable;
 import org.allaymc.api.ddui.Property;
 
 /**
- * Shared base implementation for static-text DDUI elements.
+ * Shared base implementation for non-interactive text elements.
  *
  * @param <E> the concrete element type
  *
@@ -14,7 +14,7 @@ abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase
     private final Property<String> text = new Property<>("");
 
     /**
-     * Gets the bindable text property shown by this element.
+     * Gets the text property shown by this element.
      *
      * @return the text property
      */

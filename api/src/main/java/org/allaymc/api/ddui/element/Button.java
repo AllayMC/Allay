@@ -4,7 +4,7 @@ import org.allaymc.api.ddui.Observable;
 import org.allaymc.api.ddui.Property;
 
 /**
- * A DDUI button element.
+ * Clickable button element used inside a custom form layout.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -31,7 +31,7 @@ public final class Button extends ButtonElementBase<Button> {
     }
 
     /**
-     * Gets the bindable button tooltip property.
+     * Gets the tooltip property of this button.
      *
      * @return the tooltip property
      */
@@ -62,7 +62,7 @@ public final class Button extends ButtonElementBase<Button> {
     }
 
     /**
-     * Gets the bindable disabled-state property of this button.
+     * Gets the disabled-state property of this button.
      *
      * @return the disabled-state property
      */

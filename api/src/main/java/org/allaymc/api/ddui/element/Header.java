@@ -3,7 +3,7 @@ package org.allaymc.api.ddui.element;
 import org.allaymc.api.ddui.Observable;
 
 /**
- * A DDUI header element.
+ * Static header text element used to introduce a section in a custom form.
  *
  * @author daoge_cmd | SerenityJS
  */

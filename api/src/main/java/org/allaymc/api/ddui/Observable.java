@@ -5,7 +5,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 /**
- * A reactive value used by DDUI screens.
+ * Reactive value source used by DDUI properties.
+ * <p>
+ * An observable can drive live updates for a screen or element property after the screen has been shown.
+ * For editable controls, a client-writable observable may also receive values originating from the client.
  *
  * @param <T> the value type
  *
@@ -22,7 +25,7 @@ public final class Observable<T> {
     }
 
     /**
-     * Creates a server-writable observable.
+     * Creates an observable whose value is only written by server-side code.
      *
      * @param initialValue the initial value
      * @param <T>          the value type
@@ -33,7 +36,7 @@ public final class Observable<T> {
     }
 
     /**
-     * Creates an observable with an explicit client-writable flag.
+     * Creates an observable with an explicit client-write policy.
      *
      * @param initialValue   the initial value
      * @param clientWritable whether client-originated DDUI updates may write back into this observable
@@ -54,7 +57,7 @@ public final class Observable<T> {
     }
 
     /**
-     * Updates the current value and notifies subscribers.
+     * Updates the current value and notifies all subscribers.
      *
      * @param value the new value
      */
@@ -67,6 +70,8 @@ public final class Observable<T> {
 
     /**
      * Checks whether client-originated DDUI updates may write back into this observable.
+     * <p>
+     * This flag is only relevant when the observable is bound to an editable DDUI property.
      *
      * @return {@code true} if the client may write into this observable
      */
@@ -75,7 +80,9 @@ public final class Observable<T> {
     }
 
     /**
-     * Subscribes to value changes.
+     * Subscribes to future value changes.
+     * <p>
+     * The listener is not invoked immediately with the current value.
      *
      * @param listener the listener to add
      * @return a handle that unsubscribes the listener when closed

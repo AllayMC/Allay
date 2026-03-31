@@ -7,7 +7,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * A DDUI message-box screen.
+ * Builder-style template for the DDUI {@code minecraft:message_box} screen.
+ * <p>
+ * A message box exposes two labeled buttons. When the viewer selects one, the button-specific callback runs
+ * first, then the shared response callback runs.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -192,7 +195,7 @@ public final class MessageBoxScreen extends DDUIScreen {
     }
 
     /**
-     * Sets the callback that runs after either button is selected.
+     * Sets the callback that runs after either button-specific callback.
      *
      * @param onResponse the response callback
      * @return this screen

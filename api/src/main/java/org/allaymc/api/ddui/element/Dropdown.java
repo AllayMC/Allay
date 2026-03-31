@@ -6,7 +6,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.List;
 
 /**
- * A DDUI dropdown element.
+ * Selectable dropdown element whose runtime value is the {@linkplain DropdownItem#getValue() value} of the
+ * selected item rather than its index.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -15,6 +16,8 @@ public final class Dropdown extends ValueElementBase<Dropdown, Long> {
 
     /**
      * Creates a dropdown whose default selected value is the first item value.
+     * <p>
+     * When {@code items} is empty, the initial selected value is {@code 0}.
      *
      * @param label the dropdown label
      * @param items the selectable items
@@ -38,7 +41,7 @@ public final class Dropdown extends ValueElementBase<Dropdown, Long> {
     }
 
     /**
-     * Gets the selectable dropdown items.
+     * Gets the selectable dropdown items in display order.
      *
      * @return an unmodifiable view of the selectable items
      */

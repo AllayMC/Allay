@@ -5,7 +5,7 @@ import org.allaymc.api.ddui.Property;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 
 /**
- * Shared base implementation for DDUI elements.
+ * Shared base implementation for custom-form elements.
  *
  * @param <E> the concrete element type
  *
@@ -17,7 +17,7 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     private final Property<Boolean> visible = new Property<>(true);
 
     /**
-     * Gets the bindable visibility property of this element.
+     * Gets the visibility property of this element.
      *
      * @return the visibility property
      */

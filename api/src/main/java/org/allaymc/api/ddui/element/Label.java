@@ -3,7 +3,7 @@ package org.allaymc.api.ddui.element;
 import org.allaymc.api.ddui.Observable;
 
 /**
- * A DDUI label element.
+ * Static label text element used to show read-only content inside a custom form.
  *
  * @author daoge_cmd | SerenityJS
  */

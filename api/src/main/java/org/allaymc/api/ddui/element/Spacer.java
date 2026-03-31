@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 /**
- * A DDUI spacer element.
+ * Non-interactive spacer element used to insert vertical separation in a custom form.
  *
  * @author daoge_cmd | SerenityJS
  */

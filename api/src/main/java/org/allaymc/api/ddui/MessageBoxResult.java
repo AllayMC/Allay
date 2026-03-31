@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui;
 
 /**
- * Represents the button selected in a DDUI message box.
+ * Button results produced by {@link org.allaymc.api.ddui.type.MessageBoxScreen}.
  *
  * @author daoge_cmd | SerenityJS
  */

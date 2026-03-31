@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 /**
- * Represents a selectable dropdown item.
+ * One selectable entry in a {@link Dropdown}.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -52,7 +52,7 @@ public final class DropdownItem {
     }
 
     /**
-     * Gets the item value.
+     * Gets the runtime value written back when this item is selected.
      *
      * @return the item value
      */

@@ -3,7 +3,9 @@ package org.allaymc.api.ddui.element;
 import org.allaymc.api.ddui.Observable;
 
 /**
- * A DDUI toggle element.
+ * Boolean toggle element.
+ * <p>
+ * The checked state is exposed through the inherited {@link #getValue()} property.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -30,7 +32,7 @@ public final class Toggle extends ValueElementBase<Toggle, Boolean> {
     }
 
     /**
-     * Sets the toggle value.
+     * Convenience alias of {@code value(toggled)}.
      *
      * @param toggled the toggle value
      * @return this element
@@ -40,7 +42,7 @@ public final class Toggle extends ValueElementBase<Toggle, Boolean> {
     }
 
     /**
-     * Binds the toggle value to an observable.
+     * Convenience alias of {@code value(toggled)} for observable bindings.
      *
      * @param toggled the toggle observable
      * @return this element

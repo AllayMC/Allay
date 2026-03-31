@@ -20,7 +20,7 @@ abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends Element
     };
 
     /**
-     * Gets the bindable button label property.
+     * Gets the label property of this button.
      *
      * @return the label property
      */
@@ -51,7 +51,7 @@ abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends Element
     }
 
     /**
-     * Gets the click callback.
+     * Gets the callback invoked when the viewer clicks this button.
      *
      * @return the click callback
      */
@@ -60,7 +60,10 @@ abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends Element
     }
 
     /**
-     * Sets the click callback.
+     * Sets the callback invoked when the viewer clicks this button.
+     * <p>
+     * The button must already be attached to a screen because this method returns the owning screen for continued
+     * fluent configuration.
      *
      * @param onClick the click callback
      * @return the owning screen

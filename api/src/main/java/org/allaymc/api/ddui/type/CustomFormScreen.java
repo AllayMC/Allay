@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- * A DDUI custom-form screen.
+ * Builder-style template for the DDUI {@code minecraft:custom_form} screen.
+ * <p>
+ * Elements are rendered in insertion order. A custom form may also contain a single dedicated close button,
+ * rendered outside the normal layout list.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -31,7 +34,7 @@ public final class CustomFormScreen extends DDUIScreen {
     }
 
     /**
-     * Gets the elements contained in this screen.
+     * Gets the elements currently attached to this screen in layout order.
      *
      * @return an unmodifiable view of the screen elements
      */
@@ -63,7 +66,7 @@ public final class CustomFormScreen extends DDUIScreen {
     }
 
     /**
-     * Adds an element to this screen.
+     * Appends an element to this screen.
      *
      * @param element the element to add
      * @return this screen
@@ -136,7 +139,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * Adds a text-field element.
      *
      * @param label the field label
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public TextField textField(String label) {
         var element = new TextField(label);
@@ -149,7 +152,7 @@ public final class CustomFormScreen extends DDUIScreen {
      *
      * @param label the field label
      * @param text  the text observable
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public TextField textField(String label, Observable<String> text) {
         var element = new TextField(label, text);
@@ -161,7 +164,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * Adds a toggle element.
      *
      * @param label the toggle label
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Toggle toggle(String label) {
         return toggle(label, false);
@@ -172,7 +175,7 @@ public final class CustomFormScreen extends DDUIScreen {
      *
      * @param label        the toggle label
      * @param defaultValue the default value
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Toggle toggle(String label, boolean defaultValue) {
         var element = new Toggle(label).value(defaultValue);
@@ -185,7 +188,7 @@ public final class CustomFormScreen extends DDUIScreen {
      *
      * @param label   the toggle label
      * @param toggled the value observable
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Toggle toggle(String label, Observable<Boolean> toggled) {
         var element = new Toggle(label).value(toggled);
@@ -199,7 +202,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * @param label the slider label
      * @param min   the minimum value
      * @param max   the maximum value
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Slider slider(String label, long min, long max) {
         return slider(label, min, max, min);
@@ -212,7 +215,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * @param min          the minimum value
      * @param max          the maximum value
      * @param defaultValue the default value
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Slider slider(String label, long min, long max, long defaultValue) {
         var element = new Slider(label, min, max, defaultValue);
@@ -227,7 +230,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * @param value the value observable
      * @param min   the minimum value
      * @param max   the maximum value
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Slider slider(String label, Observable<Long> value, long min, long max) {
         var element = new Slider(label, value, min, max);
@@ -242,7 +245,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * @param value the value observable
      * @param min   the minimum-value observable
      * @param max   the maximum-value observable
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Slider slider(String label, Observable<Long> value, Observable<Long> min, Observable<Long> max) {
         var element = new Slider(label, value, min, max);
@@ -252,10 +255,12 @@ public final class CustomFormScreen extends DDUIScreen {
 
     /**
      * Adds a dropdown element.
+     * <p>
+     * The first item is used as the default selection, so {@code items} must not be empty.
      *
      * @param label the dropdown label
      * @param items the selectable items
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Dropdown dropdown(String label, List<DropdownItem> items) {
         return dropdown(label, items, 0);
@@ -263,11 +268,13 @@ public final class CustomFormScreen extends DDUIScreen {
 
     /**
      * Adds a dropdown element with a default selection index.
+     * <p>
+     * The selected runtime value is the {@linkplain DropdownItem#getValue() item value} of the chosen entry.
      *
      * @param label        the dropdown label
      * @param items        the selectable items
      * @param defaultIndex the default selected index
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Dropdown dropdown(String label, List<DropdownItem> items, int defaultIndex) {
         var element = new Dropdown(label, items).value(items.get(defaultIndex).getValue());
@@ -281,7 +288,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * @param label the dropdown label
      * @param value the value observable
      * @param items the selectable items
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Dropdown dropdown(String label, Observable<Long> value, List<DropdownItem> items) {
         var element = new Dropdown(label, items).value(value);
@@ -293,7 +300,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * Adds a button element.
      *
      * @param label the button label
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Button button(String label) {
         var element = new Button(label);
@@ -305,7 +312,7 @@ public final class CustomFormScreen extends DDUIScreen {
      * Adds a button element bound to an observable label.
      *
      * @param label the label observable
-     * @return the created element handle
+     * @return the attached element handle for further configuration
      */
     public Button button(Observable<String> label) {
         var element = new Button(label);
@@ -314,7 +321,9 @@ public final class CustomFormScreen extends DDUIScreen {
     }
 
     /**
-     * Adds a close-button element.
+     * Adds the dedicated close button for this screen.
+     * <p>
+     * A custom form may contain at most one close button.
      *
      * @return this screen
      */

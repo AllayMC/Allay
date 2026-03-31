@@ -5,13 +5,15 @@ import org.allaymc.api.ddui.type.CustomFormScreen;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * Marker interface for DDUI custom-form elements.
+ * Base contract of elements that can be attached to a {@link CustomFormScreen}.
  *
  * @author daoge_cmd | SerenityJS
  */
 public sealed interface DDUIElement permits ValueElement, ElementBase {
     /**
-     * Gets the bindable visibility property of this element.
+     * Gets the visibility property of this element.
+     * <p>
+     * This property controls both the initial visibility sent to the client and later runtime updates.
      *
      * @return the visibility property
      */

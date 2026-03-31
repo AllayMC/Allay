@@ -8,7 +8,10 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.function.BiConsumer;
 
 /**
- * The base type of all DDUI screens.
+ * Base type of all DDUI screen templates.
+ * <p>
+ * A screen template is configured on the server, then turned into a runtime {@link DDUIScreenSession} when sent
+ * to a {@link DDUIViewer}.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -28,6 +31,9 @@ public abstract class DDUIScreen {
 
     /**
      * Sets a callback that runs whenever this screen closes without producing a normal response.
+     * <p>
+     * For example, this callback is used when the viewer dismisses a custom form or when the server closes the
+     * screen programmatically.
      *
      * @param onClose the callback
      * @return this screen
@@ -38,7 +44,7 @@ public abstract class DDUIScreen {
     }
 
     /**
-     * Sets a callback that runs whenever this screen closes without producing a normal response.
+     * Convenience overload of {@link #onClose(BiConsumer)} that ignores the close reason.
      *
      * @param onClose the callback
      * @return this screen

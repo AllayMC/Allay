@@ -3,7 +3,9 @@ package org.allaymc.api.ddui.element;
 import org.allaymc.api.ddui.Observable;
 
 /**
- * A DDUI text-field element.
+ * Editable text-field element.
+ * <p>
+ * The entered text is exposed through the inherited {@link #getValue()} property.
  *
  * @author daoge_cmd | SerenityJS
  */
@@ -30,7 +32,7 @@ public final class TextField extends ValueElementBase<TextField, String> {
     }
 
     /**
-     * Sets the current text value.
+     * Convenience alias of {@code value(text)}.
      *
      * @param text the text value
      * @return this element
@@ -40,7 +42,7 @@ public final class TextField extends ValueElementBase<TextField, String> {
     }
 
     /**
-     * Binds the text value to an observable.
+     * Convenience alias of {@code value(text)} for observable bindings.
      *
      * @param text the text observable
      * @return this element

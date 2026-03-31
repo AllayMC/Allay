@@ -7,7 +7,7 @@ import org.allaymc.api.ddui.Property;
 import java.util.function.BiConsumer;
 
 /**
- * Shared base implementation for DDUI value elements.
+ * Shared base implementation for editable value elements.
  *
  * @param <E> the concrete element type
  * @param <T> the value type
@@ -32,7 +32,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the bindable label property of this element.
+     * Gets the label property of this element.
      *
      * @return the label property
      */
@@ -63,7 +63,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the bindable description property of this element.
+     * Gets the description property of this element.
      *
      * @return the description property
      */
@@ -94,7 +94,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the bindable disabled-state property of this element.
+     * Gets the disabled-state property of this element.
      *
      * @return the disabled-state property
      */
@@ -125,7 +125,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the bindable value property of this element.
+     * Gets the value property of this element.
      *
      * @return the value property
      */
@@ -156,7 +156,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the callback that runs when the client changes this element.
+     * Gets the callback that runs when the viewer changes this element in an opened session.
      *
      * @return the change callback
      */
@@ -165,7 +165,10 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Sets the callback that runs when the client changes this element.
+     * Sets the callback that runs when the viewer changes this element in an opened session.
+     * <p>
+     * Server-side updates performed through {@link org.allaymc.api.ddui.DDUIScreenSession#set(ValueElement, Object)}
+     * do not trigger this callback.
      *
      * @param onChange the change callback
      * @return this element

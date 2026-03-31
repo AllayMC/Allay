@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 /**
- * A DDUI divider element.
+ * Non-interactive divider element used to visually separate groups in a custom form.
  *
  * @author daoge_cmd | SerenityJS
  */

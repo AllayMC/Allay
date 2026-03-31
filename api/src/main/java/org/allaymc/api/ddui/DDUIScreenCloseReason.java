@@ -1,7 +1,8 @@
 package org.allaymc.api.ddui;
 
 /**
- * Represents the reason why a DDUI screen session was closed.
+ * Reasons delivered to {@link org.allaymc.api.ddui.type.DDUIScreen#onClose} when a DDUI screen ends without
+ * producing a normal response.
  *
  * @author daoge_cmd | SerenityJS
  */

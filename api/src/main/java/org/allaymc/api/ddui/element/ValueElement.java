@@ -1,7 +1,10 @@
 package org.allaymc.api.ddui.element;
 
 /**
- * Represents a DDUI element that carries a value.
+ * A DDUI element that exposes a runtime value.
+ * <p>
+ * Value elements are the controls that can be read and written through a
+ * {@link org.allaymc.api.ddui.DDUIScreenSession}.
  *
  * @param <T> the value type
  *
