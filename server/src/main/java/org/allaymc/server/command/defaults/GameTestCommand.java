@@ -7,6 +7,10 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.ddui.DDUI;
+import org.allaymc.api.ddui.DropdownItem;
+import org.allaymc.api.ddui.element.CloseButton;
+import org.allaymc.api.ddui.element.Header;
+import org.allaymc.api.ddui.element.Label;
 import org.allaymc.api.debugshape.DebugLine;
 import org.allaymc.api.debugshape.DebugText;
 import org.allaymc.api.dialog.Dialog;
@@ -46,6 +50,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.LongFunction;
 
 /**
  * @author daoge_cmd
@@ -325,60 +330,201 @@ public class GameTestCommand extends Command {
                 .key("testddui")
                 .exec((context, player) -> {
                     var controller = player.getController();
-                    var name = DDUI.observable("", true);
-                    var bio = DDUI.observable("", true);
-                    var age = DDUI.observable(18L, true);
-                    var ageGroup = DDUI.observable("Adult");
-                    var difficulty = DDUI.observable(3L, true);
+                    var title = DDUI.observable("DDUI Coverage Lab");
+                    var summary = DDUI.observable("");
+                    var profileHeader = DDUI.observable("Profile");
+                    var name = DDUI.observable("Allay", true);
+                    var notes = DDUI.observable("Type here to test client-to-server sync.", true);
+                    var showAdvanced = DDUI.observable(true, true);
+                    var lockEditing = DDUI.observable(false, true);
+                    var expertMode = DDUI.observable(false, true);
+                    var verboseOutput = DDUI.observable(true, true);
+                    var difficulty = DDUI.observable(2L, true);
+                    var difficultyMin = DDUI.observable(1L);
+                    var difficultyMax = DDUI.observable(5L);
+                    var theme = DDUI.observable(1L, true);
+                    var nameDescription = DDUI.observable("Typing here updates the title, header and summary.");
+                    var difficultyDescription = DDUI.observable("Current slider range: 1 - 5");
+                    var snapshotLabel = DDUI.observable("Print Snapshot");
+                    var snapshotTooltip = DDUI.observable("Dump all DDUI values to chat");
+                    var editDisabled = DDUI.observable(false);
+                    var advancedVisible = DDUI.observable(true);
+                    var closeLabel = DDUI.observable("Close Coverage Form");
+                    var imperativeLabelVisible = DDUI.observable(false);
+                    var verboseDisabled = DDUI.observable(false);
+
+                    LongFunction<String> themeName = value -> switch ((int) value) {
+                        case 0 -> "Classic";
+                        case 1 -> "Builder";
+                        case 2 -> "Speedrunner";
+                        default -> "Unknown(" + value + ")";
+                    };
+                    Runnable refreshSummary = () -> {
+                        var currentName = name.get().isBlank() ? "<empty>" : name.get();
+                        profileHeader.set("Profile: " + currentName);
+                        title.set("DDUI Coverage Lab [" + themeName.apply(theme.get()) + "]");
+                        nameDescription.set("Name length: " + name.get().length() + "/24");
+                        difficultyDescription.set("Current slider range: " + difficultyMin.get() + " - " + difficultyMax.get());
+                        snapshotLabel.set(lockEditing.get() ? "Snapshot Disabled" : "Print Snapshot");
+                        snapshotTooltip.set("Theme=" + themeName.apply(theme.get()) + ", Difficulty=" + difficulty.get());
+                        closeLabel.set(showAdvanced.get() ? "Close Coverage Form" : "Close Compact Form");
+                        summary.set("name=" + currentName
+                                + ", advanced=" + showAdvanced.get()
+                                + ", locked=" + lockEditing.get()
+                                + ", expert=" + expertMode.get()
+                                + ", difficulty=" + difficulty.get()
+                                + ", theme=" + themeName.apply(theme.get())
+                                + ", verbose=" + verboseOutput.get());
+                    };
 
                     var form = DDUI.customForm()
-                            .title("My Form")
-                            .label("Personal information");
+                            .title(title)
+                            .onClose((session, reason) -> controller.sendMessage("DDUI custom form closed: " + reason));
+                    form.header("DDUI Coverage Demo");
+                    form.label("This example intentionally covers every current custom-form element type and most runtime update paths.");
+                    form.element(new Label(summary));
+                    form.divider();
+                    form.element(new Header(profileHeader));
 
                     var nameField = form.textField("Name", name)
-                            .description("Max 10 characters");
-                    var bioField = form.textField("Biography", bio)
-                            .description("This is your biography. You can write anything you want here.");
-                    var ageSlider = form.slider("Age", age, 1L, 100L);
-                    var ageGroupField = form.textField("Age Group", ageGroup)
-                            .description("Automatically set based on age")
-                            .disabled(true);
-                    var difficultySlider = form.slider("Difficulty", difficulty, 1L, 5L)
-                            .description("1 = Peaceful - 5 = Hardcore");
+                            .description(nameDescription)
+                            .disabled(editDisabled);
+                    var notesField = form.textField("Notes", notes)
+                            .description("Observable-backed free-form text field.")
+                            .disabled(editDisabled);
+                    var showAdvancedToggle = form.toggle("Show advanced section", showAdvanced)
+                            .description("Toggles visibility for the advanced controls below.");
+                    var lockEditingToggle = form.toggle("Disable editable controls", lockEditing)
+                            .description("Disables text fields, slider, dropdown and snapshot button.");
+                    var expertToggle = form.toggle("Expert mode", expertMode)
+                            .description("Expands the slider range from 1-5 to 2-10.");
+
+                    form.spacer();
+                    form.element(new Header("Advanced Controls").visible(advancedVisible));
+                    form.element(new Label("Use the buttons below to test observable updates, session.get/set, visibility and disabled state.")
+                            .visible(advancedVisible));
+
+                    var imperativeLabel = new Label("This label is toggled only through session.setVisible(...).")
+                            .visible(false);
+                    form.element(imperativeLabel);
+
+                    var difficultySlider = form.slider("Difficulty", difficulty, difficultyMin, difficultyMax)
+                            .description(difficultyDescription)
+                            .disabled(editDisabled)
+                            .visible(advancedVisible);
+                    var themeDropdown = form.dropdown("Theme Preset", theme, List.of(
+                                    new DropdownItem("Classic", "Baseline preset", 0L),
+                                    new DropdownItem("Builder", "Good for structure editing", 1L),
+                                    new DropdownItem("Speedrunner", "High intensity preset", 2L)
+                            ))
+                            .description("Dropdown labels, descriptions and selected value writeback.")
+                            .disabled(editDisabled)
+                            .visible(advancedVisible);
+                    var verboseToggle = form.toggle("Verbose button output", verboseOutput)
+                            .description("Buttons print extra state while this toggle is enabled.")
+                            .visible(advancedVisible);
+                    var scratchField = form.textField("Scratch Pad")
+                            .description("Not observable-backed; used to test session.set(String).")
+                            .visible(advancedVisible);
+                    var scratchSlider = form.slider("Scratch Value", 0L, 10L, 3L)
+                            .description("Not observable-backed; used to test session.set(Long).")
+                            .visible(advancedVisible);
+
+                    form.spacer();
+                    var snapshotButton = form.button(snapshotLabel)
+                            .tooltip(snapshotTooltip)
+                            .disabled(editDisabled);
+                    var presetButton = form.button("Apply Server Preset")
+                            .tooltip("Mutate multiple observables from the server side.");
+                    var sessionOpsButton = form.button("Run session.* updates")
+                            .tooltip("Calls session.set, session.get, session.setVisible and session.setDisabled.")
+                            .visible(advancedVisible);
+                    var closeButton = new CloseButton(closeLabel);
+                    form.element(closeButton);
 
                     nameField.onChange((session, value) -> {
-                        if (value.length() <= 10) {
-                            return;
+                        if (value.length() > 24) {
+                            name.set(value.substring(0, 24));
                         }
-                        name.set(value.substring(0, 10));
+                        refreshSummary.run();
                     });
-                    ageSlider.onChange((session, value) -> {
-                        if (value <= 12) {
-                            ageGroup.set("Kid");
-                        } else if (value <= 17) {
-                            ageGroup.set("Teen");
-                        } else if (value <= 64) {
-                            ageGroup.set("Adult");
-                        } else {
-                            ageGroup.set("Senior");
+                    notesField.onChange((session, value) -> refreshSummary.run());
+                    showAdvancedToggle.onChange((session, value) -> {
+                        advancedVisible.set(value);
+                        refreshSummary.run();
+                    });
+                    lockEditingToggle.onChange((session, value) -> {
+                        editDisabled.set(value);
+                        refreshSummary.run();
+                    });
+                    expertToggle.onChange((session, value) -> {
+                        difficultyMin.set(value ? 2L : 1L);
+                        difficultyMax.set(value ? 10L : 5L);
+                        if (difficulty.get() < difficultyMin.get()) {
+                            difficulty.set(difficultyMin.get());
+                        }
+                        if (difficulty.get() > difficultyMax.get()) {
+                            difficulty.set(difficultyMax.get());
+                        }
+                        refreshSummary.run();
+                    });
+                    difficultySlider.onChange((session, value) -> refreshSummary.run());
+                    themeDropdown.onChange((session, value) -> refreshSummary.run());
+                    verboseToggle.onChange((session, value) -> refreshSummary.run());
+
+                    snapshotButton.onClick(session -> {
+                        controller.sendMessage("DDUI snapshot => name=" + session.get(nameField)
+                                + ", notes=" + session.get(notesField)
+                                + ", difficulty=" + session.get(difficultySlider)
+                                + ", theme=" + themeName.apply(session.get(themeDropdown))
+                                + ", verbose=" + session.get(verboseToggle)
+                                + ", scratchText=" + session.get(scratchField)
+                                + ", scratchValue=" + session.get(scratchSlider));
+                        if (Boolean.TRUE.equals(session.get(verboseToggle))) {
+                            controller.sendMessage("Live summary => " + summary.get());
                         }
                     });
-                    form.button("Reset").onClick(session -> {
-                        name.set("");
-                        bio.set("");
-                        age.set(18L);
-                        ageGroup.set("Adult");
-                        difficulty.set(3L);
+                    presetButton.onClick(session -> {
+                        name.set("Preset-" + Server.getInstance().getTick());
+                        notes.set("Updated from the server preset button.");
+                        showAdvanced.set(true);
+                        advancedVisible.set(true);
+                        lockEditing.set(false);
+                        editDisabled.set(false);
+                        expertMode.set(true);
+                        difficultyMin.set(2L);
+                        difficultyMax.set(10L);
+                        difficulty.set(7L);
+                        theme.set(2L);
+                        verboseOutput.set(true);
+                        imperativeLabelVisible.set(false);
+                        session.setVisible(imperativeLabel, false);
+                        verboseDisabled.set(false);
+                        session.setDisabled(verboseToggle, false);
+                        session.set(scratchField, "Preset applied at tick " + Server.getInstance().getTick());
+                        session.set(scratchSlider, 8L);
+                        refreshSummary.run();
+                        controller.sendMessage("Applied DDUI server preset.");
                     });
-                    form.button("Confirm").onClick(session -> {
-                        controller.sendMessage("Confirmed successfully!");
-                        controller.sendMessage("Name: " + session.get(nameField));
-                        controller.sendMessage("Biography: " + session.get(bioField));
-                        controller.sendMessage("Age: " + session.get(ageSlider) + " (" + ageGroup.get() + ")");
-                        controller.sendMessage("Difficulty: " + session.get(difficultySlider));
-                        session.close();
+                    sessionOpsButton.onClick(session -> {
+                        imperativeLabelVisible.set(!imperativeLabelVisible.get());
+                        session.setVisible(imperativeLabel, imperativeLabelVisible.get());
+
+                        verboseDisabled.set(!verboseDisabled.get());
+                        session.setDisabled(verboseToggle, verboseDisabled.get());
+
+                        var nextScratchValue = (session.get(scratchSlider) + 1L) % 11L;
+                        session.set(scratchField, "session.set at tick " + Server.getInstance().getTick());
+                        session.set(scratchSlider, nextScratchValue);
+
+                        controller.sendMessage("Session API test => visible=" + imperativeLabelVisible.get()
+                                + ", verboseDisabled=" + verboseDisabled.get()
+                                + ", scratchText=" + session.get(scratchField)
+                                + ", scratchValue=" + session.get(scratchSlider));
                     });
-                    form.closeButton();
+                    closeButton.onClick(session -> controller.sendMessage("DDUI close button callback fired."));
+
+                    refreshSummary.run();
 
                     try {
                         form.sendTo(controller);
