@@ -1,8 +1,8 @@
 package org.allaymc.api.ddui.element;
 
+import org.allaymc.api.ddui.DDUIScreenSession;
 import org.allaymc.api.ddui.Observable;
-import org.allaymc.api.ddui.internal.BindableValue;
-import org.allaymc.api.ddui.session.DDUIScreenSession;
+import org.allaymc.api.ddui.Property;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 
 import java.util.function.Consumer;
@@ -15,26 +15,17 @@ import java.util.function.Consumer;
  * @author daoge_cmd | SerenityJS
  */
 abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends ElementBase<E> {
-    private final BindableValue<String> label = new BindableValue<>("");
+    private final Property<String> label = new Property<>("");
     private Consumer<DDUIScreenSession> onClick = session -> {
     };
 
     /**
-     * Gets the button label.
+     * Gets the bindable button label property.
      *
-     * @return the button label
+     * @return the label property
      */
-    public String getLabel() {
-        return label.value();
-    }
-
-    /**
-     * Gets the observable bound to this button's label.
-     *
-     * @return the label observable, or {@code null} if the label is not observable-backed
-     */
-    public Observable<String> getLabelObservable() {
-        return label.observable();
+    public Property<String> getLabel() {
+        return label;
     }
 
     /**

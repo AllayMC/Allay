@@ -1,6 +1,5 @@
 package org.allaymc.api.ddui;
 
-import org.allaymc.api.ddui.session.DDUIScreenSession;
 import org.allaymc.api.ddui.type.DDUIScreen;
 
 /**

@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
-import org.allaymc.api.ddui.internal.BindableValue;
+import org.allaymc.api.ddui.Property;
 
 /**
  * A DDUI button element.
@@ -9,8 +9,8 @@ import org.allaymc.api.ddui.internal.BindableValue;
  * @author daoge_cmd | SerenityJS
  */
 public final class Button extends ButtonElementBase<Button> {
-    private final BindableValue<String> tooltip = new BindableValue<>("");
-    private final BindableValue<Boolean> disabled = new BindableValue<>(false);
+    private final Property<String> tooltip = new Property<>("");
+    private final Property<Boolean> disabled = new Property<>(false);
 
     /**
      * Creates a button with a literal label.
@@ -31,21 +31,12 @@ public final class Button extends ButtonElementBase<Button> {
     }
 
     /**
-     * Gets the button tooltip.
+     * Gets the bindable button tooltip property.
      *
-     * @return the button tooltip
+     * @return the tooltip property
      */
-    public String getTooltip() {
-        return tooltip.value();
-    }
-
-    /**
-     * Gets the observable bound to the button tooltip.
-     *
-     * @return the tooltip observable, or {@code null} if the tooltip is not observable-backed
-     */
-    public Observable<String> getTooltipObservable() {
-        return tooltip.observable();
+    public Property<String> getTooltip() {
+        return tooltip;
     }
 
     /**
@@ -71,21 +62,12 @@ public final class Button extends ButtonElementBase<Button> {
     }
 
     /**
-     * Checks whether this button is disabled by default.
+     * Gets the bindable disabled-state property of this button.
      *
-     * @return {@code true} if this button is disabled
+     * @return the disabled-state property
      */
-    public boolean isDisabled() {
-        return disabled.value();
-    }
-
-    /**
-     * Gets the observable bound to the button's disabled state.
-     *
-     * @return the disabled observable, or {@code null} if the disabled state is not observable-backed
-     */
-    public Observable<Boolean> getDisabledObservable() {
-        return disabled.observable();
+    public Property<Boolean> getDisabled() {
+        return disabled;
     }
 
     /**

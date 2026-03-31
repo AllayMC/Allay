@@ -1,10 +1,6 @@
 package org.allaymc.api.ddui.type;
 
-import org.allaymc.api.ddui.DDUIScreenCloseReason;
-import org.allaymc.api.ddui.MessageBoxResult;
-import org.allaymc.api.ddui.Observable;
-import org.allaymc.api.ddui.internal.BindableValue;
-import org.allaymc.api.ddui.session.DDUIScreenSession;
+import org.allaymc.api.ddui.*;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.BiConsumer;
@@ -16,10 +12,10 @@ import java.util.function.Consumer;
  * @author daoge_cmd | SerenityJS
  */
 public final class MessageBoxScreen extends DDUIScreen {
-    private final BindableValue<String> title = new BindableValue<>("");
-    private final BindableValue<String> body = new BindableValue<>("");
-    private final BindableValue<String> button1 = new BindableValue<>("");
-    private final BindableValue<String> button2 = new BindableValue<>("");
+    private final Property<String> title = new Property<>("");
+    private final Property<String> body = new Property<>("");
+    private final Property<String> button1 = new Property<>("");
+    private final Property<String> button2 = new Property<>("");
     private Consumer<DDUIScreenSession> onButton1 = session -> {
     };
     private Consumer<DDUIScreenSession> onButton2 = session -> {
@@ -28,75 +24,39 @@ public final class MessageBoxScreen extends DDUIScreen {
     };
 
     /**
-     * Gets the title text.
+     * Gets the bindable title property of this screen.
      *
-     * @return the title text
+     * @return the title property
      */
-    public String getTitle() {
-        return title.value();
+    public Property<String> getTitle() {
+        return title;
     }
 
     /**
-     * Gets the title observable.
+     * Gets the bindable body property of this screen.
      *
-     * @return the title observable, or {@code null} if the title is not observable-backed
+     * @return the body property
      */
-    public Observable<String> getTitleObservable() {
-        return title.observable();
+    public Property<String> getBody() {
+        return body;
     }
 
     /**
-     * Gets the body text.
+     * Gets the bindable first-button label property.
      *
-     * @return the body text
+     * @return the first-button label property
      */
-    public String getBody() {
-        return body.value();
+    public Property<String> getButton1() {
+        return button1;
     }
 
     /**
-     * Gets the body observable.
+     * Gets the bindable second-button label property.
      *
-     * @return the body observable, or {@code null} if the body is not observable-backed
+     * @return the second-button label property
      */
-    public Observable<String> getBodyObservable() {
-        return body.observable();
-    }
-
-    /**
-     * Gets the first button label.
-     *
-     * @return the first button label
-     */
-    public String getButton1() {
-        return button1.value();
-    }
-
-    /**
-     * Gets the first button observable.
-     *
-     * @return the first button observable, or {@code null} if the label is not observable-backed
-     */
-    public Observable<String> getButton1Observable() {
-        return button1.observable();
-    }
-
-    /**
-     * Gets the second button label.
-     *
-     * @return the second button label
-     */
-    public String getButton2() {
-        return button2.value();
-    }
-
-    /**
-     * Gets the second button observable.
-     *
-     * @return the second button observable, or {@code null} if the label is not observable-backed
-     */
-    public Observable<String> getButton2Observable() {
-        return button2.observable();
+    public Property<String> getButton2() {
+        return button2;
     }
 
     /**

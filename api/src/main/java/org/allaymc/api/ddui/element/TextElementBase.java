@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
-import org.allaymc.api.ddui.internal.BindableValue;
+import org.allaymc.api.ddui.Property;
 
 /**
  * Shared base implementation for static-text DDUI elements.
@@ -11,24 +11,15 @@ import org.allaymc.api.ddui.internal.BindableValue;
  * @author daoge_cmd | SerenityJS
  */
 abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase<E> {
-    private final BindableValue<String> text = new BindableValue<>("");
+    private final Property<String> text = new Property<>("");
 
     /**
-     * Gets the text shown by this element.
+     * Gets the bindable text property shown by this element.
      *
-     * @return the element text
+     * @return the text property
      */
-    public String getText() {
-        return text.value();
-    }
-
-    /**
-     * Gets the observable bound to this element's text.
-     *
-     * @return the text observable, or {@code null} if the text is not observable-backed
-     */
-    public Observable<String> getTextObservable() {
-        return text.observable();
+    public Property<String> getText() {
+        return text;
     }
 
     /**

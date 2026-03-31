@@ -30,24 +30,6 @@ public final class TextField extends ValueElementBase<TextField, String> {
     }
 
     /**
-     * Gets the current text value.
-     *
-     * @return the current text value
-     */
-    public String getText() {
-        return getValue();
-    }
-
-    /**
-     * Gets the observable bound to the text value.
-     *
-     * @return the text observable, or {@code null} if the text is not observable-backed
-     */
-    public Observable<String> getTextObservable() {
-        return getValueObservable();
-    }
-
-    /**
      * Sets the current text value.
      *
      * @param text the text value

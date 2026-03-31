@@ -30,24 +30,6 @@ public final class Toggle extends ValueElementBase<Toggle, Boolean> {
     }
 
     /**
-     * Checks whether the toggle is currently enabled.
-     *
-     * @return {@code true} if the toggle is enabled
-     */
-    public boolean isToggled() {
-        return Boolean.TRUE.equals(getValue());
-    }
-
-    /**
-     * Gets the observable bound to the toggle value.
-     *
-     * @return the toggle observable, or {@code null} if the value is not observable-backed
-     */
-    public Observable<Boolean> getToggledObservable() {
-        return getValueObservable();
-    }
-
-    /**
      * Sets the toggle value.
      *
      * @param toggled the toggle value

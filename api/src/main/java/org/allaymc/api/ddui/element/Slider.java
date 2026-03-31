@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
-import org.allaymc.api.ddui.internal.BindableValue;
+import org.allaymc.api.ddui.Property;
 
 /**
  * A DDUI slider element.
@@ -9,8 +9,8 @@ import org.allaymc.api.ddui.internal.BindableValue;
  * @author daoge_cmd | SerenityJS
  */
 public final class Slider extends ValueElementBase<Slider, Long> {
-    private final BindableValue<Long> min = new BindableValue<>(0L);
-    private final BindableValue<Long> max = new BindableValue<>(0L);
+    private final Property<Long> min = new Property<>(0L);
+    private final Property<Long> max = new Property<>(0L);
 
     /**
      * Creates a slider with the minimum value as its initial value.
@@ -67,21 +67,12 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Gets the minimum slider value.
+     * Gets the bindable minimum slider value property.
      *
-     * @return the minimum slider value
+     * @return the minimum-value property
      */
-    public long getMin() {
-        return min.value();
-    }
-
-    /**
-     * Gets the observable bound to the minimum slider value.
-     *
-     * @return the minimum-value observable, or {@code null} if the minimum is not observable-backed
-     */
-    public Observable<Long> getMinObservable() {
-        return min.observable();
+    public Property<Long> getMin() {
+        return min;
     }
 
     /**
@@ -107,21 +98,12 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Gets the maximum slider value.
+     * Gets the bindable maximum slider value property.
      *
-     * @return the maximum slider value
+     * @return the maximum-value property
      */
-    public long getMax() {
-        return max.value();
-    }
-
-    /**
-     * Gets the observable bound to the maximum slider value.
-     *
-     * @return the maximum-value observable, or {@code null} if the maximum is not observable-backed
-     */
-    public Observable<Long> getMaxObservable() {
-        return max.observable();
+    public Property<Long> getMax() {
+        return max;
     }
 
     /**

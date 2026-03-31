@@ -1,10 +1,8 @@
 package org.allaymc.server.ddui;
 
-import org.allaymc.api.ddui.DDUIScreenCloseReason;
-import org.allaymc.api.ddui.MessageBoxResult;
+import org.allaymc.api.ddui.*;
 import org.allaymc.api.ddui.Observable;
 import org.allaymc.api.ddui.element.*;
-import org.allaymc.api.ddui.session.DDUIScreenSession;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 import org.allaymc.api.ddui.type.DDUIScreen;
 import org.allaymc.api.ddui.type.MessageBoxScreen;
@@ -190,7 +188,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     }
 
     private void compileCustomForm(CustomFormScreen customForm) {
-        registerProperty(initialState, "title", "title", PropertyType.STRING, binding(customForm.getTitle(), customForm.getTitleObservable()));
+        registerProperty(initialState, "title", "title", PropertyType.STRING, binding(customForm.getTitle()));
 
         var layout = new LinkedHashMap<String, Object>();
         initialState.put("layout", layout);
@@ -236,11 +234,11 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var data = compileValueElementFrame(
                 element,
                 "textfield_visible",
-                binding(element.getLabel(), element.getLabelObservable()),
-                binding(element.getDescription(), element.getDescriptionObservable()),
-                binding(element.isDisabled(), element.getDisabledObservable())
+                binding(element.getLabel()),
+                binding(element.getDescription()),
+                binding(element.getDisabled())
         );
-        registerValue(element, data, "text", path + ".text", PropertyType.STRING, binding(element.getText(), element.getTextObservable()), value ->
+        registerValue(element, data, "text", path + ".text", PropertyType.STRING, binding(element.getValue()), value ->
                 element.getOnChange().accept(this, (String) value));
         return data;
     }
@@ -250,11 +248,11 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var data = compileValueElementFrame(
                 element,
                 "toggle_visible",
-                binding(element.getLabel(), element.getLabelObservable()),
-                binding(element.getDescription(), element.getDescriptionObservable()),
-                binding(element.isDisabled(), element.getDisabledObservable())
+                binding(element.getLabel()),
+                binding(element.getDescription()),
+                binding(element.getDisabled())
         );
-        registerValue(element, data, "toggled", path + ".toggled", PropertyType.BOOLEAN, binding(element.isToggled(), element.getToggledObservable()), value ->
+        registerValue(element, data, "toggled", path + ".toggled", PropertyType.BOOLEAN, binding(element.getValue()), value ->
                 element.getOnChange().accept(this, (Boolean) value));
         return data;
     }
@@ -264,14 +262,14 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var data = compileValueElementFrame(
                 element,
                 "slider_visible",
-                binding(element.getLabel(), element.getLabelObservable()),
-                binding(element.getDescription(), element.getDescriptionObservable()),
-                binding(element.isDisabled(), element.getDisabledObservable())
+                binding(element.getLabel()),
+                binding(element.getDescription()),
+                binding(element.getDisabled())
         );
-        registerProperty(data, "minValue", path + ".minValue", PropertyType.LONG, binding(element.getMin(), element.getMinObservable()));
-        registerProperty(data, "maxValue", path + ".maxValue", PropertyType.LONG, binding(element.getMax(), element.getMaxObservable()));
+        registerProperty(data, "minValue", path + ".minValue", PropertyType.LONG, binding(element.getMin()));
+        registerProperty(data, "maxValue", path + ".maxValue", PropertyType.LONG, binding(element.getMax()));
         data.put("step", 1L);
-        registerValue(element, data, "value", path + ".value", PropertyType.LONG, binding(element.getValue(), element.getValueObservable()), value ->
+        registerValue(element, data, "value", path + ".value", PropertyType.LONG, binding(element.getValue()), value ->
                 element.getOnChange().accept(this, (Long) value));
         return data;
     }
@@ -281,11 +279,11 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var data = compileValueElementFrame(
                 element,
                 "dropdown_visible",
-                binding(element.getLabel(), element.getLabelObservable()),
-                binding(element.getDescription(), element.getDescriptionObservable()),
-                binding(element.isDisabled(), element.getDisabledObservable())
+                binding(element.getLabel()),
+                binding(element.getDescription()),
+                binding(element.getDisabled())
         );
-        registerValue(element, data, "value", path + ".value", PropertyType.LONG, binding(element.getValue(), element.getValueObservable()), value ->
+        registerValue(element, data, "value", path + ".value", PropertyType.LONG, binding(element.getValue()), value ->
                 element.getOnChange().accept(this, (Long) value));
         data.put("items", compileDropdownItems(element));
         return data;
@@ -295,10 +293,10 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var path = elementPath(element);
         var data = compileButtonFrame(
                 element,
-                binding(element.getLabel(), element.getLabelObservable()),
-                binding(element.isDisabled(), element.getDisabledObservable())
+                binding(element.getLabel()),
+                binding(element.getDisabled())
         );
-        registerProperty(data, "tooltip", path + ".tooltip", PropertyType.STRING, binding(element.getTooltip(), element.getTooltipObservable()));
+        registerProperty(data, "tooltip", path + ".tooltip", PropertyType.STRING, binding(element.getTooltip()));
         registerInboundLong(data, "onClick", path + ".onClick", value -> element.getOnClick().accept(this));
         return data;
     }
@@ -307,7 +305,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var path = elementPath(element);
         var data = compileButtonFrame(
                 element,
-                binding(element.getLabel(), element.getLabelObservable()),
+                binding(element.getLabel()),
                 null
         );
         registerInboundLong(data, "onClick", path + ".onClick", value -> {
@@ -318,11 +316,11 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     }
 
     private Map<String, Object> compileLabel(Label element) {
-        return compileTextElementFrame(element, "label_visible", binding(element.getText(), element.getTextObservable()));
+        return compileTextElementFrame(element, "label_visible", binding(element.getText()));
     }
 
     private Map<String, Object> compileHeader(Header element) {
-        return compileTextElementFrame(element, "header_visible", binding(element.getText(), element.getTextObservable()));
+        return compileTextElementFrame(element, "header_visible", binding(element.getText()));
     }
 
     private Map<String, Object> compileDivider(Divider element) {
@@ -338,26 +336,26 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     }
 
     private void compileMessageBox(MessageBoxScreen messageBox) {
-        registerProperty(initialState, "title", "title", PropertyType.STRING, binding(messageBox.getTitle(), messageBox.getTitleObservable()));
-        registerProperty(initialState, "body", "body", PropertyType.STRING, binding(messageBox.getBody(), messageBox.getBodyObservable()));
+        registerProperty(initialState, "title", "title", PropertyType.STRING, binding(messageBox.getTitle()));
+        registerProperty(initialState, "body", "body", PropertyType.STRING, binding(messageBox.getBody()));
 
         var button1 = new LinkedHashMap<String, Object>();
         initialState.put("button1", button1);
-        registerProperty(button1, "label", "button1.label", PropertyType.STRING, binding(messageBox.getButton1(), messageBox.getButton1Observable()));
+        registerProperty(button1, "label", "button1.label", PropertyType.STRING, binding(messageBox.getButton1()));
         registerInboundLong(button1, "onClick", "button1.onClick", value -> handleMessageBoxResponse(messageBox, MessageBoxResult.BUTTON1));
 
         var button2 = new LinkedHashMap<String, Object>();
         initialState.put("button2", button2);
-        registerProperty(button2, "label", "button2.label", PropertyType.STRING, binding(messageBox.getButton2(), messageBox.getButton2Observable()));
+        registerProperty(button2, "label", "button2.label", PropertyType.STRING, binding(messageBox.getButton2()));
         registerInboundLong(button2, "onClick", "button2.onClick", value -> handleMessageBoxResponse(messageBox, MessageBoxResult.BUTTON2));
     }
 
     private void registerVisible(Map<String, Object> data, DDUIElement element, String specificKey) {
-        var initial = element.isVisible();
+        var initial = element.getVisible().value();
         data.put("visible", initial);
         data.put(specificKey, initial);
 
-        var binding = bindServer(PropertyType.BOOLEAN, new PropertyBinding<>(initial, element.getVisibleObservable()),
+        var binding = bindServer(PropertyType.BOOLEAN, binding(element.getVisible()),
                 elementPath(element) + ".visible", elementPath(element) + "." + specificKey);
         visibleBindings.put(element, binding);
     }
@@ -530,8 +528,8 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         return items;
     }
 
-    private static <T> PropertyBinding<T> binding(T value, Observable<T> observable) {
-        return new PropertyBinding<>(value, observable);
+    private static <T> PropertyBinding<T> binding(Property<T> value) {
+        return new PropertyBinding<>(value.value(), value.observable());
     }
 
     private <T> ServerBinding bindServer(PropertyType type, PropertyBinding<T> property, String... paths) {

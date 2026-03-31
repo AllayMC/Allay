@@ -1,8 +1,8 @@
 package org.allaymc.api.ddui.element;
 
+import org.allaymc.api.ddui.DDUIScreenSession;
 import org.allaymc.api.ddui.Observable;
-import org.allaymc.api.ddui.internal.BindableValue;
-import org.allaymc.api.ddui.session.DDUIScreenSession;
+import org.allaymc.api.ddui.Property;
 
 import java.util.function.BiConsumer;
 
@@ -15,10 +15,10 @@ import java.util.function.BiConsumer;
  * @author daoge_cmd | SerenityJS
  */
 non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> extends ElementBase<E> implements ValueElement<T> {
-    private final BindableValue<String> label = new BindableValue<>("");
-    private final BindableValue<String> description = new BindableValue<>("");
-    private final BindableValue<Boolean> disabled = new BindableValue<>(false);
-    private final BindableValue<T> value;
+    private final Property<String> label = new Property<>("");
+    private final Property<String> description = new Property<>("");
+    private final Property<Boolean> disabled = new Property<>(false);
+    private final Property<T> value;
     private BiConsumer<DDUIScreenSession, T> onChange = (session, value) -> {
     };
 
@@ -28,25 +28,16 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @param value the initial value
      */
     protected ValueElementBase(T value) {
-        this.value = new BindableValue<>(value);
+        this.value = new Property<>(value);
     }
 
     /**
-     * Gets the label shown by this element.
+     * Gets the bindable label property of this element.
      *
-     * @return the element label
+     * @return the label property
      */
-    public String getLabel() {
-        return label.value();
-    }
-
-    /**
-     * Gets the observable bound to this element's label.
-     *
-     * @return the label observable, or {@code null} if the label is not observable-backed
-     */
-    public Observable<String> getLabelObservable() {
-        return label.observable();
+    public Property<String> getLabel() {
+        return label;
     }
 
     /**
@@ -72,21 +63,12 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the description shown by this element.
+     * Gets the bindable description property of this element.
      *
-     * @return the element description
+     * @return the description property
      */
-    public String getDescription() {
-        return description.value();
-    }
-
-    /**
-     * Gets the observable bound to this element's description.
-     *
-     * @return the description observable, or {@code null} if the description is not observable-backed
-     */
-    public Observable<String> getDescriptionObservable() {
-        return description.observable();
+    public Property<String> getDescription() {
+        return description;
     }
 
     /**
@@ -112,21 +94,12 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Checks whether this element is disabled by default.
+     * Gets the bindable disabled-state property of this element.
      *
-     * @return {@code true} if this element is disabled
+     * @return the disabled-state property
      */
-    public boolean isDisabled() {
-        return disabled.value();
-    }
-
-    /**
-     * Gets the observable bound to this element's disabled state.
-     *
-     * @return the disabled observable, or {@code null} if the disabled state is not observable-backed
-     */
-    public Observable<Boolean> getDisabledObservable() {
-        return disabled.observable();
+    public Property<Boolean> getDisabled() {
+        return disabled;
     }
 
     /**
@@ -152,21 +125,12 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the current value of this element.
+     * Gets the bindable value property of this element.
      *
-     * @return the element value
+     * @return the value property
      */
-    public T getValue() {
-        return value.value();
-    }
-
-    /**
-     * Gets the observable bound to this element's value.
-     *
-     * @return the value observable, or {@code null} if the value is not observable-backed
-     */
-    public Observable<T> getValueObservable() {
-        return value.observable();
+    public Property<T> getValue() {
+        return value;
     }
 
     /**

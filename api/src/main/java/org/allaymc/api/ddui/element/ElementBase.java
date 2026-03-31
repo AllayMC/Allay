@@ -1,7 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
-import org.allaymc.api.ddui.internal.BindableValue;
+import org.allaymc.api.ddui.Property;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 
 /**
@@ -14,24 +14,16 @@ import org.allaymc.api.ddui.type.CustomFormScreen;
 non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIElement {
     private CustomFormScreen screen;
     private int index = -1;
-    private final BindableValue<Boolean> visible = new BindableValue<>(true);
+    private final Property<Boolean> visible = new Property<>(true);
 
     /**
-     * Gets whether this element is visible by default.
+     * Gets the bindable visibility property of this element.
      *
-     * @return {@code true} if this element is visible
+     * @return the visibility property
      */
-    public boolean isVisible() {
-        return visible.value();
-    }
-
-    /**
-     * Gets the observable bound to this element's visibility.
-     *
-     * @return the visibility observable, or {@code null} if visibility is not observable-backed
-     */
-    public Observable<Boolean> getVisibleObservable() {
-        return visible.observable();
+    @Override
+    public Property<Boolean> getVisible() {
+        return visible;
     }
 
     /**

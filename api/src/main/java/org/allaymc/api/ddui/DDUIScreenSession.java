@@ -1,4 +1,4 @@
-package org.allaymc.api.ddui.session;
+package org.allaymc.api.ddui;
 
 import org.allaymc.api.ddui.element.DDUIElement;
 import org.allaymc.api.ddui.element.ValueElement;

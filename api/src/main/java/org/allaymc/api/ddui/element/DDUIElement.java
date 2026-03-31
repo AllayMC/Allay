@@ -1,6 +1,6 @@
 package org.allaymc.api.ddui.element;
 
-import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.Property;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -11,18 +11,11 @@ import org.jetbrains.annotations.ApiStatus;
  */
 public sealed interface DDUIElement permits ValueElement, ElementBase {
     /**
-     * Gets whether this element is visible by default.
+     * Gets the bindable visibility property of this element.
      *
-     * @return {@code true} if this element is visible
+     * @return the visibility property
      */
-    boolean isVisible();
-
-    /**
-     * Gets the observable bound to this element's visibility.
-     *
-     * @return the visibility observable, or {@code null} if visibility is not observable-backed
-     */
-    Observable<Boolean> getVisibleObservable();
+    Property<Boolean> getVisible();
 
     /**
      * Attaches this element to a screen slot.

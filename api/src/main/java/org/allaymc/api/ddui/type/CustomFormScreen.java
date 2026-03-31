@@ -1,11 +1,10 @@
 package org.allaymc.api.ddui.type;
 
 import org.allaymc.api.ddui.DDUIScreenCloseReason;
-import org.allaymc.api.ddui.DropdownItem;
+import org.allaymc.api.ddui.DDUIScreenSession;
 import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.Property;
 import org.allaymc.api.ddui.element.*;
-import org.allaymc.api.ddui.internal.BindableValue;
-import org.allaymc.api.ddui.session.DDUIScreenSession;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;
@@ -20,24 +19,15 @@ import java.util.function.BiConsumer;
  */
 public final class CustomFormScreen extends DDUIScreen {
     private final List<DDUIElement> elements = new ArrayList<>();
-    private final BindableValue<String> title = new BindableValue<>("");
+    private final Property<String> title = new Property<>("");
 
     /**
-     * Gets the current title text.
+     * Gets the bindable title property of this screen.
      *
-     * @return the current title text
+     * @return the title property
      */
-    public String getTitle() {
-        return title.value();
-    }
-
-    /**
-     * Gets the observable bound to the title.
-     *
-     * @return the title observable, or {@code null} if the title is not observable-backed
-     */
-    public Observable<String> getTitleObservable() {
-        return title.observable();
+    public Property<String> getTitle() {
+        return title;
     }
 
     /**

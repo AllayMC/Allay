@@ -1,8 +1,8 @@
 package org.allaymc.api.ddui.type;
 
 import org.allaymc.api.ddui.DDUIScreenCloseReason;
+import org.allaymc.api.ddui.DDUIScreenSession;
 import org.allaymc.api.ddui.DDUIViewer;
-import org.allaymc.api.ddui.session.DDUIScreenSession;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.BiConsumer;

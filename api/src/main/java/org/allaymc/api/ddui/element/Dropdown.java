@@ -1,6 +1,5 @@
 package org.allaymc.api.ddui.element;
 
-import org.allaymc.api.ddui.DropdownItem;
 import org.allaymc.api.ddui.Observable;
 import org.jetbrains.annotations.UnmodifiableView;
 

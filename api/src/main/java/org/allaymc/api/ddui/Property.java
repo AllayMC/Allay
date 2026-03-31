@@ -1,31 +1,27 @@
-package org.allaymc.api.ddui.internal;
-
-import org.allaymc.api.ddui.Observable;
-import org.jetbrains.annotations.ApiStatus;
+package org.allaymc.api.ddui;
 
 /**
- * Internal holder for a DDUI property that may either be a literal value or an observable binding.
+ * A DDUI property that may either hold a literal value or be bound to an observable.
  *
  * @param <T> the property value type
  *
  * @author daoge_cmd | SerenityJS
  */
-@ApiStatus.Internal
-public final class BindableValue<T> {
+public final class Property<T> {
     private T value;
     private Observable<T> observable;
 
     /**
-     * Creates a bindable value with an initial literal value.
+     * Creates a property with an initial literal value.
      *
      * @param value the initial value
      */
-    public BindableValue(T value) {
+    public Property(T value) {
         this.value = value;
     }
 
     /**
-     * Gets the current literal value.
+     * Gets the current value snapshot.
      *
      * @return the current value
      */

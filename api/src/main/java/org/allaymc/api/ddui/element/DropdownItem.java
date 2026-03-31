@@ -1,4 +1,4 @@
-package org.allaymc.api.ddui;
+package org.allaymc.api.ddui.element;
 
 /**
  * Represents a selectable dropdown item.

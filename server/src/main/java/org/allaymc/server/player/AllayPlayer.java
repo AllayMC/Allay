@@ -27,7 +27,7 @@ import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
-import org.allaymc.api.ddui.session.DDUIScreenSession;
+import org.allaymc.api.ddui.DDUIScreenSession;
 import org.allaymc.api.ddui.type.DDUIScreen;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.dialog.Dialog;
