@@ -49,7 +49,7 @@ public interface DDUIScreenSession {
      * @param <T>     the value type
      * @return the current value
      */
-    <T> T get(ValueElement<T> element);
+    <T> T get(ValueElement element);
 
     /**
      * Updates the current runtime value of a value element in this session.
@@ -58,7 +58,7 @@ public interface DDUIScreenSession {
      * @param value   the new value
      * @param <T>     the value type
      */
-    <T> void set(ValueElement<T> element, T value);
+    <T> void set(ValueElement element, T value);
 
     /**
      * Updates the visibility of an element in this session.

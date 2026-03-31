@@ -14,7 +14,7 @@ import java.util.function.BiConsumer;
  *
  * @author daoge_cmd | SerenityJS
  */
-non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> extends ElementBase<E> implements ValueElement<T> {
+non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> extends ElementBase<E> implements ValueElement {
     private final Property<String> label = new Property<>("");
     private final Property<String> description = new Property<>("");
     private final Property<Boolean> disabled = new Property<>(false);

@@ -36,7 +36,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     private final String screenId;
     private final String propertyName;
     private final Map<String, BoundProperty> inboundBindings = new HashMap<>();
-    private final Map<ValueElement<?>, BoundProperty> valueBindings = new IdentityHashMap<>();
+    private final Map<ValueElement, BoundProperty> valueBindings = new IdentityHashMap<>();
     private final Map<DDUIElement, ServerBinding> visibleBindings = new IdentityHashMap<>();
     private final Map<DDUIElement, ServerBinding> disabledBindings = new IdentityHashMap<>();
     private final Map<DDUIElement, String> elementPaths = new IdentityHashMap<>();
@@ -77,14 +77,14 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T get(ValueElement<T> element) {
+    public <T> T get(ValueElement element) {
         ensureOpen();
         var binding = requireValueBinding(element);
         return (T) binding.currentValue();
     }
 
     @Override
-    public <T> void set(ValueElement<T> element, T value) {
+    public <T> void set(ValueElement element, T value) {
         ensureOpen();
         requireValueBinding(element).applyServer(value);
     }
@@ -378,7 +378,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         inboundBindings.put(path, binding);
     }
 
-    private <T> void registerValue(ValueElement<T> element, Map<String, Object> data, String key, String path, PropertyType type,
+    private <T> void registerValue(ValueElement element, Map<String, Object> data, String key, String path, PropertyType type,
                                    PropertyBinding<T> property, Consumer<Object> onClientChange) {
         var binding = bindProperty(type, property, onClientChange, path);
         data.put(key, binding.currentValue());
@@ -408,7 +408,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         }
     }
 
-    private BoundProperty requireValueBinding(ValueElement<?> element) {
+    private BoundProperty requireValueBinding(ValueElement element) {
         var binding = valueBindings.get(element);
         if (binding == null) {
             throw new IllegalArgumentException("Element does not belong to this DDUI session");
