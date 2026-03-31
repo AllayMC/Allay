@@ -3,6 +3,7 @@ package org.allaymc.api.ddui.type;
 import org.allaymc.api.ddui.DDUIScreenCloseReason;
 import org.allaymc.api.ddui.MessageBoxResult;
 import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.internal.BindableValue;
 import org.allaymc.api.ddui.session.DDUIScreenSession;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -15,14 +16,10 @@ import java.util.function.Consumer;
  * @author OpenAI
  */
 public final class MessageBoxScreen extends DDUIScreen {
-    private String title = "";
-    private Observable<String> titleObservable;
-    private String body = "";
-    private Observable<String> bodyObservable;
-    private String button1 = "";
-    private Observable<String> button1Observable;
-    private String button2 = "";
-    private Observable<String> button2Observable;
+    private final BindableValue<String> title = new BindableValue<>("");
+    private final BindableValue<String> body = new BindableValue<>("");
+    private final BindableValue<String> button1 = new BindableValue<>("");
+    private final BindableValue<String> button2 = new BindableValue<>("");
     private Consumer<DDUIScreenSession> onButton1 = session -> {
     };
     private Consumer<DDUIScreenSession> onButton2 = session -> {
@@ -36,7 +33,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the title text
      */
     public String getTitle() {
-        return title;
+        return title.value();
     }
 
     /**
@@ -45,7 +42,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the title observable, or {@code null} if the title is not observable-backed
      */
     public Observable<String> getTitleObservable() {
-        return titleObservable;
+        return title.observable();
     }
 
     /**
@@ -54,7 +51,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the body text
      */
     public String getBody() {
-        return body;
+        return body.value();
     }
 
     /**
@@ -63,7 +60,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the body observable, or {@code null} if the body is not observable-backed
      */
     public Observable<String> getBodyObservable() {
-        return bodyObservable;
+        return body.observable();
     }
 
     /**
@@ -72,7 +69,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the first button label
      */
     public String getButton1() {
-        return button1;
+        return button1.value();
     }
 
     /**
@@ -81,7 +78,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the first button observable, or {@code null} if the label is not observable-backed
      */
     public Observable<String> getButton1Observable() {
-        return button1Observable;
+        return button1.observable();
     }
 
     /**
@@ -90,7 +87,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the second button label
      */
     public String getButton2() {
-        return button2;
+        return button2.value();
     }
 
     /**
@@ -99,7 +96,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return the second button observable, or {@code null} if the label is not observable-backed
      */
     public Observable<String> getButton2Observable() {
-        return button2Observable;
+        return button2.observable();
     }
 
     /**
@@ -109,8 +106,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen title(String title) {
-        this.title = title;
-        this.titleObservable = null;
+        this.title.set(title);
         return this;
     }
 
@@ -121,8 +117,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen title(Observable<String> title) {
-        this.title = title.get();
-        this.titleObservable = title;
+        this.title.bind(title);
         return this;
     }
 
@@ -133,8 +128,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen body(String body) {
-        this.body = body;
-        this.bodyObservable = null;
+        this.body.set(body);
         return this;
     }
 
@@ -145,8 +139,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen body(Observable<String> body) {
-        this.body = body.get();
-        this.bodyObservable = body;
+        this.body.bind(body);
         return this;
     }
 
@@ -157,8 +150,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen button1(String label) {
-        this.button1 = label;
-        this.button1Observable = null;
+        this.button1.set(label);
         return this;
     }
 
@@ -180,8 +172,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen button1(Observable<String> label) {
-        this.button1 = label.get();
-        this.button1Observable = label;
+        this.button1.bind(label);
         return this;
     }
 
@@ -192,8 +183,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen button2(String label) {
-        this.button2 = label;
-        this.button2Observable = null;
+        this.button2.set(label);
         return this;
     }
 
@@ -215,8 +205,7 @@ public final class MessageBoxScreen extends DDUIScreen {
      * @return this screen
      */
     public MessageBoxScreen button2(Observable<String> label) {
-        this.button2 = label.get();
-        this.button2Observable = label;
+        this.button2.bind(label);
         return this;
     }
 

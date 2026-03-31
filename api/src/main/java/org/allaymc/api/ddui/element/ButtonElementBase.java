@@ -1,6 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.internal.BindableValue;
 import org.allaymc.api.ddui.session.DDUIScreenSession;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 
@@ -14,8 +15,7 @@ import java.util.function.Consumer;
  * @author OpenAI
  */
 abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends ElementBase<E> {
-    private String label = "";
-    private Observable<String> labelObservable;
+    private final BindableValue<String> label = new BindableValue<>("");
     private Consumer<DDUIScreenSession> onClick = session -> {
     };
 
@@ -25,7 +25,7 @@ abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends Element
      * @return the button label
      */
     public String getLabel() {
-        return label;
+        return label.value();
     }
 
     /**
@@ -34,7 +34,7 @@ abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends Element
      * @return the label observable, or {@code null} if the label is not observable-backed
      */
     public Observable<String> getLabelObservable() {
-        return labelObservable;
+        return label.observable();
     }
 
     /**
@@ -44,8 +44,7 @@ abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends Element
      * @return this element
      */
     public E label(String label) {
-        this.label = label;
-        this.labelObservable = null;
+        this.label.set(label);
         return self();
     }
 
@@ -56,8 +55,7 @@ abstract class ButtonElementBase<E extends ButtonElementBase<E>> extends Element
      * @return this element
      */
     public E label(Observable<String> label) {
-        this.label = label.get();
-        this.labelObservable = label;
+        this.label.bind(label);
         return self();
     }
 

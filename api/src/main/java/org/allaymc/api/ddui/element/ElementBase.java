@@ -1,6 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.internal.BindableValue;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 
 /**
@@ -13,8 +14,7 @@ import org.allaymc.api.ddui.type.CustomFormScreen;
 non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIElement {
     private CustomFormScreen screen;
     private int index = -1;
-    private boolean visible = true;
-    private Observable<Boolean> visibleObservable;
+    private final BindableValue<Boolean> visible = new BindableValue<>(true);
 
     /**
      * Gets whether this element is visible by default.
@@ -22,7 +22,7 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
      * @return {@code true} if this element is visible
      */
     public boolean isVisible() {
-        return visible;
+        return visible.value();
     }
 
     /**
@@ -31,7 +31,7 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
      * @return the visibility observable, or {@code null} if visibility is not observable-backed
      */
     public Observable<Boolean> getVisibleObservable() {
-        return visibleObservable;
+        return visible.observable();
     }
 
     /**
@@ -41,8 +41,7 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
      * @return this element
      */
     public E visible(boolean visible) {
-        this.visible = visible;
-        this.visibleObservable = null;
+        this.visible.set(visible);
         return self();
     }
 
@@ -53,8 +52,7 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
      * @return this element
      */
     public E visible(Observable<Boolean> visible) {
-        this.visible = visible.get();
-        this.visibleObservable = visible;
+        this.visible.bind(visible);
         return self();
     }
 

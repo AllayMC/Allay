@@ -1,6 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.internal.BindableValue;
 import org.allaymc.api.ddui.session.DDUIScreenSession;
 
 import java.util.function.BiConsumer;
@@ -14,14 +15,10 @@ import java.util.function.BiConsumer;
  * @author OpenAI
  */
 non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> extends ElementBase<E> implements ValueElement<T> {
-    private String label = "";
-    private Observable<String> labelObservable;
-    private String description = "";
-    private Observable<String> descriptionObservable;
-    private boolean disabled;
-    private Observable<Boolean> disabledObservable;
-    private T value;
-    private Observable<T> valueObservable;
+    private final BindableValue<String> label = new BindableValue<>("");
+    private final BindableValue<String> description = new BindableValue<>("");
+    private final BindableValue<Boolean> disabled = new BindableValue<>(false);
+    private final BindableValue<T> value;
     private BiConsumer<DDUIScreenSession, T> onChange = (session, value) -> {
     };
 
@@ -31,7 +28,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @param value the initial value
      */
     protected ValueElementBase(T value) {
-        this.value = value;
+        this.value = new BindableValue<>(value);
     }
 
     /**
@@ -40,7 +37,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return the element label
      */
     public String getLabel() {
-        return label;
+        return label.value();
     }
 
     /**
@@ -49,7 +46,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return the label observable, or {@code null} if the label is not observable-backed
      */
     public Observable<String> getLabelObservable() {
-        return labelObservable;
+        return label.observable();
     }
 
     /**
@@ -59,8 +56,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E label(String label) {
-        this.label = label;
-        this.labelObservable = null;
+        this.label.set(label);
         return self();
     }
 
@@ -71,8 +67,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E label(Observable<String> label) {
-        this.label = label.get();
-        this.labelObservable = label;
+        this.label.bind(label);
         return self();
     }
 
@@ -82,7 +77,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return the element description
      */
     public String getDescription() {
-        return description;
+        return description.value();
     }
 
     /**
@@ -91,7 +86,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return the description observable, or {@code null} if the description is not observable-backed
      */
     public Observable<String> getDescriptionObservable() {
-        return descriptionObservable;
+        return description.observable();
     }
 
     /**
@@ -101,8 +96,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E description(String description) {
-        this.description = description;
-        this.descriptionObservable = null;
+        this.description.set(description);
         return self();
     }
 
@@ -113,8 +107,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E description(Observable<String> description) {
-        this.description = description.get();
-        this.descriptionObservable = description;
+        this.description.bind(description);
         return self();
     }
 
@@ -124,7 +117,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return {@code true} if this element is disabled
      */
     public boolean isDisabled() {
-        return disabled;
+        return disabled.value();
     }
 
     /**
@@ -133,7 +126,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return the disabled observable, or {@code null} if the disabled state is not observable-backed
      */
     public Observable<Boolean> getDisabledObservable() {
-        return disabledObservable;
+        return disabled.observable();
     }
 
     /**
@@ -143,8 +136,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E disabled(boolean disabled) {
-        this.disabled = disabled;
-        this.disabledObservable = null;
+        this.disabled.set(disabled);
         return self();
     }
 
@@ -155,8 +147,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E disabled(Observable<Boolean> disabled) {
-        this.disabled = disabled.get();
-        this.disabledObservable = disabled;
+        this.disabled.bind(disabled);
         return self();
     }
 
@@ -166,7 +157,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return the element value
      */
     public T getValue() {
-        return value;
+        return value.value();
     }
 
     /**
@@ -175,7 +166,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return the value observable, or {@code null} if the value is not observable-backed
      */
     public Observable<T> getValueObservable() {
-        return valueObservable;
+        return value.observable();
     }
 
     /**
@@ -185,8 +176,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E value(T value) {
-        this.value = value;
-        this.valueObservable = null;
+        this.value.set(value);
         return self();
     }
 
@@ -197,8 +187,7 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
      * @return this element
      */
     public E value(Observable<T> value) {
-        this.value = value.get();
-        this.valueObservable = value;
+        this.value.bind(value);
         return self();
     }
 

@@ -1,6 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.internal.BindableValue;
 
 /**
  * A DDUI button element.
@@ -8,10 +9,8 @@ import org.allaymc.api.ddui.Observable;
  * @author OpenAI
  */
 public final class Button extends ButtonElementBase<Button> {
-    private String tooltip = "";
-    private Observable<String> tooltipObservable;
-    private boolean disabled;
-    private Observable<Boolean> disabledObservable;
+    private final BindableValue<String> tooltip = new BindableValue<>("");
+    private final BindableValue<Boolean> disabled = new BindableValue<>(false);
 
     /**
      * Creates a button with a literal label.
@@ -37,7 +36,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return the button tooltip
      */
     public String getTooltip() {
-        return tooltip;
+        return tooltip.value();
     }
 
     /**
@@ -46,7 +45,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return the tooltip observable, or {@code null} if the tooltip is not observable-backed
      */
     public Observable<String> getTooltipObservable() {
-        return tooltipObservable;
+        return tooltip.observable();
     }
 
     /**
@@ -56,8 +55,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return this element
      */
     public Button tooltip(String tooltip) {
-        this.tooltip = tooltip;
-        this.tooltipObservable = null;
+        this.tooltip.set(tooltip);
         return this;
     }
 
@@ -68,8 +66,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return this element
      */
     public Button tooltip(Observable<String> tooltip) {
-        this.tooltip = tooltip.get();
-        this.tooltipObservable = tooltip;
+        this.tooltip.bind(tooltip);
         return this;
     }
 
@@ -79,7 +76,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return {@code true} if this button is disabled
      */
     public boolean isDisabled() {
-        return disabled;
+        return disabled.value();
     }
 
     /**
@@ -88,7 +85,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return the disabled observable, or {@code null} if the disabled state is not observable-backed
      */
     public Observable<Boolean> getDisabledObservable() {
-        return disabledObservable;
+        return disabled.observable();
     }
 
     /**
@@ -98,8 +95,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return this element
      */
     public Button disabled(boolean disabled) {
-        this.disabled = disabled;
-        this.disabledObservable = null;
+        this.disabled.set(disabled);
         return this;
     }
 
@@ -110,8 +106,7 @@ public final class Button extends ButtonElementBase<Button> {
      * @return this element
      */
     public Button disabled(Observable<Boolean> disabled) {
-        this.disabled = disabled.get();
-        this.disabledObservable = disabled;
+        this.disabled.bind(disabled);
         return this;
     }
 

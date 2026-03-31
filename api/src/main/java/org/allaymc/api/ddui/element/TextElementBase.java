@@ -1,6 +1,7 @@
 package org.allaymc.api.ddui.element;
 
 import org.allaymc.api.ddui.Observable;
+import org.allaymc.api.ddui.internal.BindableValue;
 
 /**
  * Shared base implementation for static-text DDUI elements.
@@ -10,8 +11,7 @@ import org.allaymc.api.ddui.Observable;
  * @author OpenAI
  */
 abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase<E> {
-    private String text = "";
-    private Observable<String> textObservable;
+    private final BindableValue<String> text = new BindableValue<>("");
 
     /**
      * Gets the text shown by this element.
@@ -19,7 +19,7 @@ abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase
      * @return the element text
      */
     public String getText() {
-        return text;
+        return text.value();
     }
 
     /**
@@ -28,7 +28,7 @@ abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase
      * @return the text observable, or {@code null} if the text is not observable-backed
      */
     public Observable<String> getTextObservable() {
-        return textObservable;
+        return text.observable();
     }
 
     /**
@@ -38,8 +38,7 @@ abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase
      * @return this element
      */
     public E text(String text) {
-        this.text = text;
-        this.textObservable = null;
+        this.text.set(text);
         return self();
     }
 
@@ -50,8 +49,7 @@ abstract class TextElementBase<E extends TextElementBase<E>> extends ElementBase
      * @return this element
      */
     public E text(Observable<String> text) {
-        this.text = text.get();
-        this.textObservable = text;
+        this.text.bind(text);
         return self();
     }
 }
