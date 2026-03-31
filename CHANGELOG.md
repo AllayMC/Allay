@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.12.0](https://github.com/AllayMC/Allay/compare/0.12.0...HEAD)</small>
 
+### Added
+
+- (API) Added DDUI support for Bedrock 1.26.10+ (protocol v944+), including `DDUI`, `DDUIViewer`, `DDUIScreenSession`, `CustomFormScreen`, `MessageBoxScreen`, `Observable`, `Property`, and the custom-form element set (`Label`, `Header`, `Spacer`, `Divider`, `TextField`, `Toggle`, `Slider`, `Dropdown`, `Button`, `CloseButton`).
+
 ### Changed
 
 - (API) Merged `org.allaymc.server.bossbar.AllayBossBar` into the concrete `org.allaymc.api.bossbar.BossBar` class, so boss bars no longer use separate API interface and server implementation types.
