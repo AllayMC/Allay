@@ -6,6 +6,7 @@ import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.FakeContainerFactory;
+import org.allaymc.api.ddui.DDUI;
 import org.allaymc.api.debugshape.DebugLine;
 import org.allaymc.api.debugshape.DebugText;
 import org.allaymc.api.dialog.Dialog;
@@ -318,6 +319,73 @@ public class GameTestCommand extends Command {
                             .title("Test Custom Form")
                             .input("test input", "type sth here", "", "this is a tooltip")
                             .sendTo(player.getController());
+                    return context.success();
+                }, SenderType.ACTUAL_PLAYER)
+                .root()
+                .key("testddui")
+                .exec((context, player) -> {
+                    var controller = player.getController();
+                    var name = DDUI.observable("", true);
+                    var bio = DDUI.observable("", true);
+                    var age = DDUI.observable(18L, true);
+                    var ageGroup = DDUI.observable("Adult");
+                    var difficulty = DDUI.observable(3L, true);
+
+                    var form = DDUI.customForm()
+                            .title("My Form")
+                            .label("Personal information");
+
+                    var nameField = form.textField("Name", name)
+                            .description("Max 10 characters");
+                    var bioField = form.textField("Biography", bio)
+                            .description("This is your biography. You can write anything you want here.");
+                    var ageSlider = form.slider("Age", age, 1L, 100L);
+                    var ageGroupField = form.textField("Age Group", ageGroup)
+                            .description("Automatically set based on age")
+                            .disabled(true);
+                    var difficultySlider = form.slider("Difficulty", difficulty, 1L, 5L)
+                            .description("1 = Peaceful - 5 = Hardcore");
+
+                    nameField.onChange((session, value) -> {
+                        if (value.length() <= 10) {
+                            return;
+                        }
+                        name.set(value.substring(0, 10));
+                    });
+                    ageSlider.onChange((session, value) -> {
+                        if (value <= 12) {
+                            ageGroup.set("Kid");
+                        } else if (value <= 17) {
+                            ageGroup.set("Teen");
+                        } else if (value <= 64) {
+                            ageGroup.set("Adult");
+                        } else {
+                            ageGroup.set("Senior");
+                        }
+                    });
+                    form.button("Reset").onClick(session -> {
+                        name.set("");
+                        bio.set("");
+                        age.set(18L);
+                        ageGroup.set("Adult");
+                        difficulty.set(3L);
+                    });
+                    form.button("Confirm").onClick(session -> {
+                        controller.sendMessage("Confirmed successfully!");
+                        controller.sendMessage("Name: " + session.get(nameField));
+                        controller.sendMessage("Biography: " + session.get(bioField));
+                        controller.sendMessage("Age: " + session.get(ageSlider) + " (" + ageGroup.get() + ")");
+                        controller.sendMessage("Difficulty: " + session.get(difficultySlider));
+                        session.close();
+                    });
+                    form.closeButton();
+
+                    try {
+                        form.sendTo(controller);
+                    } catch (UnsupportedOperationException e) {
+                        context.addError(e.getMessage());
+                        return context.fail();
+                    }
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER)
                 .root()

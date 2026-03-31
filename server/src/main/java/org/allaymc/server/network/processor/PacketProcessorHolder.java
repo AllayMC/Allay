@@ -129,6 +129,8 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new TextPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SettingsCommandPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new ModalFormResponsePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ServerboundDataStorePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ServerboundDataDrivenScreenClosedPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new ServerSettingsRequestProcessor());
         registerProcessor(ClientState.IN_GAME, new PlayerSkinPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new EntityEventPacketProcessor());

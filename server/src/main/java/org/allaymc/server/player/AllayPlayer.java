@@ -27,6 +27,8 @@ import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
+import org.allaymc.api.ddui.session.DDUIScreenSession;
+import org.allaymc.api.ddui.type.DDUIScreen;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.dialog.ModelSettings;
@@ -94,6 +96,7 @@ import org.allaymc.server.container.impl.AbstractPlayerContainer;
 import org.allaymc.server.container.impl.FakeContainerImpl;
 import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
+import org.allaymc.server.ddui.AllayDDUIScreenSession;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
@@ -116,6 +119,7 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.codec.v944.Bedrock_v944;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
@@ -203,6 +207,7 @@ public class AllayPlayer implements Player {
     protected Cache<@NotNull Integer, Form> forms;
     @Getter
     protected Pair<Integer, CustomForm> serverSettingForm;
+    protected DDUIScreenSession activeScreen;
 
     // Dialog
     protected Pair<Dialog, Entity> dialog;
@@ -2321,6 +2326,43 @@ public class AllayPlayer implements Player {
     }
 
     @Override
+    public DDUIScreenSession viewScreen(DDUIScreen screen) {
+        if (this.session.getCodec().getProtocolVersion() < Bedrock_v944.CODEC.getProtocolVersion()) {
+            throw new UnsupportedOperationException("DDUI requires Bedrock 1.26.10+ (protocol v944+), current protocol is v" + this.session.getCodec().getProtocolVersion());
+        }
+
+        if (this.activeScreen != null) {
+            this.activeScreen.close();
+        }
+
+        var session = new AllayDDUIScreenSession(this, assignFormId(), screen);
+        this.activeScreen = session;
+        session.show();
+        return session;
+    }
+
+    @Override
+    public DDUIScreenSession getActiveScreen() {
+        return this.activeScreen;
+    }
+
+    @Override
+    public DDUIScreenSession removeActiveScreen() {
+        var tmp = this.activeScreen;
+        this.activeScreen = null;
+        return tmp;
+    }
+
+    @Override
+    public void closeScreen() {
+        if (this.activeScreen instanceof AllayDDUIScreenSession session) {
+            session.closeAll();
+        } else if (this.activeScreen != null) {
+            this.activeScreen.close();
+        }
+    }
+
+    @Override
     public void displayScoreboard(Scoreboard scoreboard, DisplaySlot slot) {
         var packet1 = new SetDisplayObjectivePacket();
         packet1.setDisplaySlot(slot.getSlotName());
@@ -2901,6 +2943,10 @@ public class AllayPlayer implements Player {
     }
 
     protected void onDisconnect(String disconnectReason) {
+        var activeScreen = removeActiveScreen();
+        if (activeScreen instanceof AllayDDUIScreenSession session) {
+            session.discard();
+        }
         new PlayerDisconnectEvent(this, disconnectReason).call();
         closeAllOpenedContainers();
         if (getLastClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
