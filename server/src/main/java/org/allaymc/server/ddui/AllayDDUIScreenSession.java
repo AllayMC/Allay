@@ -530,7 +530,8 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     }
 
     private static <T> PropertyBinding<T> binding(Property<T> value) {
-        return new PropertyBinding<>(value.value(), value.observable());
+        var observable = value.observable();
+        return new PropertyBinding<>(observable != null ? observable.get() : value.value(), observable);
     }
 
     private <T> ServerBinding bindServer(PropertyType type, PropertyBinding<T> property, String... paths) {
