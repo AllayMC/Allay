@@ -40,6 +40,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     private final Map<ValueElement<?>, BoundProperty> valueBindings = new IdentityHashMap<>();
     private final Map<DDUIElement, ServerBinding> visibleBindings = new IdentityHashMap<>();
     private final Map<DDUIElement, ServerBinding> disabledBindings = new IdentityHashMap<>();
+    private final Map<DDUIElement, String> elementPaths = new IdentityHashMap<>();
     private final List<AutoCloseable> subscriptions = new ArrayList<>();
     private final Map<String, Object> initialState = new LinkedHashMap<>();
 
@@ -193,10 +194,24 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var layout = new LinkedHashMap<String, Object>();
         initialState.put("layout", layout);
 
+        var layoutIndex = 0;
+        var hasCloseButton = false;
         for (var element : customForm.getElements()) {
-            layout.put(String.valueOf(element.getIndex()), compileElement(element));
+            if (element instanceof CloseButton closeButton) {
+                if (hasCloseButton) {
+                    throw new IllegalArgumentException("Custom form can only contain one close button");
+                }
+                hasCloseButton = true;
+                elementPaths.put(closeButton, "closeButton");
+                initialState.put("closeButton", compileCloseButton(closeButton));
+                continue;
+            }
+
+            elementPaths.put(element, "layout[" + layoutIndex + "]");
+            layout.put(String.valueOf(layoutIndex), compileElement(element));
+            layoutIndex++;
         }
-        layout.put("length", (long) customForm.getElements().size());
+        layout.put("length", (long) layoutIndex);
     }
 
     private Map<String, Object> compileElement(DDUIElement element) {
@@ -355,20 +370,12 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         var button1 = new LinkedHashMap<String, Object>();
         initialState.put("button1", button1);
         registerString(button1, "label", "button1.label", messageBox.getButton1(), messageBox.getButton1Observable());
-        registerInboundLong(button1, "onClick", "button1.onClick", value -> {
-            messageBoxResult = MessageBoxResult.BUTTON1;
-            messageBox.handleButton1(this);
-            messageBox.handleResponse(this, MessageBoxResult.BUTTON1);
-        });
+        registerInboundLong(button1, "onClick", "button1.onClick", value -> handleMessageBoxResponse(messageBox, MessageBoxResult.BUTTON1));
 
         var button2 = new LinkedHashMap<String, Object>();
         initialState.put("button2", button2);
         registerString(button2, "label", "button2.label", messageBox.getButton2(), messageBox.getButton2Observable());
-        registerInboundLong(button2, "onClick", "button2.onClick", value -> {
-            messageBoxResult = MessageBoxResult.BUTTON2;
-            messageBox.handleButton2(this);
-            messageBox.handleResponse(this, MessageBoxResult.BUTTON2);
-        });
+        registerInboundLong(button2, "onClick", "button2.onClick", value -> handleMessageBoxResponse(messageBox, MessageBoxResult.BUTTON2));
     }
 
     private void registerVisible(Map<String, Object> data, DDUIElement element, String specificKey) {
@@ -442,7 +449,11 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     }
 
     private String elementPath(DDUIElement element) {
-        return "layout[" + element.getIndex() + "]";
+        var path = elementPaths.get(element);
+        if (path == null) {
+            throw new IllegalArgumentException("Element does not belong to this DDUI session");
+        }
+        return path;
     }
 
     private void ensureOpen() {
@@ -476,6 +487,20 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
         if (closeReason != null) {
             screen.handleClose(this, closeReason);
         }
+    }
+
+    private void handleMessageBoxResponse(MessageBoxScreen messageBox, MessageBoxResult result) {
+        if (messageBoxResult != null) {
+            return;
+        }
+
+        messageBoxResult = result;
+        switch (result) {
+            case BUTTON1 -> messageBox.handleButton1(this);
+            case BUTTON2 -> messageBox.handleButton2(this);
+        }
+        messageBox.handleResponse(this, result);
+        closeSilently(Integer.valueOf(formId));
     }
 
     private void sendClosePacket(Integer closeFormId) {

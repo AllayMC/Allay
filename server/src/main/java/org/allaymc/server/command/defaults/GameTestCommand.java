@@ -389,6 +389,25 @@ public class GameTestCommand extends Command {
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER)
                 .root()
+                .key("testmessagebox")
+                .exec((context, player) -> {
+                    var controller = player.getController();
+                    try {
+                        DDUI.messageBox()
+                                .title("Test Message Box")
+                                .body("Choose one option or close the box.")
+                                .button1("Button 1", session -> controller.sendMessage("You clicked button 1"))
+                                .button2("Button 2", session -> controller.sendMessage("You clicked button 2"))
+                                .onResponse((session, result) -> controller.sendMessage("Message box result: " + result))
+                                .onClose((session, reason) -> controller.sendMessage("Message box closed: " + reason))
+                                .sendTo(controller);
+                    } catch (UnsupportedOperationException e) {
+                        context.addError(e.getMessage());
+                        return context.fail();
+                    }
+                    return context.success();
+                }, SenderType.ACTUAL_PLAYER)
+                .root()
                 .key("testdialog")
                 .exec((context, player) -> {
                     var controller = player.getController();

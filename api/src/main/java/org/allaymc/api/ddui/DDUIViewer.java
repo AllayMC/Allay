@@ -2,7 +2,6 @@ package org.allaymc.api.ddui;
 
 import org.allaymc.api.ddui.session.DDUIScreenSession;
 import org.allaymc.api.ddui.type.DDUIScreen;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an object that can view a DDUI screen.
@@ -23,7 +22,6 @@ public interface DDUIViewer {
      *
      * @return the active screen session, or {@code null} if no DDUI screen is active
      */
-    @Nullable
     DDUIScreenSession getActiveScreen();
 
     /**
@@ -31,7 +29,6 @@ public interface DDUIViewer {
      *
      * @return the removed screen session, or {@code null} if no DDUI screen is active
      */
-    @Nullable
     DDUIScreenSession removeActiveScreen();
 
     /**

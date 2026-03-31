@@ -12,6 +12,7 @@ public final class CloseButton extends ButtonElementBase<CloseButton> {
      * Creates an unlabeled close button.
      */
     public CloseButton() {
+        label("Close");
     }
 
     /**
