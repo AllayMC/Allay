@@ -943,7 +943,6 @@ public class AllayPlayer implements Player {
         entry.setName(player.getUniqueId().toString());
         entry.setXuid("");
         entry.setPlatformChatId("");
-        entry.setBuildPlatform(-1);
         entry.setSkin(skin);
         entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
         entry.setColor(Color.WHITE);
@@ -2893,7 +2892,7 @@ public class AllayPlayer implements Player {
 
         return new CommandData(
                 command.getName(), I18n.get().tr(this.loginData.getLangCode(), command.getDescription()),
-                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
+                flags, CommandPermission.ANY, aliases, overloads.toArray(CommandOverloadData[]::new), List.of()
         );
     }
 
@@ -3047,7 +3046,7 @@ public class AllayPlayer implements Player {
             entry.setName(player.getOriginName());
             entry.setXuid(player.getLoginData().getXuid());
             entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
-            entry.setBuildPlatform(player.getLoginData().getDeviceInfo().device().getId());
+            entry.setBuildPlatform(BuildPlatform.from(player.getLoginData().getDeviceInfo().device().getId()));
             entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
             entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
             entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
@@ -3128,7 +3127,6 @@ public class AllayPlayer implements Player {
      * the player entity's current pos and then spawn it. The nbt will be used in EntityPlayer::loadNBT() later in
      * doFirstSpawn() method instead of here because some packets must be sent after the player fully joined the server.
      */
-    @MultiVersion(version = "1.21.50", details = "ItemRegistryPacket is only sent in 1.21.60+")
     @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     public void spawnEntityPlayer() {
         var server = Server.getInstance();
@@ -3212,25 +3210,20 @@ public class AllayPlayer implements Player {
         dimension.addPlayer(this);
         playerManager.addPlayer(this);
 
-        if (!MultiVersionHelper.is1_21_50(this)) {
-            // ItemRegistryPacket is only sent in 1.21.60+
-            sendPacket(NetworkData.ITEM_REGISTRY_PACKET.get());
-        }
+        sendPacket(NetworkData.ITEM_REGISTRY_PACKET.get());
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         for (var pkt : NetworkData.SYNC_ENTITY_PROPERTY_PACKETS.get()) {
             sendPacket(pkt);
         }
-        sendPacket(MultiVersionHelper.adaptBiomeDefinitionListPacket(this, NetworkData.BIOME_DEFINITION_LIST_PACKET.get()));
-        sendPacket(MultiVersionHelper.adaptCraftingDataPacket(this, NetworkData.CRAFTING_DATA_PACKET.get()));
+        sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
+        sendPacket(NetworkData.CRAFTING_DATA_PACKET.get());
         sendPacket(NetworkData.TRIM_DATA_PACKET.get());
     }
 
     /**
      * Sends {@link StartGamePacket} to the client.
      */
-    @MultiVersion(version = "1.21.50", details = "Item definitions is set to ensure compatibility")
-    @MultiVersion(version = "1.21.80 - 1.21.90", details = "AuthoritativeMovementMode is explicitly set to ensure compatibility")
     @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     protected void startGame(World spawnWorld, PlayerData playerData, Dimension dimension) {
         var helper = session.getPeer().getCodecHelper();
@@ -3269,8 +3262,6 @@ public class AllayPlayer implements Player {
         packet.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
         packet.setInventoriesServerAuthoritative(true);
         packet.setServerAuthoritativeBlockBreaking(true);
-        // MultiVersion: set to ensure compatibility for client below 1.21.90
-        packet.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         packet.setCommandsEnabled(true);
         packet.setMultiplayerGame(true);
         packet.setBroadcastingToLan(true);
@@ -3291,11 +3282,8 @@ public class AllayPlayer implements Player {
         packet.setWorldId("");
         packet.setScenarioId("");
         packet.setOwnerId("");
-        // MultiVersion: 1.21.50 is still using this field
-        packet.getItemDefinitions().addAll(NetworkData.ITEM_DEFINITIONS.get());
         packet.getBlockProperties().addAll(NetworkData.CUSTOM_BLOCK_PROPERTIES.get());
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
-        MultiVersionHelper.adaptItemDefinitions(this, packet.getItemDefinitions());
         MultiVersionHelper.adaptCustomBlockProperties(this, packet.getBlockProperties());
         MultiVersionHelper.adaptExperimentData(this, packet.getExperiments());
         sendPacket(packet);
@@ -3458,8 +3446,7 @@ public class AllayPlayer implements Player {
         }
 
         @Override
-        public void onDisconnect(CharSequence seq) {
-            var reason = seq.toString();
+        public void onDisconnect(String reason) {
             if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED, false)) {
                 // Failed to set the client state to DISCONNECTED from the current state. This usually
                 // happens when the client has already been disconnected by calling disconnect(). This

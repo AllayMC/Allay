@@ -309,13 +309,13 @@ public final class NetworkData {
             var info = switch (pack.getType()) {
                 case RESOURCES -> new ResourcePacksInfoPacket.Entry(
                         pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
-                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), false, null
+                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), null, false
                 );
                 case DATA -> {
                     packet.setHasAddonPacks(true);
                     yield new ResourcePacksInfoPacket.Entry(
                             pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
-                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), true, null
+                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), null, true
                     );
                 }
                 case null, default -> null;

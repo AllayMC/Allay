@@ -203,7 +203,7 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
     private class AllayServerInitializer extends BedrockServerInitializer {
 
         @Override
-        @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")
+        @MultiVersion(version = "*-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")
         protected void preInitChannel(Channel channel) throws Exception {
             super.preInitChannel(channel);
             new NettyPipelineInitEvent(channel).call();
@@ -224,7 +224,7 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
         }
 
         @Override
-        @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use RakNet version 8 but require v3 packet codec format")
+        @MultiVersion(version = "*-NetEase", details = "NetEase clients use RakNet version 8 but require v3 packet codec format")
         protected void initPacketCodec(Channel channel) throws Exception {
             // NetEase clients use rakVersion 8, but their packet format is the same as
             // international clients (v3), not the old v2 format that Protocol library

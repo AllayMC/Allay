@@ -15,10 +15,15 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - (API) Added DDUI support for Bedrock 1.26.10+ (protocol v944+), including `DDUI`, `DDUIViewer`, `DDUIScreenSession`, `CustomFormScreen`, `MessageBoxScreen`, `Observable`, `Property`, and the custom-form element set (`Label`, `Header`, `Spacer`, `Divider`, `TextField`, `Toggle`, `Slider`, `Dropdown`, `Button`, `CloseButton`).
+- Added support for NetEase 1.21.90.
 
 ### Changed
 
 - (API) Merged `org.allaymc.server.bossbar.AllayBossBar` into the concrete `org.allaymc.api.bossbar.BossBar` class, so boss bars no longer use separate API interface and server implementation types.
+
+### Removed
+
+- Removed support for bedrock (NetEase) 1.21.50 and 1.21.80.
 
 # 0.12.0 (API 0.27.0) - 2026/3/29
 

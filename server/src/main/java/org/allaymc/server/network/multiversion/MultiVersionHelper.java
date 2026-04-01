@@ -1,29 +1,18 @@
 package org.allaymc.server.network.multiversion;
 
 import org.allaymc.api.player.Player;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
-import org.cloudburstmc.protocol.bedrock.codec.v800.Bedrock_v800;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
 import org.cloudburstmc.protocol.bedrock.codec.v844.Bedrock_v844;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
 import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
-import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
-import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
-import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
-import org.cloudburstmc.protocol.bedrock.packet.BiomeDefinitionListPacket;
-import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * @author daoge_cmd
@@ -31,139 +20,7 @@ import java.util.stream.Stream;
 @MultiVersion(version = "*")
 public final class MultiVersionHelper {
 
-    public static CraftingDataPacket adaptCraftingDataPacket(Player player, CraftingDataPacket packet) {
-        if (!is1_21_50(player)) {
-            return packet;
-        }
-
-        // Remove recipes that contain items not available in 1.21.50
-        packet.getCraftingData().removeIf(MultiVersionHelper::containsUnsupportedItem);
-        return packet;
-    }
-
-    private static boolean containsUnsupportedItem(RecipeData recipe) {
-        return switch (recipe) {
-            case ShapedRecipeData shaped ->
-                containsUnsupportedIngredient(shaped.getIngredients()) ||
-                containsUnsupportedOutput(shaped.getResults());
-            case ShapelessRecipeData shapeless ->
-                containsUnsupportedIngredient(shapeless.getIngredients()) ||
-                containsUnsupportedOutput(shapeless.getResults());
-            case SmithingTransformRecipeData smithing ->
-                isUnsupportedIngredient(smithing.getTemplate()) ||
-                isUnsupportedIngredient(smithing.getBase()) ||
-                isUnsupportedIngredient(smithing.getAddition()) ||
-                isUnsupportedOutput(smithing.getResult());
-            case SmithingTrimRecipeData trim ->
-                isUnsupportedIngredient(trim.getTemplate()) ||
-                isUnsupportedIngredient(trim.getBase()) ||
-                isUnsupportedIngredient(trim.getAddition());
-            case FurnaceRecipeData furnace ->
-                isUnsupportedOutput(furnace.getResult());
-            default -> false;
-        };
-    }
-
-    private static boolean containsUnsupportedIngredient(List<ItemDescriptorWithCount> ingredients) {
-        return ingredients.stream().anyMatch(MultiVersionHelper::isUnsupportedIngredient);
-    }
-
-    private static boolean isUnsupportedIngredient(ItemDescriptorWithCount ingredient) {
-        if (ingredient.getDescriptor() instanceof DefaultDescriptor descriptor) {
-            return isItemNotAvailableIn1_21_50(descriptor.getItemId().getIdentifier());
-        }
-        return false;
-    }
-
-    private static boolean containsUnsupportedOutput(List<ItemData> outputs) {
-        return outputs.stream().anyMatch(MultiVersionHelper::isUnsupportedOutput);
-    }
-
-    private static boolean isUnsupportedOutput(ItemData output) {
-        return isItemNotAvailableIn1_21_50(output.getDefinition().getIdentifier());
-    }
-
-    public static BiomeDefinitionListPacket adaptBiomeDefinitionListPacket(Player player, BiomeDefinitionListPacket packet) {
-        if (!is1_21_50(player)) {
-            return packet;
-        }
-
-        var builder = NbtMap.builder();
-        for (var entry : packet.getBiomes().getDefinitions().entrySet()) {
-            var identifier = entry.getKey();
-            var definition = entry.getValue();
-
-            builder.putCompound(identifier, NbtMap.builder()
-                    .putFloat("ash", definition.getAshDensity())
-                    .putFloat("blue_spores", definition.getBlueSporeDensity())
-                    .putFloat("depth", definition.getDepth())
-                    .putFloat("downfall", definition.getDownfall())
-                    .putFloat("height", definition.getScale())
-                    .putBoolean("rain", definition.isRain())
-                    .putFloat("red_spores", definition.getRedSporeDensity())
-                    .putList("tags", NbtType.STRING, definition.getTags())
-                    .putFloat("temperature", definition.getTemperature())
-                    .putFloat("waterColorA", definition.getMapWaterColor().getAlpha() / 256f)
-                    .putFloat("waterColorB", definition.getMapWaterColor().getBlue() / 256f)
-                    .putFloat("waterColorG", definition.getMapWaterColor().getGreen() / 256f)
-                    .putFloat("waterColorR", definition.getMapWaterColor().getRed() / 256f)
-                    .putFloat("white_ash", definition.getWhiteAshDensity())
-                    .build()
-            );
-        }
-
-        packet.setDefinitions(builder.build());
-        return packet;
-    }
-
-    public static void adaptItemDefinitions(Player player, List<ItemDefinition> definitions) {
-        if (!is1_21_50(player)) {
-            return;
-        }
-
-        // Remove the items that do not exist in 1.21.50
-        definitions.removeIf(def -> isItemNotAvailableIn1_21_50(def.getIdentifier()));
-    }
-
-    private static boolean isItemNotAvailableIn1_21_50(String identifier) {
-        if (!identifier.startsWith(Identifier.DEFAULT_NAMESPACE)) {
-            // Skip custom items
-            return false;
-        }
-
-        if (identifier.contains("lightning_rod") &&
-            !identifier.equals("minecraft:lightning_rod")) {
-            return true;
-        }
-
-        if (Stream.of("minecraft:bush", "minecraft:firefly_bush").anyMatch(identifier::equals)) {
-            return true;
-        }
-
-        // TODO: find out why exclude "wildflowers", "cactus_flower" will crash the client
-        return Stream.of(
-                // Copper
-                "copper_bars", "copper_golem", "copper_lantern", "copper_chain",
-                "copper_helmet", "copper_chestplate", "copper_leggings", "copper_boots",
-                "copper_sword", "copper_axe", "copper_pickaxe", "copper_shovel", "copper_hoe",
-                "copper_horse_armor", "copper_torch", "copper_chest", "copper_nugget",
-                // Misc
-                "happy_ghast", "dried_ghast", "netherite_horse_armor", "harness", "nautilus_armor",
-                "nautilus_spawn_egg", "dry_grass", "spear", "_shelf", "iron_chain", "leaf_litter",
-                "brown_egg", "blue_egg", "camel_husk_spawn_egg", "parched_spawn_egg", "music_disc_tears",
-                "music_disc_lava_chicken"
-        ).anyMatch(identifier::contains);
-    }
-
     public static void adaptExperimentData(Player player, List<ExperimentData> experiments) {
-        if (is1_21_80(player)) {
-            // Enables 2025 Content Drop 2 features
-            experiments.add(new ExperimentData("y_2025_drop_2", true));
-            // Enables the locator bar for 1.21.80 clients
-            experiments.add(new ExperimentData("locator_bar", true));
-            // Allows Vibrant Visuals to appear in the settings menu
-            experiments.add(new ExperimentData("experimental_graphics", true));
-        }
         if (is1_21_100(player)) {
             experiments.add(new ExperimentData("y_2025_drop_3", true));
         }
@@ -282,10 +139,6 @@ public final class MultiVersionHelper {
                 .build();
     }
 
-    public static boolean is1_21_50(Player player) {
-        return getCodec(player).getProtocolVersion() == Bedrock_v766.CODEC.getProtocolVersion();
-    }
-
     private static boolean is1_21_130orHigher(Player player) {
         return getCodec(player).getProtocolVersion() >= Bedrock_v898.CODEC.getProtocolVersion();
     }
@@ -296,10 +149,6 @@ public final class MultiVersionHelper {
 
     private static boolean is1_21_100(Player player) {
         return getCodec(player) == Bedrock_v827.CODEC;
-    }
-
-    private static boolean is1_21_80(Player player) {
-        return getCodec(player) == Bedrock_v800.CODEC;
     }
 
     private static BedrockCodec getCodec(Player player) {

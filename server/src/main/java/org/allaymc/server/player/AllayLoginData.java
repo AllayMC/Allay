@@ -48,7 +48,7 @@ public class AllayLoginData implements LoginData {
      * @param isNetEaseClient whether the client is a NetEase client
      * @return the decoded login data, or {@code null} if decoding failed
      */
-    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
+    @MultiVersion(version = "*-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
     public static AllayLoginData decode(LoginPacket loginPacket, boolean isNetEaseClient) {
         var loginData = new AllayLoginData();
         try {
@@ -214,7 +214,7 @@ public class AllayLoginData implements LoginData {
         this.skin = skinBuilder.build();
     }
 
-    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use URL-safe Base64 encoding for skin data")
+    @MultiVersion(version = "*-NetEase", details = "NetEase clients use URL-safe Base64 encoding for skin data")
     private JsonObject decodeToken(String token, boolean isNetEaseClient) {
         String[] tokenSplit = token.split("\\.");
         if (tokenSplit.length < 2) {
