@@ -10,7 +10,7 @@ netty = "4.2.12.Final"
 nbt = { group = "org.allaymc", name = "nbt", version = "3.0.12" }
 # Protocol
 protocol-connection = { group = "org.allaymc.protocol", name = "bedrock-connection", version = "1.26.10-R1" }
-protocol-extension = {group = "org.allaymc", name = "protocol-extension", version = "0.2.1" }
+protocol-extension = {group = "org.allaymc", name = "protocol-extension", version = "0.2.2" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
 item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.110-R1" }
