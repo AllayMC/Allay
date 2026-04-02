@@ -26,7 +26,7 @@ public class CreateActionProcessor implements ContainerActionProcessor<CreateAct
         }
 
         // No need to copy because when we get item from created output, we will copy it
-        var output = outputs[action.getSlot()];
+        var output = outputs[action.slot()];
         player.getControlledEntity().getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, output, false);
         return null;
     }

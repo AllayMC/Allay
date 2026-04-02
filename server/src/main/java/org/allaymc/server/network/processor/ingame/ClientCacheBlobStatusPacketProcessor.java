@@ -6,7 +6,7 @@ import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.player.ChunkCache;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ClientCacheBlobStatusPacket;
-import org.cloudburstmc.protocol.common.PacketSignal;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 
 /**
  * @author daoge_cmd

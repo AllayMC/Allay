@@ -94,19 +94,19 @@ public final class NetworkHelper {
             switch (propType) {
                 case EnumPropertyType<?> enumProp -> {
                     var value = (Enum<?>) propertyValues.getOrDefault(enumProp, enumProp.getDefaultValue());
-                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value.ordinal()));
+                    result.intProperties().add(new IntEntityProperty(intIndex++, value.ordinal()));
                 }
                 case IntPropertyType intProp -> {
                     var value = (int) propertyValues.getOrDefault(intProp, intProp.getDefaultValue());
-                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value));
+                    result.intProperties().add(new IntEntityProperty(intIndex++, value));
                 }
                 case BooleanPropertyType boolProp -> {
                     var value = (boolean) propertyValues.getOrDefault(boolProp, boolProp.getDefaultValue());
-                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value ? 1 : 0));
+                    result.intProperties().add(new IntEntityProperty(intIndex++, value ? 1 : 0));
                 }
                 case FloatPropertyType floatProp -> {
                     var value = (float) propertyValues.getOrDefault(floatProp, floatProp.getDefaultValue());
-                    result.getFloatProperties().add(new FloatEntityProperty(floatIndex++, value));
+                    result.floatProperties().add(new FloatEntityProperty(floatIndex++, value));
                 }
             }
         }

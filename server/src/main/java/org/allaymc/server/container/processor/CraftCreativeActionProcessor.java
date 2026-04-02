@@ -24,9 +24,9 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
         }
 
         // NOTICE: 0 is not indexed by the client for items
-        var item = Registries.CREATIVE_ITEMS.getEntryByIndex(action.getCreativeItemNetworkId() - 1).itemStack();
+        var item = Registries.CREATIVE_ITEMS.getEntryByIndex(action.creativeItemNetworkId() - 1).itemStack();
         if (item == null) {
-            log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId() - 1);
+            log.warn("Unknown creative item network id: {}", action.creativeItemNetworkId() - 1);
             return error();
         }
 

@@ -220,19 +220,19 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
 
                 var worldInteractionAction = packet.getActions().getFirst();
-                if (!worldInteractionAction.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
-                    log.warn("Expected WORLD_INTERACTION action type, got {}", worldInteractionAction.getSource().getType());
+                if (!worldInteractionAction.source().type().equals(InventorySource.Type.WORLD_INTERACTION)) {
+                    log.warn("Expected WORLD_INTERACTION action type, got {}", worldInteractionAction.source().type());
                     return;
                 }
 
                 var containerAction = packet.getActions().getLast();
-                if (!containerAction.getSource().getType().equals(InventorySource.Type.CONTAINER)) {
-                    log.warn("Expected CONTAINER action type, got {}", containerAction.getSource().getType());
+                if (!containerAction.source().type().equals(InventorySource.Type.CONTAINER)) {
+                    log.warn("Expected CONTAINER action type, got {}", containerAction.source().type());
                     return;
                 }
 
-                var dropSlot = containerAction.getSlot();
-                var dropCount = containerAction.getFromItem().getCount() - containerAction.getToItem().getCount();
+                var dropSlot = containerAction.slot();
+                var dropCount = containerAction.fromItem().getCount() - containerAction.toItem().getCount();
                 if (!entity.tryDropItem(ContainerTypes.INVENTORY, dropSlot, dropCount)) {
                     log.warn("Failed to drop item from slot {} with count {}", dropSlot, dropCount);
                 }

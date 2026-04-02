@@ -10,12 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.Skin;
-import org.allaymc.protocol.extension.NetEaseEncryptionUtils;
 import org.allaymc.server.network.multiversion.MultiVersion;
 import org.cloudburstmc.protocol.bedrock.data.auth.CertificateChainPayload;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
+import org.cloudburstmc.protocol.bedrock.util.NetEaseEncryptionUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;

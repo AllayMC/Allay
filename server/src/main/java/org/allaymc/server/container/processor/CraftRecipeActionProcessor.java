@@ -9,11 +9,7 @@ import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.item.recipe.ShapedRecipe;
-import org.allaymc.api.item.recipe.ShapelessRecipe;
-import org.allaymc.api.item.recipe.SmithingRecipe;
-import org.allaymc.api.item.recipe.SmithingTrimRecipe;
+import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
@@ -40,7 +36,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
 
     @Override
     public ActionResponse handle(CraftRecipeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var recipeNetworkId = action.getRecipeNetworkId();
+        var recipeNetworkId = action.recipeNetworkId();
         if (recipeNetworkId >= EnchantmentOptionGenerator.NETWORK_ID_COUNTER_INITIAL_VALUE) {
             return handleEnchantTableRecipe(player, recipeNetworkId);
         }
@@ -68,7 +64,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
+        var numberOfRequestedCrafts = action.numberOfRequestedCrafts();
         ActionResponse error = null;
         if (isCraftingRecipe) {
             error = handleCraftingContainer(recipeContainer, numberOfRequestedCrafts, currentActionIndex, actions);

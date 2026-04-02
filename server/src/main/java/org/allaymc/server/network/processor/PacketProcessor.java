@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor;
 import org.allaymc.api.player.Player;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
-import org.cloudburstmc.protocol.common.PacketSignal;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 
 /**
  * @author Cool_Loong | daoge_cmd

@@ -14,11 +14,7 @@ import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
 import org.jline.reader.ParsedLine;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Simple command completer backed by Allay's command tree metadata.
@@ -143,8 +139,8 @@ public final class AllayCommandCompleter implements Completer {
 
     private void collectParameterSuggestions(CommandParamData param, Set<String> values) {
         var enumData = param.getEnumData();
-        if (enumData != null && !enumData.getValues().isEmpty()) {
-            values.addAll(enumData.getValues().keySet());
+        if (enumData != null && !enumData.values().isEmpty()) {
+            values.addAll(enumData.values().keySet());
             return;
         }
 

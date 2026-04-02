@@ -4,9 +4,9 @@ import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.ServerSettingsRequestPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ServerSettingsResponsePacket;
-import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
  * @author daoge_cmd

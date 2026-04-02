@@ -3,8 +3,8 @@ package org.allaymc.server.network.processor.ingame;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.SetPlayerInventoryOptionsPacket;
-import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
  * @author daoge_cmd

@@ -59,7 +59,6 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.*;
-import org.allaymc.api.player.CameraShakeType;
 import org.allaymc.api.player.ClientPlayMode;
 import org.allaymc.api.player.HudElement;
 import org.allaymc.api.player.InputInteractionModel;
@@ -86,7 +85,6 @@ import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
-import org.allaymc.protocol.extension.packet.ConfirmSkinPacket;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
@@ -121,6 +119,7 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.codec.v944.Bedrock_v944;
 import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeAction;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
@@ -130,10 +129,9 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
+import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.cloudburstmc.protocol.common.PacketSignal;
-import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
-import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.cloudburstmc.protocol.bedrock.util.OptionalBoolean;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -429,8 +427,8 @@ public class AllayPlayer implements Player {
                 p.getMetadata().putAll(parseMetadata(entity));
                 p.setHand(toNetwork(player.getContainer(ContainerTypes.INVENTORY).getItemInHand()));
                 var properties = NetworkHelper.toNetworkProperties(entity);
-                p.getProperties().getIntProperties().addAll(properties.getIntProperties());
-                p.getProperties().getFloatProperties().addAll(properties.getFloatProperties());
+                p.getProperties().intProperties().addAll(properties.intProperties());
+                p.getProperties().floatProperties().addAll(properties.floatProperties());
                 yield p;
             }
             case EntityItem item -> {
@@ -471,8 +469,8 @@ public class AllayPlayer implements Player {
                 p.setBodyRotation((float) l.yaw());
                 p.getMetadata().putAll(parseMetadata(entity));
                 var properties = NetworkHelper.toNetworkProperties(entity);
-                p.getProperties().getIntProperties().addAll(properties.getIntProperties());
-                p.getProperties().getFloatProperties().addAll(properties.getFloatProperties());
+                p.getProperties().intProperties().addAll(properties.intProperties());
+                p.getProperties().floatProperties().addAll(properties.floatProperties());
                 yield p;
             }
         };
@@ -2714,8 +2712,8 @@ public class AllayPlayer implements Player {
     public void shakeCamera(CameraShakeType shakeType, float intensity, float duration) {
         var pk = new CameraShakePacket();
         pk.setShakeType(switch (shakeType) {
-            case POSITIONAL -> org.cloudburstmc.protocol.bedrock.data.CameraShakeType.POSITIONAL;
-            case ROTATIONAL -> org.cloudburstmc.protocol.bedrock.data.CameraShakeType.ROTATIONAL;
+            case POSITIONAL -> org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeType.POSITIONAL;
+            case ROTATIONAL -> org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeType.ROTATIONAL;
         });
         pk.setIntensity(intensity);
         pk.setDuration(duration);
@@ -2727,7 +2725,7 @@ public class AllayPlayer implements Player {
     public void stopCameraShake() {
         var pk = new CameraShakePacket();
         pk.setShakeAction(CameraShakeAction.STOP);
-        pk.setShakeType(org.cloudburstmc.protocol.bedrock.data.CameraShakeType.POSITIONAL);
+        pk.setShakeType(org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeType.POSITIONAL);
         pk.setIntensity(-1);
         pk.setDuration(-1);
         sendPacket(pk);
@@ -3435,7 +3433,7 @@ public class AllayPlayer implements Player {
                 if (world == null) {
                     // Packet processors should make sure that PacketProcessor.handleSync()
                     // method won't be called if the player is not in any world
-                    log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().getName(), AllayPlayer.this);
+                    log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().name(), AllayPlayer.this);
                     processor.handleSync(AllayPlayer.this, packet, time);
                 } else {
                     ((AllayWorld) world).addSyncPacketToQueue(AllayPlayer.this, packet, time);

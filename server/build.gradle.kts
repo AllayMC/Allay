@@ -36,7 +36,7 @@ dependencies {
     api(libs.sentry)
     api(libs.jctools)
     api(libs.caffeine)
-    api(libs.bundles.protocol) {
+    api(libs.protocol) {
         exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")

@@ -29,7 +29,7 @@ public class CraftRecipeAutoActionProcessor implements ContainerActionProcessor<
 
     @Override
     public ActionResponse handle(AutoCraftRecipeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var recipeNetworkId = action.getRecipeNetworkId();
+        var recipeNetworkId = action.recipeNetworkId();
         if (recipeNetworkId <= 0 || recipeNetworkId > NetworkData.INDEXED_RECIPES.size()) {
             log.warn("Unknown auto craft recipe network id {}", recipeNetworkId);
             return error();
@@ -52,7 +52,7 @@ public class CraftRecipeAutoActionProcessor implements ContainerActionProcessor<
             return error();
         }
 
-        var timesCrafted = action.getTimesCrafted();
+        var timesCrafted = action.timesCrafted();
         if (timesCrafted < 1) {
             log.warn("Times crafted must be at least one! Actual: {}", timesCrafted);
             return error();
@@ -161,9 +161,9 @@ public class CraftRecipeAutoActionProcessor implements ContainerActionProcessor<
 
         Map<Container, Map<Integer, Integer>> consumedSlotCounts = new LinkedHashMap<>();
         for (var consumeAction : consumeActions) {
-            var sourceContainer = ContainerActionProcessor.getContainerFrom(player, consumeAction.getSource().getContainerName());
+            var sourceContainer = ContainerActionProcessor.getContainerFrom(player, consumeAction.source().containerName());
             if (sourceContainer == null) {
-                log.warn("Cannot find consume source container {}", consumeAction.getSource().getContainerName());
+                log.warn("Cannot find consume source container {}", consumeAction.source().containerName());
                 return null;
             }
 
@@ -174,9 +174,9 @@ public class CraftRecipeAutoActionProcessor implements ContainerActionProcessor<
 
             int slot;
             try {
-                slot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, consumeAction.getSource().getSlot());
+                slot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, consumeAction.source().slot());
             } catch (RuntimeException e) {
-                log.warn("Invalid consume source slot {}", consumeAction.getSource().getSlot());
+                log.warn("Invalid consume source slot {}", consumeAction.source().slot());
                 return null;
             }
 
@@ -186,12 +186,12 @@ public class CraftRecipeAutoActionProcessor implements ContainerActionProcessor<
                 return null;
             }
 
-            if (failToValidateStackUniqueId(item.getUniqueId(), consumeAction.getSource().getStackNetworkId())) {
+            if (failToValidateStackUniqueId(item.getUniqueId(), consumeAction.source().stackNetworkId())) {
                 log.warn("Mismatch source stack unique id!");
                 return null;
             }
 
-            var count = consumeAction.getCount();
+            var count = consumeAction.count();
             if (count <= 0) {
                 log.warn("Cannot consume {} items!", count);
                 return null;

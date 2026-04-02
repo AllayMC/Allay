@@ -103,19 +103,19 @@ public final class SkinConvertor {
         // Convert list of persona pieces
         List<Skin.PersonaPieces> personaPieces = serializedSkin.getPersonaPieces().stream()
                 .map(piece -> new Skin.PersonaPieces(
-                        piece.getId(),
-                        piece.getType(),
-                        piece.getPackId(),
+                        piece.id(),
+                        piece.type(),
+                        piece.packId(),
                         piece.isDefault(),
-                        piece.getProductId()
+                        piece.productId()
                 ))
                 .collect(Collectors.toList());
 
         // Convert list of persona piece tint colors
         List<Skin.PersonaPieceTintColor> tintColors = serializedSkin.getTintColors().stream()
                 .map(tint -> new Skin.PersonaPieceTintColor(
-                        tint.getType(),
-                        tint.getColors()
+                        tint.type(),
+                        tint.colors()
                 ))
                 .collect(Collectors.toList());
 
@@ -160,13 +160,13 @@ public final class SkinConvertor {
     private static Skin.AnimationData convertAnimationFromSerialized(AnimationData data) {
         return new Skin.AnimationData(
                 new Skin.ImageData(
-                        data.getImage().getWidth(),
-                        data.getImage().getHeight(),
-                        data.getImage().getImage()
+                        data.image().getWidth(),
+                        data.image().getHeight(),
+                        data.image().getImage()
                 ),
-                convertAnimationType(data.getTextureType()),
-                data.getFrames(),
-                convertExpressionType(data.getExpressionType())
+                convertAnimationType(data.textureType()),
+                data.frames(),
+                convertExpressionType(data.expressionType())
         );
     }
 

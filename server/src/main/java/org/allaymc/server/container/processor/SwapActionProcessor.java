@@ -20,24 +20,24 @@ import java.util.Map;
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
     public ActionResponse handle(SwapAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
-        var destinationContainer = ContainerActionProcessor.getContainerFrom(player, action.getDestination().getContainerName());
+        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
+        var destinationContainer = ContainerActionProcessor.getContainerFrom(player, action.destination().containerName());
 
-        var sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.getSource().getSlot());
-        var destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.getDestination().getSlot());
+        var sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.source().slot());
+        var destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.destination().slot());
 
         if (ContainerActionProcessor.tryHandleFakeContainer(sourceContainer, sourceSlot, destinationContainer, destinationSlot)) {
             return error();
         }
 
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
-        if (failToValidateStackUniqueId(sourceItem.getUniqueId(), action.getSource().getStackNetworkId())) {
+        if (failToValidateStackUniqueId(sourceItem.getUniqueId(), action.source().stackNetworkId())) {
             log.warn("mismatch stack unique id!");
             return error();
         }
 
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
-        if (failToValidateStackUniqueId(destinationItem.getUniqueId(), action.getDestination().getStackNetworkId())) {
+        if (failToValidateStackUniqueId(destinationItem.getUniqueId(), action.destination().stackNetworkId())) {
             log.warn("mismatch stack unique id!");
             return error();
         }

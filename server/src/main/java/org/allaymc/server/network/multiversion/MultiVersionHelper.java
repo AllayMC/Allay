@@ -33,7 +33,7 @@ public final class MultiVersionHelper {
 
         for (int i = 0; i < properties.size(); i++) {
             var property = properties.get(i);
-            var nbt = property.getProperties();
+            var nbt = property.properties();
             var builder = nbt.toBuilder();
 
             builder.putCompound("components", adaptComponents(player, nbt.getCompound("components")));
@@ -47,7 +47,7 @@ public final class MultiVersionHelper {
             });
             builder.putList("permutations", NbtType.COMPOUND, permutations);
 
-            properties.set(i, new BlockPropertyData(property.getName(), builder.build()));
+            properties.set(i, new BlockPropertyData(property.name(), builder.build()));
         }
     }
 

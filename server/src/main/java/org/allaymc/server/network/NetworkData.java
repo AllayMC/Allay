@@ -61,7 +61,7 @@ public final class NetworkData {
     public static final Supplier<List<BlockPropertyData>> CUSTOM_BLOCK_PROPERTIES = Suppliers.memoize(NetworkData::encodeCustomBlockProperties);
     public static final Supplier<List<ExperimentData>> EXPERIMENT_DATA_LIST = Suppliers.memoize(NetworkData::encodeExperimentDataList);
 
-    public static final Supplier<ItemComponentPacket> ITEM_REGISTRY_PACKET = Suppliers.memoize(NetworkData::encodeItemRegistryPacket);
+    public static final Supplier<ItemRegistryPacket> ITEM_REGISTRY_PACKET = Suppliers.memoize(NetworkData::encodeItemRegistryPacket);
     public static final Supplier<CreativeContentPacket> CREATIVE_CONTENT_PACKET = Suppliers.memoize(NetworkData::encodeCreativeContentPacket);
     public static final Supplier<CraftingDataPacket> CRAFTING_DATA_PACKET = Suppliers.memoize(NetworkData::encodeCraftingDataPacket);
     public static final Supplier<AvailableEntityIdentifiersPacket> AVAILABLE_ENTITY_IDENTIFIERS_PACKET = Suppliers.memoize(NetworkData::encodeAvailableEntityIdentifiersPacket);
@@ -119,8 +119,8 @@ public final class NetworkData {
         );
     }
 
-    private static ItemComponentPacket encodeItemRegistryPacket() {
-        var packet = new ItemComponentPacket();
+    private static ItemRegistryPacket encodeItemRegistryPacket() {
+        var packet = new ItemRegistryPacket();
         packet.getItems().addAll(NetworkData.ITEM_DEFINITIONS.get());
         return packet;
     }

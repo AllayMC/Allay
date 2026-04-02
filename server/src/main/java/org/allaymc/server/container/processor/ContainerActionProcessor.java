@@ -81,9 +81,9 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
     @SuppressWarnings("unchecked")
     static <T extends Container> T getContainerFrom(Player player, FullContainerName containerName) {
         var playerImpl = (EntityPlayerImpl) player.getControlledEntity();
-        var container = ((AllayPlayer) player).getOpenedContainer(containerName.getContainer());
+        var container = ((AllayPlayer) player).getOpenedContainer(containerName.container());
         if (container == null) {
-            container = ((EntityPlayerContainerHolderComponentImpl) playerImpl.getContainerHolderComponent()).getContainer(containerName.getContainer());
+            container = ((EntityPlayerContainerHolderComponentImpl) playerImpl.getContainerHolderComponent()).getContainer(containerName.container());
         }
         return (T) container;
     }

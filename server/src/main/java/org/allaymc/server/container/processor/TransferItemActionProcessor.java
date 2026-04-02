@@ -25,14 +25,14 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
     @Override
     public ActionResponse handle(T action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
-        var destinationContainer = ContainerActionProcessor.getContainerFrom(player, action.getDestination().getContainerName());
+        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
+        var destinationContainer = ContainerActionProcessor.getContainerFrom(player, action.destination().containerName());
 
-        int sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.getSource().getSlot());
-        int sourceStackNetworkId = action.getSource().getStackNetworkId();
+        int sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.source().slot());
+        int sourceStackNetworkId = action.source().stackNetworkId();
 
-        int destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.getDestination().getSlot());
-        int destinationStackNetworkId = action.getDestination().getStackNetworkId();
+        int destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.destination().slot());
+        int destinationStackNetworkId = action.destination().stackNetworkId();
 
         if (ContainerActionProcessor.tryHandleFakeContainer(sourceContainer, sourceSlot, destinationContainer, destinationSlot)) {
             return error();
@@ -49,7 +49,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return error();
         }
 
-        var count = action.getCount();
+        var count = action.count();
         if (sourItem.getCount() < count) {
             log.warn("place an item that has not enough count is not allowed");
             return error();

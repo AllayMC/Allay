@@ -12,7 +12,7 @@ import org.allaymc.server.datastruct.bitarray.BitArray;
 import org.allaymc.server.datastruct.bitarray.BitArrayVersion;
 import org.allaymc.server.datastruct.bitarray.SingletonBitArray;
 import org.cloudburstmc.nbt.NbtUtils;
-import org.cloudburstmc.protocol.common.util.VarInts;
+import org.cloudburstmc.protocol.bedrock.util.VarInts;
 
 import java.io.IOException;
 import java.util.Arrays;
