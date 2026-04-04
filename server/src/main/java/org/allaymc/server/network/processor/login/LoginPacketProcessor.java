@@ -38,37 +38,43 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         }
 
         allayPlayer.setLoginData(loginData);
+        boolean proxySyncSession = loginData.isProxyPackSyncRequest();
+        allayPlayer.setProxySyncSession(proxySyncSession);
 
         var server = Server.getInstance();
-        if (AllayServer.getSettings().genericSettings().enableWhitelist() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
+        if (!proxySyncSession &&
+            AllayServer.getSettings().genericSettings().enableWhitelist() &&
+            !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED);
             return;
         }
 
-        if (server.getPlayerManager().isBanned(player.getLoginData().getUuid().toString()) || server.getPlayerManager().isBanned(player.getOriginName())) {
+        if (!proxySyncSession &&
+            (server.getPlayerManager().isBanned(player.getLoginData().getUuid().toString()) ||
+             server.getPlayerManager().isBanned(player.getOriginName()))) {
             // TODO: I18n
             player.disconnect("You are banned!");
             return;
         }
 
-        if (!loginData.isAuthed() && AllayServer.getSettings().networkSettings().xboxAuth()) {
+        if (!proxySyncSession && !loginData.isAuthed() && AllayServer.getSettings().networkSettings().xboxAuth()) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
             return;
         }
 
         var name = loginData.getXname();
         // NetEase clients allow Chinese names, skip the standard name pattern validation
-        if (!isNetEaseClient && !NAME_PATTERN.matcher(name).matches()) {
+        if (!proxySyncSession && !isNetEaseClient && !NAME_PATTERN.matcher(name).matches()) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDNAME);
             return;
         }
         // For NetEase clients, only check that name is not empty
-        if (isNetEaseClient && (name == null || name.trim().isEmpty())) {
+        if (!proxySyncSession && isNetEaseClient && (name == null || name.trim().isEmpty())) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDNAME);
             return;
         }
 
-        if (!loginData.getSkin().isValid()) {
+        if (!proxySyncSession && !loginData.getSkin().isValid()) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDSKIN);
             return;
         }

@@ -127,6 +127,9 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
         if (maxLoginTime > 0) {
             server.getScheduler().scheduleDelayed(server, () -> {
                 var status = player.getClientState();
+                if (player.isProxySyncSession()) {
+                    return true;
+                }
                 if (status != ClientState.DISCONNECTED && status.ordinal() < ClientState.IN_GAME.ordinal()) {
                     log.warn("Session {} didn't log in within {} seconds, disconnecting...", session.getSocketAddress(), maxLoginTime / 20d);
                     player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);

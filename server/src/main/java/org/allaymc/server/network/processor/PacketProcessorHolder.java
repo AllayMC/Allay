@@ -84,6 +84,9 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.LOGGED_IN, new ClientCacheStatusPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ResourcePackClientResponsePacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ResourcePackChunkRequestPacketProcessor());
+        registerProcessor(ClientState.LOGGED_IN, new ProxyPackSyncPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new ProxyPackSyncPacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ProxyPackSyncPacketProcessor());
     }
 
     private void registerSpawnedPacketProcessors() {

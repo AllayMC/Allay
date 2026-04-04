@@ -7,6 +7,9 @@ import org.allaymc.updater.block.BlockStateUpdater_1_21_110;
 import org.allaymc.updater.item.ItemStateUpdater;
 import org.allaymc.updater.item.ItemStateUpdater_1_21_110;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.codec.netease.serializer.PyRpcSerializer;
+import org.cloudburstmc.protocol.bedrock.data.PacketRecipient;
+import org.cloudburstmc.protocol.bedrock.packet.PyRpcPacket;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
@@ -26,6 +29,8 @@ import java.util.List;
  */
 @UtilityClass
 public final class ProtocolInfo {
+
+    private static final int PY_RPC_PACKET_ID = 200;
 
     /**
      * A list which contains the supported protocol versions, and the first element is the latest version.
@@ -100,7 +105,7 @@ public final class ProtocolInfo {
     public static BedrockCodec findCodec(int protocolVersion) {
         for (var codec : SUPPORTED_VERSIONS) {
             if (codec.getProtocolVersion() == protocolVersion) {
-                return codec;
+                return ensurePyRpc(codec);
             }
         }
 
@@ -132,5 +137,15 @@ public final class ProtocolInfo {
      */
     public static SemVersion getLowestMinecraftVersion() {
         return SemVersion.from(getLowestCodec().getMinecraftVersion());
+    }
+
+    private static BedrockCodec ensurePyRpc(BedrockCodec codec) {
+        if (codec.getPacketDefinition(PyRpcPacket.class) != null) {
+            return codec;
+        }
+
+        return codec.toBuilder()
+                .registerPacket(PyRpcPacket::new, PyRpcSerializer.INSTANCE, PY_RPC_PACKET_ID, PacketRecipient.BOTH)
+                .build();
     }
 }

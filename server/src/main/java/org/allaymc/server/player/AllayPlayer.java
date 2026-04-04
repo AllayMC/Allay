@@ -221,6 +221,9 @@ public class AllayPlayer implements Player {
     @Getter
     @Setter
     protected boolean netEasePlayer;
+    @Getter
+    @Setter
+    protected boolean proxySyncSession;
 
     public AllayPlayer(BedrockServerSession session, AllayNetworkInterface sourceInterface) {
         this.session = session;
@@ -3288,6 +3291,12 @@ public class AllayPlayer implements Player {
     }
 
     public void completeLogin() {
+        if (this.proxySyncSession) {
+            this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
+            sendPlayStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
+            return;
+        }
+
         var playerManager = (AllayPlayerManager) Server.getInstance().getPlayerManager();
         if (playerManager.getPlayerCount() >= playerManager.getMaxPlayerCount()) {
             disconnect(TrKeys.MC_DISCONNECTIONSCREEN_SERVERFULL_TITLE);

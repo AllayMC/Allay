@@ -39,6 +39,7 @@ public class AllayLoginData implements LoginData {
     private Skin skin;
     private String identityPublicKey;
     private NetEaseData netEaseData;
+    private boolean proxyPackSyncRequest;
 
     /**
      * Decode the given {@link LoginPacket} and return a {@link LoginData}. If there is any error
@@ -83,9 +84,21 @@ public class AllayLoginData implements LoginData {
         this.uuid = extraData.identity;
         this.xuid = extraData.xuid;
         this.identityPublicKey = result.identityClaims().identityPublicKey;
+        this.proxyPackSyncRequest = extractProxyPackSyncRequest(result.rawIdentityClaims());
 
         if (isNetEaseClient) {
             this.netEaseData = extractNetEaseData(result.rawIdentityClaims());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean extractProxyPackSyncRequest(Map<String, Object> rawClaims) {
+        try {
+            Map<String, Object> extraData = (Map<String, Object>) rawClaims.get("extraData");
+            return extraData != null && Boolean.TRUE.equals(extraData.get("Waterdog_PackSync"));
+        } catch (Exception e) {
+            log.debug("Failed to extract proxy pack sync flag from login chain", e);
+            return false;
         }
     }
 
@@ -111,6 +124,10 @@ public class AllayLoginData implements LoginData {
             log.debug("Failed to extract NetEase data from login chain", e);
             return null;
         }
+    }
+
+    public boolean isProxyPackSyncRequest() {
+        return this.proxyPackSyncRequest;
     }
 
     private void decodeSkinData(String skinData, boolean isNetEaseClient) {
