@@ -11,7 +11,6 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
-import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 /**
@@ -42,9 +41,6 @@ public class BlockSoulFireBaseComponentImpl extends BlockBaseComponentImpl {
             living.setOnFireTicks(combustEvent.getOnFireTicks());
         }
 
-        var damageEvent = new EntityDamageEvent(entity, new DamageContainer(block, DamageType.FIRE, 2));
-        if (damageEvent.call()) {
-            living.attack(damageEvent.getDamageContainer());
-        }
+        living.attack(new DamageContainer(block, DamageType.FIRE, 2));
     }
 }
