@@ -148,11 +148,9 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     private int findGrassSurfaceY(Dimension dimension, int x, int originY, int z) {
         for (int offsetY = BONEMEAL_VERTICAL_RANGE; offsetY >= -BONEMEAL_VERTICAL_RANGE; offsetY--) {
             int y = originY + offsetY;
-            if (dimension.getBlockState(x, y, z).getBlockType() != BlockTypes.GRASS_BLOCK) {
-                continue;
-            }
-
-            if (dimension.getBlockState(x, y + 1, z).getBlockType() == BlockTypes.AIR) {
+            var surfaceType = dimension.getBlockState(x, y, z).getBlockType();
+            var aboveType = dimension.getBlockState(x, y + 1, z).getBlockType();
+            if (surfaceType == BlockTypes.GRASS_BLOCK && aboveType == BlockTypes.AIR) {
                 return y;
             }
         }
@@ -169,24 +167,22 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
         int cumulativeWeight = 0;
         for (var entry : BONEMEAL_VEGETATION) {
             cumulativeWeight += entry.weight();
-            if (roll >= cumulativeWeight) {
-                continue;
-            }
+            if (roll < cumulativeWeight) {
+                var blockType = entry.blockType().get();
+                if (entry.tallPlant()) {
+                    if (dimension.getBlockState(x, y + 1, z).getBlockType() != BlockTypes.AIR) {
+                        return false;
+                    }
 
-            var blockType = entry.blockType().get();
-            if (entry.tallPlant()) {
-                if (dimension.getBlockState(x, y + 1, z).getBlockType() != BlockTypes.AIR) {
-                    return false;
+                    var state = blockType.getDefaultState();
+                    dimension.setBlockState(x, y, z, state.setPropertyValue(BlockPropertyTypes.UPPER_BLOCK_BIT, false));
+                    dimension.setBlockState(x, y + 1, z, state.setPropertyValue(BlockPropertyTypes.UPPER_BLOCK_BIT, true));
+                } else {
+                    dimension.setBlockState(x, y, z, blockType.getDefaultState());
                 }
 
-                var state = blockType.getDefaultState();
-                dimension.setBlockState(x, y, z, state.setPropertyValue(BlockPropertyTypes.UPPER_BLOCK_BIT, false));
-                dimension.setBlockState(x, y + 1, z, state.setPropertyValue(BlockPropertyTypes.UPPER_BLOCK_BIT, true));
-            } else {
-                dimension.setBlockState(x, y, z, blockType.getDefaultState());
+                return true;
             }
-
-            return true;
         }
 
         return false;
