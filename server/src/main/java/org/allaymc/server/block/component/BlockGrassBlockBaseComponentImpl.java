@@ -58,6 +58,10 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var pos = interactInfo.clickedBlockPos();
+        if (!dimension.isYInRange(pos.y() + 1)) {
+            return false;
+        }
+
         if (dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockType() != BlockTypes.AIR) {
             return false;
         }
@@ -148,6 +152,10 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     private int findGrassSurfaceY(Dimension dimension, int x, int originY, int z) {
         for (int offsetY = BONEMEAL_VERTICAL_RANGE; offsetY >= -BONEMEAL_VERTICAL_RANGE; offsetY--) {
             int y = originY + offsetY;
+            if (!dimension.isYInRange(y) || !dimension.isYInRange(y + 1)) {
+                continue;
+            }
+
             var surfaceType = dimension.getBlockState(x, y, z).getBlockType();
             var aboveType = dimension.getBlockState(x, y + 1, z).getBlockType();
             if (surfaceType == BlockTypes.GRASS_BLOCK && aboveType == BlockTypes.AIR) {
@@ -159,6 +167,10 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean placeVegetation(Dimension dimension, int x, int y, int z, ThreadLocalRandom random) {
+        if (!dimension.isYInRange(y)) {
+            return false;
+        }
+
         if (dimension.getBlockState(x, y, z).getBlockType() != BlockTypes.AIR) {
             return false;
         }
@@ -170,6 +182,10 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
             if (roll < cumulativeWeight) {
                 var blockType = entry.blockType().get();
                 if (entry.tallPlant()) {
+                    if (!dimension.isYInRange(y + 1)) {
+                        return false;
+                    }
+
                     if (dimension.getBlockState(x, y + 1, z).getBlockType() != BlockTypes.AIR) {
                         return false;
                     }
