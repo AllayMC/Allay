@@ -10,7 +10,9 @@ import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityAnimal;
 import org.allaymc.api.entity.interfaces.EntityEnderDragon;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
+import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.data.ItemTags;
 import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.type.ItemTypes;
@@ -113,6 +115,25 @@ public final class EntityTypeInitializer {
                         @Override
                         public boolean hasDrowningDamage() {
                             return false;
+                        }
+
+                        @Override
+                        public boolean isFireproof() {
+                            if (super.isFireproof()) {
+                                return true;
+                            }
+
+                            var itemStack = ((EntityItem) thisEntity).getItemStack();
+                            if (itemStack == null) {
+                                return false;
+                            }
+
+                            var itemType = itemStack.getItemType();
+                            return itemType.hasItemTag(ItemTags.NETHERITE_TIER) ||
+                                   itemType == ItemTypes.ANCIENT_DEBRIS ||
+                                   itemType == ItemTypes.NETHERITE_BLOCK ||
+                                   itemType == ItemTypes.NETHERITE_INGOT ||
+                                   itemType == ItemTypes.NETHERITE_SCRAP;
                         }
 
                         @Override
