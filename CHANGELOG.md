@@ -21,6 +21,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Merged `org.allaymc.server.bossbar.AllayBossBar` into the concrete `org.allaymc.api.bossbar.BossBar` class, so boss bars no longer use separate API interface and server implementation types.
 
+### Fixed
+
+- Fixed small dripleaf breaking recursively triggering `Dimension.breakBlock()` between its upper and lower halves, which could spam `BlockSmallDripleafBaseComponentImpl.onBreak()` stack traces and overflow the stack.
+
 ### Removed
 
 - Removed support for bedrock (NetEase) 1.21.50 and 1.21.80.

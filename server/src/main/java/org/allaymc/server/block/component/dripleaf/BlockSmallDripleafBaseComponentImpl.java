@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.dripleaf;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
@@ -16,6 +15,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.SimpleParticle;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -76,31 +76,6 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
                 if (aboveState.getBlockType() != blockType || !aboveState.getPropertyValue(UPPER_BLOCK_BIT)) {
                     block.breakBlock();
                 }
-            }
-        }
-    }
-
-    @Override
-    public void onBreak(Block block, ItemStack usedItem, Entity entity) {
-        super.onBreak(block, usedItem, entity);
-
-        var isUpper = block.getPropertyValue(UPPER_BLOCK_BIT);
-        var pos = block.getPosition();
-        var dimension = block.getDimension();
-
-        if (isUpper) {
-            // Breaking upper half: also break lower half
-            var belowPos = BlockFace.DOWN.offsetPos(pos);
-            var belowState = dimension.getBlockState(belowPos);
-            if (belowState.getBlockType() == blockType && !belowState.getPropertyValue(UPPER_BLOCK_BIT)) {
-                dimension.breakBlock(belowPos, null, entity);
-            }
-        } else {
-            // Breaking lower half: also break upper half
-            var abovePos = new Vector3i(pos).add(0, 1, 0);
-            var aboveState = dimension.getBlockState(abovePos);
-            if (aboveState.getBlockType() == blockType && aboveState.getPropertyValue(UPPER_BLOCK_BIT)) {
-                dimension.breakBlock(abovePos, null, entity);
             }
         }
     }
