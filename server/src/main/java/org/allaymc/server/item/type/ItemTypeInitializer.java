@@ -741,6 +741,7 @@ public final class ItemTypeInitializer {
         ItemTypes.BUCKET = buildBucket(ItemId.BUCKET, BlockId.AIR, null);
         ItemTypes.COD_BUCKET = buildBucket(ItemId.COD_BUCKET, BlockId.WATER, EntityId.COD);
         ItemTypes.LAVA_BUCKET = buildBucket(ItemId.LAVA_BUCKET, BlockId.LAVA, null);
+        ItemTypes.MILK_BUCKET = buildMilkBucket();
         ItemTypes.POWDER_SNOW_BUCKET = buildBucket(ItemId.POWDER_SNOW_BUCKET, BlockId.POWDER_SNOW, null);
         ItemTypes.PUFFERFISH_BUCKET = buildBucket(ItemId.PUFFERFISH_BUCKET, BlockId.WATER, EntityId.PUFFERFISH);
         ItemTypes.SALMON_BUCKET = buildBucket(ItemId.SALMON_BUCKET, BlockId.WATER, EntityId.SALMON);
@@ -754,6 +755,14 @@ public final class ItemTypeInitializer {
                 .builder(ItemBucketStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(() -> new ItemBucketComponentImpl(liquidBlockId, entityId), ItemBucketComponentImpl.class)
+                .build();
+    }
+
+    private static ItemType<ItemMilkBucketStack> buildMilkBucket() {
+        return AllayItemType
+                .builder(ItemMilkBucketStackImpl.class)
+                .vanillaItem(ItemId.MILK_BUCKET)
+                .addComponent(ItemMilkBucketEdibleComponentImpl::new, ItemMilkBucketEdibleComponentImpl.class)
                 .build();
     }
 
