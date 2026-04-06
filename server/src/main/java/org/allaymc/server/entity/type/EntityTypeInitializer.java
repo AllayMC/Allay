@@ -129,11 +129,7 @@ public final class EntityTypeInitializer {
                             }
 
                             var itemType = itemStack.getItemType();
-                            return itemType.hasItemTag(ItemTags.NETHERITE_TIER) ||
-                                   itemType == ItemTypes.ANCIENT_DEBRIS ||
-                                   itemType == ItemTypes.NETHERITE_BLOCK ||
-                                   itemType == ItemTypes.NETHERITE_INGOT ||
-                                   itemType == ItemTypes.NETHERITE_SCRAP;
+                            return itemType.hasItemTag(ItemTags.FIREPROOF);
                         }
 
                         @Override

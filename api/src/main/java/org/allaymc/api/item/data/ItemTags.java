@@ -139,6 +139,8 @@ public interface ItemTags {
 
     ItemTag NETHERITE_TIER = create("minecraft:netherite_tier");
 
+    ItemTag FIREPROOF = create("minecraft:fireproof");
+
     ItemTag MUSIC_DISC = create("minecraft:music_disc");
 
     ItemTag HORSE_ARMOR = create("minecraft:horse_armor");
