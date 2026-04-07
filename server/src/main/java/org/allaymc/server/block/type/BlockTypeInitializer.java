@@ -2123,6 +2123,7 @@ public final class BlockTypeInitializer {
 
     public static void initSmallFlowers() {
         BlockTypes.DANDELION = buildSmallFlower(BlockId.DANDELION);
+        BlockTypes.GOLDEN_DANDELION = buildSmallFlower(BlockId.GOLDEN_DANDELION);
         BlockTypes.POPPY = buildSmallFlower(BlockId.POPPY);
         BlockTypes.BLUE_ORCHID = buildSmallFlower(BlockId.BLUE_ORCHID);
         BlockTypes.ALLIUM = buildSmallFlower(BlockId.ALLIUM);
