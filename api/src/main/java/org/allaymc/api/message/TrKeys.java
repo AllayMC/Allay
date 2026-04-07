@@ -1220,7 +1220,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_CURE = "minecraft:action.interact.cure";
 
     /**
-     * {@literal Cut }
+     * {@literal Cut}
      */
     String MC_ACTION_INTERACT_CUT = "minecraft:action.interact.cut";
 
@@ -1310,6 +1310,11 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_MOUNT = "minecraft:action.interact.mount";
 
     /**
+     * {@literal :horse_ride: Mount}
+     */
+    String MC_ACTION_INTERACT_MOUNT_TOUCH = "minecraft:action.interact.mount.touch";
+
+    /**
      * {@literal Name}
      */
     String MC_ACTION_INTERACT_NAME = "minecraft:action.interact.name";
@@ -1325,7 +1330,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_READ = "minecraft:action.interact.read";
 
     /**
-     * {@literal Remove Carpet }
+     * {@literal Remove Carpet}
      */
     String MC_ACTION_INTERACT_REMOVECARPET = "minecraft:action.interact.removecarpet";
 
@@ -1335,7 +1340,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_REMOVEHARNESS = "minecraft:action.interact.removeharness";
 
     /**
-     * {@literal Remove Horse Armor }
+     * {@literal Remove Horse Armor}
      */
     String MC_ACTION_INTERACT_REMOVEHORSEARMOR = "minecraft:action.interact.removehorsearmor";
 
@@ -1345,7 +1350,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_REMOVENAUTILUSARMOR = "minecraft:action.interact.removenautilusarmor";
 
     /**
-     * {@literal Remove Saddle }
+     * {@literal Remove Saddle}
      */
     String MC_ACTION_INTERACT_REMOVESADDLE = "minecraft:action.interact.removesaddle";
 
@@ -1365,7 +1370,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_REPAIRWOLFARMOR = "minecraft:action.interact.repairwolfarmor";
 
     /**
-     * {@literal Retrieve }
+     * {@literal Retrieve}
      */
     String MC_ACTION_INTERACT_RETRIEVE = "minecraft:action.interact.retrieve";
 
@@ -1375,9 +1380,19 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_RIDE_BOAT = "minecraft:action.interact.ride.boat";
 
     /**
+     * {@literal :boat_ride: Board}
+     */
+    String MC_ACTION_INTERACT_RIDE_BOAT_TOUCH = "minecraft:action.interact.ride.boat.touch";
+
+    /**
      * {@literal Ride}
      */
     String MC_ACTION_INTERACT_RIDE_HORSE = "minecraft:action.interact.ride.horse";
+
+    /**
+     * {@literal :horse_ride: Ride}
+     */
+    String MC_ACTION_INTERACT_RIDE_HORSE_TOUCH = "minecraft:action.interact.ride.horse.touch";
 
     /**
      * {@literal Ride}
@@ -1385,9 +1400,19 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_RIDE_MINECART = "minecraft:action.interact.ride.minecart";
 
     /**
+     * {@literal :boat_ride: Ride}
+     */
+    String MC_ACTION_INTERACT_RIDE_MINECART_TOUCH = "minecraft:action.interact.ride.minecart.touch";
+
+    /**
      * {@literal Ride}
      */
     String MC_ACTION_INTERACT_RIDE_STRIDER = "minecraft:action.interact.ride.strider";
+
+    /**
+     * {@literal :horse_ride: Ride}
+     */
+    String MC_ACTION_INTERACT_RIDE_STRIDER_TOUCH = "minecraft:action.interact.ride.strider.touch";
 
     /**
      * {@literal Saddle}
@@ -1408,6 +1433,11 @@ public interface TrKeys {
      * {@literal Sit}
      */
     String MC_ACTION_INTERACT_SIT = "minecraft:action.interact.sit";
+
+    /**
+     * {@literal Spawn Baby}
+     */
+    String MC_ACTION_INTERACT_SPAWN_EGG_BABY = "minecraft:action.interact.spawn_egg_baby";
 
     /**
      * {@literal Stand}
@@ -1485,7 +1515,7 @@ public interface TrKeys {
     String MC_ADVMODE_COMMAND_CHARLIMITEXCEEDED = "minecraft:advMode.command.charLimitExceeded";
 
     /**
-     * {@literal @n = nearest entity }
+     * {@literal @n = nearest entity}
      */
     String MC_ADVMODE_NEAREST = "minecraft:advMode.nearest";
 
@@ -1810,6 +1840,16 @@ public interface TrKeys {
     String MC_CHALKBOARDSCREEN_UNLOCKED = "minecraft:chalkboardScreen.unlocked";
 
     /**
+     * {@literal '%s' was unsuccessful.}
+     */
+    String MC_CHAR_COMMANDMACROFAIL_DESC = "minecraft:char.commandMacroFail.desc";
+
+    /**
+     * {@literal Command Macros}
+     */
+    String MC_CHAR_COMMANDMACROFAIL_TITLE = "minecraft:char.commandMacroFail.title";
+
+    /**
      * {@literal Cannot send chat message}
      */
     String MC_CHAT_CANNOTSEND = "minecraft:chat.cannotSend";
@@ -1873,6 +1913,11 @@ public interface TrKeys {
      * {@literal Mute Chat}
      */
     String MC_CHAT_MUTE = "minecraft:chat.mute";
+
+    /**
+     * {@literal New messages}
+     */
+    String MC_CHAT_NEWMESSAGES = "minecraft:chat.newMessages";
 
     /**
      * {@literal This Realm has chat filtering turned off.}
@@ -2618,6 +2663,11 @@ public interface TrKeys {
      * {@literal There are %1#d (out of %2#d seen) allowlisted players:}
      */
     String MC_COMMANDS_ALLOWLIST_LIST = "minecraft:commands.allowlist.list";
+
+    /**
+     * {@literal Using an allowlist without online authentication can be dangerous and is not allowed.}
+     */
+    String MC_COMMANDS_ALLOWLIST_NOONLINEAUTH = "minecraft:commands.allowlist.noOnlineAuth";
 
     /**
      * {@literal Allowlist reloaded from file.}
@@ -4910,6 +4960,11 @@ public interface TrKeys {
     String MC_COMMANDS_RELOAD_ALL_DESCRIPTION = "minecraft:commands.reload.all.description";
 
     /**
+     * {@literal Data Driven UI files have been reloaded.}
+     */
+    String MC_COMMANDS_RELOAD_DDUI_SUCCESS = "minecraft:commands.reload.ddui.success";
+
+    /**
      * {@literal Reloads all function and script files from all behavior packs.}
      */
     String MC_COMMANDS_RELOAD_DESCRIPTION = "minecraft:commands.reload.description";
@@ -7105,12 +7160,12 @@ public interface TrKeys {
     String MC_CONTENT_IMPORT_SUCCEEDED_WITH_WARNINGS_SUBTITLE = "minecraft:content.import.succeeded_with_warnings.subtitle";
 
     /**
-     * {@literal Failed to load content for pack %s  }
+     * {@literal Failed to load content for pack %s}
      */
     String MC_CONTENT_LOAD_FAILED = "minecraft:content.load.failed";
 
     /**
-     * {@literal Check your pack for errors and try importing again }
+     * {@literal Check your pack for errors and try importing again}
      */
     String MC_CONTENT_LOAD_FAILED_SUBTITLE = "minecraft:content.load.failed.subtitle";
 
@@ -7235,6 +7290,11 @@ public interface TrKeys {
     String MC_CRAFTING_NORECIPESWORKBENCH = "minecraft:crafting.noRecipesWorkbench";
 
     /**
+     * {@literal All recipes}
+     */
+    String MC_CRAFTINGSCREEN_TAB_ALLRECIPES = "minecraft:craftingScreen.tab.allRecipes";
+
+    /**
      * {@literal Armor}
      */
     String MC_CRAFTINGSCREEN_TAB_ARMOR = "minecraft:craftingScreen.tab.armor";
@@ -7243,6 +7303,11 @@ public interface TrKeys {
      * {@literal Construction}
      */
     String MC_CRAFTINGSCREEN_TAB_CONSTRUCTION = "minecraft:craftingScreen.tab.construction";
+
+    /**
+     * {@literal Craftable recipes}
+     */
+    String MC_CRAFTINGSCREEN_TAB_CRAFTABLERECIPES = "minecraft:craftingScreen.tab.craftableRecipes";
 
     /**
      * {@literal Equipment}
@@ -8345,7 +8410,7 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_ERRORCODE = "minecraft:disconnectionScreen.errorCode";
 
     /**
-     * {@literal There was a problem loading into the server. }
+     * {@literal There was a problem loading into the server.}
      */
     String MC_DISCONNECTIONSCREEN_FAILEDASYNCCHECK = "minecraft:disconnectionScreen.failedAsyncCheck";
 
@@ -9985,6 +10050,16 @@ public interface TrKeys {
     String MC_DR_LABEL_CURRENT_SKIN = "minecraft:dr.label.current_skin";
 
     /**
+     * {@literal Failed to load appearance}
+     */
+    String MC_DR_LABEL_FAILED_TO_LOAD_APPEARANCE = "minecraft:dr.label.failed_to_load_appearance";
+
+    /**
+     * {@literal Loading appearance}
+     */
+    String MC_DR_LABEL_LOADING_APPEARANCE = "minecraft:dr.label.loading_appearance";
+
+    /**
      * {@literal Left Arm}
      */
     String MC_DR_LEFT_ARM = "minecraft:dr.left_arm";
@@ -10068,6 +10143,11 @@ public interface TrKeys {
      * {@literal Skin blocked from multiplayer for violating Community Standards.}
      */
     String MC_DR_NOTIFICATION_CUSTOM_BANNED = "minecraft:dr.notification.custom_banned";
+
+    /**
+     * {@literal This skin will not be shown to other players.}
+     */
+    String MC_DR_NOTIFICATION_CUSTOM_BANNED_EQUPPED_SKIN_SUBTITLE = "minecraft:dr.notification.custom_banned.equpped_skin_subtitle";
 
     /**
      * {@literal You just equipped %s}
@@ -10585,6 +10665,11 @@ public interface TrKeys {
     String MC_ENCHANTMENT_WATERWORKER = "minecraft:enchantment.waterWorker";
 
     /**
+     * {@literal Agent}
+     */
+    String MC_ENTITY_AGENT_NAME = "minecraft:entity.agent.name";
+
+    /**
      * {@literal Allay}
      */
     String MC_ENTITY_ALLAY_NAME = "minecraft:entity.allay.name";
@@ -10940,9 +11025,19 @@ public interface TrKeys {
     String MC_ENTITY_NAUTILUS_NAME = "minecraft:entity.nautilus.name";
 
     /**
+     * {@literal NPC}
+     */
+    String MC_ENTITY_NPC_NAME = "minecraft:entity.npc.name";
+
+    /**
      * {@literal Ocelot}
      */
     String MC_ENTITY_OCELOT_NAME = "minecraft:entity.ocelot.name";
+
+    /**
+     * {@literal Ominous Item Spawner}
+     */
+    String MC_ENTITY_OMINOUS_ITEM_SPAWNER_NAME = "minecraft:entity.ominous_item_spawner.name";
 
     /**
      * {@literal Painting}
@@ -10988,6 +11083,11 @@ public interface TrKeys {
      * {@literal Pillager}
      */
     String MC_ENTITY_PILLAGER_NAME = "minecraft:entity.pillager.name";
+
+    /**
+     * {@literal Player}
+     */
+    String MC_ENTITY_PLAYER_NAME = "minecraft:entity.player.name";
 
     /**
      * {@literal Polar Bear}
@@ -11983,6 +12083,16 @@ public interface TrKeys {
      * {@literal %d/%d}
      */
     String MC_INVITE_PAGECOUNTER = "minecraft:invite.pageCounter";
+
+    /**
+     * {@literal You can also send a party invite along with your game invite}
+     */
+    String MC_INVITE_PARTYWITHGAMEINVITE_DESCRIPTION = "minecraft:invite.partyWithGameInvite.description";
+
+    /**
+     * {@literal Also invite to party}
+     */
+    String MC_INVITE_PARTYWITHGAMEINVITE_TITLE = "minecraft:invite.partyWithGameInvite.title";
 
     /**
      * {@literal Add Realm Members}
@@ -19775,7 +19885,7 @@ public interface TrKeys {
     String MC_JSONVALIDATIONERROR_TYPEERROR = "minecraft:jsonValidationError.typeError";
 
     /**
-     * {@literal Attack/Destroy}
+     * {@literal Attack / Destroy}
      */
     String MC_KEY_ATTACK = "minecraft:key.attack";
 
@@ -19785,7 +19895,7 @@ public interface TrKeys {
     String MC_KEY_BACK = "minecraft:key.back";
 
     /**
-     * {@literal Cancel    }
+     * {@literal Cancel}
      */
     String MC_KEY_CANCELTOAST = "minecraft:key.cancelToast";
 
@@ -19840,6 +19950,56 @@ public interface TrKeys {
     String MC_KEY_COMMAND = "minecraft:key.command";
 
     /**
+     * {@literal Command Macro 1}
+     */
+    String MC_KEY_COMMANDMACRO_0 = "minecraft:key.commandMacro.0";
+
+    /**
+     * {@literal Command Macro 2}
+     */
+    String MC_KEY_COMMANDMACRO_1 = "minecraft:key.commandMacro.1";
+
+    /**
+     * {@literal Command Macro 3}
+     */
+    String MC_KEY_COMMANDMACRO_2 = "minecraft:key.commandMacro.2";
+
+    /**
+     * {@literal Command Macro 4}
+     */
+    String MC_KEY_COMMANDMACRO_3 = "minecraft:key.commandMacro.3";
+
+    /**
+     * {@literal Command Macro 5}
+     */
+    String MC_KEY_COMMANDMACRO_4 = "minecraft:key.commandMacro.4";
+
+    /**
+     * {@literal Command Macro 6}
+     */
+    String MC_KEY_COMMANDMACRO_5 = "minecraft:key.commandMacro.5";
+
+    /**
+     * {@literal Command Macro 7}
+     */
+    String MC_KEY_COMMANDMACRO_6 = "minecraft:key.commandMacro.6";
+
+    /**
+     * {@literal Command Macro 8}
+     */
+    String MC_KEY_COMMANDMACRO_7 = "minecraft:key.commandMacro.7";
+
+    /**
+     * {@literal Command Macro 9}
+     */
+    String MC_KEY_COMMANDMACRO_8 = "minecraft:key.commandMacro.8";
+
+    /**
+     * {@literal Command Macro 10}
+     */
+    String MC_KEY_COMMANDMACRO_9 = "minecraft:key.commandMacro.9";
+
+    /**
      * {@literal Copy Coordinates}
      */
     String MC_KEY_COPYCOORDINATES = "minecraft:key.copyCoordinates";
@@ -19865,9 +20025,14 @@ public interface TrKeys {
     String MC_KEY_CYCLEFIXEDINVENTORY = "minecraft:key.cyclefixedinventory";
 
     /**
-     * {@literal Decline    }
+     * {@literal Decline}
      */
     String MC_KEY_DECLINETOAST = "minecraft:key.declineToast";
+
+    /**
+     * {@literal Identify}
+     */
+    String MC_KEY_DESCRIBEBLOCK = "minecraft:key.describeBlock";
 
     /**
      * {@literal Drop Item}
@@ -19965,7 +20130,7 @@ public interface TrKeys {
     String MC_KEY_INVENTORY = "minecraft:key.inventory";
 
     /**
-     * {@literal Jump/Fly Up}
+     * {@literal Jump / Fly Up}
      */
     String MC_KEY_JUMP = "minecraft:key.jump";
 
@@ -20100,6 +20265,11 @@ public interface TrKeys {
     String MC_KEY_MOVERIGHT = "minecraft:key.moveRight";
 
     /**
+     * {@literal Open}
+     */
+    String MC_KEY_OPENTOAST = "minecraft:key.openToast";
+
+    /**
      * {@literal Pause}
      */
     String MC_KEY_PAUSE = "minecraft:key.pause";
@@ -20165,9 +20335,19 @@ public interface TrKeys {
     String MC_KEY_SMOOTHCAMERA = "minecraft:key.smoothCamera";
 
     /**
-     * {@literal Sneak/Fly Down}
+     * {@literal Sneak / Fly Down}
      */
     String MC_KEY_SNEAK = "minecraft:key.sneak";
+
+    /**
+     * {@literal Social Drawer}
+     */
+    String MC_KEY_SOCIALDRAWER = "minecraft:key.socialDrawer";
+
+    /**
+     * {@literal Open Notification/Social Drawer/Mob Effects}
+     */
+    String MC_KEY_SOCIALDRAWERMOBEFFECTSANDINTERACTWITHTOAST = "minecraft:key.socialdrawermobeffectsandinteractwithtoast";
 
     /**
      * {@literal Highlight Players (Spectators)}
@@ -20215,14 +20395,9 @@ public interface TrKeys {
     String MC_KEY_TOGGLERENDERER = "minecraft:key.toggleRenderer";
 
     /**
-     * {@literal Use Item/Place Block}
+     * {@literal Use Item / Place Block}
      */
     String MC_KEY_USE = "minecraft:key.use";
-
-    /**
-     * {@literal View    }
-     */
-    String MC_KEY_VIEWTOAST = "minecraft:key.viewToast";
 
     /**
      * {@literal 0}
@@ -21260,6 +21435,36 @@ public interface TrKeys {
     String MC_PACK_AUTHORS_NONE = "minecraft:pack.authors.none";
 
     /**
+     * {@literal You joined the party}
+     */
+    String MC_PARTIES_CHAT_JOINEDPARTY = "minecraft:parties.chat.joinedParty";
+
+    /**
+     * {@literal %s is now the party leader}
+     */
+    String MC_PARTIES_CHAT_LEADERCHANGED = "minecraft:parties.chat.leaderChanged";
+
+    /**
+     * {@literal %s joined the party}
+     */
+    String MC_PARTIES_CHAT_MEMBERJOINED = "minecraft:parties.chat.memberJoined";
+
+    /**
+     * {@literal %s left the party}
+     */
+    String MC_PARTIES_CHAT_MEMBERLEFT = "minecraft:parties.chat.memberLeft";
+
+    /**
+     * {@literal You started the party}
+     */
+    String MC_PARTIES_CHAT_STARTEDPARTY = "minecraft:parties.chat.startedParty";
+
+    /**
+     * {@literal Not in a party or party chat not available}
+     */
+    String MC_PARTIES_CHAT_UNAVAILABLE = "minecraft:parties.chat.unavailable";
+
+    /**
      * {@literal Failed to accept invite}
      */
     String MC_PARTIES_TOAST_ACCEPTINVITEFAILED = "minecraft:parties.toast.acceptInviteFailed";
@@ -21300,6 +21505,11 @@ public interface TrKeys {
     String MC_PARTIES_TOAST_LEFTPARTY = "minecraft:parties.toast.leftParty";
 
     /**
+     * {@literal Main Menu}
+     */
+    String MC_PARTIES_TOAST_MAINMENU = "minecraft:parties.toast.mainMenu";
+
+    /**
      * {@literal %s joined the party}
      */
     String MC_PARTIES_TOAST_MEMBERJOINED = "minecraft:parties.toast.memberJoined";
@@ -21335,14 +21545,19 @@ public interface TrKeys {
     String MC_PARTIES_TOAST_SETLEADERFAILED = "minecraft:parties.toast.setLeaderFailed";
 
     /**
-     * {@literal Party loading - Main Menu}
+     * {@literal Party moving to Main Menu}
      */
     String MC_PARTIES_TOAST_TRAVELTOMENU = "minecraft:parties.toast.travelToMenu";
 
     /**
-     * {@literal Party loading - %s}
+     * {@literal Party moving to %s}
      */
     String MC_PARTIES_TOAST_TRAVELTOWORLD = "minecraft:parties.toast.travelToWorld";
+
+    /**
+     * {@literal Party}
+     */
+    String MC_PARTIES_WORLDCHAT_LABEL = "minecraft:parties.worldChat.label";
 
     /**
      * {@literal Continue}
@@ -22275,6 +22490,11 @@ public interface TrKeys {
     String MC_REALMJOINING_PROGRESSTITLE = "minecraft:realmJoining.progressTitle";
 
     /**
+     * {@literal Reconnecting you to your game}
+     */
+    String MC_RECONNECTONRESUMESCREEN_TITLE = "minecraft:reconnectOnResumeScreen.title";
+
+    /**
      * {@literal Now playing: %s}
      */
     String MC_RECORD_NOWPLAYING = "minecraft:record.nowPlaying";
@@ -22368,6 +22588,21 @@ public interface TrKeys {
      * {@literal Rate this pack}
      */
     String MC_REVIEW_ITEM_POST_RATING_SUBMIT_BUTTON = "minecraft:review.item.post.rating.submit.button";
+
+    /**
+     * {@literal Unable to rate this pack.}
+     */
+    String MC_REVIEW_ITEM_POST_RATING_SUBMIT_TOAST_ERROR_LINE1 = "minecraft:review.item.post.rating.submit.toast.error.line1";
+
+    /**
+     * {@literal Unable to submit your rating. Please try again later.}
+     */
+    String MC_REVIEW_ITEM_POST_RATING_SUBMIT_TOAST_ERROR_LINE2_GENERAL = "minecraft:review.item.post.rating.submit.toast.error.line2.general";
+
+    /**
+     * {@literal  Please purchase this pack to rate it.}
+     */
+    String MC_REVIEW_ITEM_POST_RATING_SUBMIT_TOAST_ERROR_LINE2_NOT_OWNED = "minecraft:review.item.post.rating.submit.toast.error.line2.not.owned";
 
     /**
      * {@literal Thanks for rating this pack!}
@@ -22485,6 +22720,11 @@ public interface TrKeys {
     String MC_SIGN_EDIT = "minecraft:sign.edit";
 
     /**
+     * {@literal When equipped:}
+     */
+    String MC_SLOT_ARMOR_BODY_WHEN_EQUIPPED = "minecraft:slot.armor.body.when_equipped";
+
+    /**
      * {@literal When on Chest:}
      */
     String MC_SLOT_ARMOR_CHEST_WHEN_EQUIPPED = "minecraft:slot.armor.chest.when_equipped";
@@ -22503,6 +22743,4861 @@ public interface TrKeys {
      * {@literal When on Legs:}
      */
     String MC_SLOT_ARMOR_LEGS_WHEN_EQUIPPED = "minecraft:slot.armor.legs.when_equipped";
+
+    /**
+     * {@literal Eerie noise}
+     */
+    String MC_SUBTITLES_AMBIENT_CAVE = "minecraft:subtitles.ambient.cave";
+
+    /**
+     * {@literal Eerie noise}
+     */
+    String MC_SUBTITLES_AMBIENT_SOUND = "minecraft:subtitles.ambient.sound";
+
+    /**
+     * {@literal Amethyst chimes}
+     */
+    String MC_SUBTITLES_BLOCK_AMETHYST_BLOCK_CHIME = "minecraft:subtitles.block.amethyst_block.chime";
+
+    /**
+     * {@literal Amethyst resonates}
+     */
+    String MC_SUBTITLES_BLOCK_AMETHYST_BLOCK_RESONATE = "minecraft:subtitles.block.amethyst_block.resonate";
+
+    /**
+     * {@literal Anvil destroyed}
+     */
+    String MC_SUBTITLES_BLOCK_ANVIL_DESTROY = "minecraft:subtitles.block.anvil.destroy";
+
+    /**
+     * {@literal Anvil landed}
+     */
+    String MC_SUBTITLES_BLOCK_ANVIL_LAND = "minecraft:subtitles.block.anvil.land";
+
+    /**
+     * {@literal Anvil used}
+     */
+    String MC_SUBTITLES_BLOCK_ANVIL_USE = "minecraft:subtitles.block.anvil.use";
+
+    /**
+     * {@literal Barrel closes}
+     */
+    String MC_SUBTITLES_BLOCK_BARREL_CLOSE = "minecraft:subtitles.block.barrel.close";
+
+    /**
+     * {@literal Barrel opens}
+     */
+    String MC_SUBTITLES_BLOCK_BARREL_OPEN = "minecraft:subtitles.block.barrel.open";
+
+    /**
+     * {@literal Beacon activates}
+     */
+    String MC_SUBTITLES_BLOCK_BEACON_ACTIVATE = "minecraft:subtitles.block.beacon.activate";
+
+    /**
+     * {@literal Beacon hums}
+     */
+    String MC_SUBTITLES_BLOCK_BEACON_AMBIENT = "minecraft:subtitles.block.beacon.ambient";
+
+    /**
+     * {@literal Beacon deactivates}
+     */
+    String MC_SUBTITLES_BLOCK_BEACON_DEACTIVATE = "minecraft:subtitles.block.beacon.deactivate";
+
+    /**
+     * {@literal Beacon power selected}
+     */
+    String MC_SUBTITLES_BLOCK_BEACON_POWER_SELECT = "minecraft:subtitles.block.beacon.power_select";
+
+    /**
+     * {@literal Honey drips}
+     */
+    String MC_SUBTITLES_BLOCK_BEEHIVE_DRIP = "minecraft:subtitles.block.beehive.drip";
+
+    /**
+     * {@literal Bee enters hive}
+     */
+    String MC_SUBTITLES_BLOCK_BEEHIVE_ENTER = "minecraft:subtitles.block.beehive.enter";
+
+    /**
+     * {@literal Bee leaves hive}
+     */
+    String MC_SUBTITLES_BLOCK_BEEHIVE_EXIT = "minecraft:subtitles.block.beehive.exit";
+
+    /**
+     * {@literal Shears scrape}
+     */
+    String MC_SUBTITLES_BLOCK_BEEHIVE_SHEAR = "minecraft:subtitles.block.beehive.shear";
+
+    /**
+     * {@literal Bees work}
+     */
+    String MC_SUBTITLES_BLOCK_BEEHIVE_WORK = "minecraft:subtitles.block.beehive.work";
+
+    /**
+     * {@literal Bell resonates}
+     */
+    String MC_SUBTITLES_BLOCK_BELL_RESONATE = "minecraft:subtitles.block.bell.resonate";
+
+    /**
+     * {@literal Bell rings}
+     */
+    String MC_SUBTITLES_BLOCK_BELL_USE = "minecraft:subtitles.block.bell.use";
+
+    /**
+     * {@literal Dripleaf tilts down}
+     */
+    String MC_SUBTITLES_BLOCK_BIG_DRIPLEAF_TILT_DOWN = "minecraft:subtitles.block.big_dripleaf.tilt_down";
+
+    /**
+     * {@literal Dripleaf tilts up}
+     */
+    String MC_SUBTITLES_BLOCK_BIG_DRIPLEAF_TILT_UP = "minecraft:subtitles.block.big_dripleaf.tilt_up";
+
+    /**
+     * {@literal Blast Furnace crackles}
+     */
+    String MC_SUBTITLES_BLOCK_BLASTFURNACE_FIRE_CRACKLE = "minecraft:subtitles.block.blastfurnace.fire_crackle";
+
+    /**
+     * {@literal Brewing Stand bubbles}
+     */
+    String MC_SUBTITLES_BLOCK_BREWING_STAND_BREW = "minecraft:subtitles.block.brewing_stand.brew";
+
+    /**
+     * {@literal Bubbles pop}
+     */
+    String MC_SUBTITLES_BLOCK_BUBBLE_COLUMN_BUBBLE_POP = "minecraft:subtitles.block.bubble_column.bubble_pop";
+
+    /**
+     * {@literal Bubbles flow}
+     */
+    String MC_SUBTITLES_BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT = "minecraft:subtitles.block.bubble_column.upwards_ambient";
+
+    /**
+     * {@literal Bubbles woosh}
+     */
+    String MC_SUBTITLES_BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE = "minecraft:subtitles.block.bubble_column.upwards_inside";
+
+    /**
+     * {@literal Bubbles whirl}
+     */
+    String MC_SUBTITLES_BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT = "minecraft:subtitles.block.bubble_column.whirlpool_ambient";
+
+    /**
+     * {@literal Bubbles zoom}
+     */
+    String MC_SUBTITLES_BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE = "minecraft:subtitles.block.bubble_column.whirlpool_inside";
+
+    /**
+     * {@literal Button clicks}
+     */
+    String MC_SUBTITLES_BLOCK_BUTTON_CLICK = "minecraft:subtitles.block.button.click";
+
+    /**
+     * {@literal Cake squishes}
+     */
+    String MC_SUBTITLES_BLOCK_CAKE_ADD_CANDLE = "minecraft:subtitles.block.cake.add_candle";
+
+    /**
+     * {@literal Campfire crackles}
+     */
+    String MC_SUBTITLES_BLOCK_CAMPFIRE_CRACKLE = "minecraft:subtitles.block.campfire.crackle";
+
+    /**
+     * {@literal Candle crackles}
+     */
+    String MC_SUBTITLES_BLOCK_CANDLE_CRACKLE = "minecraft:subtitles.block.candle.crackle";
+
+    /**
+     * {@literal Candle extinguishes}
+     */
+    String MC_SUBTITLES_BLOCK_CANDLE_EXTINGUISH = "minecraft:subtitles.block.candle.extinguish";
+
+    /**
+     * {@literal Cauldron water gets dyed}
+     */
+    String MC_SUBTITLES_BLOCK_CAULDRON_ADD_DYE = "minecraft:subtitles.block.cauldron.add_dye";
+
+    /**
+     * {@literal Leather armor gets cleaned}
+     */
+    String MC_SUBTITLES_BLOCK_CAULDRON_CLEAN_ARMOR = "minecraft:subtitles.block.cauldron.clean_armor";
+
+    /**
+     * {@literal Banner gets cleaned}
+     */
+    String MC_SUBTITLES_BLOCK_CAULDRON_CLEAN_BANNER = "minecraft:subtitles.block.cauldron.clean_banner";
+
+    /**
+     * {@literal Leather armor gets dyed}
+     */
+    String MC_SUBTITLES_BLOCK_CAULDRON_DYE_ARMOR = "minecraft:subtitles.block.cauldron.dye_armor";
+
+    /**
+     * {@literal Potion pours into Cauldron}
+     */
+    String MC_SUBTITLES_BLOCK_CAULDRON_FILL_POTION = "minecraft:subtitles.block.cauldron.fill_potion";
+
+    /**
+     * {@literal Potion taken from Cauldron}
+     */
+    String MC_SUBTITLES_BLOCK_CAULDRON_TAKE_POTION = "minecraft:subtitles.block.cauldron.take_potion";
+
+    /**
+     * {@literal Chest closes}
+     */
+    String MC_SUBTITLES_BLOCK_CHEST_CLOSE = "minecraft:subtitles.block.chest.close";
+
+    /**
+     * {@literal Chest locked}
+     */
+    String MC_SUBTITLES_BLOCK_CHEST_LOCKED = "minecraft:subtitles.block.chest.locked";
+
+    /**
+     * {@literal Chest opens}
+     */
+    String MC_SUBTITLES_BLOCK_CHEST_OPEN = "minecraft:subtitles.block.chest.open";
+
+    /**
+     * {@literal Chorus Flower withers}
+     */
+    String MC_SUBTITLES_BLOCK_CHORUS_FLOWER_DEATH = "minecraft:subtitles.block.chorus_flower.death";
+
+    /**
+     * {@literal Chorus Flower grows}
+     */
+    String MC_SUBTITLES_BLOCK_CHORUS_FLOWER_GROW = "minecraft:subtitles.block.chorus_flower.grow";
+
+    /**
+     * {@literal Comparator clicks}
+     */
+    String MC_SUBTITLES_BLOCK_COMPARATOR_CLICK = "minecraft:subtitles.block.comparator.click";
+
+    /**
+     * {@literal Composter emptied}
+     */
+    String MC_SUBTITLES_BLOCK_COMPOSTER_EMPTY = "minecraft:subtitles.block.composter.empty";
+
+    /**
+     * {@literal Composter filled}
+     */
+    String MC_SUBTITLES_BLOCK_COMPOSTER_FILL = "minecraft:subtitles.block.composter.fill";
+
+    /**
+     * {@literal Composter composts}
+     */
+    String MC_SUBTITLES_BLOCK_COMPOSTER_READY = "minecraft:subtitles.block.composter.ready";
+
+    /**
+     * {@literal Conduit activates}
+     */
+    String MC_SUBTITLES_BLOCK_CONDUIT_ACTIVATE = "minecraft:subtitles.block.conduit.activate";
+
+    /**
+     * {@literal Conduit pulses}
+     */
+    String MC_SUBTITLES_BLOCK_CONDUIT_AMBIENT = "minecraft:subtitles.block.conduit.ambient";
+
+    /**
+     * {@literal Conduit attacks}
+     */
+    String MC_SUBTITLES_BLOCK_CONDUIT_ATTACK_TARGET = "minecraft:subtitles.block.conduit.attack.target";
+
+    /**
+     * {@literal Conduit deactivates}
+     */
+    String MC_SUBTITLES_BLOCK_CONDUIT_DEACTIVATE = "minecraft:subtitles.block.conduit.deactivate";
+
+    /**
+     * {@literal Copper Bulb turns off}
+     */
+    String MC_SUBTITLES_BLOCK_COPPER_BULB_TURN_OFF = "minecraft:subtitles.block.copper_bulb.turn_off";
+
+    /**
+     * {@literal Copper Bulb turns on}
+     */
+    String MC_SUBTITLES_BLOCK_COPPER_BULB_TURN_ON = "minecraft:subtitles.block.copper_bulb.turn_on";
+
+    /**
+     * {@literal Chest closes}
+     */
+    String MC_SUBTITLES_BLOCK_COPPER_CHEST_CLOSE = "minecraft:subtitles.block.copper_chest.close";
+
+    /**
+     * {@literal Chest opens}
+     */
+    String MC_SUBTITLES_BLOCK_COPPER_CHEST_OPEN = "minecraft:subtitles.block.copper_chest.open";
+
+    /**
+     * {@literal Trapdoor closes}
+     */
+    String MC_SUBTITLES_BLOCK_COPPER_TRAPDOOR_CLOSE = "minecraft:subtitles.block.copper_trapdoor.close";
+
+    /**
+     * {@literal Trapdoor opens}
+     */
+    String MC_SUBTITLES_BLOCK_COPPER_TRAPDOOR_OPEN = "minecraft:subtitles.block.copper_trapdoor.open";
+
+    /**
+     * {@literal Crafter crafts}
+     */
+    String MC_SUBTITLES_BLOCK_CRAFTER_CRAFT = "minecraft:subtitles.block.crafter.craft";
+
+    /**
+     * {@literal Crafter fails crafting}
+     */
+    String MC_SUBTITLES_BLOCK_CRAFTER_FAIL = "minecraft:subtitles.block.crafter.fail";
+
+    /**
+     * {@literal Creaking Heart grumbles}
+     */
+    String MC_SUBTITLES_BLOCK_CREAKING_HEART_HURT = "minecraft:subtitles.block.creaking_heart.hurt";
+
+    /**
+     * {@literal Eerie noise}
+     */
+    String MC_SUBTITLES_BLOCK_CREAKING_HEART_IDLE = "minecraft:subtitles.block.creaking_heart.idle";
+
+    /**
+     * {@literal Creaking Heart awakens}
+     */
+    String MC_SUBTITLES_BLOCK_CREAKING_HEART_SPAWN = "minecraft:subtitles.block.creaking_heart.spawn";
+
+    /**
+     * {@literal Dry sounds}
+     */
+    String MC_SUBTITLES_BLOCK_DEADBUSH_IDLE = "minecraft:subtitles.block.deadbush.idle";
+
+    /**
+     * {@literal Decorated Pot fills}
+     */
+    String MC_SUBTITLES_BLOCK_DECORATED_POT_INSERT = "minecraft:subtitles.block.decorated_pot.insert";
+
+    /**
+     * {@literal Decorated Pot wobbles}
+     */
+    String MC_SUBTITLES_BLOCK_DECORATED_POT_INSERT_FAIL = "minecraft:subtitles.block.decorated_pot.insert_fail";
+
+    /**
+     * {@literal Decorated Pot shatters}
+     */
+    String MC_SUBTITLES_BLOCK_DECORATED_POT_SHATTER = "minecraft:subtitles.block.decorated_pot.shatter";
+
+    /**
+     * {@literal Dispensed item}
+     */
+    String MC_SUBTITLES_BLOCK_DISPENSER_DISPENSE = "minecraft:subtitles.block.dispenser.dispense";
+
+    /**
+     * {@literal Dispenser failed}
+     */
+    String MC_SUBTITLES_BLOCK_DISPENSER_FAIL = "minecraft:subtitles.block.dispenser.fail";
+
+    /**
+     * {@literal Door creaks}
+     */
+    String MC_SUBTITLES_BLOCK_DOOR_TOGGLE = "minecraft:subtitles.block.door.toggle";
+
+    /**
+     * {@literal Sounds of dryness}
+     */
+    String MC_SUBTITLES_BLOCK_DRIED_GHAST_AMBIENT = "minecraft:subtitles.block.dried_ghast.ambient";
+
+    /**
+     * {@literal Dried Ghast rehydrates}
+     */
+    String MC_SUBTITLES_BLOCK_DRIED_GHAST_AMBIENT_WATER = "minecraft:subtitles.block.dried_ghast.ambient_water";
+
+    /**
+     * {@literal Dried Ghast soaks}
+     */
+    String MC_SUBTITLES_BLOCK_DRIED_GHAST_PLACE_IN_WATER = "minecraft:subtitles.block.dried_ghast.place_in_water";
+
+    /**
+     * {@literal Dried Ghast feels better}
+     */
+    String MC_SUBTITLES_BLOCK_DRIED_GHAST_TRANSITION = "minecraft:subtitles.block.dried_ghast.transition";
+
+    /**
+     * {@literal Windy sounds}
+     */
+    String MC_SUBTITLES_BLOCK_DRY_GRASS_AMBIENT = "minecraft:subtitles.block.dry_grass.ambient";
+
+    /**
+     * {@literal Enchanting Table used}
+     */
+    String MC_SUBTITLES_BLOCK_ENCHANTMENT_TABLE_USE = "minecraft:subtitles.block.enchantment_table.use";
+
+    /**
+     * {@literal End Portal opens}
+     */
+    String MC_SUBTITLES_BLOCK_END_PORTAL_SPAWN = "minecraft:subtitles.block.end_portal.spawn";
+
+    /**
+     * {@literal Eye of Ender attaches}
+     */
+    String MC_SUBTITLES_BLOCK_END_PORTAL_FRAME_FILL = "minecraft:subtitles.block.end_portal_frame.fill";
+
+    /**
+     * {@literal Eyeblossom closes}
+     */
+    String MC_SUBTITLES_BLOCK_EYEBLOSSOM_CLOSE = "minecraft:subtitles.block.eyeblossom.close";
+
+    /**
+     * {@literal Eyeblossom whispers}
+     */
+    String MC_SUBTITLES_BLOCK_EYEBLOSSOM_IDLE = "minecraft:subtitles.block.eyeblossom.idle";
+
+    /**
+     * {@literal Eyeblossom opens}
+     */
+    String MC_SUBTITLES_BLOCK_EYEBLOSSOM_OPEN = "minecraft:subtitles.block.eyeblossom.open";
+
+    /**
+     * {@literal Fence Gate creaks}
+     */
+    String MC_SUBTITLES_BLOCK_FENCE_GATE_TOGGLE = "minecraft:subtitles.block.fence_gate.toggle";
+
+    /**
+     * {@literal Fire crackles}
+     */
+    String MC_SUBTITLES_BLOCK_FIRE_AMBIENT = "minecraft:subtitles.block.fire.ambient";
+
+    /**
+     * {@literal Fire extinguished}
+     */
+    String MC_SUBTITLES_BLOCK_FIRE_EXTINGUISH = "minecraft:subtitles.block.fire.extinguish";
+
+    /**
+     * {@literal Fireflies buzz}
+     */
+    String MC_SUBTITLES_BLOCK_FIREFLY_BUSH_IDLE = "minecraft:subtitles.block.firefly_bush.idle";
+
+    /**
+     * {@literal Tadpole hatches}
+     */
+    String MC_SUBTITLES_BLOCK_FROGSPAWN_HATCH = "minecraft:subtitles.block.frogspawn.hatch";
+
+    /**
+     * {@literal Furnace crackles}
+     */
+    String MC_SUBTITLES_BLOCK_FURNACE_FIRE_CRACKLE = "minecraft:subtitles.block.furnace.fire_crackle";
+
+    /**
+     * {@literal Block broken}
+     */
+    String MC_SUBTITLES_BLOCK_GENERIC_BREAK = "minecraft:subtitles.block.generic.break";
+
+    /**
+     * {@literal Something falls on a block}
+     */
+    String MC_SUBTITLES_BLOCK_GENERIC_FALL = "minecraft:subtitles.block.generic.fall";
+
+    /**
+     * {@literal Footsteps}
+     */
+    String MC_SUBTITLES_BLOCK_GENERIC_FOOTSTEPS = "minecraft:subtitles.block.generic.footsteps";
+
+    /**
+     * {@literal Block breaking}
+     */
+    String MC_SUBTITLES_BLOCK_GENERIC_HIT = "minecraft:subtitles.block.generic.hit";
+
+    /**
+     * {@literal Block placed}
+     */
+    String MC_SUBTITLES_BLOCK_GENERIC_PLACE = "minecraft:subtitles.block.generic.place";
+
+    /**
+     * {@literal Grindstone used}
+     */
+    String MC_SUBTITLES_BLOCK_GRINDSTONE_USE = "minecraft:subtitles.block.grindstone.use";
+
+    /**
+     * {@literal Plant cropped}
+     */
+    String MC_SUBTITLES_BLOCK_GROWING_PLANT_CROP = "minecraft:subtitles.block.growing_plant.crop";
+
+    /**
+     * {@literal Sign wobbles}
+     */
+    String MC_SUBTITLES_BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL = "minecraft:subtitles.block.hanging_sign.waxed_interact_fail";
+
+    /**
+     * {@literal Sliding down a honey block}
+     */
+    String MC_SUBTITLES_BLOCK_HONEY_BLOCK_SLIDE = "minecraft:subtitles.block.honey_block.slide";
+
+    /**
+     * {@literal Trapdoor closes}
+     */
+    String MC_SUBTITLES_BLOCK_IRON_TRAPDOOR_CLOSE = "minecraft:subtitles.block.iron_trapdoor.close";
+
+    /**
+     * {@literal Trapdoor opens}
+     */
+    String MC_SUBTITLES_BLOCK_IRON_TRAPDOOR_OPEN = "minecraft:subtitles.block.iron_trapdoor.open";
+
+    /**
+     * {@literal Lava pops}
+     */
+    String MC_SUBTITLES_BLOCK_LAVA_AMBIENT = "minecraft:subtitles.block.lava.ambient";
+
+    /**
+     * {@literal Lava hisses}
+     */
+    String MC_SUBTITLES_BLOCK_LAVA_EXTINGUISH = "minecraft:subtitles.block.lava.extinguish";
+
+    /**
+     * {@literal Lever clicks}
+     */
+    String MC_SUBTITLES_BLOCK_LEVER_CLICK = "minecraft:subtitles.block.lever.click";
+
+    /**
+     * {@literal Note Block plays}
+     */
+    String MC_SUBTITLES_BLOCK_NOTE_BLOCK_NOTE = "minecraft:subtitles.block.note_block.note";
+
+    /**
+     * {@literal Eerie noise}
+     */
+    String MC_SUBTITLES_BLOCK_PALE_HANGING_MOSS_IDLE = "minecraft:subtitles.block.pale_hanging_moss.idle";
+
+    /**
+     * {@literal Piston moves}
+     */
+    String MC_SUBTITLES_BLOCK_PISTON_MOVE = "minecraft:subtitles.block.piston.move";
+
+    /**
+     * {@literal Lava drips}
+     */
+    String MC_SUBTITLES_BLOCK_POINTED_DRIPSTONE_DRIP_LAVA = "minecraft:subtitles.block.pointed_dripstone.drip_lava";
+
+    /**
+     * {@literal Lava drips into Cauldron}
+     */
+    String MC_SUBTITLES_BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON = "minecraft:subtitles.block.pointed_dripstone.drip_lava_into_cauldron";
+
+    /**
+     * {@literal Water drips}
+     */
+    String MC_SUBTITLES_BLOCK_POINTED_DRIPSTONE_DRIP_WATER = "minecraft:subtitles.block.pointed_dripstone.drip_water";
+
+    /**
+     * {@literal Water drips into Cauldron}
+     */
+    String MC_SUBTITLES_BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON = "minecraft:subtitles.block.pointed_dripstone.drip_water_into_cauldron";
+
+    /**
+     * {@literal Stalactite crashes down}
+     */
+    String MC_SUBTITLES_BLOCK_POINTED_DRIPSTONE_LAND = "minecraft:subtitles.block.pointed_dripstone.land";
+
+    /**
+     * {@literal Portal whooshes}
+     */
+    String MC_SUBTITLES_BLOCK_PORTAL_AMBIENT = "minecraft:subtitles.block.portal.ambient";
+
+    /**
+     * {@literal Portal noise fades}
+     */
+    String MC_SUBTITLES_BLOCK_PORTAL_TRAVEL = "minecraft:subtitles.block.portal.travel";
+
+    /**
+     * {@literal Portal noise intensifies}
+     */
+    String MC_SUBTITLES_BLOCK_PORTAL_TRIGGER = "minecraft:subtitles.block.portal.trigger";
+
+    /**
+     * {@literal Pressure Plate clicks}
+     */
+    String MC_SUBTITLES_BLOCK_PRESSURE_PLATE_CLICK = "minecraft:subtitles.block.pressure_plate.click";
+
+    /**
+     * {@literal Shears carve}
+     */
+    String MC_SUBTITLES_BLOCK_PUMPKIN_CARVE = "minecraft:subtitles.block.pumpkin.carve";
+
+    /**
+     * {@literal Torch fizzes}
+     */
+    String MC_SUBTITLES_BLOCK_REDSTONE_TORCH_BURNOUT = "minecraft:subtitles.block.redstone_torch.burnout";
+
+    /**
+     * {@literal Respawn Anchor whooshes}
+     */
+    String MC_SUBTITLES_BLOCK_RESPAWN_ANCHOR_AMBIENT = "minecraft:subtitles.block.respawn_anchor.ambient";
+
+    /**
+     * {@literal Respawn Anchor is charged}
+     */
+    String MC_SUBTITLES_BLOCK_RESPAWN_ANCHOR_CHARGE = "minecraft:subtitles.block.respawn_anchor.charge";
+
+    /**
+     * {@literal Respawn Anchor depletes}
+     */
+    String MC_SUBTITLES_BLOCK_RESPAWN_ANCHOR_DEPLETE = "minecraft:subtitles.block.respawn_anchor.deplete";
+
+    /**
+     * {@literal Respawn Anchor sets spawn}
+     */
+    String MC_SUBTITLES_BLOCK_RESPAWN_ANCHOR_SET_SPAWN = "minecraft:subtitles.block.respawn_anchor.set_spawn";
+
+    /**
+     * {@literal Sandy sounds}
+     */
+    String MC_SUBTITLES_BLOCK_SAND_IDLE = "minecraft:subtitles.block.sand.idle";
+
+    /**
+     * {@literal Windy sounds}
+     */
+    String MC_SUBTITLES_BLOCK_SAND_WIND = "minecraft:subtitles.block.sand.wind";
+
+    /**
+     * {@literal Sculk bubbles}
+     */
+    String MC_SUBTITLES_BLOCK_SCULK_CHARGE = "minecraft:subtitles.block.sculk.charge";
+
+    /**
+     * {@literal Sculk spreads}
+     */
+    String MC_SUBTITLES_BLOCK_SCULK_SPREAD = "minecraft:subtitles.block.sculk.spread";
+
+    /**
+     * {@literal Sculk Catalyst blooms}
+     */
+    String MC_SUBTITLES_BLOCK_SCULK_CATALYST_BLOOM = "minecraft:subtitles.block.sculk_catalyst.bloom";
+
+    /**
+     * {@literal Sculk Sensor clicks}
+     */
+    String MC_SUBTITLES_BLOCK_SCULK_SENSOR_CLICKING = "minecraft:subtitles.block.sculk_sensor.clicking";
+
+    /**
+     * {@literal Sculk Sensor stops clicking}
+     */
+    String MC_SUBTITLES_BLOCK_SCULK_SENSOR_CLICKING_STOP = "minecraft:subtitles.block.sculk_sensor.clicking_stop";
+
+    /**
+     * {@literal Sculk Shrieker shrieks}
+     */
+    String MC_SUBTITLES_BLOCK_SCULK_SHRIEKER_SHRIEK = "minecraft:subtitles.block.sculk_shrieker.shriek";
+
+    /**
+     * {@literal Shelf activates}
+     */
+    String MC_SUBTITLES_BLOCK_SHELF_ACTIVATE = "minecraft:subtitles.block.shelf.activate";
+
+    /**
+     * {@literal Shelf deactivates}
+     */
+    String MC_SUBTITLES_BLOCK_SHELF_DEACTIVATE = "minecraft:subtitles.block.shelf.deactivate";
+
+    /**
+     * {@literal Items swap}
+     */
+    String MC_SUBTITLES_BLOCK_SHELF_MULTI_SWAP = "minecraft:subtitles.block.shelf.multi_swap";
+
+    /**
+     * {@literal Item placed}
+     */
+    String MC_SUBTITLES_BLOCK_SHELF_PLACE_ITEM = "minecraft:subtitles.block.shelf.place_item";
+
+    /**
+     * {@literal Item swaps}
+     */
+    String MC_SUBTITLES_BLOCK_SHELF_SINGLE_SWAP = "minecraft:subtitles.block.shelf.single_swap";
+
+    /**
+     * {@literal Item taken}
+     */
+    String MC_SUBTITLES_BLOCK_SHELF_TAKE_ITEM = "minecraft:subtitles.block.shelf.take_item";
+
+    /**
+     * {@literal Shulker box closes}
+     */
+    String MC_SUBTITLES_BLOCK_SHULKER_BOX_CLOSE = "minecraft:subtitles.block.shulker_box.close";
+
+    /**
+     * {@literal Shulker box opens}
+     */
+    String MC_SUBTITLES_BLOCK_SHULKER_BOX_OPEN = "minecraft:subtitles.block.shulker_box.open";
+
+    /**
+     * {@literal Sign wobbles}
+     */
+    String MC_SUBTITLES_BLOCK_SIGN_WAXED_INTERACT_FAIL = "minecraft:subtitles.block.sign.waxed_interact_fail";
+
+    /**
+     * {@literal Smithing Table used}
+     */
+    String MC_SUBTITLES_BLOCK_SMITHING_TABLE_USE = "minecraft:subtitles.block.smithing_table.use";
+
+    /**
+     * {@literal Smoker smokes}
+     */
+    String MC_SUBTITLES_BLOCK_SMOKER_SMOKE = "minecraft:subtitles.block.smoker.smoke";
+
+    /**
+     * {@literal Sniffer Egg cracks}
+     */
+    String MC_SUBTITLES_BLOCK_SNIFFER_EGG_CRACK = "minecraft:subtitles.block.sniffer_egg.crack";
+
+    /**
+     * {@literal Sniffer Egg hatches}
+     */
+    String MC_SUBTITLES_BLOCK_SNIFFER_EGG_HATCH = "minecraft:subtitles.block.sniffer_egg.hatch";
+
+    /**
+     * {@literal Sniffer plops}
+     */
+    String MC_SUBTITLES_BLOCK_SNIFFER_EGG_PLOP = "minecraft:subtitles.block.sniffer_egg.plop";
+
+    /**
+     * {@literal Sponge sucks}
+     */
+    String MC_SUBTITLES_BLOCK_SPONGE_ABSORB = "minecraft:subtitles.block.sponge.absorb";
+
+    /**
+     * {@literal Berries pop}
+     */
+    String MC_SUBTITLES_BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES = "minecraft:subtitles.block.sweet_berry_bush.pick_berries";
+
+    /**
+     * {@literal Trapdoor closes}
+     */
+    String MC_SUBTITLES_BLOCK_TRAPDOOR_CLOSE = "minecraft:subtitles.block.trapdoor.close";
+
+    /**
+     * {@literal Trapdoor opens}
+     */
+    String MC_SUBTITLES_BLOCK_TRAPDOOR_OPEN = "minecraft:subtitles.block.trapdoor.open";
+
+    /**
+     * {@literal Trapdoor creaks}
+     */
+    String MC_SUBTITLES_BLOCK_TRAPDOOR_TOGGLE = "minecraft:subtitles.block.trapdoor.toggle";
+
+    /**
+     * {@literal Ominous item prepares}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM = "minecraft:subtitles.block.trial_spawner.about_to_spawn_item";
+
+    /**
+     * {@literal Trial Spawner crackles}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_AMBIENT = "minecraft:subtitles.block.trial_spawner.ambient";
+
+    /**
+     * {@literal Ominous crackling}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_AMBIENT_CHARGED = "minecraft:subtitles.block.trial_spawner.ambient_charged";
+
+    /**
+     * {@literal Ominous crackling}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS = "minecraft:subtitles.block.trial_spawner.ambient_ominous";
+
+    /**
+     * {@literal Omen engulfs Trial Spawner}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_CHARGE_ACTIVATE = "minecraft:subtitles.block.trial_spawner.charge_activate";
+
+    /**
+     * {@literal Trial Spawner closes}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER = "minecraft:subtitles.block.trial_spawner.close_shutter";
+
+    /**
+     * {@literal Trial Spawner charges up}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_DETECT_PLAYER = "minecraft:subtitles.block.trial_spawner.detect_player";
+
+    /**
+     * {@literal Trial Spawner ejects items}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_EJECT_ITEM = "minecraft:subtitles.block.trial_spawner.eject_item";
+
+    /**
+     * {@literal Omen engulfs Trial Spawner}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE = "minecraft:subtitles.block.trial_spawner.ominous_activate";
+
+    /**
+     * {@literal Trial Spawner opens}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER = "minecraft:subtitles.block.trial_spawner.open_shutter";
+
+    /**
+     * {@literal Ominous item drops}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_SPAWN_ITEM = "minecraft:subtitles.block.trial_spawner.spawn_item";
+
+    /**
+     * {@literal Ominous item appears}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN = "minecraft:subtitles.block.trial_spawner.spawn_item_begin";
+
+    /**
+     * {@literal Trial Spawner spawns a mob}
+     */
+    String MC_SUBTITLES_BLOCK_TRIAL_SPAWNER_SPAWN_MOB = "minecraft:subtitles.block.trial_spawner.spawn_mob";
+
+    /**
+     * {@literal Tripwire attaches}
+     */
+    String MC_SUBTITLES_BLOCK_TRIPWIRE_ATTACH = "minecraft:subtitles.block.tripwire.attach";
+
+    /**
+     * {@literal Tripwire clicks}
+     */
+    String MC_SUBTITLES_BLOCK_TRIPWIRE_CLICK = "minecraft:subtitles.block.tripwire.click";
+
+    /**
+     * {@literal Tripwire detaches}
+     */
+    String MC_SUBTITLES_BLOCK_TRIPWIRE_DETACH = "minecraft:subtitles.block.tripwire.detach";
+
+    /**
+     * {@literal Vault ignites}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_ACTIVATE = "minecraft:subtitles.block.vault.activate";
+
+    /**
+     * {@literal Vault crackles}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_AMBIENT = "minecraft:subtitles.block.vault.ambient";
+
+    /**
+     * {@literal Vault closes}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_CLOSE_SHUTTER = "minecraft:subtitles.block.vault.close_shutter";
+
+    /**
+     * {@literal Vault extinguishes}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_DEACTIVATE = "minecraft:subtitles.block.vault.deactivate";
+
+    /**
+     * {@literal Vault ejects item}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_EJECT_ITEM = "minecraft:subtitles.block.vault.eject_item";
+
+    /**
+     * {@literal Vault unlocks}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_INSERT_ITEM = "minecraft:subtitles.block.vault.insert_item";
+
+    /**
+     * {@literal Vault rejects item}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_INSERT_ITEM_FAIL = "minecraft:subtitles.block.vault.insert_item_fail";
+
+    /**
+     * {@literal Vault opens}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_OPEN_SHUTTER = "minecraft:subtitles.block.vault.open_shutter";
+
+    /**
+     * {@literal Vault rejects player}
+     */
+    String MC_SUBTITLES_BLOCK_VAULT_REJECT_REWARDED_PLAYER = "minecraft:subtitles.block.vault.reject_rewarded_player";
+
+    /**
+     * {@literal Water flows}
+     */
+    String MC_SUBTITLES_BLOCK_WATER_AMBIENT = "minecraft:subtitles.block.water.ambient";
+
+    /**
+     * {@literal Sponge dries}
+     */
+    String MC_SUBTITLES_BLOCK_WET_SPONGE_DRIES = "minecraft:subtitles.block.wet_sponge.dries";
+
+    /**
+     * {@literal Book placed}
+     */
+    String MC_SUBTITLES_CHISELED_BOOKSHELF_INSERT = "minecraft:subtitles.chiseled_bookshelf.insert";
+
+    /**
+     * {@literal Enchanted Book placed}
+     */
+    String MC_SUBTITLES_CHISELED_BOOKSHELF_INSERT_ENCHANTED = "minecraft:subtitles.chiseled_bookshelf.insert_enchanted";
+
+    /**
+     * {@literal Book taken}
+     */
+    String MC_SUBTITLES_CHISELED_BOOKSHELF_TAKE = "minecraft:subtitles.chiseled_bookshelf.take";
+
+    /**
+     * {@literal Enchanted Book taken}
+     */
+    String MC_SUBTITLES_CHISELED_BOOKSHELF_TAKE_ENCHANTED = "minecraft:subtitles.chiseled_bookshelf.take_enchanted";
+
+    /**
+     * {@literal Thorns prick}
+     */
+    String MC_SUBTITLES_ENCHANT_THORNS_HIT = "minecraft:subtitles.enchant.thorns.hit";
+
+    /**
+     * {@literal Allay seeks}
+     */
+    String MC_SUBTITLES_ENTITY_ALLAY_AMBIENT_WITH_ITEM = "minecraft:subtitles.entity.allay.ambient_with_item";
+
+    /**
+     * {@literal Allay yearns}
+     */
+    String MC_SUBTITLES_ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM = "minecraft:subtitles.entity.allay.ambient_without_item";
+
+    /**
+     * {@literal Allay dies}
+     */
+    String MC_SUBTITLES_ENTITY_ALLAY_DEATH = "minecraft:subtitles.entity.allay.death";
+
+    /**
+     * {@literal Allay hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ALLAY_HURT = "minecraft:subtitles.entity.allay.hurt";
+
+    /**
+     * {@literal Allay chortles}
+     */
+    String MC_SUBTITLES_ENTITY_ALLAY_ITEM_GIVEN = "minecraft:subtitles.entity.allay.item_given";
+
+    /**
+     * {@literal Allay allays}
+     */
+    String MC_SUBTITLES_ENTITY_ALLAY_ITEM_TAKEN = "minecraft:subtitles.entity.allay.item_taken";
+
+    /**
+     * {@literal Allay tosses}
+     */
+    String MC_SUBTITLES_ENTITY_ALLAY_ITEM_THROWN = "minecraft:subtitles.entity.allay.item_thrown";
+
+    /**
+     * {@literal Armadillo grunts}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_AMBIENT = "minecraft:subtitles.entity.armadillo.ambient";
+
+    /**
+     * {@literal Scute is brushed off}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_BRUSH = "minecraft:subtitles.entity.armadillo.brush";
+
+    /**
+     * {@literal Armadillo dies}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_DEATH = "minecraft:subtitles.entity.armadillo.death";
+
+    /**
+     * {@literal Armadillo eats}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_EAT = "minecraft:subtitles.entity.armadillo.eat";
+
+    /**
+     * {@literal Armadillo hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_HURT = "minecraft:subtitles.entity.armadillo.hurt";
+
+    /**
+     * {@literal Armadillo shields itself}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_HURT_REDUCED = "minecraft:subtitles.entity.armadillo.hurt_reduced";
+
+    /**
+     * {@literal Armadillo lands}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_LAND = "minecraft:subtitles.entity.armadillo.land";
+
+    /**
+     * {@literal Armadillo peeks}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_PEEK = "minecraft:subtitles.entity.armadillo.peek";
+
+    /**
+     * {@literal Armadillo rolls up}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_ROLL = "minecraft:subtitles.entity.armadillo.roll";
+
+    /**
+     * {@literal Armadillo sheds scute}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_SCUTE_DROP = "minecraft:subtitles.entity.armadillo.scute_drop";
+
+    /**
+     * {@literal Armadillo unrolls}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_UNROLL_FINISH = "minecraft:subtitles.entity.armadillo.unroll_finish";
+
+    /**
+     * {@literal Armadillo peeks}
+     */
+    String MC_SUBTITLES_ENTITY_ARMADILLO_UNROLL_START = "minecraft:subtitles.entity.armadillo.unroll_start";
+
+    /**
+     * {@literal Something fell}
+     */
+    String MC_SUBTITLES_ENTITY_ARMOR_STAND_FALL = "minecraft:subtitles.entity.armor_stand.fall";
+
+    /**
+     * {@literal Arrow hits}
+     */
+    String MC_SUBTITLES_ENTITY_ARROW_HIT = "minecraft:subtitles.entity.arrow.hit";
+
+    /**
+     * {@literal Player hit}
+     */
+    String MC_SUBTITLES_ENTITY_ARROW_HIT_PLAYER = "minecraft:subtitles.entity.arrow.hit_player";
+
+    /**
+     * {@literal Arrow fired}
+     */
+    String MC_SUBTITLES_ENTITY_ARROW_SHOOT = "minecraft:subtitles.entity.arrow.shoot";
+
+    /**
+     * {@literal Axolotl attacks}
+     */
+    String MC_SUBTITLES_ENTITY_AXOLOTL_ATTACK = "minecraft:subtitles.entity.axolotl.attack";
+
+    /**
+     * {@literal Axolotl dies}
+     */
+    String MC_SUBTITLES_ENTITY_AXOLOTL_DEATH = "minecraft:subtitles.entity.axolotl.death";
+
+    /**
+     * {@literal Axolotl hurts}
+     */
+    String MC_SUBTITLES_ENTITY_AXOLOTL_HURT = "minecraft:subtitles.entity.axolotl.hurt";
+
+    /**
+     * {@literal Axolotl chirps}
+     */
+    String MC_SUBTITLES_ENTITY_AXOLOTL_IDLE_AIR = "minecraft:subtitles.entity.axolotl.idle_air";
+
+    /**
+     * {@literal Axolotl chirps}
+     */
+    String MC_SUBTITLES_ENTITY_AXOLOTL_IDLE_WATER = "minecraft:subtitles.entity.axolotl.idle_water";
+
+    /**
+     * {@literal Axolotl splashes}
+     */
+    String MC_SUBTITLES_ENTITY_AXOLOTL_SPLASH = "minecraft:subtitles.entity.axolotl.splash";
+
+    /**
+     * {@literal Axolotl swims}
+     */
+    String MC_SUBTITLES_ENTITY_AXOLOTL_SWIM = "minecraft:subtitles.entity.axolotl.swim";
+
+    /**
+     * {@literal Baby Nautilus chitters}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_AMBIENT = "minecraft:subtitles.entity.baby_nautilus.ambient";
+
+    /**
+     * {@literal Baby Nautilus chitters}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_AMBIENT_LAND = "minecraft:subtitles.entity.baby_nautilus.ambient_land";
+
+    /**
+     * {@literal Baby Nautilus dies}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_DEATH = "minecraft:subtitles.entity.baby_nautilus.death";
+
+    /**
+     * {@literal Baby Nautilus dies}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_DEATH_LAND = "minecraft:subtitles.entity.baby_nautilus.death_land";
+
+    /**
+     * {@literal Baby Nautilus eats}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_EAT = "minecraft:subtitles.entity.baby_nautilus.eat";
+
+    /**
+     * {@literal Baby Nautilus hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_HURT = "minecraft:subtitles.entity.baby_nautilus.hurt";
+
+    /**
+     * {@literal Baby Nautilus hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_HURT_LAND = "minecraft:subtitles.entity.baby_nautilus.hurt_land";
+
+    /**
+     * {@literal Bat screeches}
+     */
+    String MC_SUBTITLES_ENTITY_BAT_AMBIENT = "minecraft:subtitles.entity.bat.ambient";
+
+    /**
+     * {@literal Bat dies}
+     */
+    String MC_SUBTITLES_ENTITY_BAT_DEATH = "minecraft:subtitles.entity.bat.death";
+
+    /**
+     * {@literal Bat hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BAT_HURT = "minecraft:subtitles.entity.bat.hurt";
+
+    /**
+     * {@literal Bat takes off}
+     */
+    String MC_SUBTITLES_ENTITY_BAT_TAKEOFF = "minecraft:subtitles.entity.bat.takeoff";
+
+    /**
+     * {@literal Bee buzzes}
+     */
+    String MC_SUBTITLES_ENTITY_BEE_AMBIENT = "minecraft:subtitles.entity.bee.ambient";
+
+    /**
+     * {@literal Bee dies}
+     */
+    String MC_SUBTITLES_ENTITY_BEE_DEATH = "minecraft:subtitles.entity.bee.death";
+
+    /**
+     * {@literal Bee hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BEE_HURT = "minecraft:subtitles.entity.bee.hurt";
+
+    /**
+     * {@literal Bee buzzes}
+     */
+    String MC_SUBTITLES_ENTITY_BEE_LOOP = "minecraft:subtitles.entity.bee.loop";
+
+    /**
+     * {@literal Bee buzzes angrily}
+     */
+    String MC_SUBTITLES_ENTITY_BEE_LOOP_AGGRESSIVE = "minecraft:subtitles.entity.bee.loop_aggressive";
+
+    /**
+     * {@literal Bee buzzes happily}
+     */
+    String MC_SUBTITLES_ENTITY_BEE_POLLINATE = "minecraft:subtitles.entity.bee.pollinate";
+
+    /**
+     * {@literal Bee stings}
+     */
+    String MC_SUBTITLES_ENTITY_BEE_STING = "minecraft:subtitles.entity.bee.sting";
+
+    /**
+     * {@literal Blaze breathes}
+     */
+    String MC_SUBTITLES_ENTITY_BLAZE_AMBIENT = "minecraft:subtitles.entity.blaze.ambient";
+
+    /**
+     * {@literal Blaze crackles}
+     */
+    String MC_SUBTITLES_ENTITY_BLAZE_BURN = "minecraft:subtitles.entity.blaze.burn";
+
+    /**
+     * {@literal Blaze dies}
+     */
+    String MC_SUBTITLES_ENTITY_BLAZE_DEATH = "minecraft:subtitles.entity.blaze.death";
+
+    /**
+     * {@literal Blaze hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BLAZE_HURT = "minecraft:subtitles.entity.blaze.hurt";
+
+    /**
+     * {@literal Blaze shoots}
+     */
+    String MC_SUBTITLES_ENTITY_BLAZE_SHOOT = "minecraft:subtitles.entity.blaze.shoot";
+
+    /**
+     * {@literal Rowing}
+     */
+    String MC_SUBTITLES_ENTITY_BOAT_PADDLE_LAND = "minecraft:subtitles.entity.boat.paddle_land";
+
+    /**
+     * {@literal Rowing}
+     */
+    String MC_SUBTITLES_ENTITY_BOAT_PADDLE_WATER = "minecraft:subtitles.entity.boat.paddle_water";
+
+    /**
+     * {@literal Bogged rattles}
+     */
+    String MC_SUBTITLES_ENTITY_BOGGED_AMBIENT = "minecraft:subtitles.entity.bogged.ambient";
+
+    /**
+     * {@literal Bogged dies}
+     */
+    String MC_SUBTITLES_ENTITY_BOGGED_DEATH = "minecraft:subtitles.entity.bogged.death";
+
+    /**
+     * {@literal Bogged hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BOGGED_HURT = "minecraft:subtitles.entity.bogged.hurt";
+
+    /**
+     * {@literal Breeze charges}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_CHARGE = "minecraft:subtitles.entity.breeze.charge";
+
+    /**
+     * {@literal Breeze dies}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_DEATH = "minecraft:subtitles.entity.breeze.death";
+
+    /**
+     * {@literal Breeze deflects}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_DEFLECT = "minecraft:subtitles.entity.breeze.deflect";
+
+    /**
+     * {@literal Breeze hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_HURT = "minecraft:subtitles.entity.breeze.hurt";
+
+    /**
+     * {@literal Breeze flies}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_IDLE_AIR = "minecraft:subtitles.entity.breeze.idle_air";
+
+    /**
+     * {@literal Breeze whirs}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_IDLE_GROUND = "minecraft:subtitles.entity.breeze.idle_ground";
+
+    /**
+     * {@literal Breeze inhales}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_INHALE = "minecraft:subtitles.entity.breeze.inhale";
+
+    /**
+     * {@literal Breeze jumps}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_JUMP = "minecraft:subtitles.entity.breeze.jump";
+
+    /**
+     * {@literal Breeze lands}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_LAND = "minecraft:subtitles.entity.breeze.land";
+
+    /**
+     * {@literal Breeze shoots}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_SHOOT = "minecraft:subtitles.entity.breeze.shoot";
+
+    /**
+     * {@literal Breeze slides}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_SLIDE = "minecraft:subtitles.entity.breeze.slide";
+
+    /**
+     * {@literal Breeze whirls}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_WHIRL = "minecraft:subtitles.entity.breeze.whirl";
+
+    /**
+     * {@literal Wind Charge bursts}
+     */
+    String MC_SUBTITLES_ENTITY_BREEZE_WIND_BURST = "minecraft:subtitles.entity.breeze.wind_burst";
+
+    /**
+     * {@literal Camel grunts}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_AMBIENT = "minecraft:subtitles.entity.camel.ambient";
+
+    /**
+     * {@literal Camel yeets}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_DASH = "minecraft:subtitles.entity.camel.dash";
+
+    /**
+     * {@literal Camel recovers}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_DASH_READY = "minecraft:subtitles.entity.camel.dash_ready";
+
+    /**
+     * {@literal Camel dies}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_DEATH = "minecraft:subtitles.entity.camel.death";
+
+    /**
+     * {@literal Camel eats}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_EAT = "minecraft:subtitles.entity.camel.eat";
+
+    /**
+     * {@literal Camel hurts}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HURT = "minecraft:subtitles.entity.camel.hurt";
+
+    /**
+     * {@literal Saddle equips}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_SADDLE = "minecraft:subtitles.entity.camel.saddle";
+
+    /**
+     * {@literal Camel sits down}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_SIT = "minecraft:subtitles.entity.camel.sit";
+
+    /**
+     * {@literal Camel stands up}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_STAND = "minecraft:subtitles.entity.camel.stand";
+
+    /**
+     * {@literal Camel steps}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_STEP = "minecraft:subtitles.entity.camel.step";
+
+    /**
+     * {@literal Camel sands}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_STEP_SAND = "minecraft:subtitles.entity.camel.step_sand";
+
+    /**
+     * {@literal Camel Husk grumphs}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_AMBIENT = "minecraft:subtitles.entity.camel_husk.ambient";
+
+    /**
+     * {@literal Camel Husk yeets}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_DASH = "minecraft:subtitles.entity.camel_husk.dash";
+
+    /**
+     * {@literal Camel Husk recovers}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_DASH_READY = "minecraft:subtitles.entity.camel_husk.dash_ready";
+
+    /**
+     * {@literal Camel Husk dies}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_DEATH = "minecraft:subtitles.entity.camel_husk.death";
+
+    /**
+     * {@literal Camel Husk eats}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_EAT = "minecraft:subtitles.entity.camel_husk.eat";
+
+    /**
+     * {@literal Camel Husk hurts}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_HURT = "minecraft:subtitles.entity.camel_husk.hurt";
+
+    /**
+     * {@literal Saddle equips}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_SADDLE = "minecraft:subtitles.entity.camel_husk.saddle";
+
+    /**
+     * {@literal Camel Husk sits down}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_SIT = "minecraft:subtitles.entity.camel_husk.sit";
+
+    /**
+     * {@literal Camel Husk stands up}
+     */
+    String MC_SUBTITLES_ENTITY_CAMEL_HUSK_STAND = "minecraft:subtitles.entity.camel_husk.stand";
+
+    /**
+     * {@literal Cat meows}
+     */
+    String MC_SUBTITLES_ENTITY_CAT_AMBIENT = "minecraft:subtitles.entity.cat.ambient";
+
+    /**
+     * {@literal Cat begs}
+     */
+    String MC_SUBTITLES_ENTITY_CAT_BEG_FOR_FOOD = "minecraft:subtitles.entity.cat.beg_for_food";
+
+    /**
+     * {@literal Cat dies}
+     */
+    String MC_SUBTITLES_ENTITY_CAT_DEATH = "minecraft:subtitles.entity.cat.death";
+
+    /**
+     * {@literal Cat eats}
+     */
+    String MC_SUBTITLES_ENTITY_CAT_EAT = "minecraft:subtitles.entity.cat.eat";
+
+    /**
+     * {@literal Cat hisses}
+     */
+    String MC_SUBTITLES_ENTITY_CAT_HISS = "minecraft:subtitles.entity.cat.hiss";
+
+    /**
+     * {@literal Cat hurts}
+     */
+    String MC_SUBTITLES_ENTITY_CAT_HURT = "minecraft:subtitles.entity.cat.hurt";
+
+    /**
+     * {@literal Cat purrs}
+     */
+    String MC_SUBTITLES_ENTITY_CAT_PURR = "minecraft:subtitles.entity.cat.purr";
+
+    /**
+     * {@literal Chicken clucks}
+     */
+    String MC_SUBTITLES_ENTITY_CHICKEN_AMBIENT = "minecraft:subtitles.entity.chicken.ambient";
+
+    /**
+     * {@literal Chicken dies}
+     */
+    String MC_SUBTITLES_ENTITY_CHICKEN_DEATH = "minecraft:subtitles.entity.chicken.death";
+
+    /**
+     * {@literal Chicken plops}
+     */
+    String MC_SUBTITLES_ENTITY_CHICKEN_EGG = "minecraft:subtitles.entity.chicken.egg";
+
+    /**
+     * {@literal Chicken hurts}
+     */
+    String MC_SUBTITLES_ENTITY_CHICKEN_HURT = "minecraft:subtitles.entity.chicken.hurt";
+
+    /**
+     * {@literal Cod dies}
+     */
+    String MC_SUBTITLES_ENTITY_COD_DEATH = "minecraft:subtitles.entity.cod.death";
+
+    /**
+     * {@literal Cod flops}
+     */
+    String MC_SUBTITLES_ENTITY_COD_FLOP = "minecraft:subtitles.entity.cod.flop";
+
+    /**
+     * {@literal Cod hurts}
+     */
+    String MC_SUBTITLES_ENTITY_COD_HURT = "minecraft:subtitles.entity.cod.hurt";
+
+    /**
+     * {@literal Copper Golem dies}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_DEATH = "minecraft:subtitles.entity.copper_golem.death";
+
+    /**
+     * {@literal Copper Golem hurts}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_HURT = "minecraft:subtitles.entity.copper_golem.hurt";
+
+    /**
+     * {@literal Copper Golem is placing an item}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_ITEM_DROP = "minecraft:subtitles.entity.copper_golem.item_drop";
+
+    /**
+     * {@literal Copper Golem can't place item}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_ITEM_NO_DROP = "minecraft:subtitles.entity.copper_golem.item_no_drop";
+
+    /**
+     * {@literal Copper Golem is picking up item}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_NO_ITEM_GET = "minecraft:subtitles.entity.copper_golem.no_item_get";
+
+    /**
+     * {@literal Copper Golem can't pick up item}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_NO_ITEM_NO_GET = "minecraft:subtitles.entity.copper_golem.no_item_no_get";
+
+    /**
+     * {@literal Copper Golem appears}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_SPAWN = "minecraft:subtitles.entity.copper_golem.spawn";
+
+    /**
+     * {@literal Copper Golem's head spins}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_SPIN = "minecraft:subtitles.entity.copper_golem.spin";
+
+    /**
+     * {@literal Copper Golem is petrified}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_BECOME_STATUE = "minecraft:subtitles.entity.copper_golem_become_statue";
+
+    /**
+     * {@literal Copper Golem dies}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_OXIDIZED_DEATH = "minecraft:subtitles.entity.copper_golem_oxidized.death";
+
+    /**
+     * {@literal Copper Golem hurts}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_OXIDIZED_HURT = "minecraft:subtitles.entity.copper_golem_oxidized.hurt";
+
+    /**
+     * {@literal Copper Golem's head spins}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_OXIDIZED_SPIN = "minecraft:subtitles.entity.copper_golem_oxidized.spin";
+
+    /**
+     * {@literal Copper Golem dies}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_WEATHERED_DEATH = "minecraft:subtitles.entity.copper_golem_weathered.death";
+
+    /**
+     * {@literal Copper Golem hurts}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_WEATHERED_HURT = "minecraft:subtitles.entity.copper_golem_weathered.hurt";
+
+    /**
+     * {@literal Copper Golem's head spins}
+     */
+    String MC_SUBTITLES_ENTITY_COPPER_GOLEM_WEATHERED_SPIN = "minecraft:subtitles.entity.copper_golem_weathered.spin";
+
+    /**
+     * {@literal Cow moos}
+     */
+    String MC_SUBTITLES_ENTITY_COW_AMBIENT = "minecraft:subtitles.entity.cow.ambient";
+
+    /**
+     * {@literal Cow dies}
+     */
+    String MC_SUBTITLES_ENTITY_COW_DEATH = "minecraft:subtitles.entity.cow.death";
+
+    /**
+     * {@literal Cow hurts}
+     */
+    String MC_SUBTITLES_ENTITY_COW_HURT = "minecraft:subtitles.entity.cow.hurt";
+
+    /**
+     * {@literal Cow gets milked}
+     */
+    String MC_SUBTITLES_ENTITY_COW_MILK = "minecraft:subtitles.entity.cow.milk";
+
+    /**
+     * {@literal Creaking watches}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_ACTIVATE = "minecraft:subtitles.entity.creaking.activate";
+
+    /**
+     * {@literal Creaking creaks}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_AMBIENT = "minecraft:subtitles.entity.creaking.ambient";
+
+    /**
+     * {@literal Creaking attacks}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_ATTACK = "minecraft:subtitles.entity.creaking.attack";
+
+    /**
+     * {@literal Creaking calms}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_DEACTIVATE = "minecraft:subtitles.entity.creaking.deactivate";
+
+    /**
+     * {@literal Creaking crumbles}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_DEATH = "minecraft:subtitles.entity.creaking.death";
+
+    /**
+     * {@literal Creaking stops}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_FREEZE = "minecraft:subtitles.entity.creaking.freeze";
+
+    /**
+     * {@literal Creaking manifests}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_SPAWN = "minecraft:subtitles.entity.creaking.spawn";
+
+    /**
+     * {@literal Creaking is hit}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_SWAY = "minecraft:subtitles.entity.creaking.sway";
+
+    /**
+     * {@literal Creaking twitches}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_TWITCH = "minecraft:subtitles.entity.creaking.twitch";
+
+    /**
+     * {@literal Creaking moves}
+     */
+    String MC_SUBTITLES_ENTITY_CREAKING_UNFREEZE = "minecraft:subtitles.entity.creaking.unfreeze";
+
+    /**
+     * {@literal Creeper dies}
+     */
+    String MC_SUBTITLES_ENTITY_CREEPER_DEATH = "minecraft:subtitles.entity.creeper.death";
+
+    /**
+     * {@literal Creeper hurts}
+     */
+    String MC_SUBTITLES_ENTITY_CREEPER_HURT = "minecraft:subtitles.entity.creeper.hurt";
+
+    /**
+     * {@literal Creeper hisses}
+     */
+    String MC_SUBTITLES_ENTITY_CREEPER_PRIMED = "minecraft:subtitles.entity.creeper.primed";
+
+    /**
+     * {@literal Dolphin chirps}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_AMBIENT = "minecraft:subtitles.entity.dolphin.ambient";
+
+    /**
+     * {@literal Dolphin whistles}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_AMBIENT_WATER = "minecraft:subtitles.entity.dolphin.ambient_water";
+
+    /**
+     * {@literal Dolphin attacks}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_ATTACK = "minecraft:subtitles.entity.dolphin.attack";
+
+    /**
+     * {@literal Dolphin dies}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_DEATH = "minecraft:subtitles.entity.dolphin.death";
+
+    /**
+     * {@literal Dolphin eats}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_EAT = "minecraft:subtitles.entity.dolphin.eat";
+
+    /**
+     * {@literal Dolphin hurts}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_HURT = "minecraft:subtitles.entity.dolphin.hurt";
+
+    /**
+     * {@literal Dolphin jumps}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_JUMP = "minecraft:subtitles.entity.dolphin.jump";
+
+    /**
+     * {@literal Dolphin plays}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_PLAY = "minecraft:subtitles.entity.dolphin.play";
+
+    /**
+     * {@literal Dolphin splashes}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_SPLASH = "minecraft:subtitles.entity.dolphin.splash";
+
+    /**
+     * {@literal Dolphin swims}
+     */
+    String MC_SUBTITLES_ENTITY_DOLPHIN_SWIM = "minecraft:subtitles.entity.dolphin.swim";
+
+    /**
+     * {@literal Donkey hee-haws}
+     */
+    String MC_SUBTITLES_ENTITY_DONKEY_AMBIENT = "minecraft:subtitles.entity.donkey.ambient";
+
+    /**
+     * {@literal Donkey neighs}
+     */
+    String MC_SUBTITLES_ENTITY_DONKEY_ANGRY = "minecraft:subtitles.entity.donkey.angry";
+
+    /**
+     * {@literal Donkey Chest equips}
+     */
+    String MC_SUBTITLES_ENTITY_DONKEY_CHEST = "minecraft:subtitles.entity.donkey.chest";
+
+    /**
+     * {@literal Donkey dies}
+     */
+    String MC_SUBTITLES_ENTITY_DONKEY_DEATH = "minecraft:subtitles.entity.donkey.death";
+
+    /**
+     * {@literal Donkey eats}
+     */
+    String MC_SUBTITLES_ENTITY_DONKEY_EAT = "minecraft:subtitles.entity.donkey.eat";
+
+    /**
+     * {@literal Donkey hurts}
+     */
+    String MC_SUBTITLES_ENTITY_DONKEY_HURT = "minecraft:subtitles.entity.donkey.hurt";
+
+    /**
+     * {@literal Donkey jumps}
+     */
+    String MC_SUBTITLES_ENTITY_DONKEY_JUMP = "minecraft:subtitles.entity.donkey.jump";
+
+    /**
+     * {@literal Drowned gurgles}
+     */
+    String MC_SUBTITLES_ENTITY_DROWNED_AMBIENT = "minecraft:subtitles.entity.drowned.ambient";
+
+    /**
+     * {@literal Drowned gurgles}
+     */
+    String MC_SUBTITLES_ENTITY_DROWNED_AMBIENT_WATER = "minecraft:subtitles.entity.drowned.ambient_water";
+
+    /**
+     * {@literal Drowned dies}
+     */
+    String MC_SUBTITLES_ENTITY_DROWNED_DEATH = "minecraft:subtitles.entity.drowned.death";
+
+    /**
+     * {@literal Drowned hurts}
+     */
+    String MC_SUBTITLES_ENTITY_DROWNED_HURT = "minecraft:subtitles.entity.drowned.hurt";
+
+    /**
+     * {@literal Drowned throws Trident}
+     */
+    String MC_SUBTITLES_ENTITY_DROWNED_SHOOT = "minecraft:subtitles.entity.drowned.shoot";
+
+    /**
+     * {@literal Drowned steps}
+     */
+    String MC_SUBTITLES_ENTITY_DROWNED_STEP = "minecraft:subtitles.entity.drowned.step";
+
+    /**
+     * {@literal Drowned swims}
+     */
+    String MC_SUBTITLES_ENTITY_DROWNED_SWIM = "minecraft:subtitles.entity.drowned.swim";
+
+    /**
+     * {@literal Egg flies}
+     */
+    String MC_SUBTITLES_ENTITY_EGG_THROW = "minecraft:subtitles.entity.egg.throw";
+
+    /**
+     * {@literal Elder Guardian moans}
+     */
+    String MC_SUBTITLES_ENTITY_ELDER_GUARDIAN_AMBIENT = "minecraft:subtitles.entity.elder_guardian.ambient";
+
+    /**
+     * {@literal Elder Guardian flaps}
+     */
+    String MC_SUBTITLES_ENTITY_ELDER_GUARDIAN_AMBIENT_LAND = "minecraft:subtitles.entity.elder_guardian.ambient_land";
+
+    /**
+     * {@literal Elder Guardian curses}
+     */
+    String MC_SUBTITLES_ENTITY_ELDER_GUARDIAN_CURSE = "minecraft:subtitles.entity.elder_guardian.curse";
+
+    /**
+     * {@literal Elder Guardian dies}
+     */
+    String MC_SUBTITLES_ENTITY_ELDER_GUARDIAN_DEATH = "minecraft:subtitles.entity.elder_guardian.death";
+
+    /**
+     * {@literal Elder Guardian flops}
+     */
+    String MC_SUBTITLES_ENTITY_ELDER_GUARDIAN_FLOP = "minecraft:subtitles.entity.elder_guardian.flop";
+
+    /**
+     * {@literal Elder Guardian hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ELDER_GUARDIAN_HURT = "minecraft:subtitles.entity.elder_guardian.hurt";
+
+    /**
+     * {@literal Dragon roars}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_DRAGON_AMBIENT = "minecraft:subtitles.entity.ender_dragon.ambient";
+
+    /**
+     * {@literal Dragon dies}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_DRAGON_DEATH = "minecraft:subtitles.entity.ender_dragon.death";
+
+    /**
+     * {@literal Dragon flaps}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_DRAGON_FLAP = "minecraft:subtitles.entity.ender_dragon.flap";
+
+    /**
+     * {@literal Dragon growls}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_DRAGON_GROWL = "minecraft:subtitles.entity.ender_dragon.growl";
+
+    /**
+     * {@literal Dragon hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_DRAGON_HURT = "minecraft:subtitles.entity.ender_dragon.hurt";
+
+    /**
+     * {@literal Dragon shoots}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_DRAGON_SHOOT = "minecraft:subtitles.entity.ender_dragon.shoot";
+
+    /**
+     * {@literal Eye of Ender falls}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_EYE_DEATH = "minecraft:subtitles.entity.ender_eye.death";
+
+    /**
+     * {@literal Eye of Ender shoots}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_EYE_LAUNCH = "minecraft:subtitles.entity.ender_eye.launch";
+
+    /**
+     * {@literal Ender Pearl flies}
+     */
+    String MC_SUBTITLES_ENTITY_ENDER_PEARL_THROW = "minecraft:subtitles.entity.ender_pearl.throw";
+
+    /**
+     * {@literal Enderman vwoops}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMAN_AMBIENT = "minecraft:subtitles.entity.enderman.ambient";
+
+    /**
+     * {@literal Enderman dies}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMAN_DEATH = "minecraft:subtitles.entity.enderman.death";
+
+    /**
+     * {@literal Enderman hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMAN_HURT = "minecraft:subtitles.entity.enderman.hurt";
+
+    /**
+     * {@literal Enderman screams}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMAN_SCREAM = "minecraft:subtitles.entity.enderman.scream";
+
+    /**
+     * {@literal Enderman cries out}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMAN_STARE = "minecraft:subtitles.entity.enderman.stare";
+
+    /**
+     * {@literal Enderman teleports}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMAN_TELEPORT = "minecraft:subtitles.entity.enderman.teleport";
+
+    /**
+     * {@literal Endermite scuttles}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMITE_AMBIENT = "minecraft:subtitles.entity.endermite.ambient";
+
+    /**
+     * {@literal Endermite dies}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMITE_DEATH = "minecraft:subtitles.entity.endermite.death";
+
+    /**
+     * {@literal Endermite hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ENDERMITE_HURT = "minecraft:subtitles.entity.endermite.hurt";
+
+    /**
+     * {@literal Evoker murmurs}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_AMBIENT = "minecraft:subtitles.entity.evoker.ambient";
+
+    /**
+     * {@literal Evoker casts spell}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_CAST_SPELL = "minecraft:subtitles.entity.evoker.cast_spell";
+
+    /**
+     * {@literal Evoker cheers}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_CELEBRATE = "minecraft:subtitles.entity.evoker.celebrate";
+
+    /**
+     * {@literal Evoker dies}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_DEATH = "minecraft:subtitles.entity.evoker.death";
+
+    /**
+     * {@literal Evoker hurts}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_HURT = "minecraft:subtitles.entity.evoker.hurt";
+
+    /**
+     * {@literal Evoker prepares attack}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_PREPARE_ATTACK = "minecraft:subtitles.entity.evoker.prepare_attack";
+
+    /**
+     * {@literal Evoker prepares summoning}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_PREPARE_SUMMON = "minecraft:subtitles.entity.evoker.prepare_summon";
+
+    /**
+     * {@literal Evoker prepares charming}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_PREPARE_WOLOLO = "minecraft:subtitles.entity.evoker.prepare_wololo";
+
+    /**
+     * {@literal Fangs snap}
+     */
+    String MC_SUBTITLES_ENTITY_EVOKER_FANGS_ATTACK = "minecraft:subtitles.entity.evoker_fangs.attack";
+
+    /**
+     * {@literal Experience gained}
+     */
+    String MC_SUBTITLES_ENTITY_EXPERIENCE_ORB_PICKUP = "minecraft:subtitles.entity.experience_orb.pickup";
+
+    /**
+     * {@literal Firework blasts}
+     */
+    String MC_SUBTITLES_ENTITY_FIREWORK_ROCKET_BLAST = "minecraft:subtitles.entity.firework_rocket.blast";
+
+    /**
+     * {@literal Firework launches}
+     */
+    String MC_SUBTITLES_ENTITY_FIREWORK_ROCKET_LAUNCH = "minecraft:subtitles.entity.firework_rocket.launch";
+
+    /**
+     * {@literal Firework twinkles}
+     */
+    String MC_SUBTITLES_ENTITY_FIREWORK_ROCKET_TWINKLE = "minecraft:subtitles.entity.firework_rocket.twinkle";
+
+    /**
+     * {@literal Splashes}
+     */
+    String MC_SUBTITLES_ENTITY_FISH_SWIM = "minecraft:subtitles.entity.fish.swim";
+
+    /**
+     * {@literal Bobber retrieved}
+     */
+    String MC_SUBTITLES_ENTITY_FISHING_BOBBER_RETRIEVE = "minecraft:subtitles.entity.fishing_bobber.retrieve";
+
+    /**
+     * {@literal Fishing Bobber splashes}
+     */
+    String MC_SUBTITLES_ENTITY_FISHING_BOBBER_SPLASH = "minecraft:subtitles.entity.fishing_bobber.splash";
+
+    /**
+     * {@literal Bobber thrown}
+     */
+    String MC_SUBTITLES_ENTITY_FISHING_BOBBER_THROW = "minecraft:subtitles.entity.fishing_bobber.throw";
+
+    /**
+     * {@literal Fox angers}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_AGGRO = "minecraft:subtitles.entity.fox.aggro";
+
+    /**
+     * {@literal Fox squeaks}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_AMBIENT = "minecraft:subtitles.entity.fox.ambient";
+
+    /**
+     * {@literal Fox bites}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_BITE = "minecraft:subtitles.entity.fox.bite";
+
+    /**
+     * {@literal Fox dies}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_DEATH = "minecraft:subtitles.entity.fox.death";
+
+    /**
+     * {@literal Fox eats}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_EAT = "minecraft:subtitles.entity.fox.eat";
+
+    /**
+     * {@literal Fox hurts}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_HURT = "minecraft:subtitles.entity.fox.hurt";
+
+    /**
+     * {@literal Fox screeches}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_SCREECH = "minecraft:subtitles.entity.fox.screech";
+
+    /**
+     * {@literal Fox snores}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_SLEEP = "minecraft:subtitles.entity.fox.sleep";
+
+    /**
+     * {@literal Fox sniffs}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_SNIFF = "minecraft:subtitles.entity.fox.sniff";
+
+    /**
+     * {@literal Fox spits}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_SPIT = "minecraft:subtitles.entity.fox.spit";
+
+    /**
+     * {@literal Fox teleports}
+     */
+    String MC_SUBTITLES_ENTITY_FOX_TELEPORT = "minecraft:subtitles.entity.fox.teleport";
+
+    /**
+     * {@literal Frog croaks}
+     */
+    String MC_SUBTITLES_ENTITY_FROG_AMBIENT = "minecraft:subtitles.entity.frog.ambient";
+
+    /**
+     * {@literal Frog dies}
+     */
+    String MC_SUBTITLES_ENTITY_FROG_DEATH = "minecraft:subtitles.entity.frog.death";
+
+    /**
+     * {@literal Frog eats}
+     */
+    String MC_SUBTITLES_ENTITY_FROG_EAT = "minecraft:subtitles.entity.frog.eat";
+
+    /**
+     * {@literal Frog hurts}
+     */
+    String MC_SUBTITLES_ENTITY_FROG_HURT = "minecraft:subtitles.entity.frog.hurt";
+
+    /**
+     * {@literal Frog lays spawn}
+     */
+    String MC_SUBTITLES_ENTITY_FROG_LAY_SPAWN = "minecraft:subtitles.entity.frog.lay_spawn";
+
+    /**
+     * {@literal Frog jumps}
+     */
+    String MC_SUBTITLES_ENTITY_FROG_LONG_JUMP = "minecraft:subtitles.entity.frog.long_jump";
+
+    /**
+     * {@literal Something fell}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_BIG_FALL = "minecraft:subtitles.entity.generic.big_fall";
+
+    /**
+     * {@literal Burning}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_BURN = "minecraft:subtitles.entity.generic.burn";
+
+    /**
+     * {@literal Dying}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_DEATH = "minecraft:subtitles.entity.generic.death";
+
+    /**
+     * {@literal Sipping}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_DRINK = "minecraft:subtitles.entity.generic.drink";
+
+    /**
+     * {@literal Eating}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_EAT = "minecraft:subtitles.entity.generic.eat";
+
+    /**
+     * {@literal Explosion}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_EXPLODE = "minecraft:subtitles.entity.generic.explode";
+
+    /**
+     * {@literal Fire extinguishes}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_EXTINGUISH_FIRE = "minecraft:subtitles.entity.generic.extinguish_fire";
+
+    /**
+     * {@literal Something hurts}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_HURT = "minecraft:subtitles.entity.generic.hurt";
+
+    /**
+     * {@literal Something trips}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_SMALL_FALL = "minecraft:subtitles.entity.generic.small_fall";
+
+    /**
+     * {@literal Splashing}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_SPLASH = "minecraft:subtitles.entity.generic.splash";
+
+    /**
+     * {@literal Swimming}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_SWIM = "minecraft:subtitles.entity.generic.swim";
+
+    /**
+     * {@literal Wind Charge bursts}
+     */
+    String MC_SUBTITLES_ENTITY_GENERIC_WIND_BURST = "minecraft:subtitles.entity.generic.wind_burst";
+
+    /**
+     * {@literal Ghast cries}
+     */
+    String MC_SUBTITLES_ENTITY_GHAST_AMBIENT = "minecraft:subtitles.entity.ghast.ambient";
+
+    /**
+     * {@literal Ghast dies}
+     */
+    String MC_SUBTITLES_ENTITY_GHAST_DEATH = "minecraft:subtitles.entity.ghast.death";
+
+    /**
+     * {@literal Ghast hurts}
+     */
+    String MC_SUBTITLES_ENTITY_GHAST_HURT = "minecraft:subtitles.entity.ghast.hurt";
+
+    /**
+     * {@literal Ghast shoots}
+     */
+    String MC_SUBTITLES_ENTITY_GHAST_SHOOT = "minecraft:subtitles.entity.ghast.shoot";
+
+    /**
+     * {@literal Ghastling coos}
+     */
+    String MC_SUBTITLES_ENTITY_GHASTLING_AMBIENT = "minecraft:subtitles.entity.ghastling.ambient";
+
+    /**
+     * {@literal Ghastling dies}
+     */
+    String MC_SUBTITLES_ENTITY_GHASTLING_DEATH = "minecraft:subtitles.entity.ghastling.death";
+
+    /**
+     * {@literal Ghastling hurts}
+     */
+    String MC_SUBTITLES_ENTITY_GHASTLING_HURT = "minecraft:subtitles.entity.ghastling.hurt";
+
+    /**
+     * {@literal Ghastling appears}
+     */
+    String MC_SUBTITLES_ENTITY_GHASTLING_SPAWN = "minecraft:subtitles.entity.ghastling.spawn";
+
+    /**
+     * {@literal Glow Item Frame fills}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_ITEM_FRAME_ADD_ITEM = "minecraft:subtitles.entity.glow_item_frame.add_item";
+
+    /**
+     * {@literal Glow Item Frame broken}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_ITEM_FRAME_BREAK = "minecraft:subtitles.entity.glow_item_frame.break";
+
+    /**
+     * {@literal Glow Item Frame placed}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_ITEM_FRAME_PLACE = "minecraft:subtitles.entity.glow_item_frame.place";
+
+    /**
+     * {@literal Glow Item Frame empties}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM = "minecraft:subtitles.entity.glow_item_frame.remove_item";
+
+    /**
+     * {@literal Glow Item Frame clicks}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM = "minecraft:subtitles.entity.glow_item_frame.rotate_item";
+
+    /**
+     * {@literal Glow Squid swims}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_SQUID_AMBIENT = "minecraft:subtitles.entity.glow_squid.ambient";
+
+    /**
+     * {@literal Glow Squid dies}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_SQUID_DEATH = "minecraft:subtitles.entity.glow_squid.death";
+
+    /**
+     * {@literal Glow Squid hurts}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_SQUID_HURT = "minecraft:subtitles.entity.glow_squid.hurt";
+
+    /**
+     * {@literal Glow Squid shoots ink}
+     */
+    String MC_SUBTITLES_ENTITY_GLOW_SQUID_SQUIRT = "minecraft:subtitles.entity.glow_squid.squirt";
+
+    /**
+     * {@literal Goat bleats}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_AMBIENT = "minecraft:subtitles.entity.goat.ambient";
+
+    /**
+     * {@literal Goat dies}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_DEATH = "minecraft:subtitles.entity.goat.death";
+
+    /**
+     * {@literal Goat eats}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_EAT = "minecraft:subtitles.entity.goat.eat";
+
+    /**
+     * {@literal Goat Horn breaks off}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_HORN_BREAK = "minecraft:subtitles.entity.goat.horn_break";
+
+    /**
+     * {@literal Goat hurts}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_HURT = "minecraft:subtitles.entity.goat.hurt";
+
+    /**
+     * {@literal Goat leaps}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_LONG_JUMP = "minecraft:subtitles.entity.goat.long_jump";
+
+    /**
+     * {@literal Goat gets milked}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_MILK = "minecraft:subtitles.entity.goat.milk";
+
+    /**
+     * {@literal Goat stomps}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_PREPARE_RAM = "minecraft:subtitles.entity.goat.prepare_ram";
+
+    /**
+     * {@literal Goat rams}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_RAM_IMPACT = "minecraft:subtitles.entity.goat.ram_impact";
+
+    /**
+     * {@literal Goat bellows}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_SCREAMING_AMBIENT = "minecraft:subtitles.entity.goat.screaming.ambient";
+
+    /**
+     * {@literal Goat steps}
+     */
+    String MC_SUBTITLES_ENTITY_GOAT_STEP = "minecraft:subtitles.entity.goat.step";
+
+    /**
+     * {@literal Guardian moans}
+     */
+    String MC_SUBTITLES_ENTITY_GUARDIAN_AMBIENT = "minecraft:subtitles.entity.guardian.ambient";
+
+    /**
+     * {@literal Guardian flaps}
+     */
+    String MC_SUBTITLES_ENTITY_GUARDIAN_AMBIENT_LAND = "minecraft:subtitles.entity.guardian.ambient_land";
+
+    /**
+     * {@literal Guardian shoots}
+     */
+    String MC_SUBTITLES_ENTITY_GUARDIAN_ATTACK = "minecraft:subtitles.entity.guardian.attack";
+
+    /**
+     * {@literal Guardian dies}
+     */
+    String MC_SUBTITLES_ENTITY_GUARDIAN_DEATH = "minecraft:subtitles.entity.guardian.death";
+
+    /**
+     * {@literal Guardian flops}
+     */
+    String MC_SUBTITLES_ENTITY_GUARDIAN_FLOP = "minecraft:subtitles.entity.guardian.flop";
+
+    /**
+     * {@literal Guardian hurts}
+     */
+    String MC_SUBTITLES_ENTITY_GUARDIAN_HURT = "minecraft:subtitles.entity.guardian.hurt";
+
+    /**
+     * {@literal Happy Ghast croons}
+     */
+    String MC_SUBTITLES_ENTITY_HAPPY_GHAST_AMBIENT = "minecraft:subtitles.entity.happy_ghast.ambient";
+
+    /**
+     * {@literal Happy Ghast dies}
+     */
+    String MC_SUBTITLES_ENTITY_HAPPY_GHAST_DEATH = "minecraft:subtitles.entity.happy_ghast.death";
+
+    /**
+     * {@literal Harness equips}
+     */
+    String MC_SUBTITLES_ENTITY_HAPPY_GHAST_EQUIP = "minecraft:subtitles.entity.happy_ghast.equip";
+
+    /**
+     * {@literal Happy Ghast is ready}
+     */
+    String MC_SUBTITLES_ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_DOWN = "minecraft:subtitles.entity.happy_ghast.harness_goggles_down";
+
+    /**
+     * {@literal Happy Ghast stops}
+     */
+    String MC_SUBTITLES_ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_UP = "minecraft:subtitles.entity.happy_ghast.harness_goggles_up";
+
+    /**
+     * {@literal Happy Ghast hurts}
+     */
+    String MC_SUBTITLES_ENTITY_HAPPY_GHAST_HURT = "minecraft:subtitles.entity.happy_ghast.hurt";
+
+    /**
+     * {@literal Harness unequips}
+     */
+    String MC_SUBTITLES_ENTITY_HAPPY_GHAST_UNEQUIP = "minecraft:subtitles.entity.happy_ghast.unequip";
+
+    /**
+     * {@literal Hoglin growls}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_AMBIENT = "minecraft:subtitles.entity.hoglin.ambient";
+
+    /**
+     * {@literal Hoglin growls angrily}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_ANGRY = "minecraft:subtitles.entity.hoglin.angry";
+
+    /**
+     * {@literal Hoglin attacks}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_ATTACK = "minecraft:subtitles.entity.hoglin.attack";
+
+    /**
+     * {@literal Hoglin converts to Zoglin}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED = "minecraft:subtitles.entity.hoglin.converted_to_zombified";
+
+    /**
+     * {@literal Hoglin dies}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_DEATH = "minecraft:subtitles.entity.hoglin.death";
+
+    /**
+     * {@literal Hoglin hurts}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_HURT = "minecraft:subtitles.entity.hoglin.hurt";
+
+    /**
+     * {@literal Hoglin retreats}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_RETREAT = "minecraft:subtitles.entity.hoglin.retreat";
+
+    /**
+     * {@literal Hoglin steps}
+     */
+    String MC_SUBTITLES_ENTITY_HOGLIN_STEP = "minecraft:subtitles.entity.hoglin.step";
+
+    /**
+     * {@literal Horse neighs}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_AMBIENT = "minecraft:subtitles.entity.horse.ambient";
+
+    /**
+     * {@literal Horse neighs}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_ANGRY = "minecraft:subtitles.entity.horse.angry";
+
+    /**
+     * {@literal Horse armor equips}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_ARMOR = "minecraft:subtitles.entity.horse.armor";
+
+    /**
+     * {@literal Horse breathes}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_BREATHE = "minecraft:subtitles.entity.horse.breathe";
+
+    /**
+     * {@literal Horse dies}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_DEATH = "minecraft:subtitles.entity.horse.death";
+
+    /**
+     * {@literal Horse eats}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_EAT = "minecraft:subtitles.entity.horse.eat";
+
+    /**
+     * {@literal Horse gallops}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_GALLOP = "minecraft:subtitles.entity.horse.gallop";
+
+    /**
+     * {@literal Horse hurts}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_HURT = "minecraft:subtitles.entity.horse.hurt";
+
+    /**
+     * {@literal Horse jumps}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_JUMP = "minecraft:subtitles.entity.horse.jump";
+
+    /**
+     * {@literal Saddle equips}
+     */
+    String MC_SUBTITLES_ENTITY_HORSE_SADDLE = "minecraft:subtitles.entity.horse.saddle";
+
+    /**
+     * {@literal Husk groans}
+     */
+    String MC_SUBTITLES_ENTITY_HUSK_AMBIENT = "minecraft:subtitles.entity.husk.ambient";
+
+    /**
+     * {@literal Husk converts to Zombie}
+     */
+    String MC_SUBTITLES_ENTITY_HUSK_CONVERTED_TO_ZOMBIE = "minecraft:subtitles.entity.husk.converted_to_zombie";
+
+    /**
+     * {@literal Husk dies}
+     */
+    String MC_SUBTITLES_ENTITY_HUSK_DEATH = "minecraft:subtitles.entity.husk.death";
+
+    /**
+     * {@literal Husk hurts}
+     */
+    String MC_SUBTITLES_ENTITY_HUSK_HURT = "minecraft:subtitles.entity.husk.hurt";
+
+    /**
+     * {@literal Illusioner murmurs}
+     */
+    String MC_SUBTITLES_ENTITY_ILLUSIONER_AMBIENT = "minecraft:subtitles.entity.illusioner.ambient";
+
+    /**
+     * {@literal Illusioner casts spell}
+     */
+    String MC_SUBTITLES_ENTITY_ILLUSIONER_CAST_SPELL = "minecraft:subtitles.entity.illusioner.cast_spell";
+
+    /**
+     * {@literal Illusioner dies}
+     */
+    String MC_SUBTITLES_ENTITY_ILLUSIONER_DEATH = "minecraft:subtitles.entity.illusioner.death";
+
+    /**
+     * {@literal Illusioner hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ILLUSIONER_HURT = "minecraft:subtitles.entity.illusioner.hurt";
+
+    /**
+     * {@literal Illusioner displaces}
+     */
+    String MC_SUBTITLES_ENTITY_ILLUSIONER_MIRROR_MOVE = "minecraft:subtitles.entity.illusioner.mirror_move";
+
+    /**
+     * {@literal Illusioner prepares blindness}
+     */
+    String MC_SUBTITLES_ENTITY_ILLUSIONER_PREPARE_BLINDNESS = "minecraft:subtitles.entity.illusioner.prepare_blindness";
+
+    /**
+     * {@literal Illusioner prepares mirror image}
+     */
+    String MC_SUBTITLES_ENTITY_ILLUSIONER_PREPARE_MIRROR = "minecraft:subtitles.entity.illusioner.prepare_mirror";
+
+    /**
+     * {@literal Iron Golem attacks}
+     */
+    String MC_SUBTITLES_ENTITY_IRON_GOLEM_ATTACK = "minecraft:subtitles.entity.iron_golem.attack";
+
+    /**
+     * {@literal Iron Golem breaks}
+     */
+    String MC_SUBTITLES_ENTITY_IRON_GOLEM_DAMAGE = "minecraft:subtitles.entity.iron_golem.damage";
+
+    /**
+     * {@literal Iron Golem dies}
+     */
+    String MC_SUBTITLES_ENTITY_IRON_GOLEM_DEATH = "minecraft:subtitles.entity.iron_golem.death";
+
+    /**
+     * {@literal Iron Golem hurts}
+     */
+    String MC_SUBTITLES_ENTITY_IRON_GOLEM_HURT = "minecraft:subtitles.entity.iron_golem.hurt";
+
+    /**
+     * {@literal Iron Golem repaired}
+     */
+    String MC_SUBTITLES_ENTITY_IRON_GOLEM_REPAIR = "minecraft:subtitles.entity.iron_golem.repair";
+
+    /**
+     * {@literal Item breaks}
+     */
+    String MC_SUBTITLES_ENTITY_ITEM_BREAK = "minecraft:subtitles.entity.item.break";
+
+    /**
+     * {@literal Item plops}
+     */
+    String MC_SUBTITLES_ENTITY_ITEM_PICKUP = "minecraft:subtitles.entity.item.pickup";
+
+    /**
+     * {@literal Item Frame fills}
+     */
+    String MC_SUBTITLES_ENTITY_ITEM_FRAME_ADD_ITEM = "minecraft:subtitles.entity.item_frame.add_item";
+
+    /**
+     * {@literal Item Frame broken}
+     */
+    String MC_SUBTITLES_ENTITY_ITEM_FRAME_BREAK = "minecraft:subtitles.entity.item_frame.break";
+
+    /**
+     * {@literal Item Frame placed}
+     */
+    String MC_SUBTITLES_ENTITY_ITEM_FRAME_PLACE = "minecraft:subtitles.entity.item_frame.place";
+
+    /**
+     * {@literal Item Frame empties}
+     */
+    String MC_SUBTITLES_ENTITY_ITEM_FRAME_REMOVE_ITEM = "minecraft:subtitles.entity.item_frame.remove_item";
+
+    /**
+     * {@literal Item Frame clicks}
+     */
+    String MC_SUBTITLES_ENTITY_ITEM_FRAME_ROTATE_ITEM = "minecraft:subtitles.entity.item_frame.rotate_item";
+
+    /**
+     * {@literal Leash Knot broken}
+     */
+    String MC_SUBTITLES_ENTITY_LEASH_KNOT_BREAK = "minecraft:subtitles.entity.leash_knot.break";
+
+    /**
+     * {@literal Leash Knot tied}
+     */
+    String MC_SUBTITLES_ENTITY_LEASH_KNOT_PLACE = "minecraft:subtitles.entity.leash_knot.place";
+
+    /**
+     * {@literal Lightning strikes}
+     */
+    String MC_SUBTITLES_ENTITY_LIGHTNING_BOLT_IMPACT = "minecraft:subtitles.entity.lightning_bolt.impact";
+
+    /**
+     * {@literal Thunder roars}
+     */
+    String MC_SUBTITLES_ENTITY_LIGHTNING_BOLT_THUNDER = "minecraft:subtitles.entity.lightning_bolt.thunder";
+
+    /**
+     * {@literal Llama bleats}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_AMBIENT = "minecraft:subtitles.entity.llama.ambient";
+
+    /**
+     * {@literal Llama bleats angrily}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_ANGRY = "minecraft:subtitles.entity.llama.angry";
+
+    /**
+     * {@literal Llama Chest equips}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_CHEST = "minecraft:subtitles.entity.llama.chest";
+
+    /**
+     * {@literal Llama dies}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_DEATH = "minecraft:subtitles.entity.llama.death";
+
+    /**
+     * {@literal Llama eats}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_EAT = "minecraft:subtitles.entity.llama.eat";
+
+    /**
+     * {@literal Llama hurts}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_HURT = "minecraft:subtitles.entity.llama.hurt";
+
+    /**
+     * {@literal Llama spits}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_SPIT = "minecraft:subtitles.entity.llama.spit";
+
+    /**
+     * {@literal Llama steps}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_STEP = "minecraft:subtitles.entity.llama.step";
+
+    /**
+     * {@literal Llama is decorated}
+     */
+    String MC_SUBTITLES_ENTITY_LLAMA_SWAG = "minecraft:subtitles.entity.llama.swag";
+
+    /**
+     * {@literal Magma Cube dies}
+     */
+    String MC_SUBTITLES_ENTITY_MAGMA_CUBE_DEATH = "minecraft:subtitles.entity.magma_cube.death";
+
+    /**
+     * {@literal Magma Cube hurts}
+     */
+    String MC_SUBTITLES_ENTITY_MAGMA_CUBE_HURT = "minecraft:subtitles.entity.magma_cube.hurt";
+
+    /**
+     * {@literal Magma Cube squishes}
+     */
+    String MC_SUBTITLES_ENTITY_MAGMA_CUBE_SQUISH = "minecraft:subtitles.entity.magma_cube.squish";
+
+    /**
+     * {@literal Minecart jangles}
+     */
+    String MC_SUBTITLES_ENTITY_MINECART_INSIDE = "minecraft:subtitles.entity.minecart.inside";
+
+    /**
+     * {@literal Minecart jangles underwater}
+     */
+    String MC_SUBTITLES_ENTITY_MINECART_INSIDE_UNDERWATER = "minecraft:subtitles.entity.minecart.inside_underwater";
+
+    /**
+     * {@literal Minecart rolls}
+     */
+    String MC_SUBTITLES_ENTITY_MINECART_RIDING = "minecraft:subtitles.entity.minecart.riding";
+
+    /**
+     * {@literal Mooshroom transforms}
+     */
+    String MC_SUBTITLES_ENTITY_MOOSHROOM_CONVERT = "minecraft:subtitles.entity.mooshroom.convert";
+
+    /**
+     * {@literal Mooshroom eats}
+     */
+    String MC_SUBTITLES_ENTITY_MOOSHROOM_EAT = "minecraft:subtitles.entity.mooshroom.eat";
+
+    /**
+     * {@literal Mooshroom gets milked}
+     */
+    String MC_SUBTITLES_ENTITY_MOOSHROOM_MILK = "minecraft:subtitles.entity.mooshroom.milk";
+
+    /**
+     * {@literal Mooshroom gets milked suspiciously}
+     */
+    String MC_SUBTITLES_ENTITY_MOOSHROOM_SUSPICIOUS_MILK = "minecraft:subtitles.entity.mooshroom.suspicious_milk";
+
+    /**
+     * {@literal Mule hee-haws}
+     */
+    String MC_SUBTITLES_ENTITY_MULE_AMBIENT = "minecraft:subtitles.entity.mule.ambient";
+
+    /**
+     * {@literal Mule neighs}
+     */
+    String MC_SUBTITLES_ENTITY_MULE_ANGRY = "minecraft:subtitles.entity.mule.angry";
+
+    /**
+     * {@literal Mule Chest equips}
+     */
+    String MC_SUBTITLES_ENTITY_MULE_CHEST = "minecraft:subtitles.entity.mule.chest";
+
+    /**
+     * {@literal Mule dies}
+     */
+    String MC_SUBTITLES_ENTITY_MULE_DEATH = "minecraft:subtitles.entity.mule.death";
+
+    /**
+     * {@literal Mule eats}
+     */
+    String MC_SUBTITLES_ENTITY_MULE_EAT = "minecraft:subtitles.entity.mule.eat";
+
+    /**
+     * {@literal Mule hurts}
+     */
+    String MC_SUBTITLES_ENTITY_MULE_HURT = "minecraft:subtitles.entity.mule.hurt";
+
+    /**
+     * {@literal Mule jumps}
+     */
+    String MC_SUBTITLES_ENTITY_MULE_JUMP = "minecraft:subtitles.entity.mule.jump";
+
+    /**
+     * {@literal Nautilus clacks}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_AMBIENT = "minecraft:subtitles.entity.nautilus.ambient";
+
+    /**
+     * {@literal Nautilus clacks}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_AMBIENT_LAND = "minecraft:subtitles.entity.nautilus.ambient_land";
+
+    /**
+     * {@literal Nautilus jets}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_DASH = "minecraft:subtitles.entity.nautilus.dash";
+
+    /**
+     * {@literal Nautilus jets}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_DASH_LAND = "minecraft:subtitles.entity.nautilus.dash_land";
+
+    /**
+     * {@literal Nautilus recovers}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_DASH_READY = "minecraft:subtitles.entity.nautilus.dash_ready";
+
+    /**
+     * {@literal Nautilus recovers}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_DASH_READY_LAND = "minecraft:subtitles.entity.nautilus.dash_ready_land";
+
+    /**
+     * {@literal Nautilus dies}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_DEATH = "minecraft:subtitles.entity.nautilus.death";
+
+    /**
+     * {@literal Nautilus dies}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_DEATH_LAND = "minecraft:subtitles.entity.nautilus.death_land";
+
+    /**
+     * {@literal Nautilus eats}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_EAT = "minecraft:subtitles.entity.nautilus.eat";
+
+    /**
+     * {@literal Nautilus hurts}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_HURT = "minecraft:subtitles.entity.nautilus.hurt";
+
+    /**
+     * {@literal Nautilus hurts}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_HURT_LAND = "minecraft:subtitles.entity.nautilus.hurt_land";
+
+    /**
+     * {@literal Nautilus swims}
+     */
+    String MC_SUBTITLES_ENTITY_NAUTILUS_SWIM = "minecraft:subtitles.entity.nautilus.swim";
+
+    /**
+     * {@literal Painting broken}
+     */
+    String MC_SUBTITLES_ENTITY_PAINTING_BREAK = "minecraft:subtitles.entity.painting.break";
+
+    /**
+     * {@literal Painting placed}
+     */
+    String MC_SUBTITLES_ENTITY_PAINTING_PLACE = "minecraft:subtitles.entity.painting.place";
+
+    /**
+     * {@literal Panda huffs}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_AGGRESSIVE_AMBIENT = "minecraft:subtitles.entity.panda.aggressive_ambient";
+
+    /**
+     * {@literal Panda pants}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_AMBIENT = "minecraft:subtitles.entity.panda.ambient";
+
+    /**
+     * {@literal Panda bites}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_BITE = "minecraft:subtitles.entity.panda.bite";
+
+    /**
+     * {@literal Panda bleats}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_CANT_BREED = "minecraft:subtitles.entity.panda.cant_breed";
+
+    /**
+     * {@literal Panda dies}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_DEATH = "minecraft:subtitles.entity.panda.death";
+
+    /**
+     * {@literal Panda eats}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_EAT = "minecraft:subtitles.entity.panda.eat";
+
+    /**
+     * {@literal Panda hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_HURT = "minecraft:subtitles.entity.panda.hurt";
+
+    /**
+     * {@literal Panda's nose tickles}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_PRE_SNEEZE = "minecraft:subtitles.entity.panda.pre_sneeze";
+
+    /**
+     * {@literal Panda sneezes}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_SNEEZE = "minecraft:subtitles.entity.panda.sneeze";
+
+    /**
+     * {@literal Panda steps}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_STEP = "minecraft:subtitles.entity.panda.step";
+
+    /**
+     * {@literal Panda whimpers}
+     */
+    String MC_SUBTITLES_ENTITY_PANDA_WORRIED_AMBIENT = "minecraft:subtitles.entity.panda.worried_ambient";
+
+    /**
+     * {@literal Parched crackles}
+     */
+    String MC_SUBTITLES_ENTITY_PARCHED_AMBIENT = "minecraft:subtitles.entity.parched.ambient";
+
+    /**
+     * {@literal Parched dies}
+     */
+    String MC_SUBTITLES_ENTITY_PARCHED_DEATH = "minecraft:subtitles.entity.parched.death";
+
+    /**
+     * {@literal Parched hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PARCHED_HURT = "minecraft:subtitles.entity.parched.hurt";
+
+    /**
+     * {@literal Parrot talks}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_AMBIENT = "minecraft:subtitles.entity.parrot.ambient";
+
+    /**
+     * {@literal Parrot dies}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_DEATH = "minecraft:subtitles.entity.parrot.death";
+
+    /**
+     * {@literal Parrot eats}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_EATS = "minecraft:subtitles.entity.parrot.eats";
+
+    /**
+     * {@literal Parrot flutters}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_FLY = "minecraft:subtitles.entity.parrot.fly";
+
+    /**
+     * {@literal Parrot hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_HURTS = "minecraft:subtitles.entity.parrot.hurts";
+
+    /**
+     * {@literal Parrot breathes}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_BLAZE = "minecraft:subtitles.entity.parrot.imitate.blaze";
+
+    /**
+     * {@literal Parrot rattles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_BOGGED = "minecraft:subtitles.entity.parrot.imitate.bogged";
+
+    /**
+     * {@literal Parrot whirs}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_BREEZE = "minecraft:subtitles.entity.parrot.imitate.breeze";
+
+    /**
+     * {@literal Parrot grumphs}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_CAMEL_HUSK = "minecraft:subtitles.entity.parrot.imitate.camel_husk";
+
+    /**
+     * {@literal Parrot creaks}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_CREAKING = "minecraft:subtitles.entity.parrot.imitate.creaking";
+
+    /**
+     * {@literal Parrot hisses}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_CREEPER = "minecraft:subtitles.entity.parrot.imitate.creeper";
+
+    /**
+     * {@literal Parrot gurgles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_DROWNED = "minecraft:subtitles.entity.parrot.imitate.drowned";
+
+    /**
+     * {@literal Parrot moans}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ELDER_GUARDIAN = "minecraft:subtitles.entity.parrot.imitate.elder_guardian";
+
+    /**
+     * {@literal Parrot roars}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ENDER_DRAGON = "minecraft:subtitles.entity.parrot.imitate.ender_dragon";
+
+    /**
+     * {@literal Parrot scuttles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ENDERMITE = "minecraft:subtitles.entity.parrot.imitate.endermite";
+
+    /**
+     * {@literal Parrot murmurs}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_EVOKER = "minecraft:subtitles.entity.parrot.imitate.evoker";
+
+    /**
+     * {@literal Parrot cries}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_GHAST = "minecraft:subtitles.entity.parrot.imitate.ghast";
+
+    /**
+     * {@literal Parrot moans}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_GUARDIAN = "minecraft:subtitles.entity.parrot.imitate.guardian";
+
+    /**
+     * {@literal Parrot growls}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_HOGLIN = "minecraft:subtitles.entity.parrot.imitate.hoglin";
+
+    /**
+     * {@literal Parrot groans}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_HUSK = "minecraft:subtitles.entity.parrot.imitate.husk";
+
+    /**
+     * {@literal Parrot murmurs}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ILLUSIONER = "minecraft:subtitles.entity.parrot.imitate.illusioner";
+
+    /**
+     * {@literal Parrot squishes}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_MAGMA_CUBE = "minecraft:subtitles.entity.parrot.imitate.magma_cube";
+
+    /**
+     * {@literal Parrot crackles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_PARCHED = "minecraft:subtitles.entity.parrot.imitate.parched";
+
+    /**
+     * {@literal Parrot screeches}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_PHANTOM = "minecraft:subtitles.entity.parrot.imitate.phantom";
+
+    /**
+     * {@literal Parrot snorts}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_PIGLIN = "minecraft:subtitles.entity.parrot.imitate.piglin";
+
+    /**
+     * {@literal Parrot snorts}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_PIGLIN_BRUTE = "minecraft:subtitles.entity.parrot.imitate.piglin_brute";
+
+    /**
+     * {@literal Parrot murmurs}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_PILLAGER = "minecraft:subtitles.entity.parrot.imitate.pillager";
+
+    /**
+     * {@literal Parrot grunts}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_RAVAGER = "minecraft:subtitles.entity.parrot.imitate.ravager";
+
+    /**
+     * {@literal Parrot lurks}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_SHULKER = "minecraft:subtitles.entity.parrot.imitate.shulker";
+
+    /**
+     * {@literal Parrot hisses}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_SILVERFISH = "minecraft:subtitles.entity.parrot.imitate.silverfish";
+
+    /**
+     * {@literal Parrot rattles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_SKELETON = "minecraft:subtitles.entity.parrot.imitate.skeleton";
+
+    /**
+     * {@literal Parrot squishes}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_SLIME = "minecraft:subtitles.entity.parrot.imitate.slime";
+
+    /**
+     * {@literal Parrot hisses}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_SPIDER = "minecraft:subtitles.entity.parrot.imitate.spider";
+
+    /**
+     * {@literal Parrot rattles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_STRAY = "minecraft:subtitles.entity.parrot.imitate.stray";
+
+    /**
+     * {@literal Parrot vexes}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_VEX = "minecraft:subtitles.entity.parrot.imitate.vex";
+
+    /**
+     * {@literal Parrot mutters}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_VINDICATOR = "minecraft:subtitles.entity.parrot.imitate.vindicator";
+
+    /**
+     * {@literal Parrot whines}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_WARDEN = "minecraft:subtitles.entity.parrot.imitate.warden";
+
+    /**
+     * {@literal Parrot giggles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_WITCH = "minecraft:subtitles.entity.parrot.imitate.witch";
+
+    /**
+     * {@literal Parrot angers}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_WITHER = "minecraft:subtitles.entity.parrot.imitate.wither";
+
+    /**
+     * {@literal Parrot rattles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_WITHER_SKELETON = "minecraft:subtitles.entity.parrot.imitate.wither_skeleton";
+
+    /**
+     * {@literal Parrot growls}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ZOGLIN = "minecraft:subtitles.entity.parrot.imitate.zoglin";
+
+    /**
+     * {@literal Parrot groans}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ZOMBIE = "minecraft:subtitles.entity.parrot.imitate.zombie";
+
+    /**
+     * {@literal Parrot groans}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ZOMBIE_HORSE = "minecraft:subtitles.entity.parrot.imitate.zombie_horse";
+
+    /**
+     * {@literal Parrot gargles}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ZOMBIE_NAUTILUS = "minecraft:subtitles.entity.parrot.imitate.zombie_nautilus";
+
+    /**
+     * {@literal Parrot groans}
+     */
+    String MC_SUBTITLES_ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER = "minecraft:subtitles.entity.parrot.imitate.zombie_villager";
+
+    /**
+     * {@literal Phantom screeches}
+     */
+    String MC_SUBTITLES_ENTITY_PHANTOM_AMBIENT = "minecraft:subtitles.entity.phantom.ambient";
+
+    /**
+     * {@literal Phantom bites}
+     */
+    String MC_SUBTITLES_ENTITY_PHANTOM_BITE = "minecraft:subtitles.entity.phantom.bite";
+
+    /**
+     * {@literal Phantom dies}
+     */
+    String MC_SUBTITLES_ENTITY_PHANTOM_DEATH = "minecraft:subtitles.entity.phantom.death";
+
+    /**
+     * {@literal Phantom flaps}
+     */
+    String MC_SUBTITLES_ENTITY_PHANTOM_FLAP = "minecraft:subtitles.entity.phantom.flap";
+
+    /**
+     * {@literal Phantom hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PHANTOM_HURT = "minecraft:subtitles.entity.phantom.hurt";
+
+    /**
+     * {@literal Phantom swoops}
+     */
+    String MC_SUBTITLES_ENTITY_PHANTOM_SWOOP = "minecraft:subtitles.entity.phantom.swoop";
+
+    /**
+     * {@literal Pig oinks}
+     */
+    String MC_SUBTITLES_ENTITY_PIG_AMBIENT = "minecraft:subtitles.entity.pig.ambient";
+
+    /**
+     * {@literal Pig dies}
+     */
+    String MC_SUBTITLES_ENTITY_PIG_DEATH = "minecraft:subtitles.entity.pig.death";
+
+    /**
+     * {@literal Pig hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PIG_HURT = "minecraft:subtitles.entity.pig.hurt";
+
+    /**
+     * {@literal Saddle equips}
+     */
+    String MC_SUBTITLES_ENTITY_PIG_SADDLE = "minecraft:subtitles.entity.pig.saddle";
+
+    /**
+     * {@literal Piglin admires item}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_ADMIRING_ITEM = "minecraft:subtitles.entity.piglin.admiring_item";
+
+    /**
+     * {@literal Piglin snorts}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_AMBIENT = "minecraft:subtitles.entity.piglin.ambient";
+
+    /**
+     * {@literal Piglin snorts angrily}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_ANGRY = "minecraft:subtitles.entity.piglin.angry";
+
+    /**
+     * {@literal Piglin celebrates}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_CELEBRATE = "minecraft:subtitles.entity.piglin.celebrate";
+
+    /**
+     * {@literal Piglin converts to Zombified Piglin}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED = "minecraft:subtitles.entity.piglin.converted_to_zombified";
+
+    /**
+     * {@literal Piglin dies}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_DEATH = "minecraft:subtitles.entity.piglin.death";
+
+    /**
+     * {@literal Piglin hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_HURT = "minecraft:subtitles.entity.piglin.hurt";
+
+    /**
+     * {@literal Piglin snorts enviously}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_JEALOUS = "minecraft:subtitles.entity.piglin.jealous";
+
+    /**
+     * {@literal Piglin retreats}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_RETREAT = "minecraft:subtitles.entity.piglin.retreat";
+
+    /**
+     * {@literal Piglin steps}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_STEP = "minecraft:subtitles.entity.piglin.step";
+
+    /**
+     * {@literal Piglin Brute snorts}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_BRUTE_AMBIENT = "minecraft:subtitles.entity.piglin_brute.ambient";
+
+    /**
+     * {@literal Piglin Brute snorts angrily}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_BRUTE_ANGRY = "minecraft:subtitles.entity.piglin_brute.angry";
+
+    /**
+     * {@literal Piglin Brute converts to Zombified Piglin}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED = "minecraft:subtitles.entity.piglin_brute.converted_to_zombified";
+
+    /**
+     * {@literal Piglin Brute dies}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_BRUTE_DEATH = "minecraft:subtitles.entity.piglin_brute.death";
+
+    /**
+     * {@literal Piglin Brute hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_BRUTE_HURT = "minecraft:subtitles.entity.piglin_brute.hurt";
+
+    /**
+     * {@literal Piglin Brute steps}
+     */
+    String MC_SUBTITLES_ENTITY_PIGLIN_BRUTE_STEP = "minecraft:subtitles.entity.piglin_brute.step";
+
+    /**
+     * {@literal Pillager murmurs}
+     */
+    String MC_SUBTITLES_ENTITY_PILLAGER_AMBIENT = "minecraft:subtitles.entity.pillager.ambient";
+
+    /**
+     * {@literal Pillager cheers}
+     */
+    String MC_SUBTITLES_ENTITY_PILLAGER_CELEBRATE = "minecraft:subtitles.entity.pillager.celebrate";
+
+    /**
+     * {@literal Pillager dies}
+     */
+    String MC_SUBTITLES_ENTITY_PILLAGER_DEATH = "minecraft:subtitles.entity.pillager.death";
+
+    /**
+     * {@literal Pillager hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PILLAGER_HURT = "minecraft:subtitles.entity.pillager.hurt";
+
+    /**
+     * {@literal Critical attack}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_ATTACK_CRIT = "minecraft:subtitles.entity.player.attack.crit";
+
+    /**
+     * {@literal Knockback attack}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_ATTACK_KNOCKBACK = "minecraft:subtitles.entity.player.attack.knockback";
+
+    /**
+     * {@literal Strong attack}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_ATTACK_STRONG = "minecraft:subtitles.entity.player.attack.strong";
+
+    /**
+     * {@literal Sweeping attack}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_ATTACK_SWEEP = "minecraft:subtitles.entity.player.attack.sweep";
+
+    /**
+     * {@literal Weak attack}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_ATTACK_WEAK = "minecraft:subtitles.entity.player.attack.weak";
+
+    /**
+     * {@literal Burp}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_BURP = "minecraft:subtitles.entity.player.burp";
+
+    /**
+     * {@literal Player dies}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_DEATH = "minecraft:subtitles.entity.player.death";
+
+    /**
+     * {@literal Player freezes}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_FREEZE_HURT = "minecraft:subtitles.entity.player.freeze_hurt";
+
+    /**
+     * {@literal Player hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_HURT = "minecraft:subtitles.entity.player.hurt";
+
+    /**
+     * {@literal Player drowning}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_HURT_DROWN = "minecraft:subtitles.entity.player.hurt_drown";
+
+    /**
+     * {@literal Player burns}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_HURT_ON_FIRE = "minecraft:subtitles.entity.player.hurt_on_fire";
+
+    /**
+     * {@literal Player dings}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_LEVELUP = "minecraft:subtitles.entity.player.levelup";
+
+    /**
+     * {@literal Player teleports}
+     */
+    String MC_SUBTITLES_ENTITY_PLAYER_TELEPORT = "minecraft:subtitles.entity.player.teleport";
+
+    /**
+     * {@literal Polar Bear groans}
+     */
+    String MC_SUBTITLES_ENTITY_POLAR_BEAR_AMBIENT = "minecraft:subtitles.entity.polar_bear.ambient";
+
+    /**
+     * {@literal Baby Polar Bear hums}
+     */
+    String MC_SUBTITLES_ENTITY_POLAR_BEAR_AMBIENT_BABY = "minecraft:subtitles.entity.polar_bear.ambient_baby";
+
+    /**
+     * {@literal Polar Bear dies}
+     */
+    String MC_SUBTITLES_ENTITY_POLAR_BEAR_DEATH = "minecraft:subtitles.entity.polar_bear.death";
+
+    /**
+     * {@literal Polar Bear hurts}
+     */
+    String MC_SUBTITLES_ENTITY_POLAR_BEAR_HURT = "minecraft:subtitles.entity.polar_bear.hurt";
+
+    /**
+     * {@literal Polar Bear roars}
+     */
+    String MC_SUBTITLES_ENTITY_POLAR_BEAR_WARNING = "minecraft:subtitles.entity.polar_bear.warning";
+
+    /**
+     * {@literal Bottle smashes}
+     */
+    String MC_SUBTITLES_ENTITY_POTION_SPLASH = "minecraft:subtitles.entity.potion.splash";
+
+    /**
+     * {@literal Bottle thrown}
+     */
+    String MC_SUBTITLES_ENTITY_POTION_THROW = "minecraft:subtitles.entity.potion.throw";
+
+    /**
+     * {@literal Pufferfish deflates}
+     */
+    String MC_SUBTITLES_ENTITY_PUFFER_FISH_BLOW_OUT = "minecraft:subtitles.entity.puffer_fish.blow_out";
+
+    /**
+     * {@literal Pufferfish inflates}
+     */
+    String MC_SUBTITLES_ENTITY_PUFFER_FISH_BLOW_UP = "minecraft:subtitles.entity.puffer_fish.blow_up";
+
+    /**
+     * {@literal Pufferfish dies}
+     */
+    String MC_SUBTITLES_ENTITY_PUFFER_FISH_DEATH = "minecraft:subtitles.entity.puffer_fish.death";
+
+    /**
+     * {@literal Pufferfish flops}
+     */
+    String MC_SUBTITLES_ENTITY_PUFFER_FISH_FLOP = "minecraft:subtitles.entity.puffer_fish.flop";
+
+    /**
+     * {@literal Pufferfish hurts}
+     */
+    String MC_SUBTITLES_ENTITY_PUFFER_FISH_HURT = "minecraft:subtitles.entity.puffer_fish.hurt";
+
+    /**
+     * {@literal Pufferfish stings}
+     */
+    String MC_SUBTITLES_ENTITY_PUFFER_FISH_STING = "minecraft:subtitles.entity.puffer_fish.sting";
+
+    /**
+     * {@literal Rabbit squeaks}
+     */
+    String MC_SUBTITLES_ENTITY_RABBIT_AMBIENT = "minecraft:subtitles.entity.rabbit.ambient";
+
+    /**
+     * {@literal Rabbit attacks}
+     */
+    String MC_SUBTITLES_ENTITY_RABBIT_ATTACK = "minecraft:subtitles.entity.rabbit.attack";
+
+    /**
+     * {@literal Rabbit dies}
+     */
+    String MC_SUBTITLES_ENTITY_RABBIT_DEATH = "minecraft:subtitles.entity.rabbit.death";
+
+    /**
+     * {@literal Rabbit hurts}
+     */
+    String MC_SUBTITLES_ENTITY_RABBIT_HURT = "minecraft:subtitles.entity.rabbit.hurt";
+
+    /**
+     * {@literal Rabbit hops}
+     */
+    String MC_SUBTITLES_ENTITY_RABBIT_JUMP = "minecraft:subtitles.entity.rabbit.jump";
+
+    /**
+     * {@literal Ravager grunts}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_AMBIENT = "minecraft:subtitles.entity.ravager.ambient";
+
+    /**
+     * {@literal Ravager bites}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_ATTACK = "minecraft:subtitles.entity.ravager.attack";
+
+    /**
+     * {@literal Ravager cheers}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_CELEBRATE = "minecraft:subtitles.entity.ravager.celebrate";
+
+    /**
+     * {@literal Ravager dies}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_DEATH = "minecraft:subtitles.entity.ravager.death";
+
+    /**
+     * {@literal Ravager hurts}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_HURT = "minecraft:subtitles.entity.ravager.hurt";
+
+    /**
+     * {@literal Ravager roars}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_ROAR = "minecraft:subtitles.entity.ravager.roar";
+
+    /**
+     * {@literal Ravager steps}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_STEP = "minecraft:subtitles.entity.ravager.step";
+
+    /**
+     * {@literal Ravager stunned}
+     */
+    String MC_SUBTITLES_ENTITY_RAVAGER_STUNNED = "minecraft:subtitles.entity.ravager.stunned";
+
+    /**
+     * {@literal Salmon dies}
+     */
+    String MC_SUBTITLES_ENTITY_SALMON_DEATH = "minecraft:subtitles.entity.salmon.death";
+
+    /**
+     * {@literal Salmon flops}
+     */
+    String MC_SUBTITLES_ENTITY_SALMON_FLOP = "minecraft:subtitles.entity.salmon.flop";
+
+    /**
+     * {@literal Salmon hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SALMON_HURT = "minecraft:subtitles.entity.salmon.hurt";
+
+    /**
+     * {@literal Sheep baahs}
+     */
+    String MC_SUBTITLES_ENTITY_SHEEP_AMBIENT = "minecraft:subtitles.entity.sheep.ambient";
+
+    /**
+     * {@literal Sheep dies}
+     */
+    String MC_SUBTITLES_ENTITY_SHEEP_DEATH = "minecraft:subtitles.entity.sheep.death";
+
+    /**
+     * {@literal Sheep hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SHEEP_HURT = "minecraft:subtitles.entity.sheep.hurt";
+
+    /**
+     * {@literal Shulker lurks}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_AMBIENT = "minecraft:subtitles.entity.shulker.ambient";
+
+    /**
+     * {@literal Shulker closes}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_CLOSE = "minecraft:subtitles.entity.shulker.close";
+
+    /**
+     * {@literal Shulker dies}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_DEATH = "minecraft:subtitles.entity.shulker.death";
+
+    /**
+     * {@literal Shulker hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_HURT = "minecraft:subtitles.entity.shulker.hurt";
+
+    /**
+     * {@literal Shulker opens}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_OPEN = "minecraft:subtitles.entity.shulker.open";
+
+    /**
+     * {@literal Shulker shoots}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_SHOOT = "minecraft:subtitles.entity.shulker.shoot";
+
+    /**
+     * {@literal Shulker teleports}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_TELEPORT = "minecraft:subtitles.entity.shulker.teleport";
+
+    /**
+     * {@literal Shulker Bullet explodes}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_BULLET_HIT = "minecraft:subtitles.entity.shulker_bullet.hit";
+
+    /**
+     * {@literal Shulker Bullet breaks}
+     */
+    String MC_SUBTITLES_ENTITY_SHULKER_BULLET_HURT = "minecraft:subtitles.entity.shulker_bullet.hurt";
+
+    /**
+     * {@literal Silverfish hisses}
+     */
+    String MC_SUBTITLES_ENTITY_SILVERFISH_AMBIENT = "minecraft:subtitles.entity.silverfish.ambient";
+
+    /**
+     * {@literal Silverfish dies}
+     */
+    String MC_SUBTITLES_ENTITY_SILVERFISH_DEATH = "minecraft:subtitles.entity.silverfish.death";
+
+    /**
+     * {@literal Silverfish hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SILVERFISH_HURT = "minecraft:subtitles.entity.silverfish.hurt";
+
+    /**
+     * {@literal Skeleton rattles}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_AMBIENT = "minecraft:subtitles.entity.skeleton.ambient";
+
+    /**
+     * {@literal Skeleton converts to Stray}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_CONVERTED_TO_STRAY = "minecraft:subtitles.entity.skeleton.converted_to_stray";
+
+    /**
+     * {@literal Skeleton dies}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_DEATH = "minecraft:subtitles.entity.skeleton.death";
+
+    /**
+     * {@literal Skeleton hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_HURT = "minecraft:subtitles.entity.skeleton.hurt";
+
+    /**
+     * {@literal Skeleton shoots}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_SHOOT = "minecraft:subtitles.entity.skeleton.shoot";
+
+    /**
+     * {@literal Skeleton Horse cries}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_HORSE_AMBIENT = "minecraft:subtitles.entity.skeleton_horse.ambient";
+
+    /**
+     * {@literal Skeleton Horse dies}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_HORSE_DEATH = "minecraft:subtitles.entity.skeleton_horse.death";
+
+    /**
+     * {@literal Skeleton Horse hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_HORSE_HURT = "minecraft:subtitles.entity.skeleton_horse.hurt";
+
+    /**
+     * {@literal Skeleton Horse jumps}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_HORSE_JUMP_WATER = "minecraft:subtitles.entity.skeleton_horse.jump_water";
+
+    /**
+     * {@literal Skeleton Horse swims}
+     */
+    String MC_SUBTITLES_ENTITY_SKELETON_HORSE_SWIM = "minecraft:subtitles.entity.skeleton_horse.swim";
+
+    /**
+     * {@literal Slime attacks}
+     */
+    String MC_SUBTITLES_ENTITY_SLIME_ATTACK = "minecraft:subtitles.entity.slime.attack";
+
+    /**
+     * {@literal Slime dies}
+     */
+    String MC_SUBTITLES_ENTITY_SLIME_DEATH = "minecraft:subtitles.entity.slime.death";
+
+    /**
+     * {@literal Slime hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SLIME_HURT = "minecraft:subtitles.entity.slime.hurt";
+
+    /**
+     * {@literal Slime squishes}
+     */
+    String MC_SUBTITLES_ENTITY_SLIME_SQUISH = "minecraft:subtitles.entity.slime.squish";
+
+    /**
+     * {@literal Sniffer dies}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_DEATH = "minecraft:subtitles.entity.sniffer.death";
+
+    /**
+     * {@literal Sniffer digs}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_DIGGING = "minecraft:subtitles.entity.sniffer.digging";
+
+    /**
+     * {@literal Sniffer stands up}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_DIGGING_STOP = "minecraft:subtitles.entity.sniffer.digging_stop";
+
+    /**
+     * {@literal Sniffer drops seed}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_DROP_SEED = "minecraft:subtitles.entity.sniffer.drop_seed";
+
+    /**
+     * {@literal Sniffer eats}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_EAT = "minecraft:subtitles.entity.sniffer.eat";
+
+    /**
+     * {@literal Sniffer Egg cracks}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_EGG_CRACK = "minecraft:subtitles.entity.sniffer.egg_crack";
+
+    /**
+     * {@literal Sniffer Egg hatches}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_EGG_HATCH = "minecraft:subtitles.entity.sniffer.egg_hatch";
+
+    /**
+     * {@literal Sniffer delights}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_HAPPY = "minecraft:subtitles.entity.sniffer.happy";
+
+    /**
+     * {@literal Sniffer hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_HURT = "minecraft:subtitles.entity.sniffer.hurt";
+
+    /**
+     * {@literal Sniffer grunts}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_IDLE = "minecraft:subtitles.entity.sniffer.idle";
+
+    /**
+     * {@literal Sniffer scents}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_SCENTING = "minecraft:subtitles.entity.sniffer.scenting";
+
+    /**
+     * {@literal Sniffer searches}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_SEARCHING = "minecraft:subtitles.entity.sniffer.searching";
+
+    /**
+     * {@literal Sniffer sniffs}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_SNIFFING = "minecraft:subtitles.entity.sniffer.sniffing";
+
+    /**
+     * {@literal Sniffer steps}
+     */
+    String MC_SUBTITLES_ENTITY_SNIFFER_STEP = "minecraft:subtitles.entity.sniffer.step";
+
+    /**
+     * {@literal Snow Golem dies}
+     */
+    String MC_SUBTITLES_ENTITY_SNOW_GOLEM_DEATH = "minecraft:subtitles.entity.snow_golem.death";
+
+    /**
+     * {@literal Snow Golem hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SNOW_GOLEM_HURT = "minecraft:subtitles.entity.snow_golem.hurt";
+
+    /**
+     * {@literal Snowball flies}
+     */
+    String MC_SUBTITLES_ENTITY_SNOWBALL_THROW = "minecraft:subtitles.entity.snowball.throw";
+
+    /**
+     * {@literal Spider hisses}
+     */
+    String MC_SUBTITLES_ENTITY_SPIDER_AMBIENT = "minecraft:subtitles.entity.spider.ambient";
+
+    /**
+     * {@literal Spider dies}
+     */
+    String MC_SUBTITLES_ENTITY_SPIDER_DEATH = "minecraft:subtitles.entity.spider.death";
+
+    /**
+     * {@literal Spider hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SPIDER_HURT = "minecraft:subtitles.entity.spider.hurt";
+
+    /**
+     * {@literal Squid swims}
+     */
+    String MC_SUBTITLES_ENTITY_SQUID_AMBIENT = "minecraft:subtitles.entity.squid.ambient";
+
+    /**
+     * {@literal Squid dies}
+     */
+    String MC_SUBTITLES_ENTITY_SQUID_DEATH = "minecraft:subtitles.entity.squid.death";
+
+    /**
+     * {@literal Squid hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SQUID_HURT = "minecraft:subtitles.entity.squid.hurt";
+
+    /**
+     * {@literal Squid shoots ink}
+     */
+    String MC_SUBTITLES_ENTITY_SQUID_SQUIRT = "minecraft:subtitles.entity.squid.squirt";
+
+    /**
+     * {@literal Stray rattles}
+     */
+    String MC_SUBTITLES_ENTITY_STRAY_AMBIENT = "minecraft:subtitles.entity.stray.ambient";
+
+    /**
+     * {@literal Stray dies}
+     */
+    String MC_SUBTITLES_ENTITY_STRAY_DEATH = "minecraft:subtitles.entity.stray.death";
+
+    /**
+     * {@literal Stray hurts}
+     */
+    String MC_SUBTITLES_ENTITY_STRAY_HURT = "minecraft:subtitles.entity.stray.hurt";
+
+    /**
+     * {@literal Strider dies}
+     */
+    String MC_SUBTITLES_ENTITY_STRIDER_DEATH = "minecraft:subtitles.entity.strider.death";
+
+    /**
+     * {@literal Strider eats}
+     */
+    String MC_SUBTITLES_ENTITY_STRIDER_EAT = "minecraft:subtitles.entity.strider.eat";
+
+    /**
+     * {@literal Strider warbles}
+     */
+    String MC_SUBTITLES_ENTITY_STRIDER_HAPPY = "minecraft:subtitles.entity.strider.happy";
+
+    /**
+     * {@literal Strider hurts}
+     */
+    String MC_SUBTITLES_ENTITY_STRIDER_HURT = "minecraft:subtitles.entity.strider.hurt";
+
+    /**
+     * {@literal Strider chirps}
+     */
+    String MC_SUBTITLES_ENTITY_STRIDER_IDLE = "minecraft:subtitles.entity.strider.idle";
+
+    /**
+     * {@literal Strider retreats}
+     */
+    String MC_SUBTITLES_ENTITY_STRIDER_RETREAT = "minecraft:subtitles.entity.strider.retreat";
+
+    /**
+     * {@literal Tadpole dies}
+     */
+    String MC_SUBTITLES_ENTITY_TADPOLE_DEATH = "minecraft:subtitles.entity.tadpole.death";
+
+    /**
+     * {@literal Tadpole flops}
+     */
+    String MC_SUBTITLES_ENTITY_TADPOLE_FLOP = "minecraft:subtitles.entity.tadpole.flop";
+
+    /**
+     * {@literal Tadpole grows up}
+     */
+    String MC_SUBTITLES_ENTITY_TADPOLE_GROW_UP = "minecraft:subtitles.entity.tadpole.grow_up";
+
+    /**
+     * {@literal Tadpole hurts}
+     */
+    String MC_SUBTITLES_ENTITY_TADPOLE_HURT = "minecraft:subtitles.entity.tadpole.hurt";
+
+    /**
+     * {@literal TNT fizzes}
+     */
+    String MC_SUBTITLES_ENTITY_TNT_PRIMED = "minecraft:subtitles.entity.tnt.primed";
+
+    /**
+     * {@literal Tropical Fish dies}
+     */
+    String MC_SUBTITLES_ENTITY_TROPICAL_FISH_DEATH = "minecraft:subtitles.entity.tropical_fish.death";
+
+    /**
+     * {@literal Tropical Fish flops}
+     */
+    String MC_SUBTITLES_ENTITY_TROPICAL_FISH_FLOP = "minecraft:subtitles.entity.tropical_fish.flop";
+
+    /**
+     * {@literal Tropical Fish hurts}
+     */
+    String MC_SUBTITLES_ENTITY_TROPICAL_FISH_HURT = "minecraft:subtitles.entity.tropical_fish.hurt";
+
+    /**
+     * {@literal Turtle chirps}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_AMBIENT_LAND = "minecraft:subtitles.entity.turtle.ambient_land";
+
+    /**
+     * {@literal Turtle dies}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_DEATH = "minecraft:subtitles.entity.turtle.death";
+
+    /**
+     * {@literal Baby Turtle dies}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_DEATH_BABY = "minecraft:subtitles.entity.turtle.death_baby";
+
+    /**
+     * {@literal Turtle Egg breaks}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_EGG_BREAK = "minecraft:subtitles.entity.turtle.egg_break";
+
+    /**
+     * {@literal Turtle Egg cracks}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_EGG_CRACK = "minecraft:subtitles.entity.turtle.egg_crack";
+
+    /**
+     * {@literal Turtle Egg hatches}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_EGG_HATCH = "minecraft:subtitles.entity.turtle.egg_hatch";
+
+    /**
+     * {@literal Turtle hurts}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_HURT = "minecraft:subtitles.entity.turtle.hurt";
+
+    /**
+     * {@literal Baby Turtle hurts}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_HURT_BABY = "minecraft:subtitles.entity.turtle.hurt_baby";
+
+    /**
+     * {@literal Turtle lays egg}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_LAY_EGG = "minecraft:subtitles.entity.turtle.lay_egg";
+
+    /**
+     * {@literal Turtle shambles}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_SHAMBLE = "minecraft:subtitles.entity.turtle.shamble";
+
+    /**
+     * {@literal Baby Turtle shambles}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_SHAMBLE_BABY = "minecraft:subtitles.entity.turtle.shamble_baby";
+
+    /**
+     * {@literal Turtle swims}
+     */
+    String MC_SUBTITLES_ENTITY_TURTLE_SWIM = "minecraft:subtitles.entity.turtle.swim";
+
+    /**
+     * {@literal Vex vexes}
+     */
+    String MC_SUBTITLES_ENTITY_VEX_AMBIENT = "minecraft:subtitles.entity.vex.ambient";
+
+    /**
+     * {@literal Vex shrieks}
+     */
+    String MC_SUBTITLES_ENTITY_VEX_CHARGE = "minecraft:subtitles.entity.vex.charge";
+
+    /**
+     * {@literal Vex dies}
+     */
+    String MC_SUBTITLES_ENTITY_VEX_DEATH = "minecraft:subtitles.entity.vex.death";
+
+    /**
+     * {@literal Vex hurts}
+     */
+    String MC_SUBTITLES_ENTITY_VEX_HURT = "minecraft:subtitles.entity.vex.hurt";
+
+    /**
+     * {@literal Villager mumbles}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_AMBIENT = "minecraft:subtitles.entity.villager.ambient";
+
+    /**
+     * {@literal Villager cheers}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_CELEBRATE = "minecraft:subtitles.entity.villager.celebrate";
+
+    /**
+     * {@literal Villager dies}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_DEATH = "minecraft:subtitles.entity.villager.death";
+
+    /**
+     * {@literal Villager hurts}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_HURT = "minecraft:subtitles.entity.villager.hurt";
+
+    /**
+     * {@literal Villager disagrees}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_NO = "minecraft:subtitles.entity.villager.no";
+
+    /**
+     * {@literal Villager trades}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_TRADE = "minecraft:subtitles.entity.villager.trade";
+
+    /**
+     * {@literal Armorer works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_ARMORER = "minecraft:subtitles.entity.villager.work_armorer";
+
+    /**
+     * {@literal Butcher works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_BUTCHER = "minecraft:subtitles.entity.villager.work_butcher";
+
+    /**
+     * {@literal Cartographer works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_CARTOGRAPHER = "minecraft:subtitles.entity.villager.work_cartographer";
+
+    /**
+     * {@literal Cleric works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_CLERIC = "minecraft:subtitles.entity.villager.work_cleric";
+
+    /**
+     * {@literal Farmer works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_FARMER = "minecraft:subtitles.entity.villager.work_farmer";
+
+    /**
+     * {@literal Fisherman works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_FISHERMAN = "minecraft:subtitles.entity.villager.work_fisherman";
+
+    /**
+     * {@literal Fletcher works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_FLETCHER = "minecraft:subtitles.entity.villager.work_fletcher";
+
+    /**
+     * {@literal Leatherworker works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_LEATHERWORKER = "minecraft:subtitles.entity.villager.work_leatherworker";
+
+    /**
+     * {@literal Librarian works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_LIBRARIAN = "minecraft:subtitles.entity.villager.work_librarian";
+
+    /**
+     * {@literal Mason works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_MASON = "minecraft:subtitles.entity.villager.work_mason";
+
+    /**
+     * {@literal Shepherd works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_SHEPHERD = "minecraft:subtitles.entity.villager.work_shepherd";
+
+    /**
+     * {@literal Toolsmith works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_TOOLSMITH = "minecraft:subtitles.entity.villager.work_toolsmith";
+
+    /**
+     * {@literal Weaponsmith works}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_WORK_WEAPONSMITH = "minecraft:subtitles.entity.villager.work_weaponsmith";
+
+    /**
+     * {@literal Villager agrees}
+     */
+    String MC_SUBTITLES_ENTITY_VILLAGER_YES = "minecraft:subtitles.entity.villager.yes";
+
+    /**
+     * {@literal Vindicator mutters}
+     */
+    String MC_SUBTITLES_ENTITY_VINDICATOR_AMBIENT = "minecraft:subtitles.entity.vindicator.ambient";
+
+    /**
+     * {@literal Vindicator cheers}
+     */
+    String MC_SUBTITLES_ENTITY_VINDICATOR_CELEBRATE = "minecraft:subtitles.entity.vindicator.celebrate";
+
+    /**
+     * {@literal Vindicator dies}
+     */
+    String MC_SUBTITLES_ENTITY_VINDICATOR_DEATH = "minecraft:subtitles.entity.vindicator.death";
+
+    /**
+     * {@literal Vindicator hurts}
+     */
+    String MC_SUBTITLES_ENTITY_VINDICATOR_HURT = "minecraft:subtitles.entity.vindicator.hurt";
+
+    /**
+     * {@literal Wandering Trader mumbles}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_AMBIENT = "minecraft:subtitles.entity.wandering_trader.ambient";
+
+    /**
+     * {@literal Wandering Trader dies}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_DEATH = "minecraft:subtitles.entity.wandering_trader.death";
+
+    /**
+     * {@literal Wandering Trader disappears}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_DISAPPEARED = "minecraft:subtitles.entity.wandering_trader.disappeared";
+
+    /**
+     * {@literal Wandering Trader drinks milk}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_DRINK_MILK = "minecraft:subtitles.entity.wandering_trader.drink_milk";
+
+    /**
+     * {@literal Wandering Trader drinks potion}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_DRINK_POTION = "minecraft:subtitles.entity.wandering_trader.drink_potion";
+
+    /**
+     * {@literal Wandering Trader hurts}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_HURT = "minecraft:subtitles.entity.wandering_trader.hurt";
+
+    /**
+     * {@literal Wandering Trader disagrees}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_NO = "minecraft:subtitles.entity.wandering_trader.no";
+
+    /**
+     * {@literal Wandering Trader appears}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_REAPPEARED = "minecraft:subtitles.entity.wandering_trader.reappeared";
+
+    /**
+     * {@literal Wandering Trader trades}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_TRADE = "minecraft:subtitles.entity.wandering_trader.trade";
+
+    /**
+     * {@literal Wandering Trader agrees}
+     */
+    String MC_SUBTITLES_ENTITY_WANDERING_TRADER_YES = "minecraft:subtitles.entity.wandering_trader.yes";
+
+    /**
+     * {@literal Warden groans angrily}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_AGITATED = "minecraft:subtitles.entity.warden.agitated";
+
+    /**
+     * {@literal Warden whines}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_AMBIENT = "minecraft:subtitles.entity.warden.ambient";
+
+    /**
+     * {@literal Warden rages}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_ANGRY = "minecraft:subtitles.entity.warden.angry";
+
+    /**
+     * {@literal Warden lands hit}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_ATTACK_IMPACT = "minecraft:subtitles.entity.warden.attack_impact";
+
+    /**
+     * {@literal Warden dies}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_DEATH = "minecraft:subtitles.entity.warden.death";
+
+    /**
+     * {@literal Warden digs}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_DIG = "minecraft:subtitles.entity.warden.dig";
+
+    /**
+     * {@literal Warden emerges}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_EMERGE = "minecraft:subtitles.entity.warden.emerge";
+
+    /**
+     * {@literal Warden's heart beats}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_HEARTBEAT = "minecraft:subtitles.entity.warden.heartbeat";
+
+    /**
+     * {@literal Warden hurts}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_HURT = "minecraft:subtitles.entity.warden.hurt";
+
+    /**
+     * {@literal Warden takes notice}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_LISTENING = "minecraft:subtitles.entity.warden.listening";
+
+    /**
+     * {@literal Warden takes notice angrily}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_LISTENING_ANGRY = "minecraft:subtitles.entity.warden.listening_angry";
+
+    /**
+     * {@literal Warden approaches}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_NEARBY_CLOSE = "minecraft:subtitles.entity.warden.nearby_close";
+
+    /**
+     * {@literal Warden advances}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_NEARBY_CLOSER = "minecraft:subtitles.entity.warden.nearby_closer";
+
+    /**
+     * {@literal Warden draws close}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_NEARBY_CLOSEST = "minecraft:subtitles.entity.warden.nearby_closest";
+
+    /**
+     * {@literal Warden roars}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_ROAR = "minecraft:subtitles.entity.warden.roar";
+
+    /**
+     * {@literal Warden sniffs}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_SNIFF = "minecraft:subtitles.entity.warden.sniff";
+
+    /**
+     * {@literal Warden booms}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_SONIC_BOOM = "minecraft:subtitles.entity.warden.sonic_boom";
+
+    /**
+     * {@literal Warden charges}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_SONIC_CHARGE = "minecraft:subtitles.entity.warden.sonic_charge";
+
+    /**
+     * {@literal Warden steps}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_STEP = "minecraft:subtitles.entity.warden.step";
+
+    /**
+     * {@literal Warden's tendrils click}
+     */
+    String MC_SUBTITLES_ENTITY_WARDEN_TENDRIL_CLICKS = "minecraft:subtitles.entity.warden.tendril_clicks";
+
+    /**
+     * {@literal Wind Charge flies}
+     */
+    String MC_SUBTITLES_ENTITY_WIND_CHARGE_THROW = "minecraft:subtitles.entity.wind_charge.throw";
+
+    /**
+     * {@literal Wind Charge bursts}
+     */
+    String MC_SUBTITLES_ENTITY_WIND_CHARGE_WIND_BURST = "minecraft:subtitles.entity.wind_charge.wind_burst";
+
+    /**
+     * {@literal Witch giggles}
+     */
+    String MC_SUBTITLES_ENTITY_WITCH_AMBIENT = "minecraft:subtitles.entity.witch.ambient";
+
+    /**
+     * {@literal Witch cheers}
+     */
+    String MC_SUBTITLES_ENTITY_WITCH_CELEBRATE = "minecraft:subtitles.entity.witch.celebrate";
+
+    /**
+     * {@literal Witch dies}
+     */
+    String MC_SUBTITLES_ENTITY_WITCH_DEATH = "minecraft:subtitles.entity.witch.death";
+
+    /**
+     * {@literal Witch drinks}
+     */
+    String MC_SUBTITLES_ENTITY_WITCH_DRINK = "minecraft:subtitles.entity.witch.drink";
+
+    /**
+     * {@literal Witch hurts}
+     */
+    String MC_SUBTITLES_ENTITY_WITCH_HURT = "minecraft:subtitles.entity.witch.hurt";
+
+    /**
+     * {@literal Witch throws}
+     */
+    String MC_SUBTITLES_ENTITY_WITCH_THROW = "minecraft:subtitles.entity.witch.throw";
+
+    /**
+     * {@literal Wither angers}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_AMBIENT = "minecraft:subtitles.entity.wither.ambient";
+
+    /**
+     * {@literal Wither dies}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_DEATH = "minecraft:subtitles.entity.wither.death";
+
+    /**
+     * {@literal Wither hurts}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_HURT = "minecraft:subtitles.entity.wither.hurt";
+
+    /**
+     * {@literal Wither attacks}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_SHOOT = "minecraft:subtitles.entity.wither.shoot";
+
+    /**
+     * {@literal Wither released}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_SPAWN = "minecraft:subtitles.entity.wither.spawn";
+
+    /**
+     * {@literal Wither Skeleton rattles}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_SKELETON_AMBIENT = "minecraft:subtitles.entity.wither_skeleton.ambient";
+
+    /**
+     * {@literal Wither Skeleton dies}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_SKELETON_DEATH = "minecraft:subtitles.entity.wither_skeleton.death";
+
+    /**
+     * {@literal Wither Skeleton hurts}
+     */
+    String MC_SUBTITLES_ENTITY_WITHER_SKELETON_HURT = "minecraft:subtitles.entity.wither_skeleton.hurt";
+
+    /**
+     * {@literal Wolf pants}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_AMBIENT = "minecraft:subtitles.entity.wolf.ambient";
+
+    /**
+     * {@literal Wolf barks}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_BARK = "minecraft:subtitles.entity.wolf.bark";
+
+    /**
+     * {@literal Wolf dies}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_DEATH = "minecraft:subtitles.entity.wolf.death";
+
+    /**
+     * {@literal Wolf growls}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_GROWL = "minecraft:subtitles.entity.wolf.growl";
+
+    /**
+     * {@literal Wolf hurts}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_HURT = "minecraft:subtitles.entity.wolf.hurt";
+
+    /**
+     * {@literal Wolf pants}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_PANT = "minecraft:subtitles.entity.wolf.pant";
+
+    /**
+     * {@literal Wolf shakes}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_SHAKE = "minecraft:subtitles.entity.wolf.shake";
+
+    /**
+     * {@literal Wolf whines}
+     */
+    String MC_SUBTITLES_ENTITY_WOLF_WHINE = "minecraft:subtitles.entity.wolf.whine";
+
+    /**
+     * {@literal Zoglin growls}
+     */
+    String MC_SUBTITLES_ENTITY_ZOGLIN_AMBIENT = "minecraft:subtitles.entity.zoglin.ambient";
+
+    /**
+     * {@literal Zoglin growls angrily}
+     */
+    String MC_SUBTITLES_ENTITY_ZOGLIN_ANGRY = "minecraft:subtitles.entity.zoglin.angry";
+
+    /**
+     * {@literal Zoglin attacks}
+     */
+    String MC_SUBTITLES_ENTITY_ZOGLIN_ATTACK = "minecraft:subtitles.entity.zoglin.attack";
+
+    /**
+     * {@literal Zoglin dies}
+     */
+    String MC_SUBTITLES_ENTITY_ZOGLIN_DEATH = "minecraft:subtitles.entity.zoglin.death";
+
+    /**
+     * {@literal Zoglin hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOGLIN_HURT = "minecraft:subtitles.entity.zoglin.hurt";
+
+    /**
+     * {@literal Zoglin steps}
+     */
+    String MC_SUBTITLES_ENTITY_ZOGLIN_STEP = "minecraft:subtitles.entity.zoglin.step";
+
+    /**
+     * {@literal Zombie groans}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_AMBIENT = "minecraft:subtitles.entity.zombie.ambient";
+
+    /**
+     * {@literal Door shakes}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR = "minecraft:subtitles.entity.zombie.attack_wooden_door";
+
+    /**
+     * {@literal Door breaks}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_BREAK_WOODEN_DOOR = "minecraft:subtitles.entity.zombie.break_wooden_door";
+
+    /**
+     * {@literal Zombie converts to Drowned}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_CONVERTED_TO_DROWNED = "minecraft:subtitles.entity.zombie.converted_to_drowned";
+
+    /**
+     * {@literal Zombie dies}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_DEATH = "minecraft:subtitles.entity.zombie.death";
+
+    /**
+     * {@literal Turtle Egg stomped}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_DESTROY_EGG = "minecraft:subtitles.entity.zombie.destroy_egg";
+
+    /**
+     * {@literal Zombie hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_HURT = "minecraft:subtitles.entity.zombie.hurt";
+
+    /**
+     * {@literal Zombie infects}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_INFECT = "minecraft:subtitles.entity.zombie.infect";
+
+    /**
+     * {@literal Zombie Horse cries}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_HORSE_AMBIENT = "minecraft:subtitles.entity.zombie_horse.ambient";
+
+    /**
+     * {@literal Zombie Horse neighs}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_HORSE_ANGRY = "minecraft:subtitles.entity.zombie_horse.angry";
+
+    /**
+     * {@literal Zombie Horse dies}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_HORSE_DEATH = "minecraft:subtitles.entity.zombie_horse.death";
+
+    /**
+     * {@literal Zombie Horse hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_HORSE_HURT = "minecraft:subtitles.entity.zombie_horse.hurt";
+
+    /**
+     * {@literal Zombie Nautilus burbles}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_AMBIENT = "minecraft:subtitles.entity.zombie_nautilus.ambient";
+
+    /**
+     * {@literal Zombie Nautilus burbles}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND = "minecraft:subtitles.entity.zombie_nautilus.ambient_land";
+
+    /**
+     * {@literal Zombie Nautilus jets}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_DASH = "minecraft:subtitles.entity.zombie_nautilus.dash";
+
+    /**
+     * {@literal Zombie Nautilus jets}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_DASH_LAND = "minecraft:subtitles.entity.zombie_nautilus.dash_land";
+
+    /**
+     * {@literal Zombie Nautilus recovers}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_DASH_READY = "minecraft:subtitles.entity.zombie_nautilus.dash_ready";
+
+    /**
+     * {@literal Zombie Nautilus recovers}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND = "minecraft:subtitles.entity.zombie_nautilus.dash_ready_land";
+
+    /**
+     * {@literal Zombie Nautilus dies}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_DEATH = "minecraft:subtitles.entity.zombie_nautilus.death";
+
+    /**
+     * {@literal Zombie Nautilus dies}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND = "minecraft:subtitles.entity.zombie_nautilus.death_land";
+
+    /**
+     * {@literal Zombie Nautilus hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_HURT = "minecraft:subtitles.entity.zombie_nautilus.hurt";
+
+    /**
+     * {@literal Zombie Nautilus hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_HURT_LAND = "minecraft:subtitles.entity.zombie_nautilus.hurt_land";
+
+    /**
+     * {@literal Zombie Villager groans}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_VILLAGER_AMBIENT = "minecraft:subtitles.entity.zombie_villager.ambient";
+
+    /**
+     * {@literal Zombie Villager vociferates}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_VILLAGER_CONVERTED = "minecraft:subtitles.entity.zombie_villager.converted";
+
+    /**
+     * {@literal Zombie Villager snuffles}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_VILLAGER_CURE = "minecraft:subtitles.entity.zombie_villager.cure";
+
+    /**
+     * {@literal Zombie Villager dies}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_VILLAGER_DEATH = "minecraft:subtitles.entity.zombie_villager.death";
+
+    /**
+     * {@literal Zombie Villager hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_VILLAGER_HURT = "minecraft:subtitles.entity.zombie_villager.hurt";
+
+    /**
+     * {@literal Zombified Piglin grunts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIFIED_PIGLIN_AMBIENT = "minecraft:subtitles.entity.zombified_piglin.ambient";
+
+    /**
+     * {@literal Zombified Piglin grunts angrily}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIFIED_PIGLIN_ANGRY = "minecraft:subtitles.entity.zombified_piglin.angry";
+
+    /**
+     * {@literal Zombified Piglin dies}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIFIED_PIGLIN_DEATH = "minecraft:subtitles.entity.zombified_piglin.death";
+
+    /**
+     * {@literal Zombified Piglin hurts}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIFIED_PIGLIN_HURT = "minecraft:subtitles.entity.zombified_piglin.hurt";
+
+    /**
+     * {@literal Omen takes hold}
+     */
+    String MC_SUBTITLES_EVENT_MOB_EFFECT_BAD_OMEN = "minecraft:subtitles.event.mob_effect.bad_omen";
+
+    /**
+     * {@literal Raid looms nearby}
+     */
+    String MC_SUBTITLES_EVENT_MOB_EFFECT_RAID_OMEN = "minecraft:subtitles.event.mob_effect.raid_omen";
+
+    /**
+     * {@literal Ominous trial looms nearby}
+     */
+    String MC_SUBTITLES_EVENT_MOB_EFFECT_TRIAL_OMEN = "minecraft:subtitles.event.mob_effect.trial_omen";
+
+    /**
+     * {@literal Ominous horn blares}
+     */
+    String MC_SUBTITLES_EVENT_RAID_HORN = "minecraft:subtitles.event.raid.horn";
+
+    /**
+     * {@literal Gear equips}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP = "minecraft:subtitles.item.armor.equip";
+
+    /**
+     * {@literal Chain armor jingles}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_CHAIN = "minecraft:subtitles.item.armor.equip_chain";
+
+    /**
+     * {@literal Copper armor clonks}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_COPPER = "minecraft:subtitles.item.armor.equip_copper";
+
+    /**
+     * {@literal Diamond armor clangs}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_DIAMOND = "minecraft:subtitles.item.armor.equip_diamond";
+
+    /**
+     * {@literal Elytra rustle}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_ELYTRA = "minecraft:subtitles.item.armor.equip_elytra";
+
+    /**
+     * {@literal Gold armor clinks}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_GOLD = "minecraft:subtitles.item.armor.equip_gold";
+
+    /**
+     * {@literal Iron armor clanks}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_IRON = "minecraft:subtitles.item.armor.equip_iron";
+
+    /**
+     * {@literal Leather armor rustles}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_LEATHER = "minecraft:subtitles.item.armor.equip_leather";
+
+    /**
+     * {@literal Nautilus Armor equips}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_NAUTILUS = "minecraft:subtitles.item.armor.equip_nautilus";
+
+    /**
+     * {@literal Netherite armor clanks}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_NETHERITE = "minecraft:subtitles.item.armor.equip_netherite";
+
+    /**
+     * {@literal Turtle Shell thunks}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_TURTLE = "minecraft:subtitles.item.armor.equip_turtle";
+
+    /**
+     * {@literal Wolf Armor is fastened}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_EQUIP_WOLF = "minecraft:subtitles.item.armor.equip_wolf";
+
+    /**
+     * {@literal Nautilus Armor unequips}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_UNEQUIP_NAUTILUS = "minecraft:subtitles.item.armor.unequip_nautilus";
+
+    /**
+     * {@literal Wolf Armor snips away}
+     */
+    String MC_SUBTITLES_ITEM_ARMOR_UNEQUIP_WOLF = "minecraft:subtitles.item.armor.unequip_wolf";
+
+    /**
+     * {@literal Axe scrapes}
+     */
+    String MC_SUBTITLES_ITEM_AXE_SCRAPE = "minecraft:subtitles.item.axe.scrape";
+
+    /**
+     * {@literal Axe strips}
+     */
+    String MC_SUBTITLES_ITEM_AXE_STRIP = "minecraft:subtitles.item.axe.strip";
+
+    /**
+     * {@literal Wax off}
+     */
+    String MC_SUBTITLES_ITEM_AXE_WAX_OFF = "minecraft:subtitles.item.axe.wax_off";
+
+    /**
+     * {@literal Bone Meal crinkles}
+     */
+    String MC_SUBTITLES_ITEM_BONE_MEAL_USE = "minecraft:subtitles.item.bone_meal.use";
+
+    /**
+     * {@literal Page rustles}
+     */
+    String MC_SUBTITLES_ITEM_BOOK_PAGE_TURN = "minecraft:subtitles.item.book.page_turn";
+
+    /**
+     * {@literal Book thumps}
+     */
+    String MC_SUBTITLES_ITEM_BOOK_PUT = "minecraft:subtitles.item.book.put";
+
+    /**
+     * {@literal Bottle empties}
+     */
+    String MC_SUBTITLES_ITEM_BOTTLE_EMPTY = "minecraft:subtitles.item.bottle.empty";
+
+    /**
+     * {@literal Bottle fills}
+     */
+    String MC_SUBTITLES_ITEM_BOTTLE_FILL = "minecraft:subtitles.item.bottle.fill";
+
+    /**
+     * {@literal Brushing}
+     */
+    String MC_SUBTITLES_ITEM_BRUSH_BRUSHING_GENERIC = "minecraft:subtitles.item.brush.brushing.generic";
+
+    /**
+     * {@literal Brushing Gravel}
+     */
+    String MC_SUBTITLES_ITEM_BRUSH_BRUSHING_GRAVEL = "minecraft:subtitles.item.brush.brushing.gravel";
+
+    /**
+     * {@literal Brushing Gravel completed}
+     */
+    String MC_SUBTITLES_ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE = "minecraft:subtitles.item.brush.brushing.gravel.complete";
+
+    /**
+     * {@literal Brushing Sand}
+     */
+    String MC_SUBTITLES_ITEM_BRUSH_BRUSHING_SAND = "minecraft:subtitles.item.brush.brushing.sand";
+
+    /**
+     * {@literal Brushing Sand completed}
+     */
+    String MC_SUBTITLES_ITEM_BRUSH_BRUSHING_SAND_COMPLETE = "minecraft:subtitles.item.brush.brushing.sand.complete";
+
+    /**
+     * {@literal Bucket empties}
+     */
+    String MC_SUBTITLES_ITEM_BUCKET_EMPTY = "minecraft:subtitles.item.bucket.empty";
+
+    /**
+     * {@literal Bucket fills}
+     */
+    String MC_SUBTITLES_ITEM_BUCKET_FILL = "minecraft:subtitles.item.bucket.fill";
+
+    /**
+     * {@literal Axolotl scooped}
+     */
+    String MC_SUBTITLES_ITEM_BUCKET_FILL_AXOLOTL = "minecraft:subtitles.item.bucket.fill_axolotl";
+
+    /**
+     * {@literal Fish captured}
+     */
+    String MC_SUBTITLES_ITEM_BUCKET_FILL_FISH = "minecraft:subtitles.item.bucket.fill_fish";
+
+    /**
+     * {@literal Tadpole captured}
+     */
+    String MC_SUBTITLES_ITEM_BUCKET_FILL_TADPOLE = "minecraft:subtitles.item.bucket.fill_tadpole";
+
+    /**
+     * {@literal Bundle empties}
+     */
+    String MC_SUBTITLES_ITEM_BUNDLE_DROP_CONTENTS = "minecraft:subtitles.item.bundle.drop_contents";
+
+    /**
+     * {@literal Item packed}
+     */
+    String MC_SUBTITLES_ITEM_BUNDLE_INSERT = "minecraft:subtitles.item.bundle.insert";
+
+    /**
+     * {@literal Bundle full}
+     */
+    String MC_SUBTITLES_ITEM_BUNDLE_INSERT_FAIL = "minecraft:subtitles.item.bundle.insert_fail";
+
+    /**
+     * {@literal Item unpacked}
+     */
+    String MC_SUBTITLES_ITEM_BUNDLE_REMOVE_ONE = "minecraft:subtitles.item.bundle.remove_one";
+
+    /**
+     * {@literal Player teleports}
+     */
+    String MC_SUBTITLES_ITEM_CHORUS_FRUIT_TELEPORT = "minecraft:subtitles.item.chorus_fruit.teleport";
+
+    /**
+     * {@literal Crop planted}
+     */
+    String MC_SUBTITLES_ITEM_CROP_PLANT = "minecraft:subtitles.item.crop.plant";
+
+    /**
+     * {@literal Crossbow charges up}
+     */
+    String MC_SUBTITLES_ITEM_CROSSBOW_CHARGE = "minecraft:subtitles.item.crossbow.charge";
+
+    /**
+     * {@literal Arrow hits}
+     */
+    String MC_SUBTITLES_ITEM_CROSSBOW_HIT = "minecraft:subtitles.item.crossbow.hit";
+
+    /**
+     * {@literal Crossbow loads}
+     */
+    String MC_SUBTITLES_ITEM_CROSSBOW_LOAD = "minecraft:subtitles.item.crossbow.load";
+
+    /**
+     * {@literal Crossbow fires}
+     */
+    String MC_SUBTITLES_ITEM_CROSSBOW_SHOOT = "minecraft:subtitles.item.crossbow.shoot";
+
+    /**
+     * {@literal Dye stains}
+     */
+    String MC_SUBTITLES_ITEM_DYE_USE = "minecraft:subtitles.item.dye.use";
+
+    /**
+     * {@literal Swoosh}
+     */
+    String MC_SUBTITLES_ITEM_ELYTRA_FLYING = "minecraft:subtitles.item.elytra.flying";
+
+    /**
+     * {@literal Fireball whooshes}
+     */
+    String MC_SUBTITLES_ITEM_FIRECHARGE_USE = "minecraft:subtitles.item.firecharge.use";
+
+    /**
+     * {@literal Flint and Steel click}
+     */
+    String MC_SUBTITLES_ITEM_FLINTANDSTEEL_USE = "minecraft:subtitles.item.flintandsteel.use";
+
+    /**
+     * {@literal Glow Ink Sac splotches}
+     */
+    String MC_SUBTITLES_ITEM_GLOW_INK_SAC_USE = "minecraft:subtitles.item.glow_ink_sac.use";
+
+    /**
+     * {@literal Goat Horn plays}
+     */
+    String MC_SUBTITLES_ITEM_GOAT_HORN_PLAY = "minecraft:subtitles.item.goat_horn.play";
+
+    /**
+     * {@literal Hoe tills}
+     */
+    String MC_SUBTITLES_ITEM_HOE_TILL = "minecraft:subtitles.item.hoe.till";
+
+    /**
+     * {@literal Gulping}
+     */
+    String MC_SUBTITLES_ITEM_HONEY_BOTTLE_DRINK = "minecraft:subtitles.item.honey_bottle.drink";
+
+    /**
+     * {@literal Wax on}
+     */
+    String MC_SUBTITLES_ITEM_HONEYCOMB_WAX_ON = "minecraft:subtitles.item.honeycomb.wax_on";
+
+    /**
+     * {@literal Horse Armor snips away}
+     */
+    String MC_SUBTITLES_ITEM_HORSE_ARMOR_UNEQUIP = "minecraft:subtitles.item.horse_armor.unequip";
+
+    /**
+     * {@literal Ink Sac splotches}
+     */
+    String MC_SUBTITLES_ITEM_INK_SAC_USE = "minecraft:subtitles.item.ink_sac.use";
+
+    /**
+     * {@literal Lead snaps}
+     */
+    String MC_SUBTITLES_ITEM_LEAD_BREAK = "minecraft:subtitles.item.lead.break";
+
+    /**
+     * {@literal Lead tied}
+     */
+    String MC_SUBTITLES_ITEM_LEAD_TIED = "minecraft:subtitles.item.lead.tied";
+
+    /**
+     * {@literal Lead untied}
+     */
+    String MC_SUBTITLES_ITEM_LEAD_UNTIED = "minecraft:subtitles.item.lead.untied";
+
+    /**
+     * {@literal Carpet snips away}
+     */
+    String MC_SUBTITLES_ITEM_LLAMA_CARPET_UNEQUIP = "minecraft:subtitles.item.llama_carpet.unequip";
+
+    /**
+     * {@literal Lodestone Compass locks onto Lodestone}
+     */
+    String MC_SUBTITLES_ITEM_LODESTONE_COMPASS_LOCK = "minecraft:subtitles.item.lodestone_compass.lock";
+
+    /**
+     * {@literal Mace smashes}
+     */
+    String MC_SUBTITLES_ITEM_MACE_SMASH_AIR = "minecraft:subtitles.item.mace.smash_air";
+
+    /**
+     * {@literal Mace smashes}
+     */
+    String MC_SUBTITLES_ITEM_MACE_SMASH_GROUND = "minecraft:subtitles.item.mace.smash_ground";
+
+    /**
+     * {@literal Saddle equips}
+     */
+    String MC_SUBTITLES_ITEM_NAUTILUS_SADDLE_EQUIP = "minecraft:subtitles.item.nautilus_saddle_equip";
+
+    /**
+     * {@literal Saddle equips}
+     */
+    String MC_SUBTITLES_ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP = "minecraft:subtitles.item.nautilus_saddle_underwater_equip";
+
+    /**
+     * {@literal Crop planted}
+     */
+    String MC_SUBTITLES_ITEM_NETHER_WART_PLANT = "minecraft:subtitles.item.nether_wart.plant";
+
+    /**
+     * {@literal Bottle breaks}
+     */
+    String MC_SUBTITLES_ITEM_OMINOUS_BOTTLE_DISPOSE = "minecraft:subtitles.item.ominous_bottle.dispose";
+
+    /**
+     * {@literal Saddle snips away}
+     */
+    String MC_SUBTITLES_ITEM_SADDLE_UNEQUIP = "minecraft:subtitles.item.saddle.unequip";
+
+    /**
+     * {@literal Shears click}
+     */
+    String MC_SUBTITLES_ITEM_SHEARS_SHEAR = "minecraft:subtitles.item.shears.shear";
+
+    /**
+     * {@literal Shears snip}
+     */
+    String MC_SUBTITLES_ITEM_SHEARS_SNIP = "minecraft:subtitles.item.shears.snip";
+
+    /**
+     * {@literal Shield blocks}
+     */
+    String MC_SUBTITLES_ITEM_SHIELD_BLOCK = "minecraft:subtitles.item.shield.block";
+
+    /**
+     * {@literal Shovel flattens}
+     */
+    String MC_SUBTITLES_ITEM_SHOVEL_FLATTEN = "minecraft:subtitles.item.shovel.flatten";
+
+    /**
+     * {@literal Spear jabs}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_ATTACK = "minecraft:subtitles.item.spear.attack";
+
+    /**
+     * {@literal Spear hits}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_HIT = "minecraft:subtitles.item.spear.hit";
+
+    /**
+     * {@literal Spear lunges}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_LUNGE = "minecraft:subtitles.item.spear.lunge";
+
+    /**
+     * {@literal Charges with Spear}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_USE = "minecraft:subtitles.item.spear.use";
+
+    /**
+     * {@literal Spear jabs}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_WOOD_ATTACK = "minecraft:subtitles.item.spear_wood.attack";
+
+    /**
+     * {@literal Spear hits}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_WOOD_HIT = "minecraft:subtitles.item.spear_wood.hit";
+
+    /**
+     * {@literal Spear lunges}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_WOOD_LUNGE = "minecraft:subtitles.item.spear_wood.lunge";
+
+    /**
+     * {@literal Charges with Spear}
+     */
+    String MC_SUBTITLES_ITEM_SPEAR_WOOD_USE = "minecraft:subtitles.item.spear_wood.use";
+
+    /**
+     * {@literal Spyglass retracts}
+     */
+    String MC_SUBTITLES_ITEM_SPYGLASS_STOP_USING = "minecraft:subtitles.item.spyglass.stop_using";
+
+    /**
+     * {@literal Spyglass expands}
+     */
+    String MC_SUBTITLES_ITEM_SPYGLASS_USE = "minecraft:subtitles.item.spyglass.use";
+
+    /**
+     * {@literal Totem activates}
+     */
+    String MC_SUBTITLES_ITEM_TOTEM_USE = "minecraft:subtitles.item.totem.use";
+
+    /**
+     * {@literal Trident stabs}
+     */
+    String MC_SUBTITLES_ITEM_TRIDENT_HIT = "minecraft:subtitles.item.trident.hit";
+
+    /**
+     * {@literal Trident vibrates}
+     */
+    String MC_SUBTITLES_ITEM_TRIDENT_HIT_GROUND = "minecraft:subtitles.item.trident.hit_ground";
+
+    /**
+     * {@literal Trident returns}
+     */
+    String MC_SUBTITLES_ITEM_TRIDENT_RETURN = "minecraft:subtitles.item.trident.return";
+
+    /**
+     * {@literal Trident zooms}
+     */
+    String MC_SUBTITLES_ITEM_TRIDENT_RIPTIDE = "minecraft:subtitles.item.trident.riptide";
+
+    /**
+     * {@literal Trident clangs}
+     */
+    String MC_SUBTITLES_ITEM_TRIDENT_THROW = "minecraft:subtitles.item.trident.throw";
+
+    /**
+     * {@literal Trident thunder cracks}
+     */
+    String MC_SUBTITLES_ITEM_TRIDENT_THUNDER = "minecraft:subtitles.item.trident.thunder";
+
+    /**
+     * {@literal Saddle equips}
+     */
+    String MC_SUBTITLES_ITEM_UNDERWATER_SADDLE_EQUIP = "minecraft:subtitles.item.underwater_saddle.equip";
+
+    /**
+     * {@literal Wolf Armor breaks}
+     */
+    String MC_SUBTITLES_ITEM_WOLF_ARMOR_BREAK = "minecraft:subtitles.item.wolf_armor.break";
+
+    /**
+     * {@literal Wolf Armor cracks}
+     */
+    String MC_SUBTITLES_ITEM_WOLF_ARMOR_CRACK = "minecraft:subtitles.item.wolf_armor.crack";
+
+    /**
+     * {@literal Wolf Armor takes damage}
+     */
+    String MC_SUBTITLES_ITEM_WOLF_ARMOR_DAMAGE = "minecraft:subtitles.item.wolf_armor.damage";
+
+    /**
+     * {@literal Wolf Armor is repaired}
+     */
+    String MC_SUBTITLES_ITEM_WOLF_ARMOR_REPAIR = "minecraft:subtitles.item.wolf_armor.repair";
+
+    /**
+     * {@literal Soul escapes}
+     */
+    String MC_SUBTITLES_PARTICLE_SOUL_ESCAPE = "minecraft:subtitles.particle.soul_escape";
+
+    /**
+     * {@literal Map drawn}
+     */
+    String MC_SUBTITLES_UI_CARTOGRAPHY_TABLE_TAKE_RESULT = "minecraft:subtitles.ui.cartography_table.take_result";
+
+    /**
+     * {@literal Breath meter dropping}
+     */
+    String MC_SUBTITLES_UI_HUD_BUBBLE_POP = "minecraft:subtitles.ui.hud.bubble_pop";
+
+    /**
+     * {@literal Loom used}
+     */
+    String MC_SUBTITLES_UI_LOOM_TAKE_RESULT = "minecraft:subtitles.ui.loom.take_result";
+
+    /**
+     * {@literal Stonecutter used}
+     */
+    String MC_SUBTITLES_UI_STONECUTTER_TAKE_RESULT = "minecraft:subtitles.ui.stonecutter.take_result";
+
+    /**
+     * {@literal End Flash rumbles}
+     */
+    String MC_SUBTITLES_WEATHER_END_FLASH = "minecraft:subtitles.weather.end_flash";
+
+    /**
+     * {@literal Rain falls}
+     */
+    String MC_SUBTITLES_WEATHER_RAIN = "minecraft:subtitles.weather.rain";
 
     /**
      * {@literal Go Back}
@@ -22535,9 +27630,19 @@ public interface TrKeys {
     String MC_TILE_ACACIA_BUTTON_NAME = "minecraft:tile.acacia_button.name";
 
     /**
+     * {@literal Acacia Door}
+     */
+    String MC_TILE_ACACIA_DOOR_NAME = "minecraft:tile.acacia_door.name";
+
+    /**
      * {@literal Acacia Fence Gate}
      */
     String MC_TILE_ACACIA_FENCE_GATE_NAME = "minecraft:tile.acacia_fence_gate.name";
+
+    /**
+     * {@literal Acacia Hanging Sign}
+     */
+    String MC_TILE_ACACIA_HANGING_SIGN_NAME = "minecraft:tile.acacia_hanging_sign.name";
 
     /**
      * {@literal Acacia Pressure Plate}
@@ -22563,6 +27668,11 @@ public interface TrKeys {
      * {@literal Acacia Trapdoor}
      */
     String MC_TILE_ACACIA_TRAPDOOR_NAME = "minecraft:tile.acacia_trapdoor.name";
+
+    /**
+     * {@literal Acacia Wall Sign}
+     */
+    String MC_TILE_ACACIA_WALL_SIGN_NAME = "minecraft:tile.acacia_wall_sign.name";
 
     /**
      * {@literal Activator Rail}
@@ -22650,6 +27760,16 @@ public interface TrKeys {
     String MC_TILE_BAMBOO_BUTTON_NAME = "minecraft:tile.bamboo_button.name";
 
     /**
+     * {@literal Bamboo Door}
+     */
+    String MC_TILE_BAMBOO_DOOR_NAME = "minecraft:tile.bamboo_door.name";
+
+    /**
+     * {@literal Bamboo Double Slab}
+     */
+    String MC_TILE_BAMBOO_DOUBLE_SLAB_NAME = "minecraft:tile.bamboo_double_slab.name";
+
+    /**
      * {@literal Bamboo Fence}
      */
     String MC_TILE_BAMBOO_FENCE_NAME = "minecraft:tile.bamboo_fence.name";
@@ -22660,9 +27780,19 @@ public interface TrKeys {
     String MC_TILE_BAMBOO_FENCE_GATE_NAME = "minecraft:tile.bamboo_fence_gate.name";
 
     /**
+     * {@literal Bamboo Hanging Sign}
+     */
+    String MC_TILE_BAMBOO_HANGING_SIGN_NAME = "minecraft:tile.bamboo_hanging_sign.name";
+
+    /**
      * {@literal Bamboo Mosaic}
      */
     String MC_TILE_BAMBOO_MOSAIC_NAME = "minecraft:tile.bamboo_mosaic.name";
+
+    /**
+     * {@literal Bamboo Mosaic Double Slab}
+     */
+    String MC_TILE_BAMBOO_MOSAIC_DOUBLE_SLAB_NAME = "minecraft:tile.bamboo_mosaic_double_slab.name";
 
     /**
      * {@literal Bamboo Mosaic Slab}
@@ -22685,6 +27815,11 @@ public interface TrKeys {
     String MC_TILE_BAMBOO_PRESSURE_PLATE_NAME = "minecraft:tile.bamboo_pressure_plate.name";
 
     /**
+     * {@literal Bamboo Sapling}
+     */
+    String MC_TILE_BAMBOO_SAPLING_NAME = "minecraft:tile.bamboo_sapling.name";
+
+    /**
      * {@literal Bamboo Shelf}
      */
     String MC_TILE_BAMBOO_SHELF_NAME = "minecraft:tile.bamboo_shelf.name";
@@ -22700,9 +27835,19 @@ public interface TrKeys {
     String MC_TILE_BAMBOO_STAIRS_NAME = "minecraft:tile.bamboo_stairs.name";
 
     /**
+     * {@literal Bamboo Sign}
+     */
+    String MC_TILE_BAMBOO_STANDING_SIGN_NAME = "minecraft:tile.bamboo_standing_sign.name";
+
+    /**
      * {@literal Bamboo Trapdoor}
      */
     String MC_TILE_BAMBOO_TRAPDOOR_NAME = "minecraft:tile.bamboo_trapdoor.name";
+
+    /**
+     * {@literal Bamboo Wall Sign}
+     */
+    String MC_TILE_BAMBOO_WALL_SIGN_NAME = "minecraft:tile.bamboo_wall_sign.name";
 
     /**
      * {@literal Barrel}
@@ -22750,7 +27895,7 @@ public interface TrKeys {
     String MC_TILE_BED_NAME = "minecraft:tile.bed.name";
 
     /**
-     * {@literal You can only sleep at night and during thunderstorms}
+     * {@literal You can only sleep at night or during thunderstorms}
      */
     String MC_TILE_BED_NOSLEEP = "minecraft:tile.bed.noSleep";
 
@@ -22825,9 +27970,19 @@ public interface TrKeys {
     String MC_TILE_BIRCH_BUTTON_NAME = "minecraft:tile.birch_button.name";
 
     /**
+     * {@literal Birch Door}
+     */
+    String MC_TILE_BIRCH_DOOR_NAME = "minecraft:tile.birch_door.name";
+
+    /**
      * {@literal Birch Fence Gate}
      */
     String MC_TILE_BIRCH_FENCE_GATE_NAME = "minecraft:tile.birch_fence_gate.name";
+
+    /**
+     * {@literal Birch Hanging Sign}
+     */
+    String MC_TILE_BIRCH_HANGING_SIGN_NAME = "minecraft:tile.birch_hanging_sign.name";
 
     /**
      * {@literal Birch Pressure Plate}
@@ -22855,6 +28010,11 @@ public interface TrKeys {
     String MC_TILE_BIRCH_TRAPDOOR_NAME = "minecraft:tile.birch_trapdoor.name";
 
     /**
+     * {@literal Birch Wall Sign}
+     */
+    String MC_TILE_BIRCH_WALL_SIGN_NAME = "minecraft:tile.birch_wall_sign.name";
+
+    /**
      * {@literal Black Candle}
      */
     String MC_TILE_BLACK_CANDLE_NAME = "minecraft:tile.black_candle.name";
@@ -22868,6 +28028,11 @@ public interface TrKeys {
      * {@literal Blackstone}
      */
     String MC_TILE_BLACKSTONE_NAME = "minecraft:tile.blackstone.name";
+
+    /**
+     * {@literal Blackstone Double Slab}
+     */
+    String MC_TILE_BLACKSTONE_DOUBLE_SLAB_NAME = "minecraft:tile.blackstone_double_slab.name";
 
     /**
      * {@literal Blackstone Slab}
@@ -22920,6 +28085,11 @@ public interface TrKeys {
     String MC_TILE_BORDER_BLOCK_NAME = "minecraft:tile.border_block.name";
 
     /**
+     * {@literal Brain Coral Wall Fan}
+     */
+    String MC_TILE_BRAIN_CORAL_WALL_FAN_NAME = "minecraft:tile.brain_coral_wall_fan.name";
+
+    /**
      * {@literal Bricks}
      */
     String MC_TILE_BRICK_BLOCK_NAME = "minecraft:tile.brick_block.name";
@@ -22958,6 +28128,16 @@ public interface TrKeys {
      * {@literal Mushroom Stem}
      */
     String MC_TILE_BROWN_MUSHROOM_BLOCK_STEM_NAME = "minecraft:tile.brown_mushroom_block.stem.name";
+
+    /**
+     * {@literal Bubble Column}
+     */
+    String MC_TILE_BUBBLE_COLUMN_NAME = "minecraft:tile.bubble_column.name";
+
+    /**
+     * {@literal Bubble Coral Wall Fan}
+     */
+    String MC_TILE_BUBBLE_CORAL_WALL_FAN_NAME = "minecraft:tile.bubble_coral_wall_fan.name";
 
     /**
      * {@literal Budding Amethyst}
@@ -23145,6 +28325,11 @@ public interface TrKeys {
     String MC_TILE_CHAIN_COMMAND_BLOCK_NAME = "minecraft:tile.chain_command_block.name";
 
     /**
+     * {@literal Chalkboard}
+     */
+    String MC_TILE_CHALKBOARD_NAME = "minecraft:tile.chalkboard.name";
+
+    /**
      * {@literal Slate}
      */
     String MC_TILE_CHALKBOARD_ONEBYONE_NAME = "minecraft:tile.chalkboard.oneByOne.name";
@@ -23165,6 +28350,11 @@ public interface TrKeys {
     String MC_TILE_CHERRY_BUTTON_NAME = "minecraft:tile.cherry_button.name";
 
     /**
+     * {@literal Cherry Door}
+     */
+    String MC_TILE_CHERRY_DOOR_NAME = "minecraft:tile.cherry_door.name";
+
+    /**
      * {@literal Cherry Double Slab}
      */
     String MC_TILE_CHERRY_DOUBLE_SLAB_NAME = "minecraft:tile.cherry_double_slab.name";
@@ -23178,6 +28368,11 @@ public interface TrKeys {
      * {@literal Cherry Fence Gate}
      */
     String MC_TILE_CHERRY_FENCE_GATE_NAME = "minecraft:tile.cherry_fence_gate.name";
+
+    /**
+     * {@literal Cherry Hanging Sign}
+     */
+    String MC_TILE_CHERRY_HANGING_SIGN_NAME = "minecraft:tile.cherry_hanging_sign.name";
 
     /**
      * {@literal Cherry Leaves}
@@ -23220,9 +28415,19 @@ public interface TrKeys {
     String MC_TILE_CHERRY_STAIRS_NAME = "minecraft:tile.cherry_stairs.name";
 
     /**
+     * {@literal Cherry Sign}
+     */
+    String MC_TILE_CHERRY_STANDING_SIGN_NAME = "minecraft:tile.cherry_standing_sign.name";
+
+    /**
      * {@literal Cherry Trapdoor}
      */
     String MC_TILE_CHERRY_TRAPDOOR_NAME = "minecraft:tile.cherry_trapdoor.name";
+
+    /**
+     * {@literal Cherry Wall Sign}
+     */
+    String MC_TILE_CHERRY_WALL_SIGN_NAME = "minecraft:tile.cherry_wall_sign.name";
 
     /**
      * {@literal Cherry Wood}
@@ -23860,6 +29065,11 @@ public interface TrKeys {
     String MC_TILE_CRIMSON_FUNGUS_NAME = "minecraft:tile.crimson_fungus.name";
 
     /**
+     * {@literal Crimson Hanging Sign}
+     */
+    String MC_TILE_CRIMSON_HANGING_SIGN_NAME = "minecraft:tile.crimson_hanging_sign.name";
+
+    /**
      * {@literal Crimson Hyphae}
      */
     String MC_TILE_CRIMSON_HYPHAE_NAME = "minecraft:tile.crimson_hyphae.name";
@@ -23960,9 +29170,19 @@ public interface TrKeys {
     String MC_TILE_DARK_OAK_BUTTON_NAME = "minecraft:tile.dark_oak_button.name";
 
     /**
+     * {@literal Dark Oak Door}
+     */
+    String MC_TILE_DARK_OAK_DOOR_NAME = "minecraft:tile.dark_oak_door.name";
+
+    /**
      * {@literal Dark Oak Fence Gate}
      */
     String MC_TILE_DARK_OAK_FENCE_GATE_NAME = "minecraft:tile.dark_oak_fence_gate.name";
+
+    /**
+     * {@literal Dark Oak Hanging Sign}
+     */
+    String MC_TILE_DARK_OAK_HANGING_SIGN_NAME = "minecraft:tile.dark_oak_hanging_sign.name";
 
     /**
      * {@literal Dark Oak Pressure Plate}
@@ -23995,9 +29215,44 @@ public interface TrKeys {
     String MC_TILE_DARKOAK_STANDING_SIGN_NAME = "minecraft:tile.darkoak_standing_sign.name";
 
     /**
+     * {@literal Dark Oak Wall Sign}
+     */
+    String MC_TILE_DARKOAK_WALL_SIGN_NAME = "minecraft:tile.darkoak_wall_sign.name";
+
+    /**
      * {@literal Daylight Detector}
      */
     String MC_TILE_DAYLIGHT_DETECTOR_NAME = "minecraft:tile.daylight_detector.name";
+
+    /**
+     * {@literal Daylight Detector Inverted}
+     */
+    String MC_TILE_DAYLIGHT_DETECTOR_INVERTED_NAME = "minecraft:tile.daylight_detector_inverted.name";
+
+    /**
+     * {@literal Dead Brain Coral Wall Fan}
+     */
+    String MC_TILE_DEAD_BRAIN_CORAL_WALL_FAN_NAME = "minecraft:tile.dead_brain_coral_wall_fan.name";
+
+    /**
+     * {@literal Dead Bubble Coral Wall Fan}
+     */
+    String MC_TILE_DEAD_BUBBLE_CORAL_WALL_FAN_NAME = "minecraft:tile.dead_bubble_coral_wall_fan.name";
+
+    /**
+     * {@literal Dead Fire Coral Wall Fan}
+     */
+    String MC_TILE_DEAD_FIRE_CORAL_WALL_FAN_NAME = "minecraft:tile.dead_fire_coral_wall_fan.name";
+
+    /**
+     * {@literal Dead Horn Coral Wall Fan}
+     */
+    String MC_TILE_DEAD_HORN_CORAL_WALL_FAN_NAME = "minecraft:tile.dead_horn_coral_wall_fan.name";
+
+    /**
+     * {@literal Dead Tube Coral Wall Fan}
+     */
+    String MC_TILE_DEAD_TUBE_CORAL_WALL_FAN_NAME = "minecraft:tile.dead_tube_coral_wall_fan.name";
 
     /**
      * {@literal Dead Bush}
@@ -24160,6 +29415,11 @@ public interface TrKeys {
     String MC_TILE_DOORWOOD_NAME = "minecraft:tile.doorWood.name";
 
     /**
+     * {@literal Cut Copper Double Slab}
+     */
+    String MC_TILE_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.double_cut_copper_slab.name";
+
+    /**
      * {@literal Large Fern}
      */
     String MC_TILE_DOUBLE_PLANT_FERN_NAME = "minecraft:tile.double_plant.fern.name";
@@ -24240,9 +29500,139 @@ public interface TrKeys {
     String MC_TILE_DOUBLE_STONE_SLAB_WOOD_NAME = "minecraft:tile.double_stone_slab.wood.name";
 
     /**
+     * {@literal Mossy Cobblestone Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB2_MOSSY_COBBLESTONE_NAME = "minecraft:tile.double_stone_slab2.mossy_cobblestone.name";
+
+    /**
+     * {@literal Prismarine Brick Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB2_PRISMARINE_BRICKS_NAME = "minecraft:tile.double_stone_slab2.prismarine.bricks.name";
+
+    /**
+     * {@literal Dark Prismarine Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB2_PRISMARINE_DARK_NAME = "minecraft:tile.double_stone_slab2.prismarine.dark.name";
+
+    /**
+     * {@literal Prismarine DoubleSlab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB2_PRISMARINE_ROUGH_NAME = "minecraft:tile.double_stone_slab2.prismarine.rough.name";
+
+    /**
+     * {@literal Purpur Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB2_PURPUR_NAME = "minecraft:tile.double_stone_slab2.purpur.name";
+
+    /**
+     * {@literal Red Nether Brick Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB2_RED_NETHER_BRICK_NAME = "minecraft:tile.double_stone_slab2.red_nether_brick.name";
+
+    /**
      * {@literal Red Sandstone Slab}
      */
     String MC_TILE_DOUBLE_STONE_SLAB2_RED_SANDSTONE_NAME = "minecraft:tile.double_stone_slab2.red_sandstone.name";
+
+    /**
+     * {@literal Smooth Sandstone Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB2_SANDSTONE_SMOOTH_NAME = "minecraft:tile.double_stone_slab2.sandstone.smooth.name";
+
+    /**
+     * {@literal Andesite Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_ANDESITE_NAME = "minecraft:tile.double_stone_slab3.andesite.name";
+
+    /**
+     * {@literal Polished Andesite Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_ANDESITE_SMOOTH_NAME = "minecraft:tile.double_stone_slab3.andesite.smooth.name";
+
+    /**
+     * {@literal Diorite Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_DIORITE_NAME = "minecraft:tile.double_stone_slab3.diorite.name";
+
+    /**
+     * {@literal Polished Diorite Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_DIORITE_SMOOTH_NAME = "minecraft:tile.double_stone_slab3.diorite.smooth.name";
+
+    /**
+     * {@literal End Stone Brick Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_END_BRICK_NAME = "minecraft:tile.double_stone_slab3.end_brick.name";
+
+    /**
+     * {@literal Granite Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_GRANITE_NAME = "minecraft:tile.double_stone_slab3.granite.name";
+
+    /**
+     * {@literal Polished Granite Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_GRANITE_SMOOTH_NAME = "minecraft:tile.double_stone_slab3.granite.smooth.name";
+
+    /**
+     * {@literal Smooth Red Sandstone Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB3_RED_SANDSTONE_SMOOTH_NAME = "minecraft:tile.double_stone_slab3.red_sandstone.smooth.name";
+
+    /**
+     * {@literal Cut Red Sandstone Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB4_CUT_RED_SANDSTONE_NAME = "minecraft:tile.double_stone_slab4.cut_red_sandstone.name";
+
+    /**
+     * {@literal Cut Sandstone Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB4_CUT_SANDSTONE_NAME = "minecraft:tile.double_stone_slab4.cut_sandstone.name";
+
+    /**
+     * {@literal Mossy Stone Brick Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB4_MOSSY_STONE_BRICK_NAME = "minecraft:tile.double_stone_slab4.mossy_stone_brick.name";
+
+    /**
+     * {@literal Smooth Quartz Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB4_SMOOTH_QUARTZ_NAME = "minecraft:tile.double_stone_slab4.smooth_quartz.name";
+
+    /**
+     * {@literal Stone Double Slab}
+     */
+    String MC_TILE_DOUBLE_STONE_SLAB4_STONE_NAME = "minecraft:tile.double_stone_slab4.stone.name";
+
+    /**
+     * {@literal Acacia Double Slab}
+     */
+    String MC_TILE_DOUBLE_WOODEN_SLAB_ACACIA_NAME = "minecraft:tile.double_wooden_slab.acacia.name";
+
+    /**
+     * {@literal Dark Oak Double Slab}
+     */
+    String MC_TILE_DOUBLE_WOODEN_SLAB_BIG_OAK_NAME = "minecraft:tile.double_wooden_slab.big_oak.name";
+
+    /**
+     * {@literal Birch Double Slab}
+     */
+    String MC_TILE_DOUBLE_WOODEN_SLAB_BIRCH_NAME = "minecraft:tile.double_wooden_slab.birch.name";
+
+    /**
+     * {@literal Jungle Double Slab}
+     */
+    String MC_TILE_DOUBLE_WOODEN_SLAB_JUNGLE_NAME = "minecraft:tile.double_wooden_slab.jungle.name";
+
+    /**
+     * {@literal Oak Double Slab}
+     */
+    String MC_TILE_DOUBLE_WOODEN_SLAB_OAK_NAME = "minecraft:tile.double_wooden_slab.oak.name";
+
+    /**
+     * {@literal Spruce Double Slab}
+     */
+    String MC_TILE_DOUBLE_WOODEN_SLAB_SPRUCE_NAME = "minecraft:tile.double_wooden_slab.spruce.name";
 
     /**
      * {@literal Dragon Egg}
@@ -24293,6 +29683,16 @@ public interface TrKeys {
      * {@literal End Stone Bricks}
      */
     String MC_TILE_END_BRICKS_NAME = "minecraft:tile.end_bricks.name";
+
+    /**
+     * {@literal End Gateway}
+     */
+    String MC_TILE_END_GATEWAY_NAME = "minecraft:tile.end_gateway.name";
+
+    /**
+     * {@literal End Portal}
+     */
+    String MC_TILE_END_PORTAL_NAME = "minecraft:tile.end_portal.name";
 
     /**
      * {@literal End Portal Frame}
@@ -24390,6 +29790,11 @@ public interface TrKeys {
     String MC_TILE_EXPOSED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.exposed_cut_copper_stairs.name";
 
     /**
+     * {@literal Exposed Cut Copper Double Slab}
+     */
+    String MC_TILE_EXPOSED_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.exposed_double_cut_copper_slab.name";
+
+    /**
      * {@literal Exposed Lightning Rod}
      */
     String MC_TILE_EXPOSED_LIGHTNING_ROD_NAME = "minecraft:tile.exposed_lightning_rod.name";
@@ -24415,6 +29820,11 @@ public interface TrKeys {
     String MC_TILE_FIRE_NAME = "minecraft:tile.fire.name";
 
     /**
+     * {@literal Fire Coral Wall Fan}
+     */
+    String MC_TILE_FIRE_CORAL_WALL_FAN_NAME = "minecraft:tile.fire_coral_wall_fan.name";
+
+    /**
      * {@literal Firefly Bush}
      */
     String MC_TILE_FIREFLY_BUSH_NAME = "minecraft:tile.firefly_bush.name";
@@ -24423,6 +29833,11 @@ public interface TrKeys {
      * {@literal Fletching Table}
      */
     String MC_TILE_FLETCHING_TABLE_NAME = "minecraft:tile.fletching_table.name";
+
+    /**
+     * {@literal Flower Pot}
+     */
+    String MC_TILE_FLOWER_POT_NAME = "minecraft:tile.flower_pot.name";
 
     /**
      * {@literal Flowering Azalea}
@@ -24438,6 +29853,11 @@ public interface TrKeys {
      * {@literal Water}
      */
     String MC_TILE_FLOWING_WATER_NAME = "minecraft:tile.flowing_water.name";
+
+    /**
+     * {@literal Item Frame}
+     */
+    String MC_TILE_FRAME_NAME = "minecraft:tile.frame.name";
 
     /**
      * {@literal Frogspawn}
@@ -24630,9 +30050,19 @@ public interface TrKeys {
     String MC_TILE_GLAZEDTERRACOTTAYELLOW_NAME = "minecraft:tile.glazedTerracottaYellow.name";
 
     /**
+     * {@literal Glow Frame}
+     */
+    String MC_TILE_GLOW_FRAME_NAME = "minecraft:tile.glow_frame.name";
+
+    /**
      * {@literal Glow Lichen}
      */
     String MC_TILE_GLOW_LICHEN_NAME = "minecraft:tile.glow_lichen.name";
+
+    /**
+     * {@literal Glowing Obsidian}
+     */
+    String MC_TILE_GLOWINGOBSIDIAN_NAME = "minecraft:tile.glowingobsidian.name";
 
     /**
      * {@literal Glowstone}
@@ -24648,6 +30078,11 @@ public interface TrKeys {
      * {@literal Gold Ore}
      */
     String MC_TILE_GOLD_ORE_NAME = "minecraft:tile.gold_ore.name";
+
+    /**
+     * {@literal Golden Dandelion}
+     */
+    String MC_TILE_GOLDEN_DANDELION_NAME = "minecraft:tile.golden_dandelion.name";
 
     /**
      * {@literal Powered Rail}
@@ -24740,6 +30175,11 @@ public interface TrKeys {
     String MC_TILE_HOPPER_NAME = "minecraft:tile.hopper.name";
 
     /**
+     * {@literal Horn Coral Wall Fan}
+     */
+    String MC_TILE_HORN_CORAL_WALL_FAN_NAME = "minecraft:tile.horn_coral_wall_fan.name";
+
+    /**
      * {@literal Ice}
      */
     String MC_TILE_ICE_NAME = "minecraft:tile.ice.name";
@@ -24805,9 +30245,19 @@ public interface TrKeys {
     String MC_TILE_JUNGLE_BUTTON_NAME = "minecraft:tile.jungle_button.name";
 
     /**
+     * {@literal Jungle Door}
+     */
+    String MC_TILE_JUNGLE_DOOR_NAME = "minecraft:tile.jungle_door.name";
+
+    /**
      * {@literal Jungle Fence Gate}
      */
     String MC_TILE_JUNGLE_FENCE_GATE_NAME = "minecraft:tile.jungle_fence_gate.name";
+
+    /**
+     * {@literal Jungle Hanging Sign}
+     */
+    String MC_TILE_JUNGLE_HANGING_SIGN_NAME = "minecraft:tile.jungle_hanging_sign.name";
 
     /**
      * {@literal Jungle Pressure Plate}
@@ -24833,6 +30283,16 @@ public interface TrKeys {
      * {@literal Jungle Trapdoor}
      */
     String MC_TILE_JUNGLE_TRAPDOOR_NAME = "minecraft:tile.jungle_trapdoor.name";
+
+    /**
+     * {@literal Jungle Wall Sign}
+     */
+    String MC_TILE_JUNGLE_WALL_SIGN_NAME = "minecraft:tile.jungle_wall_sign.name";
+
+    /**
+     * {@literal Kelp}
+     */
+    String MC_TILE_KELP_NAME = "minecraft:tile.kelp.name";
 
     /**
      * {@literal Ladder}
@@ -24970,9 +30430,39 @@ public interface TrKeys {
     String MC_TILE_LIME_CANDLE_CAKE_NAME = "minecraft:tile.lime_candle_cake.name";
 
     /**
+     * {@literal Lit Blast Furnace}
+     */
+    String MC_TILE_LIT_BLAST_FURNACE_NAME = "minecraft:tile.lit_blast_furnace.name";
+
+    /**
+     * {@literal Lit Deepslate Redstone Ore}
+     */
+    String MC_TILE_LIT_DEEPSLATE_REDSTONE_ORE_NAME = "minecraft:tile.lit_deepslate_redstone_ore.name";
+
+    /**
+     * {@literal Lit Furnace}
+     */
+    String MC_TILE_LIT_FURNACE_NAME = "minecraft:tile.lit_furnace.name";
+
+    /**
      * {@literal Jack o'Lantern}
      */
     String MC_TILE_LIT_PUMPKIN_NAME = "minecraft:tile.lit_pumpkin.name";
+
+    /**
+     * {@literal Lit Redstone Lamp}
+     */
+    String MC_TILE_LIT_REDSTONE_LAMP_NAME = "minecraft:tile.lit_redstone_lamp.name";
+
+    /**
+     * {@literal Lit Redstone Ore}
+     */
+    String MC_TILE_LIT_REDSTONE_ORE_NAME = "minecraft:tile.lit_redstone_ore.name";
+
+    /**
+     * {@literal Lit Smoker}
+     */
+    String MC_TILE_LIT_SMOKER_NAME = "minecraft:tile.lit_smoker.name";
 
     /**
      * {@literal Locked chest}
@@ -25045,6 +30535,16 @@ public interface TrKeys {
     String MC_TILE_MANGROVE_BUTTON_NAME = "minecraft:tile.mangrove_button.name";
 
     /**
+     * {@literal Mangrove Door}
+     */
+    String MC_TILE_MANGROVE_DOOR_NAME = "minecraft:tile.mangrove_door.name";
+
+    /**
+     * {@literal Mangrove Double Slab}
+     */
+    String MC_TILE_MANGROVE_DOUBLE_SLAB_NAME = "minecraft:tile.mangrove_double_slab.name";
+
+    /**
      * {@literal Mangrove Fence}
      */
     String MC_TILE_MANGROVE_FENCE_NAME = "minecraft:tile.mangrove_fence.name";
@@ -25053,6 +30553,11 @@ public interface TrKeys {
      * {@literal Mangrove Fence Gate}
      */
     String MC_TILE_MANGROVE_FENCE_GATE_NAME = "minecraft:tile.mangrove_fence_gate.name";
+
+    /**
+     * {@literal Mangrove Hanging Sign}
+     */
+    String MC_TILE_MANGROVE_HANGING_SIGN_NAME = "minecraft:tile.mangrove_hanging_sign.name";
 
     /**
      * {@literal Mangrove Leaves}
@@ -25100,9 +30605,19 @@ public interface TrKeys {
     String MC_TILE_MANGROVE_STAIRS_NAME = "minecraft:tile.mangrove_stairs.name";
 
     /**
+     * {@literal Mangrove Sign}
+     */
+    String MC_TILE_MANGROVE_STANDING_SIGN_NAME = "minecraft:tile.mangrove_standing_sign.name";
+
+    /**
      * {@literal Mangrove Trapdoor}
      */
     String MC_TILE_MANGROVE_TRAPDOOR_NAME = "minecraft:tile.mangrove_trapdoor.name";
+
+    /**
+     * {@literal Mangrove Wall Sign}
+     */
+    String MC_TILE_MANGROVE_WALL_SIGN_NAME = "minecraft:tile.mangrove_wall_sign.name";
 
     /**
      * {@literal Mangrove Wood}
@@ -25118,6 +30633,11 @@ public interface TrKeys {
      * {@literal Melon}
      */
     String MC_TILE_MELON_BLOCK_NAME = "minecraft:tile.melon_block.name";
+
+    /**
+     * {@literal Melon Stem}
+     */
+    String MC_TILE_MELON_STEM_NAME = "minecraft:tile.melon_stem.name";
 
     /**
      * {@literal Monster Spawner}
@@ -25193,6 +30713,11 @@ public interface TrKeys {
      * {@literal Mud Brick Double Slab}
      */
     String MC_TILE_MUD_BRICK_DOUBLE_SLAB = "minecraft:tile.mud_brick_double_slab";
+
+    /**
+     * {@literal Mud Brick Double Slab}
+     */
+    String MC_TILE_MUD_BRICK_DOUBLE_SLAB_NAME = "minecraft:tile.mud_brick_double_slab.name";
 
     /**
      * {@literal Mud Brick Slab}
@@ -25315,6 +30840,11 @@ public interface TrKeys {
     String MC_TILE_NOTEBLOCK_NAME = "minecraft:tile.noteblock.name";
 
     /**
+     * {@literal Oak Hanging Sign}
+     */
+    String MC_TILE_OAK_HANGING_SIGN_NAME = "minecraft:tile.oak_hanging_sign.name";
+
+    /**
      * {@literal Oak Shelf}
      */
     String MC_TILE_OAK_SHELF_NAME = "minecraft:tile.oak_shelf.name";
@@ -25430,6 +30960,11 @@ public interface TrKeys {
     String MC_TILE_OXIDIZED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.oxidized_cut_copper_stairs.name";
 
     /**
+     * {@literal Oxidized Cut Copper Double Slab}
+     */
+    String MC_TILE_OXIDIZED_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.oxidized_double_cut_copper_slab.name";
+
+    /**
      * {@literal Oxidized Lightning Rod}
      */
     String MC_TILE_OXIDIZED_LIGHTNING_ROD_NAME = "minecraft:tile.oxidized_lightning_rod.name";
@@ -25465,6 +31000,11 @@ public interface TrKeys {
     String MC_TILE_PALE_OAK_BUTTON_NAME = "minecraft:tile.pale_oak_button.name";
 
     /**
+     * {@literal Pale Oak Door}
+     */
+    String MC_TILE_PALE_OAK_DOOR_NAME = "minecraft:tile.pale_oak_door.name";
+
+    /**
      * {@literal Pale Oak Double Slab}
      */
     String MC_TILE_PALE_OAK_DOUBLE_SLAB_NAME = "minecraft:tile.pale_oak_double_slab.name";
@@ -25478,6 +31018,11 @@ public interface TrKeys {
      * {@literal Pale Oak Fence Gate}
      */
     String MC_TILE_PALE_OAK_FENCE_GATE_NAME = "minecraft:tile.pale_oak_fence_gate.name";
+
+    /**
+     * {@literal Pale Oak Hanging Sign}
+     */
+    String MC_TILE_PALE_OAK_HANGING_SIGN_NAME = "minecraft:tile.pale_oak_hanging_sign.name";
 
     /**
      * {@literal Pale Oak Leaves}
@@ -25520,9 +31065,19 @@ public interface TrKeys {
     String MC_TILE_PALE_OAK_STAIRS_NAME = "minecraft:tile.pale_oak_stairs.name";
 
     /**
+     * {@literal Pale Oak Sign}
+     */
+    String MC_TILE_PALE_OAK_STANDING_SIGN_NAME = "minecraft:tile.pale_oak_standing_sign.name";
+
+    /**
      * {@literal Pale Oak Trapdoor}
      */
     String MC_TILE_PALE_OAK_TRAPDOOR_NAME = "minecraft:tile.pale_oak_trapdoor.name";
+
+    /**
+     * {@literal Pale Oak Wall Sign}
+     */
+    String MC_TILE_PALE_OAK_WALL_SIGN_NAME = "minecraft:tile.pale_oak_wall_sign.name";
 
     /**
      * {@literal Pale Oak Wood}
@@ -25553,6 +31108,16 @@ public interface TrKeys {
      * {@literal Piston}
      */
     String MC_TILE_PISTON_NAME = "minecraft:tile.piston.name";
+
+    /**
+     * {@literal Piston Arm Collision}
+     */
+    String MC_TILE_PISTON_ARM_COLLISION_NAME = "minecraft:tile.piston_arm_collision.name";
+
+    /**
+     * {@literal Pitcher Crop}
+     */
+    String MC_TILE_PITCHER_CROP_NAME = "minecraft:tile.pitcher_crop.name";
 
     /**
      * {@literal Pitcher Plant}
@@ -25620,6 +31185,11 @@ public interface TrKeys {
     String MC_TILE_POLISHED_BLACKSTONE_NAME = "minecraft:tile.polished_blackstone.name";
 
     /**
+     * {@literal Polished Blackstone Brick Double Slab}
+     */
+    String MC_TILE_POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB_NAME = "minecraft:tile.polished_blackstone_brick_double_slab.name";
+
+    /**
      * {@literal Polished Blackstone Brick Slab}
      */
     String MC_TILE_POLISHED_BLACKSTONE_BRICK_SLAB_NAME = "minecraft:tile.polished_blackstone_brick_slab.name";
@@ -25643,6 +31213,11 @@ public interface TrKeys {
      * {@literal Polished Blackstone Button}
      */
     String MC_TILE_POLISHED_BLACKSTONE_BUTTON_NAME = "minecraft:tile.polished_blackstone_button.name";
+
+    /**
+     * {@literal Polished Blackstone Double Slab}
+     */
+    String MC_TILE_POLISHED_BLACKSTONE_DOUBLE_SLAB_NAME = "minecraft:tile.polished_blackstone_double_slab.name";
 
     /**
      * {@literal Polished Blackstone Pressure Plate}
@@ -25705,6 +31280,11 @@ public interface TrKeys {
     String MC_TILE_POLISHED_TUFF_NAME = "minecraft:tile.polished_tuff.name";
 
     /**
+     * {@literal Polished Tuff Double Slab}
+     */
+    String MC_TILE_POLISHED_TUFF_DOUBLE_SLAB_NAME = "minecraft:tile.polished_tuff_double_slab.name";
+
+    /**
      * {@literal Polished Tuff Slab}
      */
     String MC_TILE_POLISHED_TUFF_SLAB_NAME = "minecraft:tile.polished_tuff_slab.name";
@@ -25733,6 +31313,16 @@ public interface TrKeys {
      * {@literal Powder Snow}
      */
     String MC_TILE_POWDER_SNOW_NAME = "minecraft:tile.powder_snow.name";
+
+    /**
+     * {@literal Powered Comparator}
+     */
+    String MC_TILE_POWERED_COMPARATOR_NAME = "minecraft:tile.powered_comparator.name";
+
+    /**
+     * {@literal Powered Repeater}
+     */
+    String MC_TILE_POWERED_REPEATER_NAME = "minecraft:tile.powered_repeater.name";
 
     /**
      * {@literal Prismarine Bricks}
@@ -26405,9 +31995,19 @@ public interface TrKeys {
     String MC_TILE_SPRUCE_BUTTON_NAME = "minecraft:tile.spruce_button.name";
 
     /**
+     * {@literal Spruce Door}
+     */
+    String MC_TILE_SPRUCE_DOOR_NAME = "minecraft:tile.spruce_door.name";
+
+    /**
      * {@literal Spruce Fence Gate}
      */
     String MC_TILE_SPRUCE_FENCE_GATE_NAME = "minecraft:tile.spruce_fence_gate.name";
+
+    /**
+     * {@literal Spruce Hanging Sign}
+     */
+    String MC_TILE_SPRUCE_HANGING_SIGN_NAME = "minecraft:tile.spruce_hanging_sign.name";
 
     /**
      * {@literal Spruce Pressure Plate}
@@ -26433,6 +32033,11 @@ public interface TrKeys {
      * {@literal Spruce Trapdoor}
      */
     String MC_TILE_SPRUCE_TRAPDOOR_NAME = "minecraft:tile.spruce_trapdoor.name";
+
+    /**
+     * {@literal Spruce Wall Sign}
+     */
+    String MC_TILE_SPRUCE_WALL_SIGN_NAME = "minecraft:tile.spruce_wall_sign.name";
 
     /**
      * {@literal Black Stained Glass}
@@ -26773,6 +32378,11 @@ public interface TrKeys {
      * {@literal Sticky Piston}
      */
     String MC_TILE_STICKY_PISTON_NAME = "minecraft:tile.sticky_piston.name";
+
+    /**
+     * {@literal Sticky Piston Arm Collision}
+     */
+    String MC_TILE_STICKY_PISTON_ARM_COLLISION_NAME = "minecraft:tile.sticky_piston_arm_collision.name";
 
     /**
      * {@literal Andesite}
@@ -27180,6 +32790,11 @@ public interface TrKeys {
     String MC_TILE_TORCHFLOWER_NAME = "minecraft:tile.torchflower.name";
 
     /**
+     * {@literal Torchflower Crop}
+     */
+    String MC_TILE_TORCHFLOWER_CROP_NAME = "minecraft:tile.torchflower_crop.name";
+
+    /**
      * {@literal Oak Trapdoor}
      */
     String MC_TILE_TRAPDOOR_NAME = "minecraft:tile.trapdoor.name";
@@ -27205,9 +32820,19 @@ public interface TrKeys {
     String MC_TILE_TRIPWIRE_HOOK_NAME = "minecraft:tile.tripwire_hook.name";
 
     /**
+     * {@literal Tube Coral Wall Fan}
+     */
+    String MC_TILE_TUBE_CORAL_WALL_FAN_NAME = "minecraft:tile.tube_coral_wall_fan.name";
+
+    /**
      * {@literal Tuff}
      */
     String MC_TILE_TUFF_NAME = "minecraft:tile.tuff.name";
+
+    /**
+     * {@literal Tuff Brick Double Slab}
+     */
+    String MC_TILE_TUFF_BRICK_DOUBLE_SLAB_NAME = "minecraft:tile.tuff_brick_double_slab.name";
 
     /**
      * {@literal Tuff Brick Slab}
@@ -27228,6 +32853,11 @@ public interface TrKeys {
      * {@literal Tuff Bricks}
      */
     String MC_TILE_TUFF_BRICKS_NAME = "minecraft:tile.tuff_bricks.name";
+
+    /**
+     * {@literal Tuff Double Slab}
+     */
+    String MC_TILE_TUFF_DOUBLE_SLAB_NAME = "minecraft:tile.tuff_double_slab.name";
 
     /**
      * {@literal Tuff Slab}
@@ -27265,6 +32895,16 @@ public interface TrKeys {
     String MC_TILE_UNLIT_REDSTONE_TORCH_NAME = "minecraft:tile.unlit_redstone_torch.name";
 
     /**
+     * {@literal Unpowered Comparator}
+     */
+    String MC_TILE_UNPOWERED_COMPARATOR_NAME = "minecraft:tile.unpowered_comparator.name";
+
+    /**
+     * {@literal Unpowered Repeater}
+     */
+    String MC_TILE_UNPOWERED_REPEATER_NAME = "minecraft:tile.unpowered_repeater.name";
+
+    /**
      * {@literal Vault}
      */
     String MC_TILE_VAULT_NAME = "minecraft:tile.vault.name";
@@ -27278,6 +32918,16 @@ public interface TrKeys {
      * {@literal Vines}
      */
     String MC_TILE_VINE_NAME = "minecraft:tile.vine.name";
+
+    /**
+     * {@literal Wall Banner}
+     */
+    String MC_TILE_WALL_BANNER_NAME = "minecraft:tile.wall_banner.name";
+
+    /**
+     * {@literal Wall Sign}
+     */
+    String MC_TILE_WALL_SIGN_NAME = "minecraft:tile.wall_sign.name";
 
     /**
      * {@literal Warped Button}
@@ -27308,6 +32958,11 @@ public interface TrKeys {
      * {@literal Warped Fungus}
      */
     String MC_TILE_WARPED_FUNGUS_NAME = "minecraft:tile.warped_fungus.name";
+
+    /**
+     * {@literal Warped Hanging Sign}
+     */
+    String MC_TILE_WARPED_HANGING_SIGN_NAME = "minecraft:tile.warped_hanging_sign.name";
 
     /**
      * {@literal Warped Hyphae}
@@ -27455,6 +33110,11 @@ public interface TrKeys {
     String MC_TILE_WAXED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_cut_copper_stairs.name";
 
     /**
+     * {@literal Waxed Cut Copper Double Slab}
+     */
+    String MC_TILE_WAXED_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.waxed_double_cut_copper_slab.name";
+
+    /**
      * {@literal Waxed Exposed Chiseled Copper}
      */
     String MC_TILE_WAXED_EXPOSED_CHISELED_COPPER_NAME = "minecraft:tile.waxed_exposed_chiseled_copper.name";
@@ -27523,6 +33183,11 @@ public interface TrKeys {
      * {@literal Waxed Exposed Cut Copper Stairs}
      */
     String MC_TILE_WAXED_EXPOSED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_exposed_cut_copper_stairs.name";
+
+    /**
+     * {@literal Waxed Exposed Cut Copper Double Slab}
+     */
+    String MC_TILE_WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.waxed_exposed_double_cut_copper_slab.name";
 
     /**
      * {@literal Waxed Exposed Lightning Rod}
@@ -27605,6 +33270,11 @@ public interface TrKeys {
     String MC_TILE_WAXED_OXIDIZED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_oxidized_cut_copper_stairs.name";
 
     /**
+     * {@literal Waxed Oxidized Cut Copper Double Slab}
+     */
+    String MC_TILE_WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.waxed_oxidized_double_cut_copper_slab.name";
+
+    /**
      * {@literal Waxed Oxidized Lightning Rod}
      */
     String MC_TILE_WAXED_OXIDIZED_LIGHTNING_ROD_NAME = "minecraft:tile.waxed_oxidized_lightning_rod.name";
@@ -27680,6 +33350,11 @@ public interface TrKeys {
     String MC_TILE_WAXED_WEATHERED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_weathered_cut_copper_stairs.name";
 
     /**
+     * {@literal Waxed Weathered Cut Copper Double Slab}
+     */
+    String MC_TILE_WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.waxed_weathered_double_cut_copper_slab.name";
+
+    /**
      * {@literal Waxed Weathered Lightning Rod}
      */
     String MC_TILE_WAXED_WEATHERED_LIGHTNING_ROD_NAME = "minecraft:tile.waxed_weathered_lightning_rod.name";
@@ -27753,6 +33428,11 @@ public interface TrKeys {
      * {@literal Weathered Cut Copper Stairs}
      */
     String MC_TILE_WEATHERED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.weathered_cut_copper_stairs.name";
+
+    /**
+     * {@literal Weathered Cut Copper Double Slab}
+     */
+    String MC_TILE_WEATHERED_DOUBLE_CUT_COPPER_SLAB_NAME = "minecraft:tile.weathered_double_cut_copper_slab.name";
 
     /**
      * {@literal Weathered Lightning Rod}
@@ -27858,6 +33538,11 @@ public interface TrKeys {
      * {@literal Oak Button}
      */
     String MC_TILE_WOODEN_BUTTON_NAME = "minecraft:tile.wooden_button.name";
+
+    /**
+     * {@literal Wooden Door}
+     */
+    String MC_TILE_WOODEN_DOOR_NAME = "minecraft:tile.wooden_door.name";
 
     /**
      * {@literal Oak Pressure Plate}

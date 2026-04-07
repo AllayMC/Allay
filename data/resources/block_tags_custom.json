@@ -143,6 +143,7 @@
   ],
   "minecraft:pottable_plant": [
     "minecraft:dandelion",
+    "minecraft:golden_dandelion",
     "minecraft:poppy",
     "minecraft:blue_orchid",
     "minecraft:allium",

@@ -93,7 +93,7 @@ Generate using `ItemDataProcessor`, based on `items_raw.json`.
 
 Update to the latest versions of:
 
-- [CloudburstMC/Protocol](https://github.com/CloudburstMC/Protocol)
+- [AllayMC/Protocol](https://github.com/AllayMC/Protocol)
 - [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater)
 
 ## 7. Update `ProtocolInfo.java`, `NetworkData.java` and `MultiVersion.java`

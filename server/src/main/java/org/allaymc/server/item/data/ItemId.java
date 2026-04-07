@@ -1562,6 +1562,8 @@ public enum ItemId {
 
     GOLDEN_CHESTPLATE("minecraft:golden_chestplate", 384),
 
+    GOLDEN_DANDELION("minecraft:golden_dandelion", -1091),
+
     GOLDEN_HELMET("minecraft:golden_helmet", 383),
 
     GOLDEN_HOE("minecraft:golden_hoe", 365),

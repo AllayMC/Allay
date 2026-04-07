@@ -89,7 +89,7 @@ public class LangBuilder {
                 return;
             }
             if (shouldInclude(split[0])) {
-                lang.put("minecraft:" + split[0], split[1].replaceAll("\t", ""));
+                lang.put("minecraft:" + split[0].strip(), split[1].replaceAll("\t", ""));
             }
         });
         var allayLangPath = Path.of("data/resources/unpacked/lang_raw/allay/" + langCode.name() + ".json");

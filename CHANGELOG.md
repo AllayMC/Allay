@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added DDUI support for Bedrock 1.26.10+ (protocol v944+), including `DDUI`, `DDUIViewer`, `DDUIScreenSession`, `CustomFormScreen`, `MessageBoxScreen`, `Observable`, `Property`, and the custom-form element set (`Label`, `Header`, `Spacer`, `Divider`, `TextField`, `Toggle`, `Slider`, `Dropdown`, `Button`, `CloseButton`).
 - Added support for NetEase 1.21.90.
+- Updated feature version to 1.26.10
 
 ### Changed
 
