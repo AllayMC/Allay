@@ -48,5 +48,23 @@
     "minecraft:enchanted_book",
     "minecraft:writable_book",
     "minecraft:written_book"
+  ],
+  "minecraft:fireproof": [
+    "minecraft:ancient_debris",
+    "minecraft:netherite_axe",
+    "minecraft:netherite_block",
+    "minecraft:netherite_boots",
+    "minecraft:netherite_chestplate",
+    "minecraft:netherite_helmet",
+    "minecraft:netherite_hoe",
+    "minecraft:netherite_horse_armor",
+    "minecraft:netherite_ingot",
+    "minecraft:netherite_leggings",
+    "minecraft:netherite_nautilus_armor",
+    "minecraft:netherite_pickaxe",
+    "minecraft:netherite_scrap",
+    "minecraft:netherite_shovel",
+    "minecraft:netherite_spear",
+    "minecraft:netherite_sword"
   ]
 }
