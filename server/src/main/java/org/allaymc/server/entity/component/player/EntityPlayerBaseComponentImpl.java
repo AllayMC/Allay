@@ -378,14 +378,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setFoodLevel(int value) {
         value = Math.max(0, Math.min(value, MAX_FOOD_LEVEL));
-        var event = new PlayerFoodLevelChangeEvent(thisPlayer, this.foodLevel, value);
-        if (!event.call()) {
-            return;
-        }
 
-        this.foodLevel = event.getNewFoodLevel();
-        if (isActualPlayer()) {
-            this.controller.sendFoodLevel(this.foodLevel);
+        if (this.foodLevel != value) {
+            var event = new PlayerFoodLevelChangeEvent(thisPlayer, this.foodLevel, value);
+            if (!event.call()) {
+                return;
+            }
+
+            this.foodLevel = event.getNewFoodLevel();
+            if (isActualPlayer()) {
+                this.controller.sendFoodLevel(this.foodLevel);
+            }
         }
     }
 
