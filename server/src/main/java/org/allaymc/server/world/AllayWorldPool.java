@@ -3,6 +3,7 @@ package org.allaymc.server.world;
 import com.google.common.base.Preconditions;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.OkaeriConfig;
+import eu.okaeri.configs.OkaeriConfigInitializer;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.utils.Utils;
+import org.allaymc.server.world.dimension.BuiltinDimensionSettings;
 import org.allaymc.server.world.dimension.DimensionId;
 import org.allaymc.server.world.light.NoLightEngine;
 
@@ -49,10 +50,15 @@ public final class AllayWorldPool implements WorldPool {
     public AllayWorldPool() {
         this.worlds = new ConcurrentHashMap<>();
         this.worldFolder = Path.of("worlds");
+        var builtinDimensionSettings = BuiltinDimensionSettings.get();
         this.worldConfig = Objects.requireNonNull(ConfigManager.create(
                 WorldSettings.class,
-                Utils.createConfigInitializer(this.worldFolder.resolve("world-settings.yml"))
+                createWorldSettingsInitializer(this.worldFolder.resolve("world-settings.yml"))
         ));
+        this.worldConfig.normalize();
+        applyBuiltinDimensionSettings(builtinDimensionSettings);
+        this.worldConfig.save();
+        BuiltinDimensionSettings.useWorldSettings(this.worldConfig);
     }
 
     public void loadWorlds() {
@@ -80,6 +86,7 @@ public final class AllayWorldPool implements WorldPool {
                 this.worldConfig.worlds().put(name, toWorldSetting(world));
             }
         });
+        applyBuiltinDimensionSettings(BuiltinDimensionSettings.get());
         this.worldConfig.save();
     }
 
@@ -272,12 +279,55 @@ public final class AllayWorldPool implements WorldPool {
     }
 
     private static Identifier normalizeDimensionIdentifier(String rawIdentifier) {
-        return new Identifier(rawIdentifier);
+        return DimensionId.normalizeConfigIdentifier(rawIdentifier);
+    }
+
+    private static OkaeriConfigInitializer createWorldSettingsInitializer(Path path) {
+        return it -> {
+            it.withConfigurer(new eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer());
+            it.withBindFile(path);
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load();
+        };
+    }
+
+    private void applyBuiltinDimensionSettings(BuiltinDimensionSettings builtinDimensionSettings) {
+        var builtinDimensions = new LinkedHashMap<String, WorldSettings.BuiltinDimensionSetting>();
+        for (var dimensionId : DimensionId.values()) {
+            var range = builtinDimensionSettings.getHeightRange(dimensionId);
+            builtinDimensions.put(
+                    dimensionId.getIdentifier().toString(),
+                    new WorldSettings.BuiltinDimensionSetting(range.minHeight(), range.maxHeight())
+            );
+        }
+        this.worldConfig.builtinDimensions(builtinDimensions);
     }
 
     @Getter
     @Accessors(fluent = true)
     public static class WorldSettings extends OkaeriConfig {
+
+        @Comment("Height settings shared by the built-in dimensions in all worlds")
+        @Setter
+        @CustomKey("built-in-dimensions")
+        private Map<String, BuiltinDimensionSetting> builtinDimensions = new LinkedHashMap<>(Map.of(
+                DimensionId.OVERWORLD.getIdentifier().toString(),
+                new BuiltinDimensionSetting(
+                        DimensionId.OVERWORLD.getDefaultMinHeight(),
+                        DimensionId.OVERWORLD.getDefaultMaxHeight()
+                ),
+                DimensionId.NETHER.getIdentifier().toString(),
+                new BuiltinDimensionSetting(
+                        DimensionId.NETHER.getDefaultMinHeight(),
+                        DimensionId.NETHER.getDefaultMaxHeight()
+                ),
+                DimensionId.THE_END.getIdentifier().toString(),
+                new BuiltinDimensionSetting(
+                        DimensionId.THE_END.getDefaultMinHeight(),
+                        DimensionId.THE_END.getDefaultMaxHeight()
+                )
+        ));
 
         @Setter
         @CustomKey("worlds")
@@ -293,6 +343,51 @@ public final class AllayWorldPool implements WorldPool {
         @Comment("The default world is the world that newly joined players will be in")
         @CustomKey("default-world")
         private String defaultWorld = "world";
+
+        public Map<DimensionId, BuiltinDimensionSetting> normalizedBuiltinDimensions() {
+            var normalized = new LinkedHashMap<DimensionId, BuiltinDimensionSetting>();
+            if (builtinDimensions == null || builtinDimensions.isEmpty()) {
+                return normalized;
+            }
+
+            builtinDimensions.forEach((identifier, setting) -> {
+                Preconditions.checkNotNull(setting, "Built-in dimension setting %s cannot be null", identifier);
+                var dimensionId = DimensionId.fromIdentifier(normalizeDimensionIdentifier(identifier));
+                Preconditions.checkArgument(dimensionId != null, "Built-in dimension setting %s is not a built-in dimension", identifier);
+                Preconditions.checkArgument(
+                        normalized.put(dimensionId, setting) == null,
+                        "Duplicate built-in dimension setting for %s",
+                        dimensionId.getIdentifier()
+                );
+            });
+            return normalized;
+        }
+
+        public void normalize() {
+            var normalizedBuiltinDimensions = new LinkedHashMap<String, BuiltinDimensionSetting>();
+            normalizedBuiltinDimensions().forEach((dimensionId, setting1) -> normalizedBuiltinDimensions.put(dimensionId.getIdentifier().toString(), setting1));
+            this.builtinDimensions = normalizedBuiltinDimensions;
+
+            var normalizedWorlds = new LinkedHashMap<String, WorldSetting>();
+            if (worlds != null && !worlds.isEmpty()) {
+                worlds.forEach((name, setting) -> {
+                    Preconditions.checkNotNull(setting, "World setting %s cannot be null", name);
+                    normalizedWorlds.put(name, setting.normalized());
+                });
+            }
+            this.worlds = normalizedWorlds;
+        }
+
+        @Getter
+        @Accessors(fluent = true)
+        @AllArgsConstructor
+        public static class BuiltinDimensionSetting extends OkaeriConfig {
+            @CustomKey("min-height")
+            private int minHeight;
+
+            @CustomKey("max-height")
+            private int maxHeight;
+        }
 
         @Getter
         @Accessors(fluent = true)
@@ -338,7 +433,15 @@ public final class AllayWorldPool implements WorldPool {
             public Map<Identifier, DimensionSetting> normalizedDimensions() {
                 var normalized = new LinkedHashMap<Identifier, DimensionSetting>();
                 if (dimensions != null && !dimensions.isEmpty()) {
-                    dimensions.forEach((identifier, setting) -> normalized.put(normalizeDimensionIdentifier(identifier), setting));
+                    dimensions.forEach((identifier, setting) -> {
+                        Preconditions.checkNotNull(setting, "Dimension setting %s cannot be null", identifier);
+                        var normalizedIdentifier = normalizeDimensionIdentifier(identifier);
+                        Preconditions.checkArgument(
+                                normalized.put(normalizedIdentifier, setting) == null,
+                                "Duplicate dimension setting for %s",
+                                normalizedIdentifier
+                        );
+                    });
                     return normalized;
                 }
 
@@ -352,6 +455,12 @@ public final class AllayWorldPool implements WorldPool {
                     normalized.put(DimensionId.THE_END.getIdentifier(), theEnd);
                 }
                 return normalized;
+            }
+
+            public WorldSetting normalized() {
+                var normalizedDimensions = new LinkedHashMap<String, DimensionSetting>();
+                normalizedDimensions().forEach((identifier, setting) -> normalizedDimensions.put(identifier.toString(), setting));
+                return new WorldSetting(storageType, useVirtualThread, normalizedDimensions);
             }
 
             @Getter

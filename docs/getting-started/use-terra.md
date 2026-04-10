@@ -32,7 +32,18 @@ see the latest build. Download the artifact named `Terra-allay-<version>-shaded.
 Next, we need to specify the terrain generator for the world as Terra instead of the built-in flat generator. For example,
 if we want to modify the generator of default world, just open `worlds/world-settings.yml` and modify the following:
 
-```yml linenums="1" hl_lines="5-6 8-9 11-12"
+```yml linenums="1" hl_lines="1-10 14-20"
+built-in-dimensions:
+  minecraft:overworld:
+    min-height: -64
+    max-height: 319
+  minecraft:nether:
+    min-height: 0
+    max-height: 127
+  minecraft:the_end:
+    min-height: 0
+    max-height: 255
+
 worlds:
   world:
     storage-type: LEVELDB
@@ -51,6 +62,7 @@ default-world: world
 ```
 
 To set the pack used in Terra, edit `generator-preset`. The `DEFAULT` meta-pack is embedded in the plugin.
+To change the height of the built-in dimensions, edit the top-level `built-in-dimensions` section.
 If you want to disable Nether or The End, simply omit those dimension entries from the `dimensions` map.
 
 You may need to delete the old world files if the world is already generated. In this example, you should delete `worlds/world/db`.

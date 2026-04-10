@@ -50,6 +50,7 @@ import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.allaymc.server.world.dimension.CustomDimensionIdAllocator;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -107,6 +108,7 @@ public final class Allay {
             if (DASHBOARD != null) {
                 sleep(5000);
             }
+            LogManager.shutdown();
             System.exit(1);
         }
 
@@ -119,12 +121,14 @@ public final class Allay {
             if (DASHBOARD != null) {
                 sleep(5000);
             }
+            LogManager.shutdown();
             System.exit(1);
         }
 
         log.info(I18n.get().tr(TrKeys.ALLAY_SERVER_STOPPED));
         // Server has been shutdown
         // Call System.exit(0) to stop other non-daemon threads
+        LogManager.shutdown();
         System.exit(0);
     }
 

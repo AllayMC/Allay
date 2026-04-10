@@ -59,13 +59,13 @@ public class AllayDimensionType implements DimensionType {
         );
     }
 
-    protected static void validateHeights(int minHeight, int maxHeight) {
-        Preconditions.checkArgument(minHeight >= -512 && minHeight <= 512);
-        Preconditions.checkArgument(maxHeight >= -512 && maxHeight <= 512);
-        Preconditions.checkArgument(maxHeight >= minHeight);
+    public static void validateHeights(int minHeight, int maxHeight) {
+        Preconditions.checkArgument(minHeight >= -512 && minHeight <= 512, "minHeight must be between -512 and 512");
+        Preconditions.checkArgument(maxHeight >= -512 && maxHeight <= 512, "maxHeight must be between -512 and 512");
+        Preconditions.checkArgument(maxHeight >= minHeight, "maxHeight must be greater than or equal to minHeight");
         Preconditions.checkArgument((minHeight & 15) == 0, "minHeight must align to section boundaries");
         Preconditions.checkArgument((maxHeight & 15) == 15, "maxHeight must align to section boundaries");
-        Preconditions.checkArgument((maxHeight - minHeight + 1) % 16 == 0);
+        Preconditions.checkArgument((maxHeight - minHeight + 1) % 16 == 0, "Dimension height must be a multiple of 16");
     }
 
     protected static void validateRegistration(int id, Identifier identifier) {

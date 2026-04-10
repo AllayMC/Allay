@@ -3203,6 +3203,9 @@ public class AllayPlayer implements Player {
 
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
 
+        // Dimension data should be sent before start game
+        sendPacket(NetworkData.DIMENSION_DATA_PACKET.get());
+
         // Send StartGamePacket to the client first before we start sending chunks, otherwise
         // the chunks will be ignored by the client, and the client will be unable to join the server
         startGame(dimension.getWorld(), playerData, dimension);
@@ -3229,11 +3232,6 @@ public class AllayPlayer implements Player {
         var helper = session.getPeer().getCodecHelper();
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
         helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
-
-        var dimensionDataPacket = NetworkData.DIMENSION_DATA_PACKET.get();
-        if (!dimensionDataPacket.getDefinitions().isEmpty()) {
-            sendPacket(dimensionDataPacket);
-        }
 
         var packet = new StartGamePacket();
 

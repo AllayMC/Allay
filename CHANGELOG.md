@@ -17,10 +17,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added DDUI support for Bedrock 1.26.10+ (protocol v944+), including `DDUI`, `DDUIViewer`, `DDUIScreenSession`, `CustomFormScreen`, `MessageBoxScreen`, `Observable`, `Property`, and the custom-form element set (`Label`, `Header`, `Spacer`, `Divider`, `TextField`, `Toggle`, `Slider`, `Dropdown`, `Button`, `CloseButton`).
 - (API) Added custom dimension support via `DimensionType`, `DimensionTypes`, and `Registries.DIMENSIONS`, allowing plugins to register custom dimension types with persistent numeric ids.
 - (API) Added `ItemTags.FIREPROOF` for items that should remain fireproof when dropped as item entities.
+- Added `dimension-ids.yml` in the server working directory to persist custom dimension identifier-to-id mappings for custom dimensions.
+- Added support for changing the height of vanilla dimensions.
+- Implemented bone meal interaction on grass blocks, allowing grass, flowers, and tall grass to generate from grass blocks.
 - Added support for NetEase 1.21.90.
 - Updated feature version to 1.26.10
-- Added `dimension-ids.yml` in the server working directory to persist custom dimension identifier-to-id mappings for custom dimensions.
-- Implemented bone meal interaction on grass blocks, allowing grass, flowers, and tall grass to generate from grass blocks.
 
 ### Changed
 

@@ -12,11 +12,11 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.dimension.DimensionType;
-import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.allaymc.server.registry.InternalRegistries;
+import org.allaymc.server.world.dimension.DimensionId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
@@ -297,10 +297,11 @@ public final class NetworkData {
     public static DimensionDataPacket encodeDimensionDataPacket() {
         var packet = new DimensionDataPacket();
         Registries.DIMENSIONS.getContent().m1().values().stream()
-                .filter(NetworkData::isCustomDimension)
+                .filter(NetworkData::shouldSendDimensionDefinition)
                 .map(dimensionType -> new DimensionDefinition(
                         dimensionType.getIdentifier().toString(),
-                        dimensionType.getMaxHeight(),
+                        // The client expects an open range, so it needs to add one here
+                        dimensionType.getMaxHeight() + 1,
                         dimensionType.getMinHeight(),
                         getBedrockGeneratorType(dimensionType)
                 ))
@@ -309,19 +310,13 @@ public final class NetworkData {
     }
 
     public static int getBedrockGeneratorType(DimensionType dimensionType) {
-        if (dimensionType == DimensionTypes.NETHER) {
-            return 3;
-        }
-        if (dimensionType == DimensionTypes.THE_END) {
-            return 4;
-        }
-        return 1;
+        var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        return dimensionId == null ? DimensionId.OVERWORLD.getBedrockGeneratorType() : dimensionId.getBedrockGeneratorType();
     }
 
-    private static boolean isCustomDimension(DimensionType dimensionType) {
-        return dimensionType != DimensionTypes.OVERWORLD &&
-               dimensionType != DimensionTypes.NETHER &&
-               dimensionType != DimensionTypes.THE_END;
+    private static boolean shouldSendDimensionDefinition(DimensionType dimensionType) {
+        var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        return dimensionId == null || !dimensionId.hasDefaultBounds(dimensionType);
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {

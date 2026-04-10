@@ -2,8 +2,8 @@ package org.allaymc.server.world.storage.leveldb.data;
 
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.dimension.DimensionType;
-import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.utils.Utils;
+import org.allaymc.server.world.dimension.DimensionId;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -123,7 +123,7 @@ public enum LevelDBKey {
     }
 
     public static byte[] indexChunk(int chunkX, int chunkZ, DimensionType dimensionType) {
-        if (dimensionType == DimensionTypes.OVERWORLD) {
+        if (DimensionId.OVERWORLD.matches(dimensionType)) {
             return org.allaymc.server.utils.Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ));
         }
 
