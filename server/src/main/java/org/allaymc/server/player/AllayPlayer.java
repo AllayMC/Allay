@@ -74,13 +74,14 @@ import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.hash.HashUtils;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
@@ -253,14 +254,14 @@ public class AllayPlayer implements Player {
     }
 
     protected static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk, ChunkCache cache, UUID playerId, int cacheGen) {
-        var dimensionInfo = chunk.getDimensionInfo();
+        var dimensionType = chunk.getDimensionType();
         var packet = new LevelChunkPacket();
-        packet.setDimension(dimensionInfo.dimensionId());
+        packet.setDimension(dimensionType.getId());
         packet.setChunkX(chunk.getX());
         packet.setChunkZ(chunk.getZ());
         packet.setRequestSubChunks(true);
         // NOTICE: Sub chunk limit is bigger than zero
-        packet.setSubChunkLimit(findHighestNonAirSectionY(chunk) - dimensionInfo.minSectionY());
+        packet.setSubChunkLimit(findHighestNonAirSectionY(chunk) - dimensionType.minSectionY());
 
         if (cache != null) {
             // Encode biomes blob
@@ -283,31 +284,31 @@ public class AllayPlayer implements Player {
     }
 
     private static int findHighestNonAirSectionY(AllayUnsafeChunk chunk) {
-        var dimensionInfo = chunk.getDimensionInfo();
-        for (int highest = dimensionInfo.maxSectionY(); highest > dimensionInfo.minSectionY(); highest--) {
+        var dimensionType = chunk.getDimensionType();
+        for (int highest = dimensionType.maxSectionY(); highest > dimensionType.minSectionY(); highest--) {
             if (!chunk.getSection(highest).isAirSection()) {
                 return highest;
             }
         }
 
-        return dimensionInfo.minSectionY();
+        return dimensionType.minSectionY();
     }
 
     protected static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk, ChunkCache cache, UUID playerId, int cacheGen) {
-        var dimensionInfo = chunk.getDimensionInfo();
+        var dimensionType = chunk.getDimensionType();
         var packet = new LevelChunkPacket();
-        packet.setDimension(dimensionInfo.dimensionId());
+        packet.setDimension(dimensionType.getId());
         packet.setChunkX(chunk.getX());
         packet.setChunkZ(chunk.getZ());
         packet.setRequestSubChunks(false);
-        packet.setSubChunksLength(dimensionInfo.chunkSectionCount());
+        packet.setSubChunksLength(dimensionType.chunkSectionCount());
 
         if (cache != null) {
             // Encode all section blobs + biomes blob
-            int sectionCount = dimensionInfo.chunkSectionCount();
+            int sectionCount = dimensionType.chunkSectionCount();
             byte[][] allBlobs = new byte[sectionCount + 1][];
             for (int i = 0; i < sectionCount; i++) {
-                allBlobs[i] = ChunkEncoder.encodeSectionBlob(chunk.getSection(dimensionInfo.minSectionY() + i));
+                allBlobs[i] = ChunkEncoder.encodeSectionBlob(chunk.getSection(dimensionType.minSectionY() + i));
             }
             allBlobs[sectionCount] = ChunkEncoder.encodeBiomesBlob(chunk);
 
@@ -1206,7 +1207,7 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewBlockUpdates(Chunk chunk, Collection<BlockUpdate> blockUpdates, Collection<BlockUpdate> extraBlockUpdates) {
-        var packets = new UpdateSubChunkBlocksPacket[chunk.getDimensionInfo().chunkSectionCount()];
+        var packets = new UpdateSubChunkBlocksPacket[chunk.getDimensionType().chunkSectionCount()];
         encodeBlockUpdates(packets, chunk, blockUpdates, false);
         encodeBlockUpdates(packets, chunk, extraBlockUpdates, true);
         for (var packet : packets) {
@@ -1269,7 +1270,7 @@ public class AllayPlayer implements Player {
 
         for (var update : blockUpdates) {
             var sectionY = update.y() >> 4;
-            var index = sectionY - chunk.getDimensionInfo().minSectionY();
+            var index = sectionY - chunk.getDimensionType().minSectionY();
             UpdateSubChunkBlocksPacket packet;
 
             if ((packet = packets[index]) == null) {
@@ -1889,7 +1890,7 @@ public class AllayPlayer implements Player {
             }
             case CustomParticle pa -> {
                 var pk = new SpawnParticleEffectPacket();
-                pk.setDimensionId(this.controlledEntity.getDimension().getDimensionInfo().dimensionId());
+                pk.setDimensionId(this.controlledEntity.getDimension().getDimensionType().getId());
                 pk.setIdentifier(pa.particleName());
                 pk.setMolangVariablesJson(Optional.ofNullable(pa.moLangVariables()));
                 pk.setPosition(pos);
@@ -1979,7 +1980,7 @@ public class AllayPlayer implements Player {
     @Override
     public void viewDebugShape(DebugShape debugShape) {
         var packet = new DebugDrawerPacket();
-        packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionInfo().dimensionId(), debugShape.getAttachedEntity()));
+        packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionType().getId(), debugShape.getAttachedEntity()));
         sendPacket(packet);
     }
 
@@ -1987,7 +1988,7 @@ public class AllayPlayer implements Player {
     public void viewDebugShapes(Set<DebugShape> debugShapes) {
         var packet = new DebugDrawerPacket();
         for (var debugShape : debugShapes) {
-            packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionInfo().dimensionId(), debugShape.getAttachedEntity()));
+            packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionType().getId(), debugShape.getAttachedEntity()));
         }
         sendPacket(packet);
     }
@@ -2785,11 +2786,11 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z) {
+    public void beginDimensionChange(DimensionType targetDimType, double x, double y, double z) {
         this.changingDimension = true;
 
         var packet = new ChangeDimensionPacket();
-        packet.setDimension(targetDimInfo.dimensionId());
+        packet.setDimension(targetDimType.getId());
         packet.setPosition(Vector3f.from((float) x, (float) y + 1.62f, (float) z));
         sendPacket(packet);
     }
@@ -3136,12 +3137,13 @@ public class AllayPlayer implements Player {
         Vector3fc currentPos;
 
         var logOffWorld = server.getWorldPool().getWorld(playerData.getWorld());
-        if (logOffWorld == null || logOffWorld.getDimension(playerData.getDimension()) == null) {
+        var logOffDimension = logOffWorld == null ? null : logOffWorld.getDimension(new Identifier(playerData.getDimension()));
+        if (logOffDimension == null) {
             // The world or dimension where the player logged off doesn't exist, fallback to the global spawn point
             dimension = (AllayDimension) server.getWorldPool().getGlobalSpawnPoint().dimension();
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
             var currentWorldName = dimension.getWorld().getWorldData().getDisplayName();
-            var currentDimension = dimension.getDimensionInfo().dimensionId();
+            var currentDimension = dimension.getDimensionType().getIdentifier().toString();
 
             // The old pos stored in player's nbt is invalid, and we should replace it with the new one!
             var builder = playerData.getNbt().toBuilder();
@@ -3153,7 +3155,7 @@ public class AllayPlayer implements Player {
             // Save new player data back to storage
             playerManager.getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
         } else {
-            dimension = (AllayDimension) logOffWorld.getDimension(playerData.getDimension());
+            dimension = (AllayDimension) logOffDimension;
             currentPos = readVector3f(playerData.getNbt(), "Pos");
         }
 
@@ -3178,13 +3180,13 @@ public class AllayPlayer implements Player {
         var loc = this.controlledEntity.getLocation();
         dimension = (AllayDimension) loc.dimension();
         var currentWorldName = dimension.getWorld().getWorldData().getDisplayName();
-        var currentDimension = dimension.getDimensionInfo().dimensionId();
+        var currentDimension = dimension.getDimensionType().getIdentifier().toString();
         var currentRotation = readVector2f(playerData.getNbt(), "Rotation");
 
         var positionChanged = loc.x() != currentPos.x() || loc.y() != currentPos.y() || loc.z() != currentPos.z();
         var rotationChanged = (float) loc.yaw() != currentRotation.x() || (float) loc.pitch() != currentRotation.y();
         var worldChanged = !Objects.equals(playerData.getWorld(), currentWorldName);
-        var dimensionChanged = playerData.getDimension() != currentDimension;
+        var dimensionChanged = !Objects.equals(playerData.getDimension(), currentDimension);
         if (positionChanged || rotationChanged || worldChanged || dimensionChanged) {
             if (positionChanged || rotationChanged) {
                 var builder = playerData.getNbt().toBuilder();
@@ -3228,6 +3230,11 @@ public class AllayPlayer implements Player {
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
         helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
 
+        var dimensionDataPacket = NetworkData.DIMENSION_DATA_PACKET.get();
+        if (!dimensionDataPacket.getDefinitions().isEmpty()) {
+            sendPacket(dimensionDataPacket);
+        }
+
         var packet = new StartGamePacket();
 
         packet.getGamerules().addAll(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameRules().getGameRules()));
@@ -3241,11 +3248,11 @@ public class AllayPlayer implements Player {
         packet.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
         // We don't send world seed to the client for security reason
         packet.setSeed(0L);
-        packet.setDimensionId(dimension.getDimensionInfo().dimensionId());
+        packet.setDimensionId(dimension.getDimensionType().getId());
         // 0 - limit 1 - infinite
         // 2 - flat  3 - nether
         // 4 - end   5 - void
-        packet.setGeneratorId(1);
+        packet.setGeneratorId(NetworkData.getBedrockGeneratorType(dimension.getDimensionType()));
         packet.setLevelGameType(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()));
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         packet.setTrustingPlayers(true);

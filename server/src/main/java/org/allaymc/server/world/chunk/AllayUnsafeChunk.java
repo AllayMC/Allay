@@ -21,7 +21,7 @@ import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.poi.PoiType;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -49,7 +49,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
     protected final int x, z;
     @Getter
-    protected final DimensionInfo dimensionInfo;
+    protected final DimensionType dimensionType;
     protected final AllayChunkSection[] sections;
     protected final HeightMap heightMap;
     @Getter
@@ -77,7 +77,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
      *
      * @param x                the x coordinate of the chunk
      * @param z                the z coordinate of the chunk
-     * @param dimensionInfo    the dimension info
+     * @param dimensionType    the dimension type
      * @param sections         the sections
      * @param heightMap        the height map
      * @param scheduledUpdates the scheduled updates
@@ -85,14 +85,14 @@ public class AllayUnsafeChunk implements UnsafeChunk {
      * @param blockEntities    the block entities in the chunk
      */
     AllayUnsafeChunk(
-            int x, int z, DimensionInfo dimensionInfo,
+            int x, int z, DimensionType dimensionType,
             AllayChunkSection[] sections, HeightMap heightMap,
             NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates,
             ChunkState state, NonBlockingHashMap<Integer, BlockEntity> blockEntities,
             NonBlockingHashMap<Integer, PoiType> poiEntries) {
         this.x = x;
         this.z = z;
-        this.dimensionInfo = dimensionInfo;
+        this.dimensionType = dimensionType;
         this.sections = sections;
         this.heightMap = heightMap;
         this.scheduledUpdates = scheduledUpdates;
@@ -117,11 +117,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public void checkY(int y) {
-        Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
+        Preconditions.checkArgument(y >= dimensionType.getMinHeight() && y <= dimensionType.getMaxHeight());
     }
 
     public void checkSectionY(int sectionY) {
-        Preconditions.checkArgument(sectionY >= dimensionInfo.minSectionY() && sectionY <= dimensionInfo.maxSectionY());
+        Preconditions.checkArgument(sectionY >= dimensionType.minSectionY() && sectionY <= dimensionType.maxSectionY());
     }
 
     public void checkXYZ(int x, int y, int z) {
@@ -238,7 +238,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public AllayChunkSection getSection(int sectionY) {
         checkSectionY(sectionY);
-        return sections[sectionY - this.getDimensionInfo().minSectionY()];
+        return sections[sectionY - this.getDimensionType().minSectionY()];
     }
 
     @Override
@@ -270,7 +270,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight()) {
+        if (y < dimensionType.getMinHeight() || y > dimensionType.getMaxHeight()) {
             return BlockTypes.AIR.getDefaultState();
         }
 
@@ -345,8 +345,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     protected int calculateHeight(int x, int z) {
         // If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
-        var newHeight = dimensionInfo.minHeight();
-        for (int sectionY = dimensionInfo.maxSectionY(); sectionY >= dimensionInfo.minSectionY(); sectionY--) {
+        var newHeight = dimensionType.getMinHeight();
+        for (int sectionY = dimensionType.maxSectionY(); sectionY >= dimensionType.minSectionY(); sectionY--) {
             var section = getSection(sectionY);
             if (section.isAirSection()) {
                 continue;
@@ -387,7 +387,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public BiomeType getBiome(int x, int y, int z) {
-        if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
+        if (y < getDimensionType().getMinHeight() || y > getDimensionType().getMaxHeight()) {
             return BiomeTypes.PLAINS;
         }
 

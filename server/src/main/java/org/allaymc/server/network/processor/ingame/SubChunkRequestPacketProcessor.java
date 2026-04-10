@@ -6,8 +6,9 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.chunk.OperationType;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.player.ChunkCache;
@@ -26,7 +27,6 @@ import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -47,8 +47,8 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
     @Override
     public PacketSignal handleAsync(Player player, SubChunkRequestPacket packet, long receiveTime) {
         var entity = player.getControlledEntity();
-        var dimensionInfo = Objects.requireNonNull(DimensionInfo.of(packet.getDimension()));
-        if (dimensionInfo != entity.getDimension().getDimensionInfo()) {
+        var dimensionType = Registries.DIMENSIONS.getByK1(packet.getDimension());
+        if (dimensionType == null || dimensionType != entity.getDimension().getDimensionType()) {
             // Outdated sub chunk request from a previous dimension
             var subChunkPacket = new SubChunkPacket();
             subChunkPacket.setDimension(packet.getDimension());
@@ -73,7 +73,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         // Phase 1: Collect raw data
         var infos = new ArrayList<SubChunkInfo>(packet.getPositionOffsets().size());
         for (var offset : packet.getPositionOffsets()) {
-            infos.add(collectSubChunkInfo(player, dimensionInfo, centerPosition, offset));
+            infos.add(collectSubChunkInfo(player, dimensionType, centerPosition, offset));
         }
 
         // Phase 2: Decide caching + build SubChunkData
@@ -181,12 +181,12 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         return PacketSignal.HANDLED;
     }
 
-    private SubChunkInfo collectSubChunkInfo(Player player, DimensionInfo dimensionInfo, Vector3i center, Vector3i offset) {
+    private SubChunkInfo collectSubChunkInfo(Player player, DimensionType dimensionType, Vector3i center, Vector3i offset) {
         var entity = player.getControlledEntity();
 
         int sectionY = center.getY() + offset.getY();
-        if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
-            log.warn("Player {} requested sub-chunk at y={} which is out of bounds ({}, {})", player.getOriginName(), sectionY, dimensionInfo.minSectionY(), dimensionInfo.maxSectionY());
+        if (sectionY < dimensionType.minSectionY() || sectionY > dimensionType.maxSectionY()) {
+            log.warn("Player {} requested sub-chunk at y={} which is out of bounds ({}, {})", player.getOriginName(), sectionY, dimensionType.minSectionY(), dimensionType.maxSectionY());
             return new SubChunkInfo(offset, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, HeightMapDataType.NO_DATA, null, null, null);
         }
 

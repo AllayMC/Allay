@@ -1,7 +1,7 @@
 package org.allaymc.server;
 
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -27,7 +27,7 @@ public class ChunkJMHTest {
     public void init() {
         Allay.initI18n();
         Allay.initAllay();
-        chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD).toSafeChunk();
+        chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionTypes.OVERWORLD).toSafeChunk();
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {

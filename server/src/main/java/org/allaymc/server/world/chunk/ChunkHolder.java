@@ -106,7 +106,7 @@ public final class ChunkHolder {
         chunkReadFuture.whenComplete((c, t) -> {
             if (t != null) {
                 log.error("Error while loading chunk ({},{}) !", x, z, t);
-                this.chunk = AllayUnsafeChunk.builder().voidChunk(x, z, this.dimension.getDimensionInfo()).toSafeChunk();
+                this.chunk = AllayUnsafeChunk.builder().voidChunk(x, z, this.dimension.getDimensionType()).toSafeChunk();
             } else {
                 this.chunk = c;
             }

@@ -5,7 +5,7 @@ import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permissions;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
@@ -20,7 +20,7 @@ public class SetWorldSpawnCommand extends Command {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().pos("spawnPoint").exec((context, entity) -> {
-            if (entity.getDimension().getDimensionInfo() != DimensionInfo.OVERWORLD) {
+            if (entity.getDimension().getDimensionType() != DimensionTypes.OVERWORLD) {
                 context.addError("%" + TrKeys.MC_COMMANDS_SETWORLDSPAWN_WRONGDIMENSION);
                 return context.fail();
             }

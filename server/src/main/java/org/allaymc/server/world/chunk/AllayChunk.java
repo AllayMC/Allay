@@ -8,7 +8,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.poi.PoiType;
 
 import java.util.Collection;
@@ -33,9 +33,9 @@ public class AllayChunk implements Chunk {
     AllayChunk(AllayUnsafeChunk unsafeChunk) {
         this.unsafeChunk = unsafeChunk;
 
-        var dimensionInfo = unsafeChunk.getDimensionInfo();
-        this.blockLocks = new ChunkSectionLocks(dimensionInfo);
-        this.biomeLocks = new ChunkSectionLocks(dimensionInfo);
+        var dimensionType = unsafeChunk.getDimensionType();
+        this.blockLocks = new ChunkSectionLocks(dimensionType);
+        this.biomeLocks = new ChunkSectionLocks(dimensionType);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class AllayChunk implements Chunk {
 
     @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
+        if (y < getDimensionType().getMinHeight() || y > getDimensionType().getMaxHeight()) {
             return BlockTypes.AIR.getDefaultState();
         }
 
@@ -77,7 +77,7 @@ public class AllayChunk implements Chunk {
 
     @Override
     public BiomeType getBiome(int x, int y, int z) {
-        if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
+        if (y < getDimensionType().getMinHeight() || y > getDimensionType().getMaxHeight()) {
             return BiomeTypes.PLAINS;
         }
 
@@ -189,7 +189,7 @@ public class AllayChunk implements Chunk {
 
         ChunkState getState();
 
-        DimensionInfo getDimensionInfo();
+        DimensionType getDimensionType();
 
         int getX();
 

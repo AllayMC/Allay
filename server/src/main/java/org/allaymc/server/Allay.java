@@ -26,6 +26,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.feature.WorldFeature;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
@@ -48,6 +49,7 @@ import org.allaymc.server.utils.AllayNBTIO;
 import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
+import org.allaymc.server.world.dimension.CustomDimensionIdAllocator;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -237,6 +239,12 @@ public final class Allay {
                 new BiomeTypeRegistryPopulator()
         );
         CustomBiomeIdAllocator.init();
+        DoubleKeyMappedRegistry.create(
+                RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, DimensionType>())),
+                r -> Registries.DIMENSIONS = r,
+                new DimensionTypeRegistryPopulator()
+        );
+        CustomDimensionIdAllocator.init();
 
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());

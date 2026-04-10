@@ -33,14 +33,15 @@ public final class HeightAndBiomeCodec {
      */
     public static byte[] serialize(AllayUnsafeChunk chunk) {
         return LevelDBUtils.withByteBufToArray(heightAndBiomesBuffer -> {
+            var dimensionType = chunk.getDimensionType();
             // Serialize height map
             for (var height : chunk.calculateAndGetHeightMap().getHeights()) {
-                heightAndBiomesBuffer.writeShortLE(height - chunk.getDimensionInfo().minHeight());
+                heightAndBiomesBuffer.writeShortLE(height - dimensionType.getMinHeight());
             }
 
             // Serialize biomes
             Palette<BiomeType> lastPalette = null;
-            for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
+            for (int y = dimensionType.minSectionY(); y <= dimensionType.maxSectionY(); y++) {
                 AllayChunkSection section = chunk.getSection(y);
                 section.biomes().compact();
                 section.biomes().writeToStorage(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
@@ -55,18 +56,19 @@ public final class HeightAndBiomeCodec {
      */
     public static void deserialize(byte[] data, AllayChunkBuilder builder) {
         var heightAndBiomesBuffer = Unpooled.wrappedBuffer(data);
+        var dimensionType = builder.getDimensionType();
 
         // Height map
         short[] heights = new short[HEIGHTMAP_SIZE];
         for (int i = 0; i < HEIGHTMAP_SIZE; i++) {
-            heights[i] = (short) (heightAndBiomesBuffer.readUnsignedShortLE() + builder.getDimensionInfo().minHeight());
+            heights[i] = (short) (heightAndBiomesBuffer.readUnsignedShortLE() + dimensionType.getMinHeight());
         }
         builder.heightMap(new HeightMap(heights));
 
         // Biomes
         Palette<BiomeType> lastPalette = null;
-        var minSectionY = builder.getDimensionInfo().minSectionY();
-        for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
+        var minSectionY = dimensionType.minSectionY();
+        for (int y = minSectionY; y <= dimensionType.maxSectionY(); y++) {
             AllayChunkSection section = builder.getSections()[y - minSectionY];
             if (section == null) {
                 continue;
@@ -91,8 +93,9 @@ public final class HeightAndBiomeCodec {
         byte[] biomes = new byte[HEIGHTMAP_SIZE];
         heightAndBiomesBuffer.readBytes(biomes);
 
-        var minSectionY = builder.getDimensionInfo().minSectionY();
-        for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
+        var dimensionType = builder.getDimensionType();
+        var minSectionY = dimensionType.minSectionY();
+        for (int y = minSectionY; y <= dimensionType.maxSectionY(); y++) {
             var section = builder.getSections()[y - minSectionY];
             if (section == null) {
                 continue;

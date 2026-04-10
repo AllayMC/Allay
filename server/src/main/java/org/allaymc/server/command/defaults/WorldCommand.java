@@ -11,7 +11,9 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.utils.identifier.IdentifierUtils;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class WorldCommand extends Command {
                                 world.getDimensions()
                                         .values()
                                         .stream()
-                                        .map(dim -> dim.getDimensionInfo().toString())
+                                        .map(dim -> dim.getDimensionType().getIdentifier().toString())
                                         .collect(Collectors.joining(", "))
                                 + "]"
                         );
@@ -49,35 +51,37 @@ public class WorldCommand extends Command {
                 .root()
                 .key("tp")
                 .str("world")
-                .enums("dimension", "overworld", new String[]{"overworld", "nether", "the_end"})
+                .str("dimension")
                 .optional()
                 .exec((context, entity) -> {
                     String worldName = context.getResult(1);
                     String dimName = context.getResult(2);
+                    var dimDisplayName = dimName == null ? DimensionTypes.OVERWORLD.getIdentifier().toString() : dimName;
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
 
-                    var dimInfo = DimensionInfo.fromName(dimName);
-                    if (dimInfo == null) {
+                    var dimensionType = resolveDimensionType(dimName);
+                    if (dimensionType == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_UNKNOWN, dimName);
                         return context.fail();
                     }
 
-                    var dim = world.getDimension(dimInfo.dimensionId());
+                    var dim = world.getDimension(dimensionType);
                     if (dim == null) {
-
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_DISABLED, dimDisplayName);
+                        return context.fail();
                     }
-                    if (dim.getDimensionInfo() == DimensionInfo.OVERWORLD) {
+                    if (dim.getDimensionType() == DimensionTypes.OVERWORLD) {
                         entity.teleport(world.getSpawnPoint());
                     } else {
                         // TODO: Find a safe location in nether and the_end
                         entity.teleport(new Location3d(0, 64, 0, dim));
                     }
 
-                    context.addOutput(TrKeys.ALLAY_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
+                    context.addOutput(TrKeys.ALLAY_COMMAND_WORLD_TP_SUCCESS, worldName, dimDisplayName);
                     return context.success();
                 }, SenderType.ENTITY)
                 .root()
@@ -153,5 +157,13 @@ public class WorldCommand extends Command {
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER);
 
+    }
+
+    private static DimensionType resolveDimensionType(String dimName) {
+        if (dimName == null) {
+            return DimensionTypes.OVERWORLD;
+        }
+        var identifier = IdentifierUtils.tryParse(dimName);
+        return identifier == null ? null : Registries.DIMENSIONS.getByK2(identifier);
     }
 }

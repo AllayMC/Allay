@@ -10,8 +10,8 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.chunk.UnsafeChunk;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  */
 public class AllayLightEngine implements LightEngine {
 
-    protected final DimensionInfo dimensionInfo;
+    protected final DimensionType dimensionType;
     protected final String worldName;
     protected final AtomicBoolean isRunning;
     protected final Supplier<Integer> timeSupplier;
@@ -86,16 +86,16 @@ public class AllayLightEngine implements LightEngine {
     protected LightPropagator skyLightPropagator;
 
     public AllayLightEngine(Dimension dimension, boolean useVirtualThread) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeather, AllayServer.getSettings().worldSettings().maxLightUpdateCountPerDimension(), useVirtualThread);
+        this(dimension.getDimensionType(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeather, AllayServer.getSettings().worldSettings().maxLightUpdateCountPerDimension(), useVirtualThread);
     }
 
     @VisibleForTesting
-    public AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier) {
-        this(dimensionInfo, worldName, timeSupplier, weatherSupplier, Integer.MAX_VALUE, false);
+    public AllayLightEngine(DimensionType dimensionType, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier) {
+        this(dimensionType, worldName, timeSupplier, weatherSupplier, Integer.MAX_VALUE, false);
     }
 
-    protected AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier, int maxUpdateCount, boolean useVirtualThread) {
-        this.dimensionInfo = dimensionInfo;
+    protected AllayLightEngine(DimensionType dimensionType, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier, int maxUpdateCount, boolean useVirtualThread) {
+        this.dimensionType = dimensionType;
         this.worldName = worldName;
         this.isRunning = new AtomicBoolean(true);
         this.timeSupplier = timeSupplier;
@@ -110,17 +110,17 @@ public class AllayLightEngine implements LightEngine {
         this.lightDampening = new NonBlockingHashMapLong<>();
         this.lightEmission = new NonBlockingHashMapLong<>();
         this.blockLight = new NonBlockingHashMapLong<>();
-        this.blockLightPropagator = new LightPropagator(new CachedLightDataAccessor(dimensionInfo, blockLight, lightDampening, lightEmission));
-        if (dimensionInfo.hasSkyLight()) {
+        this.blockLightPropagator = new LightPropagator(new CachedLightDataAccessor(dimensionType, blockLight, lightDampening, lightEmission));
+        if (dimensionType.hasSkyLight()) {
             this.skyLightUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
             this.lightHeightMap = new NonBlockingHashMapLong<>();
             this.lightHeightMapAccessor = new CachedChunkMapAccessor<>(lightHeightMap);
             this.skyLightInBorder = new NonBlockingHashMapLong<>();
-            this.skyLightPropagator = new LightPropagator(new CachedLightDataAccessor(dimensionInfo, skyLightInBorder, lightDampening, lightEmission));
+            this.skyLightPropagator = new LightPropagator(new CachedLightDataAccessor(dimensionType, skyLightInBorder, lightDampening, lightEmission));
         }
         // Initialize lightDataAccessor after we initialized skylight related things
         // NOTICE: we only cache skyLightInBorder, block light is not much used in "Chunk & Block" thread
-        this.lightDataAccessor = new CachedLightDataAccessor(dimensionInfo, skyLightInBorder, lightDampening, lightEmission);
+        this.lightDataAccessor = new CachedLightDataAccessor(dimensionType, skyLightInBorder, lightDampening, lightEmission);
     }
 
     @VisibleForTesting
@@ -162,10 +162,10 @@ public class AllayLightEngine implements LightEngine {
     }
 
     public void startTick() {
-        var dimensionName = worldName + ":" + dimensionInfo.toString();
+        var dimensionName = worldName + ":" + dimensionType.getIdentifier();
         startCalculatingThread("Light Calculating Thread (Chunk & Block) #" + dimensionName, chunkAndBlockUpdateQueue);
         startCalculatingThread("Light Calculating Thread (Block Light) #" + dimensionName, blockLightUpdateQueue);
-        if (dimensionInfo.hasSkyLight()) {
+        if (dimensionType.hasSkyLight()) {
             startCalculatingThread("Light Calculating Thread (Sky Light) #" + dimensionName, skyLightUpdateQueue);
         }
     }
@@ -200,7 +200,7 @@ public class AllayLightEngine implements LightEngine {
     public void handleUpdateInAllQueues() {
         handleUpdateUninterruptibleIn(chunkAndBlockUpdateQueue);
         handleUpdateUninterruptibleIn(blockLightUpdateQueue);
-        if (dimensionInfo.hasSkyLight()) {
+        if (dimensionType.hasSkyLight()) {
             handleUpdateUninterruptibleIn(skyLightUpdateQueue);
         }
     }
@@ -208,8 +208,8 @@ public class AllayLightEngine implements LightEngine {
     protected void addChunk(UnsafeChunk chunk) {
         var chunkLightDampening = createNibbleArrays();
         var chunkLightEmission = createNibbleArrays();
-        var chunkLightHeightMap = dimensionInfo.hasSkyLight() ? new HeightMap((short) dimensionInfo.minHeight()) : null;
-        for (int y = dimensionInfo.maxHeight(); y >= dimensionInfo.minHeight(); y--) {
+        var chunkLightHeightMap = dimensionType.hasSkyLight() ? new HeightMap((short) dimensionType.getMinHeight()) : null;
+        for (int y = dimensionType.getMaxHeight(); y >= dimensionType.getMinHeight(); y--) {
             var section = (AllayChunkSection) chunk.getSection(y >> 4);
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
@@ -218,15 +218,15 @@ public class AllayLightEngine implements LightEngine {
                     var lightEmission = blockStateData.lightEmission();
 
                     if (lightDampening != 0) {
-                        chunkLightDampening[(y - dimensionInfo.minHeight()) >> 4].set(x, y & 0xf, z, lightDampening);
-                        boolean skyLightSourceNotFound = dimensionInfo.hasSkyLight() && chunkLightHeightMap.get(x, z) == dimensionInfo.minHeight();
+                        chunkLightDampening[(y - dimensionType.getMinHeight()) >> 4].set(x, y & 0xf, z, lightDampening);
+                        boolean skyLightSourceNotFound = dimensionType.hasSkyLight() && chunkLightHeightMap.get(x, z) == dimensionType.getMinHeight();
                         if (skyLightSourceNotFound) {
                             chunkLightHeightMap.set(x, z, (short) (y + 1));
                         }
                     }
 
                     if (lightEmission != 0) {
-                        chunkLightEmission[(y - dimensionInfo.minHeight()) >> 4].set(x, y & 0xf, z, lightEmission);
+                        chunkLightEmission[(y - dimensionType.getMinHeight()) >> 4].set(x, y & 0xf, z, lightEmission);
                     }
                 }
             }
@@ -236,7 +236,7 @@ public class AllayLightEngine implements LightEngine {
         lightDampening.put(hash, chunkLightDampening);
         lightEmission.put(hash, chunkLightEmission);
         blockLight.put(hash, createNibbleArrays());
-        if (dimensionInfo.hasSkyLight()) {
+        if (dimensionType.hasSkyLight()) {
             lightHeightMap.put(hash, chunkLightHeightMap);
             skyLightInBorder.put(hash, createNibbleArrays());
         }
@@ -255,13 +255,13 @@ public class AllayLightEngine implements LightEngine {
             return;
         }
 
-        for (int worldY = dimensionInfo.maxHeight(); worldY >= dimensionInfo.minHeight(); worldY--) {
+        for (int worldY = dimensionType.getMaxHeight(); worldY >= dimensionType.getMinHeight(); worldY--) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     final int worldX = (chunkX << 4) + x;
                     final int worldZ = (chunkZ << 4) + z;
                     calculateBlockLightAt(worldX, worldY, worldZ);
-                    if (dimensionInfo.hasSkyLight()) {
+                    if (dimensionType.hasSkyLight()) {
                         calculateSkyLightAt(worldX, worldZ);
                     }
                 }
@@ -313,7 +313,7 @@ public class AllayLightEngine implements LightEngine {
 
     protected void calculateSkyLightAt(int x, int z) {
         var lightHeight = getLightHeight(x, z);
-        if (lightHeight > dimensionInfo.maxHeight()) {
+        if (lightHeight > dimensionType.getMaxHeight()) {
             // This x-z position is full of blocks
             return;
         }
@@ -348,8 +348,8 @@ public class AllayLightEngine implements LightEngine {
     }
 
     protected ChunkSectionNibbleArray[] createNibbleArrays() {
-        ChunkSectionNibbleArray[] nibbleArrays = new ChunkSectionNibbleArray[dimensionInfo.chunkSectionCount()];
-        for (int i = 0; i < dimensionInfo.chunkSectionCount(); i++) {
+        ChunkSectionNibbleArray[] nibbleArrays = new ChunkSectionNibbleArray[dimensionType.chunkSectionCount()];
+        for (int i = 0; i < dimensionType.chunkSectionCount(); i++) {
             nibbleArrays[i] = new ChunkSectionNibbleArray();
         }
         return nibbleArrays;
@@ -357,7 +357,7 @@ public class AllayLightEngine implements LightEngine {
 
     @Override
     public int getSkyLight(int x, int y, int z) {
-        if (!dimensionInfo.hasSkyLight()) {
+        if (!dimensionType.hasSkyLight()) {
             return 0;
         }
 
@@ -389,12 +389,12 @@ public class AllayLightEngine implements LightEngine {
 
     @Override
     public int getInternalLight(int x, int y, int z) {
-        return dimensionInfo.hasSkyLight() ? Math.max(getInternalSkyLight(x, y, z), getBlockLight(x, y, z)) : getBlockLight(x, y, z);
+        return dimensionType.hasSkyLight() ? Math.max(getInternalSkyLight(x, y, z), getBlockLight(x, y, z)) : getBlockLight(x, y, z);
     }
 
     @Override
     public int getInternalSkyLight(int x, int y, int z) {
-        return dimensionInfo.hasSkyLight() ? Math.max(0, getSkyLight(x, y, z) - calculateSkylightReduction(timeSupplier.get(), weatherSupplier.get())) : 0;
+        return dimensionType.hasSkyLight() ? Math.max(0, getSkyLight(x, y, z) - calculateSkylightReduction(timeSupplier.get(), weatherSupplier.get())) : 0;
     }
 
     public void onBlockChange(int x, int y, int z, int le, int ld) {
@@ -413,7 +413,7 @@ public class AllayLightEngine implements LightEngine {
 
             var lightDampening = unpackLightDampening(packedLightData);
             var lightEmissionValue = unpackLightEmission(packedLightData);
-            int oldLightHeight = dimensionInfo.hasSkyLight() ? getLightHeight(x, z) : 0;
+            int oldLightHeight = dimensionType.hasSkyLight() ? getLightHeight(x, z) : 0;
             var oldBlockDampening = lightDataAccessor.getLightDampening(x, y, z);
             var oldBlockEmission = lightDataAccessor.getLightEmission(x, y, z);
 
@@ -431,7 +431,7 @@ public class AllayLightEngine implements LightEngine {
             }
 
             blockLightUpdateQueue.offer(() -> blockLightPropagator.setLightAndPropagate(x, y, z, getBlockLight(x, y, z), lightEmissionValue));
-            if (!dimensionInfo.hasSkyLight() || oldBlockDampening == lightDampening) {
+            if (!dimensionType.hasSkyLight() || oldBlockDampening == lightDampening) {
                 // No change in light dampening, so no need to recalculate the sky light because
                 // sky light is only related to block dampening
                 return;
@@ -521,7 +521,7 @@ public class AllayLightEngine implements LightEngine {
             lightDampening.remove(hash);
             lightEmission.remove(hash);
             blockLight.remove(hash);
-            if (dimensionInfo.hasSkyLight()) {
+            if (dimensionType.hasSkyLight()) {
                 lightHeightMap.remove(hash);
                 skyLightInBorder.remove(hash);
             }
@@ -564,13 +564,13 @@ public class AllayLightEngine implements LightEngine {
             return defaultValue;
         }
         var array = target.get(hash);
-        return array[(y - dimensionInfo.minHeight()) >> 4].get(x & 15, y & 15, z & 15);
+        return array[(y - dimensionType.getMinHeight()) >> 4].get(x & 15, y & 15, z & 15);
     }
 
     protected int getWithoutChunkCheck(NonBlockingHashMapLong<ChunkSectionNibbleArray[]> target, int x, int y, int z) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         var array = target.get(hash);
-        return array[(y - dimensionInfo.minHeight()) >> 4].get(x & 15, y & 15, z & 15);
+        return array[(y - dimensionType.getMinHeight()) >> 4].get(x & 15, y & 15, z & 15);
     }
 
     protected void set(NonBlockingHashMapLong<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
@@ -579,26 +579,26 @@ public class AllayLightEngine implements LightEngine {
             return;
         }
         var array = target.get(hash);
-        array[(y - dimensionInfo.minHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
+        array[(y - dimensionType.getMinHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
     protected void setWithoutChunkCheck(NonBlockingHashMapLong<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         var array = target.get(hash);
-        array[(y - dimensionInfo.minHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
+        array[(y - dimensionType.getMinHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
     protected void setLightDampening(int x, int y, int z, int value) {
         setWithoutChunkCheck(lightDampening, x, y, z, value);
-        if (!dimensionInfo.hasSkyLight()) {
+        if (!dimensionType.hasSkyLight()) {
             return;
         }
 
         // Update light height
         var currentLightHeight = getLightHeight(x, z);
         if (value == 0 && currentLightHeight >= y + 1) {
-            short newLightHeight = (short) dimensionInfo.minHeight();
-            for (short i = currentLightHeight; i >= dimensionInfo.minHeight(); i--) {
+            short newLightHeight = (short) dimensionType.getMinHeight();
+            for (short i = currentLightHeight; i >= dimensionType.getMinHeight(); i--) {
                 if (lightDataAccessor.getLightDampening(x, i, z) != 0) {
                     newLightHeight = (short) (i + 1);
                     break;

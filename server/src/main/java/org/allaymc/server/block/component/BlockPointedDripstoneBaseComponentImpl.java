@@ -421,7 +421,7 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
 
         // Find cauldron below
         int searchY = y - 1;
-        while (searchY > dimension.getDimensionInfo().minHeight()) {
+        while (searchY > dimension.getDimensionType().getMinHeight()) {
             var belowState = dimension.getBlockState(x, searchY, z);
             var belowType = belowState.getBlockType();
 

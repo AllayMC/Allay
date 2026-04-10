@@ -582,7 +582,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
             return;
         }
 
-        int minY = thisEntity.getDimension().getDimensionInfo().minHeight() - 18;
+        int minY = thisEntity.getDimension().getDimensionType().getMinHeight() - 18;
         if (thisEntity.getLocation().y() <= minY) {
             attack(DamageContainer.voidDamage(10));
         }

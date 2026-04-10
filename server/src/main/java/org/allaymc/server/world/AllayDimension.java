@@ -25,8 +25,9 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.api.world.poi.PoiType;
@@ -63,7 +64,7 @@ public class AllayDimension implements Dimension {
     protected static final int LIGHTNING_STRIKE_CHANCE = 100000;
 
     protected final AllayWorld world;
-    protected final DimensionInfo dimensionInfo;
+    protected final DimensionType dimensionType;
     protected final WorldGenerator worldGenerator;
     protected final AllayChunkManager chunkManager;
     protected final AllayEntityManager entityManager;
@@ -73,9 +74,9 @@ public class AllayDimension implements Dimension {
     protected final Set<Player> players;
     protected final Set<DebugShape> debugShapes;
 
-    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo, boolean enableLightCalculation, boolean useVirtualThread) {
+    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionType dimensionType, boolean enableLightCalculation, boolean useVirtualThread) {
         this.world = world;
-        this.dimensionInfo = dimensionInfo;
+        this.dimensionType = dimensionType;
         this.worldGenerator = worldGenerator;
         this.chunkManager = new AllayChunkManager(this, worldGenerator, world.getWorldStorage());
         this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
@@ -464,7 +465,7 @@ public class AllayDimension implements Dimension {
         }
 
         // Only spawn lightning in overworld
-        if (dimensionInfo.dimensionId() != DimensionInfo.OVERWORLD.dimensionId()) {
+        if (dimensionType != DimensionTypes.OVERWORLD) {
             return;
         }
 
@@ -511,6 +512,6 @@ public class AllayDimension implements Dimension {
 
     @Override
     public String toString() {
-        return "world=" + this.world.getName() + " dimId=" + this.dimensionInfo.dimensionId();
+        return "world=" + this.world.getName() + " dimension=" + this.dimensionType.getIdentifier();
     }
 }

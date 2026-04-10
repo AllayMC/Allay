@@ -8,7 +8,7 @@ import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.World;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.world.storage.leveldb.LevelDBUtils;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -48,12 +48,12 @@ public final class BlockEntityCodec {
     /**
      * Deserialize block entities from bytes.
      */
-    public static NonBlockingHashMap<Integer, BlockEntity> deserialize(byte[] data, World world, DimensionInfo dimensionInfo) {
+    public static NonBlockingHashMap<Integer, BlockEntity> deserialize(byte[] data, World world, DimensionType dimensionType) {
         var blockEntities = new NonBlockingHashMap<Integer, BlockEntity>();
         for (var nbt : AllayNBTUtils.bytesToNbtListLE(data)) {
             BlockEntity blockEntity;
             try {
-                blockEntity = NBTIO.getAPI().fromBlockEntityNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
+                blockEntity = NBTIO.getAPI().fromBlockEntityNBT(world.getDimension(dimensionType), nbt);
             } catch (Throwable t) {
                 log.error("Error while loading block entity from NBT", t);
                 continue;

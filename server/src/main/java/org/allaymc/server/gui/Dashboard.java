@@ -137,7 +137,7 @@ public final class Dashboard {
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_UUID) + ": " + player.getLoginData().getUuid().toString() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getDisplayName() + "\n" +
-                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionType().getIdentifier(),
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
@@ -320,7 +320,7 @@ public final class Dashboard {
                 entityDimMap.keySet().retainAll(loadedDimIds);
                 // Append data for existing dimensions
                 world.getDimensions().values().forEach(dimension -> {
-                    int dimId = dimension.getDimensionInfo().dimensionId();
+                    int dimId = dimension.getDimensionType().getId();
                     appendAndTrim(
                             chunkDimMap.computeIfAbsent(dimId, id -> new ArrayList<>(Collections.nCopies(CHUNK_VALUE_COUNT, 0))),
                             dimension.getChunkManager().getLoadedChunks().size(), CHUNK_VALUE_COUNT);

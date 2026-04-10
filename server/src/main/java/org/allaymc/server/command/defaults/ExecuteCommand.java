@@ -10,7 +10,8 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.utils.identifier.IdentifierUtils;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.server.command.ProxyCommandSender;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -103,7 +104,7 @@ public class ExecuteCommand extends Command {
                 .root()
                 .key("in")
                 .str("world")
-                .enums("dimension", "overworld", "nether", "the_end")
+                .str("dimension")
                 .remain("subcommand")
                 .exec(context -> {
                     String worldName = context.getResult(1);
@@ -116,13 +117,13 @@ public class ExecuteCommand extends Command {
                         return context.fail();
                     }
 
-                    var dimInfo = DimensionInfo.fromName(dimName);
-                    if (dimInfo == null) {
+                    var dimensionType = resolveDimensionType(dimName);
+                    if (dimensionType == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_UNKNOWN, dimName);
                         return context.fail();
                     }
 
-                    var dim = world.getDimension(dimInfo.dimensionId());
+                    var dim = world.getDimension(dimensionType);
                     if (dim == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_DISABLED, dimName);
                         return context.fail();
@@ -167,5 +168,10 @@ public class ExecuteCommand extends Command {
         }
 
         return new CommandResult(successCount, context);
+    }
+
+    private static DimensionType resolveDimensionType(String dimName) {
+        var identifier = IdentifierUtils.tryParse(dimName);
+        return identifier == null ? null : Registries.DIMENSIONS.getByK2(identifier);
     }
 }

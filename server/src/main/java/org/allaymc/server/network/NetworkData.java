@@ -11,6 +11,8 @@ import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.item.recipe.ComplexRecipe;
@@ -24,6 +26,7 @@ import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.DimensionDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
@@ -66,6 +69,7 @@ public final class NetworkData {
     public static final Supplier<CraftingDataPacket> CRAFTING_DATA_PACKET = Suppliers.memoize(NetworkData::encodeCraftingDataPacket);
     public static final Supplier<AvailableEntityIdentifiersPacket> AVAILABLE_ENTITY_IDENTIFIERS_PACKET = Suppliers.memoize(NetworkData::encodeAvailableEntityIdentifiersPacket);
     public static final Supplier<BiomeDefinitionListPacket> BIOME_DEFINITION_LIST_PACKET = Suppliers.memoize(NetworkData::encodeBiomeDefinitionListPacket);
+    public static final Supplier<DimensionDataPacket> DIMENSION_DATA_PACKET = Suppliers.memoize(NetworkData::encodeDimensionDataPacket);
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
@@ -288,6 +292,36 @@ public final class NetworkData {
         var packet = new BiomeDefinitionListPacket();
         packet.setBiomes(new BiomeDefinitions(definitions));
         return packet;
+    }
+
+    public static DimensionDataPacket encodeDimensionDataPacket() {
+        var packet = new DimensionDataPacket();
+        Registries.DIMENSIONS.getContent().m1().values().stream()
+                .filter(NetworkData::isCustomDimension)
+                .map(dimensionType -> new DimensionDefinition(
+                        dimensionType.getIdentifier().toString(),
+                        dimensionType.getMaxHeight(),
+                        dimensionType.getMinHeight(),
+                        getBedrockGeneratorType(dimensionType)
+                ))
+                .forEach(packet.getDefinitions()::add);
+        return packet;
+    }
+
+    public static int getBedrockGeneratorType(DimensionType dimensionType) {
+        if (dimensionType == DimensionTypes.NETHER) {
+            return 3;
+        }
+        if (dimensionType == DimensionTypes.THE_END) {
+            return 4;
+        }
+        return 1;
+    }
+
+    private static boolean isCustomDimension(DimensionType dimensionType) {
+        return dimensionType != DimensionTypes.OVERWORLD &&
+               dimensionType != DimensionTypes.NETHER &&
+               dimensionType != DimensionTypes.THE_END;
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {

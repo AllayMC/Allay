@@ -110,7 +110,7 @@ public class Position3f extends Vector3f implements Position3fc {
         out.writeFloat(y);
         out.writeFloat(z);
         out.writeUTF(this.dimension().getWorld().getWorldData().getDisplayName());
-        out.writeInt(this.dimension().getDimensionInfo().dimensionId());
+        out.writeInt(this.dimension().getDimensionType().getId());
     }
 
     @Override
@@ -141,6 +141,6 @@ public class Position3f extends Vector3f implements Position3fc {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + this.dimension().getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + ":" + this.dimension().getDimensionType().getIdentifier() + ")";
     }
 }

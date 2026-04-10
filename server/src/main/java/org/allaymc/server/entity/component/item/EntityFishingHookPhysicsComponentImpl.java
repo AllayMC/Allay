@@ -86,7 +86,7 @@ public class EntityFishingHookPhysicsComponentImpl extends EntityProjectilePhysi
         int y = (int) Math.floor(location.y());
 
         // Find the top of the water column
-        while (y < dimension.getDimensionInfo().maxHeight()) {
+        while (y < dimension.getDimensionType().getMaxHeight()) {
             var blockState = dimension.getBlockState(x, y + 1, z);
             if (!blockState.getBlockType().hasBlockTag(BlockTags.WATER)) {
                 return y + 1;

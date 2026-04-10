@@ -13,7 +13,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.RespawnAnchorChargeSound;
@@ -54,7 +53,7 @@ public class BlockRespawnAnchorBaseComponentImpl extends BlockBaseComponentImpl 
             return false;
         }
 
-        if (dimension.getDimensionInfo() != DimensionInfo.NETHER) {
+        if (!dimension.getDimensionType().respawnAnchorWorks()) {
             if (!dimension.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.RESPAWN_BLOCKS_EXPLODE)) {
                 return true;
             }

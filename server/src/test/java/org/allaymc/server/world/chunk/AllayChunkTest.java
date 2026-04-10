@@ -5,8 +5,7 @@ import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.data.DimensionInfo;
-import org.allaymc.api.world.poi.PoiType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.poi.PoiTypes;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @ExtendWith(AllayTestExtension.class)
 class AllayChunkTest {
-    final Chunk chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD).toSafeChunk();
+    final Chunk chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionTypes.OVERWORLD).toSafeChunk();
 
     @Test
     void testInvalidGetXXXMethodCall() {

@@ -1,6 +1,6 @@
 package org.allaymc.server.world.light;
 
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.jctools.maps.NonBlockingHashMapLong;
 
@@ -8,16 +8,16 @@ import org.jctools.maps.NonBlockingHashMapLong;
  * @author daoge_cmd
  */
 public class CachedLightDataAccessor implements LightDataAccessor {
-    protected final DimensionInfo dimensionInfo;
+    protected final DimensionType dimensionType;
     protected final CachedChunkMapAccessor<ChunkSectionNibbleArray[]> cachedLight;
     protected final CachedChunkMapAccessor<ChunkSectionNibbleArray[]> cachedLightDampening;
     protected final CachedChunkMapAccessor<ChunkSectionNibbleArray[]> cachedLightEmission;
 
-    public CachedLightDataAccessor(DimensionInfo dimensionInfo,
+    public CachedLightDataAccessor(DimensionType dimensionType,
                                    NonBlockingHashMapLong<ChunkSectionNibbleArray[]> light,
                                    NonBlockingHashMapLong<ChunkSectionNibbleArray[]> lightDampening,
                                    NonBlockingHashMapLong<ChunkSectionNibbleArray[]> lightEmission) {
-        this.dimensionInfo = dimensionInfo;
+        this.dimensionType = dimensionType;
         this.cachedLight = new CachedChunkMapAccessor<>(light);
         this.cachedLightDampening = new CachedChunkMapAccessor<>(lightDampening);
         this.cachedLightEmission = new CachedChunkMapAccessor<>(lightEmission);
@@ -25,32 +25,32 @@ public class CachedLightDataAccessor implements LightDataAccessor {
 
     @Override
     public int getLight(int x, int y, int z) {
-        return cachedLight.get(x, z)[(y - dimensionInfo.minHeight()) >> 4].get(x & 15, y & 15, z & 15);
+        return cachedLight.get(x, z)[(y - dimensionType.getMinHeight()) >> 4].get(x & 15, y & 15, z & 15);
     }
 
     @Override
     public void setLight(int x, int y, int z, int value) {
-        cachedLight.get(x, z)[(y - dimensionInfo.minHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
+        cachedLight.get(x, z)[(y - dimensionType.getMinHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
     @Override
     public int getLightDampening(int x, int y, int z) {
-        return cachedLightDampening.get(x, z)[(y - dimensionInfo.minHeight()) >> 4].get(x & 15, y & 15, z & 15);
+        return cachedLightDampening.get(x, z)[(y - dimensionType.getMinHeight()) >> 4].get(x & 15, y & 15, z & 15);
     }
 
     @Override
     public int getLightEmission(int x, int y, int z) {
-        return cachedLightEmission.get(x, z)[(y - dimensionInfo.minHeight()) >> 4].get(x & 15, y & 15, z & 15);
+        return cachedLightEmission.get(x, z)[(y - dimensionType.getMinHeight()) >> 4].get(x & 15, y & 15, z & 15);
     }
 
     @Override
     public void setLightEmission(int x, int y, int z, int value) {
-        cachedLightEmission.get(x, z)[(y - dimensionInfo.minHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
+        cachedLightEmission.get(x, z)[(y - dimensionType.getMinHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
     @Override
     public boolean isYInRange(int y) {
-        return y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight();
+        return y >= dimensionType.getMinHeight() && y <= dimensionType.getMaxHeight();
     }
 
 }

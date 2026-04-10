@@ -129,7 +129,7 @@ public final class AllayChunkManager implements ChunkManager {
     }
 
     public ChunkHolder getOrCreateChunkHolder(int x, int z) {
-        return this.chunkHolders.computeIfAbsent(HashUtils.hashXZ(x, z), $ -> new ChunkHolder(this, x, z, worldStorage.readChunk(x, z, dimension.getDimensionInfo())));
+        return this.chunkHolders.computeIfAbsent(HashUtils.hashXZ(x, z), $ -> new ChunkHolder(this, x, z, worldStorage.readChunk(x, z, dimension.getDimensionType())));
     }
 
     public ChunkHolder getChunkHolder(int x, int z) {

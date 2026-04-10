@@ -15,19 +15,31 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - (API) Added DDUI support for Bedrock 1.26.10+ (protocol v944+), including `DDUI`, `DDUIViewer`, `DDUIScreenSession`, `CustomFormScreen`, `MessageBoxScreen`, `Observable`, `Property`, and the custom-form element set (`Label`, `Header`, `Spacer`, `Divider`, `TextField`, `Toggle`, `Slider`, `Dropdown`, `Button`, `CloseButton`).
+- (API) Added custom dimension support via `DimensionType`, `DimensionTypes`, and `Registries.DIMENSIONS`, allowing plugins to register custom dimension types with persistent numeric ids.
+- (API) Added `ItemTags.FIREPROOF` for items that should remain fireproof when dropped as item entities.
 - Added support for NetEase 1.21.90.
 - Updated feature version to 1.26.10
+- Added `dimension-ids.yml` in the server working directory to persist custom dimension identifier-to-id mappings for custom dimensions.
+- Implemented bone meal interaction on grass blocks, allowing grass, flowers, and tall grass to generate from grass blocks.
 
 ### Changed
 
 - (API) Merged `org.allaymc.server.bossbar.AllayBossBar` into the concrete `org.allaymc.api.bossbar.BossBar` class, so boss bars no longer use separate API interface and server implementation types.
+- (API) Replaced `DimensionInfo` across world, chunk, storage, generator-context, and player dimension-change APIs with the new `DimensionType` model.
+- (API) Implemented meaningful `toString()` output for `EffectType` and `EffectInstance` to improve logs and debugging output.
+- Changed world and player persistence to store dimension identifiers instead of raw numeric ids, while keeping backward-compatible reads for old numeric dimension data.
+- Changed `world-settings.yml` dimension configuration to use a `dimensions:` map keyed by identifiers. Legacy `overworld`/`nether`/`the-end` entries are still read, identifiers missing a namespace are normalized to the `minecraft` namespace when saved.
+- Added custom dimension definition syncing during login through `DimensionDataPacket`; Bedrock generator type mapping is now handled internally by the network layer.
 
 ### Fixed
 
+- Fixed soul fire so it now damages and ignites living entities correctly, and fixed dropped fireproof items such as netherite gear being incorrectly destroyed by fire or lava.
+- Fixed redundant food-level change events and repeated food-level packet sends when the effective food level did not change.
 - Fixed small dripleaf breaking recursively triggering `Dimension.breakBlock()` between its upper and lower halves, which could spam `BlockSmallDripleafBaseComponentImpl.onBreak()` stack traces and overflow the stack.
 
 ### Removed
 
+- (API) Removed legacy `DimensionInfo`.
 - Removed support for bedrock (NetEase) 1.21.50 and 1.21.80.
 
 # 0.12.0 (API 0.27.0) - 2026/3/29

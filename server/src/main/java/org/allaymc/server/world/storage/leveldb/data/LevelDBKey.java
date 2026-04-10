@@ -1,7 +1,8 @@
 package org.allaymc.server.world.storage.leveldb.data;
 
 import org.allaymc.api.world.chunk.ChunkState;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.utils.Utils;
 import org.jetbrains.annotations.Range;
 
@@ -121,20 +122,20 @@ public enum LevelDBKey {
         this.encoded = (byte) encoded;
     }
 
-    public static byte[] indexChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        if (dimensionInfo == DimensionInfo.OVERWORLD) {
+    public static byte[] indexChunk(int chunkX, int chunkZ, DimensionType dimensionType) {
+        if (dimensionType == DimensionTypes.OVERWORLD) {
             return org.allaymc.server.utils.Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ));
         }
 
-        return org.allaymc.server.utils.Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ), intToBytes(dimensionInfo.dimensionId()));
+        return org.allaymc.server.utils.Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ), intToBytes(dimensionType.getId()));
     }
 
     public static byte[] indexEntity(long entityUniqueId) {
         return org.allaymc.server.utils.Utils.appendBytes(ENTITY_PREFIX, longToBytes(entityUniqueId));
     }
 
-    public static byte[] createEntityIdsKey(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        return org.allaymc.server.utils.Utils.appendBytes(ENTITY_DIGEST_PREFIX, indexChunk(chunkX, chunkZ, dimensionInfo));
+    public static byte[] createEntityIdsKey(int chunkX, int chunkZ, DimensionType dimensionType) {
+        return org.allaymc.server.utils.Utils.appendBytes(ENTITY_DIGEST_PREFIX, indexChunk(chunkX, chunkZ, dimensionType));
     }
 
     private static byte[] intToBytes(int value) {
@@ -159,15 +160,15 @@ public enum LevelDBKey {
         };
     }
 
-    public byte[] createKey(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        return org.allaymc.server.utils.Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded});
+    public byte[] createKey(int chunkX, int chunkZ, DimensionType dimensionType) {
+        return org.allaymc.server.utils.Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionType), new byte[]{this.encoded});
     }
 
-    public byte[] createKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimensionInfo) {
+    public byte[] createKey(int chunkX, int chunkZ, int chunkSectionY, DimensionType dimensionType) {
         if (this != CHUNK_SECTION_PREFIX) {
             throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
         }
 
-        return Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded, (byte) chunkSectionY});
+        return Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionType), new byte[]{this.encoded, (byte) chunkSectionY});
     }
 }

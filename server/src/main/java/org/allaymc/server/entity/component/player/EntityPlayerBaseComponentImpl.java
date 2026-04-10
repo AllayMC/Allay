@@ -27,12 +27,13 @@ import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.NetherPortalHelper;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -494,11 +495,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         // Determine target dimension to show loading screen early
         var world = thisEntity.getWorld();
-        var currentDimInfo = thisEntity.getDimension().getDimensionInfo();
+        var currentDimType = thisEntity.getDimension().getDimensionType();
         Dimension targetDim;
-        if (currentDimInfo == DimensionInfo.OVERWORLD) {
+        if (currentDimType == DimensionTypes.OVERWORLD) {
             targetDim = world.getNether();
-        } else if (currentDimInfo == DimensionInfo.NETHER) {
+        } else if (currentDimType == DimensionTypes.NETHER) {
             targetDim = world.getOverWorld();
         } else {
             return;
@@ -515,9 +516,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Send dimension change screen immediately so the client shows the loading UI
         // while chunks are being loaded asynchronously in the target dimension
         var loc = thisEntity.getLocation();
-        double targetX = NetherPortalHelper.scaleCoordinate(loc.x(), currentDimInfo, targetDim.getDimensionInfo());
-        double targetZ = NetherPortalHelper.scaleCoordinate(loc.z(), currentDimInfo, targetDim.getDimensionInfo());
-        this.controller.beginDimensionChange(targetDim.getDimensionInfo(), targetX, loc.y(), targetZ);
+        var targetDimType = targetDim.getDimensionType();
+        double targetX = NetherPortalHelper.scaleCoordinate(loc.x(), currentDimType, targetDimType);
+        double targetZ = NetherPortalHelper.scaleCoordinate(loc.z(), currentDimType, targetDimType);
+        this.controller.beginDimensionChange(targetDimType, targetX, loc.y(), targetZ);
 
         Server.getInstance().getVirtualThreadPool().submit(() -> {
             NetherPortalHelper.teleport(thisEntity).thenAccept(success -> {
@@ -541,14 +543,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 this.controller.viewGameRules(targetDim.getWorld().getWorldData().getGameRules());
                 this.controller.viewWeather(targetDim.getWorld().getWeather());
             }
-            boolean dimensionChanged = currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId();
+            boolean dimensionChanged = currentDim.getDimensionType() != targetDim.getDimensionType();
             // Clear cache on dimension or world change
             ChunkCache.getInstance().clearPlayer(((AllayPlayer) this.controller).getLoginData().getUuid());
             currentDim.removePlayer(this.controller, () -> {
                 setLocationBeforeSpawn(target);
                 if (dimensionChanged && !this.controller.isChangingDimension()) {
                     // ChangeDimensionPacket was not sent early — send it now
-                    this.controller.beginDimensionChange(targetDim.getDimensionInfo(), target.x(), target.y(), target.z());
+                    this.controller.beginDimensionChange(targetDim.getDimensionType(), target.x(), target.y(), target.z());
                 }
                 targetDim.addPlayer(this.controller, () -> {
                     if (dimensionChanged) {
@@ -647,7 +649,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected NbtMap saveSpawnPoint() {
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
-                .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId())
+                .putString(TAG_DIMENSION, spawnPoint.dimension().getDimensionType().getIdentifier().toString())
                 .putInt(TAG_SPAWN_POINT_TYPE, spawnPointType.ordinal());
         AllayNBTUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
@@ -686,7 +688,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
 
-        var dimension = world.getDimension(nbt.getInt(TAG_DIMENSION));
+        var dimension = switch (nbt.get(TAG_DIMENSION)) {
+            case String dimensionId -> world.getDimension(new Identifier(dimensionId));
+            case Number dimensionId -> world.getDimension(dimensionId.intValue());
+            case null, default -> world.getDimension(DimensionTypes.OVERWORLD);
+        };
         if (dimension == null) {
             this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
             this.spawnPointType = SpawnPointType.FORCED;
