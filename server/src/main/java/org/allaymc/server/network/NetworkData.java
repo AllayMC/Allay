@@ -17,6 +17,7 @@ import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.world.dimension.DimensionId;
+import org.allaymc.server.world.dimension.VanillaGeneratorType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
@@ -303,34 +304,31 @@ public final class NetworkData {
                         // The client expects an open range, so it needs to add one here
                         dimensionType.getMaxHeight() + 1,
                         dimensionType.getMinHeight(),
-                        getDimensionDefinitionGeneratorType(dimensionType)
+                        getDimensionDefinitionGeneratorType(dimensionType).ordinal()
                 ))
                 .forEach(packet.getDefinitions()::add);
         return packet;
     }
 
-    private static int getDimensionDefinitionGeneratorType(DimensionType dimensionType) {
+    private static VanillaGeneratorType getDimensionDefinitionGeneratorType(DimensionType dimensionType) {
         var dimensionId = DimensionId.fromDimensionType(dimensionType);
-        if (dimensionId == DimensionId.OVERWORLD && !dimensionId.hasDefaultBounds(dimensionType)) {
-            // Bedrock validates the custom overworld bounds announced in DimensionDataPacket against the
-            // generator type. If a non-default overworld height is still advertised as "infinite",
-            // the client disconnects during login with invalid overworld height errors.
-
-            // Only the DimensionDefinition needs this compatibility value; StartGamePacket can keep using
-            // the normal built-in generator id for the active dimension.
-            return 5;
+        if (!dimensionId.isDefaultBounds(dimensionType)) {
+            // Void should be used as the generator type if the dimension's bounds are modified,
+            // otherwise the client will disconnect with "An error occurred"
+            return VanillaGeneratorType.VOID;
         }
+
         return getVanillaGeneratorType(dimensionType);
     }
 
-    public static int getVanillaGeneratorType(DimensionType dimensionType) {
+    public static VanillaGeneratorType getVanillaGeneratorType(DimensionType dimensionType) {
         var dimensionId = DimensionId.fromDimensionType(dimensionType);
         return dimensionId == null ? DimensionId.OVERWORLD.getVanillaGeneratorType() : dimensionId.getVanillaGeneratorType();
     }
 
     private static boolean shouldSendDimensionDefinition(DimensionType dimensionType) {
         var dimensionId = DimensionId.fromDimensionType(dimensionType);
-        return dimensionId == null || !dimensionId.hasDefaultBounds(dimensionType);
+        return dimensionId == null || !dimensionId.isDefaultBounds(dimensionType);
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {

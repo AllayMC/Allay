@@ -13,19 +13,17 @@ import java.util.Locale;
  */
 @Getter
 public enum DimensionId {
-    OVERWORLD(0, "minecraft:overworld", -64, 319, 1),
-    NETHER(1, "minecraft:nether", 0, 127, 3),
-    THE_END(2, "minecraft:the_end", 0, 255, 4);
+    OVERWORLD(0, "minecraft:overworld", -64, 319, VanillaGeneratorType.INFINITE),
+    NETHER(1, "minecraft:nether", 0, 127, VanillaGeneratorType.NETHER),
+    THE_END(2, "minecraft:the_end", 0, 255, VanillaGeneratorType.THE_END);
 
     private final int id;
     private final Identifier identifier;
     private final int defaultMinHeight;
     private final int defaultMaxHeight;
-    // The built-in Bedrock generator id used for the vanilla dimension itself, such as StartGamePacket.
-    // Custom DimensionDataPacket definitions may still override this for compatibility.
-    private final int vanillaGeneratorType;
+    private final VanillaGeneratorType vanillaGeneratorType;
 
-    DimensionId(int id, String identifier, int defaultMinHeight, int defaultMaxHeight, int vanillaGeneratorType) {
+    DimensionId(int id, String identifier, int defaultMinHeight, int defaultMaxHeight, VanillaGeneratorType vanillaGeneratorType) {
         this.id = id;
         this.identifier = new Identifier(identifier);
         this.defaultMinHeight = defaultMinHeight;
@@ -41,7 +39,7 @@ public enum DimensionId {
         return this.identifier.equals(identifier);
     }
 
-    public boolean hasDefaultBounds(DimensionType dimensionType) {
+    public boolean isDefaultBounds(DimensionType dimensionType) {
         return matches(dimensionType) &&
                dimensionType.getMinHeight() == defaultMinHeight &&
                dimensionType.getMaxHeight() == defaultMaxHeight;
@@ -66,7 +64,7 @@ public enum DimensionId {
 
     public static Identifier normalizeConfigIdentifier(String rawIdentifier) {
         var normalized = rawIdentifier.trim();
-        if (normalized.indexOf(Identifier.NAMESPACE_SEPARATOR) >= 0) {
+        if (normalized.contains(Identifier.NAMESPACE_SEPARATOR)) {
             var identifier = new Identifier(normalized);
             return switch (identifier.toString()) {
                 case "minecraft:overworld" -> OVERWORLD.getIdentifier();

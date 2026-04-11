@@ -3250,7 +3250,7 @@ public class AllayPlayer implements Player {
         // 0 - limit 1 - infinite
         // 2 - flat  3 - nether
         // 4 - end   5 - void
-        packet.setGeneratorId(NetworkData.getVanillaGeneratorType(dimension.getDimensionType()));
+        packet.setGeneratorId(NetworkData.getVanillaGeneratorType(dimension.getDimensionType()).ordinal());
         packet.setLevelGameType(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()));
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         packet.setTrustingPlayers(true);
