@@ -303,15 +303,29 @@ public final class NetworkData {
                         // The client expects an open range, so it needs to add one here
                         dimensionType.getMaxHeight() + 1,
                         dimensionType.getMinHeight(),
-                        getBedrockGeneratorType(dimensionType)
+                        getDimensionDefinitionGeneratorType(dimensionType)
                 ))
                 .forEach(packet.getDefinitions()::add);
         return packet;
     }
 
-    public static int getBedrockGeneratorType(DimensionType dimensionType) {
+    private static int getDimensionDefinitionGeneratorType(DimensionType dimensionType) {
         var dimensionId = DimensionId.fromDimensionType(dimensionType);
-        return dimensionId == null ? DimensionId.OVERWORLD.getBedrockGeneratorType() : dimensionId.getBedrockGeneratorType();
+        if (dimensionId == DimensionId.OVERWORLD && !dimensionId.hasDefaultBounds(dimensionType)) {
+            // Bedrock validates the custom overworld bounds announced in DimensionDataPacket against the
+            // generator type. If a non-default overworld height is still advertised as "infinite",
+            // the client disconnects during login with invalid overworld height errors.
+
+            // Only the DimensionDefinition needs this compatibility value; StartGamePacket can keep using
+            // the normal built-in generator id for the active dimension.
+            return 5;
+        }
+        return getVanillaGeneratorType(dimensionType);
+    }
+
+    public static int getVanillaGeneratorType(DimensionType dimensionType) {
+        var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        return dimensionId == null ? DimensionId.OVERWORLD.getVanillaGeneratorType() : dimensionId.getVanillaGeneratorType();
     }
 
     private static boolean shouldSendDimensionDefinition(DimensionType dimensionType) {

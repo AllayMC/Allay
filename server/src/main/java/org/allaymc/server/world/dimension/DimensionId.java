@@ -21,14 +21,16 @@ public enum DimensionId {
     private final Identifier identifier;
     private final int defaultMinHeight;
     private final int defaultMaxHeight;
-    private final int bedrockGeneratorType;
+    // The built-in Bedrock generator id used for the vanilla dimension itself, such as StartGamePacket.
+    // Custom DimensionDataPacket definitions may still override this for compatibility.
+    private final int vanillaGeneratorType;
 
-    DimensionId(int id, String identifier, int defaultMinHeight, int defaultMaxHeight, int bedrockGeneratorType) {
+    DimensionId(int id, String identifier, int defaultMinHeight, int defaultMaxHeight, int vanillaGeneratorType) {
         this.id = id;
         this.identifier = new Identifier(identifier);
         this.defaultMinHeight = defaultMinHeight;
         this.defaultMaxHeight = defaultMaxHeight;
-        this.bedrockGeneratorType = bedrockGeneratorType;
+        this.vanillaGeneratorType = vanillaGeneratorType;
     }
 
     public boolean matches(DimensionType dimensionType) {
