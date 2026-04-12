@@ -71,6 +71,7 @@ public final class NetworkData {
     public static final Supplier<AvailableEntityIdentifiersPacket> AVAILABLE_ENTITY_IDENTIFIERS_PACKET = Suppliers.memoize(NetworkData::encodeAvailableEntityIdentifiersPacket);
     public static final Supplier<BiomeDefinitionListPacket> BIOME_DEFINITION_LIST_PACKET = Suppliers.memoize(NetworkData::encodeBiomeDefinitionListPacket);
     public static final Supplier<DimensionDataPacket> DIMENSION_DATA_PACKET = Suppliers.memoize(NetworkData::encodeDimensionDataPacket);
+    public static final Supplier<VoxelShapesPacket> VOXEL_SHAPES_PACKET = Suppliers.memoize(NetworkData::encodeVoxelShapesPacket);
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
@@ -304,9 +305,18 @@ public final class NetworkData {
                         // The client expects an open range, so it needs to add one here
                         dimensionType.getMaxHeight() + 1,
                         dimensionType.getMinHeight(),
-                        getDimensionDefinitionGeneratorType(dimensionType).ordinal()
+                        getDimensionDefinitionGeneratorType(dimensionType).ordinal(),
+                        dimensionType.getId()
                 ))
                 .forEach(packet.getDefinitions()::add);
+        return packet;
+    }
+
+    public static VoxelShapesPacket encodeVoxelShapesPacket() {
+        var packet = new VoxelShapesPacket();
+        packet.setNameMap(new HashMap<>());
+        packet.setShapes(new ArrayList<>());
+        packet.setCustomShapeCount(0);
         return packet;
     }
 

@@ -3203,8 +3203,9 @@ public class AllayPlayer implements Player {
 
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
 
-        // Dimension data should be sent before start game
+        // Dimension data and voxel shapes should be sent before start game
         sendPacket(NetworkData.DIMENSION_DATA_PACKET.get());
+        sendPacket(NetworkData.VOXEL_SHAPES_PACKET.get());
 
         // Send StartGamePacket to the client first before we start sending chunks, otherwise
         // the chunks will be ignored by the client, and the client will be unable to join the server
@@ -3247,9 +3248,6 @@ public class AllayPlayer implements Player {
         // We don't send world seed to the client for security reason
         packet.setSeed(0L);
         packet.setDimensionId(dimension.getDimensionType().getId());
-        // 0 - limit 1 - infinite
-        // 2 - flat  3 - nether
-        // 4 - end   5 - void
         packet.setGeneratorId(NetworkData.getVanillaGeneratorType(dimension.getDimensionType()).ordinal());
         packet.setLevelGameType(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()));
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
