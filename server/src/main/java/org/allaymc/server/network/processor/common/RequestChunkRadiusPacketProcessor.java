@@ -1,4 +1,4 @@
-package org.allaymc.server.network.processor.ingame;
+package org.allaymc.server.network.processor.common;
 
 import org.allaymc.api.player.Player;
 import org.allaymc.server.AllayServer;

@@ -1,4 +1,4 @@
-package org.allaymc.server.network.processor.ingame;
+package org.allaymc.server.network.processor.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

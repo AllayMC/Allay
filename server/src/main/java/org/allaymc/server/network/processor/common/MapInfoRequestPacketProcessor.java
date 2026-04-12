@@ -1,4 +1,4 @@
-package org.allaymc.server.network.processor.ingame;
+package org.allaymc.server.network.processor.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.interfaces.BlockEntityItemFrame;

@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.player.ClientState;
+import org.allaymc.server.network.processor.common.*;
 import org.allaymc.server.network.processor.ingame.*;
 import org.allaymc.server.network.processor.login.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -75,18 +76,21 @@ public final class PacketProcessorHolder {
     }
 
     private void registerConnectedPacketProcessors() {
+        registerProcessor(ClientState.CONNECTED, new PacketViolationWarningPacketProcessor());
         registerProcessor(ClientState.CONNECTED, new RequestNetworkSettingsPacketProcessor());
         registerProcessor(ClientState.CONNECTED, new LoginPacketProcessor());
         registerProcessor(ClientState.CONNECTED, new ClientToServerHandshakePacketProcessor());
     }
 
     private void registerLoggedInPacketProcessors() {
+        registerProcessor(ClientState.LOGGED_IN, new PacketViolationWarningPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ClientCacheStatusPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ResourcePackClientResponsePacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ResourcePackChunkRequestPacketProcessor());
     }
 
     private void registerSpawnedPacketProcessors() {
+        registerProcessor(ClientState.SPAWNED, new PacketViolationWarningPacketProcessor());
         registerProcessor(ClientState.SPAWNED, new RequestChunkRadiusPacketProcessor());
         registerProcessor(ClientState.SPAWNED, new EmoteListPacketProcessor());
         registerProcessor(ClientState.SPAWNED, new SetLocalPlayerAsInitializedPacketProcessor());
@@ -98,17 +102,18 @@ public final class PacketProcessorHolder {
 
         // Client will start sending the auth input packet after spawned, however, these packets will be ignored.
         // See PlayerAuthInputPacketProcessor#notReadyForInput()
-        registerProcessor(ClientState.SPAWNED, new PlayerAuthInputPacketProcessor());
-        registerProcessor(ClientState.SPAWNED, new ServerboundLoadingScreenPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new NoopPacketProcessor(BedrockPacketType.PLAYER_AUTH_INPUT));
+        registerProcessor(ClientState.SPAWNED, new NoopPacketProcessor(BedrockPacketType.SERVERBOUND_LOADING_SCREEN));
 
         // These three packets seem are also sent during initialize chunk sending stage, so we also added them
-        registerProcessor(ClientState.SPAWNED, new MobEquipmentPacketProcessor());
-        registerProcessor(ClientState.SPAWNED, new InteractPacketProcessor());
         registerProcessor(ClientState.SPAWNED, new MapInfoRequestPacketProcessor());
-        registerProcessor(ClientState.SPAWNED, new ServerboundDiagnosticsPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new NoopPacketProcessor(BedrockPacketType.MOB_EQUIPMENT));
+        registerProcessor(ClientState.SPAWNED, new NoopPacketProcessor(BedrockPacketType.INTERACT));
+        registerProcessor(ClientState.SPAWNED, new NoopPacketProcessor(BedrockPacketType.SERVERBOUND_DIAGNOSTICS));
     }
 
     private void registerInGamePacketProcessors() {
+        registerProcessor(ClientState.IN_GAME, new PacketViolationWarningPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new AnimatePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new BlockPickRequestPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new CommandRequestPacketProcessor());
@@ -139,15 +144,15 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new SetPlayerInventoryOptionsPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new BossEventPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new EntityPickRequestPacketProcessor());
-        registerProcessor(ClientState.IN_GAME, new ServerboundLoadingScreenPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new AnvilDamagePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new BookEditPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new MapInfoRequestPacketProcessor());
-        registerProcessor(ClientState.IN_GAME, new ServerboundDiagnosticsPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new RequestAbilityPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new NPCRequestPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new LecternUpdatePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new CommandBlockUpdatePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new NoopPacketProcessor(BedrockPacketType.SERVERBOUND_LOADING_SCREEN));
+        registerProcessor(ClientState.IN_GAME, new NoopPacketProcessor(BedrockPacketType.SERVERBOUND_DIAGNOSTICS));
     }
 
     @SuppressWarnings("unchecked")
