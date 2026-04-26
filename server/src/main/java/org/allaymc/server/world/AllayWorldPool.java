@@ -47,6 +47,9 @@ public final class AllayWorldPool implements WorldPool {
     private final Path worldFolder;
     private final WorldSettings worldConfig;
 
+    @Setter
+    private World defaultWorld;
+
     public AllayWorldPool() {
         this.worlds = new ConcurrentHashMap<>();
         this.worldFolder = Path.of("worlds");
@@ -178,7 +181,8 @@ public final class AllayWorldPool implements WorldPool {
 
     @Override
     public World getDefaultWorld() {
-        return getWorld(worldConfig.defaultWorld());
+        if (defaultWorld == null) defaultWorld = getWorld(worldConfig.defaultWorld());
+        return defaultWorld;
     }
 
     private void loadWorld(String name, WorldSettings.WorldSetting setting) {
