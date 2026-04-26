@@ -51,10 +51,10 @@ public class WhitelistCommand extends Command {
                 .root()
                 .key("list")
                 .exec(context -> {
-                    var whitelist = Server.getInstance().getPlayerManager().getWhitelistedPlayers();
-                    var onlineCount = (int) Server.getInstance().getPlayerManager().getPlayers().values().stream()
-                            .filter(player -> whitelist.contains(player.getLoginData().getUuid().toString()) ||
-                                              whitelist.contains(player.getOriginName()))
+                    var playerManager = Server.getInstance().getPlayerManager();
+                    var whitelist = playerManager.getWhitelistedPlayers();
+                    var onlineCount = (int) playerManager.getPlayers().values().stream()
+                            .filter(playerManager::isWhitelisted)
                             .count();
                     context.addOutput(TrKeys.MC_COMMANDS_ALLOWLIST_LIST, whitelist.size(), onlineCount);
                     context.addOutput(String.join(", ", whitelist));
