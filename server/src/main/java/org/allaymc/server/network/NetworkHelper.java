@@ -260,35 +260,35 @@ public final class NetworkHelper {
         };
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetwork(DebugShape shape, int dimension, Entity attachedEntity) {
+    public static org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape toNetwork(DebugShape shape, int dimension, Entity attachedEntity) {
         var entityId = attachedEntity != null ? attachedEntity.getRuntimeId() : null;
         var networkPos = toNetwork(shape.getPosition());
         if (attachedEntity != null) {
             networkPos = networkPos.add(0, -NETWORK_OFFSETS.getOrDefault(attachedEntity.getEntityType().getIdentifier(), 0.0f), 0);
         }
         return switch (shape) {
-            case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugArrow(
+            case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveArrow(
                     arrow.getId(), dimension, networkPos, arrow.getArrowHeadScale(), null,
                     null, arrow.getColor(), toNetwork(arrow.getEndPosition()), arrow.getArrowHeadLength(),
                     arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments(), entityId
             );
-            case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugBox(
+            case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveBox(
                     box.getId(), dimension, networkPos, box.getScale(), null,
                     null, box.getColor(), toNetwork(box.getBoxBounds()), entityId
             );
-            case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugCircle(
+            case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveCircle(
                     circle.getId(), dimension, networkPos, circle.getScale(), null,
                     null, circle.getColor(), circle.getSegments(), entityId
             );
-            case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugLine(
+            case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveLine(
                     line.getId(), dimension, networkPos, null, null,
                     null, line.getColor(), toNetwork(line.getEndPosition()), entityId
             );
-            case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugSphere(
+            case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveSphere(
                     sphere.getId(), dimension, networkPos, sphere.getScale(), null,
                     null, sphere.getColor(), sphere.getSegments(), entityId
             );
-            case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugText(
+            case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveText(
                     text.getId(), dimension, networkPos, null, null,
                     null, text.getColor(), text.getText(), entityId
             );
@@ -296,8 +296,8 @@ public final class NetworkHelper {
         };
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetworkRemovalNotice(DebugShape shape) {
-        return new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape(shape.getId());
+    public static org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape toNetworkRemovalNotice(DebugShape shape) {
+        return new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape(shape.getId());
     }
 
     public record PortraitOffsets(double[] translate, double[] rotate, double[] scale) {

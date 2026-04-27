@@ -1275,9 +1275,7 @@ public class AllayPlayer implements Player {
 
             if ((packet = packets[index]) == null) {
                 packet = new UpdateSubChunkBlocksPacket();
-                packet.setChunkX(chunk.getX() << 4);
-                packet.setChunkY(sectionY << 4);
-                packet.setChunkZ(chunk.getZ() << 4);
+                packet.setPosition(Vector3i.from(chunk.getX() << 4, sectionY << 4, chunk.getZ() << 4));
                 packets[index] = packet;
             }
 
@@ -1979,14 +1977,14 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewDebugShape(DebugShape debugShape) {
-        var packet = new DebugDrawerPacket();
+        var packet = new PrimitiveShapesPacket();
         packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionType().getId(), debugShape.getAttachedEntity()));
         sendPacket(packet);
     }
 
     @Override
     public void viewDebugShapes(Set<DebugShape> debugShapes) {
-        var packet = new DebugDrawerPacket();
+        var packet = new PrimitiveShapesPacket();
         for (var debugShape : debugShapes) {
             packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionType().getId(), debugShape.getAttachedEntity()));
         }
@@ -1995,14 +1993,14 @@ public class AllayPlayer implements Player {
 
     @Override
     public void removeDebugShape(DebugShape debugShape) {
-        var packet = new DebugDrawerPacket();
+        var packet = new PrimitiveShapesPacket();
         packet.getShapes().add(toNetworkRemovalNotice(debugShape));
         sendPacket(packet);
     }
 
     @Override
     public void removeDebugShapes(Set<DebugShape> debugShapes) {
-        var packet = new DebugDrawerPacket();
+        var packet = new PrimitiveShapesPacket();
         for (var debugShape : debugShapes) {
             packet.getShapes().add(toNetworkRemovalNotice(debugShape));
         }
