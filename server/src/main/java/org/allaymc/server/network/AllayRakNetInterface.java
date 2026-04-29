@@ -108,7 +108,7 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
                 // I think we don't need other modes
-                .option(RakChannelOption.RAK_SERVER_COOKIE_MODE, networkSettings.raknetSendCookie() ? RakServerCookieMode.ACTIVE : RakServerCookieMode.OFF)
+                .option(RakChannelOption.RAK_SERVER_COOKIE_MODE, RakServerCookieMode.ACTIVE)
                 .option(RakChannelOption.RAK_MAX_MTU, networkSettings.raknetMaxMtu())
                 .option(RakChannelOption.RAK_GUID, serverId)
                 // Integer.MAX_VALUE fixed localhost blocking address
