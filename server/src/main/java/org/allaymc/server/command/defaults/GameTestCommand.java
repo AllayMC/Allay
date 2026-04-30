@@ -302,6 +302,15 @@ public class GameTestCommand extends Command {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
+                .key("phantom")
+                .bool("value")
+                .exec((context, player) -> {
+                    boolean value = context.getResult(1);
+                    player.setPhantom(value);
+                    player.sendMessage("Phantom set to " + player.isPhantom());
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
                 .key("testsimpleform")
                 .exec((context, player) -> {
                     Forms.simple()
