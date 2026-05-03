@@ -18,6 +18,8 @@ public class InventoryContainerImpl extends AbstractPlayerContainer implements I
     @Setter
     protected int handSlot = 0;
 
+    private boolean syncingHand = false;
+
     public InventoryContainerImpl(Supplier<EntityPlayer> playerSupplier) {
         super(ContainerTypes.INVENTORY, playerSupplier);
     }
@@ -35,6 +37,26 @@ public class InventoryContainerImpl extends AbstractPlayerContainer implements I
     @Override
     public void clearItemInHand() {
         clearSlot(handSlot);
+    }
+
+    @Override
+    public void notifySlotChange(int slot, boolean send) {
+        super.notifySlotChange(slot, send);
+        // When the hand slot changes, sync the hand item to all viewers
+        if (!syncingHand && slot == handSlot) {
+            syncingHand = true;
+            try {
+                var player = getPlayer();
+                if (player != null) {
+                    var entity = player.getControlledEntity();
+                    if (entity != null) {
+                        entity.notifyItemInHandChange();
+                    }
+                }
+            } finally {
+                syncingHand = false;
+            }
+        }
     }
 
     @Override

@@ -185,6 +185,10 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 // Set the item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
                 entityItem.remove();
+                // If the picked item went into the hand slot, sync to viewers
+                if (slot == inventory.getHandSlot()) {
+                    thisPlayer.notifyItemInHandChange();
+                }
             }
         }
 
@@ -220,9 +224,14 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 continue;
             }
 
-            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrowItem) != -1) {
+            var arrowAddedSlot = thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrowItem);
+            if (arrowAddedSlot != -1) {
                 entityArrow.applyAction(new PickedUpAction(thisPlayer));
                 entityArrow.remove();
+                // If the picked arrow went into the hand slot, sync to viewers
+                if (arrowAddedSlot == thisPlayer.getContainer(ContainerTypes.INVENTORY).getHandSlot()) {
+                    thisPlayer.notifyItemInHandChange();
+                }
             }
         }
 
@@ -253,11 +262,16 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 continue;
             }
 
-            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(tridentItem) != -1) {
+            var tridentAddedSlot = thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(tridentItem);
+            if (tridentAddedSlot != -1) {
                 entityTrident.applyAction(new PickedUpAction(thisPlayer));
                 // Clear the trident item to prevent double pickup
                 entityTrident.setTridentItem(null);
                 entityTrident.remove();
+                // If the picked trident went into the hand slot, sync to viewers
+                if (tridentAddedSlot == thisPlayer.getContainer(ContainerTypes.INVENTORY).getHandSlot()) {
+                    thisPlayer.notifyItemInHandChange();
+                }
             }
         }
     }
@@ -266,7 +280,11 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt -> getContainer(ContainerTypes.OFFHAND).loadNBT(offhandNbt));
-        nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt -> getContainer(ContainerTypes.INVENTORY).loadNBT(inventoryNbt));
+        nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt -> {
+            getContainer(ContainerTypes.INVENTORY).loadNBT(inventoryNbt);
+            // Sync hand item to viewers after loading inventory from NBT (e.g., world/player join)
+            thisPlayer.notifyItemInHandChange();
+        });
         nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt -> getContainer(ContainerTypes.ARMOR).loadNBT(armorNbt));
         nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt -> getContainer(ContainerTypes.ENDER_CHEST).loadNBT(enderItemsNbt));
     }

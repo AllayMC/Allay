@@ -2073,6 +2073,11 @@ public class AllayPlayer implements Player {
             } else {
                 viewSlotWithSpecificContainerId(playerContainer, slot, playerContainer.getUnopenedContainerId());
             }
+            // If the changed slot is the hand slot, sync hand to other entity viewers
+            if (playerContainer.getContainerType() == ContainerTypes.INVENTORY
+                && slot == ((InventoryContainer) playerContainer).getHandSlot()) {
+                viewEntityHand(this.controlledEntity);
+            }
             return;
         }
 

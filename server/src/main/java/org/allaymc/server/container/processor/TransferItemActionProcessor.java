@@ -85,6 +85,27 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return error();
         }
 
+        // Detect if source or destination is a player inventory hand slot
+        var handSlot = -1;
+        var playerEntity = (org.allaymc.api.entity.interfaces.EntityPlayer) null;
+        if (sourceContainer.getContainerType() == ContainerTypes.INVENTORY && sourceContainer instanceof org.allaymc.api.container.interfaces.InventoryContainer invContainer) {
+            handSlot = invContainer.getHandSlot();
+        } else if (destinationContainer.getContainerType() == ContainerTypes.INVENTORY && destinationContainer instanceof org.allaymc.api.container.interfaces.InventoryContainer invContainer) {
+            handSlot = invContainer.getHandSlot();
+        }
+
+        if (sourceContainer instanceof org.allaymc.server.container.impl.AbstractPlayerContainer playerSrcContainer) {
+            var player = playerSrcContainer.getPlayer();
+            if (player != null) {
+                playerEntity = player.getControlledEntity();
+            }
+        } else if (destinationContainer instanceof org.allaymc.server.container.impl.AbstractPlayerContainer playerDstContainer) {
+            var player = playerDstContainer.getPlayer();
+            if (player != null) {
+                playerEntity = player.getControlledEntity();
+            }
+        }
+
         ItemStack resultSourItem;
         ItemStack resultDestItem;
         if (sourItem.getCount() == count) {
@@ -121,6 +142,11 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 resultDestItem.setCount(count);
                 destinationContainer.setItemStack(destinationSlot, resultDestItem, false);
             }
+        }
+
+        // If the source or destination slot is the player's hand slot, sync hand to viewers
+        if (playerEntity != null && handSlot >= 0 && (sourceSlot == handSlot || destinationSlot == handSlot)) {
+            playerEntity.notifyItemInHandChange();
         }
 
         var destItemStackResponseSlot = new ItemStackResponseContainer(

@@ -31,6 +31,9 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // So after the player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with the
         // client, otherwise the client will snap into the ground
         player.viewEntityLocation(entity, entity.getLocation(), true);
+        // Sync hand item to all viewers after player fully joins
+        player.viewEntityHand(entity);
+        allayPlayer.viewEntityHand(entity);
         // Send debug shapes to the player after the player fully joined
         ((AllayDimension) entity.getDimension()).addDebugShapesTo(player);
 

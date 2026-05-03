@@ -266,6 +266,11 @@ public interface EntityPlayer extends
         } else {
             inv.setItemInHand(ItemAirStack.AIR_STACK);
         }
+        forEachViewers(viewer -> viewer.viewEntityHand(this));
+        var controller = getController();
+        if (controller != null) {
+            controller.viewEntityHand(this);
+        }
     }
 }
 
