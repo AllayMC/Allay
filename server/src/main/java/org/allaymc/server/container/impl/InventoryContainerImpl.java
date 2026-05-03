@@ -46,12 +46,9 @@ public class InventoryContainerImpl extends AbstractPlayerContainer implements I
         if (!syncingHand && slot == handSlot) {
             syncingHand = true;
             try {
-                var player = getPlayer();
-                if (player != null) {
-                    var entity = player.getControlledEntity();
-                    if (entity != null) {
-                        entity.notifyItemInHandChange();
-                    }
+                var entityPlayer = playerSupplier.get();
+                if (entityPlayer != null) {
+                    entityPlayer.notifyItemInHandChange();
                 }
             } finally {
                 syncingHand = false;

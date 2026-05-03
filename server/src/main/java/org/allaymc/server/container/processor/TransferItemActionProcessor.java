@@ -2,10 +2,13 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.container.interfaces.InventoryContainer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.container.ContainerItemMoveEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.player.Player;
+import org.allaymc.server.container.impl.AbstractPlayerContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
@@ -87,22 +90,22 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
         // Detect if source or destination is a player inventory hand slot
         var handSlot = -1;
-        var playerEntity = (org.allaymc.api.entity.interfaces.EntityPlayer) null;
-        if (sourceContainer.getContainerType() == ContainerTypes.INVENTORY && sourceContainer instanceof org.allaymc.api.container.interfaces.InventoryContainer invContainer) {
+        EntityPlayer playerEntity = null;
+        if (sourceContainer.getContainerType() == ContainerTypes.INVENTORY && sourceContainer instanceof InventoryContainer invContainer) {
             handSlot = invContainer.getHandSlot();
-        } else if (destinationContainer.getContainerType() == ContainerTypes.INVENTORY && destinationContainer instanceof org.allaymc.api.container.interfaces.InventoryContainer invContainer) {
+        } else if (destinationContainer.getContainerType() == ContainerTypes.INVENTORY && destinationContainer instanceof InventoryContainer invContainer) {
             handSlot = invContainer.getHandSlot();
         }
 
-        if (sourceContainer instanceof org.allaymc.server.container.impl.AbstractPlayerContainer playerSrcContainer) {
-            var player = playerSrcContainer.getPlayer();
-            if (player != null) {
-                playerEntity = player.getControlledEntity();
+        if (sourceContainer instanceof AbstractPlayerContainer playerSrcContainer) {
+            var containerPlayer = playerSrcContainer.playerSupplier.get();
+            if (containerPlayer != null) {
+                playerEntity = containerPlayer.getControlledEntity();
             }
-        } else if (destinationContainer instanceof org.allaymc.server.container.impl.AbstractPlayerContainer playerDstContainer) {
-            var player = playerDstContainer.getPlayer();
-            if (player != null) {
-                playerEntity = player.getControlledEntity();
+        } else if (destinationContainer instanceof AbstractPlayerContainer playerDstContainer) {
+            var containerPlayer = playerDstContainer.playerSupplier.get();
+            if (containerPlayer != null) {
+                playerEntity = containerPlayer.getControlledEntity();
             }
         }
 
