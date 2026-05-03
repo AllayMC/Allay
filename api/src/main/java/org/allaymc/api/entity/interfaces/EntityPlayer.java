@@ -255,21 +255,25 @@ public interface EntityPlayer extends
     }
 
     /**
-     * Notifies that the item in hand has changed.
-     * Will update the inventory slot or clear it if the item count is zero.
+     * Notifies viewers that the item in hand has changed by broadcasting a
+     * {@code MobEquipmentPacket}. Slot updates are handled separately through
+     * the container notification pipeline, so this method only deals with the
+     * entity hand visual. When the hand item count reaches zero the slot is
+     * cleared via {@code setItemInHand} which implicitly notifies listeners.
      */
     default void notifyItemInHandChange() {
         var inv = getContainer(ContainerTypes.INVENTORY);
         var itemStack = inv.getItemInHand();
-        if (itemStack.getCount() != 0) {
-            inv.notifySlotChange(inv.getHandSlot());
-        } else {
+        if (itemStack.getCount() == 0) {
             inv.setItemInHand(ItemAirStack.AIR_STACK);
-        }
-        forEachViewers(viewer -> viewer.viewEntityHand(this));
-        var controller = getController();
-        if (controller != null) {
-            controller.viewEntityHand(this);
+        } else {
+            // Slot update already sent by the container pipeline;
+            // only broadcast the entity hand visual here.
+            forEachViewers(viewer -> viewer.viewEntityHand(this));
+            var controller = getController();
+            if (controller != null) {
+                controller.viewEntityHand(this);
+            }
         }
     }
 }

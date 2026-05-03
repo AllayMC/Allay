@@ -42,8 +42,11 @@ public class InventoryContainerImpl extends AbstractPlayerContainer implements I
     @Override
     public void notifySlotChange(int slot, boolean send) {
         super.notifySlotChange(slot, send);
-        // When the hand slot changes, sync the hand item to all viewers
-        if (!syncingHand && slot == handSlot) {
+        // When the hand slot changes and the update should be sent to clients,
+        // sync the hand item to all entity viewers. The send=false path is
+        // used by batch operations (e.g., the item-stack request system) that
+        // do their own visual updates.
+        if (send && !syncingHand && slot == handSlot) {
             syncingHand = true;
             try {
                 var entityPlayer = playerSupplier.get();
