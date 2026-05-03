@@ -186,7 +186,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 entityItem.setItemStack(null);
                 entityItem.remove();
                 // If the picked item went into the hand slot, sync to viewers
-                if (slot == inventory.getHandSlot()) {
+                if (Objects.equals(slot, inventory.getHandSlot())) {
                     thisPlayer.notifyItemInHandChange();
                 }
             }
