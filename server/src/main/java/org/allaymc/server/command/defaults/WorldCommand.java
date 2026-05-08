@@ -56,7 +56,7 @@ public class WorldCommand extends Command {
                 .exec((context, entity) -> {
                     String worldName = context.getResult(1);
                     String dimName = context.getResult(2);
-                    var dimDisplayName = dimName == null ? DimensionTypes.OVERWORLD.getIdentifier().toString() : dimName;
+                    var dimDisplayName = dimName.isBlank() ? DimensionTypes.OVERWORLD.getIdentifier().toString() : dimName;
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
