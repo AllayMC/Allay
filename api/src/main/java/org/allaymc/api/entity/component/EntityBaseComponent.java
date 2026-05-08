@@ -4,7 +4,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.EntityAction;
@@ -832,26 +832,26 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     Map<EntityPropertyType<?>, Object> getPropertyValues();
 
     /**
-     * Attaches a debug shape to this entity.
+     * Attaches a primitive shape to this entity.
      *
-     * @param debugShape the debug shape to be attached
+     * @param primitiveShape the primitive shape to be attached
      */
-    void attachDebugShape(DebugShape debugShape);
+    void attachPrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * Gets all the attached debug shapes of this entity.
+     * Gets all the attached primitive shapes of this entity.
      *
-     * @return all the attached debug shapes of this entity
+     * @return all the attached primitive shapes of this entity
      */
     @UnmodifiableView
-    Set<DebugShape> getAttachedDebugShapes();
+    Set<PrimitiveShape> getAttachedPrimitiveShapes();
 
     /**
-     * Detaches a debug shape from this entity.
+     * Detaches a primitive shape from this entity.
      *
-     * @param debugShape the debug shape to be detached
+     * @param primitiveShape the primitive shape to be detached
      */
-    void detachDebugShape(DebugShape debugShape);
+    void detachPrimitiveShape(PrimitiveShape primitiveShape);
 
     @Override
     default boolean isValid() {

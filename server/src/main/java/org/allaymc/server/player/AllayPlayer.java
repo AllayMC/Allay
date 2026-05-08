@@ -29,7 +29,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.ddui.DDUIScreenSession;
 import org.allaymc.api.ddui.type.DDUIScreen;
-import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
@@ -476,12 +476,12 @@ public class AllayPlayer implements Player {
             }
         };
         sendPacket(packet);
-        viewDebugShapes(entity.getAttachedDebugShapes());
+        viewPrimitiveShapes(entity.getAttachedPrimitiveShapes());
     }
 
     @Override
     public void removeEntity(Entity entity) {
-        removeDebugShapes(entity.getAttachedDebugShapes());
+        removePrimitiveShapes(entity.getAttachedPrimitiveShapes());
         var packet = new RemoveEntityPacket();
         packet.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
         sendPacket(packet);
@@ -1976,33 +1976,33 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewDebugShape(DebugShape debugShape) {
+    public void viewPrimitiveShape(PrimitiveShape primitiveShape) {
         var packet = new PrimitiveShapesPacket();
-        packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionType().getId(), debugShape.getAttachedEntity()));
+        packet.getShapes().add(toNetwork(primitiveShape, this.controlledEntity.getDimension().getDimensionType().getId(), primitiveShape.getAttachedEntity()));
         sendPacket(packet);
     }
 
     @Override
-    public void viewDebugShapes(Set<DebugShape> debugShapes) {
+    public void viewPrimitiveShapes(Set<PrimitiveShape> primitiveShapes) {
         var packet = new PrimitiveShapesPacket();
-        for (var debugShape : debugShapes) {
-            packet.getShapes().add(toNetwork(debugShape, this.controlledEntity.getDimension().getDimensionType().getId(), debugShape.getAttachedEntity()));
+        for (var primitiveShape : primitiveShapes) {
+            packet.getShapes().add(toNetwork(primitiveShape, this.controlledEntity.getDimension().getDimensionType().getId(), primitiveShape.getAttachedEntity()));
         }
         sendPacket(packet);
     }
 
     @Override
-    public void removeDebugShape(DebugShape debugShape) {
+    public void removePrimitiveShape(PrimitiveShape primitiveShape) {
         var packet = new PrimitiveShapesPacket();
-        packet.getShapes().add(toNetworkRemovalNotice(debugShape));
+        packet.getShapes().add(toNetworkRemovalNotice(primitiveShape));
         sendPacket(packet);
     }
 
     @Override
-    public void removeDebugShapes(Set<DebugShape> debugShapes) {
+    public void removePrimitiveShapes(Set<PrimitiveShape> primitiveShapes) {
         var packet = new PrimitiveShapesPacket();
-        for (var debugShape : debugShapes) {
-            packet.getShapes().add(toNetworkRemovalNotice(debugShape));
+        for (var primitiveShape : primitiveShapes) {
+            packet.getShapes().add(toNetworkRemovalNotice(primitiveShape));
         }
         sendPacket(packet);
     }

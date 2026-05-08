@@ -1,13 +1,15 @@
-package org.allaymc.api.debugshape;
+package org.allaymc.api.primitiveshape;
 
 import org.joml.Vector3fc;
 
 import java.awt.*;
 
 /**
+ * Represents an arrow rendered by the client's primitive shape system.
+ *
  * @author daoge_cmd
  */
-public class DebugArrow extends DebugShape {
+public class PrimitiveArrow extends PrimitiveShape {
     /**
      * The end position of the arrow.
      * <p>
@@ -34,29 +36,22 @@ public class DebugArrow extends DebugShape {
     protected Integer arrowHeadSegments;
 
     /**
-     * The scale of the arrow head, which is a multiplier for the size of the arrow head.
-     * <p>
-     * Can be {@code null}, and in that case that the scale will be set to 1 client-side.
-     */
-    protected Float arrowHeadScale;
-
-    /**
-     * Creates a new DebugArrow instance with the specified parameters.
+     * Creates a new PrimitiveArrow instance with the specified parameters.
      *
-     * @param position          the starting position of the arrow
-     * @param color             the color of the arrow
-     * @param endPosition       the end position of the arrow
-     * @param arrowHeadLength   the length of the arrow head
-     * @param arrowHeadRadius   the radius of the arrow head
-     * @param arrowHeadSegments the number of segments in the arrow head
+     * @param position          the starting position of the arrow; can be {@code null}
+     * @param color             the color of the arrow; can be {@code null}
+     * @param endPosition       the end position of the arrow; can be {@code null}
+     * @param arrowHeadLength   the length of the arrow head; can be {@code null}
+     * @param arrowHeadRadius   the radius of the arrow head; can be {@code null}
+     * @param arrowHeadSegments the number of segments in the arrow head; can be {@code null}
+     * @param scale             the scale of the arrow; can be {@code null}
      */
-    public DebugArrow(Vector3fc position, Color color, Vector3fc endPosition, Float arrowHeadLength, Float arrowHeadRadius, Integer arrowHeadSegments, Float arrowHeadScale) {
-        super(position, color);
+    public PrimitiveArrow(Vector3fc position, Color color, Vector3fc endPosition, Float arrowHeadLength, Float arrowHeadRadius, Integer arrowHeadSegments, Float scale) {
+        super(position, color, scale, null, null, null);
         this.endPosition = endPosition;
         this.arrowHeadLength = arrowHeadLength;
         this.arrowHeadRadius = arrowHeadRadius;
         this.arrowHeadSegments = arrowHeadSegments;
-        this.arrowHeadScale = arrowHeadScale;
     }
 
     /**
@@ -71,7 +66,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the end position of the arrow.
      *
-     * @param endPosition the end position of the arrow
+     * @param endPosition the end position of the arrow; can be {@code null}
      */
     public void setEndPosition(Vector3fc endPosition) {
         this.endPosition = endPosition;
@@ -90,7 +85,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the length of the arrow head.
      *
-     * @param arrowHeadLength the length of the arrow head
+     * @param arrowHeadLength the length of the arrow head; can be {@code null}
      */
     public void setArrowHeadLength(Float arrowHeadLength) {
         this.arrowHeadLength = arrowHeadLength;
@@ -109,7 +104,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the radius of the arrow head.
      *
-     * @param arrowHeadRadius the radius of the arrow head
+     * @param arrowHeadRadius the radius of the arrow head; can be {@code null}
      */
     public void setArrowHeadRadius(Float arrowHeadRadius) {
         this.arrowHeadRadius = arrowHeadRadius;
@@ -128,29 +123,10 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the segments of the arrow head.
      *
-     * @param arrowHeadSegments the number of segments in the arrow head
+     * @param arrowHeadSegments the number of segments in the arrow head; can be {@code null}
      */
     public void setArrowHeadSegments(Integer arrowHeadSegments) {
         this.arrowHeadSegments = arrowHeadSegments;
-        this.onChange();
-    }
-
-    /**
-     * Gets the scale of the arrow head.
-     *
-     * @return the scale of the arrow head
-     */
-    public float getArrowHeadScale() {
-        return arrowHeadScale != null ? arrowHeadScale : 1.0f;
-    }
-
-    /**
-     * Sets the scale of the arrow head.
-     *
-     * @param arrowHeadScale the scale of the arrow head
-     */
-    public void setArrowHeadScale(Float arrowHeadScale) {
-        this.arrowHeadScale = arrowHeadScale;
         this.onChange();
     }
 }

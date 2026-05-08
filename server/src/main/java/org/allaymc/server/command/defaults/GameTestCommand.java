@@ -11,8 +11,8 @@ import org.allaymc.api.ddui.element.CloseButton;
 import org.allaymc.api.ddui.element.DropdownItem;
 import org.allaymc.api.ddui.element.Header;
 import org.allaymc.api.ddui.element.Label;
-import org.allaymc.api.debugshape.DebugLine;
-import org.allaymc.api.debugshape.DebugText;
+import org.allaymc.api.primitiveshape.PrimitiveLine;
+import org.allaymc.api.primitiveshape.PrimitiveText;
 import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
@@ -663,7 +663,7 @@ public class GameTestCommand extends Command {
                         }
                     }
 
-                    List<DebugLine> shapes = new ArrayList<>();
+                    List<PrimitiveLine> shapes = new ArrayList<>();
 
                     // Draw lines
                     for (var line : lines) {
@@ -671,7 +671,7 @@ public class GameTestCommand extends Command {
                             var start = vertices.get(line.get(i));
                             var end = vertices.get(line.get(i + 1));
                             if (start != null && end != null) {
-                                shapes.add(new DebugLine(pos.add(start, new Vector3f()), null, pos.add(end, new Vector3f())));
+                                shapes.add(new PrimitiveLine(pos.add(start, new Vector3f()), null, pos.add(end, new Vector3f())));
                             }
                         }
                     }
@@ -682,23 +682,23 @@ public class GameTestCommand extends Command {
                             var start = vertices.get(face.get(i));
                             var end = vertices.get(face.get((i + 1) % face.size()));
                             if (start != null && end != null) {
-                                shapes.add(new DebugLine(pos.add(start, new Vector3f()), null, pos.add(end, new Vector3f())));
+                                shapes.add(new PrimitiveLine(pos.add(start, new Vector3f()), null, pos.add(end, new Vector3f())));
                             }
                         }
                     }
 
-                    // Add debug shapes to the dimension
+                    // Add primitive shapes to the dimension
                     for (var shape : shapes) {
-                        player.getDimension().addDebugShape(shape);
+                        player.getDimension().addPrimitiveShape(shape);
                     }
 
                     context.addOutput("Done");
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("removealldebugshapes")
+                .key("removeallprimitiveshapes")
                 .exec((context, player) -> {
-                    player.getDimension().removeAllDebugShapes();
+                    player.getDimension().removeAllPrimitiveShapes();
                     context.addOutput("Done");
                     return context.success();
                 }, SenderType.PLAYER)
@@ -838,14 +838,14 @@ public class GameTestCommand extends Command {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("attachdebugshape")
+                .key("attachprimitiveshape")
                 .target("target")
                 .optional()
                 .exec((context, sender) -> {
                     List<Entity> entities = context.getResult(1);
                     var entity = entities != null && !entities.isEmpty() ? entities.getFirst() : sender;
-                    var debugText = new DebugText(new Vector3f(0f, 3f, 0f), null, "test");
-                    entity.attachDebugShape(debugText);
+                    var primitiveText = new PrimitiveText(new Vector3f(0f, 3f, 0f), null, "test");
+                    entity.attachPrimitiveShape(primitiveText);
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

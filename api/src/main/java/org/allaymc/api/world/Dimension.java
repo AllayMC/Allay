@@ -9,7 +9,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -91,31 +91,31 @@ public interface Dimension extends TaskCreator {
     EntityManager getEntityManager();
 
     /**
-     * Adds a debug shape to the dimension.
+     * Adds a primitive shape to the dimension.
      *
-     * @param debugShape the debug shape to add
+     * @param primitiveShape the primitive shape to add
      */
-    void addDebugShape(DebugShape debugShape);
+    void addPrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * Removes a debug shape from the dimension.
+     * Removes a primitive shape from the dimension.
      *
-     * @param debugShape the debug shape to remove
+     * @param primitiveShape the primitive shape to remove
      */
-    void removeDebugShape(DebugShape debugShape);
+    void removePrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * Gets all debug shapes in the dimension.
+     * Gets all primitive shapes in the dimension.
      *
-     * @return a set of debug shapes in the dimension
+     * @return a set of primitive shapes in the dimension
      */
     @UnmodifiableView
-    Set<DebugShape> getDebugShapes();
+    Set<PrimitiveShape> getPrimitiveShapes();
 
     /**
-     * Removes all debug shapes from the dimension.
+     * Removes all primitive shapes from the dimension.
      */
-    void removeAllDebugShapes();
+    void removeAllPrimitiveShapes();
 
     /**
      * Get the light engine of this dimension.

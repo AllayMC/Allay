@@ -1,13 +1,15 @@
-package org.allaymc.api.debugshape;
+package org.allaymc.api.primitiveshape;
 
 import org.joml.Vector3fc;
 
 import java.awt.*;
 
 /**
+ * Represents a line rendered by the client's primitive shape system.
+ *
  * @author daoge_cmd
  */
-public class DebugLine extends DebugShape {
+public class PrimitiveLine extends PrimitiveShape {
 
     /**
      * The end position of the line.
@@ -17,13 +19,13 @@ public class DebugLine extends DebugShape {
     protected Vector3fc endPosition;
 
     /**
-     * Creates a new DebugLine with the specified position, color, and end position.
+     * Creates a new PrimitiveLine with the specified position, color, and end position.
      *
-     * @param position    the starting position of the line
-     * @param color       the color of the line
-     * @param endPosition the end position of the line
+     * @param position    the starting position of the line; can be {@code null}
+     * @param color       the color of the line; can be {@code null}
+     * @param endPosition the end position of the line; can be {@code null}
      */
-    public DebugLine(Vector3fc position, Color color, Vector3fc endPosition) {
+    public PrimitiveLine(Vector3fc position, Color color, Vector3fc endPosition) {
         super(position, color);
         this.endPosition = endPosition;
     }
@@ -40,7 +42,7 @@ public class DebugLine extends DebugShape {
     /**
      * Sets the end position of the line.
      *
-     * @param endPosition the new end position of the line
+     * @param endPosition the new end position of the line; can be {@code null}
      */
     public void setEndPosition(Vector3fc endPosition) {
         this.endPosition = endPosition;
