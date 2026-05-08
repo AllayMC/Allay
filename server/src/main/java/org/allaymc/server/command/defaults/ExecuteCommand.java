@@ -11,7 +11,6 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.identifier.IdentifierUtils;
-import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.server.command.ProxyCommandSender;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -117,7 +116,8 @@ public class ExecuteCommand extends Command {
                         return context.fail();
                     }
 
-                    var dimensionType = resolveDimensionType(dimName);
+                    var identifier = IdentifierUtils.tryParse(dimName);
+                    var dimensionType = identifier == null ? null : Registries.DIMENSIONS.getByK2(identifier);
                     if (dimensionType == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_UNKNOWN, dimName);
                         return context.fail();
@@ -168,10 +168,5 @@ public class ExecuteCommand extends Command {
         }
 
         return new CommandResult(successCount, context);
-    }
-
-    private static DimensionType resolveDimensionType(String dimName) {
-        var identifier = IdentifierUtils.tryParse(dimName);
-        return identifier == null ? null : Registries.DIMENSIONS.getByK2(identifier);
     }
 }

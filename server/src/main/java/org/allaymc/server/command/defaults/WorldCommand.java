@@ -12,7 +12,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.IdentifierUtils;
-import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
 
@@ -51,19 +50,19 @@ public class WorldCommand extends Command {
                 .root()
                 .key("tp")
                 .str("world")
-                .str("dimension")
+                .str("dimension", DimensionTypes.OVERWORLD.getIdentifier().toString())
                 .optional()
                 .exec((context, entity) -> {
                     String worldName = context.getResult(1);
                     String dimName = context.getResult(2);
-                    var dimDisplayName = dimName.isBlank() ? DimensionTypes.OVERWORLD.getIdentifier().toString() : dimName;
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
 
-                    var dimensionType = resolveDimensionType(dimName);
+                    var identifier = IdentifierUtils.tryParse(dimName);
+                    var dimensionType = identifier == null ? null : Registries.DIMENSIONS.getByK2(identifier);
                     if (dimensionType == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_UNKNOWN, dimName);
                         return context.fail();
@@ -71,7 +70,7 @@ public class WorldCommand extends Command {
 
                     var dim = world.getDimension(dimensionType);
                     if (dim == null) {
-                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_DISABLED, dimDisplayName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_DISABLED, dimName);
                         return context.fail();
                     }
                     if (dim.getDimensionType() == DimensionTypes.OVERWORLD) {
@@ -81,7 +80,7 @@ public class WorldCommand extends Command {
                         entity.teleport(new Location3d(0, 64, 0, dim));
                     }
 
-                    context.addOutput(TrKeys.ALLAY_COMMAND_WORLD_TP_SUCCESS, worldName, dimDisplayName);
+                    context.addOutput(TrKeys.ALLAY_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
                     return context.success();
                 }, SenderType.ENTITY)
                 .root()
@@ -157,13 +156,5 @@ public class WorldCommand extends Command {
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER);
 
-    }
-
-    private static DimensionType resolveDimensionType(String dimName) {
-        if (dimName == null) {
-            return DimensionTypes.OVERWORLD;
-        }
-        var identifier = IdentifierUtils.tryParse(dimName);
-        return identifier == null ? null : Registries.DIMENSIONS.getByK2(identifier);
     }
 }

@@ -8,6 +8,7 @@ import org.allaymc.api.entity.property.type.FloatPropertyType;
 import org.allaymc.api.entity.property.type.IntPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
@@ -35,7 +36,9 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 
@@ -221,15 +224,18 @@ public final class NetworkData {
                     packet.getCraftingData().add(data);
                     NetworkData.INDEXED_RECIPES.add(recipe);
                 }
-                // Unindexed recipe (doesn't have network id)
                 case FurnaceRecipe furnace -> {
-                    var data = FurnaceRecipeData.of(
-                            CraftingDataType.FURNACE, furnace.getIngredient().getItemType().getRuntimeId(),
-                            0, NetworkHelper.toNetwork(furnace.getOutput()),
-                            furnace.getType().name().toLowerCase(Locale.ROOT)
+                    var id = idCounter++;
+                    var data = ShapelessRecipeData.of(
+                            CraftingDataType.SHAPELESS, furnace.getIdentifier().toString(),
+                            buildNetworkIngredients(furnace), buildNetworkOutputs(furnace.getOutputs()),
+                            UUID.randomUUID(), furnace.getType().name().toLowerCase(Locale.ROOT), furnace.getPriority(), id,
+                            new RecipeUnlockingRequirement(RecipeUnlockingRequirement.UnlockingContext.ALWAYS_UNLOCKED)
                     );
                     packet.getCraftingData().add(data);
+                    NetworkData.INDEXED_RECIPES.add(recipe);
                 }
+                // Unindexed recipe (doesn't have network id)
                 case PotionRecipe potion -> {
                     var data = new PotionMixData(
                             potion.getIngredient().getItemType().getRuntimeId(), potion.getIngredient().getMeta(),
@@ -267,6 +273,13 @@ public final class NetworkData {
 
     private static List<ItemDescriptorWithCount> buildNetworkIngredients(ShapelessRecipe recipe) {
         return Arrays.stream(recipe.getIngredients()).map(NetworkHelper::toNetworkWithCount).toList();
+    }
+
+    private static List<ItemDescriptorWithCount> buildNetworkIngredients(FurnaceRecipe recipe) {
+        return List.of(new ItemDescriptorWithCount(
+                new DefaultDescriptor(NetworkHelper.toNetwork(recipe.getIngredient().getItemType()), ItemTypeDescriptor.WILDCARD_META),
+                recipe.getIngredient().getCount()
+        ));
     }
 
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {

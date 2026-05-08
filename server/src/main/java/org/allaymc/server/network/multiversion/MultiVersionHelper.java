@@ -1,6 +1,9 @@
 package org.allaymc.server.network.multiversion;
 
+import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.player.Player;
+import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -8,8 +11,13 @@ import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
 import org.cloudburstmc.protocol.bedrock.codec.v844.Bedrock_v844;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
+import org.cloudburstmc.protocol.bedrock.codec.v975.Bedrock_v975;
 import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.FurnaceRecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapelessRecipeData;
+import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +27,44 @@ import java.util.List;
  */
 @MultiVersion(version = "*")
 public final class MultiVersionHelper {
+
+    public static CraftingDataPacket adaptCraftingDataPacket(Player player, CraftingDataPacket packet) {
+        if (is1_26_20orHigher(player)) {
+            return packet;
+        }
+
+        var adapted = new CraftingDataPacket();
+        packet.getCraftingData().stream()
+                .map(MultiVersionHelper::adaptCraftingData)
+                .forEach(adapted.getCraftingData()::add);
+        adapted.getPotionMixData().addAll(packet.getPotionMixData());
+        adapted.getContainerMixData().addAll(packet.getContainerMixData());
+        adapted.getMaterialReducers().addAll(packet.getMaterialReducers());
+        adapted.setCleanRecipes(packet.isCleanRecipes());
+        return adapted;
+    }
+
+    private static RecipeData adaptCraftingData(RecipeData data) {
+        if (!(data instanceof ShapelessRecipeData shapeless)) {
+            return data;
+        }
+
+        var netId = shapeless.getNetId();
+        if (netId <= 0 || netId > NetworkData.INDEXED_RECIPES.size()) {
+            return data;
+        }
+
+        var recipe = NetworkData.INDEXED_RECIPES.get(netId - 1);
+        if (!(recipe instanceof FurnaceRecipe furnace)) {
+            return data;
+        }
+
+        return FurnaceRecipeData.of(
+                furnace.getIngredient().getItemType().getRuntimeId(),
+                NetworkHelper.toNetwork(furnace.getOutput()),
+                shapeless.getTag()
+        );
+    }
 
     public static void adaptExperimentData(Player player, List<ExperimentData> experiments) {
         if (is1_21_100(player)) {
@@ -137,6 +183,10 @@ public final class MultiVersionHelper {
         return materialInstances.toBuilder()
                 .putCompound("materials", adaptedMaterials.build())
                 .build();
+    }
+
+    private static boolean is1_26_20orHigher(Player player) {
+        return getCodec(player).getProtocolVersion() >= Bedrock_v975.CODEC.getProtocolVersion();
     }
 
     private static boolean is1_21_130orHigher(Player player) {

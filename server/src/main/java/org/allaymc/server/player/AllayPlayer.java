@@ -3219,7 +3219,7 @@ public class AllayPlayer implements Player {
             sendPacket(pkt);
         }
         sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
-        sendPacket(NetworkData.CRAFTING_DATA_PACKET.get());
+        sendPacket(MultiVersionHelper.adaptCraftingDataPacket(this, NetworkData.CRAFTING_DATA_PACKET.get()));
         sendPacket(NetworkData.TRIM_DATA_PACKET.get());
     }
 
