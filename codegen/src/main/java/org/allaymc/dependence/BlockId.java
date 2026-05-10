@@ -1109,6 +1109,8 @@ public enum BlockId {
 
     GOLD_ORE("minecraft:gold_ore"),
 
+    GOLDEN_DANDELION("minecraft:golden_dandelion"),
+
     GOLDEN_RAIL("minecraft:golden_rail"),
 
     GRANITE("minecraft:granite"),

@@ -3,7 +3,7 @@ package org.allaymc.api.entity.component;
 import org.joml.Vector3ic;
 
 /**
- * Component for entities that can sleep in a bed (e.g., players, villagers).
+ * Component for entities that can enter and leave a sleeping state at a bed position.
  */
 public interface EntitySleepableComponent extends EntityComponent {
 

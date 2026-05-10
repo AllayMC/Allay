@@ -3,6 +3,8 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.block.type.BlockState;
 
 /**
+ * Shared component for falling block entities that carry the represented block state.
+ *
  * @author IWareQ
  */
 public interface EntityFallingBlockBaseComponent extends EntityBaseComponent {

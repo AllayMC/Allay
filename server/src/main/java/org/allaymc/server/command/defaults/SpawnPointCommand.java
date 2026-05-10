@@ -8,7 +8,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permissions;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.joml.Vector3d;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class SpawnPointCommand extends Command {
                 .pos("spawnPos")
                 .exec((context, sender) -> {
                     var senderLoc = sender.getLocation();
-                    if (senderLoc.dimension().getDimensionInfo() != DimensionInfo.OVERWORLD) {
+                    if (senderLoc.dimension().getDimensionType() != DimensionTypes.OVERWORLD) {
                         context.addError("%" + TrKeys.MC_COMMANDS_SPAWNPOINT_WRONGDIMENSION);
                         return context.fail();
                     }

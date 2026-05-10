@@ -141,7 +141,7 @@ nav:
       - Use Forms: tutorials/use-forms.md
       - Use Scoreboards: tutorials/use-scoreboards.md
       - Use BossBars: tutorials/use-bossbars.md
-      - Use Debug Shapes: tutorials/use-debug-shapes.md
+      - Use Primitive Shapes: tutorials/use-primitive-shapes.md
       - Block API: tutorials/block-api.md
       - Item API: tutorials/item-api.md
       - Container API: tutorials/container-api.md

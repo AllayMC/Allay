@@ -1,5 +1,6 @@
 package org.allaymc.server.item.type;
 
+import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.testutils.AllayTestExtension;
@@ -64,5 +65,15 @@ public class AllayItemTypeTest {
         axe.setDamage(1);
         assertEquals(1, axe.getDamage());
         assertThrows(IllegalArgumentException.class, () -> axe.setDamage(-1));
+    }
+
+    @Test
+    void testMilkBucketIsDrinkable() {
+        var milkBucket = ItemTypes.MILK_BUCKET.createItemStack(1);
+
+        assertInstanceOf(ItemEdibleComponent.class, milkBucket);
+        var edibleComponent = (ItemEdibleComponent) milkBucket;
+        assertTrue(edibleComponent.isDrink());
+        assertTrue(edibleComponent.canBeAlwaysEaten());
     }
 }

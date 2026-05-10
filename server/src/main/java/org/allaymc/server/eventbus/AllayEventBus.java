@@ -12,6 +12,7 @@ import org.allaymc.server.utils.ReflectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
@@ -51,7 +52,7 @@ public class AllayEventBus implements EventBus {
                 throw new EventException("Event handler method parameter must be a subclass of Event: " + method.getName() + " in listener " + listener.getClass().getName());
             }
 
-            var handlers = eventClassToHandlerMap.computeIfAbsent(eventClass, k -> new ArrayList<>());
+            var handlers = eventClassToHandlerMap.computeIfAbsent(eventClass, k -> new CopyOnWriteArrayList<>());
             var handler = new MethodEventHandler(annotation.async(), annotation.priority(), eventClass, asyncExecutorService, method, listener);
             handlers.add(handler);
             handlers.sort((h1, h2) -> Integer.compare(h2.priority, h1.priority));
@@ -72,7 +73,7 @@ public class AllayEventBus implements EventBus {
 
     @Override
     public synchronized <E extends Event> void registerListenerFor(Class<E> eventClass, Consumer<E> eventConsumer, boolean async, int priority) {
-        var handlers = eventClassToHandlerMap.computeIfAbsent(eventClass, k -> new ArrayList<>());
+        var handlers = eventClassToHandlerMap.computeIfAbsent(eventClass, k -> new CopyOnWriteArrayList<>());
         var handler = new LambdaEventHandler<>(async, priority, eventClass, asyncExecutorService, eventConsumer);
         handlers.add(handler);
         handlers.sort((h1, h2) -> Integer.compare(h2.priority, h1.priority));

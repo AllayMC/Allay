@@ -58,6 +58,10 @@ public interface Permissions {
      */
     String COMMAND_BAN_IP = "allay.command.ban-ip";
     /**
+     * The permission to use /camerashake command.
+     */
+    String COMMAND_CAMERASHAKE = "allay.command.camerashake";
+    /**
      * The permission to use /clear command.
      */
     String COMMAND_CLEAR = "allay.command.clear";
@@ -89,6 +93,10 @@ public interface Permissions {
      * The permission to use /fill command.
      */
     String COMMAND_FILL = "allay.command.fill";
+    /**
+     * The permission to use /fog command.
+     */
+    String COMMAND_FOG = "allay.command.fog";
     /**
      * The permission to use /gamemode command.
      */

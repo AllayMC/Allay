@@ -38,22 +38,36 @@ public class ReflectionUtils {
 
     public static List<Method> getAllMethods(Class<?> clazz) {
         Map<String, Method> methods = new HashMap<>();
-
-        var current = clazz;
-        while (current != null) {
-            for (var method : current.getDeclaredMethods()) {
-                var signature = buildMethodSignature(method);
-                methods.putIfAbsent(signature, method);
-            }
-
-            current = current.getSuperclass();
-        }
+        collectAllMethods(clazz, methods, new HashSet<>());
 
         return new ArrayList<>(methods.values());
     }
 
+    private static void collectAllMethods(Class<?> type, Map<String, Method> methods, Set<Class<?>> visited) {
+        if (type == null || !visited.add(type)) {
+            return;
+        }
+
+        for (var method : type.getDeclaredMethods()) {
+            var signature = buildMethodSignature(method);
+            methods.putIfAbsent(signature, method);
+        }
+
+        for (var iface : type.getInterfaces()) {
+            collectAllMethods(iface, methods, visited);
+        }
+
+        collectAllMethods(type.getSuperclass(), methods, visited);
+    }
+
     public static String buildMethodSignature(Method method) {
-        return method.getName() + Arrays.toString(method.getParameterTypes());
+        var signature = method.getName() + Arrays.toString(method.getParameterTypes());
+
+        if (method.getDeclaringClass().isInterface() && Modifier.isPrivate(method.getModifiers())) {
+            return method.getDeclaringClass().getName() + "#" + signature;
+        }
+
+        return signature;
     }
 
     public static List<Method> getAllStaticVoidParameterlessMethods(Class<?> clazz) {
@@ -107,4 +121,3 @@ public class ReflectionUtils {
         return result;
     }
 }
-

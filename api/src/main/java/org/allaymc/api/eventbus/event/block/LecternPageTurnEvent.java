@@ -15,7 +15,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class LecternPageTurnEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The previous page number.
+     */
     protected int oldPage;
+    /**
+     * The new page number.
+     */
     @Setter
     protected int newPage;
 

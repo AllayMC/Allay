@@ -14,7 +14,13 @@ import org.allaymc.api.item.interfaces.ItemBucketStack;
 @Getter
 public abstract class PlayerBucketEvent extends PlayerEvent implements CancellableEvent {
 
+    /**
+     * The bucket item involved in the event.
+     */
     protected ItemBucketStack bucketStack;
+    /**
+     * The interaction information.
+     */
     protected PlayerInteractInfo interactInfo;
 
     public PlayerBucketEvent(EntityPlayer player, ItemBucketStack bucketStack, PlayerInteractInfo interactInfo) {

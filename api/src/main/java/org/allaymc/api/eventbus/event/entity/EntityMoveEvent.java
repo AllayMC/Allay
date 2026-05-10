@@ -15,7 +15,13 @@ import org.allaymc.api.math.location.Location3dc;
 @Getter
 @CallerThread(ThreadType.COMPUTE)
 public class EntityMoveEvent extends EntityEvent {
+    /**
+     * The original location.
+     */
     protected Location3dc from;
+    /**
+     * The target location.
+     */
     @Setter
     protected Location3dc to;
 

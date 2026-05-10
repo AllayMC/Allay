@@ -1,20 +1,32 @@
 package org.allaymc.api.world.biome;
 
+import lombok.Builder;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
+import org.allaymc.api.entity.property.enums.ClimateVariant;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * BiomeData contains the data of a {@link BiomeType}.
  */
+@Builder
 @MinecraftVersionSensitive
 public record BiomeData(
         float temperature, float downfall,
         float redSporeDensity, float blueSporeDensity, float ashDensity, float whiteAshDensity,
         float foliageSnow, float depth, float scale,
-        Color mapWaterColor, boolean rain, List<String> tags
+        Color mapWaterColor, boolean rain, List<BiomeTag> tags
 ) {
+
+    private static final Set<BiomeTag> COLD_TAGS = Set.of(
+            BiomeTags.TAIGA, BiomeTags.EXTREME_HILLS, BiomeTags.FROZEN, BiomeTags.DEEP, BiomeTags.THE_END
+    );
+
+    private static final Set<BiomeTag> WARM_TAGS = Set.of(
+            BiomeTags.SAVANNA, BiomeTags.JUNGLE, BiomeTags.MESA, BiomeTags.DESERT, BiomeTags.LUKEWARM, BiomeTags.SWAMP, BiomeTags.NETHER
+    );
 
     /**
      * Determines whether the biome is considered humid based on its downfall value.
@@ -23,5 +35,26 @@ public record BiomeData(
      */
     public boolean isHumid() {
         return downfall >= 0.85;
+    }
+
+    /**
+     * Determines the entity's climate variant based on this biome's tags.
+     *
+     * @return the entity's climate variant for this biome
+     */
+    public ClimateVariant getEntityClimateVariant() {
+        for (var tag : tags) {
+            if (COLD_TAGS.contains(tag)) {
+                return ClimateVariant.COLD;
+            }
+        }
+
+        for (var tag : tags) {
+            if (WARM_TAGS.contains(tag)) {
+                return ClimateVariant.WARM;
+            }
+        }
+
+        return ClimateVariant.TEMPERATE;
     }
 }

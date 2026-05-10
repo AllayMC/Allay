@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.CompletableFuture;
 
 /**
+ * Shared component for filled map items that store, render, and send map images.
+ *
  * @author daoge_cmd
  */
 public interface ItemFilledMapBaseComponent extends ItemBaseComponent {

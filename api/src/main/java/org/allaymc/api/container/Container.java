@@ -238,7 +238,20 @@ public interface Container {
      *
      * @return the NBT list
      */
-    List<NbtMap> saveNBT();
+    default List<NbtMap> saveNBT() {
+        return saveNBT(false);
+    }
+
+    /**
+     * Save the container to NBT.
+     *
+     * @param saveEmptySlots whether to include empty slots in the NBT list.
+     *                       If {@code true}, all slots (including empty ones) are saved.
+     *                       If {@code false}, only non-empty slots are saved.
+     *
+     * @return the NBT list
+     */
+    List<NbtMap> saveNBT(boolean saveEmptySlots);
 
     /**
      * Load the container from NBT.

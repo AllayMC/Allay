@@ -17,7 +17,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @AllArgsConstructor
 @CallerThread(ThreadType.DIMENSION)
 public class BrewingStandStartBrewEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The brewing stand starting the brew.
+     */
     protected BlockEntityBrewingStand brewingStand;
+    /**
+     * The brewing time in ticks.
+     */
     @Setter
     protected int brewingTime;
 }

@@ -16,7 +16,13 @@ import org.allaymc.api.world.WorldData;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class TimeChangeEvent extends WorldEvent implements CancellableEvent {
+    /**
+     * The old world time.
+     */
     protected int oldTime;
+    /**
+     * The new world time.
+     */
     protected int newTime;
 
     public TimeChangeEvent(World world, int oldTime, int newTime) {

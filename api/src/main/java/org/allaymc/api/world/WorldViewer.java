@@ -3,7 +3,7 @@ package org.allaymc.api.world;
 import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.debugshape.DebugShapeViewer;
+import org.allaymc.api.primitiveshape.PrimitiveShapeViewer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
@@ -11,8 +11,10 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
@@ -24,6 +26,7 @@ import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -31,7 +34,7 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
-public interface WorldViewer extends DebugShapeViewer {
+public interface WorldViewer extends PrimitiveShapeViewer {
     /**
      * Views the entity passed.
      *
@@ -294,4 +297,12 @@ public interface WorldViewer extends DebugShapeViewer {
      * @param pos the pos of the command block
      */
     void viewCommandBlockEditor(Vector3ic pos);
+
+    /**
+     * Views the enchantment options available to the viewer from an enchanting table.
+     *
+     * @param enchantOptions the list of enchant options, where each pair contains
+     *                       the network id (used to identify the selected option) and the enchant option
+     */
+    void viewEnchantOptions(List<Pair<Integer, EnchantOption>> enchantOptions);
 }

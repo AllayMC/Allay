@@ -16,8 +16,17 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.DIMENSION)
 public class BlockNeighborUpdateEvent extends BlockEvent implements CancellableEvent {
+    /**
+     * The neighboring block that triggered the update.
+     */
     protected Block neighbor;
+    /**
+     * The face on which the neighboring block is located.
+     */
     protected BlockFace blockFace;
+    /**
+     * The previous state of the neighboring block.
+     */
     protected BlockState oldNeighborState;
 
     public BlockNeighborUpdateEvent(Block block, Block neighbor, BlockFace blockFace, BlockState oldNeighborState) {

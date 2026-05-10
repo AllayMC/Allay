@@ -79,6 +79,8 @@ public interface BlockEntityId {
 
     String SCULK_SHRIEKER = "SculkShrieker";
 
+    String SHELF = "Shelf";
+
     String SHULKER_BOX = "ShulkerBox";
 
     String SIGN = "Sign";

@@ -11,7 +11,13 @@ import org.allaymc.api.world.chunk.Chunk;
  */
 @Getter
 public abstract class ChunkEvent extends WorldEvent {
+    /**
+     * The dimension involved in the event.
+     */
     protected Dimension dimension;
+    /**
+     * The chunk involved in the event.
+     */
     protected Chunk chunk;
 
     public ChunkEvent(Dimension dimension, Chunk chunk) {

@@ -18,7 +18,13 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 @CallerThread(ThreadType.DIMENSION)
 public class BrewingStandBrewEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The brewing stand performing the brew.
+     */
     protected BlockEntityBrewingStand brewingStand;
+    /**
+     * The resulting brewed item stacks.
+     */
     @Setter
     protected ItemStack[] result;
 }

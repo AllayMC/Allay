@@ -35,6 +35,8 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityNoteblock> NOTEBLOCK;
     public static BlockEntityType<BlockEntityHead> HEAD;
     public static BlockEntityType<BlockEntityTarget> TARGET;
+    public static BlockEntityType<BlockEntityChiseledBookshelf> CHISELED_BOOKSHELF;
+    public static BlockEntityType<BlockEntityShelf> SHELF;
     public static BlockEntityType<BlockEntityCampfire> CAMPFIRE;
     public static BlockEntityType<BlockEntityCampfire> SOUL_CAMPFIRE;
     public static BlockEntityType<BlockEntityPistonArm> PISTON_ARM;

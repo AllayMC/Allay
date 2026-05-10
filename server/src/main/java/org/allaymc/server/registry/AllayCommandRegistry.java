@@ -31,6 +31,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     }
 
     private void registerDefaultCommands() {
+        register(new CameraShakeCommand());
         register(new MeCommand());
         register(new StopCommand());
         register(new GameModeCommand());
@@ -74,6 +75,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new HudCommand());
         register(new StructureCommand());
         register(new FillCommand());
+        register(new FogCommand());
         register(new TitleCommand());
         register(new ParticleCommand());
         register(new PermissionCommand());

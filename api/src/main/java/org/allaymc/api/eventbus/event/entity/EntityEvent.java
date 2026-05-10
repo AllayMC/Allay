@@ -13,5 +13,8 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @AllArgsConstructor
 public abstract class EntityEvent extends Event {
+    /**
+     * The entity involved in the event.
+     */
     protected Entity entity;
 }

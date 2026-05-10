@@ -47,20 +47,20 @@ public class BeaconPaymentActionProcessor implements ContainerActionProcessor<Be
             return error();
         }
 
-        if (action.getPrimaryEffect() != 0) {
-            blockEntityBeacon.setPrimaryEffect(Registries.EFFECTS.getByK1(action.getPrimaryEffect()));
+        if (action.primaryEffect() != 0) {
+            blockEntityBeacon.setPrimaryEffect(Registries.EFFECTS.getByK1(action.primaryEffect()));
         }
-        if (action.getSecondaryEffect() != 0) {
-            blockEntityBeacon.setSecondaryEffect(Registries.EFFECTS.getByK1(action.getSecondaryEffect()));
+        if (action.secondaryEffect() != 0) {
+            blockEntityBeacon.setSecondaryEffect(Registries.EFFECTS.getByK1(action.secondaryEffect()));
         }
         return null;
     }
 
     protected boolean validateDestoryAction(Container container, DestroyAction destroyAction) {
-        var source = destroyAction.getSource();
-        return destroyAction.getCount() == 1 &&
-               source.getContainerName().getContainer() == ContainerSlotType.BEACON_PAYMENT &&
-               ContainerActionProcessor.fromNetworkSlotIndex(container, source.getSlot()) == BeaconContainer.BEACON_PAYMENT_SLOT;
+        var source = destroyAction.source();
+        return destroyAction.count() == 1 &&
+               source.containerName().container() == ContainerSlotType.BEACON_PAYMENT &&
+               ContainerActionProcessor.fromNetworkSlotIndex(container, source.slot()) == BeaconContainer.BEACON_PAYMENT_SLOT;
     }
 
     @Override

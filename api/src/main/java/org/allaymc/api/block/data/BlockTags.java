@@ -116,6 +116,8 @@ public interface BlockTags {
 
     BlockTag UNPUSHABLE = create("minecraft:unpushable");
 
+    BlockTag MOSS_REPLACEABLE = create("minecraft:moss_replaceable");
+
     BlockTag LEAVES = create("minecraft:leaves");
 
     static BlockTag create(String name) {

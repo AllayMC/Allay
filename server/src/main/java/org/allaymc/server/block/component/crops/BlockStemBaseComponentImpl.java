@@ -10,6 +10,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockGrowEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.data.BlockId;
@@ -19,6 +20,7 @@ import org.joml.Vector3ic;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
@@ -27,13 +29,25 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
  * @author daoge_cmd
  */
 public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
-    protected final BlockId fruitId;
-    protected final ItemId seedsId;
+    protected final Supplier<BlockType<?>> fruitType;
+    protected final Supplier<ItemType<?>> seedsType;
+
+    public BlockStemBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> fruitTypeSupplier, Supplier<ItemType<?>> seedsTypeSupplier) {
+        super(blockType);
+        this.fruitType = fruitTypeSupplier;
+        this.seedsType = seedsTypeSupplier;
+    }
 
     public BlockStemBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId fruitId, ItemId seedsId) {
-        super(blockType);
-        this.fruitId = fruitId;
-        this.seedsId = seedsId;
+        this(blockType, fruitId::getBlockType, seedsId::getItemType);
+    }
+
+    protected BlockType<?> getFruitType() {
+        return fruitType.get();
+    }
+
+    protected ItemType<?> getSeedsType() {
+        return seedsType.get();
     }
 
     @Override
@@ -52,7 +66,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
         }
 
         var fruitBlock = block.offsetPos(stemFace);
-        if (fruitBlock.getBlockType() != fruitId.getBlockType()) {
+        if (fruitBlock.getBlockType() != getFruitType()) {
             // Fruit block is not connected to the stem,
             // so reset the stem direction to BlockFace.DOWN
             block.getDimension().setBlockState(block.getPosition(), block.getBlockState().setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal()));
@@ -74,7 +88,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
             }
 
             for (var face : BlockFace.getHorizontalBlockFaces()) {
-                if (block.offsetPos(face).getBlockType() == fruitId.getBlockType()) {
+                if (block.offsetPos(face).getBlockType() == getFruitType()) {
                     // Fruit block already exists
                     return;
                 }
@@ -92,7 +106,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
 
                 var event = new BlockGrowEvent(
                         new Block(BlockTypes.AIR.getDefaultState(), new Position3i(fruitBlock.getPosition(), block.getDimension())),
-                        fruitId.getBlockType().getDefaultState()
+                        getFruitType().getDefaultState()
                 );
                 if (event.call()) {
                     // Melon block can only be placed on farmland, dirt, or grass block
@@ -122,6 +136,6 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Set.of(seedsId.getItemType().createItemStack(1));
+        return Set.of(getSeedsType().createItemStack(1));
     }
 }

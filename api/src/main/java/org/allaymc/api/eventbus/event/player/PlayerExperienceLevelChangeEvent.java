@@ -16,7 +16,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.WORLD)
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerExperienceLevelChangeEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The old experience level.
+     */
     protected int oldExperienceLevel;
+    /**
+     * The new experience level.
+     */
     protected int newExperienceLevel;
 
     public PlayerExperienceLevelChangeEvent(EntityPlayer player, int oldExperienceLevel, int newExperienceLevel) {

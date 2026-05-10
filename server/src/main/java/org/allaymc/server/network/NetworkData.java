@@ -2,15 +2,23 @@ package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.entity.property.type.BooleanPropertyType;
+import org.allaymc.api.entity.property.type.EnumPropertyType;
+import org.allaymc.api.entity.property.type.FloatPropertyType;
+import org.allaymc.api.entity.property.type.IntPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.allaymc.server.registry.InternalRegistries;
+import org.allaymc.server.world.dimension.DimensionId;
+import org.allaymc.server.world.dimension.VanillaGeneratorType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
@@ -20,6 +28,7 @@ import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.DimensionDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
@@ -27,7 +36,9 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 
@@ -57,14 +68,17 @@ public final class NetworkData {
     public static final Supplier<List<BlockPropertyData>> CUSTOM_BLOCK_PROPERTIES = Suppliers.memoize(NetworkData::encodeCustomBlockProperties);
     public static final Supplier<List<ExperimentData>> EXPERIMENT_DATA_LIST = Suppliers.memoize(NetworkData::encodeExperimentDataList);
 
-    public static final Supplier<ItemComponentPacket> ITEM_REGISTRY_PACKET = Suppliers.memoize(NetworkData::encodeItemRegistryPacket);
+    public static final Supplier<ItemRegistryPacket> ITEM_REGISTRY_PACKET = Suppliers.memoize(NetworkData::encodeItemRegistryPacket);
     public static final Supplier<CreativeContentPacket> CREATIVE_CONTENT_PACKET = Suppliers.memoize(NetworkData::encodeCreativeContentPacket);
     public static final Supplier<CraftingDataPacket> CRAFTING_DATA_PACKET = Suppliers.memoize(NetworkData::encodeCraftingDataPacket);
     public static final Supplier<AvailableEntityIdentifiersPacket> AVAILABLE_ENTITY_IDENTIFIERS_PACKET = Suppliers.memoize(NetworkData::encodeAvailableEntityIdentifiersPacket);
     public static final Supplier<BiomeDefinitionListPacket> BIOME_DEFINITION_LIST_PACKET = Suppliers.memoize(NetworkData::encodeBiomeDefinitionListPacket);
+    public static final Supplier<DimensionDataPacket> DIMENSION_DATA_PACKET = Suppliers.memoize(NetworkData::encodeDimensionDataPacket);
+    public static final Supplier<VoxelShapesPacket> VOXEL_SHAPES_PACKET = Suppliers.memoize(NetworkData::encodeVoxelShapesPacket);
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
+    public static final Supplier<List<SyncEntityPropertyPacket>> SYNC_ENTITY_PROPERTY_PACKETS = Suppliers.memoize(NetworkData::encodeSyncEntityPropertyPackets);
 
     public static final List<Recipe> INDEXED_RECIPES = new ArrayList<>();
 
@@ -114,8 +128,8 @@ public final class NetworkData {
         );
     }
 
-    private static ItemComponentPacket encodeItemRegistryPacket() {
-        var packet = new ItemComponentPacket();
+    private static ItemRegistryPacket encodeItemRegistryPacket() {
+        var packet = new ItemRegistryPacket();
         packet.getItems().addAll(NetworkData.ITEM_DEFINITIONS.get());
         return packet;
     }
@@ -210,15 +224,18 @@ public final class NetworkData {
                     packet.getCraftingData().add(data);
                     NetworkData.INDEXED_RECIPES.add(recipe);
                 }
-                // Unindexed recipe (doesn't have network id)
                 case FurnaceRecipe furnace -> {
-                    var data = FurnaceRecipeData.of(
-                            CraftingDataType.FURNACE, furnace.getIngredient().getItemType().getRuntimeId(),
-                            0, NetworkHelper.toNetwork(furnace.getOutput()),
-                            furnace.getType().name().toLowerCase(Locale.ROOT)
+                    var id = idCounter++;
+                    var data = ShapelessRecipeData.of(
+                            CraftingDataType.SHAPELESS, furnace.getIdentifier().toString(),
+                            buildNetworkIngredients(furnace), buildNetworkOutputs(furnace.getOutputs()),
+                            UUID.randomUUID(), furnace.getType().name().toLowerCase(Locale.ROOT), furnace.getPriority(), id,
+                            new RecipeUnlockingRequirement(RecipeUnlockingRequirement.UnlockingContext.ALWAYS_UNLOCKED)
                     );
                     packet.getCraftingData().add(data);
+                    NetworkData.INDEXED_RECIPES.add(recipe);
                 }
+                // Unindexed recipe (doesn't have network id)
                 case PotionRecipe potion -> {
                     var data = new PotionMixData(
                             potion.getIngredient().getItemType().getRuntimeId(), potion.getIngredient().getMeta(),
@@ -258,6 +275,13 @@ public final class NetworkData {
         return Arrays.stream(recipe.getIngredients()).map(NetworkHelper::toNetworkWithCount).toList();
     }
 
+    private static List<ItemDescriptorWithCount> buildNetworkIngredients(FurnaceRecipe recipe) {
+        return List.of(new ItemDescriptorWithCount(
+                new DefaultDescriptor(NetworkHelper.toNetwork(recipe.getIngredient().getItemType()), ItemTypeDescriptor.WILDCARD_META),
+                recipe.getIngredient().getCount()
+        ));
+    }
+
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {
         var ids = new LinkedList<NbtMap>();
         for (var type : Registries.ENTITIES.getContent().values()) {
@@ -278,11 +302,56 @@ public final class NetworkData {
     public static BiomeDefinitionListPacket encodeBiomeDefinitionListPacket() {
         Map<String, BiomeDefinitionData> definitions = new HashMap<>();
         for (var biome : Registries.BIOMES.getContent().m1().values()) {
-            definitions.put(biome.getIdentifier().path(), NetworkHelper.toNetwork(biome));
+            definitions.put(biome.getIdentifier().toString(), NetworkHelper.toNetwork(biome));
         }
         var packet = new BiomeDefinitionListPacket();
         packet.setBiomes(new BiomeDefinitions(definitions));
         return packet;
+    }
+
+    public static DimensionDataPacket encodeDimensionDataPacket() {
+        var packet = new DimensionDataPacket();
+        Registries.DIMENSIONS.getContent().m1().values().stream()
+                .filter(NetworkData::shouldSendDimensionDefinition)
+                .map(dimensionType -> new DimensionDefinition(
+                        dimensionType.getIdentifier().toString(),
+                        // The client expects an open range, so it needs to add one here
+                        dimensionType.getMaxHeight() + 1,
+                        dimensionType.getMinHeight(),
+                        getDimensionDefinitionGeneratorType(dimensionType).ordinal(),
+                        dimensionType.getId()
+                ))
+                .forEach(packet.getDefinitions()::add);
+        return packet;
+    }
+
+    public static VoxelShapesPacket encodeVoxelShapesPacket() {
+        var packet = new VoxelShapesPacket();
+        packet.setNameMap(new HashMap<>());
+        packet.setShapes(new ArrayList<>());
+        packet.setCustomShapeCount(0);
+        return packet;
+    }
+
+    private static VanillaGeneratorType getDimensionDefinitionGeneratorType(DimensionType dimensionType) {
+        var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        if (!dimensionId.isDefaultBounds(dimensionType)) {
+            // Void should be used as the generator type if the dimension's bounds are modified,
+            // otherwise the client will disconnect with "An error occurred"
+            return VanillaGeneratorType.VOID;
+        }
+
+        return getVanillaGeneratorType(dimensionType);
+    }
+
+    public static VanillaGeneratorType getVanillaGeneratorType(DimensionType dimensionType) {
+        var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        return dimensionId == null ? DimensionId.OVERWORLD.getVanillaGeneratorType() : dimensionId.getVanillaGeneratorType();
+    }
+
+    private static boolean shouldSendDimensionDefinition(DimensionType dimensionType) {
+        var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        return dimensionId == null || !dimensionId.isDefaultBounds(dimensionType);
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {
@@ -304,13 +373,13 @@ public final class NetworkData {
             var info = switch (pack.getType()) {
                 case RESOURCES -> new ResourcePacksInfoPacket.Entry(
                         pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
-                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), false, null
+                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), null, false
                 );
                 case DATA -> {
                     packet.setHasAddonPacks(true);
                     yield new ResourcePacksInfoPacket.Entry(
                             pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(), "", pack.getId().toString(), scripting,
-                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), true, null
+                            pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED), null, true
                     );
                 }
                 case null, default -> null;
@@ -359,5 +428,52 @@ public final class NetworkData {
                 )
         ).collect(Collectors.toSet()));
         return packet;
+    }
+
+    public static List<SyncEntityPropertyPacket> encodeSyncEntityPropertyPackets() {
+        var result = new ArrayList<SyncEntityPropertyPacket>();
+        for (var entityType : Registries.ENTITIES.getContent().values()) {
+            var propTypes = entityType.getProperties();
+            if (propTypes.isEmpty()) {
+                continue;
+            }
+
+            var properties = new ArrayList<NbtMap>();
+            for (var propType : propTypes.values()) {
+                var propBuilder = NbtMap.builder();
+                propBuilder.putString("name", propType.getName());
+                propBuilder.putBoolean("clientSync", true);
+                propBuilder.putInt("type", propType.getType().ordinal());
+
+                switch (propType) {
+                    case EnumPropertyType<?> enumProp -> {
+                        propBuilder.putList("enum", NbtType.STRING, enumProp.serializedValues());
+                    }
+                    case IntPropertyType intProp -> {
+                        propBuilder.putInt("default", intProp.getDefaultValue());
+                        propBuilder.putInt("min", intProp.getMin());
+                        propBuilder.putInt("max", intProp.getMax());
+                    }
+                    case FloatPropertyType floatProp -> {
+                        propBuilder.putFloat("default", floatProp.getDefaultValue());
+                        propBuilder.putFloat("min", floatProp.getMin());
+                        propBuilder.putFloat("max", floatProp.getMax());
+                    }
+                    case BooleanPropertyType ignored -> {
+                        // no-op
+                    }
+                }
+                properties.add(propBuilder.build());
+            }
+
+            var packet = new SyncEntityPropertyPacket();
+            packet.setData(NbtMap.builder()
+                    .putString("type", entityType.getIdentifier().toString())
+                    .putList("properties", NbtType.COMPOUND, properties)
+                    .build()
+            );
+            result.add(packet);
+        }
+        return result;
     }
 }

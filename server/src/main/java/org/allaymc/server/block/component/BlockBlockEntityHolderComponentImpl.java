@@ -41,7 +41,7 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
         } else if (blockEntity.getBlockEntityType() != this.blockEntityType) {
             log.warn(
                     "Mismatched block entity type at pos {}, {}, {}, {}! Expected: {}, actual: {}",
-                    x, y, z, dimension.getWorld().getName() + "#" + dimension.getDimensionInfo().dimensionId(),
+                    x, y, z, dimension.getWorld().getName() + "#" + dimension.getDimensionType().getIdentifier(),
                     this.blockEntityType.getName(), blockEntity.getBlockEntityType().getName()
             );
             // Remove the incorrect block entity and create a new one

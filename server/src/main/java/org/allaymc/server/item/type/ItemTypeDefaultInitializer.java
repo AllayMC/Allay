@@ -896,7 +896,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLUE_EGG == null) {
             ItemTypes.BLUE_EGG = AllayItemType
-                            .builder(ItemBlueEggStackImpl.class)
+                            .builder(ItemEggStackImpl.class)
                             .vanillaItem(ItemId.BLUE_EGG)
                             .build();
         }
@@ -1166,7 +1166,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BROWN_EGG == null) {
             ItemTypes.BROWN_EGG = AllayItemType
-                            .builder(ItemBrownEggStackImpl.class)
+                            .builder(ItemEggStackImpl.class)
                             .vanillaItem(ItemId.BROWN_EGG)
                             .build();
         }
@@ -4666,6 +4666,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.GOLDEN_CHESTPLATE = AllayItemType
                             .builder(ItemChestplateStackImpl.class)
                             .vanillaItem(ItemId.GOLDEN_CHESTPLATE)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_DANDELION == null) {
+            ItemTypes.GOLDEN_DANDELION = AllayItemType
+                            .builder(ItemSmallFlowerStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_DANDELION)
                             .build();
         }
         if (ItemTypes.GOLDEN_HELMET == null) {

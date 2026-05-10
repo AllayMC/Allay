@@ -41,10 +41,10 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
             // Indicate that the further destroy action does not return a response
             // For more details, see inventory_stack_packet.md
             var noResponseForDestroyAction = false;
-            var actions = request.getActions();
+            var actions = request.actions();
 
             Map<String, Object> dataPool = new HashMap<>();
-            dataPool.put(FILTER_STRINGS_DATA_KEY, request.getFilterStrings());
+            dataPool.put(FILTER_STRINGS_DATA_KEY, request.filterStrings());
 
             for (int index = 0; index < actions.length; index++) {
                 var action = actions[index];
@@ -64,7 +64,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
                 }
 
                 if (!response.ok()) {
-                    encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.getRequestId(), null));
+                    encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.requestId(), null));
                     continue label;
                 }
 
@@ -75,7 +75,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
                 }
             }
 
-            encodedResponses.add(encodeActionResponses(responses, request.getRequestId()));
+            encodedResponses.add(encodeActionResponses(responses, request.requestId()));
         }
 
         var itemStackResponsePacket = new ItemStackResponsePacket();
@@ -86,8 +86,8 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
     private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {
         Map<ContainerSlotType, Int2ObjectMap<ItemStackResponseSlot>> changedContainers = new HashMap<>();
         responses.forEach(response -> response.containers().forEach(container -> {
-            for (var changedSlot : container.getItems()) {
-                var changedSlots = changedContainers.computeIfAbsent(container.getContainerName().getContainer(), $ -> new Int2ObjectOpenHashMap<>());
+            for (var changedSlot : container.items()) {
+                var changedSlots = changedContainers.computeIfAbsent(container.containerName().container(), $ -> new Int2ObjectOpenHashMap<>());
                 changedSlots.put(changedSlot.getSlot(), changedSlot);
             }
         }));

@@ -12,6 +12,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent.SpawnPointType;
 import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.eventbus.event.block.BlockExplodeEvent;
 import org.allaymc.api.item.ItemStack;
@@ -19,7 +20,6 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldData;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -87,7 +87,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
         var block = interactInfo.getClickedBlock();
 
-        if (dimension.getDimensionInfo() != DimensionInfo.OVERWORLD) {
+        if (!dimension.getDimensionType().bedWorks()) {
             if (!dimension.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.RESPAWN_BLOCKS_EXPLODE)) {
                 return true;
             }
@@ -112,9 +112,11 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Always set spawn point to the head position
         var spawnPoint = player.validateAndGetSpawnPoint();
-        if (spawnPoint == null || spawnPoint.x() != headPos.x() || spawnPoint.y() != headPos.y() || spawnPoint.z() != headPos.z()
-            || spawnPoint.dimension() != dimension) {
-            player.setSpawnPoint(headBlock.getLocation());
+        var sameLocation = spawnPoint != null
+                && spawnPoint.x() == headPos.x() && spawnPoint.y() == headPos.y() && spawnPoint.z() == headPos.z()
+                && spawnPoint.dimension() == dimension;
+        if (!sameLocation || player.getSpawnPointType() != SpawnPointType.BED) {
+            player.setBlockSpawnPoint(headBlock.getLocation(), SpawnPointType.BED);
             player.sendTranslatable(TrKeys.MC_TILE_BED_RESPAWNSET);
         }
 

@@ -3,13 +3,13 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.world.chunk.ChunkLoader;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -17,6 +17,9 @@ import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Shared component for player entities, covering movement states, respawn data, cooldowns, food, experience, and fishing.
+ */
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
     int MAX_FOOD_LEVEL = 20;
@@ -171,41 +174,21 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @param value Whether the player should be using an item in the air
      */
-    default void setUsingItemInAir(boolean value) {
-        setUsingItemInAir(value, getWorld().getTick());
-    }
-
-    /**
-     * Set whether the player is using an item in the air.
-     *
-     * @param value Whether the player should be using an item in the air
-     * @param time  The current tick
-     */
-    void setUsingItemInAir(boolean value, long time);
+    void setUsingItemInAir(boolean value);
 
     /**
      * Get the time when the player most recently started using an item.
      *
-     * @return The time when the player most recently started using an item
+     * @return The time when the player most recently started using an item, in entity ticks
      */
     long getStartUsingItemInAirTime();
 
     /**
-     * Get how long the player has been using the item, in game ticks.
+     * Get how long the player has been using the item, in entity ticks.
      *
-     * @param currentTime The current time
-     * @return How long the player has been using the item in game ticks
+     * @return How long the player has been using the item in entity ticks
      */
-    long getItemUsingInAirTime(long currentTime);
-
-    /**
-     * Retrieves the in-air time of an item based on the current world tick.
-     *
-     * @return the in-air time of the item as a long value
-     */
-    default long getItemUsingInAirTime() {
-        return getItemUsingInAirTime(getWorld().getTick());
-    }
+    long getItemUsingInAirTime();
 
     /**
      * Get the skin of the player.
@@ -308,10 +291,59 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     /**
      * Set the spawn point of the player.
+     * <p>
+     * This sets a forced spawn point (e.g., from the {@code /spawnpoint} command) that does not
+     * require a bed or respawn anchor to be present at the location on respawn.
      *
      * @param spawnPoint The spawn point to set
      */
     void setSpawnPoint(Location3ic spawnPoint);
+
+    /**
+     * Set the spawn point of the player as anchored to a block (e.g., a bed or respawn anchor).
+     * <p>
+     * The spawn point is validated on respawn: if the block no longer exists at the stored location,
+     * the spawn point is reset to the world spawn and the player is notified.
+     *
+     * @param spawnPoint The spawn point to set
+     * @param type       The type of block that anchors this spawn point
+     */
+    void setBlockSpawnPoint(Location3ic spawnPoint, SpawnPointType type);
+
+    /**
+     * Returns the type of the player's current spawn point.
+     *
+     * @return the {@link SpawnPointType} of the current spawn point
+     */
+    SpawnPointType getSpawnPointType();
+
+    /**
+     * Describes how a player's personal spawn point was established.
+     */
+    enum SpawnPointType {
+        /** Set by command (e.g., {@code /spawnpoint}). No block validation needed on respawn. */
+        FORCED(null),
+        /** Set by sleeping in a bed. Validated against bed existence on respawn. */
+        BED(TrKeys.MC_TILE_BED_NOTVALID),
+        /** Set by interacting with a respawn anchor. Validated against anchor existence on respawn. */
+        RESPAWN_ANCHOR(TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
+
+        /**
+         * The translation key sent to the player when they die and this spawn point block is missing.
+         * {@code null} for {@link #FORCED}, which never triggers the missing-block fallback.
+         */
+        public final String invalidSpawnKey;
+
+        public static final SpawnPointType[] VALUES = values();
+
+        SpawnPointType(String invalidSpawnKey) {
+            this.invalidSpawnKey = invalidSpawnKey;
+        }
+
+        public static SpawnPointType fromId(int id) {
+            return VALUES[id];
+        }
+    }
 
     /**
      * Check if the player can reach a block at the specified position.

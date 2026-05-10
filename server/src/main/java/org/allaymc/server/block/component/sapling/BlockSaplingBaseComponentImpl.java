@@ -36,6 +36,8 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
     protected final Identifier treeFeatureId;
     protected final Identifier secondaryTreeFeatureId;
     protected final Identifier megaTreeFeatureId;
+    protected final Identifier secondaryMegaTreeFeatureId;
+    protected final float secondaryMegaTreeChance;
 
     public BlockSaplingBaseComponentImpl(
             BlockType<? extends BlockBehavior> blockType,
@@ -43,10 +45,23 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
             Identifier secondaryTreeFeatureId,
             Identifier megaTreeFeatureId
     ) {
+        this(blockType, treeFeatureId, secondaryTreeFeatureId, megaTreeFeatureId, null, 0.0f);
+    }
+
+    public BlockSaplingBaseComponentImpl(
+            BlockType<? extends BlockBehavior> blockType,
+            Identifier treeFeatureId,
+            Identifier secondaryTreeFeatureId,
+            Identifier megaTreeFeatureId,
+            Identifier secondaryMegaTreeFeatureId,
+            float secondaryMegaTreeChance
+    ) {
         super(blockType);
         this.treeFeatureId = treeFeatureId;
         this.secondaryTreeFeatureId = secondaryTreeFeatureId;
         this.megaTreeFeatureId = megaTreeFeatureId;
+        this.secondaryMegaTreeFeatureId = secondaryMegaTreeFeatureId;
+        this.secondaryMegaTreeChance = secondaryMegaTreeChance;
     }
 
     @Override
@@ -155,7 +170,7 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
             var corner = findSaplingCorner(block);
             if (corner != null) {
                 // Found 2x2 arrangement - try mega tree
-                var megaFeature = Registries.WORLD_FEATURES.get(megaTreeFeatureId);
+                var megaFeature = selectMegaTreeFeature();
                 if (megaFeature != null) {
                     return tryGrowMegaTree(block, corner, megaFeature);
                 }
@@ -195,6 +210,13 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
             return Registries.WORLD_FEATURES.get(secondaryTreeFeatureId);
         }
         return treeFeatureId != null ? Registries.WORLD_FEATURES.get(treeFeatureId) : null;
+    }
+
+    protected WorldFeature selectMegaTreeFeature() {
+        if (secondaryMegaTreeFeatureId != null && ThreadLocalRandom.current().nextFloat() < secondaryMegaTreeChance) {
+            return Registries.WORLD_FEATURES.get(secondaryMegaTreeFeatureId);
+        }
+        return megaTreeFeatureId != null ? Registries.WORLD_FEATURES.get(megaTreeFeatureId) : null;
     }
 
     /**

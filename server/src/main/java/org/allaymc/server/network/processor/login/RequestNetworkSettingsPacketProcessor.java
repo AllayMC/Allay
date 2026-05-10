@@ -3,15 +3,17 @@ package org.allaymc.server.network.processor.login;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
-import org.allaymc.protocol.extension.NetEaseCompression;
-import org.allaymc.protocol.extension.codec.v766.Bedrock_v766_NetEase;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.codec.v766_netease.Bedrock_v766_NetEase;
+import org.cloudburstmc.protocol.bedrock.codec.v819_netease.Bedrock_v819_NetEase;
+import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
+import org.cloudburstmc.protocol.bedrock.netty.codec.compression.NetEaseCompression;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.SimpleCompressionStrategy;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.NetworkSettingsPacket;
@@ -24,21 +26,15 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestNetworkSettingsPacket;
 @Slf4j
 public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor<RequestNetworkSettingsPacket> {
 
-    /**
-     * NetEase clients use RakNet protocol version 8, while international clients use version 11.
-     */
-    private static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
-
     @Override
-    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients are detected via RakNet protocol version 8 and use raw deflate compression")
-    @MultiVersion(version = "1.21.50-NetEase", details = "Packet codec is replaced for NetEase clients")
+    @MultiVersion(version = "*-NetEase", details = "NetEase clients are detected via RakNet protocol version 8 and use raw deflate compression")
+    @MultiVersion(version = "*-NetEase", details = "Packet codec is replaced for NetEase clients")
     public void handle(Player player, RequestNetworkSettingsPacket packet) {
         var allayPlayer = (AllayPlayer) player;
         var protocolVersion = packet.getProtocolVersion();
         var settings = AllayServer.getSettings().networkSettings();
 
-        // Detect if this is a NetEase client based on RakNet protocol version
-        boolean netEasePlayer = allayPlayer.getSession().getPeer().getRakVersion() == NETEASE_RAKNET_PROTOCOL_VERSION;
+        boolean netEasePlayer = isNetEaseClient(allayPlayer);
         allayPlayer.setNetEasePlayer(netEasePlayer);
 
         // Check NetEase client support configuration
@@ -88,6 +84,9 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
 
         var session = allayPlayer.getSession();
         session.setCodec(codec);
+        if (!AllayServer.getSettings().networkSettings().enableEncodingProtection()) {
+            session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
+        }
 
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(settings.compressionAlgorithm().name()));
@@ -108,6 +107,10 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         return BedrockPacketType.REQUEST_NETWORK_SETTINGS;
     }
 
+    boolean isNetEaseClient(AllayPlayer allayPlayer) {
+        return allayPlayer.getSourceInterface().isNetEaseClient(allayPlayer.getSession());
+    }
+
     /**
      * Find the appropriate NetEase-specific codec for the given protocol version.
      *
@@ -115,10 +118,10 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
      * @return the NetEase codec, or {@code null} if not found
      */
     private static BedrockCodec findNetEaseCodec(int protocolVersion) {
-        if (protocolVersion == Bedrock_v766_NetEase.CODEC.getProtocolVersion()) {
-            return Bedrock_v766_NetEase.CODEC;
-        }
-
-        return null;
+        return switch (protocolVersion) {
+            case 766 -> Bedrock_v766_NetEase.CODEC;
+            case 819 -> Bedrock_v819_NetEase.CODEC;
+            default -> null;
+        };
     }
 }

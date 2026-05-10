@@ -3,6 +3,8 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.world.explosion.FireworkExplosion;
 
 /**
+ * Shared component for firework star items that store a single firework explosion definition.
+ *
  * @author daoge_cmd
  */
 public interface ItemFireworkStarBaseComponent extends ItemBaseComponent {

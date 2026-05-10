@@ -15,8 +15,7 @@ import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.player.GameMode;
-import org.allaymc.api.player.Player;
+import org.allaymc.api.player.*;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -33,8 +32,8 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
-import org.cloudburstmc.protocol.common.PacketSignal;
 import org.joml.Vector3i;
 
 import java.util.List;
@@ -241,6 +240,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (!mayBreak()) {
             log.debug("Player {} tried to break block too early! Progress: {}, serverSide: {}",
                     player.getOriginName(), this.currentProgress, this.serverSideBlockBreaking);
+            // The client has predicted the block destroy, send block update to restore the client's view
+            revertClientBlockPrediction(player, x, y, z);
             return;
         }
 
@@ -277,8 +278,20 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             }
         } else {
             // Failed to break the block (e.g. BlockBreakEvent cancelled), restore block state
-            player.viewBlockUpdate(new Vector3i(this.breakingPosX, this.breakingPosY, this.breakingPosZ), 0, this.blockToBreak);
+            revertClientBlockPrediction(player, this.breakingPosX, this.breakingPosY, this.breakingPosZ);
         }
+    }
+
+    /**
+     * Sends block updates to the player to revert the client's predicted block destroy.
+     * Restores both block layers (main block and extra block such as water for waterlogged blocks)
+     * using the current server-side block state.
+     */
+    protected void revertClientBlockPrediction(Player player, int x, int y, int z) {
+        var dimension = player.getControlledEntity().getDimension();
+        var pos = new Vector3i(x, y, z);
+        player.viewBlockUpdate(pos, 0, dimension.getBlockState(x, y, z, 0));
+        player.viewBlockUpdate(pos, 1, dimension.getBlockState(x, y, z, 1));
     }
 
     protected boolean checkInteractDistance(Player player) {
@@ -350,7 +363,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case MISSED_SWING -> {
                     var event = new PlayerPunchAirEvent(entity);
                     if (event.call()) {
-                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false));
+                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false), false);
                     }
                 }
             }
@@ -368,6 +381,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (notReadyForInput(player)) {
             return PacketSignal.HANDLED;
         }
+
+        updatePlayerInputState(player, packet);
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player.getControlledEntity()).getBaseComponent());
         if (baseComponent.getExpectedTeleportPos() != null) {
@@ -460,6 +475,37 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
         ((AllayPlayer) player).handlePacketSync(pk, receiveTime);
+    }
+
+    protected void updatePlayerInputState(Player player, PlayerAuthInputPacket packet) {
+        var inputMode = switch (packet.getInputMode()) {
+            case UNDEFINED -> InputMode.UNDEFINED;
+            case MOUSE -> InputMode.MOUSE;
+            case TOUCH -> InputMode.TOUCH;
+            case GAMEPAD -> InputMode.GAMEPAD;
+            case MOTION_CONTROLLER -> InputMode.MOTION_CONTROLLER;
+        };
+        ((AllayPlayer) player).setInputMode(inputMode);
+
+        var playMode = switch (packet.getPlayMode()) {
+            case NORMAL -> ClientPlayMode.NORMAL;
+            case TEASER -> ClientPlayMode.TEASER;
+            case SCREEN -> ClientPlayMode.SCREEN;
+            case VIEWER -> ClientPlayMode.VIEWER;
+            case REALITY -> ClientPlayMode.REALITY;
+            case PLACEMENT -> ClientPlayMode.PLACEMENT;
+            case LIVING_ROOM -> ClientPlayMode.LIVING_ROOM;
+            case EXIT_LEVEL -> ClientPlayMode.EXIT_LEVEL;
+            case EXIT_LEVEL_LIVING_ROOM -> ClientPlayMode.EXIT_LEVEL_LIVING_ROOM;
+        };
+        ((AllayPlayer) player).setPlayMode(playMode);
+
+        var interactionModel = switch (packet.getInputInteractionModel()) {
+            case TOUCH -> InputInteractionModel.TOUCH;
+            case CROSSHAIR -> InputInteractionModel.CROSSHAIR;
+            case CLASSIC -> InputInteractionModel.CLASSIC;
+        };
+        ((AllayPlayer) player).setInputInteractionModel(interactionModel);
     }
 
     protected boolean notReadyForInput(Player player) {

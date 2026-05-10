@@ -28,9 +28,7 @@ import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
-import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 import org.joml.primitives.AABBd;
 
 import java.util.ArrayList;
@@ -75,7 +73,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         addContainer(enchantTableContainer);
 
         // We shouldn't provide the player object directly, because at that time 'thisPlayer' is null
-        addContainer(new ArmorContainerImpl(() -> thisPlayer));
+        addContainer(new PlayerArmorContainerImpl(() -> thisPlayer));
         addContainer(new InventoryContainerImpl(() -> thisPlayer));
         addContainer(new OffhandContainerImpl(() -> thisPlayer));
         addContainer(new PlayerCursorContainerImpl(() -> thisPlayer));
@@ -84,7 +82,6 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         if (thisPlayer.isActualPlayer()) {
             clearEnchantOptions();
-            var packet = new PlayerEnchantOptionsPacket();
             if (item != ItemAirStack.AIR_STACK) {
                 var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
                 var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
@@ -93,12 +90,11 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 }
 
                 for (var option : enchantOptions) {
-                    packet.getOptions().add(NetworkHelper.toNetwork(option));
                     this.enchantOptions.add(Long.valueOf(option.left()));
                 }
-            }
 
-            thisPlayer.getController().sendPacket(packet);
+                thisPlayer.getController().viewEnchantOptions(enchantOptions);
+            }
         }
     }
 

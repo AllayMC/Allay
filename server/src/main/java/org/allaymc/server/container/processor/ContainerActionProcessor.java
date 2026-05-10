@@ -1,6 +1,12 @@
 package org.allaymc.server.container.processor;
 
 import org.allaymc.api.container.Container;
+import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.component.ItemWearableComponent;
+import org.allaymc.api.item.data.ArmorType;
+import org.allaymc.api.item.data.ItemTags;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.FakeContainerImpl;
@@ -75,9 +81,9 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
     @SuppressWarnings("unchecked")
     static <T extends Container> T getContainerFrom(Player player, FullContainerName containerName) {
         var playerImpl = (EntityPlayerImpl) player.getControlledEntity();
-        var container = ((AllayPlayer) player).getOpenedContainer(containerName.getContainer());
+        var container = ((AllayPlayer) player).getOpenedContainer(containerName.container());
         if (container == null) {
-            container = ((EntityPlayerContainerHolderComponentImpl) playerImpl.getContainerHolderComponent()).getContainer(containerName.getContainer());
+            container = ((EntityPlayerContainerHolderComponentImpl) playerImpl.getContainerHolderComponent()).getContainer(containerName.container());
         }
         return (T) container;
     }
@@ -106,5 +112,31 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
         }
 
         return false;
+    }
+
+    static boolean canPlaceItemToSlot(Container container, int slot, ItemStack item) {
+        if (item.getItemType() == ItemTypes.AIR) {
+            return true;
+        }
+
+        if (container.getContainerType() == ContainerTypes.OFFHAND && !item.getItemType().hasItemTag(ItemTags.ALLOW_OFFHAND)) {
+            return false;
+        }
+
+        if (container.getContainerType() == ContainerTypes.ARMOR) {
+            if (item instanceof ItemWearableComponent wearableComponent) {
+                return switch (slot) {
+                    case 0 -> wearableComponent.getArmorType() == ArmorType.HELMET;
+                    case 1 -> wearableComponent.getArmorType() == ArmorType.CHESTPLATE;
+                    case 2 -> wearableComponent.getArmorType() == ArmorType.LEGGINGS;
+                    case 3 -> wearableComponent.getArmorType() == ArmorType.BOOTS;
+                    default -> false;
+                };
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

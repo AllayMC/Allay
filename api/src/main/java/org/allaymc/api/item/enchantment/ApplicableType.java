@@ -1,7 +1,7 @@
 package org.allaymc.api.item.enchantment;
 
 import org.allaymc.api.item.ItemHelper;
-import org.allaymc.api.item.component.ItemArmorBaseComponent;
+import org.allaymc.api.item.component.ItemWearableComponent;
 import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
@@ -45,7 +45,7 @@ public enum ApplicableType {
     HELMET {
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
-            if (itemType.createItemStack() instanceof ItemArmorBaseComponent armor) {
+            if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
                 return armor.getArmorType() == ArmorType.HELMET;
             }
 
@@ -58,7 +58,7 @@ public enum ApplicableType {
     CHESTPLATE {
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
-            if (itemType.createItemStack() instanceof ItemArmorBaseComponent armor) {
+            if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
                 return armor.getArmorType() == ArmorType.CHESTPLATE;
             }
 
@@ -71,7 +71,7 @@ public enum ApplicableType {
     LEGGINGS {
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
-            if (itemType.createItemStack() instanceof ItemArmorBaseComponent armor) {
+            if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
                 return armor.getArmorType() == ArmorType.LEGGINGS;
             }
 
@@ -84,7 +84,7 @@ public enum ApplicableType {
     BOOTS {
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
-            if (itemType.createItemStack() instanceof ItemArmorBaseComponent armor) {
+            if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
                 return armor.getArmorType() == ArmorType.BOOTS;
             }
 
@@ -160,7 +160,7 @@ public enum ApplicableType {
     WEARABLE {
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
-            return ItemHelper.isArmor(itemType) || itemType == ItemTypes.CARVED_PUMPKIN || ItemHelper.isHead(itemType);
+            return itemType.createItemStack() instanceof ItemWearableComponent;
         }
     },
     /**

@@ -89,17 +89,17 @@ public class HelpCommand extends Command {
                     tip.append(param.isOptional() ? " [" : " <")
                             .append(param.getName())
                             .append(": ")
-                            .append(param.getType().getParamType().name().toLowerCase(Locale.ENGLISH))
+                            .append(param.getType().paramType().name().toLowerCase(Locale.ENGLISH))
                             .append(param.isOptional() ? "]" : ">");
                 } else {
-                    var enums = new ArrayList<>(param.getEnumData().getValues().keySet());
+                    var enums = new ArrayList<>(param.getEnumData().values().keySet());
                     if (enums.size() == 1 && !param.isOptional()) {
                         tip.append(" ").append(enums.getFirst());
                     } else {
                         tip.append(param.isOptional() ? " [" : " <")
                                 .append(
                                         enums.isEmpty()
-                                                ? param.getName() + ": " + param.getEnumData().getName()
+                                                ? param.getName() + ": " + param.getEnumData().name()
                                                 : String.join("|", enums.subList(0, Math.min(enums.size(), 10)))
                                 )
                                 .append(enums.size() > 10 ? "|..." : "")

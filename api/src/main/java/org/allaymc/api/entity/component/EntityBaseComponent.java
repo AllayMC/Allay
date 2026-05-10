@@ -4,12 +4,14 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
+import org.allaymc.api.entity.property.type.EntityPropertyType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
@@ -40,11 +42,14 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
+ * Defines the core lifecycle, state, movement, persistence, and viewer interaction hooks shared by entities.
+ *
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder, TaskCreator {
@@ -211,6 +216,18 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return the scheduler of this entity
      */
     Scheduler getScheduler();
+
+    /**
+     * Gets the number of ticks this entity has been alive for.
+     * <p>
+     * Note that the entity tick is independent of the world tick.
+     * If the entity has not been ticked by the world (e.g. the
+     * chunk it resides in is not loaded), its tick count will not
+     * increase, even though the world tick continues to advance.
+     *
+     * @return the entity's tick count
+     */
+    long getTick();
 
     /**
      * Get the state of the entity.
@@ -581,6 +598,19 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Check if this entity is in an active chunk (within tick radius of a chunk loader).
+     * Inactive entities may have reduced AI update frequency.
+     *
+     * @return {@code true} if the entity is in an active chunk, otherwise {@code false}.
+     */
+    default boolean isActive() {
+        var loc = getLocation();
+        int cx = (int) Math.floor(loc.x()) >> 4;
+        int cz = (int) Math.floor(loc.z()) >> 4;
+        return getDimension().getChunkManager().isChunkActive(cx, cz);
+    }
+
+    /**
      * Check if the chunk which the entity's location is in is loaded.
      *
      * @return {@code true} if the chunk is loaded, otherwise {@code false}.
@@ -741,7 +771,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Called when the entity interacts with another entity.
      *
-     * @param player    The player who interacted with the entity, can be null
+     * @param player    The player who interacted with the entity, can be {@code null}
      * @param itemStack The item used to interact with the entity
      * @return {@code true} if the interaction is successful
      */
@@ -774,6 +804,54 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param persistent {@code true} if the entity should be persistent
      */
     void setPersistent(boolean persistent);
+
+    /**
+     * Gets the current value of an entity property.
+     *
+     * @param propertyType the property type to query
+     * @param <DATATYPE>   the property value type
+     * @return the current value
+     */
+    <DATATYPE> DATATYPE getPropertyValue(EntityPropertyType<DATATYPE> propertyType);
+
+    /**
+     * Sets an entity property value.
+     *
+     * @param propertyType the property type to set
+     * @param value        the value to set
+     * @param <DATATYPE>   the property value type
+     */
+    <DATATYPE> void setPropertyValue(EntityPropertyType<DATATYPE> propertyType, DATATYPE value);
+
+    /**
+     * Gets all current entity property values.
+     *
+     * @return an unmodifiable view of the map of property types to their current values
+     */
+    @UnmodifiableView
+    Map<EntityPropertyType<?>, Object> getPropertyValues();
+
+    /**
+     * Attaches a primitive shape to this entity.
+     *
+     * @param primitiveShape the primitive shape to be attached
+     */
+    void attachPrimitiveShape(PrimitiveShape primitiveShape);
+
+    /**
+     * Gets all the attached primitive shapes of this entity.
+     *
+     * @return all the attached primitive shapes of this entity
+     */
+    @UnmodifiableView
+    Set<PrimitiveShape> getAttachedPrimitiveShapes();
+
+    /**
+     * Detaches a primitive shape from this entity.
+     *
+     * @param primitiveShape the primitive shape to be detached
+     */
+    void detachPrimitiveShape(PrimitiveShape primitiveShape);
 
     @Override
     default boolean isValid() {

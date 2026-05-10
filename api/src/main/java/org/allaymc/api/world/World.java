@@ -3,10 +3,12 @@ package org.allaymc.api.world;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -81,12 +83,34 @@ public interface World extends TaskCreator {
     float getTickUsage();
 
     /**
+     * Get the dimension by its dimension type in this world.
+     *
+     * @param dimensionType the dimension type
+     * @return the dimension, or {@code null} if the dimension is not found
+     */
+    Dimension getDimension(DimensionType dimensionType);
+
+    /**
+     * Get the dimension by the dimension identifier in this world.
+     *
+     * @param dimensionIdentifier the dimension identifier
+     * @return the dimension, or {@code null} if the dimension is not found
+     */
+    default Dimension getDimension(org.allaymc.api.utils.identifier.Identifier dimensionIdentifier) {
+        var dimensionType = Registries.DIMENSIONS.getByK2(dimensionIdentifier);
+        return dimensionType == null ? null : getDimension(dimensionType);
+    }
+
+    /**
      * Get the dimension by the dimension id in this world.
      *
      * @param dimensionId the dimension id
      * @return the dimension, or {@code null} if the dimension is not found
      */
-    Dimension getDimension(int dimensionId);
+    default Dimension getDimension(int dimensionId) {
+        var dimensionType = Registries.DIMENSIONS.getByK1(dimensionId);
+        return dimensionType == null ? null : getDimension(dimensionType);
+    }
 
     /**
      * Get the overworld dimension in this world.
@@ -94,7 +118,7 @@ public interface World extends TaskCreator {
      * @return the overworld dimension, {@code null} should never being returned
      */
     default Dimension getOverWorld() {
-        return getDimension(DimensionInfo.OVERWORLD.dimensionId());
+        return getDimension(DimensionTypes.OVERWORLD);
     }
 
     /**
@@ -103,7 +127,7 @@ public interface World extends TaskCreator {
      * @return the nether dimension, or {@code null} if the nether dimension is not found
      */
     default Dimension getNether() {
-        return getDimension(DimensionInfo.NETHER.dimensionId());
+        return getDimension(DimensionTypes.NETHER);
     }
 
     /**
@@ -112,7 +136,7 @@ public interface World extends TaskCreator {
      * @return the end dimension, or {@code null} if the end dimension is not found
      */
     default Dimension getTheEnd() {
-        return getDimension(DimensionInfo.THE_END.dimensionId());
+        return getDimension(DimensionTypes.THE_END);
     }
 
     /**
@@ -121,7 +145,7 @@ public interface World extends TaskCreator {
      * @return all dimensions in this world
      */
     @UnmodifiableView
-    Map<Integer, Dimension> getDimensions();
+    Map<DimensionType, Dimension> getDimensions();
 
     /**
      * Get the players in this world.

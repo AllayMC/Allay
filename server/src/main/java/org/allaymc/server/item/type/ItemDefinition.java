@@ -4,30 +4,29 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemVersion;
 
 /**
- * Item definition sent to the client for custom item registration.
+ * ItemDefinition holds the client-side registration data for a single item type.
  * <p>
- * The NBT structure (when component-based) contains:
- * <ul>
- *   <li>{@code components} - Item components and properties
- *     <ul>
- *       <li>{@code item_properties} - Legacy properties (max_stack_size, allow_off_hand, etc.)</li>
- *       <li>{@code minecraft:display_name} - Display name with {@code value} field</li>
- *       <li>{@code minecraft:icon} - Icon with {@code textures} map</li>
- *       <li>{@code minecraft:durability} - Durability with {@code max_durability}</li>
- *       <li>{@code minecraft:tags} - Item tags array</li>
- *       <li>Other components like armor, wearable, food, cooldown, etc.</li>
- *     </ul>
- *   </li>
- * </ul>
+ * This record is used as the return type of {@link ItemDefinitionGenerator} and is forwarded
+ * to the Bedrock item registry during network encoding. For component-based items, the payload
+ * typically contains a root {@code components} compound with entries such as
+ * {@code item_properties}, {@code minecraft:display_name}, {@code minecraft:durability},
+ * and other client-recognized item components.
+ * <p>
+ * Server-side gameplay behavior such as actual stack handling, durability consumption, and
+ * item logic is still driven by {@link org.allaymc.api.item.type.ItemType} and its components;
+ * this definition only describes what the client needs to register and render the item.
  *
- * @param componentBased whether this item uses the component-based (data-driven) format
- * @param components     the NBT data containing item components and properties
- * @param version        the item version for protocol compatibility
- *
+ * @param componentBased whether the protocol should treat this item as a data-driven/component-based item
+ * @param components     the raw NBT payload sent for this item definition, usually containing a root {@code components} compound
+ * @param version        the Bedrock item definition version used for protocol compatibility
  * @author daoge_cmd
+ * @see ItemDefinitionGenerator
  * @see CustomItemDefinitionGenerator
  * @see <a href="https://wiki.bedrock.dev/items/item-components">Bedrock Item Components</a>
  */
 public record ItemDefinition(boolean componentBased, NbtMap components, ItemVersion version) {
+    /**
+     * Default definition for items that do not provide custom component data.
+     */
     public static final ItemDefinition DEFAULT = new ItemDefinition(false, NbtMap.EMPTY, ItemVersion.NONE);
 }

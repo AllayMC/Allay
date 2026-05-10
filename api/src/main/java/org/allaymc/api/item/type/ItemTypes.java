@@ -301,7 +301,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemDyeStack> BLUE_DYE;
 
-    public static ItemType<ItemBlueEggStack> BLUE_EGG;
+    public static ItemType<ItemEggStack> BLUE_EGG;
 
     public static ItemType<ItemTerracottaStack> BLUE_GLAZED_TERRACOTTA;
 
@@ -391,7 +391,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemDyeStack> BROWN_DYE;
 
-    public static ItemType<ItemBrownEggStack> BROWN_EGG;
+    public static ItemType<ItemEggStack> BROWN_EGG;
 
     public static ItemType<ItemTerracottaStack> BROWN_GLAZED_TERRACOTTA;
 
@@ -1558,6 +1558,8 @@ public final class ItemTypes {
     public static ItemType<ItemGoldenCarrotStack> GOLDEN_CARROT;
 
     public static ItemType<ItemChestplateStack> GOLDEN_CHESTPLATE;
+
+    public static ItemType<ItemSmallFlowerStack> GOLDEN_DANDELION;
 
     public static ItemType<ItemHelmetStack> GOLDEN_HELMET;
 

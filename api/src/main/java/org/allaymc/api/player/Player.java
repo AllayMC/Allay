@@ -2,6 +2,7 @@ package org.allaymc.api.player;
 
 import org.allaymc.api.bossbar.BossBarViewer;
 import org.allaymc.api.container.ContainerViewer;
+import org.allaymc.api.ddui.DDUIViewer;
 import org.allaymc.api.dialog.DialogViewer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormViewer;
@@ -9,19 +10,24 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.MessageReceiver;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldViewer;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3dc;
 
+import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a player in the server. A {@link Player} basically 'control' an {@link EntityPlayer}.
  *
  * @author daoge_cmd
  */
-public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, ScoreboardViewer, DialogViewer {
+public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, DDUIViewer, ScoreboardViewer, DialogViewer {
 
     Speed DEFAULT_SPEED = new Speed(0.1, 1.0);
     Speed DEFAULT_FLY_SPEED = new Speed(0.05, 1.0);
@@ -223,6 +229,58 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void clearTitle();
 
     /**
+     * Shake the player's camera with the specified type, intensity and duration.
+     *
+     * @param shakeType the type of shake (positional or rotational)
+     * @param intensity the intensity of the shake
+     * @param duration  the duration of the shake in seconds
+     */
+    void shakeCamera(CameraShakeType shakeType, float intensity, float duration);
+
+    /**
+     * Stop all camera shakes for this player.
+     */
+    void stopCameraShake();
+
+    /**
+     * Push a fog setting onto this player's fog stack.
+     *
+     * @param fogId the fog identifier (e.g. {@link FogIds#FOG_DEFAULT})
+     */
+    void pushFog(String fogId);
+
+    /**
+     * Pop (remove) the last occurrence of the given fog ID from this player's fog stack.
+     *
+     * @param fogId the fog identifier to match
+     *
+     * @return {@code true} if a fog setting was removed
+     */
+    boolean popFog(String fogId);
+
+    /**
+     * Remove all occurrences of the given fog ID from this player's fog stack.
+     *
+     * @param fogId the fog identifier to match
+     *
+     * @return the number of fog settings removed
+     */
+    int removeFog(String fogId);
+
+    /**
+     * Get an unmodifiable view of this player's fog stack.
+     *
+     * @return the fog stack
+     */
+    @UnmodifiableView
+    List<String> getFogs();
+
+    /**
+     * Remove all fog settings from this player's fog stack.
+     */
+    void removeAllFogs();
+
+    /**
      * Sends the experience level to the client.
      *
      * @param value the experience level to be sent.
@@ -258,12 +316,48 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void sendFoodExhaustionLevel(float value);
 
     /**
+     * Sends the health and max health to the client.
+     *
+     * @param health    the current health value to be sent
+     * @param maxHealth the maximum health value to be sent
+     */
+    void sendHealth(float health, float maxHealth);
+
+    /**
+     * Sends the absorption value to the client.
+     *
+     * @param absorption the absorption value to be sent
+     */
+    void sendAbsorption(float absorption);
+
+    /**
      * Sends a cooldown notification to the client for the specified category.
      *
      * @param category the identifier for the cooldown category
      * @param duration the length of the cooldown in ticks
      */
     void sendCooldown(String category, int duration);
+
+    /**
+     * Sends map image data to the client.
+     *
+     * @param mapId the unique id of the map
+     * @param image the image to be rendered on the map
+     */
+    void sendMapData(long mapId, BufferedImage image);
+
+    /**
+     * Sends the death info to the client, which will be displayed on the death screen.
+     *
+     * @param deathInfo a pair where the left is the translation key of the death message,
+     *                  and the right is the translation parameters
+     */
+    void sendDeathInfo(Pair<String, String[]> deathInfo);
+
+    /**
+     * Notifies the client that an item charging action has finished (e.g. crossbow fully loaded).
+     */
+    void sendItemChargingFinished();
 
     /**
      * Represents a speed value controlled by a base speed and a multiplier. The actual
@@ -336,6 +430,34 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void setVerticalFlySpeed(Speed verticalFlySpeed);
 
     /**
+     * Sets the motion of the player.
+     *
+     * @param motion the motion vector to set
+     */
+    void setMotion(Vector3dc motion);
+
+    /**
+     * Gets the latest input mode reported by the client.
+     *
+     * @return the current input mode, or {@code null} if not available yet
+     */
+    InputMode getInputMode();
+
+    /**
+     * Gets the latest play mode reported by the client.
+     *
+     * @return the current play mode, or {@code null} if not available yet
+     */
+    ClientPlayMode getPlayMode();
+
+    /**
+     * Gets the latest input interaction model reported by the client.
+     *
+     * @return the current input interaction model, or {@code null} if not available yet
+     */
+    InputInteractionModel getInputInteractionModel();
+
+    /**
      * Sets the visibility of a specific HUD element for the player.
      *
      * @param element the {@link HudElement} whose visibility is to be modified
@@ -373,19 +495,18 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * player visual feedback while the server prepares the target dimension.
      * The flag is automatically cleared when {@link #completeDimensionChange()} is called.
      *
-     * @param targetDimInfo the target dimension info
+     * @param targetDimensionType the target dimension type
      * @param x             approximate target x coordinate
      * @param y             approximate target y coordinate
      * @param z             approximate target z coordinate
      */
-    void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z);
+    void beginDimensionChange(DimensionType targetDimensionType, double x, double y, double z);
 
     /**
      * Complete a dimension change by sending the dimension ack and resetting the flag.
      * Call this after the player has been added to the target dimension,
      * or to dismiss the loading screen if the teleport fails.
      */
-    @ApiStatus.Internal
     void completeDimensionChange();
 
     /**

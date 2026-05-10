@@ -36,7 +36,7 @@ dependencies {
     api(libs.sentry)
     api(libs.jctools)
     api(libs.caffeine)
-    api(libs.bundles.protocol) {
+    api(libs.protocol) {
         exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")
@@ -45,6 +45,7 @@ dependencies {
         exclude(group = "org.yaml", module = "snakeyaml") // Use the latest version
     }
     api(libs.bstats)
+    api(libs.lz4.java)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -85,15 +86,31 @@ tasks {
 
     shadowJar {
         archiveFileName = getShadedJarName()
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        // Log4j config fix
+        filesMatching("META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat") {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
 
         transform<Log4j2PluginsCacheFileTransformer>()
         mergeServiceFiles()
 
+        exclude("META-INF/maven/**")
+        exclude("META-INF/native-image/**")
+        exclude("META-INF/proguard/**")
+
+        exclude("META-INF/AL2.0")
         exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/*-LICENSE")
+        exclude("META-INF/*-NOTICE")
+        exclude("META-INF/io.netty.versions.properties")
+        exclude("META-INF/LGPL2.1")
         exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
         exclude("META-INF/NOTICE")
-        exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/thirdparty-LICENSE")
     }
 
     runShadow {

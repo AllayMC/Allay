@@ -13,6 +13,9 @@ import org.joml.Vector3ic;
 @CallerThread(ThreadType.WORLD)
 public class EntityWakeEvent extends EntityEvent {
 
+    /**
+     * The position of the bed.
+     */
     protected final Vector3ic bedPos;
 
     public EntityWakeEvent(Entity entity, Vector3ic bedPos) {

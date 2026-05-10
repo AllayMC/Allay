@@ -5,10 +5,13 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.component.EntityParallelTickComponent;
 import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
@@ -73,7 +76,7 @@ public class AllayEntityManager implements EntityManager {
     }
 
     public void onChunkLoad(int chunkX, int chunkZ) {
-        this.worldStorage.readEntities(chunkX, chunkZ, dimension.getDimensionInfo()).thenAccept(entities -> {
+        this.worldStorage.readEntities(chunkX, chunkZ, dimension.getDimensionType()).thenAccept(entities -> {
             for (var entity : entities.values()) {
                 addEntity(entity);
             }
@@ -102,9 +105,9 @@ public class AllayEntityManager implements EntityManager {
             // No entity in this chunk, so we should remove the old saved entities
             if (dimension.getWorld().getState() == WorldState.STOPPING) {
                 // Do it in sync if the world is stopping
-                this.worldStorage.writeEntitiesSync(chunkX, chunkZ, dimension.getDimensionInfo(), Map.of());
+                this.worldStorage.writeEntitiesSync(chunkX, chunkZ, dimension.getDimensionType(), Map.of());
             } else {
-                this.worldStorage.writeEntities(chunkX, chunkZ, dimension.getDimensionInfo(), Map.of());
+                this.worldStorage.writeEntities(chunkX, chunkZ, dimension.getDimensionType(), Map.of());
             }
         });
     }
@@ -117,6 +120,19 @@ public class AllayEntityManager implements EntityManager {
     }
 
     protected void tickEntities(long currentTick) {
+        // Parallel AI tick on compute thread pool
+        var parallelTickEntities = entities.values().stream()
+                .filter(e -> e instanceof EntityParallelTickComponent)
+                .toList();
+        if (!parallelTickEntities.isEmpty()) {
+            Utils.forEachInParallel(
+                    parallelTickEntities,
+                    Server.getInstance().getComputeThreadPool(),
+                    entity -> ((EntityParallelTickComponent) entity).parallelTick()
+            ).join();
+        }
+
+        // Normal tick
         for (var entity : entities.values()) {
             ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick);
         }
@@ -131,6 +147,34 @@ public class AllayEntityManager implements EntityManager {
                 var hashXZ = HashUtils.hashXZ(((int) loc.x()) >> 4, ((int) loc.z()) >> 4);
                 return !dimension.getChunkManager().isChunkLoaded(hashXZ);
             }, true);
+            saveLoadedEntities();
+        }
+    }
+
+    protected void saveLoadedEntities() {
+        var entitiesByChunk = new Long2ObjectOpenHashMap<Long2ObjectOpenHashMap<Entity>>();
+        for (var entity : entities.values()) {
+            if (!entity.isPersistent()) {
+                continue;
+            }
+
+            var loc = entity.getLocation();
+            var hashXZ = HashUtils.hashXZ(((int) loc.x()) >> 4, ((int) loc.z()) >> 4);
+            if (!dimension.getChunkManager().isChunkLoaded(hashXZ)) {
+                continue;
+            }
+
+            entitiesByChunk
+                    .computeIfAbsent(hashXZ, $ -> new Long2ObjectOpenHashMap<>())
+                    .put(entity.getUniqueId().getLeastSignificantBits(), entity);
+        }
+
+        for (var entry : entitiesByChunk.long2ObjectEntrySet()) {
+            var hashXZ = entry.getLongKey();
+            worldStorage.writeEntities(
+                    HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
+                    dimension.getDimensionType(), entry.getValue()
+            );
         }
     }
 
@@ -160,12 +204,12 @@ public class AllayEntityManager implements EntityManager {
             if (asyncWrite) {
                 worldStorage.writeEntities(
                         HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
-                        dimension.getDimensionInfo(), entry.getValue()
+                        dimension.getDimensionType(), entry.getValue()
                 );
             } else {
                 worldStorage.writeEntitiesSync(
                         HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
-                        dimension.getDimensionInfo(), entry.getValue()
+                        dimension.getDimensionType(), entry.getValue()
                 );
             }
         }

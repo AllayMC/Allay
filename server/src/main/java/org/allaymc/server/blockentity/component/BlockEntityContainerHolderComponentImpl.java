@@ -36,12 +36,17 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
 
     @Setter
     protected Container container;
+
     protected boolean dropItemOnBreak;
+    protected boolean openContainerOnInteract;
+    protected boolean saveEmptySlots;
+
     protected Consumer<ItemStack> comparatorUpdateListener;
 
     public BlockEntityContainerHolderComponentImpl(Supplier<Container> containerSupplier) {
         this.container = containerSupplier.get();
         this.dropItemOnBreak = true;
+        this.openContainerOnInteract = true;
     }
 
     @OnInitFinish
@@ -71,11 +76,15 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @EventHandler
     protected void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
-        builder.putList("Items", NbtType.COMPOUND, container.saveNBT());
+        builder.putList("Items", NbtType.COMPOUND, container.saveNBT(saveEmptySlots));
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
+        if (!openContainerOnInteract) {
+            return;
+        }
+
         var player = event.getInteractInfo().player();
         if (player == null) {
             return;

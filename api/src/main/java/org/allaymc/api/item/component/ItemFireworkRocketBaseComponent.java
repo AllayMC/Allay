@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * Shared component for firework rocket items, including flight duration and explosion payloads.
+ *
  * @author daoge_cmd
  */
 public interface ItemFireworkRocketBaseComponent extends ItemBaseComponent {

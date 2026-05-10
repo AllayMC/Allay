@@ -13,5 +13,8 @@ import org.allaymc.api.plugin.Plugin;
 @Getter
 @AllArgsConstructor
 public abstract class PluginEvent extends Event {
+    /**
+     * The plugin involved in the event.
+     */
     protected Plugin plugin;
 }

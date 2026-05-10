@@ -1,6 +1,6 @@
 package org.allaymc.server.world.storage.leveldb.codec;
 
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.world.chunk.AllayChunkSection;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -45,16 +45,16 @@ class ChunkSectionCodecTest {
 
     @Test
     void testFillNullSections() {
-        var dimensionInfo = DimensionInfo.OVERWORLD;
-        var sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
+        var dimensionType = DimensionTypes.OVERWORLD;
+        var sections = new AllayChunkSection[dimensionType.chunkSectionCount()];
         // Leave all sections null
         assertNull(sections[0]);
 
-        ChunkSectionCodec.fillNullSections(sections, dimensionInfo);
+        ChunkSectionCodec.fillNullSections(sections, dimensionType);
 
         for (int i = 0; i < sections.length; i++) {
             assertNotNull(sections[i], "Section at index " + i + " should not be null after fill");
-            assertEquals((byte) (i + dimensionInfo.minSectionY()), sections[i].sectionY());
+            assertEquals((byte) (i + dimensionType.minSectionY()), sections[i].sectionY());
         }
     }
 }

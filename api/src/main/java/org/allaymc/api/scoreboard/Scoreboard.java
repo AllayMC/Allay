@@ -29,11 +29,11 @@ public final class Scoreboard {
     /**
      * The display name of this scoreboard
      */
-    private final String displayName;
+    private String displayName;
     /**
      * The "criteria" of this scoreboard (e.g., dummy)
      */
-    private final String criteriaName;
+    private String criteriaName;
     private final Map<DisplaySlot, Set<ScoreboardViewer>> viewers = new ConcurrentHashMap<>();
     private final Map<Scorer, ScoreboardLine> lines = new ConcurrentHashMap<>();
     /**
@@ -41,7 +41,6 @@ public final class Scoreboard {
      * <p>
      * The sorting action is performed by the client, so the server does not need to handle sorting
      */
-    @Setter
     private SortOrder sortOrder;
 
     public Scoreboard(String objectiveName) {
@@ -131,6 +130,42 @@ public final class Scoreboard {
      */
     public boolean containViewer(ScoreboardViewer viewer, DisplaySlot slot) {
         return this.viewers.get(slot).contains(viewer);
+    }
+
+    /**
+     * Set the display name of this scoreboard.
+     * <p>
+     * If this scoreboard is being displayed, the changes will be resent to viewers immediately.
+     *
+     * @param displayName New display name
+     */
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+        resend();
+    }
+
+    /**
+     * Set the criteria name of this scoreboard.
+     * <p>
+     * If this scoreboard is being displayed, the changes will be resent to viewers immediately.
+     *
+     * @param criteriaName New criteria name
+     */
+    public void setCriteriaName(String criteriaName) {
+        this.criteriaName = criteriaName;
+        resend();
+    }
+
+    /**
+     * Set the sort order of this scoreboard.
+     * <p>
+     * If this scoreboard is being displayed, the changes will be resent to viewers immediately.
+     *
+     * @param sortOrder New sort order
+     */
+    public void setSortOrder(SortOrder sortOrder) {
+        this.sortOrder = sortOrder;
+        resend();
     }
 
     /**

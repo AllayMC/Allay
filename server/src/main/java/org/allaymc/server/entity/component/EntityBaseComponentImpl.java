@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.EntityState;
@@ -13,6 +14,7 @@ import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.property.type.*;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityPortalEnterEvent;
@@ -74,6 +76,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected static final String TAG_UNIQUE_ID = "UniqueID";
     protected static final String TAG_PDC = "PDC";
     protected static final String TAG_PORTAL_COOLDOWN = "PortalCooldown";
+    protected static final String TAG_PROPERTIES = "properties";
 
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
@@ -87,6 +90,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected final Location3d location, lastLocation;
     @Getter
     protected final long runtimeId;
+    @Getter
+    protected final Map<EntityPropertyType<?>, Object> propertyValues;
 
     // Will be reset in method loadUniqueId()
     @Getter
@@ -95,6 +100,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected EntityType<? extends Entity> entityType;
     protected Set<WorldViewer> viewers;
+    protected Set<PrimitiveShape> primitiveShapes;
     @Getter
     protected EntityState state;
     @Getter
@@ -131,13 +137,17 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     @Setter
     protected boolean inNetherPortal;
+    @Getter
+    protected long tick;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.lastLocation = new Location3d(this.location);
         this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
+        this.propertyValues = new HashMap<>();
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
+        this.primitiveShapes = new HashSet<>();
         this.state = EntityState.DESPAWNED;
         this.displayName = AllayStringUtils.snakeCaseToTitleCase(entityType.getIdentifier().path());
         this.scale = 1.0;
@@ -150,6 +160,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @OnInitFinish
     public void onInitFinish(EntityInitInfo initInfo) {
         loadNBT(initInfo.nbt());
+        // Initialize entity property defaults from the entity type definition
+        for (var propType : this.entityType.getProperties().values()) {
+            // Use putIfAbsent so values loaded from NBT are preserved
+            this.propertyValues.putIfAbsent(propType, propType.getDefaultValue());
+        }
     }
 
     @Override
@@ -158,6 +173,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     public void tick(long currentTick) {
+        this.tick++;
         manager.callEvent(new CEntityTickEvent(currentTick));
         this.scheduler.tick();
         tickPortal();
@@ -505,7 +521,27 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             builder.putInt(TAG_PORTAL_COOLDOWN, portalCooldown);
         }
 
+        if (!propertyValues.isEmpty()) {
+            var propsBuilder = NbtMap.builder();
+            for (var entry : propertyValues.entrySet()) {
+                var propType = entry.getKey();
+                var value = entry.getValue();
+                switch (propType) {
+                    case EnumPropertyType<?> enumProp -> propsBuilder.putString(propType.getName(), serializeEnumPropertyValue(enumProp, value));
+                    case IntPropertyType ignored -> propsBuilder.putInt(propType.getName(), (Integer) value);
+                    case BooleanPropertyType ignored -> propsBuilder.putInt(propType.getName(), ((Boolean) value) ? 1 : 0);
+                    case FloatPropertyType ignored -> propsBuilder.putFloat(propType.getName(), (Float) value);
+                }
+            }
+            builder.putCompound(TAG_PROPERTIES, propsBuilder.build());
+        }
+
         return builder.build();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Enum<T>> String serializeEnumPropertyValue(EnumPropertyType<T> enumProp, Object value) {
+        return enumProp.serializeValue((T) value);
     }
 
     protected void saveUniqueId(NbtMapBuilder builder) {
@@ -540,6 +576,37 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (nbt.containsKey(TAG_PORTAL_COOLDOWN)) {
             this.portalCooldown = nbt.getInt(TAG_PORTAL_COOLDOWN);
         }
+
+        nbt.listenForCompound(TAG_PROPERTIES, compound -> {
+            var propTypeMap = entityType.getProperties();
+            for (var entry : compound.entrySet()) {
+                var propType = propTypeMap.get(entry.getKey());
+                if (propType == null) continue;
+                var nbtValue = entry.getValue();
+                switch (propType) {
+                    case EnumPropertyType<?> enumProp -> {
+                        if (nbtValue instanceof String str) {
+                            propertyValues.put(propType, enumProp.deserializeValue(str));
+                        }
+                    }
+                    case IntPropertyType ignored -> {
+                        if (nbtValue instanceof Number num) {
+                            propertyValues.put(propType, num.intValue());
+                        }
+                    }
+                    case BooleanPropertyType ignored -> {
+                        if (nbtValue instanceof Number num) {
+                            propertyValues.put(propType, num.intValue() != 0);
+                        }
+                    }
+                    case FloatPropertyType ignored -> {
+                        if (nbtValue instanceof Number num) {
+                            propertyValues.put(propType, num.floatValue());
+                        }
+                    }
+                }
+            }
+        });
     }
 
     protected void loadUniqueId(NbtMap nbt) {
@@ -628,5 +695,39 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void applyAnimation(EntityAnimation animation) {
         forEachViewers(viewer -> viewer.viewEntityAnimation(thisEntity, animation));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <DATATYPE> DATATYPE getPropertyValue(EntityPropertyType<DATATYPE> propertyType) {
+        return (DATATYPE) propertyValues.getOrDefault(propertyType, propertyType.getDefaultValue());
+    }
+
+    @Override
+    public <DATATYPE> void setPropertyValue(EntityPropertyType<DATATYPE> propertyType, DATATYPE value) {
+        propertyValues.put(propertyType, value);
+    }
+
+    @Override
+    public void attachPrimitiveShape(PrimitiveShape primitiveShape) {
+        this.primitiveShapes.add(primitiveShape);
+        primitiveShape.setAttachedEntity(thisEntity);
+        for (var viewer : this.viewers) {
+            primitiveShape.addViewer(viewer);
+        }
+    }
+
+    @Override
+    public Set<PrimitiveShape> getAttachedPrimitiveShapes() {
+        return Collections.unmodifiableSet(this.primitiveShapes);
+    }
+
+    @Override
+    public void detachPrimitiveShape(PrimitiveShape primitiveShape) {
+        for (var viewer : this.viewers) {
+            primitiveShape.removeViewer(viewer);
+        }
+        primitiveShape.setAttachedEntity(null);
+        this.primitiveShapes.remove(primitiveShape);
     }
 }

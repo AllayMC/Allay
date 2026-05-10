@@ -13,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleSprintEvent extends PlayerEvent {
+    /**
+     * Whether sprinting is enabled.
+     */
     protected boolean value;
 
     public PlayerToggleSprintEvent(EntityPlayer player, boolean value) {

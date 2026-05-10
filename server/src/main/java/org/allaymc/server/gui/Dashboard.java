@@ -12,6 +12,13 @@ import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.config.Property;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -21,6 +28,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -34,6 +42,9 @@ public final class Dashboard {
     public static final int CHUNK_VALUE_COUNT = 100;
     public static final int ENTITY_VALUE_COUNT = 100;
     private static final long MEGABYTE = 1024L * 1024L;
+    private static final String LOG_APPENDER_NAME = "Dashboard";
+    private static final String CONSOLE_APPENDER_NAME = "TerminalConsole";
+    private static final String LOG_PATTERN = "[%cyan{%d{HH:mm:ss} %level}] [%yellow{%t}] [%blue{%logger{0}}] %minecraftFormatting{%msg}%n";
     private static final Map<Integer, Color> DIMENSION_COLORS = Map.of(
             0, new Color(76, 175, 80, 200),
             1, new Color(244, 67, 54, 200),
@@ -71,6 +82,7 @@ public final class Dashboard {
     private Dashboard() {
         $$$setupUI$$$();
         wrapSystemOutputStreams();
+        attachLogAppender();
         JFrame frame = new JFrame(I18n.get().tr(TrKeys.ALLAY_GUI_NAME));
         frame.setContentPane(rootPane);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -137,7 +149,7 @@ public final class Dashboard {
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_UUID) + ": " + player.getLoginData().getUuid().toString() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getDisplayName() + "\n" +
-                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionType().getIdentifier(),
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
@@ -270,6 +282,30 @@ public final class Dashboard {
         System.setErr(new PrintStream(proxyOutputStream, true));
     }
 
+    private void attachLogAppender() {
+        var ctx = (LoggerContext) LogManager.getContext(false);
+        var log4jConfig = ctx.getConfiguration();
+        if (log4jConfig.getAppender(LOG_APPENDER_NAME) != null) return;
+
+        Layout<? extends Serializable> layout = null;
+        var consoleAppender = log4jConfig.getAppender(CONSOLE_APPENDER_NAME);
+        if (consoleAppender != null) {
+            layout = consoleAppender.getLayout();
+        }
+        if (layout == null) {
+            layout = PatternLayout.newBuilder()
+                    .withConfiguration(log4jConfig)
+                    .withPattern(LOG_PATTERN)
+                    .build();
+        }
+
+        var appender = new DashboardLogAppender(LOG_APPENDER_NAME, layout, this);
+        appender.start();
+        log4jConfig.addAppender(appender);
+        log4jConfig.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).addAppender(appender, null, null);
+        ctx.updateLoggers();
+    }
+
     private @NotNull OutputStream createProxyOutputStream() {
         var originalOutputStream = System.out;
         return new OutputStream() {
@@ -320,7 +356,7 @@ public final class Dashboard {
                 entityDimMap.keySet().retainAll(loadedDimIds);
                 // Append data for existing dimensions
                 world.getDimensions().values().forEach(dimension -> {
-                    int dimId = dimension.getDimensionInfo().dimensionId();
+                    int dimId = dimension.getDimensionType().getId();
                     appendAndTrim(
                             chunkDimMap.computeIfAbsent(dimId, id -> new ArrayList<>(Collections.nCopies(CHUNK_VALUE_COUNT, 0))),
                             dimension.getChunkManager().getLoadedChunks().size(), CHUNK_VALUE_COUNT);
@@ -579,6 +615,20 @@ public final class Dashboard {
             appendTextToConsole(cmd + "\n"); // show what was run in the console
             var server = Server.getInstance();
             server.getScheduler().runLater(server, () -> Registries.COMMANDS.execute(Server.getInstance(), cmd));
+        }
+    }
+
+    private static final class DashboardLogAppender extends AbstractAppender {
+        private final Dashboard dashboard;
+
+        private DashboardLogAppender(String name, Layout<? extends Serializable> layout, Dashboard dashboard) {
+            super(name, null, layout, true, Property.EMPTY_ARRAY);
+            this.dashboard = dashboard;
+        }
+
+        @Override
+        public void append(LogEvent event) {
+            dashboard.appendTextToConsole(getLayout().toSerializable(event).toString());
         }
     }
 }

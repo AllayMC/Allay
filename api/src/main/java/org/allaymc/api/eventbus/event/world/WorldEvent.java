@@ -13,5 +13,8 @@ import org.allaymc.api.world.World;
 @Getter
 @AllArgsConstructor
 public abstract class WorldEvent extends Event {
+    /**
+     * The world involved in the event.
+     */
     protected World world;
 }

@@ -1,8 +1,8 @@
 package org.allaymc.server.world.light;
 
 import org.allaymc.api.world.WorldData;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class AllayLightEngineTest {
 
     @Test
     void testBlockLight() {
-        var lightService = new AllayLightEngine(DimensionInfo.OVERWORLD, "test_world", () -> WorldData.TIME_NOON, () -> Weather.CLEAR);
+        var lightService = new AllayLightEngine(DimensionTypes.OVERWORLD, "test_world", () -> WorldData.TIME_NOON, () -> Weather.CLEAR);
 
         // Prepare space for testing
         for (int x = -3; x <= 3; x++) {
@@ -27,7 +27,7 @@ class AllayLightEngineTest {
                 lightService.onChunkLoad(
                         AllayUnsafeChunk
                                 .builder()
-                                .voidChunk(x, z, DimensionInfo.OVERWORLD)
+                                .voidChunk(x, z, DimensionTypes.OVERWORLD)
                                 .toSafeChunk()
                 );
             }
@@ -65,7 +65,7 @@ class AllayLightEngineTest {
 
     @Test
     void testSkyLight() {
-        var lightService = new AllayLightEngine(DimensionInfo.OVERWORLD, "test_world", () -> WorldData.TIME_NOON, () -> Weather.CLEAR);
+        var lightService = new AllayLightEngine(DimensionTypes.OVERWORLD, "test_world", () -> WorldData.TIME_NOON, () -> Weather.CLEAR);
 
         // Prepare space for testing
         for (int x = -3; x <= 3; x++) {
@@ -73,7 +73,7 @@ class AllayLightEngineTest {
                 lightService.onChunkLoad(
                         AllayUnsafeChunk
                                 .builder()
-                                .voidChunk(x, z, DimensionInfo.OVERWORLD)
+                                .voidChunk(x, z, DimensionTypes.OVERWORLD)
                                 .toSafeChunk()
                 );
             }

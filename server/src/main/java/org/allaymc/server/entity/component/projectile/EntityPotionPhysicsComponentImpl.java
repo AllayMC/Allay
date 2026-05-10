@@ -7,6 +7,8 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPotionComponent;
 import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.entity.interfaces.EntitySplashPotion;
+import org.allaymc.api.eventbus.event.entity.PotionSplashEvent;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
@@ -92,6 +94,14 @@ public abstract class EntityPotionPhysicsComponentImpl extends EntityProjectileP
                 }
 
                 var factor = living != entityBeingHit ? 1.0 - distance / 4.0 : 1.0;
+
+                if (thisEntity instanceof EntitySplashPotion splashPotion) {
+                    var event = new PotionSplashEvent(splashPotion, living);
+                    if (!event.call()) {
+                        continue;
+                    }
+                }
+
                 for (var effect : effects) {
                     // Instant effects (duration <= 1) should not have duration modified
                     if (effect.getDuration() > 1) {

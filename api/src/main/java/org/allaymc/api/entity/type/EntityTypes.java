@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.type;
 
 import org.allaymc.api.entity.interfaces.*;
+import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 
 public final class EntityTypes {
     public static EntityType<EntityAgent> AGENT;
@@ -45,6 +46,9 @@ public final class EntityTypes {
 
     public static EntityType<EntityChestMinecart> CHEST_MINECART;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityChicken> CHICKEN;
 
     public static EntityType<EntityCod> COD;
@@ -53,6 +57,9 @@ public final class EntityTypes {
 
     public static EntityType<EntityCopperGolem> COPPER_GOLEM;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityCow> COW;
 
     public static EntityType<EntityCreaking> CREAKING;
@@ -67,6 +74,9 @@ public final class EntityTypes {
 
     public static EntityType<EntityDrowned> DROWNED;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityEgg> EGG;
 
     public static EntityType<EntityElderGuardian> ELDER_GUARDIAN;
@@ -161,6 +171,9 @@ public final class EntityTypes {
 
     public static EntityType<EntityPhantom> PHANTOM;
 
+    /**
+     * {@link EntityPropertyTypes#CLIMATE_VARIANT}
+     */
     public static EntityType<EntityPig> PIG;
 
     public static EntityType<EntityPiglin> PIGLIN;

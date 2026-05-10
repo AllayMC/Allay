@@ -15,6 +15,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class EntityPortalEnterEvent extends EntityEvent implements CancellableEvent {
 
+    /**
+     * The type of portal being entered.
+     */
     protected PortalType portalType;
 
     public EntityPortalEnterEvent(Entity entity, PortalType portalType) {
@@ -22,6 +25,9 @@ public class EntityPortalEnterEvent extends EntityEvent implements CancellableEv
         this.portalType = portalType;
     }
 
+    /**
+     * The type of portal being entered.
+     */
     public enum PortalType {
         NETHER,
         END

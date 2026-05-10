@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.item.data.ItemId;
@@ -16,16 +17,21 @@ import org.joml.Vector3ic;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * @author daoge_cmd
  */
 public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
-    protected ItemId dropItemId;
+    protected final Supplier<ItemType<?>> dropItemType;
+
+    public BlockWallSignBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<ItemType<?>> dropItemTypeSupplier) {
+        super(blockType);
+        this.dropItemType = dropItemTypeSupplier;
+    }
 
     public BlockWallSignBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId dropItemId) {
-        super(blockType);
-        this.dropItemId = dropItemId;
+        this(blockType, dropItemId::getItemType);
     }
 
     @Override
@@ -48,11 +54,11 @@ public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Set.of(dropItemId.getItemType().createItemStack(1));
+        return Set.of(dropItemType.get().createItemStack(1));
     }
 
     @Override
     public ItemStack getSilkTouchDrop(Block block) {
-        return dropItemId.getItemType().createItemStack(1);
+        return dropItemType.get().createItemStack(1);
     }
 }

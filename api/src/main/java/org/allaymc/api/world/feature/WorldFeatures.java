@@ -18,6 +18,9 @@ public final class WorldFeatures {
     public static WorldFeature MANGROVE_TREE;
     public static WorldFeature PALE_OAK_TREE;
 
+    // Azalea tree
+    public static WorldFeature AZALEA_TREE;
+
     // Large tree variants
     public static WorldFeature MEGA_SPRUCE_TREE;
     public static WorldFeature MEGA_PINE_TREE;

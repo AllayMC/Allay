@@ -4,11 +4,15 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
+import org.allaymc.api.item.ItemStack;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.List;
 import java.util.Map;
 
 /**
+ * Component for living entities with health, damage, effects, air supply, fire, freeze, and drop behavior.
+ *
  * @author daoge_cmd
  */
 public interface EntityLivingComponent extends EntityComponent {
@@ -73,7 +77,7 @@ public interface EntityLivingComponent extends EntityComponent {
     /**
      * Get the time when the last damage was dealt to this entity.
      *
-     * @return the time in milliseconds
+     * @return the time in entity ticks, or {@code -1} if no damage has been received
      */
     long getLastDamageTime();
 
@@ -283,6 +287,21 @@ public interface EntityLivingComponent extends EntityComponent {
     default boolean canApplyEffect(EffectType effectType) {
         return true;
     }
+
+    /**
+     * Get the items this entity drops on death.
+     *
+     * @param lootingLevel the looting enchantment level of the killer's weapon
+     * @return the list of item stacks to drop
+     */
+    List<ItemStack> getDrops(int lootingLevel);
+
+    /**
+     * Get the amount of XP this entity drops on death.
+     *
+     * @return the amount of XP to drop
+     */
+    int getDropXpAmount();
 
     /**
      * Gets the damage absorption value of this entity. This value represents how much

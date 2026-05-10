@@ -104,7 +104,7 @@ public record StructureFile(
      * @param nbt the nbt data to load
      * @return the loaded structure
      */
-    public static StructureFile formNBT(NbtMap nbt) {
+    public static StructureFile fromNBT(NbtMap nbt) {
         if (nbt.getInt("format_version") != FORMAT_VERSION) {
             throw new StructureException("format_version should be " + FORMAT_VERSION);
         }

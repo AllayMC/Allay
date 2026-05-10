@@ -74,7 +74,7 @@ public class CompostableItemRegistryLoader implements RegistryLoader<Void, Map<I
                 ItemTypes.WHITE_TULIP, ItemTypes.PINK_TULIP, ItemTypes.OXEYE_DAISY,
                 ItemTypes.CORNFLOWER, ItemTypes.LILY_OF_THE_VALLEY, ItemTypes.TORCHFLOWER,
                 ItemTypes.SUNFLOWER, ItemTypes.LILAC, ItemTypes.ROSE_BUSH, ItemTypes.PEONY,
-                ItemTypes.OPEN_EYEBLOSSOM, ItemTypes.CLOSED_EYEBLOSSOM
+                ItemTypes.OPEN_EYEBLOSSOM, ItemTypes.CLOSED_EYEBLOSSOM, ItemTypes.GOLDEN_DANDELION
         );
 
         // 85% chance items

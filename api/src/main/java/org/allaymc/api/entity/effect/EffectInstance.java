@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Range;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Range;
  */
 @Setter
 @Getter
+@ToString
 @AllArgsConstructor
 public final class EffectInstance {
     /**

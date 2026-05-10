@@ -2107,6 +2107,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockOreBehavior> GOLD_ORE;
 
+    public static BlockType<BlockSmallFlower> GOLDEN_DANDELION;
+
     /**
      * {@link BlockPropertyTypes#RAIL_DATA_BIT}
      * {@link BlockPropertyTypes#RAIL_DIRECTION_6}
@@ -2510,7 +2512,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_BLOCK_FACE}
      */
-    public static BlockType<BlockLargeAmethystBudBehavior> LARGE_AMETHYST_BUD;
+    public static BlockType<BlockAmethystClusterBehavior> LARGE_AMETHYST_BUD;
 
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
@@ -2858,7 +2860,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_BLOCK_FACE}
      */
-    public static BlockType<BlockMediumAmethystBudBehavior> MEDIUM_AMETHYST_BUD;
+    public static BlockType<BlockAmethystClusterBehavior> MEDIUM_AMETHYST_BUD;
 
     public static BlockType<BlockMelonBlockBehavior> MELON_BLOCK;
 
@@ -4057,7 +4059,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_BLOCK_FACE}
      */
-    public static BlockType<BlockSmallAmethystBudBehavior> SMALL_AMETHYST_BUD;
+    public static BlockType<BlockAmethystClusterBehavior> SMALL_AMETHYST_BUD;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}

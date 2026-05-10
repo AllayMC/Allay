@@ -10,12 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.Skin;
-import org.allaymc.protocol.extension.NetEaseEncryptionUtils;
 import org.allaymc.server.network.multiversion.MultiVersion;
 import org.cloudburstmc.protocol.bedrock.data.auth.CertificateChainPayload;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
+import org.cloudburstmc.protocol.bedrock.util.NetEaseEncryptionUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -48,7 +48,7 @@ public class AllayLoginData implements LoginData {
      * @param isNetEaseClient whether the client is a NetEase client
      * @return the decoded login data, or {@code null} if decoding failed
      */
-    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
+    @MultiVersion(version = "*-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
     public static AllayLoginData decode(LoginPacket loginPacket, boolean isNetEaseClient) {
         var loginData = new AllayLoginData();
         try {
@@ -214,7 +214,7 @@ public class AllayLoginData implements LoginData {
         this.skin = skinBuilder.build();
     }
 
-    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use URL-safe Base64 encoding for skin data")
+    @MultiVersion(version = "*-NetEase", details = "NetEase clients use URL-safe Base64 encoding for skin data")
     private JsonObject decodeToken(String token, boolean isNetEaseClient) {
         String[] tokenSplit = token.split("\\.");
         if (tokenSplit.length < 2) {
