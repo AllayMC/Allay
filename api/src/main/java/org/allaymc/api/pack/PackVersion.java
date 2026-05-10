@@ -19,11 +19,11 @@ public class PackVersion extends Semver {
     }
 
     PackVersion(String version) {
-        this(version, PackVersionType.Arr);
+        this(version, PackVersionType.Str);
     }
 
     PackVersion(int major, int minor, int patch) {
-        this( String.format("%d.%d.%d", major, minor, patch), PackVersionType.Arr);
+        this(String.format("%d.%d.%d", major, minor, patch), PackVersionType.Arr);
     }
 
     enum PackVersionType {
