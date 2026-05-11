@@ -31,12 +31,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Changed world and player persistence to store dimension identifiers instead of raw numeric ids, while keeping backward-compatible reads for old numeric dimension data.
 - Changed `world-settings.yml` dimension configuration to use a `dimensions:` map keyed by identifiers. Legacy `overworld`/`nether`/`the-end` entries are still read, identifiers missing a namespace are normalized to the `minecraft` namespace when saved.
 - Added custom dimension definition syncing during login through `DimensionDataPacket`; Bedrock generator type mapping is now handled internally by the network layer.
+- (API) The return type of Pack.getVersion() is changed from `SemVersion` to `Semver` from the `semver4j`. This is because the support of semver in package manifest version fields.
 
 ### Fixed
 
 - Fixed soul fire so it now damages and ignites living entities correctly, and fixed dropped fireproof items such as netherite gear being incorrectly destroyed by fire or lava.
 - Fixed redundant food-level change events and repeated food-level packet sends when the effective food level did not change.
 - Fixed small dripleaf breaking recursively triggering `Dimension.breakBlock()` between its upper and lower halves, which could spam `BlockSmallDripleafBaseComponentImpl.onBreak()` stack traces and overflow the stack.
+- Allay now support semver in package manifest version fields.
 
 ### Removed
 
