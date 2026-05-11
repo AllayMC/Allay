@@ -31,12 +31,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Changed world and player persistence to store dimension identifiers instead of raw numeric ids, while keeping backward-compatible reads for old numeric dimension data.
 - Changed `world-settings.yml` dimension configuration to use a `dimensions:` map keyed by identifiers. Legacy `overworld`/`nether`/`the-end` entries are still read, identifiers missing a namespace are normalized to the `minecraft` namespace when saved.
 - Added custom dimension definition syncing during login through `DimensionDataPacket`; Bedrock generator type mapping is now handled internally by the network layer.
+- (API) The return type of Pack.getVersion() is changed from `SemVersion` to `Semver` from the `semver4j`. This is because the support of semver in package manifest version fields.
 
 ### Fixed
 
 - Fixed soul fire so it now damages and ignites living entities correctly, and fixed dropped fireproof items such as netherite gear being incorrectly destroyed by fire or lava.
 - Fixed redundant food-level change events and repeated food-level packet sends when the effective food level did not change.
 - Fixed small dripleaf breaking recursively triggering `Dimension.breakBlock()` between its upper and lower halves, which could spam `BlockSmallDripleafBaseComponentImpl.onBreak()` stack traces and overflow the stack.
+- Allay now support semver in package manifest version fields.
 
 ### Removed
 
@@ -214,7 +216,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `EntityPlayerBaseComponent.setBlockSpawnPoint(Location3ic, SpawnPointType)` and `getSpawnPointType()` to distinguish block-anchored spawn points (bed, respawn anchor) from forced ones (e.g., `/spawnpoint`). Added `SpawnPointType` enum (`FORCED`, `BED`, `RESPAWN_ANCHOR`) with a stable numeric `id` for NBT persistence and an `invalidSpawnKey` field carrying the appropriate i18n message key per type.
 - (API) `Scoreboard.displayName` and `Scoreboard.criteriaName` are now mutable — added corresponding setter methods.
 - Improved physics engine motion threshold handling: small forces (e.g. buoyancy) now accumulate across ticks instead of being zeroed out.
-- (API) The return type of Pack.getVersion() is changed from `SemVersion` to `Semver` from the `semver4j`. This is because the support of semver in package manifest version fields.
 - Refactored network layer: extracted shared session initialization into abstract `AllayNetworkInterface` base class, renamed RakNet implementation to `AllayRakNetInterface`.
 - Made network settings detection transport-aware, allowing each network interface to report its own compression and encryption capabilities.
 - Improved entity auto-save mechanism: entities in loaded chunks are now periodically written to disk on every `entityAutoSaveCycle` tick interval, rather than only being saved when unloaded or on server shutdown.
@@ -229,7 +230,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed incorrect permissions used for gamemode and plugin commands.
 - Fixed a bug where permission node `Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR` does not have effect.
 - Fixed a bug where player permission in the player list is always visitor even if the player is already an operator.
-- Allay now support semver in package manifest version fields.
 - Fixed a bug where boss bar is not shown.
 - Fixed snow layers incorrectly decaying in cold biomes.
 - Fixed default interface methods not being recognized as `@EventHandler` candidates during event handler scanning.
