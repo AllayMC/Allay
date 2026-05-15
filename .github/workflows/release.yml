@@ -67,6 +67,7 @@ jobs:
           export RELEASE_TAG RELEASE_DATE
 
           python3 <<'PY'
+          from html import unescape
           import os
           import re
           import sys
@@ -76,6 +77,7 @@ jobs:
           release_date = os.environ["RELEASE_DATE"]
           changelog_path = Path("CHANGELOG.md")
           lines = changelog_path.read_text(encoding="utf-8").splitlines()
+          readme = Path("README.md").read_text(encoding="utf-8")
 
           heading = re.compile(rf"^#\s+{re.escape(tag)}(?:\s|$)")
           start = next((i for i, line in enumerate(lines) if heading.match(line)), None)
@@ -99,10 +101,34 @@ jobs:
               sys.exit(f"Changelog section for {tag} is empty")
 
           section[0] = re.sub(r"\s+-\s+Unreleased\s*$", f" - {release_date}", section[0])
-          release_notes = "\n".join(section).replace("...HEAD", f"...{tag}") + "\n"
+          title = re.sub(r"\s+-\s+\d{4}/\d{1,2}/\d{1,2}\s*$", "", section[0].removeprefix("#").strip())
+
+          badge = re.search(r"minecraft-([^\"/]+)-green", readme)
+          if badge is None:
+              sys.exit("Could not find Minecraft version badge in README.md")
+          minecraft_versions = unescape(badge.group(1).replace("%20", " "))
+          minecraft_versions = re.sub(r"\s*~\s*", " - ", minecraft_versions)
+
+          body = section[1:]
+          while body and not body[0].strip():
+              body.pop(0)
+          if body and body[0].strip().startswith("<small>"):
+              release_notes_lines = [
+                  body[0],
+                  "",
+                  f"**For Minecraft: Bedrock Edition {minecraft_versions}**",
+                  "",
+                  *body[2:],
+              ]
+          else:
+              release_notes_lines = [
+                  f"**For Minecraft: Bedrock Edition {minecraft_versions}**",
+                  "",
+                  *body,
+              ]
+          release_notes = "\n".join(release_notes_lines).replace("...HEAD", f"...{tag}") + "\n"
           Path("release-notes.md").write_text(release_notes, encoding="utf-8")
 
-          title = section[0].removeprefix("#").strip()
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
               output.write(f"tag={tag}\n")
               output.write(f"title={title}\n")
