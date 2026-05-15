@@ -1,0 +1,188 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g., 0.12.1)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: wrapper
+          cache-overwrite-existing: true
+          cache-read-only: false
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
+
+      - name: Prepare release metadata
+        id: release
+        env:
+          RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$RELEASE_TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Release tag must use the existing Allay format, e.g. 0.12.1"
+            exit 1
+          fi
+
+          SERVER_VERSION="$(sed -n 's/^server\.version=//p' gradle.properties | tr -d '[:space:]')"
+          if [[ "$SERVER_VERSION" != "$RELEASE_TAG" ]]; then
+            echo "::error::Tag $RELEASE_TAG does not match server.version=$SERVER_VERSION"
+            exit 1
+          fi
+
+          RELEASE_DATE="$(TZ=Asia/Shanghai date '+%Y/%-m/%-d')"
+          export RELEASE_TAG RELEASE_DATE
+
+          python3 <<'PY'
+          import os
+          import re
+          import sys
+          from pathlib import Path
+
+          tag = os.environ["RELEASE_TAG"]
+          release_date = os.environ["RELEASE_DATE"]
+          changelog_path = Path("CHANGELOG.md")
+          lines = changelog_path.read_text(encoding="utf-8").splitlines()
+
+          heading = re.compile(rf"^#\s+{re.escape(tag)}(?:\s|$)")
+          start = next((i for i, line in enumerate(lines) if heading.match(line)), None)
+          if start is None:
+              sys.exit(f"Could not find changelog section for {tag}")
+
+          end = next(
+              (i for i in range(start + 1, len(lines)) if lines[i].startswith("# ")),
+              len(lines),
+          )
+          section = lines[start:end]
+          while section and not section[-1].strip():
+              section.pop()
+
+          content_lines = [
+              line
+              for line in section[1:]
+              if line.strip() and not line.strip().startswith("<small>")
+          ]
+          if not content_lines:
+              sys.exit(f"Changelog section for {tag} is empty")
+
+          section[0] = re.sub(r"\s+-\s+Unreleased\s*$", f" - {release_date}", section[0])
+          release_notes = "\n".join(section).replace("...HEAD", f"...{tag}") + "\n"
+          Path("release-notes.md").write_text(release_notes, encoding="utf-8")
+
+          title = section[0].removeprefix("#").strip()
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"tag={tag}\n")
+              output.write(f"title={title}\n")
+          PY
+
+      - name: Build release
+        run: |
+          chmod +x gradlew
+          ./gradlew -Pallay.is-dev-build=false build server:shadowJar
+
+      - name: Find shaded jar
+        id: jar
+        run: |
+          set -euo pipefail
+
+          mapfile -t JARS < <(find server/build/libs -maxdepth 1 -type f -name 'allay-server-*-shaded.jar' | sort)
+          if [[ "${#JARS[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one shaded jar, found ${#JARS[@]}"
+            printf '%s\n' "${JARS[@]}"
+            exit 1
+          fi
+
+          SHADED_JAR_PATH="${JARS[0]}"
+          SHADED_JAR_NAME="$(basename "$SHADED_JAR_PATH")"
+          echo "path=$SHADED_JAR_PATH" >> "$GITHUB_OUTPUT"
+          echo "name=$SHADED_JAR_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Upload release build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: allay-server-release
+          path: ${{ steps.jar.outputs.path }}
+
+      - name: Verify Maven Central credentials
+        if: github.repository == 'AllayMC/Allay'
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SONATYPE_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SONATYPE_SECRET_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+
+          for name in \
+            ORG_GRADLE_PROJECT_mavenCentralUsername \
+            ORG_GRADLE_PROJECT_mavenCentralPassword \
+            ORG_GRADLE_PROJECT_signingInMemoryKey \
+            ORG_GRADLE_PROJECT_signingInMemoryKeyPassword
+          do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::$name is not configured"
+              exit 1
+            fi
+          done
+
+      - name: Publish to Maven Central
+        if: github.repository == 'AllayMC/Allay'
+        run: |
+          ./gradlew -Pallay.is-dev-build=false api:publishToMavenCentral
+          ./gradlew -Pallay.is-dev-build=false server:publishToMavenCentral
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SONATYPE_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SONATYPE_SECRET_KEY_PASSWORD }}
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.release.outputs.tag }}
+          TITLE: ${{ steps.release.outputs.title }}
+          SHADED_JAR_PATH: ${{ steps.jar.outputs.path }}
+          SHADED_JAR_NAME: ${{ steps.jar.outputs.name }}
+        run: |
+          set -euo pipefail
+
+          ASSET="${SHADED_JAR_PATH}#${SHADED_JAR_NAME}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "$TITLE" --notes-file release-notes.md
+            gh release upload "$TAG" "$ASSET" --clobber
+          else
+            gh release create "$TAG" "$ASSET" --verify-tag --title "$TITLE" --notes-file release-notes.md
+          fi
