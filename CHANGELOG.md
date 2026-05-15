@@ -8,7 +8,7 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.12.1 (API 0.28.0) - Unreleased
+# 0.13.0 (API 0.28.0) - Unreleased
 
 <small>[Compare with 0.12.0](https://github.com/AllayMC/Allay/compare/0.12.0...HEAD)</small>
 
@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for changing the height of vanilla dimensions.
 - Implemented bone meal interaction on grass blocks, allowing grass, flowers, and tall grass to generate from grass blocks.
 - Added support for NetEase 1.21.90.
+- Added support for MCBE 1.26.20.
 - Updated feature version to 1.26.10
 
 ### Changed
