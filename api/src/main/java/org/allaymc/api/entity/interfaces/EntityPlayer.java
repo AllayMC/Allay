@@ -122,6 +122,7 @@ public interface EntityPlayer extends
         var item = container.getItemStack(slot);
         var event = new PlayerDropItemEvent(this, item);
         if (!event.call()) {
+            container.notifySlotChange(slot);
             return;
         }
 
