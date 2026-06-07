@@ -387,6 +387,12 @@ public class AllayPlayer implements Player {
         viewPlayerPermission(this);
         viewPlayerListChange(playerManager.getPlayers().values(), true);
 
+        this.controlledEntity.forEachViewers(viewer -> {
+            viewer.viewEntityArmors(this.controlledEntity);
+            viewer.viewEntityHand(this.controlledEntity);
+            viewer.viewEntityOffhand(this.controlledEntity);
+        });
+
         sendSpeed(this.speed);
         sendExperienceLevel(this.controlledEntity.getExperienceLevel());
         sendExperienceProgress(this.controlledEntity.getExperienceProgress());
