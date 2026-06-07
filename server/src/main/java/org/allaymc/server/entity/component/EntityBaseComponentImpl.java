@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.EntityState;
@@ -13,11 +14,7 @@ import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.property.type.BooleanPropertyType;
-import org.allaymc.api.entity.property.type.EntityPropertyType;
-import org.allaymc.api.entity.property.type.EnumPropertyType;
-import org.allaymc.api.entity.property.type.FloatPropertyType;
-import org.allaymc.api.entity.property.type.IntPropertyType;
+import org.allaymc.api.entity.property.type.*;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityPortalEnterEvent;
@@ -103,6 +100,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected EntityType<? extends Entity> entityType;
     protected Set<WorldViewer> viewers;
+    protected Set<PrimitiveShape> primitiveShapes;
     @Getter
     protected EntityState state;
     @Getter
@@ -149,6 +147,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.propertyValues = new HashMap<>();
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
+        this.primitiveShapes = new HashSet<>();
         this.state = EntityState.DESPAWNED;
         this.displayName = AllayStringUtils.snakeCaseToTitleCase(entityType.getIdentifier().path());
         this.scale = 1.0;
@@ -707,5 +706,28 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public <DATATYPE> void setPropertyValue(EntityPropertyType<DATATYPE> propertyType, DATATYPE value) {
         propertyValues.put(propertyType, value);
+    }
+
+    @Override
+    public void attachPrimitiveShape(PrimitiveShape primitiveShape) {
+        this.primitiveShapes.add(primitiveShape);
+        primitiveShape.setAttachedEntity(thisEntity);
+        for (var viewer : this.viewers) {
+            primitiveShape.addViewer(viewer);
+        }
+    }
+
+    @Override
+    public Set<PrimitiveShape> getAttachedPrimitiveShapes() {
+        return Collections.unmodifiableSet(this.primitiveShapes);
+    }
+
+    @Override
+    public void detachPrimitiveShape(PrimitiveShape primitiveShape) {
+        for (var viewer : this.viewers) {
+            primitiveShape.removeViewer(viewer);
+        }
+        primitiveShape.setAttachedEntity(null);
+        this.primitiveShapes.remove(primitiveShape);
     }
 }

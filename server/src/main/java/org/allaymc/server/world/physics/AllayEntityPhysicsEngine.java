@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent.LiquidState;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.MathUtils;
@@ -18,7 +19,7 @@ import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
 import org.allaymc.server.AllayServer;
@@ -99,7 +100,13 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
             if (!physicsComponent.computeMovementServerSide() ||
                 !entity.isCurrentChunkLoaded() ||
                 // Invisible bedrock is present at minHeight - 40
-                entity.getLocation().y() < dimension.getDimensionInfo().minHeight() - 40) {
+                entity.getLocation().y() < dimension.getDimensionType().getMinHeight() - 40) {
+
+                // Living entities handle void via damage ticks; remove non-living entities directly.
+                if (!(entity instanceof EntityLiving)) {
+                    entity.remove();
+                }
+
                 return;
             }
 
@@ -317,7 +324,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         }
         if (lavaMotion.lengthSquared() > 0) {
             // Same to above
-            finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
+            finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionType() == DimensionTypes.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
         }
 
         if (finalMotion.lengthSquared() > 0) {

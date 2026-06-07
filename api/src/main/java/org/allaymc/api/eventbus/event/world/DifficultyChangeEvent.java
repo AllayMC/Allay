@@ -16,7 +16,13 @@ import org.allaymc.api.world.data.Difficulty;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class DifficultyChangeEvent extends WorldEvent implements CancellableEvent {
+    /**
+     * The old difficulty.
+     */
     protected Difficulty oldDifficulty;
+    /**
+     * The new difficulty.
+     */
     @Setter
     protected Difficulty newDifficulty;
 

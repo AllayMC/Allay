@@ -7,8 +7,6 @@ import org.allaymc.updater.block.BlockStateUpdater_1_21_110;
 import org.allaymc.updater.item.ItemStateUpdater;
 import org.allaymc.updater.item.ItemStateUpdater_1_21_110;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
-import org.cloudburstmc.protocol.bedrock.codec.v800.Bedrock_v800;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
@@ -17,6 +15,8 @@ import org.cloudburstmc.protocol.bedrock.codec.v859.Bedrock_v859;
 import org.cloudburstmc.protocol.bedrock.codec.v860.Bedrock_v860;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
 import org.cloudburstmc.protocol.bedrock.codec.v924.Bedrock_v924;
+import org.cloudburstmc.protocol.bedrock.codec.v944.Bedrock_v944;
+import org.cloudburstmc.protocol.bedrock.codec.v975.Bedrock_v975;
 
 import java.util.List;
 
@@ -33,6 +33,8 @@ public final class ProtocolInfo {
      */
     public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
             // Order is important. The first codec is the latest supported version.
+            Bedrock_v975.CODEC,
+            Bedrock_v944.CODEC,
             Bedrock_v924.CODEC,
             Bedrock_v898.CODEC,
             Bedrock_v860.CODEC,
@@ -40,15 +42,13 @@ public final class ProtocolInfo {
             Bedrock_v844.CODEC,
             Bedrock_v827.CODEC,
             Bedrock_v819.CODEC,
-            Bedrock_v818.CODEC,
-            Bedrock_v800.CODEC,
-            Bedrock_v766.CODEC
+            Bedrock_v818.CODEC
     );
 
     /**
      * Feature version is the version of the game from which vanilla features will be used.
      */
-    public static final BedrockCodec FEATURE_VERSION = Bedrock_v924.CODEC;
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v944.CODEC;
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.

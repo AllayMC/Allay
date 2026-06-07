@@ -1,5 +1,6 @@
 package org.allaymc.server.world.feature.tree;
 
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.property.enums.PillarAxis;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -69,10 +70,11 @@ public class CherryTreeFeature extends TreeWorldFeature {
             attachments.add(new FoliageAttachment(x, y + trunkHeight, z, 0, false));
         }
 
-        HorizontalDirection branchDirection = HorizontalDirection.values()[random.nextInt(HorizontalDirection.values().length)];
+        var horizontalFaces = BlockFace.getHorizontalBlockFaces();
+        BlockFace branchDirection = horizontalFaces[random.nextInt(horizontalFaces.length)];
         attachments.add(generateBranch(context, x, y, z, maxFreeTreeHeight, branchDirection, firstBranchStart, firstBranchStart < trunkHeight - 1));
         if (placeSecondBranch) {
-            attachments.add(generateBranch(context, x, y, z, maxFreeTreeHeight, opposite(branchDirection), secondBranchStart, secondBranchStart < trunkHeight - 1));
+            attachments.add(generateBranch(context, x, y, z, maxFreeTreeHeight, branchDirection.opposite(), secondBranchStart, secondBranchStart < trunkHeight - 1));
         }
 
         var placedLeaves = new ArrayList<Vector3i>();
@@ -165,17 +167,18 @@ public class CherryTreeFeature extends TreeWorldFeature {
         int leafY = y + localY;
         int baseBelowY = y - 1;
         var random = ThreadLocalRandom.current();
-        for (var direction : HorizontalDirection.values()) {
-            int edge = direction.clockWiseAxisPositive() ? range + extra : range;
-            int cursorX = x + direction.clockWiseStepX() * edge + direction.stepX() * -range;
-            int cursorZ = z + direction.clockWiseStepZ() * edge + direction.stepZ() * -range;
+        for (var direction : BlockFace.getHorizontalBlockFaces()) {
+            var cw = direction.rotateY();
+            int edge = (cw.getOffset().x() + cw.getOffset().z() > 0) ? range + extra : range;
+            int cursorX = x + cw.getOffset().x() * edge + direction.getOffset().x() * -range;
+            int cursorZ = z + cw.getOffset().z() * edge + direction.getOffset().z() * -range;
             for (int i = -range; i < range + extra; i++) {
                 if (isLeaves(context, cursorX, leafY, cursorZ) &&
                     tryPlaceLeafExtension(context, random, cursorX, leafY - 1, cursorZ, x, baseBelowY, z, hangingLeavesChance, placedLeaves)) {
                     tryPlaceLeafExtension(context, random, cursorX, leafY - 2, cursorZ, x, baseBelowY, z, hangingLeavesExtensionChance, placedLeaves);
                 }
-                cursorX += direction.stepX();
-                cursorZ += direction.stepZ();
+                cursorX += direction.getOffset().x();
+                cursorZ += direction.getOffset().z();
             }
         }
     }
@@ -207,7 +210,7 @@ public class CherryTreeFeature extends TreeWorldFeature {
             int y,
             int z,
             int treeHeight,
-            HorizontalDirection direction,
+            BlockFace direction,
             int branchStart,
             boolean doubleBranch
     ) {
@@ -218,15 +221,15 @@ public class CherryTreeFeature extends TreeWorldFeature {
         int branchEndY = treeHeight - 1 + sampleUniform(random, -1, 0);
         boolean extended = doubleBranch || branchEndY < branchStart;
         int horizontalLength = sampleUniform(random, 2, 4) + (extended ? 1 : 0);
-        int targetX = x + direction.stepX() * horizontalLength;
+        int targetX = x + direction.getOffset().x() * horizontalLength;
         int targetY = y + branchEndY;
-        int targetZ = z + direction.stepZ() * horizontalLength;
+        int targetZ = z + direction.getOffset().z() * horizontalLength;
         int firstSteps = extended ? 2 : 1;
-        PillarAxis horizontalAxis = direction.stepX() != 0 ? PillarAxis.X : PillarAxis.Z;
+        PillarAxis horizontalAxis = direction.getOffset().x() != 0 ? PillarAxis.X : PillarAxis.Z;
 
         for (int i = 0; i < firstSteps; i++) {
-            currentX += direction.stepX();
-            currentZ += direction.stepZ();
+            currentX += direction.getOffset().x();
+            currentZ += direction.getOffset().z();
             placeLogWithAxisIfValid(context, currentX, currentY, currentZ, horizontalAxis);
         }
 
@@ -243,20 +246,11 @@ public class CherryTreeFeature extends TreeWorldFeature {
                 currentY += verticalStep;
                 placeLog(context, currentX, currentY, currentZ);
             } else {
-                currentX += direction.stepX();
-                currentZ += direction.stepZ();
+                currentX += direction.getOffset().x();
+                currentZ += direction.getOffset().z();
                 placeLogWithAxisIfValid(context, currentX, currentY, currentZ, horizontalAxis);
             }
         }
-    }
-
-    private HorizontalDirection opposite(HorizontalDirection direction) {
-        return switch (direction) {
-            case WEST -> HorizontalDirection.EAST;
-            case EAST -> HorizontalDirection.WEST;
-            case NORTH -> HorizontalDirection.SOUTH;
-            case SOUTH -> HorizontalDirection.NORTH;
-        };
     }
 
     private int sampleUniform(ThreadLocalRandom random, int min, int max) {

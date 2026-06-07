@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.hash.HashUtils;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
@@ -125,10 +125,10 @@ public final class ChunkSectionCodec {
         return BlockTypes.UNKNOWN.getDefaultState();
     }
 
-    public static AllayChunkSection[] fillNullSections(AllayChunkSection[] sections, DimensionInfo dimensionInfo) {
+    public static AllayChunkSection[] fillNullSections(AllayChunkSection[] sections, DimensionType dimensionType) {
         for (int i = 0; i < sections.length; i++) {
             if (sections[i] == null) {
-                sections[i] = new AllayChunkSection((byte) (i + dimensionInfo.minSectionY()));
+                sections[i] = new AllayChunkSection((byte) (i + dimensionType.minSectionY()));
             }
         }
         return sections;

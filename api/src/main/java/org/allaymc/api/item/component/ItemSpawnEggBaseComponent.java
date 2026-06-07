@@ -3,7 +3,7 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.entity.type.EntityType;
 
 /**
- * Component for spawn egg items that can spawn entities.
+ * Shared component for spawn egg items that define the spawned entity type.
  *
  * @author daoge_cmd
  */

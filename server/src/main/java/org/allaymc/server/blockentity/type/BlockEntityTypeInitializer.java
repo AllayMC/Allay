@@ -253,6 +253,14 @@ public final class BlockEntityTypeInitializer {
                 .build();
     }
 
+    public static void initChiseledBookshelf() {
+        BlockEntityTypes.CHISELED_BOOKSHELF = AllayBlockEntityType
+                .builder(BlockEntityChiseledBookshelfImpl.class)
+                .name(BlockEntityId.CHISELED_BOOKSHELF)
+                .addComponent(BlockEntityChiseledBookshelfContainerHolderComponentImpl::new, BlockEntityChiseledBookshelfContainerHolderComponentImpl.class)
+                .build();
+    }
+
     public static void initCampfire() {
         BlockEntityTypes.CAMPFIRE = AllayBlockEntityType
                 .builder(BlockEntityCampfireImpl.class)

@@ -22,8 +22,17 @@ import java.util.List;
 @CallerThread(ThreadType.VIRTUAL)
 public class PortalCreateEvent extends Event implements CancellableEvent {
 
+    /**
+     * The dimension where the portal is being created.
+     */
     protected Dimension dimension;
+    /**
+     * The positions of the portal blocks to place.
+     */
     protected List<Vector3ic> portalBlocks;
+    /**
+     * The reason for the portal creation.
+     */
     protected CreateReason reason;
 
     public PortalCreateEvent(Dimension dimension, List<Vector3ic> portalBlocks, CreateReason reason) {
@@ -32,6 +41,9 @@ public class PortalCreateEvent extends Event implements CancellableEvent {
         this.reason = reason;
     }
 
+    /**
+     * The reason for the portal creation.
+     */
     public enum CreateReason {
         FIRE,
         NETHER_PAIR

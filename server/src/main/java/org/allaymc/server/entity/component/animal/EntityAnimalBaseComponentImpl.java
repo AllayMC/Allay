@@ -9,7 +9,6 @@ import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityGetDropXpEvent;
@@ -44,10 +43,6 @@ public abstract class EntityAnimalBaseComponentImpl extends EntityBaseComponentI
         aiComponent.getMemoryStorage().put(MemoryTypes.LAST_FEED_PLAYER, player.getRuntimeId());
         player.tryConsumeItemInHand();
         return true;
-    }
-
-    protected boolean canDrop() {
-        return thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_MOB_LOOT) && !babyComponent.isBaby();
     }
 
     @EventHandler

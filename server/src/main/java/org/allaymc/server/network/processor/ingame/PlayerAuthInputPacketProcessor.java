@@ -15,11 +15,7 @@ import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.player.ClientPlayMode;
-import org.allaymc.api.player.GameMode;
-import org.allaymc.api.player.InputInteractionModel;
-import org.allaymc.api.player.InputMode;
-import org.allaymc.api.player.Player;
+import org.allaymc.api.player.*;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -36,8 +32,8 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
-import org.cloudburstmc.protocol.common.PacketSignal;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
@@ -378,7 +374,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case MISSED_SWING -> {
                     var event = new PlayerPunchAirEvent(entity);
                     if (event.call()) {
-                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false));
+                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false), false);
                     }
                 }
             }

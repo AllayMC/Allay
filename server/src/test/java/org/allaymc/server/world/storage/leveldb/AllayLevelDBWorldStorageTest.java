@@ -5,7 +5,7 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Difficulty;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.testutils.AllayTestExtension;
@@ -98,7 +98,7 @@ class AllayLevelDBWorldStorageTest {
     @Test
     @SneakyThrows
     void testWriteAndReadChunk() {
-        AllayUnsafeChunk allayUnsafeChunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD);
+        AllayUnsafeChunk allayUnsafeChunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionTypes.OVERWORLD);
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
@@ -111,7 +111,7 @@ class AllayLevelDBWorldStorageTest {
 
         levelDBWorldStorage.writeChunkSync(allayUnsafeChunk.toSafeChunk());
 
-        Chunk chunk = levelDBWorldStorage.readChunkSync(0, 0, DimensionInfo.OVERWORLD);
+        Chunk chunk = levelDBWorldStorage.readChunkSync(0, 0, DimensionTypes.OVERWORLD);
         assertEquals(OAK_WOOD.getDefaultState(), chunk.getBlockState(0, 55, 0));
         assertEquals(BiomeTypes.FOREST, chunk.getBiome(0, 55, 0));
         assertEquals(319, chunk.getHeight(0, 0));

@@ -2,7 +2,6 @@ package org.allaymc.server.world;
 
 import com.google.common.base.Preconditions;
 import io.netty.util.internal.PlatformDependent;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +23,8 @@ import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.FakeChunkLoader;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
@@ -35,10 +36,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -63,7 +61,7 @@ public class AllayWorld implements World {
     protected final Queue<PacketQueueEntry> packetQueue;
 
     protected final AtomicReference<WorldState> state;
-    protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
+    protected final Map<DimensionType, Dimension> dimensionMap;
     @Getter
     protected final Scheduler scheduler;
     protected final GameLoop gameLoop;
@@ -96,7 +94,7 @@ public class AllayWorld implements World {
         this.worldData.increaseWorldStartCount();
         this.packetQueue = PlatformDependent.newMpscQueue();
         this.state = new AtomicReference<>(WorldState.STARTING);
-        this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
+        this.dimensionMap = new LinkedHashMap<>(3);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
         this.gameLoop = GameLoop.builder()
                 .currentTick(this.worldData.getTotalTime())
@@ -296,7 +294,7 @@ public class AllayWorld implements World {
 
         // Only overworld players can sleep
         var overworldPlayers = players.stream()
-                .filter(p -> p.getControlledEntity().getDimension().getDimensionInfo().dimensionId() == 0)
+                .filter(p -> p.getControlledEntity().getDimension().getDimensionType() == DimensionTypes.OVERWORLD)
                 .toList();
 
         if (overworldPlayers.isEmpty()) {
@@ -396,13 +394,13 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public Dimension getDimension(int dimensionId) {
-        return this.dimensionMap.get(dimensionId);
+    public Dimension getDimension(DimensionType dimensionType) {
+        return this.dimensionMap.get(dimensionType);
     }
 
     @Override
     @UnmodifiableView
-    public Map<Integer, Dimension> getDimensions() {
+    public Map<DimensionType, Dimension> getDimensions() {
         return Collections.unmodifiableMap(this.dimensionMap);
     }
 
@@ -415,8 +413,8 @@ public class AllayWorld implements World {
     }
 
     public void addDimension(Dimension dimension) {
-        Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionInfo().dimensionId()));
-        this.dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
+        Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionType()));
+        this.dimensionMap.put(dimension.getDimensionType(), dimension);
     }
 
     @Override

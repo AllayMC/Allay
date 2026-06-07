@@ -1,5 +1,6 @@
 package org.allaymc.server.world.feature.tree;
 
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -92,9 +93,9 @@ public class MangroveTreeFeature extends TreeWorldFeature {
         var roots = new ArrayList<Vector3i>();
         roots.add(new Vector3i(x, trunkY - 1, z));
 
-        for (var direction : HorizontalDirection.values()) {
+        for (var direction : BlockFace.getHorizontalBlockFaces()) {
             var directionalRoots = new ArrayList<Vector3i>();
-            var sidePos = new Vector3i(x + direction.stepX(), trunkY, z + direction.stepZ());
+            var sidePos = new Vector3i(x + direction.getOffset().x(), trunkY, z + direction.getOffset().z());
             if (!simulateRoots(context, sidePos, direction, trunkOrigin, directionalRoots, 0)) {
                 return false;
             }
@@ -111,7 +112,7 @@ public class MangroveTreeFeature extends TreeWorldFeature {
     private boolean simulateRoots(
             WorldFeatureContext context,
             Vector3i pos,
-            HorizontalDirection direction,
+            BlockFace direction,
             Vector3i trunkOrigin,
             List<Vector3i> roots,
             int length
@@ -131,10 +132,10 @@ public class MangroveTreeFeature extends TreeWorldFeature {
         return true;
     }
 
-    private List<Vector3i> potentialRootPositions(Vector3i pos, HorizontalDirection direction, Vector3i trunkOrigin) {
+    private List<Vector3i> potentialRootPositions(Vector3i pos, BlockFace direction, Vector3i trunkOrigin) {
         var random = ThreadLocalRandom.current();
         var below = new Vector3i(pos.x(), pos.y() - 1, pos.z());
-        var forward = new Vector3i(pos.x() + direction.stepX(), pos.y(), pos.z() + direction.stepZ());
+        var forward = new Vector3i(pos.x() + direction.getOffset().x(), pos.y(), pos.z() + direction.getOffset().z());
         int distance = Math.abs(pos.x() - trunkOrigin.x()) + Math.abs(pos.y() - trunkOrigin.y()) + Math.abs(pos.z() - trunkOrigin.z());
         if (distance > 5 && distance <= 8) {
             if (random.nextFloat() < 0.2f) {
@@ -178,10 +179,11 @@ public class MangroveTreeFeature extends TreeWorldFeature {
             List<FoliageAttachment> attachments
     ) {
         var random = ThreadLocalRandom.current();
+        var horizontalFaces = BlockFace.getHorizontalBlockFaces();
         for (int i = 0; i < height; i++) {
             int logY = y + i;
             if (placeMangroveLog(context, x, logY, z) && i < height - 1 && random.nextFloat() < 0.5f) {
-                HorizontalDirection direction = HorizontalDirection.values()[random.nextInt(HorizontalDirection.values().length)];
+                BlockFace direction = horizontalFaces[random.nextInt(horizontalFaces.length)];
                 int extraBranchLength = Math.max(0, random.nextInt(2) - random.nextInt(2) - 1);
                 int extraBranchSteps = tall ? sampleUniform(random, 1, 6) : sampleUniform(random, 1, 4);
                 placeMangroveBranch(context, x, z, logY, height, direction, extraBranchLength, extraBranchSteps, attachments);
@@ -199,7 +201,7 @@ public class MangroveTreeFeature extends TreeWorldFeature {
             int z,
             int y,
             int freeTreeHeight,
-            HorizontalDirection direction,
+            BlockFace direction,
             int extraBranchLength,
             int extraBranchSteps,
             List<FoliageAttachment> attachments
@@ -212,8 +214,8 @@ public class MangroveTreeFeature extends TreeWorldFeature {
         while (currentStep < freeTreeHeight && extraBranchSteps > 0) {
             if (currentStep >= 1) {
                 int logY = y + currentStep;
-                currentX += direction.stepX();
-                currentZ += direction.stepZ();
+                currentX += direction.getOffset().x();
+                currentZ += direction.getOffset().z();
                 topY = logY;
                 if (placeMangroveLog(context, currentX, logY, currentZ)) {
                     topY = logY + 1;

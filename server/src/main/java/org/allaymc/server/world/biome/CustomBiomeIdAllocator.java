@@ -20,7 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public final class CustomBiomeIdAllocator {
 
-    private static final int CUSTOM_BIOME_ID_START = 30000;
+    public static final int CUSTOM_BIOME_ID_START = 30000;
+
     private static final String FILE_NAME = "biome-ids.yml";
 
     private static CustomBiomeIdAllocator instance;
@@ -43,10 +44,6 @@ public final class CustomBiomeIdAllocator {
         }
 
         this.nextId = new AtomicInteger(maxId + 1);
-
-        if (!identifierToId.isEmpty()) {
-            log.info("Loaded {} custom biome ID(s) from {}", identifierToId.size(), FILE_NAME);
-        }
     }
 
     /**
@@ -92,7 +89,6 @@ public final class CustomBiomeIdAllocator {
         identifierToId.put(key, id);
         config.set(key, id);
         config.save();
-        log.info("Allocated custom biome ID {} for {}", id, key);
         return id;
     }
 }

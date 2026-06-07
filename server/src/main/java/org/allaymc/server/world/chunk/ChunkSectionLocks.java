@@ -1,6 +1,6 @@
 package org.allaymc.server.world.chunk;
 
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -13,8 +13,8 @@ public final class ChunkSectionLocks {
     private final int minSectionY;
     private final ReadWriteLock[] locks;
 
-    public ChunkSectionLocks(DimensionInfo dimensionInfo) {
-        this(dimensionInfo.minSectionY(), dimensionInfo.chunkSectionCount());
+    public ChunkSectionLocks(DimensionType dimensionType) {
+        this(dimensionType.minSectionY(), dimensionType.chunkSectionCount());
     }
 
     public ChunkSectionLocks(int minSectionY, int sectionCount) {

@@ -4,7 +4,7 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * BlockOxidationComponent is implemented by all blocks that can be oxidized.
+ * Component for blocks whose state changes with oxidation level and waxing state.
  *
  * @author IWareQ
  */

@@ -4,6 +4,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.EntityAction;
@@ -47,6 +48,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
+ * Defines the core lifecycle, state, movement, persistence, and viewer interaction hooks shared by entities.
+ *
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder, TaskCreator {
@@ -827,6 +830,28 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     @UnmodifiableView
     Map<EntityPropertyType<?>, Object> getPropertyValues();
+
+    /**
+     * Attaches a primitive shape to this entity.
+     *
+     * @param primitiveShape the primitive shape to be attached
+     */
+    void attachPrimitiveShape(PrimitiveShape primitiveShape);
+
+    /**
+     * Gets all the attached primitive shapes of this entity.
+     *
+     * @return all the attached primitive shapes of this entity
+     */
+    @UnmodifiableView
+    Set<PrimitiveShape> getAttachedPrimitiveShapes();
+
+    /**
+     * Detaches a primitive shape from this entity.
+     *
+     * @param primitiveShape the primitive shape to be detached
+     */
+    void detachPrimitiveShape(PrimitiveShape primitiveShape);
 
     @Override
     default boolean isValid() {

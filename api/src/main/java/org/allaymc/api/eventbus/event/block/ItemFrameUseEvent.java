@@ -31,6 +31,9 @@ public class ItemFrameUseEvent extends BlockEvent implements CancellableEvent {
         this.action = action;
     }
 
+    /**
+     * The type of item frame interaction.
+     */
     public enum Action {
         DROP,
         PUT,

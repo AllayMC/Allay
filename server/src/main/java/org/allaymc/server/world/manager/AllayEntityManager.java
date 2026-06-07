@@ -76,7 +76,7 @@ public class AllayEntityManager implements EntityManager {
     }
 
     public void onChunkLoad(int chunkX, int chunkZ) {
-        this.worldStorage.readEntities(chunkX, chunkZ, dimension.getDimensionInfo()).thenAccept(entities -> {
+        this.worldStorage.readEntities(chunkX, chunkZ, dimension.getDimensionType()).thenAccept(entities -> {
             for (var entity : entities.values()) {
                 addEntity(entity);
             }
@@ -105,9 +105,9 @@ public class AllayEntityManager implements EntityManager {
             // No entity in this chunk, so we should remove the old saved entities
             if (dimension.getWorld().getState() == WorldState.STOPPING) {
                 // Do it in sync if the world is stopping
-                this.worldStorage.writeEntitiesSync(chunkX, chunkZ, dimension.getDimensionInfo(), Map.of());
+                this.worldStorage.writeEntitiesSync(chunkX, chunkZ, dimension.getDimensionType(), Map.of());
             } else {
-                this.worldStorage.writeEntities(chunkX, chunkZ, dimension.getDimensionInfo(), Map.of());
+                this.worldStorage.writeEntities(chunkX, chunkZ, dimension.getDimensionType(), Map.of());
             }
         });
     }
@@ -173,7 +173,7 @@ public class AllayEntityManager implements EntityManager {
             var hashXZ = entry.getLongKey();
             worldStorage.writeEntities(
                     HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
-                    dimension.getDimensionInfo(), entry.getValue()
+                    dimension.getDimensionType(), entry.getValue()
             );
         }
     }
@@ -204,12 +204,12 @@ public class AllayEntityManager implements EntityManager {
             if (asyncWrite) {
                 worldStorage.writeEntities(
                         HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
-                        dimension.getDimensionInfo(), entry.getValue()
+                        dimension.getDimensionType(), entry.getValue()
                 );
             } else {
                 worldStorage.writeEntitiesSync(
                         HashUtils.getXFromHashXZ(hashXZ), HashUtils.getZFromHashXZ(hashXZ),
-                        dimension.getDimensionInfo(), entry.getValue()
+                        dimension.getDimensionType(), entry.getValue()
                 );
             }
         }

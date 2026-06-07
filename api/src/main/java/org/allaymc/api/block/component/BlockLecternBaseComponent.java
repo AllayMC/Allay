@@ -3,7 +3,7 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.dto.Block;
 
 /**
- * Base component for lectern block behavior.
+ * Shared component for lectern blocks, including page turn handling.
  *
  * @author daoge_cmd
  */

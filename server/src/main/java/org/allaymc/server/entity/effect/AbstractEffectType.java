@@ -35,4 +35,9 @@ public abstract class AbstractEffectType implements EffectType {
     public EffectInstance createInstance(int amplifier, int duration, boolean ambient, boolean visible) {
         return new EffectInstance(this, amplifier, duration, ambient, visible);
     }
+
+    @Override 
+    public String toString() {
+        return "EffectType(" + identifier.toString() + ")";
+    }
 }

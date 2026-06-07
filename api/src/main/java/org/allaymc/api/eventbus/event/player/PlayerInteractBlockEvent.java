@@ -31,6 +31,9 @@ public class PlayerInteractBlockEvent extends PlayerEvent implements Cancellable
         this.action = action;
     }
 
+    /**
+     * The type of block interaction.
+     */
     public enum Action {
         LEFT_CLICK,
         RIGHT_CLICK

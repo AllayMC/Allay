@@ -16,7 +16,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.WORLD)
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerFoodLevelChangeEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The old food level.
+     */
     protected int oldFoodLevel;
+    /**
+     * The new food level.
+     */
     @Setter
     protected int newFoodLevel;
 

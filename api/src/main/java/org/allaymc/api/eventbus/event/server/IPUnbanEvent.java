@@ -15,5 +15,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @CallerThread(ThreadType.SERVER)
 public class IPUnbanEvent extends ServerEvent implements CancellableEvent {
+    /**
+     * The IP address being unbanned.
+     */
     protected String ip;
 }

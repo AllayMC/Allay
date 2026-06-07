@@ -18,6 +18,10 @@ import static org.allaymc.server.entity.ai.executor.EntityControlHelper.setRoute
  */
 public class FlatRandomRoamExecutor implements BehaviorExecutor {
 
+    protected static final double TARGET_REACHED_DISTANCE_SQUARED = 1.0;
+    protected static final double MIN_PROGRESS_DISTANCE_SQUARED = 0.0625;
+    protected static final int MAX_STUCK_TICKS = 40;
+
     protected final float speed;
     protected final int maxRoamRange;
     protected final int frequency;
@@ -29,6 +33,9 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
     protected int durationTick;
     protected int targetCalTick;
     protected int retryCount;
+    protected int stuckTick;
+    protected double bestDistanceSquared;
+    protected boolean hadMoveDirection;
     protected boolean hasTarget;
 
     public FlatRandomRoamExecutor(float speed, int maxRoamRange, int frequency,
@@ -52,6 +59,9 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
         durationTick = 0;
         targetCalTick = 0;
         retryCount = 0;
+        stuckTick = 0;
+        bestDistanceSquared = Double.MAX_VALUE;
+        hadMoveDirection = false;
         hasTarget = false;
         entity.setMovementSpeed(speed);
         entity.setPitchEnabled(false);
@@ -69,12 +79,26 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
             var loc = entity.getLocation();
             double dx = moveTarget.x() - loc.x();
             double dz = moveTarget.z() - loc.z();
-            if (dx * dx + dz * dz < 1.0) {
+            double distanceSquared = dx * dx + dz * dz;
+            if (entity.hasMoveDirection()) {
+                hadMoveDirection = true;
+            }
+            if (distanceSquared < TARGET_REACHED_DISTANCE_SQUARED) {
                 hasTarget = false;
+                stuckTick = 0;
+                bestDistanceSquared = Double.MAX_VALUE;
+                hadMoveDirection = false;
                 if (!calNextTargetImmediately) {
                     EntityControlHelper.removeRouteTarget(entity);
                     EntityControlHelper.removeLookTarget(entity);
                 }
+            } else if (hadMoveDirection && !entity.hasMoveDirection()) {
+                abandonTarget(entity);
+            } else if (distanceSquared + MIN_PROGRESS_DISTANCE_SQUARED < bestDistanceSquared) {
+                bestDistanceSquared = distanceSquared;
+                stuckTick = 0;
+            } else if (++stuckTick >= MAX_STUCK_TICKS) {
+                abandonTarget(entity);
             }
         }
 
@@ -91,15 +115,13 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
 
     @Override
     public void onStop(EntityIntelligent entity) {
-        EntityControlHelper.removeRouteTarget(entity);
-        EntityControlHelper.removeLookTarget(entity);
+        abandonTarget(entity);
         entity.setPitchEnabled(true);
     }
 
     @Override
     public void onInterrupt(EntityIntelligent entity) {
-        EntityControlHelper.removeRouteTarget(entity);
-        EntityControlHelper.removeLookTarget(entity);
+        abandonTarget(entity);
         entity.setPitchEnabled(true);
     }
 
@@ -131,7 +153,20 @@ public class FlatRandomRoamExecutor implements BehaviorExecutor {
         setRouteTarget(entity, target);
         setLookTarget(entity, target);
         hasTarget = true;
+        stuckTick = 0;
+        bestDistanceSquared = entity.getLocation().distanceSquared(targetX, targetY, targetZ);
+        hadMoveDirection = false;
         targetCalTick = 0;
         retryCount = 0;
+    }
+
+    protected void abandonTarget(EntityIntelligent entity) {
+        EntityControlHelper.removeRouteTarget(entity);
+        EntityControlHelper.removeLookTarget(entity);
+        hasTarget = false;
+        stuckTick = 0;
+        bestDistanceSquared = Double.MAX_VALUE;
+        hadMoveDirection = false;
+        targetCalTick = frequency;
     }
 }

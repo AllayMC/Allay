@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.SemVersion;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -26,8 +25,8 @@ public class PackManifest {
     static {
         var builder = new GsonBuilder();
         builder.disableHtmlEscaping();
-        builder.registerTypeAdapter(SemVersion.class, new SemVersion.Serializer());
-        builder.registerTypeAdapter(SemVersion.class, new SemVersion.Deserializer());
+        builder.registerTypeAdapter(PackVersion.class, new PackVersion.Deserializer());
+        builder.registerTypeAdapter(PackVersion.class, new PackVersion.Serializer());
         builder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Deserializer());
         builder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Serializer());
         builder.registerTypeAdapter(PackManifest.Capability.class, new PackManifest.Capability.Deserializer());
@@ -111,7 +110,7 @@ public class PackManifest {
         private String name;
         private String description;
         private UUID uuid;
-        private SemVersion version;
+        private PackVersion version;
     }
 
     @Data
@@ -119,7 +118,7 @@ public class PackManifest {
 
         private UUID uuid;
         private String description;
-        private SemVersion version;
+        private PackVersion version;
         private Pack.Type type;
     }
 }

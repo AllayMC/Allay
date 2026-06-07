@@ -63,8 +63,8 @@ public class BlockDragonEggBaseComponentImpl extends BlockBaseComponentImpl {
 
     private void teleport(Dimension dimension, Vector3ic fromPos) {
         var random = ThreadLocalRandom.current();
-        var minY = dimension.getDimensionInfo().minHeight();
-        var maxY = dimension.getDimensionInfo().maxHeight();
+        var minY = dimension.getDimensionType().getMinHeight();
+        var maxY = dimension.getDimensionType().getMaxHeight();
 
         for (int i = 0; i < MAX_TELEPORT_ATTEMPTS; i++) {
             int x = fromPos.x() + random.nextInt(-TELEPORT_RANGE_XZ, TELEPORT_RANGE_XZ);

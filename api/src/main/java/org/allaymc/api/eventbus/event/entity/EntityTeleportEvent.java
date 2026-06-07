@@ -18,9 +18,18 @@ import org.allaymc.api.math.location.Location3dc;
 @Getter
 @CallerThread(ThreadType.DIMENSION)
 public class EntityTeleportEvent extends EntityEvent implements CancellableEvent {
+    /**
+     * The original location.
+     */
     protected Location3dc from;
+    /**
+     * The target location.
+     */
     @Setter
     protected Location3d to;
+    /**
+     * The reason for the teleport.
+     */
     @Getter
     protected Reason reason;
 
@@ -35,6 +44,9 @@ public class EntityTeleportEvent extends EntityEvent implements CancellableEvent
         return from.dimension().getWorld() != to.dimension().getWorld();
     }
 
+    /**
+     * The reason for the teleport.
+     */
     @Getter
     @AllArgsConstructor
     public enum Reason {

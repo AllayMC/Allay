@@ -2,6 +2,7 @@ package org.allaymc.api.player;
 
 import org.allaymc.api.bossbar.BossBarViewer;
 import org.allaymc.api.container.ContainerViewer;
+import org.allaymc.api.ddui.DDUIViewer;
 import org.allaymc.api.dialog.DialogViewer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormViewer;
@@ -11,7 +12,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldViewer;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3dc;
@@ -27,7 +28,7 @@ import java.util.Set;
  *
  * @author daoge_cmd
  */
-public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, ScoreboardViewer, DialogViewer {
+public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, DDUIViewer, ScoreboardViewer, DialogViewer {
 
     Speed DEFAULT_SPEED = new Speed(0.1, 1.0);
     Speed DEFAULT_FLY_SPEED = new Speed(0.05, 1.0);
@@ -696,12 +697,12 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * player visual feedback while the server prepares the target dimension.
      * The flag is automatically cleared when {@link #completeDimensionChange()} is called.
      *
-     * @param targetDimInfo the target dimension info
+     * @param targetDimensionType the target dimension type
      * @param x             approximate target x coordinate
      * @param y             approximate target y coordinate
      * @param z             approximate target z coordinate
      */
-    void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z);
+    void beginDimensionChange(DimensionType targetDimensionType, double x, double y, double z);
 
     /**
      * Complete a dimension change by sending the dimension ack and resetting the flag.

@@ -31,8 +31,8 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // So after the player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with the
         // client, otherwise the client will snap into the ground
         player.viewEntityLocation(entity, entity.getLocation(), true);
-        // Send debug shapes to the player after the player fully joined
-        ((AllayDimension) entity.getDimension()).addDebugShapesTo(player);
+        // Send primitive shapes to the player after the player fully joined
+        ((AllayDimension) entity.getDimension()).addPrimitiveShapesTo(player);
 
         var joinMessage = event.getJoinMessage();
         if (joinMessage != null && !joinMessage.isBlank()) {

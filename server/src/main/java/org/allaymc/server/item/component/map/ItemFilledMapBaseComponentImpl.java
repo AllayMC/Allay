@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component.map;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypes;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 
 import javax.imageio.ImageIO;
@@ -148,7 +148,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         var chunkX = x & 0xF;
         var chunkZ = z & 0xF;
         int height = chunk.getHeight(chunkX, chunkZ);
-        while (height >= dimension.getDimensionInfo().minHeight()) {
+        while (height >= dimension.getDimensionType().getMinHeight()) {
             var block = chunk.getBlockState(chunkX, height, chunkZ);
             var color = block.getBlockStateData().mapColor();
             var tintMethod = block.getBlockStateData().tintMethod();

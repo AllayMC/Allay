@@ -15,6 +15,9 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerDropItemEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The item stack being dropped.
+     */
     protected ItemStack itemStack;
 
     public PlayerDropItemEvent(EntityPlayer player, ItemStack itemStack) {

@@ -3,7 +3,7 @@ package org.allaymc.api.world;
 import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.debugshape.DebugShapeViewer;
+import org.allaymc.api.primitiveshape.PrimitiveShapeViewer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
@@ -34,7 +34,7 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
-public interface WorldViewer extends DebugShapeViewer {
+public interface WorldViewer extends PrimitiveShapeViewer {
     /**
      * Views the entity passed.
      *

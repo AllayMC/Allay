@@ -13,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleSneakEvent extends PlayerEvent {
+    /**
+     * Whether sneaking is enabled.
+     */
     protected boolean value;
 
     public PlayerToggleSneakEvent(EntityPlayer player, boolean value) {

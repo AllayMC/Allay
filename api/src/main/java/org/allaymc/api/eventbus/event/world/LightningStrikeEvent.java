@@ -41,8 +41,17 @@ public class LightningStrikeEvent extends WorldEvent implements CancellableEvent
         CUSTOM
     }
 
+    /**
+     * The dimension where the lightning strike occurs.
+     */
     protected Dimension dimension;
+    /**
+     * The lightning bolt entity.
+     */
     protected EntityLightningBolt lightningBolt;
+    /**
+     * The cause of the lightning strike.
+     */
     protected Cause cause;
 
     public LightningStrikeEvent(Dimension dimension, EntityLightningBolt lightningBolt, Cause cause) {

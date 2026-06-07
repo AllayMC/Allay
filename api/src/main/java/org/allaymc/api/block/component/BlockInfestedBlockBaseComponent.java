@@ -3,6 +3,8 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.type.BlockType;
 
 /**
+ * Shared component for infested blocks that expose the normal block type they mimic.
+ *
  * @author IWareQ
  */
 public interface BlockInfestedBlockBaseComponent extends BlockBaseComponent {

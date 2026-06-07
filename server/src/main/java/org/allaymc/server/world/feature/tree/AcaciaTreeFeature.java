@@ -1,5 +1,6 @@
 package org.allaymc.server.world.feature.tree;
 
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
@@ -45,7 +46,8 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
         var attachments = new ArrayList<FoliageAttachment>();
         int currentX = x;
         int currentZ = z;
-        HorizontalDirection primaryDirection = List.of(HorizontalDirection.values()).get(random.nextInt(4));
+        var horizontalFaces = BlockFace.getHorizontalBlockFaces();
+        BlockFace primaryDirection = horizontalFaces[random.nextInt(4)];
         int bendStart = maxFreeTreeHeight - random.nextInt(4) - 1;
         int bendLength = 3 - random.nextInt(3);
         int lastPlacedY = y;
@@ -53,8 +55,8 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
         for (int dy = 0; dy < maxFreeTreeHeight; dy++) {
             int logY = y + dy;
             if (dy >= bendStart && bendLength > 0) {
-                currentX += primaryDirection.stepX();
-                currentZ += primaryDirection.stepZ();
+                currentX += primaryDirection.getOffset().x();
+                currentZ += primaryDirection.getOffset().z();
                 bendLength--;
             }
 
@@ -65,7 +67,7 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
 
         attachments.add(new FoliageAttachment(currentX, lastPlacedY, currentZ, 1, false));
 
-        HorizontalDirection secondaryDirection = List.of(HorizontalDirection.values()).get(random.nextInt(4));
+        BlockFace secondaryDirection = horizontalFaces[random.nextInt(4)];
         if (secondaryDirection != primaryDirection) {
             int secondaryStart = bendStart - random.nextInt(2) - 1;
             int secondaryLength = 1 + random.nextInt(3);
@@ -76,8 +78,8 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
             for (int dy = secondaryStart; dy < maxFreeTreeHeight && secondaryLength > 0; secondaryLength--, dy++) {
                 if (dy >= 1) {
                     int logY = y + dy;
-                    currentX += secondaryDirection.stepX();
-                    currentZ += secondaryDirection.stepZ();
+                    currentX += secondaryDirection.getOffset().x();
+                    currentZ += secondaryDirection.getOffset().z();
                     if (placeLogIfValid(context, currentX, logY, currentZ)) {
                         secondaryTopY = logY + 1;
                     }

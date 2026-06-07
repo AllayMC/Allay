@@ -6,6 +6,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.List;
 
 /**
+ * Shared component for writable books whose pages can be edited and reordered.
+ *
  * @author daoge_cmd
  */
 public interface ItemWritableBookBaseComponent extends ItemBaseComponent {

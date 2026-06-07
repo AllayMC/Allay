@@ -16,7 +16,13 @@ import org.allaymc.api.math.location.Location3dc;
 @Getter
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
+    /**
+     * The original location.
+     */
     protected Location3dc from;
+    /**
+     * The target location.
+     */
     protected Location3dc to;
 
     /**

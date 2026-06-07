@@ -18,7 +18,8 @@ import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3i;
@@ -219,13 +220,13 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public int getFlowDecay(DimensionInfo dimensionInfo) {
-        return dimensionInfo == DimensionInfo.NETHER ? 1 : 2;
+    public int getFlowDecay(DimensionType dimensionType) {
+        return dimensionType == DimensionTypes.NETHER ? 1 : 2;
     }
 
     @Override
-    public int getFlowSpeed(DimensionInfo dimensionInfo) {
-        return dimensionInfo == DimensionInfo.NETHER ? 10 : 30;
+    public int getFlowSpeed(DimensionType dimensionType) {
+        return dimensionType == DimensionTypes.NETHER ? 10 : 30;
     }
 
     @Override

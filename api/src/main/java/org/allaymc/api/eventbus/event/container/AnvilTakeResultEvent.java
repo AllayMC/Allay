@@ -19,8 +19,17 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 @CallerThread(ThreadType.WORLD)
 public class AnvilTakeResultEvent extends ContainerEvent implements CancellableEvent {
+    /**
+     * The viewer taking the anvil result.
+     */
     protected ContainerViewer viewer;
+    /**
+     * The anvil container.
+     */
     protected AnvilContainer container;
+    /**
+     * The result item being taken.
+     */
     @Setter
     protected ItemStack resultItem;
 }

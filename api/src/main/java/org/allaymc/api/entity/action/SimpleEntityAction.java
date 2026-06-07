@@ -6,24 +6,24 @@ package org.allaymc.api.entity.action;
  * @author daoge_cmd
  */
 public enum SimpleEntityAction implements EntityAction {
-    // SWING_ARM makes an entity or player swing its arm
+    /// SWING_ARM makes an entity or player swing its arm
     SWING_ARM,
-    // HURT makes an entity display the animation for being hurt. The entity will be shown as red for a short duration
+    /// HURT makes an entity display the animation for being hurt. The entity will be shown as red for a short duration
     HURT,
-    // DEATH makes an entity display the death animation. After this animation, the entity disappears from viewers watching it
+    /// DEATH makes an entity display the death animation. After this animation, the entity disappears from viewers watching it
     DEATH,
-    // EAT makes an entity display the eating particles at its mouth to viewers with the item in its hand being eaten
+    /// EAT makes an entity display the eating particles at its mouth to viewers with the item in its hand being eaten
     EAT,
-    // FIREWORK_EXPLODE makes a firework rocket display an explosion particle
+    /// FIREWORK_EXPLODE makes a firework rocket display an explosion particle
     FIREWORK_EXPLODE,
-    // TOTEM_USE displays the totem use particles and animation
+    /// TOTEM_USE displays the totem use particles and animation
     TOTEM_USE,
-    // FISHING_HOOK_BITE makes a fishing hook entity display the fish bite animation with bubble and splash effects
+    /// FISHING_HOOK_BITE makes a fishing hook entity display the fish bite animation with bubble and splash effects
     FISHING_HOOK_BITE,
-    // WAKE_UP makes an entity play the wake-up animation (used when a sleeping entity stops sleeping)
+    /// WAKE_UP makes an entity play the wake-up animation (used when a sleeping entity stops sleeping)
     WAKE_UP,
-    // IN_LOVE makes an entity display love (heart) particles to viewers
+    /// IN_LOVE makes an entity display love (heart) particles to viewers
     IN_LOVE,
-    // EAT_GRASS makes an entity display the grass eating animation to viewers (used by sheep)
+    /// EAT_GRASS makes an entity display the grass eating animation to viewers (used by sheep)
     EAT_GRASS
 }

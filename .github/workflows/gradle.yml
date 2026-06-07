@@ -36,7 +36,7 @@ jobs:
           distribution: 'zulu'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: wrapper
           cache-overwrite-existing: true
@@ -55,7 +55,7 @@ jobs:
         run: ./gradlew jacocoTestReport
 
       - name: Upload Coverage Reports to Codecov
-        uses: codecov/codecov-action@v5.5.2
+        uses: codecov/codecov-action@v6.0.1
         if: success()
         with:
           directory: .jacoco/test/

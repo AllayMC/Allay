@@ -9,7 +9,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -28,7 +28,7 @@ import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.OperationType;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.api.world.manager.BlockUpdateManager;
@@ -58,8 +58,7 @@ import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
- * Represents a dimension in the world. Each world can have at most three dimensions and at least one
- * overworld dimension.
+ * Represents a dimension in the world.
  *
  * @author daoge_cmd | Cool_Loong
  */
@@ -92,31 +91,31 @@ public interface Dimension extends TaskCreator {
     EntityManager getEntityManager();
 
     /**
-     * Adds a debug shape to the dimension.
+     * Adds a primitive shape to the dimension.
      *
-     * @param debugShape the debug shape to add
+     * @param primitiveShape the primitive shape to add
      */
-    void addDebugShape(DebugShape debugShape);
+    void addPrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * Removes a debug shape from the dimension.
+     * Removes a primitive shape from the dimension.
      *
-     * @param debugShape the debug shape to remove
+     * @param primitiveShape the primitive shape to remove
      */
-    void removeDebugShape(DebugShape debugShape);
+    void removePrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * Gets all debug shapes in the dimension.
+     * Gets all primitive shapes in the dimension.
      *
-     * @return a set of debug shapes in the dimension
+     * @return a set of primitive shapes in the dimension
      */
     @UnmodifiableView
-    Set<DebugShape> getDebugShapes();
+    Set<PrimitiveShape> getPrimitiveShapes();
 
     /**
-     * Removes all debug shapes from the dimension.
+     * Removes all primitive shapes from the dimension.
      */
-    void removeAllDebugShapes();
+    void removeAllPrimitiveShapes();
 
     /**
      * Get the light engine of this dimension.
@@ -126,11 +125,11 @@ public interface Dimension extends TaskCreator {
     LightEngine getLightEngine();
 
     /**
-     * Get the dimension info of this dimension.
+     * Get the dimension type of this dimension.
      *
-     * @return the dimension info
+     * @return the dimension type
      */
-    DimensionInfo getDimensionInfo();
+    DimensionType getDimensionType();
 
     /**
      * Get the world which contains this dimension.
@@ -376,7 +375,7 @@ public interface Dimension extends TaskCreator {
      * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found or the chunk is not loaded
      */
     default BlockState getBlockState(int x, int y, int z, int layer) {
-        if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
+        if (y < this.getDimensionType().getMinHeight() || y > getDimensionType().getMaxHeight()) {
             return AIR.getDefaultState();
         }
 
@@ -458,7 +457,7 @@ public interface Dimension extends TaskCreator {
         }
 
         var blockStates = new BlockState[sizeX][sizeY][sizeZ];
-        var dimensionInfo = getDimensionInfo();
+        var dimensionType = getDimensionType();
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;
@@ -482,7 +481,7 @@ public interface Dimension extends TaskCreator {
                 }
 
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
-                    if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
+                    if (sectionY < dimensionType.minSectionY() || sectionY > dimensionType.maxSectionY()) {
                         continue;
                     }
 
@@ -528,7 +527,7 @@ public interface Dimension extends TaskCreator {
             return;
         }
 
-        var dimensionInfo = getDimensionInfo();
+        var dimensionType = getDimensionType();
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;
@@ -552,7 +551,7 @@ public interface Dimension extends TaskCreator {
                 }
 
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
-                    if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
+                    if (sectionY < dimensionType.minSectionY() || sectionY > dimensionType.maxSectionY()) {
                         continue;
                     }
 
@@ -844,7 +843,7 @@ public interface Dimension extends TaskCreator {
      * @return {@code true} if the y coordinate is in the range of this dimension, otherwise {@code false}.
      */
     default boolean isYInRange(double y) {
-        return y >= getDimensionInfo().minHeight() && y <= getDimensionInfo().maxHeight();
+        return y >= getDimensionType().getMinHeight() && y <= getDimensionType().getMaxHeight();
     }
 
     /**
@@ -1192,7 +1191,7 @@ public interface Dimension extends TaskCreator {
     default int getHeight(int x, int z) {
         var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            return getDimensionInfo().minHeight();
+            return getDimensionType().getMinHeight();
         }
 
         return chunk.getHeight(x & 15, z & 15);
@@ -1276,7 +1275,7 @@ public interface Dimension extends TaskCreator {
      * @return the biome at the specified pos.{@link BiomeTypes#PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded
      */
     default BiomeType getBiome(int x, int y, int z) {
-        if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
+        if (y < this.getDimensionType().getMinHeight() || y > getDimensionType().getMaxHeight())
             return BiomeTypes.PLAINS;
 
         var chunk = getChunkManager().getChunkByDimensionPos(x, z);

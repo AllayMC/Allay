@@ -13,7 +13,13 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 @Getter
 @CallerThread(ThreadType.SERVER)
 public class ScoreboardLineValueChangeEvent extends ScoreboardLineEvent implements CancellableEvent {
+    /**
+     * The old line value.
+     */
     protected int oldValue;
+    /**
+     * The new line value.
+     */
     protected int newValue;
 
     public ScoreboardLineValueChangeEvent(Scoreboard scoreboard, ScoreboardLine line, int oldValue, int newValue) {

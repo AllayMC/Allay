@@ -103,6 +103,12 @@ public final class MemoryTypes {
             new MemoryType<>(new Identifier("minecraft:nearest_player"));
 
     /**
+     * Runtime ID of the entity this mob is currently retaliating against.
+     */
+    public static final MemoryType<Long> ATTACK_TARGET =
+            new MemoryType<>(new Identifier("minecraft:attack_target"));
+
+    /**
      * Runtime ID of this entity's breeding spouse.
      */
     public static final MemoryType<Long> ENTITY_SPOUSE =

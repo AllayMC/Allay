@@ -1,7 +1,7 @@
 package org.allaymc.server.world.storage.leveldb.codec;
 
 import org.allaymc.api.world.biome.BiomeTypes;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.world.chunk.AllayChunkBuilder;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.testutils.AllayTestExtension;
@@ -15,7 +15,7 @@ class HeightAndBiomeCodecTest {
 
     @Test
     void testSerializeAndDeserialize() {
-        var chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD);
+        var chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionTypes.OVERWORLD);
 
         // Set custom heights and biomes
         chunk.setHeight(0, 0, (short) 100);
@@ -31,12 +31,12 @@ class HeightAndBiomeCodecTest {
         var builder = new AllayChunkBuilder()
                 .chunkX(0)
                 .chunkZ(0)
-                .dimensionInfo(DimensionInfo.OVERWORLD);
+                .dimensionType(DimensionTypes.OVERWORLD);
 
         // Builder needs sections to populate biomes into
-        var sections = new org.allaymc.server.world.chunk.AllayChunkSection[DimensionInfo.OVERWORLD.chunkSectionCount()];
+        var sections = new org.allaymc.server.world.chunk.AllayChunkSection[DimensionTypes.OVERWORLD.chunkSectionCount()];
         for (int i = 0; i < sections.length; i++) {
-            sections[i] = new org.allaymc.server.world.chunk.AllayChunkSection((byte) (i + DimensionInfo.OVERWORLD.minSectionY()));
+            sections[i] = new org.allaymc.server.world.chunk.AllayChunkSection((byte) (i + DimensionTypes.OVERWORLD.minSectionY()));
         }
         builder.sections(sections);
 
@@ -48,11 +48,11 @@ class HeightAndBiomeCodecTest {
         assertEquals(319, builder.getHeightMap().get(15, 15));
 
         // Verify biomes - section index for y=0 is (0 - (-64)) / 16 = 4
-        var sectionForY0 = sections[0 - DimensionInfo.OVERWORLD.minSectionY()];
+        var sectionForY0 = sections[0 - DimensionTypes.OVERWORLD.minSectionY()];
         assertEquals(BiomeTypes.FOREST, sectionForY0.getBiomeType(0, 0, 0));
 
         // section index for y=64 is (64 - (-64)) / 16 = 8
-        var sectionForY64 = sections[64 / 16 - DimensionInfo.OVERWORLD.minSectionY()];
+        var sectionForY64 = sections[64 / 16 - DimensionTypes.OVERWORLD.minSectionY()];
         assertEquals(BiomeTypes.DESERT, sectionForY64.getBiomeType(5, 0, 5));
     }
 }

@@ -4,7 +4,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * Represents a edible item component.
+ * Component for consumable items that restore food or act as drinks when used.
  *
  * @author IWareQ
  */

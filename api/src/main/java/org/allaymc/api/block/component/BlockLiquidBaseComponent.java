@@ -4,11 +4,11 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * BlockLiquidBaseComponent is the base component for liquid blocks.
+ * Shared component for liquid blocks, covering depth, source, hardening, and flow characteristics.
  *
  * @author daoge_cmd
  */
@@ -109,7 +109,7 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      *
      * @return the flow decay of the liquid
      */
-    int getFlowDecay(DimensionInfo dimensionInfo);
+    int getFlowDecay(DimensionType dimensionType);
 
     /**
      * Get the flow speed of the liquid in ticks.
@@ -118,7 +118,7 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      *
      * @return the flow speed of the liquid in ticks
      */
-    int getFlowSpeed(DimensionInfo dimensionInfo);
+    int getFlowSpeed(DimensionType dimensionType);
 
     /**
      * Check whether the block can become a source block if there are more than

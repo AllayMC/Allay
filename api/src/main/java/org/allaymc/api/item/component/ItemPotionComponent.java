@@ -3,7 +3,7 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.data.PotionType;
 
 /**
- * Represents an item that can hold potion effects.
+ * Component for items whose behavior is determined by a potion type.
  *
  * @author daoge_cmd
  */

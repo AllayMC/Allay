@@ -12,6 +12,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 public abstract class EntityEffectEvent extends EntityEvent implements CancellableEvent {
+    /**
+     * The effect involved in the event.
+     */
     protected EffectInstance effect;
 
     public EntityEffectEvent(Entity entity, EffectInstance effect) {

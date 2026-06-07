@@ -3,11 +3,15 @@ package org.allaymc.api.world;
 import lombok.Builder;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -64,29 +68,29 @@ public interface WorldPool {
             WorldGenerator netherGenerator,
             WorldGenerator theEndGenerator
     ) {
+        var dimensionSettings = new LinkedHashMap<Identifier, DimensionSetting>();
+        dimensionSettings.put(DimensionTypes.OVERWORLD.getIdentifier(), new DimensionSetting(DimensionTypes.OVERWORLD, overworldGenerator, true));
+        if (netherGenerator != null) {
+            dimensionSettings.put(DimensionTypes.NETHER.getIdentifier(), new DimensionSetting(DimensionTypes.NETHER, netherGenerator, true));
+        }
+        if (theEndGenerator != null) {
+            dimensionSettings.put(DimensionTypes.THE_END.getIdentifier(), new DimensionSetting(DimensionTypes.THE_END, theEndGenerator, true));
+        }
         loadWorld(
                 new WorldSetting(name, storage, false),
-                new DimensionSetting(overworldGenerator, true),
-                new DimensionSetting(netherGenerator, true),
-                new DimensionSetting(theEndGenerator, true)
+                dimensionSettings
         );
     }
 
     /**
-     * Create a world with the provided name, storage, and dimension settings for different dimensions.
+     * Create a world with the provided name, storage, and dimension settings.
      *
-     * @param worldSetting     the setting of the world
-     * @param overworldSetting the setting of the overworld dimension
-     * @param netherSetting    the setting of the nether dimension, or {@code null} if the nether dimension does not exist
-     * @param theEndSetting    the setting of the end, or {@code null} if the end dimension does not exist
+     * @param worldSetting       the setting of the world
+     * @param dimensionSettings  the settings of the dimensions keyed by their identifiers. Each key must match
+     *                           {@link DimensionSetting#dimensionType()}{@code .getIdentifier()}.
      * @throws IllegalArgumentException if the world with the specific name already exists
      */
-    void loadWorld(
-            WorldSetting worldSetting,
-            DimensionSetting overworldSetting,
-            DimensionSetting netherSetting,
-            DimensionSetting theEndSetting
-    );
+    void loadWorld(WorldSetting worldSetting, Map<Identifier, DimensionSetting> dimensionSettings);
 
     /**
      * Unload the world with the specific name.
@@ -122,10 +126,11 @@ public interface WorldPool {
     /**
      * DimensionSetting contains the setting of a dimension when creating a new world.
      *
+     * @param dimensionType          the dimension type
      * @param worldGenerator         the world generator used for this dimension
      * @param enableLightCalculation whether light calculation is enabled in this dimension
      */
     @Builder
-    record DimensionSetting(WorldGenerator worldGenerator, boolean enableLightCalculation) {
+    record DimensionSetting(DimensionType dimensionType, WorldGenerator worldGenerator, boolean enableLightCalculation) {
     }
 }

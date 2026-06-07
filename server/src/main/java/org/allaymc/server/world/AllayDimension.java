@@ -7,7 +7,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -25,8 +25,9 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.api.world.poi.PoiType;
@@ -63,7 +64,7 @@ public class AllayDimension implements Dimension {
     protected static final int LIGHTNING_STRIKE_CHANCE = 100000;
 
     protected final AllayWorld world;
-    protected final DimensionInfo dimensionInfo;
+    protected final DimensionType dimensionType;
     protected final WorldGenerator worldGenerator;
     protected final AllayChunkManager chunkManager;
     protected final AllayEntityManager entityManager;
@@ -71,11 +72,11 @@ public class AllayDimension implements Dimension {
     protected final Scheduler scheduler;
     protected final AllayLightEngine lightEngine;
     protected final Set<Player> players;
-    protected final Set<DebugShape> debugShapes;
+    protected final Set<PrimitiveShape> primitiveShapes;
 
-    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo, boolean enableLightCalculation, boolean useVirtualThread) {
+    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionType dimensionType, boolean enableLightCalculation, boolean useVirtualThread) {
         this.world = world;
-        this.dimensionInfo = dimensionInfo;
+        this.dimensionType = dimensionType;
         this.worldGenerator = worldGenerator;
         this.chunkManager = new AllayChunkManager(this, worldGenerator, world.getWorldStorage());
         this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
@@ -83,7 +84,7 @@ public class AllayDimension implements Dimension {
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
         this.lightEngine = enableLightCalculation ? new AllayLightEngine(this, useVirtualThread) : new NoLightEngine(this);
         this.players = new NonBlockingHashSet<>();
-        this.debugShapes = new NonBlockingHashSet<>();
+        this.primitiveShapes = new NonBlockingHashSet<>();
         worldGenerator.setDimension(this);
     }
 
@@ -132,24 +133,24 @@ public class AllayDimension implements Dimension {
         this.chunkManager.addChunkLoader(entity);
         this.entityManager.addEntity(entity, runnable);
         if (player.getClientState() == ClientState.IN_GAME) {
-            // Only send debug shapes to the players when they are in-game. This
-            // solves the issue that debug shapes won't be displayed if the player
-            // haven't fully joined. When the player join, the debug shapes will be
+            // Only send primitive shapes to the players when they are in-game. This
+            // solves the issue that primitive shapes won't be displayed if the player
+            // haven't fully joined. When the player join, the primitive shapes will be
             // sent to the player after the player is fully joined.
             // See SetLocalPlayerAsInitializedPacketProcessor.
-            addDebugShapesTo(player);
+            addPrimitiveShapesTo(player);
         }
     }
 
     /**
      * Set this method to public because it is used in {@link SetLocalPlayerAsInitializedPacketProcessor}
      */
-    public void addDebugShapesTo(WorldViewer viewer) {
-        for (var debugShape : debugShapes) {
-            // Let's send all the debug shapes in one packet to improve performance
-            debugShape.addViewer(viewer, false);
+    public void addPrimitiveShapesTo(WorldViewer viewer) {
+        for (var primitiveShape : primitiveShapes) {
+            // Let's send all the primitive shapes in one packet to improve performance
+            primitiveShape.addViewer(viewer, false);
         }
-        viewer.viewDebugShapes(debugShapes);
+        viewer.viewPrimitiveShapes(primitiveShapes);
     }
 
     public void removePlayer(Player player) {
@@ -171,15 +172,15 @@ public class AllayDimension implements Dimension {
             // Run the callback directly
             runnable.run();
         }
-        removeDebugShapesFrom(player);
+        removePrimitiveShapesFrom(player);
     }
 
-    protected void removeDebugShapesFrom(WorldViewer viewer) {
-        for (var debugShape : debugShapes) {
+    protected void removePrimitiveShapesFrom(WorldViewer viewer) {
+        for (var primitiveShape : primitiveShapes) {
             // Let's send all the remove notices in one packet to improve performance
-            debugShape.removeViewer(viewer, false);
+            primitiveShape.removeViewer(viewer, false);
         }
-        viewer.removeDebugShapes(debugShapes);
+        viewer.removePrimitiveShapes(primitiveShapes);
     }
 
     @Override
@@ -189,33 +190,33 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public void addDebugShape(DebugShape debugShape) {
-        this.debugShapes.add(debugShape);
+    public void addPrimitiveShape(PrimitiveShape primitiveShape) {
+        this.primitiveShapes.add(primitiveShape);
         for (var player : this.players) {
-            debugShape.addViewer(player);
+            primitiveShape.addViewer(player);
         }
     }
 
     @Override
-    public void removeDebugShape(DebugShape debugShape) {
-        this.debugShapes.remove(debugShape);
+    public void removePrimitiveShape(PrimitiveShape primitiveShape) {
+        this.primitiveShapes.remove(primitiveShape);
         for (var player : this.players) {
-            debugShape.removeViewer(player);
+            primitiveShape.removeViewer(player);
         }
     }
 
     @Override
     @UnmodifiableView
-    public Set<DebugShape> getDebugShapes() {
-        return Collections.unmodifiableSet(this.debugShapes);
+    public Set<PrimitiveShape> getPrimitiveShapes() {
+        return Collections.unmodifiableSet(this.primitiveShapes);
     }
 
     @Override
-    public void removeAllDebugShapes() {
+    public void removeAllPrimitiveShapes() {
         for (var player : players) {
-            removeDebugShapesFrom(player);
+            removePrimitiveShapesFrom(player);
         }
-        this.debugShapes.clear();
+        this.primitiveShapes.clear();
     }
 
     @Override
@@ -464,7 +465,7 @@ public class AllayDimension implements Dimension {
         }
 
         // Only spawn lightning in overworld
-        if (dimensionInfo.dimensionId() != DimensionInfo.OVERWORLD.dimensionId()) {
+        if (dimensionType != DimensionTypes.OVERWORLD) {
             return;
         }
 
@@ -511,6 +512,6 @@ public class AllayDimension implements Dimension {
 
     @Override
     public String toString() {
-        return "world=" + this.world.getName() + " dimId=" + this.dimensionInfo.dimensionId();
+        return "world=" + this.world.getName() + " dimension=" + this.dimensionType.getIdentifier();
     }
 }

@@ -4,14 +4,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
- * Component interface for shield items.
- * <p>
- * Provides functionality for damage blocking mechanics including:
- * <ul>
- *   <li>Directional blocking calculation</li>
- *   <li>Shield durability consumption</li>
- *   <li>Axe shield-breaking detection</li>
- * </ul>
+ * Shared component for shield items, including blocking, durability loss, and shield disable logic.
  *
  * @author daoge_cmd
  */

@@ -5,10 +5,12 @@ import org.allaymc.api.player.Player;
 import org.allaymc.api.player.PlayerAbility;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RequestPermissionsPacket;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * @author zernix2077
@@ -43,9 +45,9 @@ public class RequestPermissionsPacketProcessor extends PacketProcessor<RequestPe
 
         var updated = EnumSet.noneOf(PlayerAbility.class);
         updated.addAll(target.getAbilities());
-        for (int bit = 0; bit < CONTROLLABLE_ABILITIES.length; bit++) {
-            var ability = CONTROLLABLE_ABILITIES[bit];
-            if ((packet.getCustomPermissions() & (1 << bit)) != 0) {
+        var requestedPermissions = packet.getCustomPermissions();
+        for (var ability : CONTROLLABLE_ABILITIES) {
+            if (hasNetworkAbility(requestedPermissions, ability)) {
                 updated.add(ability);
             } else {
                 updated.remove(ability);
@@ -55,6 +57,25 @@ public class RequestPermissionsPacketProcessor extends PacketProcessor<RequestPe
         if (new PlayerAbilitiesUpdateRequestEvent(player, target, updated).call()) {
             target.setAbilities(updated);
         }
+    }
+
+    protected boolean hasNetworkAbility(Set<Ability> abilities, PlayerAbility ability) {
+        if (abilities == null) {
+            return false;
+        }
+
+        return abilities.contains(switch (ability) {
+            case PLACE_BLOCK -> Ability.BUILD;
+            case BREAK_BLOCK -> Ability.MINE;
+            case INTERACT_BLOCK -> Ability.DOORS_AND_SWITCHES;
+            case OPEN_CONTAINER -> Ability.OPEN_CONTAINERS;
+            case ATTACK_PLAYER -> Ability.ATTACK_PLAYERS;
+            case ATTACK_MOB -> Ability.ATTACK_MOBS;
+            case FLYING -> Ability.FLYING;
+            case MAY_FLY -> Ability.MAY_FLY;
+            case INFINITE_BLOCK -> Ability.INSTABUILD;
+            case NO_CLIP -> Ability.NO_CLIP;
+        });
     }
 
     @Override

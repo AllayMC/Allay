@@ -5,7 +5,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
@@ -68,15 +68,15 @@ public interface WorldStorage {
      *
      * @param chunkX        the x coordinate of the chunk
      * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionInfo the dimension info of the chunk
+     * @param dimensionType the dimension type of the chunk
      * @return a chunk future
      */
-    CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
+    CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
-     * Similar to {@link #readChunk(int, int, DimensionInfo)} but is synchronous.
+     * Similar to {@link #readChunk(int, int, DimensionType)} but is synchronous.
      */
-    Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
+    Chunk readChunkSync(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
      * Write a chunk to the storage.
@@ -96,42 +96,42 @@ public interface WorldStorage {
      *
      * @param chunkX        the x coordinate of the chunk
      * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionInfo the dimension info of the chunk
+     * @param dimensionType the dimension type of the chunk
      * @return the entities in the chunk
      */
-    CompletableFuture<Map<Long, Entity>> readEntities(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
+    CompletableFuture<Map<Long, Entity>> readEntities(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
-     * Similar to {@link #readEntities(int, int, DimensionInfo)} but is synchronous.
+     * Similar to {@link #readEntities(int, int, DimensionType)} but is synchronous.
      */
-    Map<Long, Entity> readEntitiesSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
+    Map<Long, Entity> readEntitiesSync(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
      * Write the entities in a chunk.
      *
      * @param chunkX        the x coordinate of the chunk
      * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionInfo the dimension info of the chunk
+     * @param dimensionType the dimension type of the chunk
      * @param entities      the entities to write. Note that the key is the unique id of the entity, not the runtime id
      *                      If an empty map is passed, all existing entities in the chunk will be removed.
      * @return a future which will be completed when the entities are written
      */
-    CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities);
+    CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities);
 
     /**
-     * Similar to {@link #writeEntities(int, int, DimensionInfo, Map)} but is synchronous.
+     * Similar to {@link #writeEntities(int, int, DimensionType, Map)} but is synchronous.
      */
-    void writeEntitiesSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities);
+    void writeEntitiesSync(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities);
 
     /**
      * Check if the storage contains a chunk.
      *
      * @param chunkX        the x coordinate of the chunk
      * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionInfo the dimension info of the chunk
+     * @param dimensionType the dimension type of the chunk
      * @return {@code true} if the storage contains the chunk, {@code false} otherwise
      */
-    boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
+    boolean containChunk(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
      * Write world data to the storage.

@@ -1,8 +1,9 @@
 package org.allaymc.api.item.data;
 
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface ItemTags {
@@ -104,6 +105,8 @@ public interface ItemTags {
 
     ItemTag LOGS = create("minecraft:logs");
 
+    ItemTag ALLOW_OFFHAND = create("minecraft:allow_offhand");
+
     ItemTag HANGING_SIGN = create("minecraft:hanging_sign");
 
     ItemTag LECTERN_BOOKS = create("minecraft:lectern_books");
@@ -113,6 +116,8 @@ public interface ItemTags {
     ItemTag IS_TRIDENT = create("minecraft:is_trident");
 
     ItemTag CHAINMAIL_TIER = create("minecraft:chainmail_tier");
+
+    ItemTag CHISELED_BOOKSHELF_BOOK = create("minecraft:chiseled_bookshelf_book");
 
     ItemTag HANGING_ACTOR = create("minecraft:hanging_actor");
 
@@ -133,6 +138,8 @@ public interface ItemTags {
     ItemTag DIGGER = create("minecraft:digger");
 
     ItemTag NETHERITE_TIER = create("minecraft:netherite_tier");
+
+    ItemTag FIREPROOF = create("minecraft:fireproof");
 
     ItemTag MUSIC_DISC = create("minecraft:music_disc");
 

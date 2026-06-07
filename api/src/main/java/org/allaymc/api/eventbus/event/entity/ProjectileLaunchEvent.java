@@ -21,6 +21,9 @@ public class ProjectileLaunchEvent extends EntityEvent implements CancellableEve
      * The entity that shoot this projectile.
      */
     protected Entity shooter;
+    /**
+     * The throw force of the projectile.
+     */
     @Setter
     protected double throwForce;
 

@@ -30,7 +30,6 @@ import org.cloudburstmc.netty.channel.raknet.config.RakServerCookieMode;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.CompressionCodec;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.NoopCompression;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.SimpleCompressionStrategy;
@@ -39,8 +38,8 @@ import org.cloudburstmc.protocol.bedrock.netty.codec.packet.BedrockPacketCodec_v
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
-import java.util.OptionalInt;
 import java.util.HashSet;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -204,7 +203,7 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
     private class AllayServerInitializer extends BedrockServerInitializer {
 
         @Override
-        @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")
+        @MultiVersion(version = "*-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")
         protected void preInitChannel(Channel channel) throws Exception {
             super.preInitChannel(channel);
             new NettyPipelineInitEvent(channel).call();
@@ -225,7 +224,7 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
         }
 
         @Override
-        @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use RakNet version 8 but require v3 packet codec format")
+        @MultiVersion(version = "*-NetEase", details = "NetEase clients use RakNet version 8 but require v3 packet codec format")
         protected void initPacketCodec(Channel channel) throws Exception {
             // NetEase clients use rakVersion 8, but their packet format is the same as
             // international clients (v3), not the old v2 format that Protocol library
@@ -242,10 +241,6 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
 
         @Override
         protected void initSession(BedrockServerSession session) {
-            if (!AllayServer.getSettings().networkSettings().enableEncodingProtection()) {
-                session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
-            }
-
             initPlayerSession(session);
         }
     }

@@ -121,21 +121,4 @@ public class MegaJungleTreeFeature extends TreeWorldFeature {
         }
     }
 
-    private void placeTrunkVines(WorldFeatureContext context, List<Vector3i> placedLogs) {
-        var random = ThreadLocalRandom.current();
-        for (var log : placedLogs) {
-            if (random.nextInt(3) > 0 && isAir(context, log.x() - 1, log.y(), log.z())) {
-                placeVine(context, log.x() - 1, log.y(), log.z(), VineFace.EAST);
-            }
-            if (random.nextInt(3) > 0 && isAir(context, log.x() + 1, log.y(), log.z())) {
-                placeVine(context, log.x() + 1, log.y(), log.z(), VineFace.WEST);
-            }
-            if (random.nextInt(3) > 0 && isAir(context, log.x(), log.y(), log.z() - 1)) {
-                placeVine(context, log.x(), log.y(), log.z() - 1, VineFace.SOUTH);
-            }
-            if (random.nextInt(3) > 0 && isAir(context, log.x(), log.y(), log.z() + 1)) {
-                placeVine(context, log.x(), log.y(), log.z() + 1, VineFace.NORTH);
-            }
-        }
-    }
 }

@@ -3,7 +3,7 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Component for animal entities that can breed and grow.
+ * Component for animal entities that define their breeding items.
  *
  * @author daoge_cmd
  */

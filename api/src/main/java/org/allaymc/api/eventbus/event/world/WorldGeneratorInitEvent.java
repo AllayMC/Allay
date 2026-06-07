@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.world.World;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.function.GenerateFunction;
 import org.allaymc.api.world.generator.function.Noiser;
@@ -18,7 +18,7 @@ import org.allaymc.api.world.generator.function.PostProcessor;
  * {@link PostProcessor}s to any registered generator. {@link GenerateFunction#init(String)}
  * is called automatically on each added function.
  * <p>
- * This event is fired once per dimension per world load. Use {@link #getDimensionInfo()} and
+ * This event is fired once per dimension per world load. Use {@link #getDimensionType()} and
  * {@link #getGenerator()}'s name to selectively target generators.
  *
  * @author daoge_cmd
@@ -35,11 +35,11 @@ public class WorldGeneratorInitEvent extends WorldEvent {
     /**
      * The dimension this generator will be attached to.
      */
-    private final DimensionInfo dimensionInfo;
+    private final DimensionType dimensionType;
 
-    public WorldGeneratorInitEvent(World world, WorldGenerator generator, DimensionInfo dimensionInfo) {
+    public WorldGeneratorInitEvent(World world, WorldGenerator generator, DimensionType dimensionType) {
         super(world);
         this.generator = generator;
-        this.dimensionInfo = dimensionInfo;
+        this.dimensionType = dimensionType;
     }
 }

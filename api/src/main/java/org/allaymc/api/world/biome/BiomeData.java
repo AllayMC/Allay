@@ -17,15 +17,15 @@ public record BiomeData(
         float temperature, float downfall,
         float redSporeDensity, float blueSporeDensity, float ashDensity, float whiteAshDensity,
         float foliageSnow, float depth, float scale,
-        Color mapWaterColor, boolean rain, List<String> tags
+        Color mapWaterColor, boolean rain, List<BiomeTag> tags
 ) {
 
-    private static final Set<String> COLD_TAGS = Set.of(
-            "taiga", "extreme_hills", "frozen", "deep_down", "the_end"
+    private static final Set<BiomeTag> COLD_TAGS = Set.of(
+            BiomeTags.TAIGA, BiomeTags.EXTREME_HILLS, BiomeTags.FROZEN, BiomeTags.DEEP, BiomeTags.THE_END
     );
 
-    private static final Set<String> WARM_TAGS = Set.of(
-            "savanna", "jungle", "mesa", "desert", "lukewarm", "swamp", "nether"
+    private static final Set<BiomeTag> WARM_TAGS = Set.of(
+            BiomeTags.SAVANNA, BiomeTags.JUNGLE, BiomeTags.MESA, BiomeTags.DESERT, BiomeTags.LUKEWARM, BiomeTags.SWAMP, BiomeTags.NETHER
     );
 
     /**

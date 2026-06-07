@@ -29,6 +29,7 @@ public final class ContainerActionProcessorHolder {
         registerProcessor(new CraftGrindstoneActionProcessor());
         registerProcessor(new CraftLoomActionProcessor());
         registerProcessor(new CraftRecipeOptionalActionProcessor());
+        registerProcessor(new CraftRecipeAutoActionProcessor());
     }
 
     public <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type) {

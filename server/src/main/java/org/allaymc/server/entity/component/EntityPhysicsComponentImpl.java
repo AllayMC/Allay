@@ -328,7 +328,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     private boolean notValidEntityArea(AABBd extendAABB) {
         var dimension = thisEntity.getDimension();
-        return !(extendAABB.minY >= dimension.getDimensionInfo().minHeight()) &&
+        return !(extendAABB.minY >= dimension.getDimensionType().getMinHeight()) &&
                !dimension.getChunkManager().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
                !dimension.getChunkManager().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
