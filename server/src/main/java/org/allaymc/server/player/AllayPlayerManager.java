@@ -78,6 +78,11 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     @Override
+    public Player getPlayerByName(String playerName) {
+        return PlayerNameMatcher.findOnlinePlayerByName(players, playerName);
+    }
+
+    @Override
     public int getMaxPlayerCount() {
         return maxPlayerCount;
     }
@@ -97,11 +102,12 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public boolean isBanned(String uuidOrName) {
-        return banInfo.bannedPlayers().contains(uuidOrName);
+        return PlayerNameMatcher.containsStoredIdentity(banInfo.bannedPlayers(), normalizeOnlinePlayerIdentity(uuidOrName));
     }
 
     @Override
     public boolean ban(String uuidOrName) {
+        uuidOrName = normalizeOnlinePlayerIdentity(uuidOrName);
         if (isBanned(uuidOrName)) {
             return false;
         }
@@ -112,8 +118,9 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         banInfo.bannedPlayers().add(uuidOrName);
+        var bannedIdentity = uuidOrName;
         players.values().stream()
-                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
+                .filter(player -> PlayerNameMatcher.matchesPlayer(player, bannedIdentity))
                 .forEach(player -> player.disconnect("You are banned!"));
 
         return true;
@@ -121,6 +128,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public boolean unban(String uuidOrName) {
+        uuidOrName = resolveStoredIdentity(banInfo.bannedPlayers(), uuidOrName);
         if (!isBanned(uuidOrName)) {
             return false;
         }
@@ -205,11 +213,12 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public boolean isWhitelisted(String uuidOrName) {
-        return whitelist.whitelist().contains(uuidOrName);
+        return PlayerNameMatcher.containsStoredIdentity(whitelist.whitelist(), normalizeOnlinePlayerIdentity(uuidOrName));
     }
 
     @Override
     public boolean addToWhitelist(String uuidOrName) {
+        uuidOrName = normalizeOnlinePlayerIdentity(uuidOrName);
         if (isWhitelisted(uuidOrName)) {
             return false;
         }
@@ -224,6 +233,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public boolean removeFromWhitelist(String uuidOrName) {
+        uuidOrName = resolveStoredIdentity(whitelist.whitelist(), uuidOrName);
         if (!isWhitelisted(uuidOrName)) {
             return false;
         }
@@ -234,8 +244,9 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         whitelist.whitelist().remove(uuidOrName);
+        var whitelistedIdentity = uuidOrName;
         players.values().stream()
-                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
+                .filter(player -> PlayerNameMatcher.matchesPlayer(player, whitelistedIdentity))
                 .forEach(player -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED));
         return true;
     }
@@ -247,11 +258,12 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public boolean isOperator(String uuidOrName) {
-        return operators.operators().contains(uuidOrName);
+        return PlayerNameMatcher.containsStoredIdentity(operators.operators(), normalizeOnlinePlayerIdentity(uuidOrName));
     }
 
     @Override
     public void setOperator(String uuidOrName, boolean value) {
+        uuidOrName = value ? normalizeOnlinePlayerIdentity(uuidOrName) : resolveStoredIdentity(operators.operators(), uuidOrName);
         if (value == isOperator(uuidOrName)) {
             return;
         }
@@ -262,10 +274,20 @@ public class AllayPlayerManager implements PlayerManager {
             operators.operators().remove(uuidOrName);
         }
 
+        var operatorIdentity = uuidOrName;
         players.values().stream()
-                .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
+                .filter(player -> PlayerNameMatcher.matchesPlayer(player, operatorIdentity))
                 .findFirst()
                 .ifPresent(player -> player.viewPlayerPermission(player));
+    }
+
+    protected String normalizeOnlinePlayerIdentity(String uuidOrName) {
+        var player = getPlayerByName(uuidOrName);
+        return player != null ? player.getOriginName() : uuidOrName;
+    }
+
+    protected String resolveStoredIdentity(Set<String> identities, String uuidOrName) {
+        return PlayerNameMatcher.resolveStoredIdentity(identities, normalizeOnlinePlayerIdentity(uuidOrName));
     }
 
     public void startNetworkInterfaces() {

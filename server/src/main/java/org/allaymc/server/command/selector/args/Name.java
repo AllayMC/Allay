@@ -28,8 +28,8 @@ public class Name extends CachedSimpleSelectorArgument {
         }
 
         return entity ->
-                include.stream().allMatch(name -> entity.getCommandSenderName().equals(name)) &&
-                exclude.stream().noneMatch(name -> entity.getCommandSenderName().equals(name));
+                include.stream().allMatch(name -> entity.getCommandSenderName().equalsIgnoreCase(name)) &&
+                exclude.stream().noneMatch(name -> entity.getCommandSenderName().equalsIgnoreCase(name));
     }
 
     @Override
