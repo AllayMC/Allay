@@ -10,18 +10,6 @@ public interface Permissions {
     /* Ability */
 
     /**
-     * Permission to fly in survival mode. Only TRUE allows flying.
-     */
-    String ABILITY_FLY_SURVIVAL = "ability.fly.survival";
-    /**
-     * Permission to fly in creative mode. FALSE denies, otherwise allowed.
-     */
-    String ABILITY_FLY_CREATIVE = "ability.fly.creative";
-    /**
-     * Permission to fly in adventure mode. Only TRUE allows flying.
-     */
-    String ABILITY_FLY_ADVENTURE = "ability.fly.adventure";
-    /**
      * The permission to chat.
      */
     String ABILITY_CHAT = "ability.chat";

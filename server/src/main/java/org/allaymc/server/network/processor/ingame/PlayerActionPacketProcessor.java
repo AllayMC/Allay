@@ -22,6 +22,9 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     log.debug("Player {} tried to start item use on without stopping", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
+                if (!player.canInteractWithBlocks()) {
+                    yield PacketSignal.HANDLED;
+                }
 
                 entity.setUsingItemOnBlock(true);
                 yield PacketSignal.HANDLED;

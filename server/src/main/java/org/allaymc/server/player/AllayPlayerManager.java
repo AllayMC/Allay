@@ -265,7 +265,7 @@ public class AllayPlayerManager implements PlayerManager {
         players.values().stream()
                 .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
                 .findFirst()
-                .ifPresent(player -> player.viewPlayerPermission(player));
+                .ifPresent(player -> this.players.values().forEach(viewer -> viewer.viewPlayerAbilities(player)));
     }
 
     public void startNetworkInterfaces() {

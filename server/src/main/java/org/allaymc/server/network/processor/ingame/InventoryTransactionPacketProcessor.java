@@ -7,6 +7,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.sound.AttackSound;
@@ -85,6 +86,12 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 clickPos, blockFace
                         );
 
+                        if (!player.canInteractWithBlocks()) {
+                            player.viewBlockUpdate(clickBlockPos, 0, dimension.getBlockState(clickBlockPos));
+                            player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
+                            break;
+                        }
+
                         var event = new PlayerInteractBlockEvent(entity, interactInfo, PlayerInteractBlockEvent.Action.RIGHT_CLICK);
                         if (!event.call()) {
                             player.viewBlockUpdate(clickBlockPos, 0, dimension.getBlockState(clickBlockPos));
@@ -113,6 +120,11 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                         // Player places a block
                         if (itemInHand.getItemType() == AIR) {
+                            break;
+                        }
+
+                        if (!player.canPlaceBlocks()) {
+                            player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
                             break;
                         }
 
@@ -191,6 +203,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         // Doesn't have damage component, can't attack
                         if (!(target instanceof EntityLivingComponent damageable)) {
+                            return;
+                        }
+                        if (target instanceof EntityPlayer) {
+                            if (!player.canAttackPlayers()) {
+                                return;
+                            }
+                        } else if (!player.canAttackMobs()) {
                             return;
                         }
 
