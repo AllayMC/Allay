@@ -38,6 +38,17 @@ public class InventoryContainerImpl extends AbstractPlayerContainer implements I
     }
 
     @Override
+    public void notifySlotChange(int slot, boolean send) {
+        super.notifySlotChange(slot, send);
+        if (slot == handSlot) {
+            var player = playerSupplier.get();
+            if (player != null) {
+                player.forEachViewers(viewer -> viewer.viewEntityHand(player));
+            }
+        }
+    }
+
+    @Override
     public int getUnopenedContainerId() {
         return UnopenedContainerId.PLAYER_INVENTORY;
     }

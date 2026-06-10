@@ -408,6 +408,12 @@ public class AllayPlayer implements Player {
                 .forEach(this::viewPlayerAbilities);
         broadcastPlayerAbilities();
 
+        this.controlledEntity.forEachViewers(viewer -> {
+            viewer.viewEntityArmors(this.controlledEntity);
+            viewer.viewEntityHand(this.controlledEntity);
+            viewer.viewEntityOffhand(this.controlledEntity);
+        });
+
         sendSpeed(this.speed);
         sendExperienceLevel(this.controlledEntity.getExperienceLevel());
         sendExperienceProgress(this.controlledEntity.getExperienceProgress());
