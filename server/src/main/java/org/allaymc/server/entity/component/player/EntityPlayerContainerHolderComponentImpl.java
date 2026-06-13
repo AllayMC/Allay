@@ -138,7 +138,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     }
 
     protected void tickPickUpEntities() {
-        if (!thisPlayer.isCurrentChunkLoaded()) {
+        if (!thisPlayer.isCurrentChunkLoaded() || thisPlayer.isPhantom()) {
             return;
         }
 
