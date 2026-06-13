@@ -8,9 +8,32 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.13.0 (API 0.28.0) - Unreleased
+# 0.13.1 (API 0.29.0) - Unreleased
 
-<small>[Compare with 0.12.0](https://github.com/AllayMC/Allay/compare/0.12.0...HEAD)</small>
+<small>[Compare with 0.13.0](https://github.com/AllayMC/Allay/compare/0.13.0...HEAD)</small>
+
+### Added
+
+- (API) Added player abilities API, including `PlayerAbility`, ability getters/setters on `Player`, ability state helpers such as `canFly()`, `canPlaceBlocks()`, `isNoClip()`, `isImmutableWorld()`, and `isAlwaysFlying()`, plus `PlayerAbilitiesUpdateEvent` and cancellable `PlayerAbilitiesUpdateRequestEvent`.
+- (API) Added player ability persistence to `PlayerData`.
+- Added dashboard console command completion backed by the command tree, including command names, aliases, enum values, and online player targets.
+- Added clickable `http://` and `https://` links in dashboard console logs.
+
+### Changed
+
+- (API) `GameMode` now exposes its default `PlayerAbility` set, and player flight checks now use player abilities instead of the removed legacy fly permissions.
+- Changed RakNet send-cookie handling to use a fixed cookie internally.
+- Dashboard console commands may now be entered with a leading `/`, matching terminal console behavior.
+
+### Fixed
+
+* Fixed item-in-hand inventory desync after hand/container updates (#879). 
+* Fixed inventory synchronization after cancelled item drop actions.
+* Fixed swing sound effect playback position so it is relative to the player.
+
+# 0.13.0 (API 0.28.0) - 2026/5/15
+
+<small>[Compare with 0.12.0](https://github.com/AllayMC/Allay/compare/0.12.0...0.13.0)</small>
 
 ### Added
 
