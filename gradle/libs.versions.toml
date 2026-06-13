@@ -3,7 +3,7 @@ log4j = "2.26.0"
 commons-rng = "1.7"
 fastutil = "8.5.15"
 leveldb = "1.1.0"
-netty = "4.2.14.Final"
+netty = "4.2.15.Final"
 
 [libraries]
 # NBT
@@ -65,7 +65,7 @@ javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.16.0" }
 # Reflections
 fastreflect = { group = "me.sunlan", name = "fast-reflection", version = "1.0.3" }
 # Math computing
-joml = { group = "org.joml", name = "joml", version = "1.10.8" }
+joml = { group = "org.joml", name = "joml", version = "1.10.9" }
 joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "1.11.1" }
 # Netty
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version.ref = "netty" }
@@ -73,10 +73,10 @@ netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", ve
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.13" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "7.2.1" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "7.3.1" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.7.1" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "261.24374.191" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "261.25134.147" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.1.0" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
@@ -88,7 +88,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.46" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.43.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.43.2" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.6" }
 # bStats
@@ -113,6 +113,6 @@ stateupdater = ["updater-common", "item-updater", "block-updater"]
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version = "9.4.2" }
-gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "3.0.3" }
+gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "4.0.1" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
 publish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
