@@ -12,6 +12,7 @@ import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.server.command.AllayCommandSuggester;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
@@ -22,6 +23,10 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 import java.awt.*;
@@ -75,6 +80,7 @@ public final class Dashboard {
     private JPanel pluginTab;
     private JTabbedPane perfTabbedPane;
     private List<Integer> ramValues;
+    private CommandAutocomplete commandAutocomplete;
     private final Map<String, Map<Integer, List<Integer>>> chunkCountByWorld = new LinkedHashMap<>();
     private final Map<String, Map<Integer, List<Integer>>> entityCountByWorld = new LinkedHashMap<>();
     private String selectedWorld;
@@ -392,6 +398,7 @@ public final class Dashboard {
         updatePluginTable();
 
         cmdInput.addActionListener(new CommandListener());
+        commandAutocomplete = new CommandAutocomplete(this.cmdInput, new AllayCommandSuggester(server));
         SwingUtilities.invokeLater(() -> {
             cmdInput.setEnabled(true);
             cmdInput.requestFocusInWindow();
@@ -605,16 +612,161 @@ public final class Dashboard {
         }
     }
 
-    private class CommandListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            var cmd = cmdInput.getText().trim();
-            cmdInput.setText(""); // clear the input
-            if (cmd.isEmpty()) return;
+    private static final class CommandAutocomplete {
+        private final JTextField input;
+        private final AllayCommandSuggester suggester;
+        private final JPopupMenu popup = new JPopupMenu();
+        private final DefaultListModel<String> suggestionModel = new DefaultListModel<>();
+        private final JList<String> suggestionList = new JList<>(suggestionModel);
+        private boolean completing;
 
-            appendTextToConsole(cmd + "\n"); // show what was run in the console
-            var server = Server.getInstance();
-            server.getScheduler().runLater(server, () -> Registries.COMMANDS.execute(Server.getInstance(), cmd));
+        private CommandAutocomplete(JTextField input, AllayCommandSuggester suggester) {
+            this.input = input;
+            this.suggester = suggester;
+            this.setupPopup();
+            this.setupBindings();
+        }
+
+        private void setupPopup() {
+            this.suggestionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            this.suggestionList.setVisibleRowCount(8);
+            this.popup.setFocusable(false);
+            this.popup.add(new JScrollPane(suggestionList));
+        }
+
+        private void setupBindings() {
+            this.input.setFocusTraversalKeysEnabled(false);
+            this.input.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "complete-command");
+            this.input.getActionMap().put("complete-command", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    completeNext();
+                }
+            });
+            this.input.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "hide-command-completions");
+            this.input.getActionMap().put("hide-command-completions", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    hide();
+                }
+            });
+            this.input.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    refreshSuggestionsIfUserEdited();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    refreshSuggestionsIfUserEdited();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    refreshSuggestionsIfUserEdited();
+                }
+            });
+            this.input.addCaretListener(e -> refreshSuggestionsIfUserEdited());
+        }
+
+        private void completeNext() {
+            var completion = this.suggester.complete(this.input.getText(), this.input.getCaretPosition());
+            var candidates = completion.candidates();
+            if (candidates.isEmpty()) {
+                hide();
+                return;
+            }
+
+            var current = this.input.getText().substring(completion.replaceStart(), completion.replaceEnd());
+            var candidate = this.chooseCandidate(candidates, current);
+            this.applyCandidate(completion, candidate, this.shouldAppendSpace(candidates, candidate));
+            this.refreshSuggestions();
+        }
+
+        private String chooseCandidate(List<String> candidates, String current) {
+            if (candidates.size() == 1) {
+                return candidates.getFirst();
+            }
+
+            var currentIndex = this.indexOfIgnoreCase(candidates, current);
+            if (currentIndex == -1) {
+                return candidates.getFirst();
+            }
+
+            return candidates.get((currentIndex + 1) % candidates.size());
+        }
+
+        private void applyCandidate(AllayCommandSuggester.Completion completion, String candidate, boolean appendSpace) {
+            var text = this.input.getText();
+            var replacement = appendSpace ? candidate + " " : candidate;
+            this.completing = true;
+            try {
+                this.input.setText(text.substring(0, completion.replaceStart()) + replacement + text.substring(completion.replaceEnd()));
+                this.input.setCaretPosition(completion.replaceStart() + replacement.length());
+            } finally {
+                this.completing = false;
+            }
+        }
+
+        private boolean shouldAppendSpace(List<String> candidates, String candidate) {
+            return candidates.stream()
+                    .filter(value -> !value.equalsIgnoreCase(candidate))
+                    .noneMatch(value -> startsWithIgnoreCase(value, candidate));
+        }
+
+        private int indexOfIgnoreCase(List<String> values, String value) {
+            for (int i = 0; i < values.size(); i++) {
+                if (values.get(i).equalsIgnoreCase(value)) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private void refreshSuggestionsIfUserEdited() {
+            if (!this.completing) {
+                SwingUtilities.invokeLater(this::refreshSuggestions);
+            }
+        }
+
+        private void refreshSuggestions() {
+            if (!this.input.isShowing() || this.input.getText().isBlank()) {
+                hide();
+                return;
+            }
+
+            var completion = this.suggester.complete(this.input.getText(), this.input.getCaretPosition());
+            var candidates = completion.candidates();
+            if (candidates.isEmpty()) {
+                this.hide();
+                return;
+            }
+
+            this.showSuggestions(candidates, candidates.getFirst());
+        }
+
+        private void showSuggestions(List<String> candidates, String selected) {
+            this.suggestionModel.clear();
+            candidates.forEach(this.suggestionModel::addElement);
+            this.suggestionList.setSelectedValue(selected, true);
+            this.suggestionList.setPrototypeCellValue(candidates.stream().max(Comparator.comparingInt(String::length)).orElse(""));
+            this.popup.setPopupSize(Math.max(this.input.getWidth(), 220), Math.min(180, 24 * Math.max(1, candidates.size()) + 6));
+            if (!this.popup.isVisible()) {
+                this.popup.show(this.input, 0, this.input.getHeight());
+            }
+        }
+
+        private void hide() {
+            this.popup.setVisible(false);
+        }
+
+        private boolean startsWithIgnoreCase(String value, String prefix) {
+            if (prefix == null || prefix.isEmpty()) {
+                return true;
+            }
+
+            return value.regionMatches(true, 0, prefix, 0, prefix.length());
         }
     }
 
@@ -629,6 +781,27 @@ public final class Dashboard {
         @Override
         public void append(LogEvent event) {
             dashboard.appendTextToConsole(getLayout().toSerializable(event).toString());
+        }
+    }
+
+    private class CommandListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (commandAutocomplete != null) {
+                commandAutocomplete.hide();
+            }
+            var cmd = cmdInput.getText().trim();
+            cmdInput.setText(""); // clear the input
+            if (cmd.isEmpty()) return;
+            if (cmd.startsWith("/")) {
+                cmd = cmd.substring(1);
+            }
+            if (cmd.isEmpty()) return;
+
+            appendTextToConsole(cmd + "\n"); // show what was run in the console
+            var server = Server.getInstance();
+            var command = cmd;
+            server.getScheduler().runLater(server, () -> Registries.COMMANDS.execute(Server.getInstance(), command));
         }
     }
 }
