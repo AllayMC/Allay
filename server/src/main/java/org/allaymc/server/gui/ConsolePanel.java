@@ -31,8 +31,14 @@ import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.Serial;
+import java.net.URI;
+import java.util.regex.Pattern;
 
 /**
  * This class was based on this <a href="https://stackoverflow.com/a/6899478/5299903">code</a>
@@ -46,10 +52,51 @@ public class ConsolePanel extends JTextPane {
     private static final long serialVersionUID = 1L;
 
     private static final int MAX_DOCUMENT_CHARS = 200_000;
+    private static final String LINK_ATTRIBUTE = "link";
+    private static final Pattern LINK_PATTERN = Pattern.compile("(?i)\\bhttps?://[^\\s<>\"]+");
 
     private static Color colorCurrent = ANSIColor.RESET.getColor();
     int currentLength = 0; // Used to let ProgressBars work
     private String remaining = "";
+
+    public ConsolePanel() {
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON1) {
+                    return;
+                }
+
+                var uri = getLinkAt(e.getPoint());
+                if (uri == null) {
+                    return;
+                }
+
+                try {
+                    openLink(uri);
+                } catch (Exception ex) {
+                    log.warn("Could not open link {}", uri, ex);
+                }
+            }
+        });
+        this.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(getLinkAt(e.getPoint()) == null ? Cursor.TEXT_CURSOR : Cursor.HAND_CURSOR));
+            }
+        });
+    }
+
+    private static void openLink(URI uri) throws Exception {
+        if (!Desktop.isDesktopSupported()) {
+            return;
+        }
+
+        var desktop = Desktop.getDesktop();
+        if (desktop.isSupported(Desktop.Action.BROWSE)) {
+            desktop.browse(uri);
+        }
+    }
 
     /**
      * Append the given string in the given color to the text pane
@@ -69,7 +116,7 @@ public class ConsolePanel extends JTextPane {
             if (text.contains("\n")) {
                 // We're good to normally add to the document
                 try {
-                    getDocument().insertString(len, text, attribute);
+                    insertTextWithLinks(text, attribute);
                     trimDocument();
                 } catch (BadLocationException e) {
                     log.error("Error while appending text to console", e);
@@ -82,7 +129,7 @@ public class ConsolePanel extends JTextPane {
             // There's no newline, we should erase our progress to the start
             try {
                 getDocument().remove(len - currentLength, currentLength);
-                getDocument().insertString(len - currentLength, text, attribute);
+                insertTextWithLinks(text, attribute);
                 trimDocument();
                 currentLength = text.length();
             } catch (BadLocationException e) {
@@ -94,11 +141,68 @@ public class ConsolePanel extends JTextPane {
         currentLength += text.length();
 
         try {
-            getDocument().insertString(len, text, attribute);
+            insertTextWithLinks(text, attribute);
             trimDocument();
         } catch (BadLocationException e) {
             log.error("Error while appending text to console", e);
         }
+    }
+
+    private void insertTextWithLinks(String text, SimpleAttributeSet baseAttribute) throws BadLocationException {
+        var matcher = LINK_PATTERN.matcher(text);
+        int pos = 0;
+        while (matcher.find()) {
+            var linkStart = matcher.start();
+            var linkEnd = trimLinkEnd(text, matcher.end());
+            if (linkEnd <= linkStart) {
+                continue;
+            }
+
+            insertText(text.substring(pos, linkStart), baseAttribute);
+            var link = text.substring(linkStart, linkEnd);
+            var linkAttribute = createLinkAttribute(baseAttribute, link);
+            insertText(link, linkAttribute == null ? baseAttribute : linkAttribute);
+            pos = linkEnd;
+        }
+        insertText(text.substring(pos), baseAttribute);
+    }
+
+    private void insertText(String text, SimpleAttributeSet attribute) throws BadLocationException {
+        if (text.isEmpty()) {
+            return;
+        }
+
+        getDocument().insertString(getDocument().getLength(), text, attribute);
+    }
+
+    private static SimpleAttributeSet createLinkAttribute(SimpleAttributeSet baseAttribute, String link) {
+        var attribute = new SimpleAttributeSet(baseAttribute);
+        try {
+            attribute.addAttribute(LINK_ATTRIBUTE, URI.create(link));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+        StyleConstants.setUnderline(attribute, true);
+        return attribute;
+    }
+
+    private static int trimLinkEnd(String text, int end) {
+        while (end > 0 && ".,;:!?)]}".indexOf(text.charAt(end - 1)) != -1) {
+            end--;
+        }
+        return end;
+    }
+
+    private URI getLinkAt(Point point) {
+        var position = viewToModel2D(point);
+        if (position < 0) {
+            return null;
+        }
+
+        var doc = (StyledDocument) getDocument();
+        var element = doc.getCharacterElement(position);
+        var attribute = element.getAttributes().getAttribute(LINK_ATTRIBUTE);
+        return attribute instanceof URI uri ? uri : null;
     }
 
     private void trimDocument() {
