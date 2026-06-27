@@ -53,7 +53,16 @@ public class AllayEventBus implements EventBus {
             }
 
             var handlers = eventClassToHandlerMap.computeIfAbsent(eventClass, k -> new CopyOnWriteArrayList<>());
-            var handler = new MethodEventHandler(annotation.async(), annotation.priority(), eventClass, asyncExecutorService, method, listener);
+            var handler = new MethodEventHandler(
+                    annotation.async(),
+                    annotation.priority(),
+                    annotation.ignoreCancelled(),
+                    eventClass,
+                    asyncExecutorService,
+                    method,
+                    listener
+            );
+
             handlers.add(handler);
             handlers.sort((h1, h2) -> Integer.compare(h2.priority, h1.priority));
             listenerToHandlerMap.computeIfAbsent(listener, k -> new ArrayList<>()).add(handler);
@@ -96,7 +105,13 @@ public class AllayEventBus implements EventBus {
             return event;
         }
 
-        handlers.forEach(handler -> handler.invoke(event));
+        handlers.forEach(handler -> {
+            if (handler.ignoreCancelled && event.isCancelled()) {
+                return;
+            }
+
+            handler.invoke(event);
+        });
         return event;
     }
 }

@@ -26,4 +26,11 @@ public @interface EventHandler {
      * @return the priority of the event handler
      */
     int priority() default 0;
+
+    /**
+     * Whether cancelled events should be ignored by this handler.
+     *
+     * @return {@code true} if the event handler should not be invoked for cancelled events, otherwise {@code false}
+     */
+    boolean ignoreCancelled() default false;
 }

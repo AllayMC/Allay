@@ -20,8 +20,16 @@ public class MethodEventHandler extends AbstractEventHandler {
     protected final FastMethod method;
     protected final Object instance;
 
-    public MethodEventHandler(boolean async, int priority, Class<?> eventClass, ExecutorService asyncExecutorService, Method method, Object instance) {
-        super(async, priority, eventClass, asyncExecutorService);
+    public MethodEventHandler(
+            boolean async,
+            int priority,
+            boolean ignoreCancelled,
+            Class<?> eventClass,
+            ExecutorService asyncExecutorService,
+            Method method,
+            Object instance
+    ) {
+        super(async, priority, ignoreCancelled, eventClass, asyncExecutorService);
         this.method = FastMethod.create(
                 method,
                 FAST_MEMBER_LOADERS.computeIfAbsent(

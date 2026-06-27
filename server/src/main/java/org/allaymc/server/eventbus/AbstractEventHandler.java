@@ -12,6 +12,7 @@ public abstract class AbstractEventHandler {
 
     protected final boolean async;
     protected final int priority;
+    protected final boolean ignoreCancelled;
     protected final Class<?> eventClass;
     protected final ExecutorService asyncExecutorService;
 
