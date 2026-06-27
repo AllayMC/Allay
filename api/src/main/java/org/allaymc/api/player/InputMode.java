@@ -1,7 +1,7 @@
 package org.allaymc.api.player;
 
 /**
- * InputMode represents player's current input mode, as reported from the input.
+ * Represents a player's input mode, as reported by the client.
  *
  * @author zernix2077
  */
@@ -14,5 +14,20 @@ public enum InputMode {
      * @deprecated since 1.21.120
      */
     @Deprecated
-    MOTION_CONTROLLER
+    MOTION_CONTROLLER;
+
+    /**
+     * Get input mode by id.
+     *
+     * @param id the id of the input mode
+     * @return the input mode, or {@code null} if the id is unknown
+     */
+    public static InputMode from(int id) {
+        var values = values();
+        if (id < 0 || id > values.length) {
+            return null;
+        }
+
+        return values[id];
+    }
 }
