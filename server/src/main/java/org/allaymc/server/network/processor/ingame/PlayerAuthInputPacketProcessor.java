@@ -9,6 +9,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
+import org.allaymc.api.eventbus.event.server.PlayerControlModeUpdateEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchAirEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
@@ -393,7 +394,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
-        updatePlayerInputState(player, packet);
+        updatePlayerInputState((AllayPlayer) player, packet);
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player.getControlledEntity()).getBaseComponent());
         if (baseComponent.getExpectedTeleportPos() != null) {
@@ -488,17 +489,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         ((AllayPlayer) player).handlePacketSync(pk, receiveTime);
     }
 
-    protected void updatePlayerInputState(Player player, PlayerAuthInputPacket packet) {
-        var inputMode = switch (packet.getInputMode()) {
+    protected void updatePlayerInputState(AllayPlayer player, PlayerAuthInputPacket packet) {
+        var newInputMode = switch (packet.getInputMode()) {
             case UNDEFINED -> InputMode.UNDEFINED;
             case MOUSE -> InputMode.MOUSE;
             case TOUCH -> InputMode.TOUCH;
             case GAMEPAD -> InputMode.GAMEPAD;
             case MOTION_CONTROLLER -> InputMode.MOTION_CONTROLLER;
         };
-        ((AllayPlayer) player).setInputMode(inputMode);
+        var oldInputMode = player.getInputMode();
 
-        var playMode = switch (packet.getPlayMode()) {
+        var newPlayMode = switch (packet.getPlayMode()) {
             case NORMAL -> ClientPlayMode.NORMAL;
             case TEASER -> ClientPlayMode.TEASER;
             case SCREEN -> ClientPlayMode.SCREEN;
@@ -509,14 +510,34 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case EXIT_LEVEL -> ClientPlayMode.EXIT_LEVEL;
             case EXIT_LEVEL_LIVING_ROOM -> ClientPlayMode.EXIT_LEVEL_LIVING_ROOM;
         };
-        ((AllayPlayer) player).setPlayMode(playMode);
+        var oldPlayMode = player.getPlayMode();
 
-        var interactionModel = switch (packet.getInputInteractionModel()) {
+        var newInteractionModel = switch (packet.getInputInteractionModel()) {
             case TOUCH -> InputInteractionModel.TOUCH;
             case CROSSHAIR -> InputInteractionModel.CROSSHAIR;
             case CLASSIC -> InputInteractionModel.CLASSIC;
         };
-        ((AllayPlayer) player).setInputInteractionModel(interactionModel);
+        var oldInteractionModel = player.getInputInteractionModel();
+
+        var changed = newInputMode != oldInputMode ||
+                      newPlayMode != oldPlayMode ||
+                      newInteractionModel != oldInteractionModel;
+
+        if (changed) {
+            player.setInputMode(newInputMode);
+            player.setPlayMode(newPlayMode);
+            player.setInputInteractionModel(newInteractionModel);
+
+            new PlayerControlModeUpdateEvent(
+                    player,
+                    oldInputMode,
+                    newInputMode,
+                    oldPlayMode,
+                    newPlayMode,
+                    oldInteractionModel,
+                    newInteractionModel
+            ).call();
+        }
     }
 
     protected boolean notReadyForInput(Player player) {
