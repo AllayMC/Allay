@@ -190,9 +190,7 @@ public class DoubleChestContainerImpl implements BlockContainer {
     @Override
     public boolean addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer)) {
-            log.warn("Viewer already exists! Container: {}, Viewer: {}", getContainerType(), viewer);
-            removeViewer(viewer);
-            return addViewer(viewer);
+            return true;
         }
         if (viewer instanceof Player player && !player.canOpenContainers()) {
             return false;

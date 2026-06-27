@@ -181,6 +181,8 @@ public class AllayPlayer implements Player {
     @Getter
     @Setter
     protected boolean containerClosedByClient;
+    @Setter
+    protected boolean suppressNextContainerClosePacket;
     @Getter
     protected Speed speed, flySpeed, verticalFlySpeed;
     @Getter
@@ -2173,6 +2175,12 @@ public class AllayPlayer implements Player {
 
     @SneakyThrows
     protected void sendContainerClosePacket(byte assignedId, Container container) {
+        if (this.suppressNextContainerClosePacket) {
+            this.suppressNextContainerClosePacket = false;
+            this.containerClosedByClient = false;
+            return;
+        }
+
         var packet = new ContainerClosePacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
