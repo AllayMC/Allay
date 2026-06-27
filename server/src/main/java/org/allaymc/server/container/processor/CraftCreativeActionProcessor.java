@@ -23,6 +23,11 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
             return error();
         }
 
+        if (player.getOpenedContainer(ContainerTypes.INVENTORY) == null) {
+            log.warn("Player {} tried to take creative item without opening inventory", player.getOriginName());
+            return error();
+        }
+
         // NOTICE: 0 is not indexed by the client for items
         var item = Registries.CREATIVE_ITEMS.getEntryByIndex(action.creativeItemNetworkId() - 1).itemStack();
         if (item == null) {
