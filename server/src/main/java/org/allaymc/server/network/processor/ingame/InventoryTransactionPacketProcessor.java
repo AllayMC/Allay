@@ -58,6 +58,11 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     @Override
     public void handleSync(Player player, InventoryTransactionPacket packet, long receiveTime) {
         var entity = player.getControlledEntity();
+
+        // Fix desync issue
+        // https://github.com/CloudburstMC/Nukkit/blob/dbbb7ca6fe7e097ba25a451f9a280a9f7b251471/src/main/java/cn/nukkit/Player.java#L4287
+        entity.setHandSlot(packet.getHotbarSlot(), false);
+
         var itemInHand = entity.getItemInHand();
         var transactionType = packet.getTransactionType();
         switch (transactionType) {
