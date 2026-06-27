@@ -117,7 +117,7 @@ public interface LoginData {
          */
         public static UIProfile from(int id) {
             var values = values();
-            if (id < 0 || id > values.length) {
+            if (id < 0 || id >= values.length) {
                 return null;
             }
 

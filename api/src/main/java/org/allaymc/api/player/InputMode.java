@@ -24,7 +24,7 @@ public enum InputMode {
      */
     public static InputMode from(int id) {
         var values = values();
-        if (id < 0 || id > values.length) {
+        if (id < 0 || id >= values.length) {
             return null;
         }
 
