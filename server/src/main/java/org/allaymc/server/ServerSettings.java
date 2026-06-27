@@ -71,6 +71,10 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("If debug mode is enabled, the console will output more detailed information")
         private boolean debug = false;
 
+        @Comment("If trace mode is enabled, the console will output even more detailed information,")
+        @Comment("including packets received by all players, possibly producing a lot of unwanted spam")
+        private boolean trace = false;
+
         @Comment("If whitelist is enabled, only players in the whitelist can join the server")
         @CustomKey("enable-whitelist")
         private boolean enableWhitelist = false;
