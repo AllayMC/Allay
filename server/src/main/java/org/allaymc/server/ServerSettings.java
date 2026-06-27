@@ -119,6 +119,12 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("compression-algorithm")
         private CompressionAlgorithm compressionAlgorithm = CompressionAlgorithm.ZLIB;
 
+        @Comment("Sending movement speed updates during actions such as sprinting or using speed or slowness effects may interfere with the client's prediction")
+        @Comment("The client correctly predicts movement speed locally in all standard cases, and additional server-side updates may lead to inconsistent speed states")
+        @Comment("Disabling this may make client-side movement speed more deterministic and predictable, but may cause desynchronization if the speed attribute is updated manually by the plugin")
+        @CustomKey("send-movement-speed-updates")
+        private boolean sendMovementSpeedUpdates = true;
+
         @CustomKey("network-thread-number")
         @Comment("The number of network threads. If put zero here, the server will automatically determine the number of network threads")
         private int networkThreadNumber = 0;

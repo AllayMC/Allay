@@ -3362,7 +3362,11 @@ public class AllayPlayer implements Player {
     public void setSpeed(Speed speed) {
         if (!this.speed.equals(speed)) {
             this.speed = speed;
-            sendSpeed(this.speed);
+
+            // NOTE: Sending speed updates to the client may interfere with local movement speed prediction
+            if (AllayServer.getSettings().networkSettings().sendMovementSpeedUpdates()) {
+                sendSpeed(this.speed);
+            }
         }
     }
 
