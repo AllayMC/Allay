@@ -248,8 +248,7 @@ public final class AllayServer implements Server {
         // Disable all plugins
         this.pluginManager.disablePlugins();
 
-        // Save all configurations & data
-        SETTINGS.save();
+        // Save all data
         this.scoreboardManager.save();
         this.playerManager.shutdown();
 

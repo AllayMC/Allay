@@ -81,16 +81,6 @@ public final class AllayWorldPool implements WorldPool {
         while (this.worlds.values().stream().anyMatch(world -> world.getState() != WorldState.STOPPED)) {
             Thread.onSpinWait();
         }
-
-        // Save world settings
-        this.worldConfig.worlds().clear();
-        this.worlds.forEach((name, world) -> {
-            if (!world.isRuntimeOnly()) {
-                this.worldConfig.worlds().put(name, toWorldSetting(world));
-            }
-        });
-        applyBuiltinDimensionSettings(BuiltinDimensionSettings.get());
-        this.worldConfig.save();
     }
 
     @Override
@@ -167,6 +157,17 @@ public final class AllayWorldPool implements WorldPool {
 
         world.shutdown();
         this.worlds.remove(name);
+        this.worldConfig.worlds().remove(name);
+        this.worldConfig.save();
+    }
+
+    public void saveWorldConfig(World world) {
+        if (world.isRuntimeOnly()) {
+            this.worldConfig.worlds().remove(world.getName());
+        } else {
+            this.worldConfig.worlds().put(world.getName(), toWorldSetting(world));
+        }
+        this.worldConfig.save();
     }
 
     @Override
