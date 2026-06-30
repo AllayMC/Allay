@@ -391,8 +391,6 @@ public class AllayPlayer implements Player {
         var playerManager = server.getPlayerManager();
         var world = this.controlledEntity.getWorld();
 
-        this.controlledEntity.loadNBT(playerManager.getPlayerStorage().readPlayerData(this).getNbt());
-
         viewEntityState(this.controlledEntity);
         viewPlayerGameMode(this.controlledEntity);
         this.controlledEntity.forEachViewers(viewer -> viewer.viewPlayerGameMode(this.controlledEntity));
@@ -3463,17 +3461,6 @@ public class AllayPlayer implements Player {
             currentPos = readVector3f(playerData.getNbt(), "Pos");
         }
 
-        var storedAbilities = playerData.getAbilities();
-        if (storedAbilities == null) {
-            var permissionName = AllayServer.getSettings().genericSettings().defaultPermission().toUpperCase();
-            this.abilities.addAll(abilitiesFromPermission(PlayerPermission.valueOf(permissionName)));
-
-            var gameMode = GameMode.from(playerData.getNbt().getInt("PlayerGameMode", NetworkHelper.toNetwork(dimension.getWorld().getWorldData().getGameMode()).ordinal()));
-            this.abilities.addAll(gameMode.getAbilities());
-        } else {
-            this.abilities.addAll(storedAbilities);
-        }
-
         this.controlledEntity = EntityTypes.PLAYER.createEntity();
         this.controlledEntity.setSkin(this.loginData.getSkin());
         this.controlledEntity.setDisplayName(loginData.getXname());
@@ -3485,6 +3472,17 @@ public class AllayPlayer implements Player {
         baseComponent.setController(this);
         baseComponent.setUniqueId(this.loginData.getUuid());
         baseComponent.setPermissionCalculator(new OpPermissionCalculator(this));
+
+        this.controlledEntity.loadNBT(playerManager.getPlayerStorage().readPlayerData(this).getNbt());
+
+        var storedAbilities = playerData.getAbilities();
+        if (storedAbilities == null) {
+            var permissionName = AllayServer.getSettings().genericSettings().defaultPermission().toUpperCase();
+            this.abilities.addAll(abilitiesFromPermission(PlayerPermission.valueOf(permissionName)));
+            this.abilities.addAll(this.controlledEntity.getGameMode().getAbilities());
+        } else {
+            this.abilities.addAll(storedAbilities);
+        }
 
         var event = new PlayerSpawnEvent(this, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         if (!event.call()) {
@@ -3524,7 +3522,7 @@ public class AllayPlayer implements Player {
 
         // Send StartGamePacket to the client first before we start sending chunks, otherwise
         // the chunks will be ignored by the client, and the client will be unable to join the server
-        startGame(dimension.getWorld(), playerData, dimension);
+        startGame(dimension.getWorld(), dimension);
 
         dimension.addPlayer(this);
         playerManager.addPlayer(this);
@@ -3544,7 +3542,7 @@ public class AllayPlayer implements Player {
      * Sends {@link StartGamePacket} to the client.
      */
     @MultiVersion(version = "*", details = "MultiVersionHelper is used")
-    protected void startGame(World spawnWorld, PlayerData playerData, Dimension dimension) {
+    protected void startGame(World spawnWorld, Dimension dimension) {
         var helper = session.getPeer().getCodecHelper();
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
         helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
@@ -3554,7 +3552,7 @@ public class AllayPlayer implements Player {
         packet.getGamerules().addAll(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameRules().getGameRules()));
         packet.setUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
         packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
-        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("PlayerGameMode", NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()).ordinal())));
+        packet.setPlayerGameType(NetworkHelper.toNetwork(this.controlledEntity.getGameMode()));
         var loc = this.controlledEntity.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
