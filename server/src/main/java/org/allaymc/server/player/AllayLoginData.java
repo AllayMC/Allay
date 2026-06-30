@@ -126,6 +126,11 @@ public class AllayLoginData implements LoginData {
             this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
         }
 
+        // On some recent versions offline clients do not include xname in chain data, so this field should be used instead
+        if (!this.authed && this.xname.isEmpty() && skinMap.has("ThirdPartyName")) {
+            this.xname = skinMap.get("ThirdPartyName").getAsString();
+        }
+
         if (skinMap.has("LanguageCode")) {
             this.langCode = LangCode.valueOf(skinMap.get("LanguageCode").getAsString());
         }
