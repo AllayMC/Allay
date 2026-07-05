@@ -73,9 +73,14 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var otherDevice = server.getPlayerManager().getPlayers().get(loginData.getUuid());
-        if (otherDevice != null) {
-            otherDevice.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
+        var otherPlayer = server.getPlayerManager().getPlayers().get(loginData.getUuid());
+        if (otherPlayer != null) {
+            if (otherPlayer.getLoginData().getDeviceInfo().equals(loginData.getDeviceInfo())) {
+                otherPlayer.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
+            } else {
+                player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
+                return;
+            }
         }
 
         if (!AllayServer.getSettings().networkSettings().enableNetworkEncryption()) {
