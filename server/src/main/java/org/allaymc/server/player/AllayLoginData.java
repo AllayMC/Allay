@@ -51,6 +51,7 @@ public class AllayLoginData implements LoginData {
     @MultiVersion(version = "*-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
     public static AllayLoginData decode(LoginPacket loginPacket, boolean isNetEaseClient) {
         var loginData = new AllayLoginData();
+
         try {
             ChainValidationResult result;
             if (isNetEaseClient) {
@@ -72,6 +73,10 @@ public class AllayLoginData implements LoginData {
             return null;
         }
 
+        // On latest versions offline clients no longer include any uniquely identifying information in chain data,
+        // so we derive it from resolved xname
+        loginData.uuid = UUID.fromString(loginData.authed ? loginData.xuid : loginData.xname);
+
         return loginData;
     }
 
@@ -80,7 +85,6 @@ public class AllayLoginData implements LoginData {
 
         var extraData = result.identityClaims().extraData;
         this.xname = extraData.displayName;
-        this.uuid = extraData.identity;
         this.xuid = extraData.xuid;
         this.identityPublicKey = result.identityClaims().identityPublicKey;
 
@@ -126,7 +130,7 @@ public class AllayLoginData implements LoginData {
             this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
         }
 
-        // On some recent versions offline clients do not include xname in chain data, so this field should be used instead
+        // Offline clients on latest versions report xname as empty in chain data, so this field should be used instead
         if (!this.authed && this.xname.isEmpty() && skinMap.has("ThirdPartyName")) {
             this.xname = skinMap.get("ThirdPartyName").getAsString();
         }
