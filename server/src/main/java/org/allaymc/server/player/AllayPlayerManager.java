@@ -277,7 +277,12 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     public synchronized void addPlayer(Player player) {
-        this.players.put(player.getLoginData().getUuid(), player);
+        var previous = this.players.put(player.getLoginData().getUuid(), player);
+        if (previous != null) {
+            // May happen if two players with same uuid try to connect in same time
+            previous.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_BODY_LOGGEDINELSEWHERE);
+        }
+
         updatePlayerCount();
         Server.getInstance().getMessageChannel().addReceiver(player.getControlledEntity());
         broadcastPlayerListChange(player, true);
@@ -291,8 +296,11 @@ public class AllayPlayerManager implements PlayerManager {
 
         // At this time the client has disconnected
         if (player.getLastClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
-            this.players.remove(player.getLoginData().getUuid());
-            updatePlayerCount();
+            var uuid = player.getLoginData().getUuid();
+            if (this.players.get(uuid) == player) {
+                this.players.remove(uuid);
+                updatePlayerCount();
+            }
 
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
