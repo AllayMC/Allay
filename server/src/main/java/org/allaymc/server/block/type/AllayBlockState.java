@@ -110,12 +110,17 @@ public record AllayBlockState(
         var succeedCount = 0;
         var succeed = new boolean[propertyValues.size()];
         for (int i = 0; i < blockPropertyValues.length; i++) {
-            int index;
-            if ((index = propertyValues.indexOf(blockPropertyValues[i])) != -1) {
-                succeedCount++;
-                succeed[index] = true;
-                newPropertyValues[i] = propertyValues.get(index);
-            } else newPropertyValues[i] = blockPropertyValues[i];
+            var found = false;
+            for (int j = 0; j < propertyValues.size(); j++) {
+                if (propertyValues.get(j).getPropertyType() == blockPropertyValues[i].getPropertyType()) {
+                    succeedCount++;
+                    succeed[j] = true;
+                    newPropertyValues[i] = propertyValues.get(j);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) newPropertyValues[i] = blockPropertyValues[i];
         }
 
         if (succeedCount != propertyValues.size()) {
