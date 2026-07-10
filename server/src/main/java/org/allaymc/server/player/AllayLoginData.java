@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.LangCode;
+import org.allaymc.api.player.InputMode;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.Skin;
 import org.allaymc.server.network.multiversion.MultiVersion;
@@ -36,6 +37,9 @@ public class AllayLoginData implements LoginData {
     private DeviceInfo deviceInfo;
     private LangCode langCode;
     private String gameVersion;
+    private String serverAddress;
+    private InputMode currentInputMode;
+    private InputMode defaultInputMode;
     private Skin skin;
     private String identityPublicKey;
     private NetEaseData netEaseData;
@@ -132,6 +136,18 @@ public class AllayLoginData implements LoginData {
 
         if (skinMap.has("GameVersion")) {
             this.gameVersion = skinMap.get("GameVersion").getAsString();
+        }
+
+        if (skinMap.has("ServerAddress")) {
+            this.serverAddress = skinMap.get("ServerAddress").getAsString();
+        }
+
+        if (skinMap.has("CurrentInputMode")) {
+            this.currentInputMode = InputMode.from(skinMap.get("CurrentInputMode").getAsInt());
+        }
+
+        if (skinMap.has("DefaultInputMode")) {
+            this.defaultInputMode = InputMode.from(skinMap.get("DefaultInputMode").getAsInt());
         }
 
         var skinBuilder = Skin.builder();

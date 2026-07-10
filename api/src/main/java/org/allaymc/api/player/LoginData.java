@@ -68,6 +68,29 @@ public interface LoginData {
     String getGameVersion();
 
     /**
+     * Gets the server address the client used to join the server.
+     * <p>
+     * This can be used to distinguish between subdomains that point to the same IP endpoint.
+     *
+     * @return the server address used by the client
+     */
+    String getServerAddress();
+
+    /**
+     * Gets the player's current input mode at login.
+     *
+     * @return the player's current input mode at login
+     */
+    InputMode getCurrentInputMode();
+
+    /**
+     * Gets the default input mode for the player's platform.
+     *
+     * @return the default input mode for the player's platform
+     */
+    InputMode getDefaultInputMode();
+
+    /**
      * Gets the player's skin.
      *
      * @return the player's skin
@@ -94,7 +117,7 @@ public interface LoginData {
          */
         public static UIProfile from(int id) {
             var values = values();
-            if (id < 0 || id > values.length) {
+            if (id < 0 || id >= values.length) {
                 return null;
             }
 
