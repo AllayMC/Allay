@@ -26,7 +26,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
     public static final float DEFAULT_FAT_AABB_MARGIN = 0f;
 
     private final List<AABBTreeNode<T>> nodes;
-    private final AABBTreeHeuristicFunction<T> insertionHeuristicFunction;
+    private final AABBTreeHeuristic<T> insertionHeuristicFunction;
     private final AABBOverlapFilter<T> defaultAABBOverlapFilter;
     private final CollisionFilter<T> defaultCollisionFilter;
     private final Map<AABBTreeObject<T>, Integer> objects;
@@ -38,10 +38,10 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
     private int root;
 
     public AABBTree() {
-        this(new AreaAABBHeuristicFunction<>(), DEFAULT_FAT_AABB_MARGIN);
+        this(new AreaAABBHeuristic<>(), DEFAULT_FAT_AABB_MARGIN);
     }
 
-    public AABBTree(AABBTreeHeuristicFunction<T> insertionHeuristicFunction, float fatAABBMargin) {
+    public AABBTree(AABBTreeHeuristic<T> insertionHeuristicFunction, float fatAABBMargin) {
         nodes = new ObjectArrayList<>();
         root = AABBTreeNode.INVALID_NODE_INDEX;
         this.insertionHeuristicFunction = insertionHeuristicFunction;
@@ -239,9 +239,9 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             AABBd aabbA = leftChild.getAabb();
             AABBd aabbB = rightChild.getAabb();
 
-            AABBTreeHeuristicFunction.HeuristicResult heuristicResult = insertionHeuristicFunction
+            AABBTreeHeuristic.HeuristicResult heuristicResult = insertionHeuristicFunction
                     .getInsertionHeuristic(aabbA, aabbB, nodeToAdd.getData(), nodeToAddAABB);
-            parentNode = AABBTreeHeuristicFunction.HeuristicResult.LEFT.equals(heuristicResult) ? leftChild : rightChild;
+            parentNode = AABBTreeHeuristic.HeuristicResult.LEFT.equals(heuristicResult) ? leftChild : rightChild;
         }
 
         int oldParentIndex = parentNode.getParent();

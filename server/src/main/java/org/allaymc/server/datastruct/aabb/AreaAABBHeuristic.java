@@ -8,7 +8,7 @@ import static org.allaymc.server.datastruct.aabb.AABBUtils.getArea;
 /**
  * @author daoge_cmd
  */
-public class AreaAABBHeuristicFunction<T extends HasAABB> implements AABBTreeHeuristicFunction<T> {
+public class AreaAABBHeuristic<T extends HasAABB> implements AABBTreeHeuristic<T> {
     private final AABBd temp = new AABBd();
 
     @Override

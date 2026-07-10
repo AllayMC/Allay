@@ -7,7 +7,7 @@ import org.joml.primitives.AABBd;
  * @author daoge_cmd
  */
 @FunctionalInterface
-public interface AABBTreeHeuristicFunction<T extends HasAABB> {
+public interface AABBTreeHeuristic<T extends HasAABB> {
     HeuristicResult getInsertionHeuristic(AABBd left, AABBd right, T object, AABBd objectAABB);
 
     enum HeuristicResult {
