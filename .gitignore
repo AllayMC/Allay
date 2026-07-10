@@ -35,7 +35,10 @@
 /server/players
 /server/plugins
 /server/resource_packs
-/server/server-settings.yml
 /server/worlds
 /server/ban-info.yml
+/server/biome-ids.yml
+/server/dimension-ids.yml
+/server/operators.yml
+/server/server-settings.yml
 /server/whitelist.yml
