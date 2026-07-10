@@ -126,6 +126,10 @@ public class AllayLoginData implements LoginData {
             this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
         }
 
+        if (!this.authed && this.xname.isEmpty() && skinMap.has("ThirdPartyName")) {
+            this.xname = skinMap.get("ThirdPartyName").getAsString();
+        }
+
         if (skinMap.has("LanguageCode")) {
             this.langCode = LangCode.valueOf(skinMap.get("LanguageCode").getAsString());
         }
