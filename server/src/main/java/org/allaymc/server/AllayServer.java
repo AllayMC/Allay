@@ -32,7 +32,7 @@ import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.scroreboard.JsonScoreboardStorage;
 import org.allaymc.server.terminal.AllayTerminalConsole;
-import org.allaymc.server.utils.AllayForkJoinWorkerThreadFactory;
+import org.allaymc.server.utils.AllayComputeThreadFactory;
 import org.allaymc.server.utils.GameLoop;
 import org.allaymc.server.utils.SignalUtils;
 import org.allaymc.server.utils.Utils;
@@ -154,7 +154,7 @@ public final class AllayServer implements Server {
                 SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ?
                         Runtime.getRuntime().availableProcessors() :
                         SETTINGS.genericSettings().maxComputeThreadCount(),
-                new AllayForkJoinWorkerThreadFactory(), null, true
+                new AllayComputeThreadFactory(), null, true
         );
     }
 

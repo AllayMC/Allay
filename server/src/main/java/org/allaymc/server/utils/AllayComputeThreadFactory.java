@@ -8,7 +8,7 @@ import java.util.concurrent.ForkJoinWorkerThread;
 /**
  * @author daoge_cmd
  */
-public class AllayForkJoinWorkerThreadFactory implements ForkJoinPool.ForkJoinWorkerThreadFactory {
+public class AllayComputeThreadFactory implements ForkJoinPool.ForkJoinWorkerThreadFactory {
     @Override
     public ForkJoinWorkerThread newThread(ForkJoinPool pool) {
         var thread = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(pool);
