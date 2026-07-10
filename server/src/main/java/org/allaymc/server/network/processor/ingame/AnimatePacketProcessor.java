@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import org.allaymc.api.entity.action.SimpleEntityAction;
+import org.allaymc.api.eventbus.event.player.PlayerSwingArmEvent;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
@@ -14,6 +15,7 @@ public class AnimatePacketProcessor extends PacketProcessor<AnimatePacket> {
     @Override
     public PacketSignal handleAsync(Player player, AnimatePacket packet, long receiveTime) {
         if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
+            new PlayerSwingArmEvent(player.getControlledEntity()).call();
             player.getControlledEntity().applyAction(SimpleEntityAction.SWING_ARM);
             return PacketSignal.HANDLED;
         }
