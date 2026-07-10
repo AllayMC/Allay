@@ -160,6 +160,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.startUsingItemInAirTime = -1;
         this.cooldowns = new NonBlockingHashMap<>();
         this.foodLevel = MAX_FOOD_LEVEL;
+        this.foodSaturationLevel = MAX_FOOD_SATURATION_LEVEL;
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
         this.chunkLoadingRadius = AllayServer.getSettings().worldSettings().viewDistance();
         this.chunkMaxSendCountPerTick = AllayServer.getSettings().worldSettings().chunkMaxSendCountPerTick();
@@ -389,7 +390,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var currentFoodLevel = getFoodLevel();
         var difficulty = getWorld().getWorldData().getDifficulty();
         if (difficulty == Difficulty.PEACEFUL && foodTickTimer % 10 == 0) {
-            setFoodLevel(currentFoodLevel + 1);
+            if (currentFoodLevel < MAX_FOOD_LEVEL) {
+                setFoodLevel(currentFoodLevel + 1);
+            }
             if (foodTickTimer % 20 == 0) {
                 regenerate(false);
             }
