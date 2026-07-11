@@ -78,8 +78,10 @@ public class AllayLoginData implements LoginData {
         }
 
         // On latest versions offline clients no longer include any uniquely identifying information in chain data,
-        // so we derive it from resolved xname
-        loginData.uuid = UUID.fromString(loginData.authed ? loginData.xuid : loginData.xname);
+        // so we derive it from resolved xname for offline clients and from xuid for online clients.
+        // We use "xuid:" and "xname:" prefixes to ensure no collision between offline and online accounts is possible.
+        var key = loginData.authed ? "xuid:" + loginData.xuid : "xname:" + loginData.xname;
+        loginData.uuid = UUID.nameUUIDFromBytes(key.getBytes(StandardCharsets.UTF_8));
 
         return loginData;
     }
