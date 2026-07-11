@@ -87,9 +87,7 @@ public class BaseContainer implements Container {
     @Override
     public boolean addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer)) {
-            log.warn("Viewer already exists! Container: {}, Viewer: {}", this.containerType, viewer);
-            removeViewer(viewer);
-            return addViewer(viewer);
+            return true;
         }
         if (viewer instanceof Player player && this instanceof BlockContainer && !player.canOpenContainers()) {
             return false;
