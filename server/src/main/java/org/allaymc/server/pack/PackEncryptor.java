@@ -6,7 +6,6 @@ import com.google.gson.Strictness;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.pack.PackManifest;
-import org.allaymc.server.utils.JSONUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.crypto.Cipher;
@@ -215,8 +214,10 @@ public final class PackEncryptor {
             throw new IllegalArgumentException("manifest file not exists");
         }
 
-        var manifest = JSONUtils.from(new InputStreamReader(zip.getInputStream(manifestEntry), StandardCharsets.UTF_8), PackManifest.class);
-        return manifest.getHeader().getUuid().toString();
+        try (var reader = new InputStreamReader(zip.getInputStream(manifestEntry), StandardCharsets.UTF_8)) {
+            var manifest = PackManifest.fromJson(reader);
+            return manifest.getHeader().getUuid().toString();
+        }
     }
 
     @SneakyThrows
