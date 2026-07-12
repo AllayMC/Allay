@@ -959,6 +959,14 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    public static void initGoatHorn() {
+        ItemTypes.GOAT_HORN = AllayItemType
+                .builder(ItemGoatHornStackImpl.class)
+                .vanillaItem(ItemId.GOAT_HORN)
+                .addComponent(ItemGoatHornBaseComponentImpl::new, ItemGoatHornBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initCrossbow() {
         ItemTypes.CROSSBOW = AllayItemType
                 .builder(ItemCrossbowStackImpl.class)
