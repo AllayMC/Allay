@@ -110,8 +110,8 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
             return;
         }
 
-        // Enable detailed packet logging if debug mode is enabled
-        if (AllayServer.getSettings().genericSettings().debug()) {
+        // Enable detailed packet logging if debug packets mode is enabled
+        if (AllayServer.getSettings().networkSettings().debugPackets()) {
             session.setLogging(true);
         }
 

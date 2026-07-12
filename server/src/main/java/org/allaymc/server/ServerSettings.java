@@ -114,6 +114,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("enable-network-encryption")
         private boolean enableNetworkEncryption = true;
 
+        @Comment("Log detailed packet information for each player session")
+        @CustomKey("debug-packets")
+        private boolean debugPackets = false;
+
         @Comment("The compression algorithm used for network data streams. Possible values: ZLIB, SNAPPY")
         @Comment("ZLIB has better compression ratios and SNAPPY has better compression performance")
         @CustomKey("compression-algorithm")
