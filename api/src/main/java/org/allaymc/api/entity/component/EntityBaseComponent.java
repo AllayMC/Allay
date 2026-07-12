@@ -2,6 +2,8 @@ package org.allaymc.api.entity.component;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.primitiveshape.PrimitiveShape;
@@ -736,7 +738,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         var eyeLoc = getLocation().add(0, getEyeHeight(), 0, new Vector3d());
         var eyesBlockState = dim.getBlockState(eyeLoc);
 
-        return eyesBlockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
+        return isWaterOrBubbleColumn(eyesBlockState) &&
                eyesBlockState.getBlockStateData().computeOffsetShape(MathUtils.floor(eyeLoc)).intersectsPoint(eyeLoc);
     }
 
@@ -750,8 +752,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         var loc = getLocation();
         var blockState = dim.getBlockState(loc);
 
-        return blockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
+        return isWaterOrBubbleColumn(blockState) &&
                blockState.getBlockStateData().computeOffsetShape(MathUtils.floor(loc)).intersectsPoint(loc);
+    }
+
+    private static boolean isWaterOrBubbleColumn(BlockState blockState) {
+        return blockState.getBlockType().hasBlockTag(BlockTags.WATER) ||
+               blockState.getBlockType() == BlockTypes.BUBBLE_COLUMN;
     }
 
     /**
