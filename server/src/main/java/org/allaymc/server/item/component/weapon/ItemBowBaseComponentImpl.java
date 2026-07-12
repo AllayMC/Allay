@@ -75,7 +75,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         );
         arrow.setShooter(player);
         arrow.setPotionType(potionType);
-        if (infinity || creative) {
+        if (shouldDisableArrowPickup(creative, infinity, potionType != null)) {
             arrow.setInfinite(true);
         }
         arrow.setPowerLevel(powerLevel);
@@ -158,5 +158,9 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         }
 
         return arrow;
+    }
+
+    static boolean shouldDisableArrowPickup(boolean creative, boolean infinity, boolean tipped) {
+        return creative || infinity && !tipped;
     }
 }

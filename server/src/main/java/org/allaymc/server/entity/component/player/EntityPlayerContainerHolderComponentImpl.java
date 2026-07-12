@@ -193,7 +193,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 .stream()
                 .filter(EntityArrow.class::isInstance)
                 .map(EntityArrow.class::cast)
-                .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
+                .filter(EntityPlayerContainerHolderComponentImpl::isArrowReadyForPickup)
                 .toList();
         for (var entityArrow : entityArrows) {
             if (entityArrow.willBeDespawnedLater()) {
@@ -260,6 +260,10 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 entityTrident.remove();
             }
         }
+    }
+
+    static boolean isArrowReadyForPickup(EntityArrow arrow) {
+        return arrow.isInGround();
     }
 
     @EventHandler
