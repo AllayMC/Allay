@@ -43,6 +43,9 @@ import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderCom
 import org.allaymc.server.entity.component.player.EntityPlayerLivingComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.component.projectile.*;
+import org.allaymc.server.entity.component.vehicle.EntityBoatBaseComponentImpl;
+import org.allaymc.server.entity.component.vehicle.EntityBoatLivingComponentImpl;
+import org.allaymc.server.entity.component.vehicle.EntityBoatPhysicsComponentImpl;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 import org.joml.Vector3i;
@@ -58,6 +61,16 @@ import static org.allaymc.server.entity.ai.evaluator.LogicHelper.any;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class EntityTypeInitializer {
+    public static void initBoat() {
+        EntityTypes.BOAT = AllayEntityType
+                .builder(EntityBoatImpl.class)
+                .vanillaEntity(EntityId.BOAT)
+                .addComponent(EntityBoatBaseComponentImpl::new, EntityBoatBaseComponentImpl.class)
+                .addComponent(EntityBoatLivingComponentImpl::new, EntityBoatLivingComponentImpl.class)
+                .addComponent(EntityBoatPhysicsComponentImpl::new, EntityBoatPhysicsComponentImpl.class)
+                .build();
+    }
+
     public static void initFallingBlock() {
         EntityTypes.FALLING_BLOCK = AllayEntityType
                 .builder(EntityFallingBlockImpl.class)
