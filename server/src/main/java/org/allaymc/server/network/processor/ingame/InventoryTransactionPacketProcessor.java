@@ -58,10 +58,14 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     @Override
     public void handleSync(Player player, InventoryTransactionPacket packet, long receiveTime) {
         var entity = player.getControlledEntity();
-        var itemInHand = entity.getItemInHand();
+
         var transactionType = packet.getTransactionType();
+        var itemInHand = entity.getItemInHand();
         switch (transactionType) {
             case ITEM_USE -> {
+                entity.setHandSlot(packet.getHotbarSlot(), false);
+                itemInHand = entity.getItemInHand();
+
                 var blockFace = BlockFace.fromIndex(packet.getBlockFace());
                 var world = entity.getLocation().dimension();
                 switch (packet.getActionType()) {
@@ -187,6 +191,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 if (!entity.canReach(target.getLocation())) {
                     return;
                 }
+
+                entity.setHandSlot(packet.getHotbarSlot(), false);
+                itemInHand = entity.getItemInHand();
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
