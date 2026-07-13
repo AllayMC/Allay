@@ -15,7 +15,7 @@ public class LambdaEventHandler<E extends Event> extends AbstractEventHandler {
     protected final Consumer<E> eventConsumer;
 
     public LambdaEventHandler(boolean async, int priority, Class<E> eventClass, ExecutorService asyncExecutorService, Consumer<E> eventConsumer) {
-        super(async, priority, eventClass, asyncExecutorService);
+        super(async, priority, false, eventClass, asyncExecutorService);
         this.eventConsumer = eventConsumer;
     }
 
