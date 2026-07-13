@@ -49,7 +49,12 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
                 continue;
             }
 
-            var recipe = parseShapeless(shapelessRecipe.getAsJsonObject());
+            var recipe = isFurnaceLike(shapelessRecipe.getAsJsonObject()) ?
+                    parseFurnaceLikeShapeless(shapelessRecipe.getAsJsonObject()) :
+                    parseShapeless(shapelessRecipe.getAsJsonObject());
+            if (recipe == null) {
+                continue;
+            }
             recipes.put(recipe.getIdentifier(), recipe);
         }
 
@@ -68,14 +73,17 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
         }
 
         // Furnace
-        var furnaceRecipes = obj.getAsJsonArray("furnaceAux");
-        for (var furnaceRecipe : furnaceRecipes) {
-            if (isDeprecated(furnaceRecipe.getAsJsonObject())) {
-                continue;
-            }
+        var furnaceRecipeElement = obj.get("furnaceAux");
+        if (furnaceRecipeElement != null && !furnaceRecipeElement.isJsonNull()) {
+            var furnaceRecipes = furnaceRecipeElement.getAsJsonArray();
+            for (var furnaceRecipe : furnaceRecipes) {
+                if (isDeprecated(furnaceRecipe.getAsJsonObject())) {
+                    continue;
+                }
 
-            var recipe = parseFurnace(furnaceRecipe.getAsJsonObject());
-            recipes.put(recipe.getIdentifier(), recipe);
+                var recipe = parseFurnace(furnaceRecipe.getAsJsonObject());
+                recipes.put(recipe.getIdentifier(), recipe);
+            }
         }
 
         // Potion
@@ -96,6 +104,17 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
 
     protected static boolean isDeprecated(JsonObject obj) {
         return obj.has("tag") && obj.get("tag").getAsString().equals("deprecated");
+    }
+
+    protected static boolean isFurnaceLike(JsonObject obj) {
+        if (!obj.has("tag")) {
+            return false;
+        }
+
+        return switch (obj.get("tag").getAsString()) {
+            case "furnace", "blast_furnace", "smoker", "campfire", "soul_campfire" -> true;
+            default -> false;
+        };
     }
 
     protected static SmithingTrimRecipe parseSmithingTrim(JsonObject obj) {
@@ -138,6 +157,20 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
                     case "cartography_table" -> ShapelessRecipe.Type.CARTOGRAPHY_TABLE;
                     default -> throw new IllegalStateException("Unhandled tag for shapeless recipe: " + obj.get("tag").getAsString());
                 }
+        );
+    }
+
+    protected static FurnaceRecipe parseFurnaceLikeShapeless(JsonObject obj) {
+        var input = obj.getAsJsonArray("input").get(0).getAsJsonObject();
+        if (!input.has("item")) {
+            log.warn("Skipping unsupported tag-based furnace recipe: {}", obj.get("id").getAsString());
+            return null;
+        }
+
+        return new FurnaceRecipe(
+                RecipeJsonUtils.parseItemStack(input),
+                RecipeJsonUtils.parseOutput(obj.getAsJsonArray("output").get(0).getAsJsonObject()),
+                FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase(Locale.ROOT))
         );
     }
 

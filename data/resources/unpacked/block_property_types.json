@@ -1000,6 +1000,17 @@
         "z"
       ]
     },
+    "potent_sulfur_state": {
+      "serializationName": "potent_sulfur_state",
+      "valueType": "ENUM",
+      "values": [
+        "dry",
+        "wet",
+        "dormant",
+        "erupting",
+        "continuous"
+      ]
+    },
     "powered_bit": {
       "serializationName": "powered_bit",
       "valueType": "BOOLEAN",
