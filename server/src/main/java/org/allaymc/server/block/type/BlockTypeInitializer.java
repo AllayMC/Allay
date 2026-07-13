@@ -1139,6 +1139,15 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initBubbleColumn() {
+        BlockTypes.BUBBLE_COLUMN = AllayBlockType
+                .builder(BlockBubbleColumnBehaviorImpl.class)
+                .vanillaBlock(BlockId.BUBBLE_COLUMN)
+                .setProperties(BlockPropertyTypes.DRAG_DOWN)
+                .setBaseComponentSupplier(BlockBubbleColumnBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initLava() {
         BlockTypes.LAVA = AllayBlockType
                 .builder(BlockLiquidBehaviorImpl.class)
@@ -1694,6 +1703,14 @@ public final class BlockTypeInitializer {
                 .builder(BlockMagmaBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGMA)
                 .setBaseComponentSupplier(BlockMagmaBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSoulSand() {
+        BlockTypes.SOUL_SAND = AllayBlockType
+                .builder(BlockSoulSandBehaviorImpl.class)
+                .vanillaBlock(BlockId.SOUL_SAND)
+                .setBaseComponentSupplier(BlockSoulSandBaseComponentImpl::new)
                 .build();
     }
 

@@ -6,16 +6,14 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.interfaces.EntityLiving;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
- * @author IWareQ
+ * Allay Project 2026/7/12
+ *
+ * @author Miroshka000
  */
-public class BlockMagmaBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockMagmaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockSoulSandBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockSoulSandBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
@@ -30,17 +28,6 @@ public class BlockMagmaBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         if (face == BlockFace.UP) {
             BlockBubbleColumnBaseComponentImpl.updateAbove(block);
-        }
-    }
-
-    @Override
-    public void onCollideWithEntity(Block block, Entity entity) {
-        if (entity instanceof EntityLiving living) {
-            if (entity instanceof EntityPlayer player && player.isSneaking()) {
-                return;
-            }
-
-            living.attack(DamageContainer.magma(1));
         }
     }
 }
