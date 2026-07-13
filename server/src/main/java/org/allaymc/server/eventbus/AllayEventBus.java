@@ -105,13 +105,7 @@ public class AllayEventBus implements EventBus {
             return event;
         }
 
-        handlers.forEach(handler -> {
-            if (handler.ignoreCancelled && event.isCancelled()) {
-                return;
-            }
-
-            handler.invoke(event);
-        });
+        handlers.forEach(handler -> handler.invoke(event));
         return event;
     }
 }

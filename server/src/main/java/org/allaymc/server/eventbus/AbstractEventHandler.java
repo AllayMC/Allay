@@ -1,6 +1,7 @@
 package org.allaymc.server.eventbus;
 
 import lombok.AllArgsConstructor;
+import org.allaymc.api.eventbus.event.Event;
 
 import java.util.concurrent.ExecutorService;
 
@@ -18,10 +19,28 @@ public abstract class AbstractEventHandler {
 
     public void invoke(Object event) {
         if (!async) {
+            if (shouldIgnore(event)) {
+                return;
+            }
+
             invoke0(event);
         } else {
-            asyncExecutorService.submit(() -> invoke0(event));
+            if (shouldIgnore(event)) {
+                return;
+            }
+
+            asyncExecutorService.submit(() -> {
+                if (shouldIgnore(event)) {
+                    return;
+                }
+
+                invoke0(event);
+            });
         }
+    }
+
+    protected boolean shouldIgnore(Object event) {
+        return ignoreCancelled && ((Event) event).isCancelled();
     }
 
     protected abstract void invoke0(Object event);
