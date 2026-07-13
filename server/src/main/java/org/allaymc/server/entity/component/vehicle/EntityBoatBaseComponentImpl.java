@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.vehicle;
 
+import lombok.Getter;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityBoatBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -43,12 +44,17 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
     @Dependency
     protected EntityPhysicsComponent physicsComponent;
 
-    protected BoatVariant variant = BoatVariant.OAK;
+    @Getter
+    protected BoatVariant boatVariant = BoatVariant.OAK;
     protected final List<EntityPlayer> passengers = new ArrayList<>(2);
     protected final Vector2f movementInput = new Vector2f();
-    protected boolean paddleLeft;
-    protected boolean paddleRight;
+    @Getter
+    protected boolean paddlingLeft;
+    @Getter
+    protected boolean paddlingRight;
+    @Getter
     protected float rowTimeLeft;
+    @Getter
     protected float rowTimeRight;
     protected long lastInputTick = Long.MIN_VALUE;
 
@@ -62,35 +68,10 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
     }
 
     @Override
-    public BoatVariant getBoatVariant() {
-        return variant;
-    }
-
-    @Override
     public void setBoatVariant(BoatVariant variant) {
-        this.variant = Objects.requireNonNull(variant, "variant");
+        this.boatVariant = Objects.requireNonNull(variant, "variant");
         broadcastState();
         updatePassengerPositions();
-    }
-
-    @Override
-    public float getRowTimeLeft() {
-        return rowTimeLeft;
-    }
-
-    @Override
-    public float getRowTimeRight() {
-        return rowTimeRight;
-    }
-
-    @Override
-    public boolean isPaddlingLeft() {
-        return paddleLeft;
-    }
-
-    @Override
-    public boolean isPaddlingRight() {
-        return paddleRight;
     }
 
     @Override
@@ -167,8 +148,8 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
         }
 
         this.movementInput.set(movement == null ? new Vector2f() : movement);
-        this.paddleLeft = paddleLeft;
-        this.paddleRight = paddleRight;
+        this.paddlingLeft = paddleLeft;
+        this.paddlingRight = paddleRight;
         this.lastInputTick = getTick();
     }
 
@@ -190,10 +171,10 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
         var forward = Math.clamp(movementInput.y(), -1f, 1f);
         var steer = Math.clamp(movementInput.x(), -1f, 1f);
         if (Math.abs(forward) < 0.001f && Math.abs(steer) < 0.001f) {
-            if (paddleLeft && paddleRight) {
+            if (paddlingLeft && paddlingRight) {
                 forward = 1;
-            } else if (paddleLeft != paddleRight) {
-                steer = paddleRight ? 1 : -1;
+            } else if (paddlingLeft != paddlingRight) {
+                steer = paddlingRight ? 1 : -1;
             }
         }
 
@@ -204,7 +185,7 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
         }
 
         double acceleration = forward >= 0 ? 0.04 * forward : 0.02 * forward;
-        if (Math.abs(forward) < 0.001f && paddleLeft != paddleRight) {
+        if (Math.abs(forward) < 0.001f && paddlingLeft != paddlingRight) {
             acceleration = 0.005;
         }
         if (Math.abs(acceleration) < 0.00001) {
@@ -230,8 +211,8 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
     protected void updateRowingAnimation() {
         var oldLeft = rowTimeLeft;
         var oldRight = rowTimeRight;
-        rowTimeLeft = paddleLeft ? rowTimeLeft + (float) (Math.PI / 8) : 0;
-        rowTimeRight = paddleRight ? rowTimeRight + (float) (Math.PI / 8) : 0;
+        rowTimeLeft = paddlingLeft ? rowTimeLeft + (float) (Math.PI / 8) : 0;
+        rowTimeRight = paddlingRight ? rowTimeRight + (float) (Math.PI / 8) : 0;
         if (Float.compare(oldLeft, rowTimeLeft) != 0 || Float.compare(oldRight, rowTimeRight) != 0) {
             broadcastState();
         }
@@ -239,8 +220,8 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
 
     protected void clearInput() {
         movementInput.zero();
-        paddleLeft = false;
-        paddleRight = false;
+        paddlingLeft = false;
+        paddlingRight = false;
     }
 
     @Override
@@ -251,7 +232,7 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
 
         for (int i = 0; i < passengers.size(); i++) {
             var localX = passengers.size() == 1 ? 0 : (i == 0 ? 0.2 : -0.6);
-            var localY = variant.isRaft() ? 0.1 : -0.2;
+            var localY = boatVariant.isRaft() ? 0.1 : -0.2;
             var yaw = Math.toRadians(getLocation().yaw());
             var x = getLocation().x() + localX * Math.cos(yaw);
             var z = getLocation().z() + localX * Math.sin(yaw);
@@ -296,14 +277,14 @@ public class EntityBoatBaseComponentImpl extends EntityBaseComponentImpl impleme
 
     @EventHandler
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
-        event.getNbt().putInt(TAG_VARIANT, variant.getNetworkId());
+        event.getNbt().putInt(TAG_VARIANT, boatVariant.getNetworkId());
     }
 
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         if (event.getNbt().containsKey(TAG_VARIANT)) {
             var loaded = BoatVariant.fromNetworkId(event.getNbt().getInt(TAG_VARIANT));
-            variant = loaded == null ? BoatVariant.OAK : loaded;
+            boatVariant = loaded == null ? BoatVariant.OAK : loaded;
         }
     }
 
