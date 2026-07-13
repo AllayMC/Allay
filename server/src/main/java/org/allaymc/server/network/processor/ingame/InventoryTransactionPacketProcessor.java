@@ -9,6 +9,7 @@ import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.*;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.server.network.NetworkHelper;
@@ -103,7 +104,6 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             break;
                         }
 
-                        entity.setUsingItemInAir(false);
                         var sneaking = entity.isSneaking();
                         var useItemOnBlock = !sneaking;
                         var useBlock = !sneaking || itemInHand.getItemType() == AIR;
@@ -128,11 +128,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
 
                         if (!player.canPlaceBlocks()) {
+                            handleItemUseInAir(entity, itemInHand);
                             player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
                             break;
                         }
 
                         if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
+                            handleItemUseInAir(entity, itemInHand);
                             var blockStateReplaced = dimension.getBlockState(placeBlockPos);
                             player.viewBlockUpdate(placeBlockPos, 0, blockStateReplaced);
                         }
@@ -145,16 +147,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
 
                         if (!entity.isUsingItemInAir()) {
-                            if (itemInHand.canUseItemInAir(entity)) {
-                                if (new PlayerStartUseItemInAirEvent(entity).call()) {
-                                    entity.setUsingItemInAir(true);
-                                }
-                            } else {
-                                if (new PlayerRightClickItemInAirEvent(entity).call()) {
-                                    itemInHand.rightClickItemInAir(entity);
-                                }
-                            }
-                        } else if (entity.isUsingItemInAir()) {
+                            handleItemUseInAir(entity, itemInHand);
+                        } else {
                             entity.setUsingItemInAir(false);
                             var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime());
                             if (event.call()) {
@@ -271,6 +265,27 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             entity.clearItemInHand();
         } else {
             entity.notifyItemInHandChange();
+        }
+    }
+
+    boolean tryStartUsingItemInAir(EntityPlayer player, ItemStack itemStack) {
+        if (!itemStack.canUseItemInAir(player)) {
+            return false;
+        }
+
+        if (new PlayerStartUseItemInAirEvent(player).call()) {
+            player.setUsingItemInAir(true);
+        }
+        return true;
+    }
+
+    void handleItemUseInAir(EntityPlayer player, ItemStack itemStack) {
+        if (tryStartUsingItemInAir(player, itemStack)) {
+            return;
+        }
+
+        if (new PlayerRightClickItemInAirEvent(player).call()) {
+            itemStack.rightClickItemInAir(player);
         }
     }
 
