@@ -59,14 +59,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     public void handleSync(Player player, InventoryTransactionPacket packet, long receiveTime) {
         var entity = player.getControlledEntity();
 
-        // Fix desync issue
-        // https://github.com/CloudburstMC/Nukkit/blob/dbbb7ca6fe7e097ba25a451f9a280a9f7b251471/src/main/java/cn/nukkit/Player.java#L4287
-        entity.setHandSlot(packet.getHotbarSlot(), false);
-
-        var itemInHand = entity.getItemInHand();
         var transactionType = packet.getTransactionType();
+        var itemInHand = entity.getItemInHand();
         switch (transactionType) {
             case ITEM_USE -> {
+                entity.setHandSlot(packet.getHotbarSlot(), false);
+                itemInHand = entity.getItemInHand();
+
                 var blockFace = BlockFace.fromIndex(packet.getBlockFace());
                 var world = entity.getLocation().dimension();
                 switch (packet.getActionType()) {
@@ -192,6 +191,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 if (!entity.canReach(target.getLocation())) {
                     return;
                 }
+
+                entity.setHandSlot(packet.getHotbarSlot(), false);
+                itemInHand = entity.getItemInHand();
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
