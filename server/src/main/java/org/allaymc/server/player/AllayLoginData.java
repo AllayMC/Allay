@@ -77,13 +77,26 @@ public class AllayLoginData implements LoginData {
             return null;
         }
 
-        // On latest versions offline clients no longer include any uniquely identifying information in chain data,
-        // so we derive it from resolved xname for offline clients and from xuid for online clients.
-        // We use "xuid:" and "xname:" prefixes to ensure no collision between offline and online accounts is possible.
-        var key = loginData.authed ? "xuid:" + loginData.xuid : "xname:" + loginData.xname;
-        loginData.uuid = UUID.nameUUIDFromBytes(key.getBytes(StandardCharsets.UTF_8));
+        try {
+            loginData.uuid = resolveUuid(loginData.authed, loginData.uuid, loginData.xname);
+        } catch (Throwable t) {
+            log.warn("Failed to resolve player UUID!", t);
+            return null;
+        }
 
         return loginData;
+    }
+
+    static UUID resolveUuid(boolean authed, UUID identity, String xname) {
+        if (authed) {
+            return Objects.requireNonNull(identity, "Authenticated player identity cannot be null");
+        }
+        if (xname == null || xname.isBlank()) {
+            throw new IllegalArgumentException("Offline player name cannot be blank");
+        }
+
+        // Recent offline clients do not provide a stable identity in their authentication token.
+        return UUID.nameUUIDFromBytes(("xname:" + xname).getBytes(StandardCharsets.UTF_8));
     }
 
     private void decodeChainData(ChainValidationResult result, boolean isNetEaseClient) {
@@ -91,6 +104,7 @@ public class AllayLoginData implements LoginData {
 
         var extraData = result.identityClaims().extraData;
         this.xname = extraData.displayName;
+        this.uuid = extraData.identity;
         this.xuid = extraData.xuid;
         this.identityPublicKey = result.identityClaims().identityPublicKey;
 
@@ -137,7 +151,7 @@ public class AllayLoginData implements LoginData {
         }
 
         // Offline clients on latest versions report xname as empty in chain data, so this field should be used instead
-        if (!this.authed && this.xname.isEmpty() && skinMap.has("ThirdPartyName")) {
+        if (!this.authed && (this.xname == null || this.xname.isBlank()) && skinMap.has("ThirdPartyName")) {
             this.xname = skinMap.get("ThirdPartyName").getAsString();
         }
 
