@@ -19,7 +19,6 @@ import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
@@ -27,6 +26,7 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.FurnaceContainerImpl;
+import org.allaymc.server.item.recipe.FurnaceRecipeMatcher;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 import org.joml.Vector3d;
@@ -318,13 +318,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     protected FurnaceRecipe matchFurnaceRecipe(ItemStack ingredient) {
-        var furnaceRecipe = (FurnaceRecipe) Registries.RECIPES.get(FurnaceRecipe.buildIdentifier(ingredient, getFurnaceRecipeType()));
-        if (furnaceRecipe != null) {
-            return furnaceRecipe;
-        }
-
-        // Blast furnace and smoker can also use a normal furnace recipe
-        return (FurnaceRecipe) Registries.RECIPES.get(FurnaceRecipe.buildIdentifier(ingredient, FurnaceRecipe.Type.FURNACE));
+        return FurnaceRecipeMatcher.match(ingredient, getFurnaceRecipeType(), true);
     }
 
     protected boolean isFuel(ItemStack itemStack) {

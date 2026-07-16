@@ -8,7 +8,6 @@ import org.allaymc.api.entity.property.type.FloatPropertyType;
 import org.allaymc.api.entity.property.type.IntPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
-import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
@@ -38,7 +37,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataTyp
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
-import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 
@@ -276,10 +274,7 @@ public final class NetworkData {
     }
 
     private static List<ItemDescriptorWithCount> buildNetworkIngredients(FurnaceRecipe recipe) {
-        return List.of(new ItemDescriptorWithCount(
-                new DefaultDescriptor(NetworkHelper.toNetwork(recipe.getIngredient().getItemType()), ItemTypeDescriptor.WILDCARD_META),
-                recipe.getIngredient().getCount()
-        ));
+        return List.of(NetworkHelper.toNetworkWithCount(recipe.getIngredient()));
     }
 
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {

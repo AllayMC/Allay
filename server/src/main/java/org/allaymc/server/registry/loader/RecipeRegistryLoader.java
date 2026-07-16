@@ -3,7 +3,6 @@ package org.allaymc.server.registry.loader;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
@@ -20,7 +19,6 @@ import java.util.*;
 /**
  * @author daoge_cmd
  */
-@Slf4j
 public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier, Recipe>> {
     @SneakyThrows
     @Override
@@ -52,9 +50,6 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
             var recipe = isFurnaceLike(shapelessRecipe.getAsJsonObject()) ?
                     parseFurnaceLikeShapeless(shapelessRecipe.getAsJsonObject()) :
                     parseShapeless(shapelessRecipe.getAsJsonObject());
-            if (recipe == null) {
-                continue;
-            }
             recipes.put(recipe.getIdentifier(), recipe);
         }
 
@@ -162,14 +157,11 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
 
     protected static FurnaceRecipe parseFurnaceLikeShapeless(JsonObject obj) {
         var input = obj.getAsJsonArray("input").get(0).getAsJsonObject();
-        if (!input.has("item")) {
-            log.warn("Skipping unsupported tag-based furnace recipe: {}", obj.get("id").getAsString());
-            return null;
-        }
 
         return new FurnaceRecipe(
-                RecipeJsonUtils.parseItemStack(input),
+                RecipeJsonUtils.parseItemDescriptor(input),
                 RecipeJsonUtils.parseOutput(obj.getAsJsonArray("output").get(0).getAsJsonObject()),
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
                 FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase(Locale.ROOT))
         );
     }
@@ -201,8 +193,9 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
 
     protected static FurnaceRecipe parseFurnace(JsonObject obj) {
         return new FurnaceRecipe(
-                RecipeJsonUtils.parseItemStack(obj.getAsJsonObject("input")),
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("input")),
                 RecipeJsonUtils.parseOutput(obj.getAsJsonObject("output")),
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
                 FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase(Locale.ROOT))
         );
     }

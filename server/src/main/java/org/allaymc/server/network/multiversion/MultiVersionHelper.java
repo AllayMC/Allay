@@ -1,6 +1,7 @@
 package org.allaymc.server.network.multiversion;
 
 import org.allaymc.api.item.recipe.FurnaceRecipe;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.NetworkHelper;
@@ -21,6 +22,7 @@ import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author daoge_cmd
@@ -36,6 +38,7 @@ public final class MultiVersionHelper {
         var adapted = new CraftingDataPacket();
         packet.getCraftingData().stream()
                 .map(MultiVersionHelper::adaptCraftingData)
+                .filter(Objects::nonNull)
                 .forEach(adapted.getCraftingData()::add);
         adapted.getPotionMixData().addAll(packet.getPotionMixData());
         adapted.getContainerMixData().addAll(packet.getContainerMixData());
@@ -44,7 +47,7 @@ public final class MultiVersionHelper {
         return adapted;
     }
 
-    private static RecipeData adaptCraftingData(RecipeData data) {
+    static RecipeData adaptCraftingData(RecipeData data) {
         if (!(data instanceof ShapelessRecipeData shapeless)) {
             return data;
         }
@@ -59,8 +62,12 @@ public final class MultiVersionHelper {
             return data;
         }
 
+        if (!(furnace.getIngredient() instanceof ItemTypeDescriptor ingredient)) {
+            return null;
+        }
+
         return FurnaceRecipeData.of(
-                furnace.getIngredient().getItemType().getRuntimeId(),
+                ingredient.getItemType().getRuntimeId(),
                 NetworkHelper.toNetwork(furnace.getOutput()),
                 shapeless.getTag()
         );
