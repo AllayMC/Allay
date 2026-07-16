@@ -12,7 +12,7 @@ nbt = { group = "org.allaymc", name = "nbt", version = "3.0.12" }
 protocol = { group = "org.allaymc.protocol", name = "bedrock-connection", version = "1.26.30-R1" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
-item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.110-R1" }
+item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.26.20-R1" }
 block-updater = { group = "org.allaymc.stateupdater", name = "block-updater", version = "1.21.110-R1" }
 # Collections
 guava = { group = "com.google.guava", name = "guava", version = "33.6.0-jre" }
