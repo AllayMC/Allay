@@ -239,15 +239,24 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     return;
                 }
 
-                var worldInteractionAction = packet.getActions().getFirst();
-                if (!worldInteractionAction.source().type().equals(InventorySource.Type.WORLD_INTERACTION)) {
-                    log.warn("Expected WORLD_INTERACTION action type, got {}", worldInteractionAction.source().type());
+                // 1.26.30 reordered the action list: WORLD_INTERACTION now comes after CONTAINER.
+                // Instead of assuming a fixed order with getFirst()/getLast(), we search by type.
+                var worldInteractionAction = packet.getActions().stream()
+                        .filter(action -> action.source().type().equals(InventorySource.Type.WORLD_INTERACTION))
+                        .findFirst()
+                        .orElse(null);
+                var containerAction = packet.getActions().stream()
+                        .filter(action -> action.source().type().equals(InventorySource.Type.CONTAINER))
+                        .findFirst()
+                        .orElse(null);
+
+                if (worldInteractionAction == null) {
+                    log.warn("Expected WORLD_INTERACTION action type not found");
                     return;
                 }
 
-                var containerAction = packet.getActions().getLast();
-                if (!containerAction.source().type().equals(InventorySource.Type.CONTAINER)) {
-                    log.warn("Expected CONTAINER action type, got {}", containerAction.source().type());
+                if (containerAction == null) {
+                    log.warn("Expected CONTAINER action type not found");
                     return;
                 }
 

@@ -1,9 +1,8 @@
 package org.allaymc.api.item.data;
 
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface ItemTags {
@@ -17,9 +16,13 @@ public interface ItemTags {
 
     ItemTag IS_PICKAXE = create("minecraft:is_pickaxe");
 
+    ItemTag SULFUR_CUBE_ARCHETYPE_STICKY = create("minecraft:sulfur_cube_archetype_sticky");
+
     ItemTag TRIMMABLE_ARMORS = create("minecraft:trimmable_armors");
 
     ItemTag IS_HOE = create("minecraft:is_hoe");
+
+    ItemTag SULFUR_CUBE_ARCHETYPE_BOUNCY = create("minecraft:sulfur_cube_archetype_bouncy");
 
     ItemTag BOOKSHELF_BOOKS = create("minecraft:bookshelf_books");
 
@@ -33,9 +36,13 @@ public interface ItemTags {
 
     ItemTag IS_SWORD = create("minecraft:is_sword");
 
+    ItemTag SULFUR_CUBE_ARCHETYPE_FAST_SLIDING = create("minecraft:sulfur_cube_archetype_fast_sliding");
+
     ItemTag TRANSFORMABLE_ITEMS = create("minecraft:transformable_items");
 
     ItemTag STONE_BRICKS = create("minecraft:stone_bricks");
+
+    ItemTag SULFUR_CUBE_ARCHETYPE_SLOW_FLAT = create("minecraft:sulfur_cube_archetype_slow_flat");
 
     ItemTag DOOR = create("minecraft:door");
 
@@ -81,13 +88,19 @@ public interface ItemTags {
 
     ItemTag DYE = create("minecraft:dye");
 
+    ItemTag SULFUR_CUBE_ARCHETYPE_HOT = create("minecraft:sulfur_cube_archetype_hot");
+
     ItemTag NAUTILUS_ARMOR = create("minecraft:nautilus_armor");
 
     ItemTag VIBRATION_DAMPER = create("minecraft:vibration_damper");
 
+    ItemTag SULFUR_CUBE_ARCHETYPE_SLOW_BOUNCY = create("minecraft:sulfur_cube_archetype_slow_bouncy");
+
     ItemTag LEATHER_TIER = create("minecraft:leather_tier");
 
     ItemTag IS_SHEARS = create("minecraft:is_shears");
+
+    ItemTag SULFUR_CUBE_ARCHETYPE_FAST_FLAT = create("minecraft:sulfur_cube_archetype_fast_flat");
 
     ItemTag BOATS = create("minecraft:boats");
 
@@ -101,7 +114,11 @@ public interface ItemTags {
 
     ItemTag METAL_NUGGETS = create("minecraft:metal_nuggets");
 
+    ItemTag SULFUR_CUBE_ARCHETYPE_HIGH_RESISTANCE = create("minecraft:sulfur_cube_archetype_high_resistance");
+
     ItemTag IS_ARMOR = create("minecraft:is_armor");
+
+    ItemTag FIREPROOF = create("minecraft:fireproof");
 
     ItemTag LOGS = create("minecraft:logs");
 
@@ -117,17 +134,23 @@ public interface ItemTags {
 
     ItemTag CHAINMAIL_TIER = create("minecraft:chainmail_tier");
 
+    ItemTag SULFUR_CUBE_ARCHETYPE_REGULAR = create("minecraft:sulfur_cube_archetype_regular");
+
     ItemTag CHISELED_BOOKSHELF_BOOK = create("minecraft:chiseled_bookshelf_book");
 
     ItemTag HANGING_ACTOR = create("minecraft:hanging_actor");
 
     ItemTag IS_MINECART = create("minecraft:is_minecart");
 
+    ItemTag SULFUR_CUBE_ARCHETYPE_SLOW_SLIDING = create("minecraft:sulfur_cube_archetype_slow_sliding");
+
     ItemTag WOOL = create("minecraft:wool");
 
     ItemTag SIGN = create("minecraft:sign");
 
     ItemTag COPPER_TIER = create("minecraft:copper_tier");
+
+    ItemTag SULFUR_CUBE_ARCHETYPE_LIGHT = create("minecraft:sulfur_cube_archetype_light");
 
     ItemTag STONE_TIER = create("minecraft:stone_tier");
 
@@ -139,7 +162,7 @@ public interface ItemTags {
 
     ItemTag NETHERITE_TIER = create("minecraft:netherite_tier");
 
-    ItemTag FIREPROOF = create("minecraft:fireproof");
+    ItemTag SULFUR_CUBE_ARCHETYPE_EXPLOSIVE = create("minecraft:sulfur_cube_archetype_explosive");
 
     ItemTag MUSIC_DISC = create("minecraft:music_disc");
 

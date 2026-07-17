@@ -1,11 +1,10 @@
 package org.allaymc.server.block.data;
 
+import java.util.Locale;
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
-
-import java.util.Locale;
 
 public enum BlockId {
     ACACIA_BUTTON("minecraft:acacia_button"),
@@ -384,6 +383,8 @@ public enum BlockId {
 
     CHISELED_BOOKSHELF("minecraft:chiseled_bookshelf"),
 
+    CHISELED_CINNABAR("minecraft:chiseled_cinnabar"),
+
     CHISELED_COPPER("minecraft:chiseled_copper"),
 
     CHISELED_DEEPSLATE("minecraft:chiseled_deepslate"),
@@ -402,6 +403,8 @@ public enum BlockId {
 
     CHISELED_STONE_BRICKS("minecraft:chiseled_stone_bricks"),
 
+    CHISELED_SULFUR("minecraft:chiseled_sulfur"),
+
     CHISELED_TUFF("minecraft:chiseled_tuff"),
 
     CHISELED_TUFF_BRICKS("minecraft:chiseled_tuff_bricks"),
@@ -409,6 +412,26 @@ public enum BlockId {
     CHORUS_FLOWER("minecraft:chorus_flower"),
 
     CHORUS_PLANT("minecraft:chorus_plant"),
+
+    CINNABAR("minecraft:cinnabar"),
+
+    CINNABAR_BRICK_DOUBLE_SLAB("minecraft:cinnabar_brick_double_slab"),
+
+    CINNABAR_BRICK_SLAB("minecraft:cinnabar_brick_slab"),
+
+    CINNABAR_BRICK_STAIRS("minecraft:cinnabar_brick_stairs"),
+
+    CINNABAR_BRICK_WALL("minecraft:cinnabar_brick_wall"),
+
+    CINNABAR_BRICKS("minecraft:cinnabar_bricks"),
+
+    CINNABAR_DOUBLE_SLAB("minecraft:cinnabar_double_slab"),
+
+    CINNABAR_SLAB("minecraft:cinnabar_slab"),
+
+    CINNABAR_STAIRS("minecraft:cinnabar_stairs"),
+
+    CINNABAR_WALL("minecraft:cinnabar_wall"),
 
     CLAY("minecraft:clay"),
 
@@ -1860,6 +1883,16 @@ public enum BlockId {
 
     POLISHED_BLACKSTONE_WALL("minecraft:polished_blackstone_wall"),
 
+    POLISHED_CINNABAR("minecraft:polished_cinnabar"),
+
+    POLISHED_CINNABAR_DOUBLE_SLAB("minecraft:polished_cinnabar_double_slab"),
+
+    POLISHED_CINNABAR_SLAB("minecraft:polished_cinnabar_slab"),
+
+    POLISHED_CINNABAR_STAIRS("minecraft:polished_cinnabar_stairs"),
+
+    POLISHED_CINNABAR_WALL("minecraft:polished_cinnabar_wall"),
+
     POLISHED_DEEPSLATE("minecraft:polished_deepslate"),
 
     POLISHED_DEEPSLATE_DOUBLE_SLAB("minecraft:polished_deepslate_double_slab"),
@@ -1886,6 +1919,16 @@ public enum BlockId {
 
     POLISHED_GRANITE_STAIRS("minecraft:polished_granite_stairs"),
 
+    POLISHED_SULFUR("minecraft:polished_sulfur"),
+
+    POLISHED_SULFUR_DOUBLE_SLAB("minecraft:polished_sulfur_double_slab"),
+
+    POLISHED_SULFUR_SLAB("minecraft:polished_sulfur_slab"),
+
+    POLISHED_SULFUR_STAIRS("minecraft:polished_sulfur_stairs"),
+
+    POLISHED_SULFUR_WALL("minecraft:polished_sulfur_wall"),
+
     POLISHED_TUFF("minecraft:polished_tuff"),
 
     POLISHED_TUFF_DOUBLE_SLAB("minecraft:polished_tuff_double_slab"),
@@ -1901,6 +1944,8 @@ public enum BlockId {
     PORTAL("minecraft:portal"),
 
     POTATOES("minecraft:potatoes"),
+
+    POTENT_SULFUR("minecraft:potent_sulfur"),
 
     POWDER_SNOW("minecraft:powder_snow"),
 
@@ -2289,6 +2334,28 @@ public enum BlockId {
     STRUCTURE_BLOCK("minecraft:structure_block"),
 
     STRUCTURE_VOID("minecraft:structure_void"),
+
+    SULFUR("minecraft:sulfur"),
+
+    SULFUR_BRICK_DOUBLE_SLAB("minecraft:sulfur_brick_double_slab"),
+
+    SULFUR_BRICK_SLAB("minecraft:sulfur_brick_slab"),
+
+    SULFUR_BRICK_STAIRS("minecraft:sulfur_brick_stairs"),
+
+    SULFUR_BRICK_WALL("minecraft:sulfur_brick_wall"),
+
+    SULFUR_BRICKS("minecraft:sulfur_bricks"),
+
+    SULFUR_DOUBLE_SLAB("minecraft:sulfur_double_slab"),
+
+    SULFUR_SLAB("minecraft:sulfur_slab"),
+
+    SULFUR_SPIKE("minecraft:sulfur_spike"),
+
+    SULFUR_STAIRS("minecraft:sulfur_stairs"),
+
+    SULFUR_WALL("minecraft:sulfur_wall"),
 
     SUNFLOWER("minecraft:sunflower"),
 

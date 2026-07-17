@@ -216,6 +216,8 @@ public enum EntityId {
 
     STRIDER("minecraft:strider"),
 
+    SULFUR_CUBE("minecraft:sulfur_cube"),
+
     TADPOLE("minecraft:tadpole"),
 
     THROWN_TRIDENT("minecraft:thrown_trident"),

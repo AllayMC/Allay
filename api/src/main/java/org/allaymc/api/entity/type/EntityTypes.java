@@ -226,6 +226,8 @@ public final class EntityTypes {
 
     public static EntityType<EntityStrider> STRIDER;
 
+    public static EntityType<EntitySulfurCube> SULFUR_CUBE;
+
     public static EntityType<EntityTadpole> TADPOLE;
 
     public static EntityType<EntityThrownTrident> THROWN_TRIDENT;

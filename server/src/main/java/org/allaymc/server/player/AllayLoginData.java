@@ -55,6 +55,7 @@ public class AllayLoginData implements LoginData {
     @MultiVersion(version = "*-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
     public static AllayLoginData decode(LoginPacket loginPacket, boolean isNetEaseClient) {
         var loginData = new AllayLoginData();
+
         try {
             ChainValidationResult result;
             if (isNetEaseClient) {
@@ -76,7 +77,26 @@ public class AllayLoginData implements LoginData {
             return null;
         }
 
+        try {
+            loginData.uuid = resolveUuid(loginData.authed, loginData.uuid, loginData.xname);
+        } catch (Throwable t) {
+            log.warn("Failed to resolve player UUID!", t);
+            return null;
+        }
+
         return loginData;
+    }
+
+    static UUID resolveUuid(boolean authed, UUID identity, String xname) {
+        if (authed) {
+            return Objects.requireNonNull(identity, "Authenticated player identity cannot be null");
+        }
+        if (xname == null || xname.isBlank()) {
+            throw new IllegalArgumentException("Offline player name cannot be blank");
+        }
+
+        // Recent offline clients do not provide a stable identity in their authentication token.
+        return UUID.nameUUIDFromBytes(("xname:" + xname).getBytes(StandardCharsets.UTF_8));
     }
 
     private void decodeChainData(ChainValidationResult result, boolean isNetEaseClient) {
@@ -128,6 +148,11 @@ public class AllayLoginData implements LoginData {
             int deviceOS = skinMap.get("DeviceOS").getAsInt();
             int uiProfile = skinMap.get("UIProfile").getAsInt();
             this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
+        }
+
+        // Offline clients on latest versions report xname as empty in chain data, so this field should be used instead
+        if (!this.authed && (this.xname == null || this.xname.isBlank()) && skinMap.has("ThirdPartyName")) {
+            this.xname = skinMap.get("ThirdPartyName").getAsString();
         }
 
         if (skinMap.has("LanguageCode")) {
