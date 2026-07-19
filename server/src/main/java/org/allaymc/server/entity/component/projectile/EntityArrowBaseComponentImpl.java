@@ -23,7 +23,6 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected static final String TAG_PIERCING_LEVEL = "enchantPiercing";
     protected static final String TAG_SHOT_BY_PLAYER = "player";
     protected static final String TAG_IN_GROUND = "inGround";
-    protected static final String TAG_ON_GROUND = "OnGround";
 
     @Getter
     @Setter
@@ -76,7 +75,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinite = b != 0);
         nbt.listenForByte(TAG_PIERCING_LEVEL, b -> this.piercingLevel = b);
         nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b -> this.pickUpDisabled = !b);
-        this.inGround = nbt.getBoolean(TAG_IN_GROUND, nbt.getBoolean(TAG_ON_GROUND, false));
+        this.inGround = nbt.getBoolean(TAG_IN_GROUND, false);
     }
 
     @Override
