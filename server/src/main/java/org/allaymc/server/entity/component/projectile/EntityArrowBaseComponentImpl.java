@@ -75,7 +75,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinite = b != 0);
         nbt.listenForByte(TAG_PIERCING_LEVEL, b -> this.piercingLevel = b);
         nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b -> this.pickUpDisabled = !b);
-        this.inGround = nbt.getBoolean(TAG_IN_GROUND, false);
+        nbt.listenForBoolean(TAG_IN_GROUND, b -> this.inGround = b);
     }
 
     @Override
