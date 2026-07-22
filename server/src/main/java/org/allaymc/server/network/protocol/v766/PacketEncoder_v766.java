@@ -35,6 +35,7 @@ import org.allaymc.api.player.Skin;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.primitiveshape.PrimitiveShape;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.data.SortOrder;
@@ -58,12 +59,13 @@ import org.allaymc.api.world.sound.*;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
-import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.player.ChunkCache;
 import org.allaymc.server.player.SkinConvertor;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.utils.GitProperties;
 import org.allaymc.server.utils.JSONUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -146,7 +148,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiers() {
         var identifiers = new ArrayList<NbtMap>();
-        for (var entityType : getData().source().entityTypes()) {
+        for (var entityType : Registries.ENTITIES.getContent().values()) {
             identifiers.add(NbtMap.builder()
                     .putString("id", entityType.getIdentifier().toString())
                     .build());
@@ -162,7 +164,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public Collection<SyncEntityPropertyPacket> encodeSyncEntityProperties() {
         var packets = new ArrayList<SyncEntityPropertyPacket>();
-        for (var entityType : getData().source().entityTypes()) {
+        for (var entityType : Registries.ENTITIES.getContent().values()) {
             if (entityType.getProperties().isEmpty()) {
                 continue;
             }
@@ -203,7 +205,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public BiomeDefinitionListPacket encodeBiomeDefinitions() {
         var definitions = new LinkedHashMap<String, BiomeDefinitionData>();
-        for (var biomeType : getData().source().biomeTypes()) {
+        for (var biomeType : Registries.BIOMES.getContent().m1().values()) {
             definitions.put(biomeType.getIdentifier().toString(), NetworkHelper.toNetwork(biomeType));
         }
 
@@ -215,7 +217,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public DimensionDataPacket encodeDimensionData() {
         var packet = new DimensionDataPacket();
-        getData().source().dimensionTypes().stream()
+        Registries.DIMENSIONS.getContent().m1().values().stream()
                 .filter(PacketEncoder_v766::shouldSendDimensionDefinition)
                 .map(dimensionType -> new DimensionDefinition(
                         dimensionType.getIdentifier().toString(),
@@ -235,14 +237,14 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
     @Override
     public ResourcePacksInfoPacket encodeResourcePacksInfo() {
-        var settings = getData().source().encodingSettings();
+        var settings = AllayServer.getSettings().resourcePackSettings();
         var packet = new ResourcePacksInfoPacket();
         packet.setForcedToAccept(settings.forceResourcePacks());
         packet.setWorldTemplateId(new UUID(0, 0));
         packet.setWorldTemplateVersion("");
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
 
-        for (var pack : getData().source().packs()) {
+        for (var pack : Registries.PACKS.getContent().values()) {
             boolean scripting = pack.getType() == Pack.Type.SCRIPT;
             if (scripting) {
                 packet.setScriptingEnabled(true);
@@ -265,13 +267,13 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
     @Override
     public ResourcePackStackPacket encodeResourcePackStack() {
-        var settings = getData().source().encodingSettings();
+        var settings = AllayServer.getSettings().resourcePackSettings();
         var packet = new ResourcePackStackPacket();
         packet.setForcedToAccept(settings.forceResourcePacks() && !settings.allowClientResourcePacks());
         packet.setGameVersion("*");
         packet.getExperiments().addAll(createExperiments());
 
-        for (var pack : getData().source().packs()) {
+        for (var pack : Registries.PACKS.getContent().values()) {
             switch (pack.getType()) {
                 case RESOURCES -> packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
                         pack.getId().toString(), pack.getStringVersion(), ""));
@@ -337,10 +339,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public TrimDataPacket encodeTrimData() {
         var packet = new TrimDataPacket();
-        getData().source().trimPatterns().stream()
+        InternalRegistries.TRIM_PATTERNS.getContent().values().stream()
                 .map(pattern -> new TrimPattern(pattern.itemType().getIdentifier().toString(), pattern.patternId()))
                 .forEach(packet.getPatterns()::add);
-        getData().source().trimMaterials().stream()
+        InternalRegistries.TRIM_MATERIALS.getContent().values().stream()
                 .map(material -> new TrimMaterial(
                         material.materialId(),
                         material.color(),
@@ -2609,16 +2611,17 @@ public class PacketEncoder_v766 extends PacketEncoder {
         // The world seed is intentionally hidden from clients.
         packet.setSeed(0L);
         packet.setDimensionId(dimension.getDimensionType().getId());
-        packet.setGeneratorId(NetworkData.getVanillaGeneratorType(dimension.getDimensionType()).ordinal());
+        packet.setGeneratorId(getVanillaGeneratorType(dimension.getDimensionType()).ordinal());
         packet.setLevelGameType(NetworkHelper.toNetwork(worldData.getGameMode()));
         packet.setDifficulty(worldData.getDifficulty().ordinal());
         packet.setTrustingPlayers(true);
 
-        var settings = getData().source().encodingSettings();
-        packet.setLevelName(settings.levelName());
-        packet.setLevelId(settings.levelName());
-        packet.setDefaultPlayerPermission(PlayerPermission.valueOf(settings.defaultPermission()));
-        packet.setServerChunkTickRange(settings.serverChunkTickRange());
+        var settings = AllayServer.getSettings();
+        var levelName = settings.genericSettings().motd();
+        packet.setLevelName(levelName);
+        packet.setLevelId(levelName);
+        packet.setDefaultPlayerPermission(PlayerPermission.valueOf(settings.genericSettings().defaultPermission()));
+        packet.setServerChunkTickRange(settings.worldSettings().tickRadius());
         packet.setVanillaVersion("*");
         packet.setServerEngine(AllayAPI.getInstance().getCoreName() + " " + GitProperties.getBuildVersion());
         packet.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
@@ -2705,7 +2708,14 @@ public class PacketEncoder_v766 extends PacketEncoder {
         if (dimensionId != null && !dimensionId.isDefaultBounds(dimensionType)) {
             return VanillaGeneratorType.VOID;
         }
-        return NetworkData.getVanillaGeneratorType(dimensionType);
+        return getVanillaGeneratorType(dimensionType);
+    }
+
+    private static VanillaGeneratorType getVanillaGeneratorType(DimensionType dimensionType) {
+        var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        return dimensionId == null ?
+                DimensionId.OVERWORLD.getVanillaGeneratorType() :
+                dimensionId.getVanillaGeneratorType();
     }
 
     private static RecipeData copyRecipeData(RecipeData recipe) {

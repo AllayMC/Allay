@@ -1,6 +1,7 @@
 package org.allaymc.server.network.protocol;
 
-import org.allaymc.server.network.NetworkData;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.server.network.processor.PacketProcessorRegistry;
 import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
@@ -9,7 +10,14 @@ import org.allaymc.server.network.protocol.v819.Protocol_v819_NetEase;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
+import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
+import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -24,13 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
+@ExtendWith(AllayTestExtension.class)
 class ProtocolRegistryTest {
     @Test
     void defaultRegistryPublishesOnlySupportedVariantVersionPairs() {
-        var registry = ProtocolRegistry.createDefault(mock(NetworkData.class));
+        var registry = ProtocolRegistry.createDefault();
 
         assertNull(registry.resolve(ClientVariant.INTERNATIONAL, 766));
         assertInstanceOf(Protocol_v766_NetEase.class, registry.resolve(ClientVariant.NETEASE, 766));
@@ -184,23 +191,17 @@ class ProtocolRegistryTest {
 
     private static Protocol initializedProtocol(BedrockCodec codec, ClientVariant variant) {
         var protocol = protocol(codec, variant);
-        protocol.initialize(mock(NetworkData.class));
+        protocol.initialize();
         return protocol;
     }
 
     private static Protocol protocol(BedrockCodec codec, ClientVariant variant) {
-        var data = mock(ProtocolData.class);
-        when(data.protocolVersion()).thenReturn(codec.getProtocolVersion());
-        when(data.variant()).thenReturn(variant);
-        return new TestProtocol(codec, variant, data);
+        return new TestProtocol(codec, variant);
     }
 
     private static final class TestProtocol extends Protocol {
-        private final ProtocolData data;
-
-        private TestProtocol(BedrockCodec codec, ClientVariant variant, ProtocolData data) {
+        private TestProtocol(BedrockCodec codec, ClientVariant variant) {
             super(codec, variant);
-            this.data = data;
         }
 
         @Override
@@ -208,8 +209,33 @@ class ProtocolRegistryTest {
         }
 
         @Override
-        protected ProtocolData createData(NetworkData source) {
-            return data;
+        protected List<ItemDefinition> createItemDefinitions() {
+            return List.of();
+        }
+
+        @Override
+        protected List<BlockDefinition> createBlockDefinitions() {
+            return List.of();
+        }
+
+        @Override
+        protected List<CreativeItemGroup> createCreativeGroups() {
+            return List.of();
+        }
+
+        @Override
+        protected List<CreativeItemData> createCreativeItems() {
+            return List.of();
+        }
+
+        @Override
+        protected List<BlockPropertyData> createCustomBlockProperties() {
+            return List.of();
+        }
+
+        @Override
+        protected RecipeTable createRecipeTable() {
+            return new RecipeTable(List.of(), List.of(), new Int2ObjectOpenHashMap<Recipe>());
         }
 
         @Override

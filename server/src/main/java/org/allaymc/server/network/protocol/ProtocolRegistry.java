@@ -1,6 +1,8 @@
 package org.allaymc.server.network.protocol;
 
-import org.allaymc.server.network.NetworkData;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.server.item.creative.AllayCreativeItemRegistry;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.network.protocol.v1001.Protocol_v1001;
 import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
 import org.allaymc.server.network.protocol.v818.Protocol_v818;
@@ -95,11 +97,15 @@ public final class ProtocolRegistry {
         return frozenSnapshot != null;
     }
 
-    public static ProtocolRegistry createDefault(NetworkData source) {
+    public static ProtocolRegistry createDefault() {
+        freezeSourceRegistries();
+
         var registry = new ProtocolRegistry();
         var supported = new ArrayList<Protocol>();
+        supported.add(new Protocol_v766_NetEase());
         supported.add(new Protocol_v818());
         supported.add(new Protocol_v819());
+        supported.add(new Protocol_v819_NetEase());
         supported.add(new Protocol_v827());
         supported.add(new Protocol_v844());
         supported.add(new Protocol_v859());
@@ -109,15 +115,27 @@ public final class ProtocolRegistry {
         supported.add(new Protocol_v944());
         supported.add(new Protocol_v975());
         supported.add(new Protocol_v1001());
-        supported.add(new Protocol_v766_NetEase());
-        supported.add(new Protocol_v819_NetEase());
 
         for (var protocol : supported) {
-            protocol.initialize(source);
+            protocol.initialize();
             registry.register(protocol);
         }
         registry.freeze();
         return registry;
+    }
+
+    private static void freezeSourceRegistries() {
+        Registries.ITEMS.freeze();
+        Registries.BLOCKS.freeze();
+        Registries.BLOCK_STATE_PALETTE.freeze();
+        Registries.RECIPES.freeze();
+        Registries.ENTITIES.freeze();
+        Registries.BIOMES.freeze();
+        Registries.DIMENSIONS.freeze();
+        Registries.PACKS.freeze();
+        InternalRegistries.TRIM_PATTERNS.freeze();
+        InternalRegistries.TRIM_MATERIALS.freeze();
+        ((AllayCreativeItemRegistry) Registries.CREATIVE_ITEMS).freeze();
     }
 
     public static synchronized void installDefault(ProtocolRegistry registry) {

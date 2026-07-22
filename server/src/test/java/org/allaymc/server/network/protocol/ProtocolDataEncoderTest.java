@@ -70,22 +70,9 @@ class ProtocolDataEncoderTest {
 
     @Test
     void packedMaterialBooleansStartAtV844() {
-        var legacyData = protocol(827).getData();
-        var packedData = protocol(844).getData();
-        assertFalse(legacyData.materialInstancesUsePackedBooleans());
-        assertTrue(packedData.materialInstancesUsePackedBooleans());
-
         var definition = blockDefinition(materialInstances(), NbtMap.EMPTY);
-        var legacy = ProtocolData.adaptBlockDefinition(
-                definition,
-                legacyData.materialInstancesUsePackedBooleans(),
-                true
-        );
-        var modern = ProtocolData.adaptBlockDefinition(
-                definition,
-                packedData.materialInstancesUsePackedBooleans(),
-                true
-        );
+        var legacy = encodeCustomBlockDefinition(protocol(827), definition);
+        var modern = encodeCustomBlockDefinition(protocol(844), definition);
         var legacyMaterial = material(legacy);
         var modernMaterial = material(modern);
 
@@ -97,11 +84,6 @@ class ProtocolDataEncoderTest {
 
     @Test
     void multipleCollisionBoxesStartAtV898() {
-        var legacyData = protocol(860).getData();
-        var multipleData = protocol(898).getData();
-        assertFalse(legacyData.multipleCollisionBoxes());
-        assertTrue(multipleData.multipleCollisionBoxes());
-
         var collision = NbtMap.builder()
                 .putBoolean("enabled", true)
                 .putList("boxes", NbtType.COMPOUND, List.of(
@@ -110,16 +92,12 @@ class ProtocolDataEncoderTest {
                 ))
                 .build();
         var definition = blockDefinition(NbtMap.EMPTY, collision);
-        var legacy = ProtocolData.adaptBlockDefinition(
-                definition,
-                true,
-                legacyData.multipleCollisionBoxes()
-        ).getCompound("components").getCompound("minecraft:collision_box");
-        var modern = ProtocolData.adaptBlockDefinition(
-                definition,
-                true,
-                multipleData.multipleCollisionBoxes()
-        ).getCompound("components").getCompound("minecraft:collision_box");
+        var legacy = encodeCustomBlockDefinition(protocol(860), definition)
+                .getCompound("components")
+                .getCompound("minecraft:collision_box");
+        var modern = encodeCustomBlockDefinition(protocol(898), definition)
+                .getCompound("components")
+                .getCompound("minecraft:collision_box");
 
         assertFalse(legacy.containsKey("boxes"));
         assertEquals(List.of(-8f, 0f, -8f), legacy.getList("origin", NbtType.FLOAT));
@@ -171,6 +149,10 @@ class ProtocolDataEncoderTest {
         var protocol = registry.resolve(ClientVariant.INTERNATIONAL, version);
         assertNotNull(protocol);
         return protocol;
+    }
+
+    private static NbtMap encodeCustomBlockDefinition(Protocol protocol, NbtMap definition) {
+        return protocol.encodeCustomBlockDefinition(definition);
     }
 
     private static void assertRecipeIdsResolve(RecipeTable table) {

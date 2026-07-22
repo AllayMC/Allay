@@ -7,6 +7,7 @@ import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v860.Protocol_v860;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -31,8 +32,8 @@ public class Protocol_v898 extends Protocol_v860 {
     }
 
     @Override
-    protected ProtocolData.Builder configureData(ProtocolData.Builder builder) {
-        return super.configureData(builder).multipleCollisionBoxes();
+    protected NbtMap encodeCustomBlockDefinition(NbtMap definition) {
+        return definition;
     }
 
     @Override

@@ -1,11 +1,16 @@
 package org.allaymc.server.network.protocol;
 
-import org.allaymc.server.network.NetworkData;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.server.network.processor.PacketProcessorRegistry;
 import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
+import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,6 +19,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -29,109 +35,68 @@ class ProtocolInitializationTest {
 
     @Test
     void publishesOnlyAfterEveryComponentMatches() {
-        var data = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
-        var encoder = new PacketEncoder_v766(data);
-        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL, data, encoder);
+        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL);
 
         assertFalse(protocol.isInitialized());
         assertThrows(IllegalStateException.class, protocol::getData);
         assertThrows(IllegalStateException.class, protocol::getEncoder);
         assertThrows(IllegalStateException.class, protocol::getFeatures);
 
-        protocol.initialize(mock(NetworkData.class));
+        protocol.initialize();
 
         assertTrue(protocol.isInitialized());
-        assertSame(data, protocol.getData());
-        assertSame(encoder, protocol.getEncoder());
+        assertSame(protocol.getData(), protocol.getEncoder().getData());
         assertTrue(protocol.supports(ProtocolFeature.DATA_DRIVEN_UI));
-        assertThrows(IllegalStateException.class, () -> protocol.initialize(mock(NetworkData.class)));
-        assertThrows(IllegalStateException.class, () -> protocol.initialize(null));
+        assertThrows(IllegalStateException.class, protocol::initialize);
     }
 
     @Test
-    void rejectsMissingDataWithoutPublishing() {
-        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL, null, null);
+    void rejectsMissingGeneratedDataWithoutPublishing() {
+        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL);
+        protocol.itemDefinitions = null;
 
-        assertThrows(NullPointerException.class, () -> protocol.initialize(mock(NetworkData.class)));
+        assertThrows(NullPointerException.class, protocol::initialize);
         assertFalse(protocol.isInitialized());
         assertThrows(IllegalStateException.class, protocol::getData);
     }
 
     @Test
     void rejectsMissingEncoderWithoutPublishing() {
-        var data = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
-        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL, data, null);
+        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL);
+        protocol.encoderFactory = ignored -> null;
 
-        assertThrows(NullPointerException.class, () -> protocol.initialize(mock(NetworkData.class)));
+        assertThrows(NullPointerException.class, protocol::initialize);
         assertFalse(protocol.isInitialized());
         assertThrows(IllegalStateException.class, protocol::getEncoder);
     }
 
     @Test
-    void rejectsDataWithAnotherProtocolVersionWithoutPublishing() {
-        var data = data(CODEC.getProtocolVersion() + 1, ClientVariant.INTERNATIONAL);
-        var protocol = new TestProtocol(
-                ClientVariant.INTERNATIONAL,
-                data,
-                new PacketEncoder_v766(data)
-        );
-
-        assertThrows(IllegalStateException.class, () -> protocol.initialize(mock(NetworkData.class)));
-        assertFalse(protocol.isInitialized());
-    }
-
-    @Test
-    void rejectsDataWithAnotherVariantWithoutPublishing() {
-        var data = data(CODEC.getProtocolVersion(), ClientVariant.NETEASE);
-        var protocol = new TestProtocol(
-                ClientVariant.INTERNATIONAL,
-                data,
-                new PacketEncoder_v766(data)
-        );
-
-        assertThrows(IllegalStateException.class, () -> protocol.initialize(mock(NetworkData.class)));
-        assertFalse(protocol.isInitialized());
-    }
-
-    @Test
     void rejectsEncoderBackedByAnotherDataInstanceWithoutPublishing() {
-        var data = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
-        var encoderData = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
-        var protocol = new TestProtocol(
-                ClientVariant.INTERNATIONAL,
-                data,
-                new PacketEncoder_v766(encoderData)
-        );
+        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL);
+        var encoderData = emptyData();
+        protocol.encoderFactory = ignored -> new PacketEncoder_v766(encoderData);
 
-        assertThrows(IllegalStateException.class, () -> protocol.initialize(mock(NetworkData.class)));
+        assertThrows(IllegalStateException.class, protocol::initialize);
         assertFalse(protocol.isInitialized());
     }
 
     @Test
     void rejectsDuplicateDefinitionsBeforePublishing() {
-        var data = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
         var first = mock(ItemDefinition.class);
         var duplicate = mock(ItemDefinition.class);
         when(first.runtimeId()).thenReturn(7);
         when(duplicate.runtimeId()).thenReturn(7);
-        when(data.itemDefinitions()).thenReturn(List.of(first, duplicate));
-        var protocol = new TestProtocol(
-                ClientVariant.INTERNATIONAL,
-                data,
-                new PacketEncoder_v766(data)
-        );
+        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL);
+        protocol.itemDefinitions = List.of(first, duplicate);
 
-        assertThrows(IllegalArgumentException.class, () -> protocol.initialize(mock(NetworkData.class)));
+        assertThrows(IllegalArgumentException.class, protocol::initialize);
         assertFalse(protocol.isInitialized());
         assertThrows(IllegalStateException.class, protocol::getEncoder);
     }
 
     @Test
     void concurrentInitializationPublishesAllComponentsExactlyOnce() throws Exception {
-        var data = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
-        var encoder = new PacketEncoder_v766(data);
-        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL, data, encoder);
-        var source = mock(NetworkData.class);
+        var protocol = new TestProtocol(ClientVariant.INTERNATIONAL);
         var readerStarted = new CountDownLatch(1);
         var initializeTogether = new CountDownLatch(1);
         var successes = new AtomicInteger();
@@ -146,8 +111,7 @@ class ProtocolInitializationTest {
                     Thread.onSpinWait();
                 }
                 assertTrue(protocol.isInitialized());
-                assertSame(data, protocol.getData());
-                assertSame(encoder, protocol.getEncoder());
+                assertSame(protocol.getData(), protocol.getEncoder().getData());
                 assertTrue(protocol.supports(ProtocolFeature.DATA_DRIVEN_UI));
             } catch (Throwable throwable) {
                 unexpectedFailure.compareAndSet(null, throwable);
@@ -156,7 +120,7 @@ class ProtocolInitializationTest {
         Runnable initialize = () -> {
             try {
                 initializeTogether.await();
-                protocol.initialize(source);
+                protocol.initialize();
                 successes.incrementAndGet();
             } catch (IllegalStateException exception) {
                 duplicateAttempts.incrementAndGet();
@@ -181,21 +145,23 @@ class ProtocolInitializationTest {
         assertEquals(1, duplicateAttempts.get());
     }
 
-    private static ProtocolData data(int protocolVersion, ClientVariant variant) {
-        var data = mock(ProtocolData.class);
-        when(data.protocolVersion()).thenReturn(protocolVersion);
-        when(data.variant()).thenReturn(variant);
-        return data;
+    private static ProtocolData emptyData() {
+        return new ProtocolData(
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                new RecipeTable(List.of(), List.of(), new Int2ObjectOpenHashMap<Recipe>())
+        );
     }
 
     private static final class TestProtocol extends Protocol {
-        private final ProtocolData data;
-        private final PacketEncoder encoder;
+        private List<ItemDefinition> itemDefinitions = List.of();
+        private Function<ProtocolData, PacketEncoder> encoderFactory = PacketEncoder_v766::new;
 
-        private TestProtocol(ClientVariant variant, ProtocolData data, PacketEncoder encoder) {
+        private TestProtocol(ClientVariant variant) {
             super(CODEC, variant);
-            this.data = data;
-            this.encoder = encoder;
         }
 
         @Override
@@ -203,13 +169,38 @@ class ProtocolInitializationTest {
         }
 
         @Override
-        protected ProtocolData createData(NetworkData source) {
-            return data;
+        protected List<ItemDefinition> createItemDefinitions() {
+            return itemDefinitions;
+        }
+
+        @Override
+        protected List<BlockDefinition> createBlockDefinitions() {
+            return List.of();
+        }
+
+        @Override
+        protected List<CreativeItemGroup> createCreativeGroups() {
+            return List.of();
+        }
+
+        @Override
+        protected List<CreativeItemData> createCreativeItems() {
+            return List.of();
+        }
+
+        @Override
+        protected List<BlockPropertyData> createCustomBlockProperties() {
+            return List.of();
+        }
+
+        @Override
+        protected RecipeTable createRecipeTable() {
+            return new RecipeTable(List.of(), List.of(), new Int2ObjectOpenHashMap<Recipe>());
         }
 
         @Override
         protected PacketEncoder createEncoder(ProtocolData data) {
-            return encoder;
+            return encoderFactory.apply(data);
         }
 
         @Override

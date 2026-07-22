@@ -2,6 +2,7 @@ package org.allaymc.server.network.protocol.v766;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.player.Skin;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -20,7 +21,7 @@ public class PacketEncoder_v766_NetEase extends PacketEncoder_v766 {
     @Override
     public BiomeDefinitionListPacket encodeBiomeDefinitions() {
         var definitions = NbtMap.builder();
-        for (var biomeType : getData().source().biomeTypes()) {
+        for (var biomeType : Registries.BIOMES.getContent().m1().values()) {
             var biome = biomeType.getBiomeData();
             var color = biome.mapWaterColor();
             definitions.putCompound(biomeType.getIdentifier().toString(), NbtMap.builder()

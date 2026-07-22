@@ -1,8 +1,10 @@
 package org.allaymc.server.network.protocol;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
+import org.allaymc.api.item.recipe.Recipe;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.server.network.protocol.v975.Protocol_v975;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.FurnaceRecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.IdentifiableRecipeData;
@@ -110,20 +112,23 @@ class RecipeTableIntegrityTest {
 
     @Test
     void recipeSourceAndRepeatedTablesUseStableIdentifierOrder() {
-        var source = protocol(975).getData().source();
-        var identifiers = source.recipes().stream()
+        var sourceIdentifiers = Registries.RECIPES.getContent().values().stream()
                 .map(recipe -> recipe.getIdentifier().toString())
+                .sorted()
                 .toList();
-        assertEquals(identifiers.stream().sorted().toList(), identifiers);
 
-        var first = ProtocolData.builder(source, 975, ClientVariant.INTERNATIONAL)
-                .furnaceRecipesAreShapeless()
-                .build()
-                .recipeTable();
-        var second = ProtocolData.builder(source, 975, ClientVariant.INTERNATIONAL)
-                .furnaceRecipesAreShapeless()
-                .build()
-                .recipeTable();
+        var firstProtocol = new Protocol_v975();
+        firstProtocol.initialize();
+        var secondProtocol = new Protocol_v975();
+        secondProtocol.initialize();
+        var first = firstProtocol.getData().recipeTable();
+        var second = secondProtocol.getData().recipeTable();
+        var indexedIdentifiers = indexedIdentifiers(first).entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .toList();
+        assertEquals(indexedIdentifiers.stream().sorted().toList(), indexedIdentifiers);
+        assertTrue(sourceIdentifiers.containsAll(indexedIdentifiers));
         assertEquals(indexedIdentifiers(first), indexedIdentifiers(second));
     }
 

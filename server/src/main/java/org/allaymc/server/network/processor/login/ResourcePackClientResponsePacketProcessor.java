@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
@@ -20,7 +21,6 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
         switch (packet.getStatus()) {
             case SEND_PACKS -> {
                 var protocol = allayPlayer.getProtocol();
-                var source = protocol.getData().source();
                 var encoder = protocol.getEncoder();
                 int chunkSize = AllayServer.getSettings()
                         .resourcePackSettings()
@@ -34,7 +34,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                         return;
                     }
 
-                    var pack = source.pack(id);
+                    var pack = Registries.PACKS.get(id);
                     if (pack == null) {
                         player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_RESOURCEPACK);
                         return;
