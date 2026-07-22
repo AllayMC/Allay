@@ -6,16 +6,26 @@ import org.allaymc.api.block.property.type.BooleanPropertyType;
 import org.allaymc.api.block.property.type.EnumPropertyType;
 import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.data.ItemTag;
+import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.block.type.TestBlock;
 import org.allaymc.server.block.type.TestBlockImpl;
 import org.allaymc.server.block.type.TestEnum;
+import org.allaymc.server.block.type.CustomBlockStateDefinition;
+import org.allaymc.server.item.impl.ItemStackImpl;
+import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.item.type.CustomItemDefinition;
+import org.cloudburstmc.nbt.NbtMap;
+import org.joml.Vector3f;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Registers block types used by tests before the server freezes its registries.
@@ -41,6 +51,9 @@ public final class TestRegistryFixtures {
     private static BlockType<TestBlock> molangBlockTypeWithAllProperties;
     private static BlockType<TestBlock> molangBlockTypeWithBooleanOnly;
     private static BlockType<TestBlock> molangBlockTypeWithoutProperties;
+    private static BlockType<TestBlock> customDefinitionBlockType;
+    private static ItemType<?> customDefinitionItemType;
+    private static final AtomicInteger CUSTOM_BLOCK_DEFINITION_INVOCATIONS = new AtomicInteger();
     private static boolean registered;
 
     private TestRegistryFixtures() {
@@ -72,6 +85,7 @@ public final class TestRegistryFixtures {
                 .identifier("allay_test:test_block_with_customized_item")
                 .setComponents(List.of(new TestComponentImpl()))
                 .customizeItemType(itemBuilder -> itemBuilder.setItemTags(Set.of(CUSTOMIZED_ITEM_TAG)))
+                .customBlockDefinition(CustomBlockStateDefinition.ofTexture("allay_test_constant_block"))
                 .build();
         molangBlockTypeWithAllProperties = AllayBlockType
                 .builder(TestBlockImpl.class)
@@ -95,6 +109,58 @@ public final class TestRegistryFixtures {
                 .setComponents(List.of(
                         new TestComponentImpl(),
                         BlockStateDataComponentImpl.ofDefault()))
+                .build();
+        customDefinitionBlockType = AllayBlockType
+                .builder(TestBlockImpl.class)
+                .identifier("allay_test:custom_definition_block")
+                .setProperties(BLOCK_BOOLEAN_PROPERTY)
+                .setComponents(List.of(
+                        new TestComponentImpl(),
+                        BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.builder()
+                                .collisionShape(VoxelShape.builder()
+                                        .solid(0, 0, 0, 0.25, 0.5, 0.25)
+                                        .solid(0.5, 0.125, 0.5, 1, 1, 1)
+                                        .build())
+                                .build())))
+                .customBlockDefinition(state -> {
+                    CUSTOM_BLOCK_DEFINITION_INVOCATIONS.incrementAndGet();
+                    return CustomBlockStateDefinition.builder()
+                            .geometry("geometry.allay_test.custom_block")
+                            .materials(CustomBlockStateDefinition.Materials.builder()
+                                    .any(CustomBlockStateDefinition.MaterialInstance.builder()
+                                            .texture("allay_test_custom_block")
+                                            .faceDimming(true)
+                                            .randomUVRotation(true)
+                                            .ambientOcclusionIntensity(1f)
+                                            .build())
+                                    .build())
+                            .displayName("tile.allay_test.custom_definition_block.name")
+                            .rawComponents(Map.of(
+                                    "minecraft:collision_box",
+                                    NbtMap.builder().putBoolean("enabled", false).build()
+                            ))
+                            .build();
+                })
+                .customBlockRotationOffset(90)
+                .customBlockRawComponent("allay_test:global", NbtMap.EMPTY)
+                .build();
+        customDefinitionItemType = AllayItemType
+                .builder(ItemStackImpl.class)
+                .identifier("allay_test:custom_definition_item")
+                .customItemDefinition(CustomItemDefinition.builder()
+                        .texture("allay_test_custom_item")
+                        .displayName("item.allay_test.custom_definition_item.name")
+                        .renderOffsets(CustomItemDefinition.RenderOffsets.builder()
+                                .mainHand(CustomItemDefinition.RenderOffsets.Hand.builder()
+                                        .firstPerson(CustomItemDefinition.RenderOffsets.Offset.builder()
+                                                .scale(new Vector3f(0.25f))
+                                                .build())
+                                        .build())
+                                .build())
+                        .foil(true)
+                        .rawProperties(Map.of("allay_test:property", NbtMap.EMPTY))
+                        .rawComponents(Map.of("allay_test:component", NbtMap.EMPTY))
+                        .build())
                 .build();
 
         registered = true;
@@ -156,6 +222,21 @@ public final class TestRegistryFixtures {
     public static BlockType<TestBlock> molangBlockTypeWithoutProperties() {
         ensureRegistered();
         return molangBlockTypeWithoutProperties;
+    }
+
+    public static BlockType<TestBlock> customDefinitionBlockType() {
+        ensureRegistered();
+        return customDefinitionBlockType;
+    }
+
+    public static ItemType<?> customDefinitionItemType() {
+        ensureRegistered();
+        return customDefinitionItemType;
+    }
+
+    public static int customBlockDefinitionInvocations() {
+        ensureRegistered();
+        return CUSTOM_BLOCK_DEFINITION_INVOCATIONS.get();
     }
 
     private static void ensureRegistered() {

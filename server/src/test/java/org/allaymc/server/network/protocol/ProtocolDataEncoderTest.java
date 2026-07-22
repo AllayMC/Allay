@@ -2,9 +2,14 @@ package org.allaymc.server.network.protocol;
 
 import io.netty.buffer.Unpooled;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
+import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.protocol.v827.PacketEncoder_v827;
 import org.allaymc.server.network.protocol.v844.PacketEncoder_v844;
 import org.allaymc.testutils.AllayTestExtension;
+import org.allaymc.testutils.TestRegistryFixtures;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
@@ -70,9 +75,8 @@ class ProtocolDataEncoderTest {
 
     @Test
     void packedMaterialBooleansStartAtV844() {
-        var definition = blockDefinition(materialInstances(), NbtMap.EMPTY);
-        var legacy = encodeCustomBlockDefinition(protocol(827), definition);
-        var modern = encodeCustomBlockDefinition(protocol(844), definition);
+        var legacy = customBlockDefinition(protocol(827));
+        var modern = customBlockDefinition(protocol(844));
         var legacyMaterial = material(legacy);
         var modernMaterial = material(modern);
 
@@ -84,25 +88,82 @@ class ProtocolDataEncoderTest {
 
     @Test
     void multipleCollisionBoxesStartAtV898() {
-        var collision = NbtMap.builder()
-                .putBoolean("enabled", true)
-                .putList("boxes", NbtType.COMPOUND, List.of(
-                        box(0, 0, 0, 4, 8, 4),
-                        box(8, 2, 8, 16, 16, 16)
-                ))
-                .build();
-        var definition = blockDefinition(NbtMap.EMPTY, collision);
-        var legacy = encodeCustomBlockDefinition(protocol(860), definition)
-                .getCompound("components")
+        var legacy = firstPermutationComponents(customBlockDefinition(protocol(860)))
                 .getCompound("minecraft:collision_box");
-        var modern = encodeCustomBlockDefinition(protocol(898), definition)
-                .getCompound("components")
+        var modern = firstPermutationComponents(customBlockDefinition(protocol(898)))
                 .getCompound("minecraft:collision_box");
 
         assertFalse(legacy.containsKey("boxes"));
+        assertTrue(legacy.getBoolean("enabled"));
         assertEquals(List.of(-8f, 0f, -8f), legacy.getList("origin", NbtType.FLOAT));
         assertEquals(List.of(16f, 16f, 16f), legacy.getList("size", NbtType.FLOAT));
         assertEquals(2, modern.getList("boxes", NbtType.COMPOUND).size());
+    }
+
+    @Test
+    void definitionsAreResolvedOnceAndEncodedFromStructuredModels() {
+        var blockType = TestRegistryFixtures.customDefinitionBlockType();
+        assertEquals(blockType.getAllStates().size(), TestRegistryFixtures.customBlockDefinitionInvocations());
+
+        var blockDefinition = customBlockDefinition(protocol(898));
+        var placementDirection = blockDefinition.getList("traits", NbtType.COMPOUND).getFirst();
+        assertEquals(90f, placementDirection.getFloat("y_rotation_offset"));
+        assertTrue(blockDefinition.getCompound("components").containsKey("allay_test:global"));
+
+        var customItemType = TestRegistryFixtures.customDefinitionItemType();
+        var customItem = protocol(898).getData().itemDefinitions().stream()
+                .filter(definition -> definition.identifier().equals(customItemType.getIdentifier().toString()))
+                .findFirst()
+                .orElseThrow();
+        var components = customItem.componentData().getCompound("components");
+        assertTrue(customItem.componentBased());
+        assertEquals("item.allay_test.custom_definition_item.name",
+                components.getCompound("minecraft:display_name").getString("value"));
+        assertTrue(components.containsKey("allay_test:component"));
+        assertTrue(components.getCompound("item_properties").containsKey("allay_test:property"));
+
+        var vanillaDiamond = assertInstanceOf(AllayItemType.class, ItemTypes.DIAMOND);
+        assertFalse(vanillaDiamond.isCustomItem());
+        assertNull(vanillaDiamond.getCustomItemDefinition());
+    }
+
+    @Test
+    void cachedItemPayloadsUseDefinitionsFromTheirProtocolRegistry() {
+        var protocol = protocol(898);
+        for (var creativeItem : protocol.getData().creativeItems()) {
+            assertTrue(protocol.getItemDefinitionRegistry().isRegistered(creativeItem.item().getDefinition()));
+            var blockDefinition = creativeItem.item().getBlockDefinition();
+            if (blockDefinition != null) {
+                assertTrue(protocol.getBlockDefinitionRegistry().isRegistered(blockDefinition));
+            }
+        }
+        for (var recipe : protocol.getData().recipeTable().encodedRecipes()) {
+            switch (recipe) {
+                case CraftingRecipeData crafting -> crafting.getResults().forEach(output ->
+                        assertTrue(protocol.getItemDefinitionRegistry().isRegistered(output.getDefinition())));
+                case SmithingTransformRecipeData smithing -> assertTrue(
+                        protocol.getItemDefinitionRegistry().isRegistered(smithing.getResult().getDefinition()));
+                case FurnaceRecipeData furnace -> assertTrue(
+                        protocol.getItemDefinitionRegistry().isRegistered(furnace.getResult().getDefinition()));
+                default -> {
+                }
+            }
+        }
+
+        var air = NetworkHelper.toNetwork(
+                ItemAirStack.AIR_STACK,
+                protocol.getItemDefinitionRegistry(),
+                protocol.getBlockDefinitionRegistry()
+        );
+        assertTrue(protocol.getItemDefinitionRegistry().isRegistered(air.getDefinition()));
+
+        var blockItem = NetworkHelper.toNetwork(
+                TestRegistryFixtures.customDefinitionBlockType().getItemType().createItemStack(1),
+                protocol.getItemDefinitionRegistry(),
+                protocol.getBlockDefinitionRegistry()
+        );
+        assertTrue(protocol.getItemDefinitionRegistry().isRegistered(blockItem.getDefinition()));
+        assertTrue(protocol.getBlockDefinitionRegistry().isRegistered(blockItem.getBlockDefinition()));
     }
 
     @Test
@@ -151,8 +212,12 @@ class ProtocolDataEncoderTest {
         return protocol;
     }
 
-    private static NbtMap encodeCustomBlockDefinition(Protocol protocol, NbtMap definition) {
-        return protocol.encodeCustomBlockDefinition(definition);
+    private static NbtMap customBlockDefinition(Protocol protocol) {
+        return protocol.getData().customBlockProperties().stream()
+                .filter(property -> property.name().equals("allay_test:custom_definition_block"))
+                .findFirst()
+                .orElseThrow()
+                .properties();
     }
 
     private static void assertRecipeIdsResolve(RecipeTable table) {
@@ -171,47 +236,17 @@ class ProtocolDataEncoderTest {
         return packet.getExperiments().stream().anyMatch(experiment -> experiment.name().equals(name));
     }
 
-    private static NbtMap blockDefinition(NbtMap materialInstances, NbtMap collisionBox) {
-        var components = NbtMap.builder();
-        if (!materialInstances.isEmpty()) {
-            components.putCompound("minecraft:material_instances", materialInstances);
-        }
-        if (!collisionBox.isEmpty()) {
-            components.putCompound("minecraft:collision_box", collisionBox);
-        }
-        return NbtMap.builder()
-                .putCompound("components", components.build())
-                .putList("permutations", NbtType.COMPOUND, List.of())
-                .build();
-    }
-
-    private static NbtMap materialInstances() {
-        return NbtMap.builder()
-                .putCompound("materials", NbtMap.builder()
-                        .putCompound("*", NbtMap.builder()
-                                .putString("texture", "test")
-                                .putByte("packed_bools", (byte) 3)
-                                .build())
-                        .build())
-                .build();
-    }
-
     private static NbtMap material(NbtMap definition) {
-        return definition.getCompound("components")
+        return firstPermutationComponents(definition)
                 .getCompound("minecraft:material_instances")
                 .getCompound("materials")
                 .getCompound("*");
     }
 
-    private static NbtMap box(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
-        return NbtMap.builder()
-                .putFloat("minX", minX)
-                .putFloat("minY", minY)
-                .putFloat("minZ", minZ)
-                .putFloat("maxX", maxX)
-                .putFloat("maxY", maxY)
-                .putFloat("maxZ", maxZ)
-                .build();
+    private static NbtMap firstPermutationComponents(NbtMap definition) {
+        return definition.getList("permutations", NbtType.COMPOUND)
+                .getFirst()
+                .getCompound("components");
     }
 
     private static int findRecipeWithOutput(List<RecipeData> recipes) {

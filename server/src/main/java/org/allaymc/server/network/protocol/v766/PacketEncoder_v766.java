@@ -813,7 +813,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setContainerId(containerId);
         // Both fields must be zero when FullContainerName is otherwise unused.
         packet.setContainerNameData(new FullContainerName(ContainerSlotType.ANVIL_INPUT, null));
-        packet.setContents(NetworkHelper.toNetwork(container.getItemStacks()));
+        packet.setContents(encodeItemStacks(container.getItemStacks()));
         return packet;
     }
 
@@ -827,7 +827,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 ContainerActionProcessor.getSlotType(container, slot),
                 null
         ));
-        packet.setItem(NetworkHelper.toNetwork(container.getItemStack(slot)));
+        packet.setItem(encodeItemStack(container.getItemStack(slot)));
         return packet;
     }
 
@@ -905,7 +905,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 ));
                 packet.setGameType(NetworkHelper.toNetwork(player.getGameMode()));
                 packet.getMetadata().putAll(encodeEntityMetadata(entity));
-                packet.setHand(NetworkHelper.toNetwork(
+                packet.setHand(encodeItemStack(
                         player.getContainer(ContainerTypes.INVENTORY).getItemInHand()
                 ));
                 var properties = NetworkHelper.toNetworkProperties(entity);
@@ -917,7 +917,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 var packet = new AddItemEntityPacket();
                 packet.setRuntimeEntityId(item.getRuntimeId());
                 packet.setUniqueEntityId(item.getUniqueId().getLeastSignificantBits());
-                packet.setItemInHand(NetworkHelper.toNetwork(
+                packet.setItemInHand(encodeItemStack(
                         Objects.requireNonNullElse(item.getItemStack(), ItemAirStack.AIR_STACK)
                 ));
                 packet.setPosition(position);
@@ -1296,13 +1296,13 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
         var handContainer = entity.getContainer(ContainerTypes.ENTITY_HAND);
         if (handContainer != null) {
-            packet.setItem(NetworkHelper.toNetwork(handContainer.getItemInHand()));
+            packet.setItem(encodeItemStack(handContainer.getItemInHand()));
             packet.setInventorySlot(0);
             packet.setHotbarSlot(0);
         } else {
             var inventory = entity.getContainer(ContainerTypes.INVENTORY);
             var handSlot = inventory.getHandSlot();
-            packet.setItem(NetworkHelper.toNetwork(inventory.getItemInHand()));
+            packet.setItem(encodeItemStack(inventory.getItemInHand()));
             packet.setInventorySlot(handSlot);
             packet.setHotbarSlot(handSlot);
         }
@@ -1318,7 +1318,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setContainerId(UnopenedContainerId.OFFHAND);
         packet.setInventorySlot(1);
         packet.setHotbarSlot(1);
-        packet.setItem(NetworkHelper.toNetwork(offhand.getOffhand()));
+        packet.setItem(encodeItemStack(offhand.getOffhand()));
         return packet;
     }
 
@@ -1328,11 +1328,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         var armor = entity.getContainer(ContainerTypes.ARMOR);
         var packet = new MobArmorEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setBody(NetworkHelper.toNetwork(ItemAirStack.AIR_STACK));
-        packet.setHelmet(NetworkHelper.toNetwork(armor.getHelmet()));
-        packet.setChestplate(NetworkHelper.toNetwork(armor.getChestplate()));
-        packet.setLeggings(NetworkHelper.toNetwork(armor.getLeggings()));
-        packet.setBoots(NetworkHelper.toNetwork(armor.getBoots()));
+        packet.setBody(encodeItemStack(ItemAirStack.AIR_STACK));
+        packet.setHelmet(encodeItemStack(armor.getHelmet()));
+        packet.setChestplate(encodeItemStack(armor.getChestplate()));
+        packet.setLeggings(encodeItemStack(armor.getLeggings()));
+        packet.setBoots(encodeItemStack(armor.getBoots()));
         return packet;
     }
 

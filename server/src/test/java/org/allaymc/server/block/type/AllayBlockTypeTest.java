@@ -3,6 +3,7 @@ package org.allaymc.server.block.type;
 import org.allaymc.api.block.property.enums.WallConnectionType;
 import org.allaymc.api.block.property.type.*;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.testutils.AllayTestExtension;
 import org.allaymc.testutils.TestRegistryFixtures;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,6 +48,18 @@ class AllayBlockTypeTest {
 
         assertNotNull(blockType.getItemType());
         assertTrue(blockType.getItemType().hasItemTag(customTag));
+    }
+
+    @Test
+    void testConstantAndMissingCustomDefinitions() {
+        var constantBlock = (AllayBlockType<?>) TestRegistryFixtures.customizedItemBlockType();
+        var definition = constantBlock.getCustomBlockDefinition();
+
+        assertNotNull(definition);
+        assertEquals(constantBlock.getAllStates().size(), definition.stateDefinitions().size());
+        assertEquals(1, definition.stateDefinitions().values().stream().distinct().count());
+        assertNull(((AllayItemType<?>) constantBlock.getItemType()).getCustomItemDefinition());
+        assertNull(((AllayBlockType<?>) testBlockType1).getCustomBlockDefinition());
     }
 
     @Test

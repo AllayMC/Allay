@@ -5,21 +5,18 @@ import lombok.Getter;
 import lombok.experimental.Tolerate;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateData;
-import org.allaymc.api.block.data.TintMethod;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.server.utils.MolangUtils;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 
 import java.util.*;
 
 /**
- * BlockStateDefinition holds the client-side rendering properties for a single block state.
+ * Describes the protocol-independent client-side appearance of one custom block state.
  * <p>
- * This record is used as the return type of the user-provided function in {@link CustomBlockDefinitionGenerator}.
- * Each BlockState can have different rendering properties (geometry, materials, transformation, etc.),
- * and the system will automatically optimize these into global components and state-specific permutations.
+ * A block type may use one instance for every state or resolve a different instance for each state while the
+ * block type is being built. Protocol implementations serialize this model into their own wire format.
  * <p>
  * Physical properties like collision shape, light emission, and friction are still
  * read from {@link BlockStateData} and are not part of this definition.
@@ -28,62 +25,43 @@ import java.util.*;
  * @param materials        material instances for rendering, {@code null} for default
  * @param transformation   transformation applied to the block model, {@code null} for none
  * @param displayName      display name shown in inventory/tooltips, {@code null} to use block identifier
- * @param customComponents custom components used for this block state
+ * @param rawComponents   raw Bedrock components used as an explicit extension point
  * @author daoge_cmd
  */
 @Builder(toBuilder = true)
-public record BlockStateDefinition(
+public record CustomBlockStateDefinition(
         Geometry geometry,
         Materials materials,
         Transformation transformation,
         @MayContainTrKey String displayName,
-        Map<String, NbtMap> customComponents
+        Map<String, NbtMap> rawComponents
 ) {
     /**
      * Default definition with no custom properties.
      */
-    public static final BlockStateDefinition DEFAULT = BlockStateDefinition.builder().build();
+    public static final CustomBlockStateDefinition DEFAULT = CustomBlockStateDefinition.builder().build();
+
+    public CustomBlockStateDefinition {
+        if (rawComponents == null) {
+            rawComponents = Map.of();
+        } else {
+            var copy = new LinkedHashMap<String, NbtMap>();
+            rawComponents.forEach((name, component) -> copy.put(
+                    Objects.requireNonNull(name, "rawComponents contains a null name"),
+                    Objects.requireNonNull(component, "rawComponents contains a null component")
+            ));
+            rawComponents = Collections.unmodifiableMap(copy);
+        }
+    }
 
     /**
-     * Converts this definition to NBT format for permutation components.
+     * Creates a definition that renders the same opaque texture on every face.
      *
-     * @param tintMethod the tint method from BlockStateData (can be null)
-     * @return the NBT representation containing only non-null components
+     * @param texture the terrain texture short name
+     * @return the custom block state definition
      */
-    public NbtMap toComponentsNbt(TintMethod tintMethod) {
-        var builder = NbtMap.builder();
-
-        if (displayName != null) {
-            builder.putCompound("minecraft:display_name", NbtMap.builder()
-                    .putString("value", displayName)
-                    .build());
-        }
-
-        if (geometry != null) {
-            builder.putCompound("minecraft:geometry", geometry.toNBT());
-        }
-
-        if (materials != null && !materials.isEmpty()) {
-            var materialsNbt = NbtMap.builder();
-            for (var entry : materials.entrySet()) {
-                materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT(tintMethod));
-            }
-            builder.putCompound("minecraft:material_instances", NbtMap.builder()
-                    // This is required, otherwise the client will crash
-                    .putCompound("mappings", NbtMap.EMPTY)
-                    .putCompound("materials", materialsNbt.build())
-                    .build());
-        }
-
-        if (transformation != null) {
-            builder.putCompound("minecraft:transformation", transformation.toNBT());
-        }
-
-        if (customComponents != null) {
-            builder.putAll(this.customComponents);
-        }
-
-        return builder.build();
+    public static CustomBlockStateDefinition ofTexture(String texture) {
+        return builder().materials(Materials.builder().any(texture).build()).build();
     }
 
     /**
@@ -149,7 +127,7 @@ public record BlockStateDefinition(
      * Lombok merges this class with its generated builder, allowing
      * additional overloaded methods alongside the standard ones.
      */
-    public static class BlockStateDefinitionBuilder {
+    public static class CustomBlockStateDefinitionBuilder {
         /**
          * Sets the geometry using a string identifier.
          * <p>
@@ -159,7 +137,7 @@ public record BlockStateDefinition(
          * @return this builder
          */
         @Tolerate
-        public BlockStateDefinitionBuilder geometry(String identifier) {
+        public CustomBlockStateDefinitionBuilder geometry(String identifier) {
             this.geometry = Geometry.of(identifier);
             return this;
         }
@@ -170,12 +148,6 @@ public record BlockStateDefinition(
      * <p>
      * Material instances define how each face of a block is rendered,
      * including texture, transparency, and lighting effects.
-     * <p>
-     * The NBT encoding uses {@code packed_bools} (1.21.110+ format) to pack
-     * {@code faceDimming}, {@code randomUVRotation}, and {@code textureVariation}
-     * into a single byte. Protocol-specific encoders convert it to the legacy
-     * format with separate boolean fields for older clients.
-     *
      * @param texture          the texture shortname from terrain_texture.json
      * @param renderMethod     controls transparency and culling behavior
      * @param faceDimming      whether faces using the material instance are dimmed by their direction
@@ -195,68 +167,128 @@ public record BlockStateDefinition(
             boolean textureVariation
     ) {
         public MaterialInstance {
+            if (texture == null || texture.isBlank()) {
+                throw new IllegalArgumentException("Texture cannot be null or blank");
+            }
             if (renderMethod == null) {
                 renderMethod = RenderMethod.OPAQUE;
             }
+            if (ambientOcclusionIntensity < 0 || ambientOcclusionIntensity > 10) {
+                throw new IllegalArgumentException("Ambient occlusion intensity must be between 0 and 10");
+            }
         }
 
+        /**
+         * Creates an opaque material with the standard lighting defaults.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance of(String texture) {
             return new MaterialInstance(texture, RenderMethod.OPAQUE, true, 1.0f, false, false);
         }
 
+        /**
+         * Creates a material with a selected render method and the standard lighting defaults.
+         *
+         * @param texture      the terrain texture short name
+         * @param renderMethod the client render method
+         * @return the material instance
+         */
         public static MaterialInstance of(String texture, RenderMethod renderMethod) {
             return new MaterialInstance(texture, renderMethod, true, 1.0f, false, false);
         }
 
+        /**
+         * Creates an opaque material.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance opaque(String texture) {
             return of(texture, RenderMethod.OPAQUE);
         }
 
+        /**
+         * Creates a translucent blended material.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance blend(String texture) {
             return of(texture, RenderMethod.BLEND);
         }
 
+        /**
+         * Creates an opaque material rendered from both sides.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance doubleSided(String texture) {
             return of(texture, RenderMethod.DOUBLE_SIDED);
         }
 
+        /**
+         * Creates a double-sided alpha-test material.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance alphaTest(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST);
         }
 
+        /**
+         * Creates a single-sided alpha-test material.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance alphaTestSingleSided(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED);
         }
 
+        /**
+         * Creates an alpha-test material that becomes opaque at distance.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance alphaTestToOpaque(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST_TO_OPAQUE);
         }
 
+        /**
+         * Creates a single-sided alpha-test material that becomes opaque at distance.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance alphaTestSingleSidedToOpaque(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE);
         }
 
+        /**
+         * Creates a blended material that becomes opaque at distance.
+         *
+         * @param texture the terrain texture short name
+         * @return the material instance
+         */
         public static MaterialInstance blendToOpaque(String texture) {
             return of(texture, RenderMethod.BLEND_TO_OPAQUE);
         }
 
-        public NbtMap toNBT(TintMethod tintMethod) {
-            byte packedBools = 0;
-            if (faceDimming) packedBools |= 0x1;
-            if (randomUVRotation) packedBools |= 0x2;
-            if (textureVariation) packedBools |= 0x4;
-
-            var builder = NbtMap.builder()
-                    .putString("texture", texture)
-                    .putString("render_method", renderMethod.getId())
-                    .putFloat("ambient_occlusion", ambientOcclusionIntensity)
-                    .putByte("packed_bools", packedBools)
-                    .putString("tint_method", tintMethod.name().toLowerCase(Locale.ROOT));
-
-            return builder.build();
-        }
-
         public static class MaterialInstanceBuilder {
+            private boolean faceDimming = true;
+            private float ambientOcclusionIntensity = 1f;
+
+            /**
+             * Enables or disables ambient occlusion using its conventional intensity.
+             *
+             * @param value whether ambient occlusion is enabled
+             * @return this builder
+             */
             public MaterialInstanceBuilder ambientOcclusion(boolean value) {
                 this.ambientOcclusionIntensity = value ? 1.0f : 0.0f;
                 return this;
@@ -280,6 +312,7 @@ public record BlockStateDefinition(
      *     .any("default_texture")                           // all faces (wildcard)
      *     .face(BlockFace.UP, "top_texture")                // override top face
      *     .face(BlockFace.DOWN, MaterialInstance.blend("bottom_texture"))
+     *     .build()
      * }</pre>
      *
      * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
@@ -290,101 +323,130 @@ public record BlockStateDefinition(
          */
         public static final String ANY_FACE = "*";
 
-        private final Map<String, MaterialInstance> materials = new HashMap<>();
+        private final Map<String, MaterialInstance> materials;
 
-        private Materials() {
-        }
-
-        public static Materials builder() {
-            return new Materials();
+        private Materials(Map<String, MaterialInstance> materials) {
+            this.materials = Collections.unmodifiableMap(new LinkedHashMap<>(materials));
         }
 
         /**
-         * Sets the material for a specific block face.
+         * Creates a mutable builder for an immutable material collection.
          *
-         * @param face     the block face
-         * @param material the material instance
+         * @return the material builder
          */
-        public Materials face(BlockFace face, MaterialInstance material) {
-            materials.put(face.name().toLowerCase(Locale.ROOT), material);
-            return this;
+        public static MaterialsBuilder builder() {
+            return new MaterialsBuilder();
         }
 
         /**
-         * Sets the material for a specific block face with default opaque rendering.
+         * Returns the material instances keyed by face or custom material name.
          *
-         * @param face    the block face
-         * @param texture the texture name
+         * @return the immutable material map
          */
-        public Materials face(BlockFace face, String texture) {
-            return face(face, MaterialInstance.of(texture));
+        public Map<String, MaterialInstance> materials() {
+            return materials;
         }
 
         /**
-         * Sets the material for all unspecified faces (wildcard).
+         * Checks whether this definition contains any material instances.
          *
-         * @param material the material instance
-         */
-        public Materials any(MaterialInstance material) {
-            materials.put(ANY_FACE, material);
-            return this;
-        }
-
-        /**
-         * Sets the material for all unspecified faces (wildcard) with default opaque rendering.
-         *
-         * @param texture the texture name
-         */
-        public Materials any(String texture) {
-            return any(MaterialInstance.of(texture));
-        }
-
-        /**
-         * Sets the same material for all horizontal faces (north, south, east, west).
-         *
-         * @param material the material instance
-         */
-        public Materials sides(MaterialInstance material) {
-            for (var face : BlockFace.getHorizontalBlockFaces()) {
-                face(face, material);
-            }
-            return this;
-        }
-
-        /**
-         * Sets the same material for all horizontal faces (north, south, east, west).
-         *
-         * @param texture the texture name
-         */
-        public Materials sides(String texture) {
-            return sides(MaterialInstance.of(texture));
-        }
-
-        /**
-         * Gets the entry set of all the material instances.
-         *
-         * @return the entry set of all the material instances
-         */
-        public Set<Map.Entry<String, MaterialInstance>> entrySet() {
-            return materials.entrySet();
-        }
-
-        /**
-         * Checks if this object is empty.
-         *
-         * @return {@code true} if this object is empty, {@code false} otherwise
+         * @return {@code true} when no material instances are defined
          */
         public boolean isEmpty() {
             return materials.isEmpty();
+        }
+
+        /**
+         * Builds an immutable collection of material instances.
+         */
+        public static final class MaterialsBuilder {
+            private final Map<String, MaterialInstance> materials = new LinkedHashMap<>();
+
+            /**
+             * Sets the material for a specific block face.
+             *
+             * @param face     the block face
+             * @param material the material instance
+             * @return this builder
+             */
+            public MaterialsBuilder face(BlockFace face, MaterialInstance material) {
+                materials.put(
+                        Objects.requireNonNull(face, "face").name().toLowerCase(Locale.ROOT),
+                        Objects.requireNonNull(material, "material")
+                );
+                return this;
+            }
+
+            /**
+             * Sets the material for a specific block face with default opaque rendering.
+             *
+             * @param face    the block face
+             * @param texture the texture name
+             * @return this builder
+             */
+            public MaterialsBuilder face(BlockFace face, String texture) {
+                return face(face, MaterialInstance.of(texture));
+            }
+
+            /**
+             * Sets the material for all unspecified faces (wildcard).
+             *
+             * @param material the material instance
+             * @return this builder
+             */
+            public MaterialsBuilder any(MaterialInstance material) {
+                materials.put(ANY_FACE, Objects.requireNonNull(material, "material"));
+                return this;
+            }
+
+            /**
+             * Sets the material for all unspecified faces (wildcard) with default opaque rendering.
+             *
+             * @param texture the texture name
+             * @return this builder
+             */
+            public MaterialsBuilder any(String texture) {
+                return any(MaterialInstance.of(texture));
+            }
+
+            /**
+             * Sets the same material for all horizontal faces (north, south, east, west).
+             *
+             * @param material the material instance
+             * @return this builder
+             */
+            public MaterialsBuilder sides(MaterialInstance material) {
+                for (var face : BlockFace.getHorizontalBlockFaces()) {
+                    face(face, material);
+                }
+                return this;
+            }
+
+            /**
+             * Sets the same material for all horizontal faces (north, south, east, west).
+             *
+             * @param texture the texture name
+             * @return this builder
+             */
+            public MaterialsBuilder sides(String texture) {
+                return sides(MaterialInstance.of(texture));
+            }
+
+            /**
+             * Builds the immutable material collection.
+             *
+             * @return the material definition
+             */
+            public Materials build() {
+                return new Materials(materials);
+            }
         }
     }
 
     /**
      * Transformation applied to block geometry.
      * <p>
-     * Rotation values must be multiples of 90 degrees. The NBT encoding
-     * divides rotation by 90 (e.g., 90 degrees becomes RX=1, 180 becomes RX=2).
-     * Negative rotations are normalized to positive equivalents.
+     * Rotation values are expressed in degrees and must be multiples of 90.
      *
      * @param rx X-axis rotation in degrees (must be 0, 90, 180, or 270)
      * @param ry Y-axis rotation in degrees (must be 0, 90, 180, or 270)
@@ -404,31 +466,18 @@ public record BlockStateDefinition(
             float tx, float ty, float tz
     ) {
         public Transformation {
+            validateRotation(rx, "rx");
+            validateRotation(ry, "ry");
+            validateRotation(rz, "rz");
             if (sx == 0) sx = 1.0f;
             if (sy == 0) sy = 1.0f;
             if (sz == 0) sz = 1.0f;
         }
 
-        /**
-         * Converts this transformation to NBT format.
-         * <p>
-         * NBT format uses {@code RX/RY/RZ} as rotation divided by 90 (0-3),
-         * {@code SX/SY/SZ} as scale factors, and {@code TX/TY/TZ} as translation.
-         *
-         * @return the NBT representation
-         */
-        public NbtMap toNBT() {
-            return NbtMap.builder()
-                    .putInt("RX", (((rx % 360) + 360) % 360) / 90)
-                    .putInt("RY", (((ry % 360) + 360) % 360) / 90)
-                    .putInt("RZ", (((rz % 360) + 360) % 360) / 90)
-                    .putFloat("SX", sx)
-                    .putFloat("SY", sy)
-                    .putFloat("SZ", sz)
-                    .putFloat("TX", tx)
-                    .putFloat("TY", ty)
-                    .putFloat("TZ", tz)
-                    .build();
+        private static void validateRotation(int rotation, String axis) {
+            if (rotation % 90 != 0) {
+                throw new IllegalArgumentException(axis + " rotation must be a multiple of 90 degrees");
+            }
         }
     }
 
@@ -438,8 +487,8 @@ public record BlockStateDefinition(
      * Defines the 3D model (geometry) used for rendering the block, including
      * bone visibility, culling rules, and UV lock settings.
      * <p>
-     * The NBT encoding supports both string shorthand ({@code "geometry.block"})
-     * and object form with advanced features like bone visibility and culling.
+     * A simple identifier is sufficient for ordinary geometry. Bone visibility,
+     * culling, and UV lock settings are available for advanced models.
      * <p>
      * Example usage:
      * <pre>{@code
@@ -476,16 +525,13 @@ public record BlockStateDefinition(
             List<String> uvLockBones,
             boolean uvLockAll
     ) {
-
-        private static final String DEFAULT_CULLING_LAYER = "minecraft:culling_layer.undefined";
-
         public Geometry {
             if (identifier == null || identifier.isEmpty()) {
                 throw new IllegalArgumentException("Geometry identifier cannot be null or empty");
             }
             // Ensure immutability
             if (boneVisibility != null) {
-                boneVisibility = Map.copyOf(boneVisibility);
+                boneVisibility = Collections.unmodifiableMap(new LinkedHashMap<>(boneVisibility));
             }
             if (uvLockBones != null) {
                 uvLockBones = List.copyOf(uvLockBones);
@@ -509,45 +555,6 @@ public record BlockStateDefinition(
          */
         public static GeometryBuilder builder() {
             return new GeometryBuilder();
-        }
-
-        /**
-         * Converts this geometry to NBT format.
-         *
-         * @return the NBT representation
-         */
-        public NbtMap toNBT() {
-            var builder = NbtMap.builder()
-                    .putString("identifier", identifier)
-                    .putBoolean("ignoreGeometryForIsSolid", true)
-                    .putBoolean("needsLegacyTopRotation", false)
-                    .putBoolean("useBlockTypeLightAbsorption", false);
-
-            if (boneVisibility != null && !boneVisibility.isEmpty()) {
-                var boneVisNbt = NbtMap.builder();
-                for (var entry : boneVisibility.entrySet()) {
-                    boneVisNbt.putCompound(entry.getKey(), NbtMap.builder()
-                            .putString("expression", entry.getValue().toMolang())
-                            .putShort("version", (short) MolangUtils.MOLANG_VERSION)
-                            .build()
-                    );
-                }
-                builder.putCompound("bone_visibility", boneVisNbt.build());
-            }
-
-            builder.putString("culling", culling != null ? culling : "");
-            builder.putString("culling_layer", cullingLayer != null ? cullingLayer : DEFAULT_CULLING_LAYER);
-
-            // uv_lock can be boolean (all bones) or array (specific bones)
-            if (uvLockAll) {
-                builder.putBoolean("uv_lock", true);
-            } else if (uvLockBones != null && !uvLockBones.isEmpty()) {
-                builder.putList("uv_lock", NbtType.STRING, uvLockBones);
-            } else {
-                builder.putBoolean("uv_lock", false);
-            }
-
-            return builder.build();
         }
 
         /**

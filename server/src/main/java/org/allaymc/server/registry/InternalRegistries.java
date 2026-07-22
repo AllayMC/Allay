@@ -12,7 +12,7 @@ import org.allaymc.api.world.biome.BiomeData;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.property.BlockPropertyProcessor;
 import org.allaymc.server.item.data.ItemId;
-import org.allaymc.server.item.type.ItemDefinition;
+import org.allaymc.server.item.type.VanillaItemDefinitionData;
 import org.allaymc.server.world.biome.BiomeId;
 
 import java.util.Map;
@@ -30,7 +30,7 @@ public final class InternalRegistries {
     public static SimpleMappedRegistry<BlockId, Integer> BLOCK_DEFAULT_STATE_HASHES;
     public static SimpleMappedRegistry<BlockPropertyType<?>, BlockPropertyProcessor> BLOCK_PROPERTY_PROCESSORS;
 
-    public static SimpleMappedRegistry<ItemId, ItemDefinition> ITEM_DEFINITIONS;
+    public static SimpleMappedRegistry<ItemId, VanillaItemDefinitionData> VANILLA_ITEM_DEFINITIONS;
 
     public static SimpleMappedRegistry<BiomeId, BiomeData> BIOME_DATA;
 

@@ -270,12 +270,16 @@ class PacketEncoderCompatibilityTest {
         assertNotSame(firstContents.getContents(), secondContents.getContents());
         assertNotSame(firstContents.getContents().getFirst(), secondContents.getContents().getFirst());
         assertEquals(ContainerTypes.CHEST.getSize(), secondContents.getContents().size());
+        assertTrue(protocol.getItemDefinitionRegistry().isRegistered(
+                secondContents.getContents().getFirst().getDefinition()
+        ));
         assertPacketEncodes(protocol, secondContents);
 
         var firstSlot = encoder.encodeContainerSlot(container, 0, 7);
         var secondSlot = encoder.encodeContainerSlot(container, 0, 7);
         assertNotSame(firstSlot, secondSlot);
         assertNotSame(firstSlot.getItem(), secondSlot.getItem());
+        assertTrue(protocol.getItemDefinitionRegistry().isRegistered(firstSlot.getItem().getDefinition()));
         assertPacketEncodes(protocol, firstSlot);
 
         var containerPosition = new org.joml.Vector3i(1, 65, 2);

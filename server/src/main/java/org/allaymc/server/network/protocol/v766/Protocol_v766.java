@@ -9,16 +9,16 @@ import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.Protocol;
 import org.allaymc.server.network.protocol.ProtocolData;
+import org.allaymc.server.block.type.CustomBlockStateDefinition;
+import org.allaymc.api.block.data.TintMethod;
+import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.Locale;
 
 /**
  * Oldest complete protocol baseline. The international v766 variant is intentionally not registered.
@@ -118,103 +118,22 @@ public abstract class Protocol_v766 extends Protocol {
     }
 
     @Override
-    protected NbtMap encodeCustomBlockDefinition(NbtMap definition) {
-        return transformBlockDefinition(
-                definition,
-                components -> downgradeMaterialInstances(downgradeCollisionBox(components))
-        );
-    }
-
-    protected static NbtMap transformBlockDefinition(
-            NbtMap definition,
-            UnaryOperator<NbtMap> componentTransformer
+    protected NbtMap encodeMaterialInstance(
+            CustomBlockStateDefinition.MaterialInstance material,
+            TintMethod tintMethod
     ) {
-        var builder = definition.toBuilder()
-                .putCompound("components", componentTransformer.apply(definition.getCompound("components")));
-        var permutations = new ArrayList<NbtMap>();
-        definition.getList("permutations", NbtType.COMPOUND).forEach(permutation -> permutations.add(
-                permutation.toBuilder()
-                        .putCompound(
-                                "components",
-                                componentTransformer.apply(permutation.getCompound("components"))
-                        )
-                        .build()
-        ));
-        return builder.putList("permutations", NbtType.COMPOUND, permutations).build();
-    }
-
-    protected static NbtMap downgradeCollisionBox(NbtMap components) {
-        var collisionBox = components.getCompound("minecraft:collision_box");
-        if (collisionBox.isEmpty() || !collisionBox.containsKey("boxes")) {
-            return components;
-        }
-        return components.toBuilder()
-                .putCompound("minecraft:collision_box", mergeCollisionBoxes(collisionBox))
-                .build();
-    }
-
-    protected static NbtMap downgradeMaterialInstances(NbtMap components) {
-        var materialInstances = components.getCompound("minecraft:material_instances");
-        if (materialInstances.isEmpty()) {
-            return components;
-        }
-        return components.toBuilder()
-                .putCompound("minecraft:material_instances", unpackMaterialBooleans(materialInstances))
-                .build();
-    }
-
-    private static NbtMap mergeCollisionBoxes(NbtMap collisionBox) {
-        var boxes = collisionBox.getList("boxes", NbtType.COMPOUND);
-        if (boxes.isEmpty()) {
-            return NbtMap.builder().putBoolean("enabled", false).build();
-        }
-
-        var first = boxes.getFirst();
-        float minX = first.getFloat("minX");
-        float minY = first.getFloat("minY");
-        float minZ = first.getFloat("minZ");
-        float maxX = first.getFloat("maxX");
-        float maxY = first.getFloat("maxY");
-        float maxZ = first.getFloat("maxZ");
-        for (int index = 1; index < boxes.size(); index++) {
-            var box = boxes.get(index);
-            minX = Math.min(minX, box.getFloat("minX"));
-            minY = Math.min(minY, box.getFloat("minY"));
-            minZ = Math.min(minZ, box.getFloat("minZ"));
-            maxX = Math.max(maxX, box.getFloat("maxX"));
-            maxY = Math.max(maxY, box.getFloat("maxY"));
-            maxZ = Math.max(maxZ, box.getFloat("maxZ"));
-        }
-
         return NbtMap.builder()
-                .putBoolean("enabled", collisionBox.getBoolean("enabled"))
-                .putList("origin", NbtType.FLOAT, List.of(minX - 8, minY, minZ - 8))
-                .putList("size", NbtType.FLOAT, List.of(maxX - minX, Math.min(maxY - minY, 16), maxZ - minZ))
+                .putString("texture", material.texture())
+                .putString("render_method", material.renderMethod().getId())
+                .putFloat("ambient_occlusion", material.ambientOcclusionIntensity())
+                .putBoolean("face_dimming", material.faceDimming())
+                .putString("tint_method", tintMethod.name().toLowerCase(Locale.ROOT))
                 .build();
     }
 
-    private static NbtMap unpackMaterialBooleans(NbtMap materialInstances) {
-        var materials = materialInstances.getCompound("materials");
-        var adaptedMaterials = NbtMap.builder();
-        for (var entry : materials.entrySet()) {
-            if (!(entry.getValue() instanceof NbtMap material)) {
-                continue;
-            }
-
-            var adaptedMaterial = NbtMap.builder();
-            for (var materialEntry : material.entrySet()) {
-                if (materialEntry.getKey().equals("packed_bools")) {
-                    byte packedBools = (Byte) materialEntry.getValue();
-                    adaptedMaterial.putBoolean("face_dimming", (packedBools & 1) != 0);
-                } else {
-                    adaptedMaterial.put(materialEntry.getKey(), materialEntry.getValue());
-                }
-            }
-            adaptedMaterials.putCompound(entry.getKey(), adaptedMaterial.build());
-        }
-        return materialInstances.toBuilder()
-                .putCompound("materials", adaptedMaterials.build())
-                .build();
+    @Override
+    protected NbtMap encodeCollisionBox(VoxelShape shape) {
+        return encodeMergedBox(shape);
     }
 
     @Override

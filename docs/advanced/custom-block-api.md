@@ -4,565 +4,375 @@ comments: true
 
 # Custom Block API
 
-This guide covers the advanced Custom Block API for creating blocks with custom client-side rendering properties
-such as custom geometry, textures, transformations, and state-dependent appearances.
-
-**What you will learn:**
-
-- How to create custom blocks with the function-based API
-- Configuring geometry, materials, and transformations
-- Creating state-dependent rendering (different appearances per block state)
+This guide explains how to describe custom block rendering with protocol-independent Java objects. Allay stores the
+definition on the block type and encodes it for each supported Bedrock protocol when networking is initialized.
 
 !!! warning "Server Module Required"
-    The Custom Block API requires access to the **server module**. In your `build.gradle.kts`, you must set
-    `apiOnly = false` in the `allay` block:
+    The Custom Block API belongs to the server module. Set `apiOnly = false` in the AllayGradle configuration:
 
     ```kotlin
     allay {
-        apiOnly = false  // Required for Custom Block API
-        // ... other settings
+        apiOnly = false
     }
     ```
 
-    Note that internal APIs may change between versions. See [AllayGradle documentation](https://github.com/AllayMC/AllayGradle)
-    for more details.
+    Server APIs may change between versions. See the
+    [AllayGradle documentation](https://github.com/AllayMC/AllayGradle) for dependency setup.
 
-!!! tip "Prerequisites"
-    Before diving into custom blocks, make sure you understand the basics of the Block API covered in
-    [Block API Tutorial](../tutorials/block-api.md).
+Before using this API, become familiar with the [Block API tutorial](../tutorials/block-api.md).
 
 ## Overview
 
-The Custom Block API uses a **function-based approach** where you provide a function that maps each `BlockState`
-to its rendering properties via `BlockStateDefinition`. The system automatically:
+A custom block definition has two levels:
 
-- Iterates all possible block state combinations
-- Collects rendering properties for each state
+- `CustomBlockDefinition` is created by `AllayBlockType.Builder`. It contains type-wide configuration and an immutable
+  state-definition table.
+- `CustomBlockStateDefinition` describes the geometry, materials, transformation, and display name for one state.
+
+You normally construct only `CustomBlockStateDefinition`. Pass either one constant definition or a state function to
+`customBlockDefinition(...)`. The function runs once for each state while the block type is built; it is not retained
+or called while packets are sent.
 
 ## Quick Start
 
 ### Simple Textured Block
 
-The simplest way to create a custom block with a texture:
-
 ```java linenums="1"
 import org.allaymc.server.block.type.AllayBlockType;
-import org.allaymc.server.block.type.CustomBlockDefinitionGenerator;
+import org.allaymc.server.block.type.CustomBlockStateDefinition;
 
 AllayBlockType.builder(MyBlockImpl.class)
     .identifier("myplugin:ruby_block")
-    .blockDefinitionGenerator(
-        CustomBlockDefinitionGenerator.ofTexture("ruby_block"))
+    .customBlockDefinition(CustomBlockStateDefinition.ofTexture("ruby_block"))
     .build();
 ```
+
+The texture name is a short name from `terrain_texture.json`.
 
 ### Block with Custom Geometry
 
 ```java linenums="1"
-import org.allaymc.server.block.type.BlockStateDefinition;
-import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
-import org.allaymc.server.block.type.BlockStateDefinition.Materials;
+import org.allaymc.server.block.type.CustomBlockStateDefinition.Geometry;
+import org.allaymc.server.block.type.CustomBlockStateDefinition.Materials;
 
-AllayBlockType.builder(MyBlockImpl.class)
-    .identifier("myplugin:custom_lamp")
-    .blockDefinitionGenerator(
-        CustomBlockDefinitionGenerator.ofConstant(
-            BlockStateDefinition.builder()
-                .geometry(Geometry.of("geometry.custom_lamp"))
-                .materials(Materials.builder().any("lamp_texture"))
-                .displayName("Custom Lamp")
-                .build()))
+var lampDefinition = CustomBlockStateDefinition.builder()
+    .geometry(Geometry.of("geometry.myplugin.lamp"))
+    .materials(Materials.builder().any("lamp").build())
+    .displayName("tile.myplugin.lamp.name")
+    .build();
+
+AllayBlockType.builder(MyLampImpl.class)
+    .identifier("myplugin:lamp")
+    .customBlockDefinition(lampDefinition)
     .build();
 ```
 
 ### State-Dependent Rendering
 
-The most powerful feature - different appearances based on block state:
+Use the function overload only when appearance changes with a block property:
 
 ```java linenums="1"
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
 
 AllayBlockType.builder(MyDoorImpl.class)
-    .identifier("myplugin:custom_door")
+    .identifier("myplugin:brass_door")
     .setProperties(BlockPropertyTypes.OPEN_BIT)
-    .blockDefinitionGenerator(
-        CustomBlockDefinitionGenerator.of(state -> {
-            boolean isOpen = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
-            return BlockStateDefinition.builder()
-                .geometry(Geometry.of(isOpen ? "geometry.door_open" : "geometry.door_closed"))
-                .materials(Materials.builder().any("door_texture"))
-                .build();
-        }))
+    .customBlockDefinition(state -> {
+        boolean open = state.getPropertyValue(BlockPropertyTypes.OPEN_BIT);
+        return CustomBlockStateDefinition.builder()
+            .geometry(open ? "geometry.myplugin.door_open" : "geometry.myplugin.door_closed")
+            .materials(Materials.builder().any("brass_door").build())
+            .build();
+    })
     .build();
 ```
 
-## CustomBlockDefinitionGenerator
+Every returned definition must be non-null. Prefer the constant overload when all states look alike.
 
-The main entry point for custom block definitions.
+## State Definition
 
-### Factory Methods
+`CustomBlockStateDefinition` accepts these fields:
 
-| Method                                           | Description                                      |
-|--------------------------------------------------|--------------------------------------------------|
-| `of(Function<BlockState, BlockStateDefinition>)` | Full control - provide a function for each state |
-| `ofConstant(BlockStateDefinition)`               | All states have the same appearance              |
-| `ofTexture(String texture)`                      | Simple texture-only block                        |
+| Field | Purpose |
+| --- | --- |
+| `geometry` | Model identifier plus optional bone visibility, culling, and UV locking |
+| `materials` | Textures and render methods assigned by face or material name |
+| `transformation` | Model rotation, scale, and translation |
+| `displayName` | Literal text or translation key; defaults to the block identifier |
+| `rawComponents` | Advanced raw Bedrock components for this state |
 
-### Using `of()` - Full Control
-
-```java linenums="1"
-CustomBlockDefinitionGenerator.of(state -> {
-    // Access block state properties
-    int age = state.getPropertyValue(BlockPropertyTypes.AGE);
-    boolean powered = state.getPropertyValue(BlockPropertyTypes.POWERED_BIT);
-
-    // Return different definitions based on state
-    return BlockStateDefinition.builder()
-        .geometry(Geometry.of("geometry.crop_stage_" + age))
-        .materials(Materials.builder().any(powered ? "crop_powered" : "crop_normal"))
-        .build();
-});
-```
-
-### Using `ofConstant()` - Same Appearance
-
-```java linenums="1"
-CustomBlockDefinitionGenerator.ofConstant(
-    BlockStateDefinition.builder()
-        .geometry(Geometry.of("geometry.my_block"))
-        .materials(Materials.builder().any("my_texture"))
-        .transformation(Transformation.builder().ry(45).build())
-        .build()
-);
-```
-
-### Using `ofTexture()` - Simple Texture
-
-```java linenums="1"
-// All faces use the same texture with default opaque rendering
-CustomBlockDefinitionGenerator.ofTexture("ruby_block");
-```
-
-## BlockStateDefinition
-
-Holds the client-side rendering properties for a block state.
-
-```java linenums="1"
-BlockStateDefinition.builder()
-    .geometry(Geometry)         // Geometry configuration
-    .materials(Materials)       // Material instances
-    .transformation(Transformation)  // Model transformation
-    .displayName(String)        // Display name in inventory
-    .build()
-```
-
-### Properties
-
-| Property         | Type             | Description                                                                           |
-|------------------|------------------|---------------------------------------------------------------------------------------|
-| `geometry`       | `Geometry`       | Geometry configuration with identifier and advanced properties, null for default cube |
-| `materials`      | `Materials`      | Material/texture configuration for block faces                                        |
-| `transformation` | `Transformation` | Rotation, scale, and translation of the model                                         |
-| `displayName`    | `String`         | Name shown in inventory, null uses block identifier                                   |
+The object is immutable after construction. Collection arguments are copied, so builders and source maps may be reused
+without changing a registered block.
 
 ## Geometry
 
-Configure the 3D model (geometry) for block rendering. Supports both simple identifier-only form and
-advanced object form with bone visibility, culling, and UV lock settings.
+For a simple model, provide only its resource-pack identifier:
 
-### Simple Form
-
-For basic geometry with just an identifier:
-
-```java linenums="1"
-import org.allaymc.server.block.type.BlockStateDefinition.Geometry;
-
-// Simple string form - most common usage
-Geometry.of("geometry.custom_block")
+```java
+Geometry geometry = Geometry.of("geometry.myplugin.machine");
 ```
 
-### Advanced Form (Object)
-
-For advanced features like bone visibility control and culling optimization:
+The advanced builder adds conditional bones, culling metadata, and UV locks:
 
 ```java linenums="1"
-import org.allaymc.api.block.property.type.BlockPropertyTypes;
-
-// Object form with bone visibility based on block properties
-Geometry.builder()
-    .identifier("geometry.door")
-    .boneVisibility("hinge", false)                                    // Always hidden
-    .boneVisibility("handle", BlockPropertyTypes.OPEN_BIT, true)       // Visible when open
-    .build()
-
-// With culling optimization
-Geometry.builder()
-    .identifier("geometry.leaves")
-    .culling("custom:culling.leaves")
-    .build()
-
-// With UV lock
-Geometry.builder()
-    .identifier("geometry.rotatable")
-    .uvLockAll()  // Lock UVs for all bones when rotating
-    .build()
+Geometry geometry = Geometry.builder()
+    .identifier("geometry.myplugin.machine")
+    .boneVisibility("indicator", BlockPropertyTypes.POWERED_BIT)
+    .boneVisibility("cover", BlockPropertyTypes.OPEN_BIT, false)
+    .culling("myplugin:culling.machine")
+    .cullingLayer("myplugin:machine_layer")
+    .uvLock("base", "frame")
+    .build();
 ```
-
-### Properties
-
-| Property         | Type                          | Description                                                         |
-|------------------|-------------------------------|---------------------------------------------------------------------|
-| `identifier`     | `String`                      | **Required.** Geometry identifier (e.g., `"geometry.custom_block"`) |
-| `boneVisibility` | `Map<String, BoneVisibility>` | Map of bone names to visibility conditions                          |
-| `culling`        | `String`                      | Culling rules identifier (format: `namespace:culling.name`)         |
-| `cullingLayer`   | `String`                      | Culling layer for optimization                                      |
-| `uvLockBones`    | `List<String>`                | List of specific bone names to lock UVs                             |
-| `uvLockAll`      | `boolean`                     | Whether to lock UVs for all bones                                   |
 
 ### Bone Visibility
 
-Control which bones of a geometry are visible. Use property-based conditions for
-dynamic visibility based on block state:
+Bone visibility can be expressed in four ways:
 
-```java linenums="1"
-Geometry.builder()
-    .identifier("geometry.complex_model")
-    // Static visibility - always hidden
-    .boneVisibility("decoration", false)
-    // Property-based visibility - visible when powered
-    .boneVisibility("indicator", BlockPropertyTypes.POWERED_BIT)
-    // Property-based visibility with specific value
-    .boneVisibility("stage_2", BlockPropertyTypes.AGE, 2)
-    .build()
+```java
+.boneVisibility("always_visible", true)
+.boneVisibility("powered_part", BlockPropertyTypes.POWERED_BIT)
+.boneVisibility("age_three", BlockPropertyTypes.AGE_4, 3)
+.boneVisibilityMolang("advanced", "q.block_state('myplugin:mode') == 2")
 ```
 
-#### Bone Visibility Methods
-
-| Method                                               | Description                               |
-|------------------------------------------------------|-------------------------------------------|
-| `boneVisibility(String, boolean)`                    | Static visibility (always visible/hidden) |
-| `boneVisibility(String, BlockPropertyType<Boolean>)` | Visible when boolean property is true     |
-| `boneVisibility(String, BlockPropertyType<T>, T)`    | Visible when property equals value        |
-| `boneVisibilityMolang(String, String)`               | Raw Molang expression (advanced)          |
+Property overloads are preferred because Allay formats the Molang condition consistently. Raw Molang remains available
+for expressions that cannot be represented by one property comparison.
 
 ### Culling
 
-Configure block culling for performance optimization:
-
-```java linenums="1"
-Geometry.builder()
-    .identifier("geometry.leaves")
-    .culling("myplugin:culling.leaves")      // Custom culling rules
-    .cullingLayer("minecraft:culling_layer.leaves")
-    .build()
-```
+`culling(...)` selects a culling rules resource. `cullingLayer(...)` assigns the geometry to a culling layer. These are
+independent settings: use either or both when the resource pack defines them.
 
 ### UV Lock
 
-Prevent UV coordinates from rotating when the block model is transformed:
-
-```java linenums="1"
-// Lock all bones
-Geometry.builder()
-    .identifier("geometry.log")
-    .uvLockAll()
-    .build()
-
-// Lock specific bones only
-Geometry.builder()
-    .identifier("geometry.complex")
-    .uvLock("top", "bottom")  // Only lock these bones
-    .build()
-```
+Use `uvLockAll()` to lock every bone, or `uvLock(String...)` / `uvLock(List<String>)` for selected bones.
+UV locking keeps textures aligned when transformed geometry rotates.
 
 ## Materials
 
-Configure textures for each block face.
-
-### Builder Pattern
+Material names may be face names, the wildcard `*`, or names referenced by custom geometry. Build the collection before
+passing it to the state definition:
 
 ```java linenums="1"
-import org.allaymc.server.block.type.BlockStateDefinition.Materials;
-import org.allaymc.api.block.data.BlockFace;
-
-Materials.builder()
-    .any("default_texture")                    // All unspecified faces
-    .face(BlockFace.UP, "top_texture")        // Override top face
-    .face(BlockFace.DOWN, "bottom_texture")   // Override bottom face
-    .sides("side_texture")                    // All horizontal faces
+Materials materials = Materials.builder()
+    .any("machine_side")
+    .face(BlockFace.UP, "machine_top")
+    .face(BlockFace.DOWN, MaterialInstance.opaque("machine_bottom"))
+    .sides(MaterialInstance.alphaTest("machine_grille"))
+    .build();
 ```
 
-### Methods
+`any(...)` supplies the fallback material. `face(...)` overrides one face, and `sides(...)` assigns north, south, east,
+and west together.
 
-| Method                              | Description                                      |
-|-------------------------------------|--------------------------------------------------|
-| `any(String texture)`               | Set texture for all unspecified faces (wildcard) |
-| `any(MaterialInstance)`             | Set material for all unspecified faces           |
-| `face(BlockFace, String)`           | Set texture for a specific face                  |
-| `face(BlockFace, MaterialInstance)` | Set material for a specific face                 |
-| `sides(String texture)`             | Set texture for all horizontal faces (N/S/E/W)   |
-| `sides(MaterialInstance)`           | Set material for all horizontal faces            |
+### Material Instances
 
-### Practical Examples
+Factory methods cover the standard render methods:
 
-**Simple single texture:**
+| Factory | Render method | Typical use |
+| --- | --- | --- |
+| `opaque(texture)` | `OPAQUE` | Solid blocks |
+| `blend(texture)` | `BLEND` | Translucent glass or ice |
+| `doubleSided(texture)` | `DOUBLE_SIDED` | Surfaces visible from both sides |
+| `alphaTest(texture)` | `ALPHA_TEST` | Cutout vegetation and crossed planes |
+| `alphaTestSingleSided(texture)` | `ALPHA_TEST_SINGLE_SIDED` | Doors and other one-sided cutouts |
+| `alphaTestToOpaque(texture)` | `ALPHA_TEST_TO_OPAQUE` | Cutouts that become opaque at distance |
+| `alphaTestSingleSidedToOpaque(texture)` | `ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE` | One-sided distance optimization |
+| `blendToOpaque(texture)` | `BLEND_TO_OPAQUE` | Translucency that becomes opaque at distance |
 
-```java linenums="1"
-Materials.builder()
-    .any("stone_texture")
-```
-
-**Different top and bottom:**
+The builder exposes the same options plus lighting flags:
 
 ```java linenums="1"
-Materials.builder()
-    .any("log_side")                    // Default for all faces
-    .face(BlockFace.UP, "log_top")      // Override top
-    .face(BlockFace.DOWN, "log_top")    // Override bottom
-```
-
-**Furnace-style (front face different):**
-
-```java linenums="1"
-Materials.builder()
-    .any("furnace_side")
-    .face(BlockFace.UP, "furnace_top")
-    .face(BlockFace.NORTH, "furnace_front")
-```
-
-## MaterialInstance
-
-Configure advanced rendering properties for a face.
-
-```java linenums="1"
-import org.allaymc.server.block.type.BlockStateDefinition.MaterialInstance;
-import org.allaymc.server.block.type.BlockStateDefinition.RenderMethod;
-
-MaterialInstance.builder()
-    .texture("my_texture")
+MaterialInstance leaves = MaterialInstance.builder()
+    .texture("silver_leaves")
     .renderMethod(RenderMethod.ALPHA_TEST)
     .faceDimming(true)
-    .ambientOcclusion(true)
-    .randomUVRotation(false)
-    .textureVariation(false)
-    .build()
+    .ambientOcclusionIntensity(0.8f)
+    .randomUVRotation(true)
+    .textureVariation(true)
+    .build();
 ```
 
-### Builder Properties
-
-| Property           | Type           | Default  | Description                                              |
-|--------------------|----------------|----------|----------------------------------------------------------|
-| `texture`          | `String`       | Required | Texture name from resource pack                          |
-| `renderMethod`     | `RenderMethod` | `OPAQUE` | How the texture is rendered                              |
-| `faceDimming`      | `boolean`      | `true`   | Apply directional light dimming                          |
-| `ambientOcclusion` | `boolean`      | `true`   | Apply ambient occlusion shadows                          |
-| `randomUVRotation` | `boolean`      | `false`  | Randomly rotate texture to avoid tiling patterns         |
-| `textureVariation` | `boolean`      | `false`  | Enable texture variation                                 |
-
-### Factory Methods
-
-| Method                                          | Description                             |
-|-------------------------------------------------|-----------------------------------------|
-| `MaterialInstance.of(String texture)`           | Opaque texture with defaults            |
-| `MaterialInstance.opaque(String)`               | Explicit opaque rendering               |
-| `MaterialInstance.alphaTest(String)`            | Binary transparency (solid/transparent) |
-| `MaterialInstance.alphaTestSingleSided(String)` | Binary transparency, single-sided       |
-| `MaterialInstance.blend(String)`                | Smooth transparency blending            |
-| `MaterialInstance.doubleSided(String)`          | Visible from both sides                 |
-
-### Render Methods
-
-| RenderMethod                        | Description                                      | Use Case                      |
-|-------------------------------------|--------------------------------------------------|-------------------------------|
-| `OPAQUE`                            | Fully opaque                                     | Solid blocks like stone       |
-| `ALPHA_TEST`                        | Binary transparency                              | Leaves, flowers, crops        |
-| `ALPHA_TEST_SINGLE_SIDED`           | Binary, one-sided                                | Glass panes                   |
-| `ALPHA_TEST_TO_OPAQUE`              | Binary transparency, opaque at distance          | Performance-optimized leaves  |
-| `ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE` | Single-sided, opaque at distance                 | Performance-optimized panes   |
-| `BLEND`                             | Smooth transparency                              | Stained glass, water          |
-| `BLEND_TO_OPAQUE`                   | Smooth transparency, opaque at distance          | Performance-optimized glass   |
-| `DOUBLE_SIDED`                      | Both sides visible                               | Vines, banners                |
-
-### Example with Transparency
-
-```java linenums="1"
-Materials.builder().any(MaterialInstance.alphaTest("leaves_texture"))
-```
+Allay encodes these fields directly in the format understood by each client version.
 
 ## Transformation
 
-Apply rotation, scale, and translation to the block model.
+Transformations use degrees for rotation, factors for scale, and block units for translation:
 
 ```java linenums="1"
-import org.allaymc.server.block.type.BlockStateDefinition.Transformation;
-
-Transformation.builder()
-    .rx(0).ry(90).rz(0)      // Rotation in degrees (0, 90, 180, 270)
-    .sx(1).sy(1).sz(1)       // Scale (default 1.0)
-    .tx(0).ty(0).tz(0)       // Translation
-    .build()
+Transformation transformation = Transformation.builder()
+    .ry(90)
+    .sx(0.75f)
+    .sy(1.25f)
+    .sz(0.75f)
+    .ty(0.125f)
+    .build();
 ```
 
-### Properties
+Rotations must be multiples of 90 degrees. Negative and values above 360 are accepted when they remain multiples of 90.
+An omitted or zero scale axis uses `1.0`.
 
-| Property         | Type    | Description                                      |
-|------------------|---------|--------------------------------------------------|
-| `rx`, `ry`, `rz` | `int`   | Rotation in degrees (must be 0, 90, 180, or 270) |
-| `sx`, `sy`, `sz` | `float` | Scale factors (default 1.0)                      |
-| `tx`, `ty`, `tz` | `float` | Translation offsets                              |
-
-!!! warning "Rotation Constraints"
-    Rotation values must be 0, 90, 180, or 270 degrees. Other values will cause rendering issues.
-
-### Rotation Example
-
-Create a block that rotates based on facing direction:
+State-dependent transformations can rotate one geometry without duplicating resource-pack models:
 
 ```java linenums="1"
-CustomBlockDefinitionGenerator.of(state -> {
-    var facing = state.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
-    int rotation = switch (facing) {
-        case NORTH -> 0;
-        case EAST -> 90;
-        case SOUTH -> 180;
-        case WEST -> 270;
-    };
-
-    return BlockStateDefinition.builder()
-        .geometry(Geometry.of("geometry.directional_block"))
-        .transformation(Transformation.builder().ry(rotation).build())
-        .build();
-});
+AllayBlockType.builder(MyDirectionalBlockImpl.class)
+    .identifier("myplugin:directional_console")
+    .setProperties(BlockPropertyTypes.DIRECTION_4)
+    .customBlockDefinition(state -> {
+        int direction = state.getPropertyValue(BlockPropertyTypes.DIRECTION_4);
+        return CustomBlockStateDefinition.builder()
+            .geometry("geometry.myplugin.directional_console")
+            .materials(Materials.builder().any("directional_console").build())
+            .transformation(Transformation.builder().ry(direction * 90).build())
+            .build();
+    })
+    .build();
 ```
+
+## Placement Rotation
+
+Placement rotation belongs to the block type, not an individual state:
+
+```java
+AllayBlockType.builder(MyMachineImpl.class)
+    .identifier("myplugin:machine")
+    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+    .customBlockDefinition(machineDefinition)
+    .customBlockRotationOffset(90)
+    .build();
+```
+
+Valid offsets are `0`, `90`, `180`, and `270`. The option affects the placement-direction trait and is useful with the
+cardinal-direction or facing-direction properties.
+
+## Physical Properties
+
+Do not duplicate collision, selection, light, or friction settings in the client definition. Allay derives these for
+each state from `BlockStateData`:
+
+- collision shape and selection shape;
+- light emission and dampening;
+- friction;
+- server-authoritative mining behavior.
+
+This keeps rendering metadata aligned with server behavior. Blocks tagged `REPLACEABLE` or `POTTABLE_PLANT` also receive
+the matching client components automatically. Every block tag is included in the state components.
+
+```java linenums="1"
+AllayBlockType.builder(MyFlowerImpl.class)
+    .identifier("myplugin:moon_flower")
+    .setBlockTags(Set.of(BlockTags.POTTABLE_PLANT, BlockTags.REPLACEABLE))
+    .customBlockDefinition(CustomBlockStateDefinition.builder()
+        .geometry("geometry.myplugin.cross")
+        .materials(Materials.builder()
+            .any(MaterialInstance.alphaTest("moon_flower"))
+            .build())
+        .build())
+    .build();
+```
+
+## Raw Components
+
+Raw NBT is an escape hatch for components that do not yet have a structured API. Global components apply to the entire
+type; state components apply only to the corresponding permutation:
+
+```java linenums="1"
+var stateDefinition = CustomBlockStateDefinition.builder()
+    .materials(Materials.builder().any("signal_lamp").build())
+    .rawComponents(Map.of(
+        "minecraft:random_offset", NbtMap.builder().putString("type", "xyz").build()))
+    .build();
+
+AllayBlockType.builder(MySignalLampImpl.class)
+    .identifier("myplugin:signal_lamp")
+    .customBlockDefinition(stateDefinition)
+    .customBlockRawComponent("myplugin:global_marker", NbtMap.EMPTY)
+    .build();
+```
+
+Use `customBlockRawComponents(Map)` to replace the complete global raw-component map. Raw payloads are merged as supplied
+and are not adapted for older protocols; compatibility is the plugin's responsibility. Server-derived physical
+components take precedence over state-level raw entries with the same name.
 
 ## Complete Examples
 
 ### Growth Stage Crop
 
 ```java linenums="1"
-import org.allaymc.api.block.property.type.IntPropertyType;
-
-// Define growth property (0-7)
-var AGE = IntPropertyType.of("age", 0, 7, 0);
-
-AllayBlockType.builder(CustomCropImpl.class)
-    .identifier("myplugin:magic_crop")
-    .setProperties(AGE)
-    .blockDefinitionGenerator(
-        CustomBlockDefinitionGenerator.of(state -> {
-            int age = state.getPropertyValue(AGE);
-            return BlockStateDefinition.builder()
-                .geometry(Geometry.of("geometry.crop"))
-                .materials(Materials.builder().any(MaterialInstance.alphaTest("magic_crop_stage_" + age)))
-                .build();
-        }))
+AllayBlockType.builder(MyCropImpl.class)
+    .identifier("myplugin:moon_crop")
+    .setProperties(BlockPropertyTypes.AGE_16)
+    .customBlockDefinition(state -> {
+        int age = state.getPropertyValue(BlockPropertyTypes.AGE_16);
+        return CustomBlockStateDefinition.builder()
+            .geometry(Geometry.builder()
+                .identifier("geometry.myplugin.crop")
+                .boneVisibilityMolang("flowers", "q.block_state('age') >= 5")
+                .uvLockAll()
+                .build())
+            .materials(Materials.builder()
+                .any(MaterialInstance.alphaTest("moon_crop_" + age))
+                .build())
+            .displayName("tile.myplugin.moon_crop.name")
+            .build();
+    })
     .build();
 ```
 
-### Multi-State Machine Block
+### Multi-State Machine
 
 ```java linenums="1"
-import org.allaymc.api.block.property.type.BooleanPropertyType;
-import org.allaymc.api.block.property.type.EnumPropertyType;
+enum MachineMode { OFF, IDLE, RUNNING }
 
-enum MachineState { OFF, IDLE, RUNNING }
+var POWERED = BooleanPropertyType.of("myplugin:powered", false);
+var MODE = EnumPropertyType.of("myplugin:mode", MachineMode.class, MachineMode.OFF);
 
-var POWERED = BooleanPropertyType.of("powered", false);
-var STATE = EnumPropertyType.of("state", MachineState.class, MachineState.OFF);
-
-AllayBlockType.builder(MachineBlockImpl.class)
+AllayBlockType.builder(MyMachineImpl.class)
     .identifier("myplugin:processing_machine")
-    .setProperties(POWERED, STATE)
-    .blockDefinitionGenerator(
-        CustomBlockDefinitionGenerator.of(state -> {
-            boolean powered = state.getPropertyValue(POWERED);
-            MachineState machineState = state.getPropertyValue(STATE);
-
-            String geometry = powered ? "geometry.machine_on" : "geometry.machine_off";
-            String texture = switch (machineState) {
-                case OFF -> "machine_off";
-                case IDLE -> "machine_idle";
-                case RUNNING -> "machine_running";
-            };
-
-            return BlockStateDefinition.builder()
-                .geometry(Geometry.of(geometry))
-                .materials(Materials.builder().any(texture))
-                .displayName("Processing Machine")
-                .build();
-        }))
+    .setProperties(POWERED, MODE)
+    .customBlockDefinition(state -> {
+        boolean powered = state.getPropertyValue(POWERED);
+        MachineMode mode = state.getPropertyValue(MODE);
+        String texture = switch (mode) {
+            case OFF -> "machine_off";
+            case IDLE -> "machine_idle";
+            case RUNNING -> "machine_running";
+        };
+        return CustomBlockStateDefinition.builder()
+            .geometry(powered ? "geometry.myplugin.machine_on" : "geometry.myplugin.machine_off")
+            .materials(Materials.builder().any(texture).build())
+            .displayName("tile.myplugin.processing_machine.name")
+            .build();
+    })
     .build();
 ```
 
-### Rotatable Block with Custom NBT Components
+### Rotatable Reinforced Block with a Raw Component
 
 ```java linenums="1"
-import org.cloudburstmc.nbt.NbtMap;
-import java.util.Map;
-
-// Custom components (advanced usage)
-Map<String, NbtMap> customComponents = Map.of(
-    "minecraft:destructible_by_explosion", NbtMap.builder()
-        .putFloat("explosion_resistance", 100.0f)
-        .build()
-);
-
-AllayBlockType.builder(ReinforcedBlockImpl.class)
+AllayBlockType.builder(MyReinforcedBlockImpl.class)
     .identifier("myplugin:reinforced_block")
-    .blockDefinitionGenerator(new CustomBlockDefinitionGenerator(
-        state -> BlockStateDefinition.builder()
-            .geometry(Geometry.of("geometry.reinforced"))
-            .materials(Materials.builder().any("reinforced_texture"))
-            .build(),
-        customComponents))
+    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+    .customBlockDefinition(CustomBlockStateDefinition.builder()
+        .geometry("geometry.myplugin.reinforced")
+        .materials(Materials.builder().any("reinforced_block").build())
+        .build())
+    .customBlockRotationOffset(90)
+    .customBlockRawComponent(
+        "minecraft:destructible_by_explosion",
+        NbtMap.builder().putFloat("explosion_resistance", 100.0f).build())
     .build();
 ```
 
-## Physical Properties
+Keep state functions deterministic and inexpensive. They run only during registration, but their results become the
+cached definitions used by every supported protocol.
 
-Physical properties like collision shape, light emission, and friction are **automatically read** from
-`BlockStateData` and don't need to be specified in `BlockStateDefinition`:
+## Best Practices
 
-- Collision shape
-- Selection box
-- Light emission
-- Light dampening
-- Friction coefficient
-
-These are configured through block components, not the definition generator.
-
-## Automatic Components from Block Tags
-
-Certain block tags automatically add components to your custom block:
-
-| Block Tag        | Effect                                    |
-|------------------|-------------------------------------------|
-| `REPLACEABLE`    | Block can be replaced when placing others |
-| `POTTABLE_PLANT` | Block can be placed in a flower pot       |
-
-```java linenums="1"
-import org.allaymc.api.block.tag.BlockTags;
-
-AllayBlockType.builder(CustomFlowerImpl.class)
-    .identifier("myplugin:custom_flower")
-    .addBlockTag(BlockTags.POTTABLE_PLANT)  // Can be placed in flower pots
-    .blockDefinitionGenerator(
-        CustomBlockDefinitionGenerator.ofTexture("custom_flower"))
-    .build();
-```
-
-## Tips and Best Practices
-
-!!! tip "Start Simple"
-    Begin with `ofTexture()` or `ofConstant()` and only use `of()` when you need state-dependent rendering.
-
-!!! tip "Use Descriptive Geometry Names"
-    Name your geometry files clearly: `geometry.my_block_open`, `geometry.my_block_closed`.
-
-!!! warning "Geometry Must Exist"
-    The geometry identifier must reference an actual geometry file in your resource pack.
-    Missing geometries will cause client-side rendering issues.
-
-!!! warning "Texture Names"
-    Texture names must match entries in your resource pack's `terrain_texture.json` or `textures/item_texture.json`.
+- Start with `CustomBlockStateDefinition.ofTexture(...)` or the constant overload and introduce a state function only
+  when appearance actually varies.
+- Use descriptive resource names such as `geometry.myplugin.machine_open` and keep texture short names synchronized with
+  `terrain_texture.json`.
+- Verify that every geometry and culling identifier exists in the resource pack; missing assets render as placeholders.
+- Keep raw components small and document the client versions they target.

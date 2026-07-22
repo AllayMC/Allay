@@ -13,6 +13,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.form.type.Form;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.math.location.Location3dc;
@@ -34,6 +35,7 @@ import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.Sound;
+import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.player.ChunkCache;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -45,14 +47,20 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.definition.DefinitionRegistry;
+import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.awt.image.BufferedImage;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -62,13 +70,29 @@ import java.util.UUID;
  */
 public abstract class PacketEncoder {
     private final ProtocolData data;
+    private final DefinitionRegistry<ItemDefinition> itemDefinitions;
+    private final DefinitionRegistry<BlockDefinition> blockDefinitions;
 
     protected PacketEncoder(ProtocolData data) {
         this.data = Objects.requireNonNull(data, "data");
+        this.itemDefinitions = SimpleDefinitionRegistry.<ItemDefinition>builder()
+                .addAll(data.itemDefinitions())
+                .build();
+        this.blockDefinitions = SimpleDefinitionRegistry.<BlockDefinition>builder()
+                .addAll(data.blockDefinitions())
+                .build();
     }
 
     public final ProtocolData getData() {
         return data;
+    }
+
+    protected final ItemData encodeItemStack(ItemStack itemStack) {
+        return NetworkHelper.toNetwork(itemStack, itemDefinitions, blockDefinitions);
+    }
+
+    protected final List<ItemData> encodeItemStacks(List<ItemStack> itemStacks) {
+        return NetworkHelper.toNetwork(itemStacks, itemDefinitions, blockDefinitions);
     }
 
     public abstract ItemRegistryPacket encodeItemRegistry();

@@ -42,18 +42,34 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final Set<ItemTag> itemTags;
     @Getter
     private final ItemData itemData;
+    @Getter
+    private final boolean customItem;
 
     private final Supplier<BlockType<?>> blockType;
 
+    /**
+     * The protocol-independent client definition for this item, or {@code null} when no custom
+     * item definition was configured.
+     */
     @Getter
-    private ItemDefinition itemDefinition;
+    private final CustomItemDefinition customItemDefinition;
 
-    private AllayItemType(Function<ItemStackInitInfo, T> instanceCreator, Identifier identifier, int runtimeId, Set<ItemTag> itemTags, ItemData itemData) {
+    private AllayItemType(
+            Function<ItemStackInitInfo, T> instanceCreator,
+            Identifier identifier,
+            int runtimeId,
+            Set<ItemTag> itemTags,
+            ItemData itemData,
+            boolean customItem,
+            CustomItemDefinition customItemDefinition
+    ) {
         this.instanceCreator = instanceCreator;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
         this.itemTags = itemTags;
         this.itemData = itemData;
+        this.customItem = customItem;
+        this.customItemDefinition = customItemDefinition;
         this.blockType = Suppliers.memoize(() -> Registries.BLOCKS.get(BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier)));
     }
 
@@ -87,7 +103,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected int runtimeId = Integer.MAX_VALUE;
         protected Set<ItemTag> itemTags = Set.of();
         protected ItemData itemData = ItemData.DEFAULT;
-        protected ItemDefinitionGenerator itemDefinitionGenerator;
+        protected CustomItemDefinition customItemDefinition;
 
         /**
          * Creates a new item type builder.
@@ -140,12 +156,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("Cannot find item data for vanilla item " + itemId + " in registry!");
             }
 
-            // Item component data for vanilla item
-            var vanillaItemDefinition = InternalRegistries.ITEM_DEFINITIONS.get(itemId);
-            if (vanillaItemDefinition != null) {
-                itemDefinitionGenerator($ -> vanillaItemDefinition);
-            }
-
             // Tags for vanilla item
             var tags = InternalRegistries.ITEM_TAGS.get(itemId);
             if (tags != null) {
@@ -168,15 +178,13 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         /**
-         * Sets the item definition generator for custom items.
-         * <p>
-         * The generator creates the client-side item definition that is sent to players.
+         * Sets the protocol-independent client definition for this custom item.
          *
-         * @param itemDefinitionGenerator the item definition generator
+         * @param customItemDefinition the item definition parameters
          * @return this builder
          */
-        public Builder itemDefinitionGenerator(ItemDefinitionGenerator itemDefinitionGenerator) {
-            this.itemDefinitionGenerator = itemDefinitionGenerator;
+        public Builder customItemDefinition(CustomItemDefinition customItemDefinition) {
+            this.customItemDefinition = Objects.requireNonNull(customItemDefinition, "customItemDefinition");
             return this;
         }
 
@@ -332,15 +340,18 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("Failed to create item type!", e);
             }
 
-            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags, itemData);
-
-            // Generate item definition
-            if (itemDefinitionGenerator != null) {
-                type.itemDefinition = itemDefinitionGenerator.generate(type);
-            } else {
-                // If not specified, the default item definition is also used for custom block item
-                type.itemDefinition = ItemDefinition.DEFAULT;
+            if (!isCustomItem && customItemDefinition != null) {
+                throw new ItemTypeBuildException("Vanilla items cannot have a custom item definition");
             }
+            var type = new AllayItemType<>(
+                    instanceCreator,
+                    identifier,
+                    runtimeId,
+                    itemTags,
+                    itemData,
+                    isCustomItem,
+                    customItemDefinition
+            );
 
             Registries.ITEMS.register(identifier, type);
             return type;

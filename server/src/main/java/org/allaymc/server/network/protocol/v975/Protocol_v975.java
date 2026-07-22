@@ -1,7 +1,6 @@
 package org.allaymc.server.network.protocol.v975;
 
 import org.allaymc.api.item.recipe.FurnaceRecipe;
-import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
@@ -31,7 +30,7 @@ public class Protocol_v975 extends Protocol_v944 {
         return ShapelessRecipeData.of(
                 CraftingDataType.SHAPELESS,
                 recipe.getIdentifier().toString(),
-                List.of(NetworkHelper.toNetworkWithCount(recipe.getIngredient())),
+                List.of(encodeItemDescriptorWithCount(recipe.getIngredient())),
                 buildNetworkOutputs(recipe.getOutputs()),
                 UUID.randomUUID(),
                 recipe.getType().name().toLowerCase(Locale.ROOT),

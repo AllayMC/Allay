@@ -29,6 +29,7 @@ import org.allaymc.server.item.impl.ItemStackImpl;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.utils.BlockAndItemIdMapper;
+import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -55,7 +56,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     private BlockState defaultState;
     private T blockBehavior;
-    private BlockDefinition blockDefinition;
+
+    /**
+     * The protocol-independent client definition for this block, or {@code null} when no custom
+     * block definition was configured.
+     */
+    private CustomBlockDefinition customBlockDefinition;
 
     private AllayBlockType(
             Map<String, BlockPropertyType<?>> properties,
@@ -206,7 +212,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         this.identifier,
                         properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
                 ));
-        protected BlockDefinitionGenerator blockDefinitionGenerator;
+        protected Function<BlockState, CustomBlockStateDefinition> customBlockDefinitionFunction;
+        protected float customBlockRotationOffset;
+        protected Map<String, NbtMap> customBlockRawComponents = new LinkedHashMap<>();
 
         /**
          * Creates a new block type builder.
@@ -412,17 +420,69 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         /**
-         * Sets the block definition generator for custom blocks.
-         * <p>
-         * The generator creates the client-side block definition that is sent to players.
-         * Use {@link CustomBlockDefinitionGenerator} for custom block rendering configuration.
+         * Uses one client definition for every state of this custom block.
          *
-         * @param blockDefinitionGenerator the block definition generator
+         * @param definition the protocol-independent state definition
          * @return this builder
-         * @see CustomBlockDefinitionGenerator
          */
-        public Builder blockDefinitionGenerator(BlockDefinitionGenerator blockDefinitionGenerator) {
-            this.blockDefinitionGenerator = blockDefinitionGenerator;
+        public Builder customBlockDefinition(CustomBlockStateDefinition definition) {
+            Objects.requireNonNull(definition, "definition");
+            return customBlockDefinition(state -> definition);
+        }
+
+        /**
+         * Resolves a client definition for every state of this custom block.
+         * <p>
+         * The function is invoked exactly once per state during {@link #build()} and is not retained by the built
+         * block type. Use this overload only when appearance depends on block properties.
+         *
+         * @param definitionFunction function from a constructed block state to its protocol-independent definition
+         * @return this builder
+         */
+        public Builder customBlockDefinition(Function<BlockState, CustomBlockStateDefinition> definitionFunction) {
+            this.customBlockDefinitionFunction = Objects.requireNonNull(definitionFunction, "definitionFunction");
+            return this;
+        }
+
+        /**
+         * Sets the placement-direction rotation offset for this custom block type.
+         *
+         * @param rotationOffset 0, 90, 180, or 270 degrees
+         * @return this builder
+         */
+        public Builder customBlockRotationOffset(float rotationOffset) {
+            if (rotationOffset != 0f && rotationOffset != 90f && rotationOffset != 180f && rotationOffset != 270f) {
+                throw new IllegalArgumentException("Rotation offset must be 0, 90, 180, or 270 degrees");
+            }
+            this.customBlockRotationOffset = rotationOffset;
+            return this;
+        }
+
+        /**
+         * Replaces the raw global Bedrock components for this custom block.
+         * <p>
+         * Raw components are an advanced escape hatch and are not adapted between protocol versions.
+         *
+         * @param components component names and raw payloads
+         * @return this builder
+         */
+        public Builder customBlockRawComponents(Map<String, NbtMap> components) {
+            this.customBlockRawComponents = new LinkedHashMap<>(Objects.requireNonNull(components, "components"));
+            return this;
+        }
+
+        /**
+         * Adds one raw global Bedrock component to this custom block.
+         *
+         * @param name      component name
+         * @param component raw component payload
+         * @return this builder
+         */
+        public Builder customBlockRawComponent(String name, NbtMap component) {
+            this.customBlockRawComponents.put(
+                    Objects.requireNonNull(name, "name"),
+                    Objects.requireNonNull(component, "component")
+            );
             return this;
         }
 
@@ -495,8 +555,28 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }
 
-            // Generate block definition
-            type.blockDefinition = blockDefinitionGenerator != null ? blockDefinitionGenerator.generate(type) : BlockDefinition.DEFAULT;
+            if (!isCustomBlock && customBlockDefinitionFunction != null) {
+                throw new BlockTypeBuildException("Vanilla blocks cannot have a custom block definition");
+            }
+            if (customBlockDefinitionFunction == null) {
+                if (customBlockRotationOffset != 0f || !customBlockRawComponents.isEmpty()) {
+                    throw new BlockTypeBuildException("Custom block options require a custom block definition");
+                }
+            } else {
+                var stateDefinitions = new LinkedHashMap<Integer, CustomBlockStateDefinition>();
+                for (var blockState : type.getAllStates()) {
+                    var definition = Objects.requireNonNull(
+                            customBlockDefinitionFunction.apply(blockState),
+                            "Custom block definition function returned null for state " + blockState
+                    );
+                    stateDefinitions.put(blockState.blockStateHash(), definition);
+                }
+                type.customBlockDefinition = new CustomBlockDefinition(
+                        customBlockRotationOffset,
+                        stateDefinitions,
+                        customBlockRawComponents
+                );
+            }
 
             Registries.BLOCKS.register(type.getIdentifier(), type);
             for (var blockState : type.blockStateHashMap.values()) {

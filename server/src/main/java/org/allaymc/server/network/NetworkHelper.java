@@ -26,13 +26,12 @@ import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.data.EntityId;
-import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityProperties;
 import org.cloudburstmc.protocol.bedrock.data.entity.FloatEntityProperty;
 import org.cloudburstmc.protocol.bedrock.data.entity.IntEntityProperty;
@@ -40,6 +39,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
+import org.cloudburstmc.protocol.bedrock.definition.DefinitionRegistry;
 import org.joml.*;
 
 import java.util.HashMap;
@@ -114,16 +114,28 @@ public final class NetworkHelper {
         return result;
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(ItemDescriptor descriptor) {
+    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(
+            ItemDescriptor descriptor,
+            DefinitionRegistry<ItemDefinition> itemDefinitions
+    ) {
         return switch (descriptor) {
-            case ItemTypeDescriptor type -> new DefaultDescriptor(toNetwork(type.getItemType()), type.getMeta());
+            case ItemTypeDescriptor type -> new DefaultDescriptor(
+                    getItemDefinition(type.getItemType(), itemDefinitions),
+                    type.getMeta()
+            );
             case ItemTagDescriptor tag -> new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemTagDescriptor(tag.getItemTag().name());
             default -> throw new IllegalArgumentException("Unexpected value: " + descriptor);
         };
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount(ItemDescriptor descriptor) {
-        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(toNetwork(descriptor), 1);
+    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount(
+            ItemDescriptor descriptor,
+            DefinitionRegistry<ItemDefinition> itemDefinitions
+    ) {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(
+                toNetwork(descriptor, itemDefinitions),
+                1
+        );
     }
 
     public static BiomeDefinitionData toNetwork(BiomeType biome) {
@@ -161,25 +173,27 @@ public final class NetworkHelper {
         );
     }
 
-    public ItemDefinition toNetwork(ItemType<?> itemType) {
-        var itemDefinition = ((AllayItemType<?>) itemType).getItemDefinition();
-        return new SimpleItemDefinition(
-                itemType.getIdentifier().toString(), itemType.getRuntimeId(), itemDefinition.version(),
-                itemDefinition.componentBased(), itemDefinition.components()
-        );
-    }
-
-    public static ItemData toNetwork(ItemStack itemStack) {
+    public static ItemData toNetwork(
+            ItemStack itemStack,
+            DefinitionRegistry<ItemDefinition> itemDefinitions,
+            DefinitionRegistry<BlockDefinition> blockDefinitions
+    ) {
         var itemType = itemStack.getItemType();
         if (itemType == ItemTypes.AIR) {
-            return ItemData.AIR;
+            return ItemData.AIR.toBuilder()
+                    .definition(getItemDefinition(itemType, itemDefinitions))
+                    .build();
         }
 
         var blockState = itemStack.toBlockState();
+        var blockDefinition = blockState == null ? null : blockDefinitions.getDefinition(blockState.blockStateHash());
+        if (blockState != null && blockDefinition == null) {
+            throw new IllegalStateException("Missing block definition for state " + blockState.blockStateHash());
+        }
         return ItemData
                 .builder()
-                .definition(NetworkHelper.toNetwork(itemType))
-                .blockDefinition(blockState != null ? blockState::blockStateHash : () -> 0)
+                .definition(getItemDefinition(itemType, itemDefinitions))
+                .blockDefinition(blockDefinition)
                 .count(itemStack.getCount())
                 .damage(itemStack.getMeta())
                 .tag(itemStack.saveExtraTag())
@@ -189,8 +203,23 @@ public final class NetworkHelper {
 
     }
 
-    public static List<ItemData> toNetwork(List<ItemStack> items) {
-        return items.stream().map(NetworkHelper::toNetwork).toList();
+    public static List<ItemData> toNetwork(
+            List<ItemStack> items,
+            DefinitionRegistry<ItemDefinition> itemDefinitions,
+            DefinitionRegistry<BlockDefinition> blockDefinitions
+    ) {
+        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions)).toList();
+    }
+
+    private static ItemDefinition getItemDefinition(
+            ItemType<?> itemType,
+            DefinitionRegistry<ItemDefinition> itemDefinitions
+    ) {
+        var definition = itemDefinitions.getDefinition(itemType.getRuntimeId());
+        if (definition == null) {
+            throw new IllegalStateException("Missing item definition for " + itemType.getIdentifier());
+        }
+        return definition;
     }
 
     public static Vector3ic fromNetwork(org.cloudburstmc.math.vector.Vector3i vec) {
