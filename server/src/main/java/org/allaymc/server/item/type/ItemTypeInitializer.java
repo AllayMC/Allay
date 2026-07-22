@@ -7,6 +7,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySplashPotion;
 import org.allaymc.api.entity.property.enums.ClimateVariant;
+import org.allaymc.api.entity.data.BoatVariant;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.data.DiscType;
@@ -46,6 +47,32 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class ItemTypeInitializer {
+    public static void initBoats() {
+        ItemTypes.BOAT = buildBoat(ItemId.BOAT, BoatVariant.OAK);
+        ItemTypes.OAK_BOAT = buildBoat(ItemId.OAK_BOAT, BoatVariant.OAK);
+        ItemTypes.SPRUCE_BOAT = buildBoat(ItemId.SPRUCE_BOAT, BoatVariant.SPRUCE);
+        ItemTypes.BIRCH_BOAT = buildBoat(ItemId.BIRCH_BOAT, BoatVariant.BIRCH);
+        ItemTypes.JUNGLE_BOAT = buildBoat(ItemId.JUNGLE_BOAT, BoatVariant.JUNGLE);
+        ItemTypes.ACACIA_BOAT = buildBoat(ItemId.ACACIA_BOAT, BoatVariant.ACACIA);
+        ItemTypes.DARK_OAK_BOAT = buildBoat(ItemId.DARK_OAK_BOAT, BoatVariant.DARK_OAK);
+        ItemTypes.MANGROVE_BOAT = buildBoat(ItemId.MANGROVE_BOAT, BoatVariant.MANGROVE);
+        ItemTypes.CHERRY_BOAT = buildBoat(ItemId.CHERRY_BOAT, BoatVariant.CHERRY);
+        ItemTypes.PALE_OAK_BOAT = buildBoat(ItemId.PALE_OAK_BOAT, BoatVariant.PALE_OAK);
+        ItemTypes.BAMBOO_RAFT = AllayItemType
+                .builder(ItemBambooRaftStackImpl.class)
+                .vanillaItem(ItemId.BAMBOO_RAFT)
+                .addComponent(info -> new ItemBoatBaseComponentImpl(info, BoatVariant.BAMBOO), ItemBoatBaseComponentImpl.class)
+                .build();
+    }
+
+    private static ItemType<ItemBoatStack> buildBoat(ItemId itemId, BoatVariant variant) {
+        return AllayItemType
+                .builder(ItemBoatStackImpl.class)
+                .vanillaItem(itemId)
+                .addComponent(info -> new ItemBoatBaseComponentImpl(info, variant), ItemBoatBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initBanner() {
         ItemTypes.BANNER = AllayItemType
                 .builder(ItemBannerStackImpl.class)

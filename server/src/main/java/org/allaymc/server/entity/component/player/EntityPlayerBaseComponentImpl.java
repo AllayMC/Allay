@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.primitiveshape.PrimitiveShape;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
@@ -95,6 +96,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected Player controller;
     @Getter
+    protected Entity vehicle;
+    @Getter
     protected GameMode gameMode;
     protected boolean phantom;
     @Getter
@@ -121,6 +124,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected long startUsingItemInAirTime;
 
     protected Map<String, Long> cooldowns;
+
+    @Override
+    public void setVehicle(Entity vehicle) {
+        this.vehicle = vehicle;
+    }
 
     @Getter
     protected String scoreTag;

@@ -12,6 +12,8 @@ import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.EntityRideableComponent;
+import org.allaymc.api.entity.data.EntityLinkType;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.property.type.*;
@@ -475,6 +477,20 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         viewers.add(viewer);
         viewer.viewEntity(thisEntity);
         viewer.viewEntityState(thisEntity);
+        if (thisEntity instanceof EntityRideableComponent rideableComponent) {
+            var passengers = rideableComponent.getPassengers();
+            for (int i = 0; i < passengers.size(); i++) {
+                viewer.viewEntityLink(thisEntity, passengers.get(i), i == 0 ? EntityLinkType.RIDER : EntityLinkType.PASSENGER);
+            }
+        }
+        if (thisEntity instanceof EntityPlayer passenger &&
+            passenger.getVehicle() instanceof EntityRideableComponent rideableComponent) {
+            var passengers = rideableComponent.getPassengers();
+            var seat = passengers.indexOf(passenger);
+            if (seat >= 0) {
+                viewer.viewEntityLink(passenger.getVehicle(), passenger, seat == 0 ? EntityLinkType.RIDER : EntityLinkType.PASSENGER);
+            }
+        }
     }
 
     @Override

@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Shared component for player entities, covering movement states, respawn data, cooldowns, food, experience, and fishing.
  */
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, EntityRiderComponent, ChunkLoader {
 
     int MAX_FOOD_LEVEL = 20;
     float MAX_FOOD_SATURATION_LEVEL = 20;

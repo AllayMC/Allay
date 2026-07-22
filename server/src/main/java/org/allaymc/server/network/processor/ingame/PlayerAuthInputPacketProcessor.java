@@ -9,6 +9,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
+import org.allaymc.api.entity.interfaces.EntityBoat;
 import org.allaymc.api.eventbus.event.server.PlayerControlModeUpdateEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchAirEvent;
@@ -396,6 +397,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         updatePlayerInputState((AllayPlayer) player, packet);
 
+        var ridingVehicle = handleVehicleInput(player, packet);
+
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player.getControlledEntity()).getBaseComponent());
         if (baseComponent.getExpectedTeleportPos() != null) {
             var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
@@ -414,7 +417,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
-        if (isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
+        if (!ridingVehicle && isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
             // The pos which the client sends to the server is higher than the actual coordinates (one base offset)
             handleMovement(player, packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0), packet.getRotation());
         }
@@ -448,6 +451,39 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             }
         }
         return PacketSignal.UNHANDLED;
+    }
+
+    protected boolean handleVehicleInput(Player player, PlayerAuthInputPacket packet) {
+        var entity = player.getControlledEntity();
+        if (!(entity.getVehicle() instanceof EntityBoat boat)) {
+            return false;
+        }
+
+        // Ignore spoofed vehicle input, but continue suppressing standalone player movement while mounted.
+        if (packet.getPredictedVehicle() != 0 && packet.getPredictedVehicle() != boat.getRuntimeId()) {
+            return true;
+        }
+        if (boat.getControllingPassenger() != entity) {
+            return true;
+        }
+
+        var input = packet.getRawMoveVector();
+        if (input == null || input.lengthSquared() == 0) {
+            input = packet.getAnalogMoveVector();
+        }
+        if (input == null || input.lengthSquared() == 0) {
+            input = packet.getMotion();
+        }
+        var movement = input == null || !Float.isFinite(input.getX()) || !Float.isFinite(input.getY())
+                ? new org.joml.Vector2f()
+                : new org.joml.Vector2f(input.getX(), input.getY());
+        boat.setPaddleInput(
+                entity,
+                movement,
+                packet.getInputData().contains(PlayerAuthInputData.PADDLE_LEFT),
+                packet.getInputData().contains(PlayerAuthInputData.PADDLE_RIGHT)
+        );
+        return true;
     }
 
     protected boolean validateClientLocation(Player player, Vector3f pos, Vector3f rot) {

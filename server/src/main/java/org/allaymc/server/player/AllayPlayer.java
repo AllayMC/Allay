@@ -36,6 +36,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.*;
 import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.data.EntityAnimation;
+import org.allaymc.api.entity.data.EntityLinkType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -129,6 +130,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityLinkData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
@@ -596,6 +598,21 @@ public class AllayPlayer implements Player {
         sendPacket(packet);
     }
 
+    @Override
+    public void viewEntityLink(Entity vehicle, Entity passenger, EntityLinkType linkType) {
+        var packet = new SetEntityLinkPacket();
+        var networkType = switch (linkType) {
+            case RIDER -> EntityLinkData.Type.RIDER;
+            case PASSENGER -> EntityLinkData.Type.PASSENGER;
+            case REMOVE -> EntityLinkData.Type.REMOVE;
+        };
+        packet.setEntityLink(new EntityLinkData(
+                vehicle.getUniqueId().getLeastSignificantBits(), passenger.getUniqueId().getLeastSignificantBits(), networkType,
+                true, true, 0
+        ));
+        sendPacket(packet);
+    }
+
     protected EntityDataMap parseMetadata(Entity entity) {
         var map = new EntityDataMap();
         addGenericMetadata(entity, map);
@@ -783,6 +800,18 @@ public class AllayPlayer implements Player {
             }
             case EntitySheep sheep -> {
                 map.setFlag(EntityFlag.SHEARED, sheep.isSheared());
+            }
+            case EntityBoat boat -> {
+                map.put(EntityDataTypes.VARIANT, boat.getBoatVariant().getNetworkId());
+                map.put(EntityDataTypes.ROW_TIME_LEFT, boat.getRowTimeLeft());
+                map.put(EntityDataTypes.ROW_TIME_RIGHT, boat.getRowTimeRight());
+                if (boat.getLastDamage() != null) {
+                    var interval = boat.getTick() - boat.getLastDamageTime();
+                    if (interval <= 10) {
+                        map.put(EntityDataTypes.HURT_TICKS, (int) interval);
+                    }
+                }
+                map.put(EntityDataTypes.CONTROLLING_RIDER_SEAT_INDEX, (byte) 0);
             }
             default -> {
             }

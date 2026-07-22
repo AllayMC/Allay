@@ -9,6 +9,7 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
+import org.allaymc.api.entity.data.EntityLinkType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantOption;
@@ -71,6 +72,16 @@ public interface WorldViewer extends PrimitiveShapeViewer {
      * @param entity the entity to view
      */
     void viewEntityState(Entity entity);
+
+    /**
+     * Views a vehicle/passenger relationship update.
+     *
+     * @param vehicle the vehicle entity
+     * @param passenger the passenger entity
+     * @param linkType the relationship update type
+     */
+    default void viewEntityLink(Entity vehicle, Entity passenger, EntityLinkType linkType) {
+    }
 
     /**
      * Views the item in the main hand of the entity passed.

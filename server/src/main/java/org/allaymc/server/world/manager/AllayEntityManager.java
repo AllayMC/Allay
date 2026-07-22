@@ -7,6 +7,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.component.EntityParallelTickComponent;
 import org.allaymc.api.entity.component.EntitySleepableComponent;
+import org.allaymc.api.entity.component.EntityRideableComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
@@ -266,6 +267,14 @@ public class AllayEntityManager implements EntityManager {
 
     protected void removeEntityImmediately(Entity entity) {
         new EntityDespawnEvent(entity).call();
+
+        if (entity instanceof EntityRideableComponent rideableComponent) {
+            rideableComponent.ejectPassengers();
+        }
+        if (entity instanceof EntityPlayer player &&
+            player.getVehicle() instanceof EntityRideableComponent rideableComponent) {
+            rideableComponent.removePassenger(player);
+        }
 
         // Wake up the entity if they are sleeping, so the bed's occupied state is cleared
         if (entity instanceof EntitySleepableComponent sleepableComponent && sleepableComponent.isSleeping()) {
