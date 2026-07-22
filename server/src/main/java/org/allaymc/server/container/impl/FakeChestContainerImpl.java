@@ -4,11 +4,9 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.blockentity.data.BlockEntityId;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
 import org.joml.Vector3ic;
-
-import static org.allaymc.server.network.NetworkHelper.toNetwork;
 
 /**
  * @author daoge_cmd
@@ -33,10 +31,11 @@ public class FakeChestContainerImpl extends FakeContainerImpl {
             nbt.putString("CustomName", this.customName);
         }
 
-        var packet = new BlockEntityDataPacket();
-        packet.setBlockPosition(toNetwork(pos));
-        packet.setData(nbt.build());
-        player.sendPacket(packet);
+        var allayPlayer = (AllayPlayer) player;
+        allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeBlockEntityData(
+                pos,
+                nbt.build()
+        ));
 
         this.fakeBlockPositions.put(player, new Vector3ic[]{pos});
     }

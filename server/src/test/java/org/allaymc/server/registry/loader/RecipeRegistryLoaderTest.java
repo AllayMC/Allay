@@ -11,7 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.allaymc.api.item.type.ItemTypes.CHARCOAL;
 import static org.allaymc.api.item.type.ItemTypes.SAND;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 @ExtendWith(AllayTestExtension.class)
 class RecipeRegistryLoaderTest {

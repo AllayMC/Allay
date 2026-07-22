@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.container;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
@@ -12,6 +11,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.container.Container;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
 
 /**

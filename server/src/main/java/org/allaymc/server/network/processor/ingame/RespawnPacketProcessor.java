@@ -10,8 +10,8 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.world.AllayDimension;
-import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
 
@@ -41,10 +41,8 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         var spawnPoint = event.getRespawnLocation();
 
         // NOTICE: No need to set runtime entity id
-        var respawnPacket = new RespawnPacket();
-        respawnPacket.setPosition(Vector3f.from(spawnPoint.x(), spawnPoint.y(), spawnPoint.z()));
-        respawnPacket.setState(RespawnPacket.State.SERVER_READY);
-        player.sendPacket(respawnPacket);
+        var allayPlayer = (AllayPlayer) player;
+        allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeRespawn(spawnPoint));
 
         // Remove the player from the dimension first to properly clean up chunk loader and entity
         // viewer state, then re-add the player to respawn

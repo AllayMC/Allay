@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.redstone;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
@@ -11,6 +10,7 @@ import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySmallFireball;
 import org.allaymc.api.entity.interfaces.EntityThrownTrident;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3dc;
 

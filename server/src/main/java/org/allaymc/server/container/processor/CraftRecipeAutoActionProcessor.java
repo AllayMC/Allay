@@ -11,7 +11,7 @@ import org.allaymc.api.item.recipe.ShapedRecipe;
 import org.allaymc.api.item.recipe.ShapelessRecipe;
 import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.player.Player;
-import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.AutoCraftRecipeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -30,12 +30,16 @@ public class CraftRecipeAutoActionProcessor implements ContainerActionProcessor<
     @Override
     public ActionResponse handle(AutoCraftRecipeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var recipeNetworkId = action.recipeNetworkId();
-        if (recipeNetworkId <= 0 || recipeNetworkId > NetworkData.INDEXED_RECIPES.size()) {
+        if (recipeNetworkId <= 0) {
             log.warn("Unknown auto craft recipe network id {}", recipeNetworkId);
             return error();
         }
 
-        var recipe = NetworkData.INDEXED_RECIPES.get(recipeNetworkId - 1);
+        var recipe = ((AllayPlayer) player).getProtocol().getData().recipeTable().recipesByNetworkId().get(recipeNetworkId);
+        if (recipe == null) {
+            log.warn("Unknown auto craft recipe network id {}", recipeNetworkId);
+            return error();
+        }
         if (!(recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe)) {
             log.warn("Recipe {} is not supported by auto craft", recipe.getIdentifier());
             return error();

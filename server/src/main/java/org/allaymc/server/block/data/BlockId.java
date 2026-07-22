@@ -1,10 +1,11 @@
 package org.allaymc.server.block.data;
 
-import java.util.Locale;
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
+
+import java.util.Locale;
 
 public enum BlockId {
     ACACIA_BUTTON("minecraft:acacia_button"),

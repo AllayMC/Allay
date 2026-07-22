@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.sponge;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
@@ -11,6 +10,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 import java.util.ArrayDeque;
 import java.util.Queue;

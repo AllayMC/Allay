@@ -5,6 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.Instrument;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.interfaces.BlockEntityNoteblock;
@@ -12,7 +13,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.NoteParticle;
 import org.allaymc.api.world.sound.NoteSound;
-import org.allaymc.api.block.type.BlockState;
 
 /**
  * Implementation of the noteblock.

@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.player.Skin;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,10 +22,10 @@ public final class SkinConvertor {
     public static SerializedSkin toSerializedSkin(Skin skin) {
         // Convert ImageData for skin and cape
         ImageData serializedSkinData = ImageData.of(
-                skin.skinData().width(), skin.skinData().height(), skin.skinData().data());
+                skin.skinData().width(), skin.skinData().height(), skin.skinData().data().clone());
 
         ImageData serializedCapeData = ImageData.of(
-                skin.capeData().width(), skin.capeData().height(), skin.capeData().data());
+                skin.capeData().width(), skin.capeData().height(), skin.capeData().data().clone());
 
         // Convert list of animations
         List<AnimationData> serializedAnimations = skin.animations().stream()
@@ -46,7 +47,7 @@ public final class SkinConvertor {
         List<PersonaPieceTintData> serializedTintColors = skin.pieceTintColors().stream()
                 .map(tint -> new PersonaPieceTintData(
                         tint.pieceType(),
-                        tint.colors()
+                        new ArrayList<>(tint.colors())
                 ))
                 .collect(Collectors.toList());
 
@@ -86,13 +87,13 @@ public final class SkinConvertor {
         Skin.ImageData skinData = new Skin.ImageData(
                 serializedSkin.getSkinData().getWidth(),
                 serializedSkin.getSkinData().getHeight(),
-                serializedSkin.getSkinData().getImage()
+                serializedSkin.getSkinData().getImage().clone()
         );
 
         Skin.ImageData capeData = new Skin.ImageData(
                 serializedSkin.getCapeData().getWidth(),
                 serializedSkin.getCapeData().getHeight(),
-                serializedSkin.getCapeData().getImage()
+                serializedSkin.getCapeData().getImage().clone()
         );
 
         // Convert list of animations
@@ -115,7 +116,7 @@ public final class SkinConvertor {
         List<Skin.PersonaPieceTintColor> tintColors = serializedSkin.getTintColors().stream()
                 .map(tint -> new Skin.PersonaPieceTintColor(
                         tint.type(),
-                        tint.colors()
+                        new ArrayList<>(tint.colors())
                 ))
                 .collect(Collectors.toList());
 
@@ -149,7 +150,7 @@ public final class SkinConvertor {
                 ImageData.of(
                         data.imageData().width(),
                         data.imageData().height(),
-                        data.imageData().data()
+                        data.imageData().data().clone()
                 ),
                 convertAnimationType(data.animationType()),
                 data.frameCount(),
@@ -162,7 +163,7 @@ public final class SkinConvertor {
                 new Skin.ImageData(
                         data.image().getWidth(),
                         data.image().getHeight(),
-                        data.image().getImage()
+                        data.image().getImage().clone()
                 ),
                 convertAnimationType(data.textureType()),
                 data.frames(),

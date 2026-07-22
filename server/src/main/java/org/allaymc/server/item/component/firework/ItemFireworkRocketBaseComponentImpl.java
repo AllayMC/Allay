@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component.firework;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -12,6 +11,7 @@ import org.allaymc.api.item.component.ItemFireworkRocketBaseComponent;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;

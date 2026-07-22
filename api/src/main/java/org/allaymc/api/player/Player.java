@@ -13,7 +13,6 @@ import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.dimension.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3dc;
 
@@ -711,19 +710,4 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      */
     void completeDimensionChange();
 
-    /**
-     * Sends a packet to the client.
-     *
-     * @param packet the packet object to be sent to the client. The type of the packet depends on the implementation.
-     */
-    @ApiStatus.Internal
-    void sendPacket(Object packet);
-
-    /**
-     * Immediately sends a packet to the client without any delay or buffering.
-     *
-     * @param packet the packet to be sent to the client. The type of the packet depends on the implementation.
-     */
-    @ApiStatus.Internal
-    void sendPacketImmediately(Object packet);
 }

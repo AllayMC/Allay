@@ -69,6 +69,7 @@ public final class Allay {
     public static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
     public static Dashboard DASHBOARD;
+    private static boolean initialized;
 
     public static void main(String[] args) throws InterruptedException {
         long initialTime = System.currentTimeMillis();
@@ -143,13 +144,18 @@ public final class Allay {
     }
 
     /**
-     * NOTICE: The i18n implementation must be registered before initializing allay,
-     * which means that you should call initI18n() before call initAllay()!
+     * Initializes API bindings and registries once.
+     *
+     * <p>{@link #initI18n()} must run first because registry initialization may emit translated output.</p>
      */
     @VisibleForTesting
-    public static void initAllay() {
+    public static synchronized void initAllay() {
+        if (initialized) {
+            return;
+        }
         initAllayAPI();
         initRegistries();
+        initialized = true;
     }
 
     private static void initAllayAPI() {
@@ -193,7 +199,7 @@ public final class Allay {
         );
         InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataRegistryLoader());
         InternalRegistries.ITEM_TAGS = SimpleMappedRegistry.create(new ItemTagRegistryLoader());
-        InternalRegistries.ITEM_DEFINITIONS = SimpleMappedRegistry.create(new ItemDefinitionRegistryLoader());
+        InternalRegistries.VANILLA_ITEM_DEFINITIONS = SimpleMappedRegistry.create(new VanillaItemDefinitionRegistryLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
                 r -> Registries.ITEMS = r,

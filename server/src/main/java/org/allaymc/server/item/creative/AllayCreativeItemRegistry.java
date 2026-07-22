@@ -22,6 +22,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 /**
+ * Builds the indexed creative inventory used as source data for protocol initialization.
+ *
  * @author daoge_cmd
  */
 @Slf4j
@@ -30,6 +32,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
     protected final Map<Type, AllayCreativeItemCategory> categories;
     protected final List<CreativeItemEntry> entries;
     protected final List<CreativeItemGroup> groups;
+    protected volatile boolean frozen;
 
     public AllayCreativeItemRegistry() {
         this.categories = new EnumMap<>(Type.class);
@@ -114,13 +117,33 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
     }
 
     CreativeItemEntry assignIndexForEntry(CreativeItemGroup group, ItemStack itemStack) {
+        ensureMutable();
         var entry = new CreativeItemEntry(entries.size(), group, itemStack);
         entries.add(entry);
         return entry;
     }
 
     int assignIndexForGroup(CreativeItemGroup group) {
+        ensureMutable();
         groups.add(group);
         return groups.size() - 1;
+    }
+
+    /**
+     * Prevents further creative group and entry assignment.
+     */
+    public void freeze() {
+        frozen = true;
+    }
+
+    /**
+     * Ensures that creative indexes may still be assigned.
+     *
+     * @throws IllegalStateException if this registry is frozen
+     */
+    void ensureMutable() {
+        if (frozen) {
+            throw new IllegalStateException("Creative item registry is frozen");
+        }
     }
 }

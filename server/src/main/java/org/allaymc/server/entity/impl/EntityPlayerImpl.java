@@ -4,11 +4,7 @@ import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.entity.EntityInitInfo;
-import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.EntityLivingComponent;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.EntitySleepableComponent;
+import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.component.ComponentProvider;
 

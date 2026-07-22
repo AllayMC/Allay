@@ -2,7 +2,6 @@ package org.allaymc.api.player;
 
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.network.NetworkManager;
 import org.jetbrains.annotations.UnmodifiableView;
 

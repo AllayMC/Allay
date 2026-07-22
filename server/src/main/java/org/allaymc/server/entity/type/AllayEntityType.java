@@ -16,16 +16,10 @@ import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.data.EntityId;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static org.allaymc.server.component.ComponentProvider.toMap;
 

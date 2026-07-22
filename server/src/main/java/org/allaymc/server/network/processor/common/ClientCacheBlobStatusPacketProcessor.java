@@ -20,7 +20,12 @@ public class ClientCacheBlobStatusPacketProcessor extends PacketProcessor<Client
 
         var acks = packet.getAcks().toLongArray();
         var naks = packet.getNaks().toLongArray();
-        var missResponse = cache.handleBlobStatus(allayPlayer.getLoginData().getUuid(), acks, naks);
+        var missResponse = cache.handleBlobStatus(
+                allayPlayer.getProtocol().getEncoder(),
+                allayPlayer.getLoginData().getUuid(),
+                acks,
+                naks
+        );
 
         if (missResponse != null) {
             allayPlayer.sendPacket(missResponse);

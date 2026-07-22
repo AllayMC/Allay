@@ -4,13 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.network.ProtocolInfo;
-import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
+import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.server.player.AllayPlayer;
-import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v766_netease.Bedrock_v766_NetEase;
-import org.cloudburstmc.protocol.bedrock.codec.v819_netease.Bedrock_v819_NetEase;
 import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.NetEaseCompression;
@@ -21,14 +18,17 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
 import org.cloudburstmc.protocol.bedrock.packet.RequestNetworkSettingsPacket;
 
 /**
+ * Selects the exact protocol requested by a client before enabling negotiated compression.
+ *
+ * <p>This processor runs with the bootstrap codec; successful negotiation installs the selected
+ * codec before any version-specific packet is sent.</p>
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor<RequestNetworkSettingsPacket> {
 
     @Override
-    @MultiVersion(version = "*-NetEase", details = "NetEase clients are detected via RakNet protocol version 8 and use raw deflate compression")
-    @MultiVersion(version = "*-NetEase", details = "Packet codec is replaced for NetEase clients")
     public void handle(Player player, RequestNetworkSettingsPacket packet) {
         var allayPlayer = (AllayPlayer) player;
         var protocolVersion = packet.getProtocolVersion();
@@ -37,7 +37,6 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         boolean netEasePlayer = isNetEaseClient(allayPlayer);
         allayPlayer.setNetEasePlayer(netEasePlayer);
 
-        // Check NetEase client support configuration
         if (netEasePlayer) {
             if (!settings.neteaseClientSupport()) {
                 log.debug("Rejected NetEase client connection from {} - NetEase support is disabled",
@@ -55,50 +54,60 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             }
         }
 
-        // For NetEase clients, use the NetEase-specific codec with different ContainerSlotType IDs
-        BedrockCodec codec;
-        if (netEasePlayer) {
-            codec = findNetEaseCodec(protocolVersion);
-        } else {
-            codec = ProtocolInfo.findCodec(protocolVersion);
-        }
-
-        if (codec == null) {
-            // Cannot find a suitable codec for the client protocol version, let's check if it's too old or too new
+        var variant = netEasePlayer ? ClientVariant.NETEASE : ClientVariant.INTERNATIONAL;
+        var registry = ProtocolRegistry.getDefault();
+        var protocol = registry.resolve(variant, protocolVersion);
+        if (protocol == null) {
             var loginFailedPacket = new PlayStatusPacket();
-            if (protocolVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
+            var latest = registry.getLatest(variant);
+            var lowest = registry.getLowest(variant);
+            if (latest != null && protocolVersion > latest.getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
-            } else if (protocolVersion < ProtocolInfo.getLowestCodec().getProtocolVersion()) {
+            } else if (lowest != null && protocolVersion < lowest.getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
             } else {
-                // A version that is in the middle of the lowest and latest versions is not supported for
-                // some reason. Since we don't have compatible status in PlayStatusPacket.Status, let's
-                // disconnect the client with custom reason instead of sending PlayStatusPacket
+                // Bedrock has no status for a gap between supported versions, so use a generic reason.
                 player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_BODY_VERSIONNOTSUPPORTED);
                 return;
             }
 
-            player.sendPacketImmediately(loginFailedPacket);
+            allayPlayer.sendPacketImmediately(loginFailedPacket);
             return;
         }
 
         var session = allayPlayer.getSession();
-        session.setCodec(codec);
+        if (!allayPlayer.installProtocol(protocol)) {
+            return;
+        }
         if (!AllayServer.getSettings().networkSettings().enableEncodingProtection()) {
             session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
         }
 
         var settingsPacket = new NetworkSettingsPacket();
-        settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(settings.compressionAlgorithm().name()));
-        // NOTICE: We don't need to set the compression threshold after 1.20.60
-        player.sendPacketImmediately(settingsPacket);
-        // NOTICE: The NetworkSettingsPacket shouldn't be compressed, so we set the compression after sending the packet
+        settingsPacket.setCompressionAlgorithm(netEasePlayer
+                ? PacketCompressionAlgorithm.ZLIB
+                : PacketCompressionAlgorithm.valueOf(settings.compressionAlgorithm().name()));
+        // Compression thresholds are ignored by clients from 1.20.60 onward.
+        var sentPacket = allayPlayer.getProtocolSession().sendImmediatelyAndGet(allayPlayer, settingsPacket);
+        if (!(sentPacket instanceof NetworkSettingsPacket sentSettings)) {
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
+            return;
+        }
+        var compressionAlgorithm = sentSettings.getCompressionAlgorithm();
+        if (compressionAlgorithm == null) {
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
+            return;
+        }
+        // Use the post-event value, since listeners may replace or mutate the settings packet.
         if (netEasePlayer) {
-            // NetEase clients use raw deflate format, set NetEaseCompression now
-            // (initial compression was NOOP to handle uncompressed RequestNetworkSettingsPacket)
+            if (compressionAlgorithm != PacketCompressionAlgorithm.ZLIB) {
+                player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
+                return;
+            }
+            // NetEase uses raw deflate; it can only be enabled after the uncompressed settings packet.
             session.getPeer().setCompression(new SimpleCompressionStrategy(new NetEaseCompression()));
         } else {
-            session.setCompression(settingsPacket.getCompressionAlgorithm());
+            session.setCompression(compressionAlgorithm);
         }
     }
 
@@ -111,17 +120,4 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         return allayPlayer.getSourceInterface().isNetEaseClient(allayPlayer.getSession());
     }
 
-    /**
-     * Find the appropriate NetEase-specific codec for the given protocol version.
-     *
-     * @param protocolVersion the protocol version
-     * @return the NetEase codec, or {@code null} if not found
-     */
-    private static BedrockCodec findNetEaseCodec(int protocolVersion) {
-        return switch (protocolVersion) {
-            case 766 -> Bedrock_v766_NetEase.CODEC;
-            case 819 -> Bedrock_v819_NetEase.CODEC;
-            default -> null;
-        };
-    }
 }

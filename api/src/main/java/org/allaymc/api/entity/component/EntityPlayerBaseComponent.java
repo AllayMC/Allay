@@ -4,8 +4,6 @@ import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.Permissions;
-import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;

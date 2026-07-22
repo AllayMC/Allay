@@ -3,10 +3,10 @@ package org.allaymc.server.block.component.respawnpoint;
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.message.TrKeys;
 import org.joml.Vector3i;
 

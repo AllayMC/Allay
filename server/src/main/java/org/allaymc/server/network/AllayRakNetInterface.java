@@ -22,7 +22,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.ServerSettings;
 import org.allaymc.server.eventbus.event.network.NettyPipelineInitEvent;
-import org.allaymc.server.network.multiversion.MultiVersion;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
@@ -203,7 +202,6 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
     private class AllayServerInitializer extends BedrockServerInitializer {
 
         @Override
-        @MultiVersion(version = "*-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")
         protected void preInitChannel(Channel channel) throws Exception {
             super.preInitChannel(channel);
             new NettyPipelineInitEvent(channel).call();
@@ -224,7 +222,6 @@ public class AllayRakNetInterface extends AllayNetworkInterface {
         }
 
         @Override
-        @MultiVersion(version = "*-NetEase", details = "NetEase clients use RakNet version 8 but require v3 packet codec format")
         protected void initPacketCodec(Channel channel) throws Exception {
             // NetEase clients use rakVersion 8, but their packet format is the same as
             // international clients (v3), not the old v2 format that Protocol library
