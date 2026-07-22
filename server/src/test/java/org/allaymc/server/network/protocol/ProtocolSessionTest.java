@@ -1,7 +1,7 @@
 package org.allaymc.server.network.protocol;
 
-import org.allaymc.api.player.ClientState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
@@ -20,14 +20,7 @@ import org.cloudburstmc.protocol.bedrock.data.PacketRecipient;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.definition.DefinitionRegistry;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
-import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
-import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
-import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
-import org.cloudburstmc.protocol.bedrock.packet.VoxelShapesPacket;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,21 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith({AllayTestExtension.class, MockitoExtension.class})
 class ProtocolSessionTest {

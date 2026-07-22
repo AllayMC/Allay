@@ -3,7 +3,6 @@ package org.allaymc.server.block.component.door;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
-import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -20,6 +19,7 @@ import org.joml.Vector3ic;
 
 import java.util.Set;
 
+import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**

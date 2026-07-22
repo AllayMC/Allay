@@ -1,7 +1,8 @@
 package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.property.enums.WallConnectionType;
-import org.allaymc.api.block.property.type.*;
+import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.testutils.AllayTestExtension;

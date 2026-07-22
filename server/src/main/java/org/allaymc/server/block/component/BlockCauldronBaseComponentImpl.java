@@ -21,7 +21,6 @@ import org.allaymc.api.item.component.ItemBannerBaseComponent;
 import org.allaymc.api.item.component.ItemDyeComponent;
 import org.allaymc.api.item.component.ItemDyeableComponent;
 import org.allaymc.api.item.component.ItemPotionComponent;
-import org.allaymc.api.item.component.ItemShulkerBoxBaseComponent;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.item.interfaces.ItemLingeringPotionStack;

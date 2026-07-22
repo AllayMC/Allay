@@ -7,22 +7,16 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.item.component.ItemToolComponent;
 import org.allaymc.api.item.component.ItemWearableComponent;
 import org.allaymc.api.item.data.ItemTag;
 import org.allaymc.api.item.data.ItemTags;
-import org.allaymc.api.item.recipe.FurnaceRecipe;
-import org.allaymc.api.item.recipe.PotionRecipe;
-import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.item.recipe.ShapedRecipe;
-import org.allaymc.api.item.recipe.ShapelessRecipe;
-import org.allaymc.api.item.recipe.SmithingTransformRecipe;
-import org.allaymc.api.item.recipe.SmithingTrimRecipe;
+import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
+import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.block.type.CustomBlockDefinition;
@@ -44,36 +38,17 @@ import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemVersion;
+import org.cloudburstmc.protocol.bedrock.data.inventory.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.FurnaceRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.MultiRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.NetworkRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapedRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapelessRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.SmithingTransformRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.SmithingTrimRecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.definition.DefinitionRegistry;
 import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
 import org.joml.Vector3fc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * An immutable, fully initialized Bedrock protocol implementation.
@@ -88,7 +63,6 @@ public abstract class Protocol {
     private PacketProcessorRegistry processorRegistry;
     private ProtocolData data;
     private PacketEncoder encoder;
-    private Set<ProtocolFeature> features;
     private DefinitionRegistry<ItemDefinition> itemDefinitionRegistry;
     private DefinitionRegistry<BlockDefinition> blockDefinitionRegistry;
     private volatile boolean initialized;
@@ -135,12 +109,9 @@ public abstract class Protocol {
             if (packetEncoder.getData() != protocolData) {
                 throw new IllegalStateException("Packet encoder does not reference the protocol's data instance: " + this);
             }
-            var protocolFeatures = Set.copyOf(createFeatures());
-
             this.processorRegistry = registry;
             this.data = protocolData;
             this.encoder = packetEncoder;
-            this.features = protocolFeatures;
             this.initialized = true;
         } catch (RuntimeException | Error exception) {
             this.itemDefinitionRegistry = null;
@@ -152,10 +123,6 @@ public abstract class Protocol {
     protected abstract void registerProcessors(PacketProcessorRegistry registry);
 
     protected abstract PacketEncoder createEncoder(ProtocolData data);
-
-    protected Set<ProtocolFeature> createFeatures() {
-        return Set.of();
-    }
 
     protected List<ItemDefinition> createItemDefinitions() {
         return Registries.ITEMS.getContent().values().stream()
@@ -838,16 +805,6 @@ public abstract class Protocol {
     public final PacketProcessorHolder createProcessorHolder() {
         ensureInitialized();
         return new PacketProcessorHolder(processorRegistry);
-    }
-
-    public final boolean supports(ProtocolFeature feature) {
-        ensureInitialized();
-        return features.contains(feature);
-    }
-
-    public final Set<ProtocolFeature> getFeatures() {
-        ensureInitialized();
-        return features;
     }
 
     final DefinitionRegistry<ItemDefinition> getItemDefinitionRegistry() {

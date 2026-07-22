@@ -22,18 +22,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(AllayTestExtension.class)
 class AllayPlayerProtocolLifecycleTest {
+
+    @Test
+    void emptyEncoderResultsAreIgnoredAtTheSendBoundary() {
+        var player = new TestPlayer(mock(BedrockServerSession.class), mock(AllayNetworkInterface.class));
+
+        player.sendPacket(null);
+        player.sendPackets(null);
+        player.sendPackets(List.of());
+        player.sendPacketImmediately(null);
+        player.sendPacketsImmediately(null);
+        player.sendPacketsImmediately(List.of());
+    }
 
     @Test
     void disconnectWaitsForProtocolInstallAndTransitionsInstalledSession() throws Exception {

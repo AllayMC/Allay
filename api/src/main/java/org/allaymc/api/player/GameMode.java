@@ -2,10 +2,11 @@ package org.allaymc.api.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import java.util.EnumSet;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
 import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.EnumSet;
 
 /**
  * GameMode represents a game mode that may be assigned to a player. Upon joining the world, players will be

@@ -1,10 +1,10 @@
 package org.allaymc.server.network.protocol;
 
 import io.netty.buffer.Unpooled;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.type.AllayItemType;
-import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.protocol.v827.PacketEncoder_v827;
 import org.allaymc.server.network.protocol.v844.PacketEncoder_v844;
@@ -12,11 +12,11 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.allaymc.testutils.TestRegistryFixtures;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
+import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -28,7 +28,6 @@ import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;

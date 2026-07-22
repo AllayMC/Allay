@@ -1,11 +1,11 @@
 package org.allaymc.server.network.protocol.v844;
 
+import org.allaymc.api.block.data.TintMethod;
+import org.allaymc.server.block.type.CustomBlockStateDefinition;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v827.Protocol_v827;
-import org.allaymc.server.block.type.CustomBlockStateDefinition;
-import org.allaymc.api.block.data.TintMethod;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v844.Bedrock_v844;

@@ -31,8 +31,8 @@ for imports and Lombok usage because no repository-wide formatter or linter is c
 and implementation comments. In `api/`, every class, interface, and method requires Javadoc. In `server/`, also
 document internal interfaces commonly used by downstream developers. Explain complex, non-obvious implementation logic
 with concise comments. Do not introduce nullability annotations such as `@NonNull` or `@Nullable`; they can cause
-misleading IDE diagnostics and do not prevent null-pointer errors. Preserve relevant thread-safety and API-status
-annotations.
+misleading IDE diagnostics and do not prevent null-pointer errors. For parameters or return values that may be `null`,
+document their null behavior explicitly in Javadoc instead. Preserve relevant thread-safety and API-status annotations.
 
 ## Testing Guidelines
 

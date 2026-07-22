@@ -1,5 +1,6 @@
 package org.allaymc.server.network.protocol.v898;
 
+import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.server.network.processor.PacketProcessorRegistry;
 import org.allaymc.server.network.processor.ingame.ServerboundDataStorePacketProcessor;
@@ -7,7 +8,6 @@ import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v860.Protocol_v860;
-import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;

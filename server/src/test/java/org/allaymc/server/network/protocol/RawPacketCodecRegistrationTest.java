@@ -1,13 +1,7 @@
 package org.allaymc.server.network.protocol;
 
 import org.allaymc.testutils.AllayTestExtension;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ClientboundDataDrivenUICloseScreenPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ClientboundDataDrivenUIShowScreenPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ClientboundDataStorePacket;
-import org.cloudburstmc.protocol.bedrock.packet.ConfirmSkinPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PrimitiveShapesPacket;
-import org.cloudburstmc.protocol.bedrock.packet.VoxelShapesPacket;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,7 +100,6 @@ class RawPacketCodecRegistrationTest {
             assertRegistration(protocol, ClientboundDataDrivenUIShowScreenPacket.class, version >= 924);
             assertRegistration(protocol, ClientboundDataDrivenUICloseScreenPacket.class, version >= 924);
             assertRegistration(protocol, VoxelShapesPacket.class, version >= 924);
-            assertEquals(version >= 944, protocol.supports(ProtocolFeature.DATA_DRIVEN_UI));
         }
     }
 

@@ -4,7 +4,6 @@ import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
-import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.RequestAbilityPacket;
 
 /**

@@ -2,7 +2,6 @@ package org.allaymc.server.network.protocol;
 
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.item.creative.AllayCreativeItemRegistry;
-import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.network.protocol.v1001.Protocol_v1001;
 import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
 import org.allaymc.server.network.protocol.v818.Protocol_v818;
@@ -16,15 +15,9 @@ import org.allaymc.server.network.protocol.v898.Protocol_v898;
 import org.allaymc.server.network.protocol.v924.Protocol_v924;
 import org.allaymc.server.network.protocol.v944.Protocol_v944;
 import org.allaymc.server.network.protocol.v975.Protocol_v975;
+import org.allaymc.server.registry.InternalRegistries;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Exact protocol lookup keyed by client variant and protocol version.

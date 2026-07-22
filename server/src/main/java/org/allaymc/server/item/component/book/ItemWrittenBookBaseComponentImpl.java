@@ -1,11 +1,11 @@
 package org.allaymc.server.item.component.book;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemWrittenBookBaseComponent;
 import org.allaymc.api.item.data.WrittenBookGeneration;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.Range;

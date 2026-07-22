@@ -24,26 +24,24 @@ import org.allaymc.api.entity.property.type.BooleanPropertyType;
 import org.allaymc.api.entity.property.type.EnumPropertyType;
 import org.allaymc.api.entity.property.type.FloatPropertyType;
 import org.allaymc.api.entity.property.type.IntPropertyType;
+import org.allaymc.api.form.type.Form;
+import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.form.type.Form;
-import org.allaymc.api.player.CameraShakeType;
-import org.allaymc.api.player.HudElement;
-import org.allaymc.api.player.Player;
-import org.allaymc.api.player.PlayerData;
-import org.allaymc.api.player.Skin;
-import org.allaymc.api.pack.Pack;
-import org.allaymc.api.pack.PackManifest;
-import org.allaymc.api.primitiveshape.PrimitiveShape;
-import org.allaymc.api.registry.Registries;
-import org.allaymc.api.scoreboard.Scoreboard;
-import org.allaymc.api.scoreboard.data.DisplaySlot;
-import org.allaymc.api.scoreboard.data.SortOrder;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.pack.Pack;
+import org.allaymc.api.pack.PackManifest;
+import org.allaymc.api.player.CameraShakeType;
+import org.allaymc.api.player.HudElement;
+import org.allaymc.api.player.Player;
+import org.allaymc.api.player.PlayerData;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.api.scoreboard.Scoreboard;
+import org.allaymc.api.scoreboard.data.DisplaySlot;
+import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -56,10 +54,10 @@ import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
-import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
@@ -88,12 +86,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
@@ -103,9 +96,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.List;
 
 /**
  * Complete packet encoder baseline for protocol v766.
@@ -228,11 +222,6 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 ))
                 .forEach(packet.getDefinitions()::add);
         return packet;
-    }
-
-    @Override
-    public Collection<VoxelShapesPacket> encodeVoxelShapes() {
-        return List.of();
     }
 
     @Override
@@ -2426,59 +2415,6 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setActionJson("");
         packet.setAction(NpcDialoguePacket.Action.CLOSE);
         return packet;
-    }
-
-    @Override
-    public Collection<PrimitiveShapesPacket> encodePrimitiveShapes(
-            Collection<? extends PrimitiveShape> primitiveShapes,
-            int dimensionId
-    ) {
-        Objects.requireNonNull(primitiveShapes, "primitiveShapes");
-        return List.of();
-    }
-
-    @Override
-    public Collection<PrimitiveShapesPacket> encodePrimitiveShapeRemovals(
-            Collection<? extends PrimitiveShape> primitiveShapes
-    ) {
-        Objects.requireNonNull(primitiveShapes, "primitiveShapes");
-        return List.of();
-    }
-
-    @Override
-    public Collection<ConfirmSkinPacket> encodeSkinConfirmation(EntityPlayer player, Skin skin) {
-        Objects.requireNonNull(player, "player");
-        Objects.requireNonNull(skin, "skin");
-        return List.of();
-    }
-
-    @Override
-    public ClientboundDataStorePacket encodeDataStoreChange(
-            String dataStoreName,
-            String propertyName,
-            Object value
-    ) {
-        throw new UnsupportedOperationException("Data-driven UI is not supported by this protocol");
-    }
-
-    @Override
-    public ClientboundDataStorePacket encodeDataStoreUpdates(
-            String dataStoreName,
-            String propertyName,
-            Collection<String> paths,
-            Object value
-    ) {
-        throw new UnsupportedOperationException("Data-driven UI is not supported by this protocol");
-    }
-
-    @Override
-    public ClientboundDataDrivenUIShowScreenPacket encodeDataDrivenUIShowScreen(String screenId, int formId) {
-        throw new UnsupportedOperationException("Data-driven UI is not supported by this protocol");
-    }
-
-    @Override
-    public ClientboundDataDrivenUICloseScreenPacket encodeDataDrivenUICloseScreen(Integer formId) {
-        throw new UnsupportedOperationException("Data-driven UI is not supported by this protocol");
     }
 
     @Override

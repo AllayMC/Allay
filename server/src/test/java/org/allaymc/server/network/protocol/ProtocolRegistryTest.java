@@ -7,6 +7,7 @@ import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
 import org.allaymc.server.network.protocol.v819.Protocol_v819;
 import org.allaymc.server.network.protocol.v819.Protocol_v819_NetEase;
+import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
@@ -15,7 +16,6 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
-import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -25,13 +25,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(AllayTestExtension.class)
 class ProtocolRegistryTest {

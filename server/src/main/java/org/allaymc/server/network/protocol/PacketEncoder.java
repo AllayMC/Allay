@@ -3,25 +3,22 @@ package org.allaymc.server.network.protocol;
 import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.container.Container;
+import org.allaymc.api.dialog.Dialog;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.bossbar.BossBar;
-import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
-import org.allaymc.api.pack.Pack;
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.player.CameraShakeType;
+import org.allaymc.api.pack.Pack;
+import org.allaymc.api.player.*;
 import org.allaymc.api.player.HudElement;
-import org.allaymc.api.player.Player;
-import org.allaymc.api.player.PlayerData;
-import org.allaymc.api.player.Skin;
 import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -39,16 +36,12 @@ import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.player.ChunkCache;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.Ability;
-import org.cloudburstmc.protocol.bedrock.data.AttributeData;
-import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
-import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
+import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
-import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
@@ -59,14 +52,11 @@ import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Stateless conversion from Allay domain data to packets accepted by one protocol codec.
+ * Unsupported operations return {@code null}; callers must treat that as an empty encoding result.
  */
 public abstract class PacketEncoder {
     private final ProtocolData data;
@@ -95,209 +85,351 @@ public abstract class PacketEncoder {
         return NetworkHelper.toNetwork(itemStacks, itemDefinitions, blockDefinitions);
     }
 
-    public abstract ItemRegistryPacket encodeItemRegistry();
+    public ItemRegistryPacket encodeItemRegistry() {
+        return null;
+    }
 
-    public abstract CreativeContentPacket encodeCreativeContent();
+    public CreativeContentPacket encodeCreativeContent() {
+        return null;
+    }
 
-    public abstract CraftingDataPacket encodeCraftingData();
+    public CraftingDataPacket encodeCraftingData() {
+        return null;
+    }
 
-    public abstract AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiers();
+    public AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiers() {
+        return null;
+    }
 
-    public abstract Collection<SyncEntityPropertyPacket> encodeSyncEntityProperties();
+    public Collection<SyncEntityPropertyPacket> encodeSyncEntityProperties() {
+        return null;
+    }
 
-    public abstract BiomeDefinitionListPacket encodeBiomeDefinitions();
+    public BiomeDefinitionListPacket encodeBiomeDefinitions() {
+        return null;
+    }
 
-    public abstract DimensionDataPacket encodeDimensionData();
+    public DimensionDataPacket encodeDimensionData() {
+        return null;
+    }
 
-    public abstract Collection<VoxelShapesPacket> encodeVoxelShapes();
+    public Collection<VoxelShapesPacket> encodeVoxelShapes() {
+        return null;
+    }
 
-    public abstract ResourcePacksInfoPacket encodeResourcePacksInfo();
+    public ResourcePacksInfoPacket encodeResourcePacksInfo() {
+        return null;
+    }
 
-    public abstract ResourcePackStackPacket encodeResourcePackStack();
+    public ResourcePackStackPacket encodeResourcePackStack() {
+        return null;
+    }
 
-    public abstract ResourcePackDataInfoPacket encodeResourcePackDataInfo(
+    public ResourcePackDataInfoPacket encodeResourcePackDataInfo(
             Pack pack,
             int maxChunkSize
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ResourcePackChunkDataPacket encodeResourcePackChunkData(
+    public ResourcePackChunkDataPacket encodeResourcePackChunkData(
             Pack pack,
             int chunkIndex,
             int maxChunkSize
-    );
+    ) {
+        return null;
+    }
 
-    public abstract TrimDataPacket encodeTrimData();
+    public TrimDataPacket encodeTrimData() {
+        return null;
+    }
 
-    public abstract NetworkChunkPublisherUpdatePacket encodeChunkPublisher(EntityPlayer player);
+    public NetworkChunkPublisherUpdatePacket encodeChunkPublisher(EntityPlayer player) {
+        return null;
+    }
 
-    public abstract LevelChunkPacket encodeLevelChunk(
+    public LevelChunkPacket encodeLevelChunk(
             Chunk chunk,
             boolean useSubChunkSending,
             ChunkCache cache,
             UUID playerId,
             int cacheGeneration
-    );
+    ) {
+        return null;
+    }
 
-    public abstract SetTimePacket encodeTime(int timeOfDay);
+    public SetTimePacket encodeTime(int timeOfDay) {
+        return null;
+    }
 
-    public abstract GameRulesChangedPacket encodeGameRules(GameRules gameRules);
+    public GameRulesChangedPacket encodeGameRules(GameRules gameRules) {
+        return null;
+    }
 
-    public abstract UpdateBlockPacket encodeBlockUpdate(Vector3ic position, int layer, BlockState blockState);
+    public UpdateBlockPacket encodeBlockUpdate(Vector3ic position, int layer, BlockState blockState) {
+        return null;
+    }
 
-    public abstract Collection<UpdateSubChunkBlocksPacket> encodeBlockUpdates(
+    public Collection<UpdateSubChunkBlocksPacket> encodeBlockUpdates(
             Chunk chunk,
             Collection<BlockUpdate> blockUpdates,
             Collection<BlockUpdate> extraBlockUpdates
-    );
+    ) {
+        return null;
+    }
 
-    public abstract Collection<BedrockPacket> encodeBlockAction(Vector3ic position, BlockAction action);
+    public Collection<BedrockPacket> encodeBlockAction(Vector3ic position, BlockAction action) {
+        return null;
+    }
 
-    public abstract StopSoundPacket encodeStopSound(String soundName);
+    public StopSoundPacket encodeStopSound(String soundName) {
+        return null;
+    }
 
-    public abstract Collection<BedrockPacket> encodeParticle(
+    public Collection<BedrockPacket> encodeParticle(
             Particle particle,
             Vector3dc position,
             int dimensionId
-    );
+    ) {
+        return null;
+    }
 
-    public abstract Collection<LevelEventPacket> encodeWeather(Weather weather);
+    public Collection<LevelEventPacket> encodeWeather(Weather weather) {
+        return null;
+    }
 
-    public abstract BlockEntityDataPacket encodeBlockEntity(BlockEntity blockEntity);
+    public BlockEntityDataPacket encodeBlockEntity(BlockEntity blockEntity) {
+        return null;
+    }
 
-    public abstract ContainerOpenPacket encodeLectern(Vector3ic position);
+    public ContainerOpenPacket encodeLectern(Vector3ic position) {
+        return null;
+    }
 
-    public abstract OpenSignPacket encodeSignEditor(Vector3ic position, boolean frontSide);
+    public OpenSignPacket encodeSignEditor(Vector3ic position, boolean frontSide) {
+        return null;
+    }
 
-    public abstract InventoryContentPacket encodeContainerContents(Container container, int containerId);
+    public InventoryContentPacket encodeContainerContents(Container container, int containerId) {
+        return null;
+    }
 
-    public abstract InventorySlotPacket encodeContainerSlot(Container container, int slot, int containerId);
+    public InventorySlotPacket encodeContainerSlot(Container container, int slot, int containerId) {
+        return null;
+    }
 
-    public abstract ContainerOpenPacket encodeContainerOpen(
+    public ContainerOpenPacket encodeContainerOpen(
             Container container,
             byte containerId,
             Vector3ic position
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ContainerClosePacket encodeContainerClose(
+    public ContainerClosePacket encodeContainerClose(
             Container container,
             byte containerId,
             boolean serverInitiated
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ContainerSetDataPacket encodeContainerData(int containerId, int property, int value);
+    public ContainerSetDataPacket encodeContainerData(int containerId, int property, int value) {
+        return null;
+    }
 
-    public abstract BedrockPacket encodeEntitySpawn(Entity entity);
+    public BedrockPacket encodeEntitySpawn(Entity entity) {
+        return null;
+    }
 
-    public abstract RemoveEntityPacket encodeEntityRemove(Entity entity);
+    public RemoveEntityPacket encodeEntityRemove(Entity entity) {
+        return null;
+    }
 
-    public abstract BedrockPacket encodePlayerGameMode(EntityPlayer player, boolean self);
+    public BedrockPacket encodePlayerGameMode(EntityPlayer player, boolean self) {
+        return null;
+    }
 
-    public abstract BedrockPacket encodeEntityLocation(
+    public BedrockPacket encodeEntityLocation(
             Entity entity,
             Location3dc location,
             boolean teleporting,
             boolean self
-    );
+    ) {
+        return null;
+    }
 
-    public abstract SetEntityMotionPacket encodeEntityMotion(Entity entity, Vector3dc motion);
+    public SetEntityMotionPacket encodeEntityMotion(Entity entity, Vector3dc motion) {
+        return null;
+    }
 
-    public abstract EntityDataMap encodeEntityMetadata(Entity entity);
+    public EntityDataMap encodeEntityMetadata(Entity entity) {
+        return null;
+    }
 
-    public abstract SetEntityDataPacket encodeEntityState(Entity entity);
+    public SetEntityDataPacket encodeEntityState(Entity entity) {
+        return null;
+    }
 
-    public abstract <T extends Entity & EntityContainerHolderComponent> MobEquipmentPacket encodeEntityHand(T entity);
+    public <T extends Entity & EntityContainerHolderComponent> MobEquipmentPacket encodeEntityHand(T entity) {
+        return null;
+    }
 
-    public abstract <T extends Entity & EntityContainerHolderComponent> MobEquipmentPacket encodeEntityOffhand(T entity);
+    public <T extends Entity & EntityContainerHolderComponent> MobEquipmentPacket encodeEntityOffhand(T entity) {
+        return null;
+    }
 
-    public abstract <T extends Entity & EntityContainerHolderComponent> MobArmorEquipmentPacket encodeEntityArmor(T entity);
+    public <T extends Entity & EntityContainerHolderComponent> MobArmorEquipmentPacket encodeEntityArmor(T entity) {
+        return null;
+    }
 
-    public abstract AnimateEntityPacket encodeEntityAnimation(Entity entity, EntityAnimation animation);
+    public AnimateEntityPacket encodeEntityAnimation(Entity entity, EntityAnimation animation) {
+        return null;
+    }
 
-    public abstract LevelEventGenericPacket encodeSleepingIndicator(int sleepingCount, int totalCount);
+    public LevelEventGenericPacket encodeSleepingIndicator(int sleepingCount, int totalCount) {
+        return null;
+    }
 
-    public abstract ContainerOpenPacket encodeCommandBlockEditor(Vector3ic position);
+    public ContainerOpenPacket encodeCommandBlockEditor(Vector3ic position) {
+        return null;
+    }
 
-    public abstract PlayerEnchantOptionsPacket encodeEnchantOptions(
+    public PlayerEnchantOptionsPacket encodeEnchantOptions(
             Collection<Pair<Integer, EnchantOption>> enchantOptions
-    );
+    ) {
+        return null;
+    }
 
-    public abstract Collection<BedrockPacket> encodePlayerSkin(EntityPlayer player, boolean trustSkin);
+    public Collection<BedrockPacket> encodePlayerSkin(EntityPlayer player, boolean trustSkin) {
+        return null;
+    }
 
-    public abstract Collection<BedrockPacket> encodeEntityAction(Entity entity, EntityAction action, boolean self);
+    public Collection<BedrockPacket> encodeEntityAction(Entity entity, EntityAction action, boolean self) {
+        return null;
+    }
 
-    public abstract EmotePacket encodePlayerEmote(EntityPlayer player, UUID emoteId, boolean silence);
+    public EmotePacket encodePlayerEmote(EntityPlayer player, UUID emoteId, boolean silence) {
+        return null;
+    }
 
-    public abstract MobEffectPacket encodeMobEffect(
+    public MobEffectPacket encodeMobEffect(
             Entity entity,
             EffectInstance newEffect,
             EffectInstance oldEffect,
             long tick
-    );
+    ) {
+        return null;
+    }
 
-    public abstract Collection<BedrockPacket> encodeSound(Sound sound, Vector3dc position, boolean relative);
+    public Collection<BedrockPacket> encodeSound(Sound sound, Vector3dc position, boolean relative) {
+        return null;
+    }
 
-    public abstract BossEventPacket encodeBossBar(long bossEntityId, BossBar bossBar);
+    public BossEventPacket encodeBossBar(long bossEntityId, BossBar bossBar) {
+        return null;
+    }
 
-    public abstract BossEventPacket encodeBossBarRemoval(long bossEntityId);
+    public BossEventPacket encodeBossBarRemoval(long bossEntityId) {
+        return null;
+    }
 
-    public abstract ModalFormRequestPacket encodeForm(int formId, Form form);
+    public ModalFormRequestPacket encodeForm(int formId, Form form) {
+        return null;
+    }
 
-    public abstract ClientboundCloseFormPacket encodeCloseForms();
+    public ClientboundCloseFormPacket encodeCloseForms() {
+        return null;
+    }
 
-    public abstract Collection<BedrockPacket> encodeScoreboard(
+    public Collection<BedrockPacket> encodeScoreboard(
             Scoreboard scoreboard,
             DisplaySlot slot,
             Collection<ScoreInfo> scores
-    );
+    ) {
+        return null;
+    }
 
-    public abstract SetDisplayObjectivePacket encodeScoreboardSlotRemoval(DisplaySlot slot);
+    public SetDisplayObjectivePacket encodeScoreboardSlotRemoval(DisplaySlot slot) {
+        return null;
+    }
 
-    public abstract RemoveObjectivePacket encodeScoreboardRemoval(Scoreboard scoreboard);
+    public RemoveObjectivePacket encodeScoreboardRemoval(Scoreboard scoreboard) {
+        return null;
+    }
 
-    public abstract SetScorePacket encodeScore(SetScorePacket.Action action, ScoreInfo score);
+    public SetScorePacket encodeScore(SetScorePacket.Action action, ScoreInfo score) {
+        return null;
+    }
 
-    public abstract PlayerStartItemCooldownPacket encodeCooldown(String category, int duration);
+    public PlayerStartItemCooldownPacket encodeCooldown(String category, int duration) {
+        return null;
+    }
 
-    public abstract ClientboundMapItemDataPacket encodeMapData(long mapId, BufferedImage image);
+    public ClientboundMapItemDataPacket encodeMapData(long mapId, BufferedImage image) {
+        return null;
+    }
 
-    public abstract DeathInfoPacket encodeDeathInfo(String message);
+    public DeathInfoPacket encodeDeathInfo(String message) {
+        return null;
+    }
 
-    public abstract EntityEventPacket encodeItemChargingFinished(long runtimeEntityId);
+    public EntityEventPacket encodeItemChargingFinished(long runtimeEntityId) {
+        return null;
+    }
 
-    public abstract UpdateAttributesPacket encodeAttribute(long runtimeEntityId, AttributeData attribute);
+    public UpdateAttributesPacket encodeAttribute(long runtimeEntityId, AttributeData attribute) {
+        return null;
+    }
 
-    public abstract TextPacket encodeText(String xuid, String message, TextPacket.Type type);
+    public TextPacket encodeText(String xuid, String message, TextPacket.Type type) {
+        return null;
+    }
 
-    public abstract ToastRequestPacket encodeToast(String title, String content);
+    public ToastRequestPacket encodeToast(String title, String content) {
+        return null;
+    }
 
-    public abstract SetTitlePacket encodeTitle(
+    public SetTitlePacket encodeTitle(
             SetTitlePacket.Type type,
             String text,
             int fadeInTime,
             int stayTime,
             int fadeOutTime
-    );
+    ) {
+        return null;
+    }
 
-    public abstract CameraShakePacket encodeCameraShake(
+    public CameraShakePacket encodeCameraShake(
             CameraShakeType shakeType,
             float intensity,
             float duration
-    );
+    ) {
+        return null;
+    }
 
-    public abstract CameraShakePacket encodeCameraShakeStop();
+    public CameraShakePacket encodeCameraShakeStop() {
+        return null;
+    }
 
-    public abstract PlayerFogPacket encodeFogStack(Collection<String> fogStack);
+    public PlayerFogPacket encodeFogStack(Collection<String> fogStack) {
+        return null;
+    }
 
-    public abstract ChangeDimensionPacket encodeDimensionChange(
+    public ChangeDimensionPacket encodeDimensionChange(
             DimensionType dimensionType,
             double x,
             double y,
             double z
-    );
+    ) {
+        return null;
+    }
 
-    public abstract PlayerActionPacket encodeDimensionChangeSuccess(long runtimeEntityId);
+    public PlayerActionPacket encodeDimensionChangeSuccess(long runtimeEntityId) {
+        return null;
+    }
 
-    public abstract UpdateAbilitiesPacket encodePlayerAbilities(
+    public UpdateAbilitiesPacket encodePlayerAbilities(
             long uniqueEntityId,
             CommandPermission commandPermission,
             PlayerPermission playerPermission,
@@ -305,91 +437,139 @@ public abstract class PacketEncoder {
             float walkSpeed,
             float flySpeed,
             float verticalFlySpeed
-    );
+    ) {
+        return null;
+    }
 
-    public abstract UpdateAdventureSettingsPacket encodeAdventureSettings(
+    public UpdateAdventureSettingsPacket encodeAdventureSettings(
             boolean noPlayerVersusMob,
             boolean noMobVersusPlayer,
             boolean showNameTags,
             boolean immutableWorld
-    );
+    ) {
+        return null;
+    }
 
-    public abstract PlayerListPacket encodePlayerList(
+    public PlayerListPacket encodePlayerList(
             Collection<? extends Player> players,
             boolean add,
             boolean trustSkins
-    );
+    ) {
+        return null;
+    }
 
-    public abstract TransferPacket encodeTransfer(String address, int port);
+    public TransferPacket encodeTransfer(String address, int port) {
+        return null;
+    }
 
-    public abstract AvailableCommandsPacket encodeCommands(Collection<CommandData> commands);
+    public AvailableCommandsPacket encodeCommands(Collection<CommandData> commands) {
+        return null;
+    }
 
-    public abstract Collection<SetHudPacket> encodeHudElements(Collection<HudElement> hiddenElements);
+    public Collection<SetHudPacket> encodeHudElements(Collection<HudElement> hiddenElements) {
+        return null;
+    }
 
-    public abstract Collection<BedrockPacket> encodeDialog(Dialog dialog, Entity entity);
+    public Collection<BedrockPacket> encodeDialog(Dialog dialog, Entity entity) {
+        return null;
+    }
 
-    public abstract NpcDialoguePacket encodeDialogClose(Entity entity);
+    public NpcDialoguePacket encodeDialogClose(Entity entity) {
+        return null;
+    }
 
-    public abstract Collection<PrimitiveShapesPacket> encodePrimitiveShapes(
+    public Collection<PrimitiveShapesPacket> encodePrimitiveShapes(
             Collection<? extends PrimitiveShape> primitiveShapes,
             int dimensionId
-    );
+    ) {
+        return null;
+    }
 
-    public abstract Collection<PrimitiveShapesPacket> encodePrimitiveShapeRemovals(
+    public Collection<PrimitiveShapesPacket> encodePrimitiveShapeRemovals(
             Collection<? extends PrimitiveShape> primitiveShapes
-    );
+    ) {
+        return null;
+    }
 
-    public abstract Collection<ConfirmSkinPacket> encodeSkinConfirmation(EntityPlayer player, Skin skin);
+    public Collection<ConfirmSkinPacket> encodeSkinConfirmation(EntityPlayer player, Skin skin) {
+        return null;
+    }
 
-    public abstract ClientboundDataStorePacket encodeDataStoreChange(
+    public ClientboundDataStorePacket encodeDataStoreChange(
             String dataStoreName,
             String propertyName,
             Object value
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ClientboundDataStorePacket encodeDataStoreUpdates(
+    public ClientboundDataStorePacket encodeDataStoreUpdates(
             String dataStoreName,
             String propertyName,
             Collection<String> paths,
             Object value
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ClientboundDataDrivenUIShowScreenPacket encodeDataDrivenUIShowScreen(
+    public ClientboundDataDrivenUIShowScreenPacket encodeDataDrivenUIShowScreen(
             String screenId,
             int formId
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ClientboundDataDrivenUICloseScreenPacket encodeDataDrivenUICloseScreen(Integer formId);
+    public ClientboundDataDrivenUICloseScreenPacket encodeDataDrivenUICloseScreen(Integer formId) {
+        return null;
+    }
 
-    public abstract ClientCacheMissResponsePacket encodeClientCacheMissResponse(Map<Long, byte[]> blobs);
+    public ClientCacheMissResponsePacket encodeClientCacheMissResponse(Map<Long, byte[]> blobs) {
+        return null;
+    }
 
-    public abstract BlockEntityDataPacket encodeBlockEntityData(Vector3ic position, NbtMap data);
+    public BlockEntityDataPacket encodeBlockEntityData(Vector3ic position, NbtMap data) {
+        return null;
+    }
 
-    public abstract ChunkRadiusUpdatedPacket encodeChunkRadiusUpdated(int radius);
+    public ChunkRadiusUpdatedPacket encodeChunkRadiusUpdated(int radius) {
+        return null;
+    }
 
-    public abstract SubChunkPacket encodeSubChunk(
+    public SubChunkPacket encodeSubChunk(
             int dimension,
             Vector3i centerPosition,
             boolean cacheEnabled,
             Collection<SubChunkData> subChunks
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ContainerClosePacket encodeContainerClose(
+    public ContainerClosePacket encodeContainerClose(
             byte id,
             ContainerType type,
             boolean serverInitiated
-    );
+    ) {
+        return null;
+    }
 
-    public abstract ItemStackResponsePacket encodeItemStackResponse(Collection<ItemStackResponse> responses);
+    public ItemStackResponsePacket encodeItemStackResponse(Collection<ItemStackResponse> responses) {
+        return null;
+    }
 
-    public abstract RespawnPacket encodeRespawn(Vector3ic position);
+    public RespawnPacket encodeRespawn(Vector3ic position) {
+        return null;
+    }
 
-    public abstract ServerSettingsResponsePacket encodeServerSettingsResponse(int formId, String formData);
+    public ServerSettingsResponsePacket encodeServerSettingsResponse(int formId, String formData) {
+        return null;
+    }
 
-    public abstract StartGamePacket encodeStartGame(
+    public StartGamePacket encodeStartGame(
             World spawnWorld,
             PlayerData playerData,
             Dimension dimension,
             EntityPlayer player
-    );
+    ) {
+        return null;
+    }
 }

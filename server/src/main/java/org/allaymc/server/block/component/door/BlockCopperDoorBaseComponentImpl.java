@@ -6,11 +6,11 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.interfaces.BlockCopperDoorBehavior;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.component.annotation.Dependency;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
-import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author IWareQ

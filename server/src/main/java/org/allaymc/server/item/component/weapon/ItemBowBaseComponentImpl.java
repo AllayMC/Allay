@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component.weapon;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
@@ -16,6 +15,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.container.impl.OffhandContainerImpl;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3d;
 
 /**

@@ -19,8 +19,8 @@ import org.allaymc.api.primitiveshape.PrimitiveSphere;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
-import org.allaymc.api.world.WorldViewer.BlockUpdate;
 import org.allaymc.api.world.WorldData;
+import org.allaymc.api.world.WorldViewer.BlockUpdate;
 import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.dimension.DimensionType;
@@ -40,21 +40,14 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
-import org.cloudburstmc.protocol.bedrock.packet.AddEntityPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelSoundEventPacket;
-import org.cloudburstmc.protocol.bedrock.packet.MobEffectPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerSkinPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PrimitiveShapesPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SpawnParticleEffectPacket;
+import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.joml.primitives.AABBd;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.joml.primitives.AABBd;
 
-import java.awt.Color;
+import java.awt.*;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +56,7 @@ import java.util.function.Supplier;
 
 import static org.allaymc.api.item.type.ItemTypes.STONE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(AllayTestExtension.class)
 class PacketEncoderCompatibilityTest {
@@ -81,8 +72,8 @@ class PacketEncoderCompatibilityTest {
         var sphere = new PrimitiveSphere(new org.joml.Vector3f(1, 2, 3), Color.RED, 2f, 12);
 
         var netEaseV766 = protocol(ClientVariant.NETEASE, 766).getEncoder();
-        assertTrue(netEaseV766.encodePrimitiveShapes(List.of(sphere), 0).isEmpty());
-        assertTrue(netEaseV766.encodePrimitiveShapeRemovals(List.of(sphere)).isEmpty());
+        assertNull(netEaseV766.encodePrimitiveShapes(List.of(sphere), 0));
+        assertNull(netEaseV766.encodePrimitiveShapeRemovals(List.of(sphere)));
 
         for (var protocol : List.of(
                 protocol(ClientVariant.INTERNATIONAL, 818),
@@ -434,20 +425,23 @@ class PacketEncoderCompatibilityTest {
 
             var firstVoxelShapes = encoder.encodeVoxelShapes();
             var secondVoxelShapes = encoder.encodeVoxelShapes();
-            assertEquals(firstVoxelShapes.size(), secondVoxelShapes.size(), protocol::toString);
-            assertEquals(
-                    protocol.getProtocolVersion() >= 924 ? 1 : 0,
-                    firstVoxelShapes.size(),
-                    protocol::toString
-            );
-            var firstVoxelIterator = firstVoxelShapes.iterator();
-            var secondVoxelIterator = secondVoxelShapes.iterator();
-            while (firstVoxelIterator.hasNext()) {
-                var first = firstVoxelIterator.next();
-                var second = secondVoxelIterator.next();
-                assertNotSame(first, second, () -> protocol + " reused " + first.getPacketType());
-                assertPacketEncodes(protocol, first);
-                assertPacketEncodes(protocol, second);
+            if (protocol.getProtocolVersion() < 924) {
+                assertNull(firstVoxelShapes, protocol::toString);
+                assertNull(secondVoxelShapes, protocol::toString);
+            } else {
+                assertNotNull(firstVoxelShapes, protocol::toString);
+                assertNotNull(secondVoxelShapes, protocol::toString);
+                assertEquals(firstVoxelShapes.size(), secondVoxelShapes.size(), protocol::toString);
+                assertEquals(1, firstVoxelShapes.size(), protocol::toString);
+                var firstVoxelIterator = firstVoxelShapes.iterator();
+                var secondVoxelIterator = secondVoxelShapes.iterator();
+                while (firstVoxelIterator.hasNext()) {
+                    var first = firstVoxelIterator.next();
+                    var second = secondVoxelIterator.next();
+                    assertNotSame(first, second, () -> protocol + " reused " + first.getPacketType());
+                    assertPacketEncodes(protocol, first);
+                    assertPacketEncodes(protocol, second);
+                }
             }
 
             var firstProperties = encoder.encodeSyncEntityProperties();
@@ -510,9 +504,8 @@ class PacketEncoderCompatibilityTest {
                 .skinData(new Skin.ImageData(1, 1, skinBytes))
                 .build();
 
-        assertTrue(protocol(ClientVariant.INTERNATIONAL, 819).getEncoder()
-                .encodeSkinConfirmation(player, skin)
-                .isEmpty());
+        assertNull(protocol(ClientVariant.INTERNATIONAL, 819).getEncoder()
+                .encodeSkinConfirmation(player, skin));
 
         for (var protocol : List.of(
                 protocol(ClientVariant.NETEASE, 766),
@@ -538,18 +531,26 @@ class PacketEncoderCompatibilityTest {
     }
 
     @Test
-    void dataDrivenUIPacketsAreConstructedByTheFeatureBranch() {
+    void encoderOperationsHaveConcreteFallbacks() {
+        for (var method : PacketEncoder.class.getDeclaredMethods()) {
+            if (method.getName().startsWith("encode")) {
+                assertFalse(Modifier.isAbstract(method.getModifiers()), method::toString);
+            }
+        }
+    }
+
+    @Test
+    void unsupportedDataDrivenUIOperationsReturnNull() {
         var legacy = protocol(ClientVariant.INTERNATIONAL, 924).getEncoder();
-        assertThrows(UnsupportedOperationException.class, () ->
-                legacy.encodeDataStoreChange("minecraft", "property", Map.of()));
-        assertThrows(UnsupportedOperationException.class, () ->
-                legacy.encodeDataDrivenUIShowScreen("minecraft:custom_form", 1));
+        assertNull(legacy.encodeDataStoreChange("minecraft", "property", Map.of()));
+        assertNull(legacy.encodeDataStoreUpdates("minecraft", "property", List.of("value"), 1));
+        assertNull(legacy.encodeDataDrivenUIShowScreen("minecraft:custom_form", 1));
+        assertNull(legacy.encodeDataDrivenUICloseScreen(1));
 
         for (var protocol : List.of(
                 protocol(ClientVariant.INTERNATIONAL, 944),
                 protocol(ClientVariant.INTERNATIONAL, 1001)
         )) {
-            assertTrue(protocol.supports(ProtocolFeature.DATA_DRIVEN_UI));
             var encoder = protocol.getEncoder();
             var source = new java.util.LinkedHashMap<String, Object>();
             source.put("title", "Initial title");

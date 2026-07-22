@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.plant;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import org.allaymc.api.block.BlockBehavior;
@@ -8,6 +7,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -16,6 +16,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.block.FortuneDropHelper;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.item.data.ItemId;
 
 import java.util.HashSet;
@@ -24,7 +25,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPDATE_BIT;
-import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd

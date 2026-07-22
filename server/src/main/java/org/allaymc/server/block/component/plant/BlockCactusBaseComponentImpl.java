@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.plant;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
@@ -13,6 +12,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.AGE_16;

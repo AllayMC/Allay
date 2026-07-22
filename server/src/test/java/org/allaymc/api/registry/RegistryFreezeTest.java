@@ -1,6 +1,5 @@
 package org.allaymc.api.registry;
 
-import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.junit.jupiter.api.Test;
 
@@ -10,10 +9,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RegistryFreezeTest {
 

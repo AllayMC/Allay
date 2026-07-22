@@ -2,7 +2,6 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
@@ -15,6 +14,7 @@ import org.allaymc.api.world.sound.FenceGateSound;
 import org.allaymc.server.block.BlockPlaceHelper;
 import org.joml.Vector3ic;
 
+import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**

@@ -23,18 +23,19 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.ddui.DDUIScreenSession;
 import org.allaymc.api.ddui.type.DDUIScreen;
-import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.dialog.Dialog;
-import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.action.*;
-import org.allaymc.api.entity.component.*;
+import org.allaymc.api.entity.action.EntityAction;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.entity.interfaces.*;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.eventbus.event.server.PlayerDisconnectEvent;
 import org.allaymc.api.eventbus.event.server.PlayerAbilitiesUpdateEvent;
+import org.allaymc.api.eventbus.event.server.PlayerDisconnectEvent;
 import org.allaymc.api.eventbus.event.server.PlayerLoginEvent;
 import org.allaymc.api.eventbus.event.server.PlayerSpawnEvent;
 import org.allaymc.api.form.type.CustomForm;
@@ -49,15 +50,11 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.*;
-import org.allaymc.api.player.ClientPlayMode;
-import org.allaymc.api.player.HudElement;
-import org.allaymc.api.player.InputInteractionModel;
-import org.allaymc.api.player.InputMode;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
-import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.FakeScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
@@ -72,8 +69,8 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.gamerule.GameRules;
-import org.allaymc.api.world.particle.*;
-import org.allaymc.api.world.sound.*;
+import org.allaymc.api.world.particle.Particle;
+import org.allaymc.api.world.sound.Sound;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
@@ -92,41 +89,30 @@ import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.network.processor.PacketProcessorRegistry;
 import org.allaymc.server.network.processor.login.RequestNetworkSettingsPacketProcessor;
 import org.allaymc.server.network.protocol.Protocol;
-import org.allaymc.server.network.protocol.ProtocolFeature;
 import org.allaymc.server.network.protocol.ProtocolSession;
-import org.allaymc.server.utils.JSONUtils;
 import org.allaymc.server.world.AllayDimension;
-import org.allaymc.server.world.AllayWorld;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.math.vector.Vector3i;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.*;
-import org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeAction;
+import org.cloudburstmc.protocol.bedrock.data.Ability;
+import org.cloudburstmc.protocol.bedrock.data.AttributeData;
+import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
+import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNBTUtils.*;
-import static org.allaymc.server.network.NetworkHelper.toNetwork;
 
 /**
  * @author daoge_cmd
@@ -865,10 +851,6 @@ public class AllayPlayer implements Player {
 
     @Override
     public DDUIScreenSession viewScreen(DDUIScreen screen) {
-        if (!getProtocol().supports(ProtocolFeature.DATA_DRIVEN_UI)) {
-            throw new UnsupportedOperationException("DDUI is not supported by " + getProtocol());
-        }
-
         if (this.activeScreen != null) {
             this.activeScreen.close();
         }
@@ -1250,7 +1232,9 @@ public class AllayPlayer implements Player {
     }
 
     public void sendPacket(BedrockPacket packet) {
-        Objects.requireNonNull(packet, "packet");
+        if (packet == null) {
+            return;
+        }
         var selectedSession = protocolSession;
         if (selectedSession != null) {
             selectedSession.send(this, packet);
@@ -1260,7 +1244,10 @@ public class AllayPlayer implements Player {
     }
 
     public void sendPackets(Collection<? extends BedrockPacket> packets) {
-        Objects.requireNonNull(packets, "packets").forEach(packet ->
+        if (packets == null || packets.isEmpty()) {
+            return;
+        }
+        packets.forEach(packet ->
                 Objects.requireNonNull(packet, "packets contains null")
         );
         var selectedSession = protocolSession;
@@ -1272,7 +1259,9 @@ public class AllayPlayer implements Player {
     }
 
     public void sendPacketImmediately(BedrockPacket packet) {
-        Objects.requireNonNull(packet, "packet");
+        if (packet == null) {
+            return;
+        }
         var selectedSession = protocolSession;
         if (selectedSession != null) {
             selectedSession.sendImmediately(this, packet);
@@ -1282,7 +1271,10 @@ public class AllayPlayer implements Player {
     }
 
     public void sendPacketsImmediately(Collection<? extends BedrockPacket> packets) {
-        Objects.requireNonNull(packets, "packets").forEach(packet ->
+        if (packets == null || packets.isEmpty()) {
+            return;
+        }
+        packets.forEach(packet ->
                 Objects.requireNonNull(packet, "packets contains null")
         );
         var selectedSession = protocolSession;

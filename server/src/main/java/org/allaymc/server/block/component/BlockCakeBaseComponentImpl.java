@@ -5,6 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -17,7 +18,6 @@ import org.allaymc.api.world.sound.SimpleSound;
 import java.util.Set;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.BITE_COUNTER;
-import org.allaymc.api.block.type.BlockState;
 
 /**
  * Base component for cake block behavior.

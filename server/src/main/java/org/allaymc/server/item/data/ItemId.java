@@ -1,10 +1,11 @@
 package org.allaymc.server.item.data;
 
-import java.util.Locale;
 import lombok.Getter;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
+
+import java.util.Locale;
 
 public enum ItemId {
     ACACIA_BOAT("minecraft:acacia_boat", 411),

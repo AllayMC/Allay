@@ -1,10 +1,10 @@
 package org.allaymc.server.block.component.redstone;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 /**
  * Implementation of the redstone block, which constantly outputs maximum signal (15) to all faces.

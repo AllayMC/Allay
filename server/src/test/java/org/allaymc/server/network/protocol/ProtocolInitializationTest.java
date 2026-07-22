@@ -14,19 +14,13 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,13 +34,11 @@ class ProtocolInitializationTest {
         assertFalse(protocol.isInitialized());
         assertThrows(IllegalStateException.class, protocol::getData);
         assertThrows(IllegalStateException.class, protocol::getEncoder);
-        assertThrows(IllegalStateException.class, protocol::getFeatures);
 
         protocol.initialize();
 
         assertTrue(protocol.isInitialized());
         assertSame(protocol.getData(), protocol.getEncoder().getData());
-        assertTrue(protocol.supports(ProtocolFeature.DATA_DRIVEN_UI));
         assertThrows(IllegalStateException.class, protocol::initialize);
     }
 
@@ -112,7 +104,6 @@ class ProtocolInitializationTest {
                 }
                 assertTrue(protocol.isInitialized());
                 assertSame(protocol.getData(), protocol.getEncoder().getData());
-                assertTrue(protocol.supports(ProtocolFeature.DATA_DRIVEN_UI));
             } catch (Throwable throwable) {
                 unexpectedFailure.compareAndSet(null, throwable);
             }
@@ -203,9 +194,5 @@ class ProtocolInitializationTest {
             return encoderFactory.apply(data);
         }
 
-        @Override
-        protected Set<ProtocolFeature> createFeatures() {
-            return Set.of(ProtocolFeature.DATA_DRIVEN_UI);
-        }
     }
 }

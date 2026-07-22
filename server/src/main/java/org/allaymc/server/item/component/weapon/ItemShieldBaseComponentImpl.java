@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component.weapon;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
@@ -11,6 +10,7 @@ import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemShieldBaseComponent;
 import org.allaymc.api.item.interfaces.ItemAxeStack;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3d;
 
 /**

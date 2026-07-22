@@ -7,8 +7,8 @@ import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.IdentifiableRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.NetworkRecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.UniqueCraftingData;
 
 import java.util.HashSet;

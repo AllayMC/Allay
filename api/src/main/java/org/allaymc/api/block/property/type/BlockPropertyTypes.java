@@ -1,31 +1,9 @@
 package org.allaymc.api.block.property.type;
 
-import java.util.List;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
-import org.allaymc.api.block.property.enums.Attachment;
-import org.allaymc.api.block.property.enums.BambooLeafSize;
-import org.allaymc.api.block.property.enums.BambooStalkThickness;
-import org.allaymc.api.block.property.enums.BigDripleafTilt;
-import org.allaymc.api.block.property.enums.CauldronLiquid;
-import org.allaymc.api.block.property.enums.CrackedState;
-import org.allaymc.api.block.property.enums.CreakingHeartState;
-import org.allaymc.api.block.property.enums.DripstoneThickness;
-import org.allaymc.api.block.property.enums.LeverDirection;
-import org.allaymc.api.block.property.enums.MinecraftBlockFace;
-import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
-import org.allaymc.api.block.property.enums.MinecraftFacingDirection;
-import org.allaymc.api.block.property.enums.MinecraftVerticalHalf;
-import org.allaymc.api.block.property.enums.Orientation;
-import org.allaymc.api.block.property.enums.PaleMossCarpetSide;
-import org.allaymc.api.block.property.enums.PillarAxis;
-import org.allaymc.api.block.property.enums.PortalAxis;
-import org.allaymc.api.block.property.enums.PotentSulfurState;
-import org.allaymc.api.block.property.enums.SeaGrassType;
-import org.allaymc.api.block.property.enums.StructureBlockType;
-import org.allaymc.api.block.property.enums.TorchFacingDirection;
-import org.allaymc.api.block.property.enums.TurtleEggCount;
-import org.allaymc.api.block.property.enums.VaultState;
-import org.allaymc.api.block.property.enums.WallConnectionType;
+import org.allaymc.api.block.property.enums.*;
+
+import java.util.List;
 
 @MinecraftVersionSensitive
 public interface BlockPropertyTypes {

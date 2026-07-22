@@ -2,7 +2,6 @@ package org.allaymc.api.scoreboard;
 
 import com.google.common.collect.Sets;
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.eventbus.event.scoreboard.ScoreboardAllLinesRemoveEvent;
 import org.allaymc.api.eventbus.event.scoreboard.ScoreboardLineAddEvent;
 import org.allaymc.api.eventbus.event.scoreboard.ScoreboardLineRemoveEvent;

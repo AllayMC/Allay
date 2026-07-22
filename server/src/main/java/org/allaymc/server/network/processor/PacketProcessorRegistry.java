@@ -4,11 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.player.ClientState;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**

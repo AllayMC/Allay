@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component.weapon;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -13,6 +12,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.api.world.sound.TridentRiptideSound;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3d;
 
 /**
