@@ -8,7 +8,7 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.13.1 (API 0.29.0) - Unreleased
+# 0.14.0 (API 0.29.0) - Unreleased
 
 <small>[Compare with 0.13.0](https://github.com/AllayMC/Allay/compare/0.13.0...HEAD)</small>
 
@@ -16,12 +16,19 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added player abilities API, including `PlayerAbility`, ability getters/setters on `Player`, ability state helpers such as `canFly()`, `canPlaceBlocks()`, `isNoClip()`, `isImmutableWorld()`, and `isAlwaysFlying()`, plus `PlayerAbilitiesUpdateEvent` and cancellable `PlayerAbilitiesUpdateRequestEvent`.
 - (API) Added player ability persistence to `PlayerData`.
+- (API) Added player phantom mode through `EntityPlayerBaseComponent.setPhantom()` and `isPhantom()`, allowing players to be hidden from viewers and excluded from world interaction while still interacting with the world themselves.
+- (API) Added `PlayerSwingArmEvent`, `PlayerControlModeUpdateEvent`, and the `EventHandler.ignoreCancelled` option for finer control over player input and event handling.
+- (API) Extended `LoginData` with the joined server address and current/default input modes, and added `InputMode.from(int)` for client input-mode lookup.
+- (API) Added `GoatHornInstrument` and goat horn instrument accessors, alongside full goat horn use behavior.
+- Implemented bubble columns from soul sand and magma blocks, including entity movement and water-state handling.
+- Added support for MCBE 1.26.30 (protocol v1001), including the new cinnabar and sulfur blocks/items and sulfur cube entity.
 - Added dashboard console command completion backed by the command tree, including command names, aliases, enum values, and online player targets.
 - Added clickable `http://` and `https://` links in dashboard console logs.
 
 ### Changed
 
 - (API) `GameMode` now exposes its default `PlayerAbility` set, and player flight checks now use player abilities instead of the removed legacy fly permissions.
+- (API) `FurnaceRecipe` ingredients now use `ItemDescriptor` and support item tags and recipe priorities across furnace-like recipes.
 - Changed RakNet send-cookie handling to use a fixed cookie internally.
 - Dashboard console commands may now be entered with a leading `/`, matching terminal console behavior.
 
