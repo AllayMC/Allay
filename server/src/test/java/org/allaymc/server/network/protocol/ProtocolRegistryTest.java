@@ -2,10 +2,10 @@ package org.allaymc.server.network.protocol;
 
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.processor.PacketProcessorRegistry;
-import org.allaymc.server.network.protocol.v766.PacketEncoderV766;
-import org.allaymc.server.network.protocol.v766.ProtocolV766NetEase;
-import org.allaymc.server.network.protocol.v819.ProtocolV819;
-import org.allaymc.server.network.protocol.v819.ProtocolV819NetEase;
+import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
+import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
+import org.allaymc.server.network.protocol.v819.Protocol_v819;
+import org.allaymc.server.network.protocol.v819.Protocol_v819_NetEase;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
@@ -33,9 +33,9 @@ class ProtocolRegistryTest {
         var registry = ProtocolRegistry.createDefault(mock(NetworkData.class));
 
         assertNull(registry.resolve(ClientVariant.INTERNATIONAL, 766));
-        assertInstanceOf(ProtocolV766NetEase.class, registry.resolve(ClientVariant.NETEASE, 766));
-        assertInstanceOf(ProtocolV819.class, registry.resolve(ClientVariant.INTERNATIONAL, 819));
-        assertInstanceOf(ProtocolV819NetEase.class, registry.resolve(ClientVariant.NETEASE, 819));
+        assertInstanceOf(Protocol_v766_NetEase.class, registry.resolve(ClientVariant.NETEASE, 766));
+        assertInstanceOf(Protocol_v819.class, registry.resolve(ClientVariant.INTERNATIONAL, 819));
+        assertInstanceOf(Protocol_v819_NetEase.class, registry.resolve(ClientVariant.NETEASE, 819));
         assertNull(registry.resolve(ClientVariant.NETEASE, 818));
         assertEquals(818, registry.getLowest(ClientVariant.INTERNATIONAL).getProtocolVersion());
         assertEquals(1001, registry.getLatest(ClientVariant.INTERNATIONAL).getProtocolVersion());
@@ -214,7 +214,7 @@ class ProtocolRegistryTest {
 
         @Override
         protected PacketEncoder createEncoder(ProtocolData data) {
-            return new PacketEncoderV766(data);
+            return new PacketEncoder_v766(data);
         }
     }
 }

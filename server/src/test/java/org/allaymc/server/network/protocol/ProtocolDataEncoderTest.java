@@ -2,8 +2,8 @@ package org.allaymc.server.network.protocol;
 
 import io.netty.buffer.Unpooled;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
-import org.allaymc.server.network.protocol.v827.PacketEncoderV827;
-import org.allaymc.server.network.protocol.v844.PacketEncoderV844;
+import org.allaymc.server.network.protocol.v827.PacketEncoder_v827;
+import org.allaymc.server.network.protocol.v844.PacketEncoder_v844;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -52,8 +52,8 @@ class ProtocolDataEncoderTest {
 
     @Test
     void v827ExperimentDoesNotLeakIntoV844() {
-        var v827 = assertInstanceOf(PacketEncoderV827.class, protocol(827).getEncoder());
-        var v844 = assertInstanceOf(PacketEncoderV844.class, protocol(844).getEncoder());
+        var v827 = assertInstanceOf(PacketEncoder_v827.class, protocol(827).getEncoder());
+        var v844 = assertInstanceOf(PacketEncoder_v844.class, protocol(844).getEncoder());
 
         var first827 = v827.encodeResourcePackStack();
         var second827 = v827.encodeResourcePackStack();

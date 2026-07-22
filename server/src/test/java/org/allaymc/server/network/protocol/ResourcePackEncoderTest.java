@@ -1,7 +1,7 @@
 package org.allaymc.server.network.protocol;
 
 import org.allaymc.api.pack.Pack;
-import org.allaymc.server.network.protocol.v766.PacketEncoderV766;
+import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -34,7 +34,7 @@ class ResourcePackEncoderTest {
             return Arrays.copyOfRange(content, offset, Math.min(offset + length, content.length));
         });
 
-        var encoder = new PacketEncoderV766(mock(ProtocolData.class));
+        var encoder = new PacketEncoder_v766(mock(ProtocolData.class));
 
         var firstInfo = encoder.encodeResourcePackDataInfo(pack, 3);
         firstInfo.getHash()[0] = 99;

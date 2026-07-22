@@ -3,7 +3,7 @@ package org.allaymc.server.network.protocol.v818;
 import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.protocol.ProtocolData;
-import org.allaymc.server.network.protocol.v766.PacketEncoderV766;
+import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.packet.PrimitiveShapesPacket;
 
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Objects;
 
 /** International v818 encoder. */
-public class PacketEncoderV818 extends PacketEncoderV766 {
-    public PacketEncoderV818(ProtocolData data) {
+public class PacketEncoder_v818 extends PacketEncoder_v766 {
+    public PacketEncoder_v818(ProtocolData data) {
         super(data);
     }
 

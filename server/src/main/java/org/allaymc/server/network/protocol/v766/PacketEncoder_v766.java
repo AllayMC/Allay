@@ -108,8 +108,8 @@ import java.util.*;
 /**
  * Complete packet encoder baseline for protocol v766.
  */
-public class PacketEncoderV766 extends PacketEncoder {
-    public PacketEncoderV766(ProtocolData data) {
+public class PacketEncoder_v766 extends PacketEncoder {
+    public PacketEncoder_v766(ProtocolData data) {
         super(data);
     }
 
@@ -136,7 +136,7 @@ public class PacketEncoderV766 extends PacketEncoder {
     public CraftingDataPacket encodeCraftingData() {
         var packet = new CraftingDataPacket();
         data().recipeTable().encodedRecipes().stream()
-                .map(PacketEncoderV766::copyRecipeData)
+                .map(PacketEncoder_v766::copyRecipeData)
                 .forEach(packet.getCraftingData()::add);
         packet.getPotionMixData().addAll(data().recipeTable().potionMixes());
         packet.setCleanRecipes(true);
@@ -216,7 +216,7 @@ public class PacketEncoderV766 extends PacketEncoder {
     public DimensionDataPacket encodeDimensionData() {
         var packet = new DimensionDataPacket();
         data().source().dimensionTypes().stream()
-                .filter(PacketEncoderV766::shouldSendDimensionDefinition)
+                .filter(PacketEncoder_v766::shouldSendDimensionDefinition)
                 .map(dimensionType -> new DimensionDefinition(
                         dimensionType.getIdentifier().toString(),
                         dimensionType.getMaxHeight() + 1,
@@ -2744,7 +2744,7 @@ public class PacketEncoderV766 extends PacketEncoder {
 
     private static List<ItemData> copyItems(List<ItemData> items) {
         return items.stream()
-                .map(PacketEncoderV766::copyItemData)
+                .map(PacketEncoder_v766::copyItemData)
                 .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
 

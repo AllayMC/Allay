@@ -10,8 +10,8 @@ import org.cloudburstmc.protocol.bedrock.codec.v766_netease.Bedrock_v766_NetEase
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 /** NetEase v766 protocol. */
-public class ProtocolV766NetEase extends ProtocolV766 {
-    public ProtocolV766NetEase() {
+public class Protocol_v766_NetEase extends Protocol_v766 {
+    public Protocol_v766_NetEase() {
         super(Bedrock_v766_NetEase.CODEC, ClientVariant.NETEASE);
     }
 
@@ -27,6 +27,6 @@ public class ProtocolV766NetEase extends ProtocolV766 {
 
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
-        return new PacketEncoderV766NetEase(data);
+        return new PacketEncoder_v766_NetEase(data);
     }
 }

@@ -19,12 +19,12 @@ import java.util.EnumSet;
 /**
  * Oldest complete protocol baseline. The international v766 variant is intentionally not registered.
  */
-public abstract class ProtocolV766 extends Protocol {
-    public ProtocolV766() {
+public abstract class Protocol_v766 extends Protocol {
+    public Protocol_v766() {
         this(Bedrock_v766.CODEC, ClientVariant.INTERNATIONAL);
     }
 
-    protected ProtocolV766(BedrockCodec codec, ClientVariant variant) {
+    protected Protocol_v766(BedrockCodec codec, ClientVariant variant) {
         super(codec, variant);
     }
 
@@ -127,6 +127,6 @@ public abstract class ProtocolV766 extends Protocol {
 
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
-        return new PacketEncoderV766(data);
+        return new PacketEncoder_v766(data);
     }
 }

@@ -10,8 +10,8 @@ import org.cloudburstmc.protocol.bedrock.codec.v819_netease.Bedrock_v819_NetEase
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 /** NetEase v819 protocol. */
-public class ProtocolV819NetEase extends ProtocolV819 {
-    public ProtocolV819NetEase() {
+public class Protocol_v819_NetEase extends Protocol_v819 {
+    public Protocol_v819_NetEase() {
         super(Bedrock_v819_NetEase.CODEC, ClientVariant.NETEASE);
     }
 
@@ -27,6 +27,6 @@ public class ProtocolV819NetEase extends ProtocolV819 {
 
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
-        return new PacketEncoderV819NetEase(data);
+        return new PacketEncoder_v819_NetEase(data);
     }
 }

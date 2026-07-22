@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Objects;
 
 /** NetEase-specific v766 encoder branch. */
-public class PacketEncoderV766NetEase extends PacketEncoderV766 {
-    public PacketEncoderV766NetEase(ProtocolData data) {
+public class PacketEncoder_v766_NetEase extends PacketEncoder_v766 {
+    public PacketEncoder_v766_NetEase(ProtocolData data) {
         super(data);
     }
 

@@ -1,15 +1,15 @@
 package org.allaymc.server.network.protocol.v827;
 
 import org.allaymc.server.network.protocol.ProtocolData;
-import org.allaymc.server.network.protocol.v819.PacketEncoderV819;
+import org.allaymc.server.network.protocol.v819.PacketEncoder_v819;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /** International v827 encoder. */
-public class PacketEncoderV827 extends PacketEncoderV819 {
-    public PacketEncoderV827(ProtocolData data) {
+public class PacketEncoder_v827 extends PacketEncoder_v819 {
+    public PacketEncoder_v827(ProtocolData data) {
         super(data);
     }
 

@@ -72,7 +72,7 @@ class RawPacketCodecRegistrationTest {
     @Test
     void baselineEncoderPacketsAreAcceptedByEveryTargetCodec() throws IOException {
         var encoderSource = findSourceRoot().resolve(
-                "org/allaymc/server/network/protocol/v766/PacketEncoderV766.java"
+                "org/allaymc/server/network/protocol/v766/PacketEncoder_v766.java"
         );
         var packetNames = findPacketConstructions(encoderSource);
         assertFalse(packetNames.isEmpty());

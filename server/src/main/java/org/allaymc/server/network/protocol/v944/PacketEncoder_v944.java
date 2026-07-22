@@ -1,7 +1,7 @@
 package org.allaymc.server.network.protocol.v944;
 
 import org.allaymc.server.network.protocol.ProtocolData;
-import org.allaymc.server.network.protocol.v924.PacketEncoderV924;
+import org.allaymc.server.network.protocol.v924.PacketEncoder_v924;
 import org.cloudburstmc.protocol.bedrock.data.datastore.DataStoreChange;
 import org.cloudburstmc.protocol.bedrock.data.datastore.DataStoreUpdate;
 import org.cloudburstmc.protocol.bedrock.packet.ClientboundDataDrivenUICloseScreenPacket;
@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /** International v944 encoder. */
-public class PacketEncoderV944 extends PacketEncoderV924 {
-    public PacketEncoderV944(ProtocolData data) {
+public class PacketEncoder_v944 extends PacketEncoder_v924 {
+    public PacketEncoder_v944(ProtocolData data) {
         super(data);
     }
 

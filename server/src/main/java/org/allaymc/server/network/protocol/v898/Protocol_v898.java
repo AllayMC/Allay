@@ -6,18 +6,18 @@ import org.allaymc.server.network.processor.ingame.ServerboundDataStorePacketPro
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
-import org.allaymc.server.network.protocol.v860.ProtocolV860;
+import org.allaymc.server.network.protocol.v860.Protocol_v860;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 /** International v898 protocol. */
-public class ProtocolV898 extends ProtocolV860 {
-    public ProtocolV898() {
+public class Protocol_v898 extends Protocol_v860 {
+    public Protocol_v898() {
         this(Bedrock_v898.CODEC, ClientVariant.INTERNATIONAL);
     }
 
-    protected ProtocolV898(BedrockCodec codec, ClientVariant variant) {
+    protected Protocol_v898(BedrockCodec codec, ClientVariant variant) {
         super(codec, variant);
     }
 
@@ -38,6 +38,6 @@ public class ProtocolV898 extends ProtocolV860 {
 
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
-        return new PacketEncoderV898(data);
+        return new PacketEncoder_v898(data);
     }
 }

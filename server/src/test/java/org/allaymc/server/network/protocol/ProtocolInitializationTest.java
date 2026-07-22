@@ -2,7 +2,7 @@ package org.allaymc.server.network.protocol;
 
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.processor.PacketProcessorRegistry;
-import org.allaymc.server.network.protocol.v766.PacketEncoderV766;
+import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
@@ -30,7 +30,7 @@ class ProtocolInitializationTest {
     @Test
     void publishesOnlyAfterEveryComponentMatches() {
         var data = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
-        var encoder = new PacketEncoderV766(data);
+        var encoder = new PacketEncoder_v766(data);
         var protocol = new TestProtocol(ClientVariant.INTERNATIONAL, data, encoder);
 
         assertFalse(protocol.isInitialized());
@@ -73,7 +73,7 @@ class ProtocolInitializationTest {
         var protocol = new TestProtocol(
                 ClientVariant.INTERNATIONAL,
                 data,
-                new PacketEncoderV766(data)
+                new PacketEncoder_v766(data)
         );
 
         assertThrows(IllegalStateException.class, () -> protocol.initialize(mock(NetworkData.class)));
@@ -86,7 +86,7 @@ class ProtocolInitializationTest {
         var protocol = new TestProtocol(
                 ClientVariant.INTERNATIONAL,
                 data,
-                new PacketEncoderV766(data)
+                new PacketEncoder_v766(data)
         );
 
         assertThrows(IllegalStateException.class, () -> protocol.initialize(mock(NetworkData.class)));
@@ -100,7 +100,7 @@ class ProtocolInitializationTest {
         var protocol = new TestProtocol(
                 ClientVariant.INTERNATIONAL,
                 data,
-                new PacketEncoderV766(encoderData)
+                new PacketEncoder_v766(encoderData)
         );
 
         assertThrows(IllegalStateException.class, () -> protocol.initialize(mock(NetworkData.class)));
@@ -118,7 +118,7 @@ class ProtocolInitializationTest {
         var protocol = new TestProtocol(
                 ClientVariant.INTERNATIONAL,
                 data,
-                new PacketEncoderV766(data)
+                new PacketEncoder_v766(data)
         );
 
         assertThrows(IllegalArgumentException.class, () -> protocol.initialize(mock(NetworkData.class)));
@@ -129,7 +129,7 @@ class ProtocolInitializationTest {
     @Test
     void concurrentInitializationPublishesAllComponentsExactlyOnce() throws Exception {
         var data = data(CODEC.getProtocolVersion(), ClientVariant.INTERNATIONAL);
-        var encoder = new PacketEncoderV766(data);
+        var encoder = new PacketEncoder_v766(data);
         var protocol = new TestProtocol(ClientVariant.INTERNATIONAL, data, encoder);
         var source = mock(NetworkData.class);
         var readerStarted = new CountDownLatch(1);

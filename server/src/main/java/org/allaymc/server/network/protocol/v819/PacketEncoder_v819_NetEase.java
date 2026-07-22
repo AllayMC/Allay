@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 /** NetEase-specific v819 encoder branch. */
-public class PacketEncoderV819NetEase extends PacketEncoderV819 {
-    public PacketEncoderV819NetEase(ProtocolData data) {
+public class PacketEncoder_v819_NetEase extends PacketEncoder_v819 {
+    public PacketEncoder_v819_NetEase(ProtocolData data) {
         super(data);
     }
 

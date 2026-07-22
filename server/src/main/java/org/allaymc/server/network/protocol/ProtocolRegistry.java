@@ -1,19 +1,19 @@
 package org.allaymc.server.network.protocol;
 
 import org.allaymc.server.network.NetworkData;
-import org.allaymc.server.network.protocol.v1001.ProtocolV1001;
-import org.allaymc.server.network.protocol.v766.ProtocolV766NetEase;
-import org.allaymc.server.network.protocol.v818.ProtocolV818;
-import org.allaymc.server.network.protocol.v819.ProtocolV819;
-import org.allaymc.server.network.protocol.v819.ProtocolV819NetEase;
-import org.allaymc.server.network.protocol.v827.ProtocolV827;
-import org.allaymc.server.network.protocol.v844.ProtocolV844;
-import org.allaymc.server.network.protocol.v859.ProtocolV859;
-import org.allaymc.server.network.protocol.v860.ProtocolV860;
-import org.allaymc.server.network.protocol.v898.ProtocolV898;
-import org.allaymc.server.network.protocol.v924.ProtocolV924;
-import org.allaymc.server.network.protocol.v944.ProtocolV944;
-import org.allaymc.server.network.protocol.v975.ProtocolV975;
+import org.allaymc.server.network.protocol.v1001.Protocol_v1001;
+import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
+import org.allaymc.server.network.protocol.v818.Protocol_v818;
+import org.allaymc.server.network.protocol.v819.Protocol_v819;
+import org.allaymc.server.network.protocol.v819.Protocol_v819_NetEase;
+import org.allaymc.server.network.protocol.v827.Protocol_v827;
+import org.allaymc.server.network.protocol.v844.Protocol_v844;
+import org.allaymc.server.network.protocol.v859.Protocol_v859;
+import org.allaymc.server.network.protocol.v860.Protocol_v860;
+import org.allaymc.server.network.protocol.v898.Protocol_v898;
+import org.allaymc.server.network.protocol.v924.Protocol_v924;
+import org.allaymc.server.network.protocol.v944.Protocol_v944;
+import org.allaymc.server.network.protocol.v975.Protocol_v975;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -98,19 +98,19 @@ public final class ProtocolRegistry {
     public static ProtocolRegistry createDefault(NetworkData source) {
         var registry = new ProtocolRegistry();
         var supported = new ArrayList<Protocol>();
-        supported.add(new ProtocolV818());
-        supported.add(new ProtocolV819());
-        supported.add(new ProtocolV827());
-        supported.add(new ProtocolV844());
-        supported.add(new ProtocolV859());
-        supported.add(new ProtocolV860());
-        supported.add(new ProtocolV898());
-        supported.add(new ProtocolV924());
-        supported.add(new ProtocolV944());
-        supported.add(new ProtocolV975());
-        supported.add(new ProtocolV1001());
-        supported.add(new ProtocolV766NetEase());
-        supported.add(new ProtocolV819NetEase());
+        supported.add(new Protocol_v818());
+        supported.add(new Protocol_v819());
+        supported.add(new Protocol_v827());
+        supported.add(new Protocol_v844());
+        supported.add(new Protocol_v859());
+        supported.add(new Protocol_v860());
+        supported.add(new Protocol_v898());
+        supported.add(new Protocol_v924());
+        supported.add(new Protocol_v944());
+        supported.add(new Protocol_v975());
+        supported.add(new Protocol_v1001());
+        supported.add(new Protocol_v766_NetEase());
+        supported.add(new Protocol_v819_NetEase());
 
         for (var protocol : supported) {
             protocol.initialize(source);

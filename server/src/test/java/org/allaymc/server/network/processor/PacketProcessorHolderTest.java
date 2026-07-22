@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor;
 
 import org.allaymc.api.player.ClientState;
-import org.allaymc.server.network.protocol.v766.ProtocolV766;
+import org.allaymc.server.network.protocol.v766.Protocol_v766;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class PacketProcessorHolderTest {
 
     @Test
     void gameplayRegistryDoesNotContainBootstrapNegotiationProcessor() {
-        var registry = new ExposedProtocolV766().createGameplayRegistry();
+        var registry = new ExposedProtocol_v766().createGameplayRegistry();
 
         assertFalse(registry.getFactories().keySet().stream()
                 .anyMatch(key -> key.packetType() == BedrockPacketType.REQUEST_NETWORK_SETTINGS));
@@ -73,7 +73,7 @@ class PacketProcessorHolderTest {
         }
     }
 
-    private static final class ExposedProtocolV766 extends ProtocolV766 {
+    private static final class ExposedProtocol_v766 extends Protocol_v766 {
         private PacketProcessorRegistry createGameplayRegistry() {
             var registry = new PacketProcessorRegistry();
             registerProcessors(registry);

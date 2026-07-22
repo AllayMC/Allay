@@ -1,7 +1,7 @@
 package org.allaymc.server.player;
 
 import org.allaymc.server.network.protocol.ProtocolData;
-import org.allaymc.server.network.protocol.v766.PacketEncoderV766;
+import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -16,7 +16,7 @@ class ChunkCacheTest {
         var constructor = ChunkCache.class.getDeclaredConstructor(int.class);
         constructor.setAccessible(true);
         var cache = constructor.newInstance(16);
-        var encoder = new PacketEncoderV766(mock(ProtocolData.class));
+        var encoder = new PacketEncoder_v766(mock(ProtocolData.class));
         var playerId = UUID.randomUUID();
         byte[] cachedBytes = {1, 2, 3, 4};
         long hash = cache.tryStoreBlobsAndOpenTransaction(playerId, 0, cachedBytes)[0];

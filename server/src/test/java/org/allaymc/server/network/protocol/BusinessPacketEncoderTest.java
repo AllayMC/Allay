@@ -1,6 +1,6 @@
 package org.allaymc.server.network.protocol;
 
-import org.allaymc.server.network.protocol.v766.PacketEncoderV766;
+import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 
 class BusinessPacketEncoderTest {
 
-    private final PacketEncoder encoder = new PacketEncoderV766(mock(ProtocolData.class));
+    private final PacketEncoder encoder = new PacketEncoder_v766(mock(ProtocolData.class));
 
     @Test
     void simpleBusinessPacketsAreFreshAndCarryTheirInputs() {
