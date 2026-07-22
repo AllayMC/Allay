@@ -20,6 +20,10 @@ import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
+import org.allaymc.api.entity.property.type.BooleanPropertyType;
+import org.allaymc.api.entity.property.type.EnumPropertyType;
+import org.allaymc.api.entity.property.type.FloatPropertyType;
+import org.allaymc.api.entity.property.type.IntPropertyType;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.form.type.Form;
@@ -28,6 +32,8 @@ import org.allaymc.api.player.HudElement;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
+import org.allaymc.api.pack.Pack;
+import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -142,7 +148,7 @@ public class PacketEncoderV766 extends PacketEncoder {
         var identifiers = new ArrayList<NbtMap>();
         for (var entityType : data().source().entityTypes()) {
             identifiers.add(NbtMap.builder()
-                    .putString("id", entityType.identifier().toString())
+                    .putString("id", entityType.getIdentifier().toString())
                     .build());
         }
 
@@ -157,28 +163,28 @@ public class PacketEncoderV766 extends PacketEncoder {
     public Collection<SyncEntityPropertyPacket> encodeSyncEntityProperties() {
         var packets = new ArrayList<SyncEntityPropertyPacket>();
         for (var entityType : data().source().entityTypes()) {
-            if (entityType.properties().isEmpty()) {
+            if (entityType.getProperties().isEmpty()) {
                 continue;
             }
 
             var properties = new ArrayList<NbtMap>();
-            for (var propertyType : entityType.properties()) {
+            for (var propertyType : entityType.getProperties().values()) {
                 var property = NbtMap.builder()
-                        .putString("name", propertyType.name())
+                        .putString("name", propertyType.getName())
                         .putBoolean("clientSync", true)
-                        .putInt("type", propertyType.type().ordinal());
+                        .putInt("type", propertyType.getType().ordinal());
                 switch (propertyType) {
-                    case NetworkData.EnumEntityPropertySnapshot enumProperty ->
+                    case EnumPropertyType<?> enumProperty ->
                             property.putList("enum", NbtType.STRING, enumProperty.serializedValues());
-                    case NetworkData.IntEntityPropertySnapshot intProperty -> property
-                            .putInt("default", intProperty.defaultValue())
-                            .putInt("min", intProperty.min())
-                            .putInt("max", intProperty.max());
-                    case NetworkData.FloatEntityPropertySnapshot floatProperty -> property
-                            .putFloat("default", floatProperty.defaultValue())
-                            .putFloat("min", floatProperty.min())
-                            .putFloat("max", floatProperty.max());
-                    case NetworkData.BooleanEntityPropertySnapshot ignored -> {
+                    case IntPropertyType intProperty -> property
+                            .putInt("default", intProperty.getDefaultValue())
+                            .putInt("min", intProperty.getMin())
+                            .putInt("max", intProperty.getMax());
+                    case FloatPropertyType floatProperty -> property
+                            .putFloat("default", floatProperty.getDefaultValue())
+                            .putFloat("min", floatProperty.getMin())
+                            .putFloat("max", floatProperty.getMax());
+                    case BooleanPropertyType ignored -> {
                     }
                 }
                 properties.add(property.build());
@@ -186,7 +192,7 @@ public class PacketEncoderV766 extends PacketEncoder {
 
             var packet = new SyncEntityPropertyPacket();
             packet.setData(NbtMap.builder()
-                    .putString("type", entityType.identifier().toString())
+                    .putString("type", entityType.getIdentifier().toString())
                     .putList("properties", NbtType.COMPOUND, properties)
                     .build());
             packets.add(packet);
@@ -209,7 +215,7 @@ public class PacketEncoderV766 extends PacketEncoder {
     @Override
     public DimensionDataPacket encodeDimensionData() {
         var packet = new DimensionDataPacket();
-        data().source().dimensionSnapshots().stream()
+        data().source().dimensionTypes().stream()
                 .filter(PacketEncoderV766::shouldSendDimensionDefinition)
                 .map(dimensionType -> new DimensionDefinition(
                         dimensionType.getIdentifier().toString(),
@@ -237,12 +243,12 @@ public class PacketEncoderV766 extends PacketEncoder {
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
 
         for (var pack : data().source().packs()) {
-            boolean scripting = pack.type() == org.allaymc.api.pack.Pack.Type.SCRIPT;
+            boolean scripting = pack.getType() == Pack.Type.SCRIPT;
             if (scripting) {
                 packet.setScriptingEnabled(true);
             }
 
-            ResourcePacksInfoPacket.Entry entry = switch (pack.type()) {
+            ResourcePacksInfoPacket.Entry entry = switch (pack.getType()) {
                 case RESOURCES -> createResourcePackInfo(pack, scripting, false);
                 case DATA -> {
                     packet.setHasAddonPacks(true);
@@ -266,11 +272,11 @@ public class PacketEncoderV766 extends PacketEncoder {
         packet.getExperiments().addAll(createExperiments());
 
         for (var pack : data().source().packs()) {
-            switch (pack.type()) {
+            switch (pack.getType()) {
                 case RESOURCES -> packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
-                        pack.id().toString(), pack.version(), ""));
+                        pack.getId().toString(), pack.getStringVersion(), ""));
                 case DATA -> packet.getBehaviorPacks().add(new ResourcePackStackPacket.Entry(
-                        pack.id().toString(), pack.version(), ""));
+                        pack.getId().toString(), pack.getStringVersion(), ""));
                 case WORLD_TEMPLATE, SCRIPT -> {
                 }
             }
@@ -280,7 +286,7 @@ public class PacketEncoderV766 extends PacketEncoder {
 
     @Override
     public ResourcePackDataInfoPacket encodeResourcePackDataInfo(
-            NetworkData.PackSnapshot pack,
+            Pack pack,
             int maxChunkSize
     ) {
         Objects.requireNonNull(pack, "pack");
@@ -289,19 +295,19 @@ public class PacketEncoderV766 extends PacketEncoder {
         }
 
         var packet = new ResourcePackDataInfoPacket();
-        packet.setPackId(pack.id());
-        packet.setPackVersion(pack.version());
+        packet.setPackId(pack.getId());
+        packet.setPackVersion(pack.getStringVersion());
         packet.setMaxChunkSize(maxChunkSize);
-        packet.setChunkCount((pack.size() + (long) maxChunkSize - 1) / maxChunkSize);
-        packet.setCompressedPackSize(pack.size());
-        packet.setHash(pack.hash());
-        packet.setType(toNetworkResourcePackType(pack.type()));
+        packet.setChunkCount((pack.getSize() + (long) maxChunkSize - 1) / maxChunkSize);
+        packet.setCompressedPackSize(pack.getSize());
+        packet.setHash(pack.getHash().clone());
+        packet.setType(toNetworkResourcePackType(pack.getType()));
         return packet;
     }
 
     @Override
     public ResourcePackChunkDataPacket encodeResourcePackChunkData(
-            NetworkData.PackSnapshot pack,
+            Pack pack,
             int chunkIndex,
             int maxChunkSize
     ) {
@@ -313,17 +319,17 @@ public class PacketEncoderV766 extends PacketEncoder {
             throw new IllegalArgumentException("Resource-pack chunk index cannot be negative");
         }
 
-        long chunkCount = (pack.size() + (long) maxChunkSize - 1) / maxChunkSize;
+        long chunkCount = (pack.getSize() + (long) maxChunkSize - 1) / maxChunkSize;
         if (chunkIndex >= chunkCount) {
             throw new IllegalArgumentException("Resource-pack chunk index is out of bounds: " + chunkIndex);
         }
         long offset = (long) chunkIndex * maxChunkSize;
 
         var packet = new ResourcePackChunkDataPacket();
-        packet.setPackId(pack.id());
-        packet.setPackVersion(pack.version());
+        packet.setPackId(pack.getId());
+        packet.setPackVersion(pack.getStringVersion());
         packet.setChunkIndex(chunkIndex);
-        packet.setData(Unpooled.wrappedBuffer(pack.chunk((int) offset, maxChunkSize)));
+        packet.setData(Unpooled.wrappedBuffer(pack.getChunk((int) offset, maxChunkSize)));
         packet.setProgress(offset);
         return packet;
     }
@@ -2662,19 +2668,19 @@ public class PacketEncoderV766 extends PacketEncoder {
     }
 
     private static ResourcePacksInfoPacket.Entry createResourcePackInfo(
-            NetworkData.PackSnapshot pack,
+            Pack pack,
             boolean scripting,
             boolean addon
     ) {
         return new ResourcePacksInfoPacket.Entry(
-                pack.id(),
-                pack.version(),
-                pack.size(),
-                pack.contentKey(),
+                pack.getId(),
+                pack.getStringVersion(),
+                pack.getSize(),
+                pack.getContentKey(),
                 "",
-                pack.id().toString(),
+                pack.getId().toString(),
                 scripting,
-                pack.raytraced(),
+                pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
                 null,
                 addon
         );

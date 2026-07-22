@@ -24,9 +24,7 @@ public record RecipeTable(
         Int2ObjectMap<Recipe> recipesByNetworkId
 ) {
     public RecipeTable {
-        encodedRecipes = ProtocolPayloadCopier.copyRecipes(
-                Objects.requireNonNull(encodedRecipes, "encodedRecipes")
-        );
+        encodedRecipes = List.copyOf(Objects.requireNonNull(encodedRecipes, "encodedRecipes"));
         potionMixes = List.copyOf(Objects.requireNonNull(potionMixes, "potionMixes"));
 
         var recipes = new Int2ObjectOpenHashMap<Recipe>();
@@ -72,10 +70,5 @@ public record RecipeTable(
             }
         }
         recipesByNetworkId = Int2ObjectMaps.unmodifiable(recipes);
-    }
-
-    @Override
-    public List<RecipeData> encodedRecipes() {
-        return ProtocolPayloadCopier.copyRecipes(encodedRecipes);
     }
 }

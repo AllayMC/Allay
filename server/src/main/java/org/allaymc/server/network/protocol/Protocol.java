@@ -38,7 +38,7 @@ public abstract class Protocol {
     /**
      * Completes this protocol's one-time initialization.
      *
-     * @param source immutable global network source data
+     * @param source frozen global network source data
      */
     public final synchronized void initialize(NetworkData source) {
         if (initialized) {

@@ -117,7 +117,7 @@ table.
 
 ## 8. Review Protocol Data and Encoders
 
-- Keep protocol-independent registry snapshots in `NetworkData`.
+- Keep protocol-independent frozen registry sources in `NetworkData`.
 - Keep expensive client payloads and stable ID mappings in `ProtocolData`.
 - Build recipe payloads and `recipesByNetworkId` together in the protocol's `RecipeTable`.
 - Construct a new packet for every encoder call. Never cache a `BedrockPacket`.

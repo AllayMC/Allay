@@ -26,7 +26,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescripto
 import java.util.*;
 
 /**
- * Immutable, protocol-specific precomputed data shared by an encoder and packet processors.
+ * Protocol-specific precomputed data shared by an encoder and packet processors.
  */
 public final class ProtocolData {
     private final NetworkData source;
@@ -57,11 +57,11 @@ public final class ProtocolData {
         this.source = Objects.requireNonNull(source, "source");
         this.protocolVersion = protocolVersion;
         this.variant = Objects.requireNonNull(variant, "variant");
-        this.itemDefinitions = ProtocolPayloadCopier.copyItemDefinitions(itemDefinitions);
+        this.itemDefinitions = List.copyOf(itemDefinitions);
         this.blockDefinitions = List.copyOf(blockDefinitions);
-        this.creativeGroups = ProtocolPayloadCopier.copyCreativeGroups(creativeGroups);
-        this.creativeItems = ProtocolPayloadCopier.copyCreativeItems(creativeItems);
-        this.customBlockProperties = ProtocolPayloadCopier.copyBlockProperties(customBlockProperties);
+        this.creativeGroups = List.copyOf(creativeGroups);
+        this.creativeItems = List.copyOf(creativeItems);
+        this.customBlockProperties = List.copyOf(customBlockProperties);
         this.recipeTable = Objects.requireNonNull(recipeTable, "recipeTable");
         this.materialInstancesUsePackedBooleans = materialInstancesUsePackedBooleans;
         this.multipleCollisionBoxes = multipleCollisionBoxes;
@@ -70,7 +70,7 @@ public final class ProtocolData {
     /**
      * Creates a protocol data builder whose feature switches describe the oldest baseline.
      *
-     * @param source immutable protocol-independent source data
+     * @param source frozen protocol-independent source data
      * @param protocolVersion Bedrock protocol number
      * @param variant client distribution
      * @return a protocol data builder
@@ -89,26 +89,26 @@ public final class ProtocolData {
         var itemDefinitions = source.itemTypes().stream()
                 .map(NetworkHelper::toNetwork)
                 .toList();
-        var blockDefinitions = source.blockStateRuntimeIds().stream()
-                .map(runtimeId -> (BlockDefinition) () -> runtimeId)
+        var blockDefinitions = source.blockStates().stream()
+                .map(blockState -> (BlockDefinition) blockState::blockStateHash)
                 .toList();
         var creativeGroups = source.creativeGroups().stream()
                 .map(group -> new CreativeItemGroup(
-                        switch (group.category()) {
+                        switch (group.getCategory().getType()) {
                             case CONSTRUCTION -> CreativeItemCategory.CONSTRUCTION;
                             case NATURE -> CreativeItemCategory.NATURE;
                             case EQUIPMENT -> CreativeItemCategory.EQUIPMENT;
                             case ITEMS -> CreativeItemCategory.ITEMS;
                         },
-                        group.name(),
-                        NetworkHelper.toNetwork(group.icon())
+                        group.getName(),
+                        NetworkHelper.toNetwork(group.getIcon())
                 ))
                 .toList();
         var creativeItems = source.creativeItems().stream()
                 .map(entry -> new CreativeItemData(
                         NetworkHelper.toNetwork(entry.itemStack()),
                         entry.index() + 1,
-                        entry.groupIndex()
+                        entry.group().getIndex()
                 ))
                 .toList();
 
@@ -144,7 +144,7 @@ public final class ProtocolData {
     }
 
     public List<ItemDefinition> itemDefinitions() {
-        return ProtocolPayloadCopier.copyItemDefinitions(itemDefinitions);
+        return itemDefinitions;
     }
 
     public List<BlockDefinition> blockDefinitions() {
@@ -152,15 +152,15 @@ public final class ProtocolData {
     }
 
     public List<CreativeItemGroup> creativeGroups() {
-        return ProtocolPayloadCopier.copyCreativeGroups(creativeGroups);
+        return creativeGroups;
     }
 
     public List<CreativeItemData> creativeItems() {
-        return ProtocolPayloadCopier.copyCreativeItems(creativeItems);
+        return creativeItems;
     }
 
     public List<BlockPropertyData> customBlockProperties() {
-        return ProtocolPayloadCopier.copyBlockProperties(customBlockProperties);
+        return customBlockProperties;
     }
 
     public RecipeTable recipeTable() {
@@ -457,7 +457,7 @@ public final class ProtocolData {
     }
 
     /**
-     * Builds one immutable protocol data snapshot. Subclasses in the protocol inheritance chain
+     * Builds one protocol data set. Subclasses in the protocol inheritance chain
      * enable only the data format changes introduced by their version.
      */
     public static final class Builder {
@@ -493,7 +493,7 @@ public final class ProtocolData {
             return this;
         }
 
-        /** Builds the immutable protocol data snapshot. */
+        /** Builds the protocol data set. */
         public ProtocolData build() {
             return ProtocolData.build(this);
         }

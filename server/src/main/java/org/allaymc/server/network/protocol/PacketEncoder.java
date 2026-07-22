@@ -14,6 +14,7 @@ import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.enchantment.EnchantOption;
+import org.allaymc.api.pack.Pack;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.CameraShakeType;
 import org.allaymc.api.player.HudElement;
@@ -33,7 +34,6 @@ import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.Sound;
-import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.player.ChunkCache;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -96,12 +96,12 @@ public abstract class PacketEncoder {
     public abstract ResourcePackStackPacket encodeResourcePackStack();
 
     public abstract ResourcePackDataInfoPacket encodeResourcePackDataInfo(
-            NetworkData.PackSnapshot pack,
+            Pack pack,
             int maxChunkSize
     );
 
     public abstract ResourcePackChunkDataPacket encodeResourcePackChunkData(
-            NetworkData.PackSnapshot pack,
+            Pack pack,
             int chunkIndex,
             int maxChunkSize
     );
