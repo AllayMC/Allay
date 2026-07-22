@@ -19,7 +19,10 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Connection-bound protocol state and packet dispatch.
+ * Binds an initialized protocol to one connection and owns its packet processors and client state.
+ *
+ * <p>Inbound and outbound events are applied here so validation and dispatch always use the packet
+ * that event listeners leave behind.</p>
  */
 @Slf4j
 @Getter
@@ -30,6 +33,13 @@ public final class ProtocolSession {
     @Getter(AccessLevel.NONE)
     private boolean codecInstalled;
 
+    /**
+     * Creates connection-local state for an initialized protocol.
+     *
+     * @param protocol the selected protocol
+     * @param session the connection that will use the protocol
+     * @throws IllegalArgumentException if the protocol is not initialized
+     */
     public ProtocolSession(Protocol protocol, BedrockServerSession session) {
         this.protocol = Objects.requireNonNull(protocol, "protocol");
         this.session = Objects.requireNonNull(session, "session");
@@ -42,7 +52,13 @@ public final class ProtocolSession {
         }
     }
 
-    /** Installs the selected codec and its immutable definition registries. */
+    /**
+     * Installs the selected codec and its immutable definition registries.
+     *
+     * <p>If installation fails, the previous bootstrap codec and definition registries are restored.</p>
+     *
+     * @throws IllegalStateException if installation already ran or no bootstrap codec is present
+     */
     public synchronized void installCodec() {
         if (codecInstalled) {
             throw new IllegalStateException("Protocol codec is already installed");
@@ -74,6 +90,16 @@ public final class ProtocolSession {
         }
     }
 
+    /**
+     * Applies the receive event and dispatches an inbound packet to this connection's processor.
+     *
+     * <p>Processors run their asynchronous phase immediately. When they request synchronous work,
+     * that work is queued on the player's world or run directly if no world is available.</p>
+     *
+     * @param player the receiving player
+     * @param packet the inbound packet
+     * @return {@link PacketSignal#HANDLED}; protocol dispatch consumes every inbound packet
+     */
     public PacketSignal receive(AllayPlayer player, BedrockPacket packet) {
         Objects.requireNonNull(player, "player");
         Objects.requireNonNull(packet, "packet");
@@ -116,6 +142,13 @@ public final class ProtocolSession {
         return PacketSignal.HANDLED;
     }
 
+    /**
+     * Runs the synchronous phase of the processor selected for the current client state.
+     *
+     * @param player the receiving player
+     * @param packet the inbound packet
+     * @param receiveTime the tick at which the packet was received
+     */
     public void handleSync(AllayPlayer player, BedrockPacket packet, long receiveTime) {
         var processor = processorHolder.getProcessor(packet);
         if (processor == null) {
@@ -125,24 +158,55 @@ public final class ProtocolSession {
         processor.handleSync(player, packet, receiveTime);
     }
 
+    /**
+     * Applies the send event and queues a packet for transmission.
+     *
+     * @param player the sending player
+     * @param packet the outbound packet
+     */
     public void send(AllayPlayer player, BedrockPacket packet) {
         sendPacket(player, packet, false);
     }
 
+    /**
+     * Applies the send event and transmits a packet immediately.
+     *
+     * @param player the sending player
+     * @param packet the outbound packet
+     */
     public void sendImmediately(AllayPlayer player, BedrockPacket packet) {
         sendPacket(player, packet, true);
     }
 
+    /**
+     * Applies the send event, transmits a packet immediately, and returns the actual packet sent.
+     *
+     * @param player the sending player
+     * @param packet the original outbound packet
+     * @return the post-event packet, or {@code null} if transmission was rejected or cancelled
+     */
     public BedrockPacket sendImmediatelyAndGet(AllayPlayer player, BedrockPacket packet) {
         return sendPacket(player, packet, true);
     }
 
+    /**
+     * Queues each packet for transmission, applying the send event separately to every packet.
+     *
+     * @param player the sending player
+     * @param packets the outbound packets
+     */
     public void send(AllayPlayer player, Collection<? extends BedrockPacket> packets) {
         for (var packet : packets) {
             sendPacket(player, packet, false);
         }
     }
 
+    /**
+     * Transmits each packet immediately, applying the send event separately to every packet.
+     *
+     * @param player the sending player
+     * @param packets the outbound packets
+     */
     public void sendImmediately(AllayPlayer player, Collection<? extends BedrockPacket> packets) {
         for (var packet : packets) {
             sendPacket(player, packet, true);
@@ -194,18 +258,41 @@ public final class ProtocolSession {
         return outgoingPacket;
     }
 
+    /**
+     * Returns the current packet-processing state.
+     *
+     * @return the current client state
+     */
     public ClientState getClientState() {
         return processorHolder.getClientState();
     }
 
+    /**
+     * Returns the state preceding the most recent successful transition.
+     *
+     * @return the previous state, or {@code null} before the first transition
+     */
     public ClientState getLastClientState() {
         return processorHolder.getLastClientState();
     }
 
+    /**
+     * Advances the packet-processing state when the requested transition is valid.
+     *
+     * @param state the target state
+     * @return {@code true} if the state changed
+     */
     public boolean setClientState(ClientState state) {
         return processorHolder.setClientState(state);
     }
 
+    /**
+     * Advances the packet-processing state when the requested transition is valid.
+     *
+     * @param state the target state
+     * @param warnIfFailed whether to log rejected transitions
+     * @return {@code true} if the state changed
+     */
     public boolean setClientState(ClientState state, boolean warnIfFailed) {
         return processorHolder.setClientState(state, warnIfFailed);
     }

@@ -27,12 +27,23 @@ Use the checked-in Gradle wrapper and a Java 21 JDK (`gradlew.bat` on Windows).
 
 Use UTF-8, four-space indentation, and the existing Java brace style. Keep packages lowercase beneath `org.allaymc`;
 use `PascalCase` for types, `camelCase` for methods and fields, and `UPPER_SNAKE_CASE` for constants. Match nearby code
-for imports and Lombok usage because no repository-wide formatter or linter is configured. Use English for all Javadoc
-and implementation comments. In `api/`, every class, interface, and method requires Javadoc. In `server/`, also
-document internal interfaces commonly used by downstream developers. Explain complex, non-obvious implementation logic
-with concise comments. Do not introduce nullability annotations such as `@NonNull` or `@Nullable`; they can cause
-misleading IDE diagnostics and do not prevent null-pointer errors. For parameters or return values that may be `null`,
-document their null behavior explicitly in Javadoc instead. Preserve relevant thread-safety and API-status annotations.
+for imports and Lombok usage because no repository-wide formatter or linter is configured. Do not introduce nullability
+annotations such as `@NonNull` or `@Nullable`; they can cause misleading IDE diagnostics and do not prevent null-pointer
+errors. Preserve relevant thread-safety and API-status annotations.
+
+## Documentation & Comment Style
+
+- Write all Javadoc and implementation comments in clear English.
+- In `api/`, every class, interface, and method requires Javadoc. In `server/`, also document internal interfaces used by
+  downstream developers; do not document every private helper merely for coverage.
+- Write Javadoc as a concise caller-facing contract. Describe only information the signature cannot express, such as
+  defaults, null behaviour, constraints, units, side effects, failures, ownership, lifetime, and threading requirements.
+- Start with a present-tense summary such as "Returns..." or "Creates...". Use `@param`, `@return`, and `@throws` only
+  when they add useful information; avoid filler that repeats names, types, or the summary.
+- Use implementation comments to explain non-obvious reasons, invariants, protocol rules, edge cases, concurrency,
+  performance trade-offs, or required ordering. Do not narrate visible checks, assignments, loops, or calls.
+- Keep comments synchronized with behaviour. Remove stale and commented-out code, and make `TODO` and `FIXME` comments
+  actionable. Do not expand a focused change into unrelated documentation cleanup.
 
 ## Testing Guidelines
 

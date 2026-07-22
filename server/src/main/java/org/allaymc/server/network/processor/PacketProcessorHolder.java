@@ -10,6 +10,11 @@ import java.util.*;
 import java.util.function.Supplier;
 
 /**
+ * Holds connection-local processor instances and selects them by client state and packet type.
+ *
+ * <p>A factory registered for multiple states is instantiated once so its connection-local state
+ * is shared across those registrations.</p>
+ *
  * @author Cool_Loong
  */
 @Slf4j
@@ -67,19 +72,36 @@ public final class PacketProcessorHolder {
         return (PacketProcessor<BedrockPacket>) processor;
     }
 
+    /**
+     * Returns the processor registered for the packet in the current client state.
+     *
+     * @param packet the packet to process
+     * @return the processor, or {@code null} when no registration matches
+     */
     public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
         var map = processors.get(clientState);
         return map != null ? map.get(packet.getPacketType()) : null;
     }
 
+    /**
+     * Advances to the requested client state and logs rejected transitions.
+     *
+     * @param clientState the target state
+     * @return {@code true} if the state changed
+     */
     public boolean setClientState(ClientState clientState) {
         return setClientState(clientState, true);
     }
 
-    // We use lock here because this method won't be called frequently
-    // Instead, method getClientState() will be called frequently
+    /**
+     * Advances to the requested client state when its declared predecessor matches.
+     *
+     * @param clientState the target state
+     * @param warnIfFailed whether to log a rejected transition
+     * @return {@code true} if the state changed
+     */
     public synchronized boolean setClientState(ClientState clientState, boolean warnIfFailed) {
-        // Already in the target state
+        // Transitions are rare; synchronize the check-and-set while keeping volatile reads lock-free.
         if (this.clientState == clientState) {
             if (warnIfFailed) {
                 log.warn("Client state is already in {}", this.clientState);
@@ -87,7 +109,6 @@ public final class PacketProcessorHolder {
             return false;
         }
 
-        // PreviousState != null means that we should check if the previous state is correct
         if (clientState.getPreviousState() != null && this.clientState != clientState.getPreviousState()) {
             if (warnIfFailed) {
                 log.warn("Failed to set client state to {}. Current is {}", clientState, this.clientState);

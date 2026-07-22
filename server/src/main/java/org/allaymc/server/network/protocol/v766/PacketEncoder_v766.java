@@ -1982,6 +1982,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return supportsSoundEvent(packet.getSound()) ? List.of(packet) : List.of();
     }
 
+    /**
+     * Checks whether this protocol can represent a sound event.
+     *
+     * @param soundEvent the sound event to check
+     * @return {@code true} if the event may be sent to this client
+     */
     protected boolean supportsSoundEvent(SoundEvent soundEvent) {
         return switch (soundEvent) {
             case RECORD_TEARS, RECORD_LAVA_CHICKEN, SINGLE_ITEM_SWAP, MULTI_ITEM_SWAP -> false;
@@ -2598,6 +2604,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return createDefaultExperiments();
     }
 
+    /**
+     * Creates the experiment set shared by protocol versions that use this baseline.
+     *
+     * @return fresh experiment payloads
+     */
     protected final List<ExperimentData> createDefaultExperiments() {
         return List.of(
                 new ExperimentData("data_driven_items", true),

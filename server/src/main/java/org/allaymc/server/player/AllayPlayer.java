@@ -1231,6 +1231,12 @@ public class AllayPlayer implements Player {
         ));
     }
 
+    /**
+     * Sends a packet through the selected protocol after applying the packet send event.
+     *
+     * @param packet the packet to send; {@code null} is ignored
+     * @throws IllegalStateException if a non-bootstrap packet is sent before protocol negotiation
+     */
     public void sendPacket(BedrockPacket packet) {
         if (packet == null) {
             return;
@@ -1243,6 +1249,13 @@ public class AllayPlayer implements Player {
         }
     }
 
+    /**
+     * Sends packets in iteration order, applying the packet send event to each packet.
+     *
+     * @param packets the packets to send; {@code null} and empty collections are ignored
+     * @throws NullPointerException if the collection contains {@code null}
+     * @throws IllegalStateException if a non-bootstrap packet is sent before protocol negotiation
+     */
     public void sendPackets(Collection<? extends BedrockPacket> packets) {
         if (packets == null || packets.isEmpty()) {
             return;
@@ -1258,6 +1271,12 @@ public class AllayPlayer implements Player {
         }
     }
 
+    /**
+     * Sends a packet immediately through the selected protocol.
+     *
+     * @param packet the packet to send; {@code null} is ignored
+     * @throws IllegalStateException if a non-bootstrap packet is sent before protocol negotiation
+     */
     public void sendPacketImmediately(BedrockPacket packet) {
         if (packet == null) {
             return;
@@ -1270,6 +1289,13 @@ public class AllayPlayer implements Player {
         }
     }
 
+    /**
+     * Sends packets immediately in iteration order.
+     *
+     * @param packets the packets to send; {@code null} and empty collections are ignored
+     * @throws NullPointerException if the collection contains {@code null}
+     * @throws IllegalStateException if a non-bootstrap packet is sent before protocol negotiation
+     */
     public void sendPacketsImmediately(Collection<? extends BedrockPacket> packets) {
         if (packets == null || packets.isEmpty()) {
             return;
@@ -1417,6 +1443,13 @@ public class AllayPlayer implements Player {
         return activeProcessorHolder().getLastClientState();
     }
 
+    /**
+     * Atomically replaces bootstrap processing with the negotiated protocol session.
+     *
+     * @param protocol the initialized protocol selected for this connection
+     * @return {@code true} if the protocol was installed, or {@code false} if the connection closed first
+     * @throws IllegalStateException if a protocol is already installed
+     */
     public boolean installProtocol(Protocol protocol) {
         Objects.requireNonNull(protocol, "protocol");
         synchronized (protocolLifecycleLock) {
@@ -1434,6 +1467,12 @@ public class AllayPlayer implements Player {
         }
     }
 
+    /**
+     * Returns the protocol selected for this connection.
+     *
+     * @return the negotiated protocol
+     * @throws IllegalStateException if negotiation has not completed
+     */
     public Protocol getProtocol() {
         var selectedSession = protocolSession;
         if (selectedSession == null) {

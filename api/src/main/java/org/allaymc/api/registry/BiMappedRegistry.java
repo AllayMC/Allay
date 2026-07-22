@@ -34,6 +34,9 @@ public class BiMappedRegistry<LEFT, RIGHT> extends AbstractRegistry<BiMap<LEFT, 
         content.put(left, right);
     }
 
+    /**
+     * Freezes this registry using an immutable snapshot that preserves bidirectional lookup.
+     */
     @Override
     public synchronized void freeze() {
         if (frozen) {

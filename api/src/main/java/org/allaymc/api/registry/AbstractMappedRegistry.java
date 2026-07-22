@@ -74,6 +74,9 @@ public abstract class AbstractMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY
         return content.put(key, value);
     }
 
+    /**
+     * Freezes this registry using an insertion-ordered, unmodifiable snapshot of its mappings.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public synchronized void freeze() {

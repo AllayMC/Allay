@@ -18,6 +18,11 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
 import org.cloudburstmc.protocol.bedrock.packet.RequestNetworkSettingsPacket;
 
 /**
+ * Selects the exact protocol requested by a client before enabling negotiated compression.
+ *
+ * <p>This processor runs with the bootstrap codec; successful negotiation installs the selected
+ * codec before any version-specific packet is sent.</p>
+ *
  * @author daoge_cmd
  */
 @Slf4j
@@ -32,7 +37,6 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         boolean netEasePlayer = isNetEaseClient(allayPlayer);
         allayPlayer.setNetEasePlayer(netEasePlayer);
 
-        // Check NetEase client support configuration
         if (netEasePlayer) {
             if (!settings.neteaseClientSupport()) {
                 log.debug("Rejected NetEase client connection from {} - NetEase support is disabled",
@@ -54,7 +58,6 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         var registry = ProtocolRegistry.getDefault();
         var protocol = registry.resolve(variant, protocolVersion);
         if (protocol == null) {
-            // Cannot find a suitable codec for the client protocol version, let's check if it's too old or too new
             var loginFailedPacket = new PlayStatusPacket();
             var latest = registry.getLatest(variant);
             var lowest = registry.getLowest(variant);
@@ -63,9 +66,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             } else if (lowest != null && protocolVersion < lowest.getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
             } else {
-                // A version that is in the middle of the lowest and latest versions is not supported for
-                // some reason. Since we don't have compatible status in PlayStatusPacket.Status, let's
-                // disconnect the client with custom reason instead of sending PlayStatusPacket
+                // Bedrock has no status for a gap between supported versions, so use a generic reason.
                 player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_BODY_VERSIONNOTSUPPORTED);
                 return;
             }
@@ -86,7 +87,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         settingsPacket.setCompressionAlgorithm(netEasePlayer
                 ? PacketCompressionAlgorithm.ZLIB
                 : PacketCompressionAlgorithm.valueOf(settings.compressionAlgorithm().name()));
-        // NOTICE: We don't need to set the compression threshold after 1.20.60
+        // Compression thresholds are ignored by clients from 1.20.60 onward.
         var sentPacket = allayPlayer.getProtocolSession().sendImmediatelyAndGet(allayPlayer, settingsPacket);
         if (!(sentPacket instanceof NetworkSettingsPacket sentSettings)) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
@@ -97,14 +98,13 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
             return;
         }
-        // NOTICE: The NetworkSettingsPacket shouldn't be compressed, so we set the compression after sending the packet
+        // Use the post-event value, since listeners may replace or mutate the settings packet.
         if (netEasePlayer) {
             if (compressionAlgorithm != PacketCompressionAlgorithm.ZLIB) {
                 player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
                 return;
             }
-            // NetEase clients use raw deflate format, set NetEaseCompression now
-            // (initial compression was NOOP to handle uncompressed RequestNetworkSettingsPacket)
+            // NetEase uses raw deflate; it can only be enabled after the uncompressed settings packet.
             session.getPeer().setCompression(new SimpleCompressionStrategy(new NetEaseCompression()));
         } else {
             session.setCompression(compressionAlgorithm);

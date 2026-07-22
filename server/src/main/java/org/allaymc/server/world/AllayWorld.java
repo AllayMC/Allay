@@ -141,6 +141,17 @@ public class AllayWorld implements World {
         this.gameLoop.wakeUp();
     }
 
+    /**
+     * Queues a processor's synchronous phase on this world's tick thread.
+     *
+     * <p>The processor selected during receipt is retained so a later client-state transition
+     * cannot redirect the queued packet to a different processor.</p>
+     *
+     * @param player the receiving player
+     * @param packet the received packet
+     * @param time the tick at which the packet was received
+     * @param processor the processor selected during the asynchronous phase
+     */
     public void addSyncPacketToQueue(
             Player player,
             BedrockPacket packet,
@@ -156,14 +167,13 @@ public class AllayWorld implements World {
             PacketQueueEntry entry;
             int count = 0;
             while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
-                // The player should still in the same world
+                // A queued packet belongs to the world that owned the player when it was received.
                 if (entry.player.getControlledEntity().getWorld() != this) {
                     log.error("Trying to handle sync packet in world {} which the player {} is not in!", name, entry.player.getOriginName());
                     continue;
                 }
 
-                // The player may have been disconnected,
-                // which is possible because this is a synced packet
+                // The connection may close while the packet waits for the world thread.
                 if (!entry.player.getClientState().canHandlePackets()) {
                     continue;
                 }
@@ -465,6 +475,14 @@ public class AllayWorld implements World {
         getPlayers().forEach(player -> player.viewWeather(this.weather));
     }
 
+    /**
+     * Captures all context needed to finish packet handling without repeating processor selection.
+     *
+     * @param player the receiving player
+     * @param packet the received packet
+     * @param time the receive tick
+     * @param processor the processor selected during receipt
+     */
     protected record PacketQueueEntry(
             Player player,
             BedrockPacket packet,

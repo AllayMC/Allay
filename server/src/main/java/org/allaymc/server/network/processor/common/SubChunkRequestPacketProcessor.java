@@ -154,6 +154,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         return PacketSignal.HANDLED;
     }
 
+    /**
+     * Assigns independently releasable buffer views to the logical and render height maps.
+     */
     static void setHeightMaps(SubChunkData subChunkData, HeightMapDataType type, byte[] data) {
         subChunkData.setHeightMapType(type);
         subChunkData.setRenderHeightMapType(type);

@@ -70,6 +70,11 @@ public abstract class AbstractRegistry<CONTENT> implements Registry<CONTENT> {
         return frozen;
     }
 
+    /**
+     * Ensures that a mutating operation may still proceed.
+     *
+     * @throws IllegalStateException if this registry is frozen
+     */
     protected final void ensureMutable() {
         if (frozen) {
             throw new IllegalStateException("Registry is frozen");

@@ -144,8 +144,9 @@ public final class Allay {
     }
 
     /**
-     * NOTICE: The i18n implementation must be registered before initializing allay,
-     * which means that you should call initI18n() before call initAllay()!
+     * Initializes API bindings and registries once.
+     *
+     * <p>{@link #initI18n()} must run first because registry initialization may emit translated output.</p>
      */
     @VisibleForTesting
     public static synchronized void initAllay() {

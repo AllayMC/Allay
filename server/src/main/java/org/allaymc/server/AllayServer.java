@@ -75,6 +75,9 @@ public final class AllayServer implements Server {
     private final ScoreboardManager scoreboardManager;
     @Getter
     private final AllayPluginManager pluginManager;
+    /**
+     * The frozen protocols available to network connections, or {@code null} before server startup.
+     */
     @Getter
     private ProtocolRegistry protocolRegistry;
     @Getter
@@ -187,6 +190,7 @@ public final class AllayServer implements Server {
         this.scoreboardManager.read();
         this.pluginManager.enablePlugins();
 
+        // Plugins register source data before protocol snapshots freeze it; networking starts afterward.
         this.protocolRegistry = ProtocolRegistry.createDefault();
         ProtocolRegistry.installDefault(protocolRegistry);
 

@@ -114,6 +114,14 @@ public final class NetworkHelper {
         return result;
     }
 
+    /**
+     * Encodes an ingredient using item definitions from the target protocol.
+     *
+     * @param descriptor the server-side ingredient
+     * @param itemDefinitions the target protocol's item definitions
+     * @return the network ingredient
+     * @throws IllegalStateException if a referenced item has no definition in the target protocol
+     */
     public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(
             ItemDescriptor descriptor,
             DefinitionRegistry<ItemDefinition> itemDefinitions
@@ -128,6 +136,13 @@ public final class NetworkHelper {
         };
     }
 
+    /**
+     * Encodes a single-count ingredient using item definitions from the target protocol.
+     *
+     * @param descriptor the server-side ingredient
+     * @param itemDefinitions the target protocol's item definitions
+     * @return the counted network ingredient
+     */
     public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount(
             ItemDescriptor descriptor,
             DefinitionRegistry<ItemDefinition> itemDefinitions
@@ -173,6 +188,15 @@ public final class NetworkHelper {
         );
     }
 
+    /**
+     * Encodes an item stack using definitions from the target protocol.
+     *
+     * @param itemStack the server-side item stack
+     * @param itemDefinitions the target protocol's item definitions
+     * @param blockDefinitions the target protocol's block definitions
+     * @return the network item data
+     * @throws IllegalStateException if a required definition is missing
+     */
     public static ItemData toNetwork(
             ItemStack itemStack,
             DefinitionRegistry<ItemDefinition> itemDefinitions,
@@ -203,6 +227,14 @@ public final class NetworkHelper {
 
     }
 
+    /**
+     * Encodes item stacks using definitions from the target protocol.
+     *
+     * @param items the server-side item stacks
+     * @param itemDefinitions the target protocol's item definitions
+     * @param blockDefinitions the target protocol's block definitions
+     * @return the encoded item data in input order
+     */
     public static List<ItemData> toNetwork(
             List<ItemStack> items,
             DefinitionRegistry<ItemDefinition> itemDefinitions,

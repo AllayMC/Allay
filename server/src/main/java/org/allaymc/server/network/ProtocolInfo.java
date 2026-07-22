@@ -51,7 +51,9 @@ public final class ProtocolInfo {
                                                       (BLOCK_STATE_VERSION.patch() << 8) | BLOCK_STATE_VERSION.revision();
 
     /**
-     * Get the latest codec.
+     * Returns the latest international codec.
+     *
+     * <p>Before the default protocol registry is installed, this returns the built-in bootstrap value.</p>
      *
      * @return the latest codec
      */
@@ -63,9 +65,11 @@ public final class ProtocolInfo {
     }
 
     /**
-     * Get the lowest codec.
+     * Returns the oldest international codec.
      *
-     * @return the lowest codec
+     * <p>Before the default protocol registry is installed, this returns the built-in bootstrap value.</p>
+     *
+     * @return the oldest codec
      */
     public static BedrockCodec getLowestCodec() {
         if (ProtocolRegistry.hasDefault()) {

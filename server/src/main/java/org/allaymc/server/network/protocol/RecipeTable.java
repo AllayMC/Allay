@@ -17,6 +17,13 @@ import java.util.Objects;
 
 /**
  * Protocol-specific encoded recipes and their matching server-side network ID index.
+ *
+ * <p>Construction verifies that every positive network ID in {@code encodedRecipes} has exactly
+ * one matching server-side recipe. Collections and indexes are exposed as immutable values.</p>
+ *
+ * @param encodedRecipes recipe payloads sent to the client
+ * @param potionMixes potion-mixing payloads sent to the client
+ * @param recipesByNetworkId server-side recipes keyed by their encoded network ID
  */
 public record RecipeTable(
         List<RecipeData> encodedRecipes,

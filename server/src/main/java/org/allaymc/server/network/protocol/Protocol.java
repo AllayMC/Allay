@@ -51,10 +51,10 @@ import org.joml.Vector3fc;
 import java.util.*;
 
 /**
- * An immutable, fully initialized Bedrock protocol implementation.
+ * Defines one Bedrock protocol and its immutable, version-specific runtime data.
  *
- * <p>Construction only records the protocol identity. {@link #initialize()} performs
- * the overridable initialization steps after the complete subtype has been constructed.</p>
+ * <p>Construction records only the protocol identity. Call {@link #initialize()} after the
+ * complete subtype has been constructed and before registering or using the protocol.</p>
  */
 public abstract class Protocol {
     private final BedrockCodec codec;
@@ -67,6 +67,12 @@ public abstract class Protocol {
     private DefinitionRegistry<BlockDefinition> blockDefinitionRegistry;
     private volatile boolean initialized;
 
+    /**
+     * Creates a protocol for the given codec and client variant.
+     *
+     * @param codec the packet codec that identifies the protocol version
+     * @param variant the client family supported by this protocol
+     */
     protected Protocol(BedrockCodec codec, ClientVariant variant) {
         this.codec = Objects.requireNonNull(codec, "codec");
         this.variant = Objects.requireNonNull(variant, "variant");
@@ -120,10 +126,26 @@ public abstract class Protocol {
         }
     }
 
+    /**
+     * Registers the packet processors available to connections using this protocol.
+     *
+     * @param registry the mutable registry populated during initialization
+     */
     protected abstract void registerProcessors(PacketProcessorRegistry registry);
 
+    /**
+     * Creates the packet encoder backed by this protocol's initialized data.
+     *
+     * @param data the immutable protocol data
+     * @return the packet encoder
+     */
     protected abstract PacketEncoder createEncoder(ProtocolData data);
 
+    /**
+     * Builds the item definitions exposed to this protocol.
+     *
+     * @return item definitions ordered by runtime ID
+     */
     protected List<ItemDefinition> createItemDefinitions() {
         return Registries.ITEMS.getContent().values().stream()
                 .sorted(Comparator.comparingInt(org.allaymc.api.item.type.ItemType::getRuntimeId))
@@ -280,6 +302,11 @@ public abstract class Protocol {
         return List.of(vector.x(), vector.y(), vector.z());
     }
 
+    /**
+     * Builds the block definitions exposed to this protocol.
+     *
+     * @return block definitions ordered by runtime ID
+     */
     protected List<BlockDefinition> createBlockDefinitions() {
         return Registries.BLOCKS.getContent().values().stream()
                 .flatMap(blockType -> blockType.getAllStates().stream())
@@ -287,6 +314,11 @@ public abstract class Protocol {
                 .toList();
     }
 
+    /**
+     * Builds the creative inventory groups for this protocol.
+     *
+     * @return creative groups in network order
+     */
     protected List<CreativeItemGroup> createCreativeGroups() {
         return Registries.CREATIVE_ITEMS.getGroups().stream()
                 .map(group -> new CreativeItemGroup(
@@ -302,6 +334,11 @@ public abstract class Protocol {
                 .toList();
     }
 
+    /**
+     * Builds the creative inventory entries for this protocol.
+     *
+     * @return creative items in network order
+     */
     protected List<CreativeItemData> createCreativeItems() {
         return Registries.CREATIVE_ITEMS.getEntries().stream()
                 .map(entry -> new CreativeItemData(
@@ -312,6 +349,11 @@ public abstract class Protocol {
                 .toList();
     }
 
+    /**
+     * Builds the custom block properties advertised to this protocol.
+     *
+     * @return custom block properties ordered by block runtime ID
+     */
     protected List<BlockPropertyData> createCustomBlockProperties() {
         var properties = new ArrayList<BlockPropertyData>();
         var blockTypes = Registries.BLOCKS.getContent().values().stream()
@@ -482,6 +524,13 @@ public abstract class Protocol {
         return encodePackedMaterialInstance(material, tintMethod);
     }
 
+    /**
+     * Encodes a material instance using the packed boolean layout shared by modern protocols.
+     *
+     * @param material the material to encode
+     * @param tintMethod the tint applied by the client
+     * @return the encoded material component
+     */
     protected final NbtMap encodePackedMaterialInstance(
             CustomBlockStateDefinition.MaterialInstance material,
             TintMethod tintMethod
@@ -506,6 +555,12 @@ public abstract class Protocol {
         return encodeBoxListCollision(shape);
     }
 
+    /**
+     * Encodes every solid in a voxel shape in the client's sixteenth-block coordinate space.
+     *
+     * @param shape the shape to encode, or {@code null} to disable collision
+     * @return the encoded collision component
+     */
     protected final NbtMap encodeBoxListCollision(VoxelShape shape) {
         if (shape == null || shape.getSolids().isEmpty()) {
             return NbtMap.builder().putBoolean("enabled", false).build();
@@ -524,6 +579,12 @@ public abstract class Protocol {
                 .build();
     }
 
+    /**
+     * Encodes the union of a voxel shape as the single box required by legacy protocols.
+     *
+     * @param shape the shape to encode, or {@code null} to disable the box
+     * @return the encoded box component
+     */
     protected static NbtMap encodeMergedBox(VoxelShape shape) {
         if (shape == null || shape.getSolids().isEmpty()) {
             return NbtMap.builder().putBoolean("enabled", false).build();
@@ -604,6 +665,14 @@ public abstract class Protocol {
         return builder.build();
     }
 
+    /**
+     * Builds this protocol's recipe payloads and matching server-side network ID index.
+     *
+     * <p>Recipes are sorted by identifier before positive network IDs are assigned so the
+     * mapping remains deterministic for a fixed registry.</p>
+     *
+     * @return the immutable recipe table
+     */
     protected RecipeTable createRecipeTable() {
         var encodedRecipes = new ArrayList<RecipeData>();
         var potionMixes = new ArrayList<PotionMixData>();
@@ -705,6 +774,13 @@ public abstract class Protocol {
         return new RecipeTable(encodedRecipes, potionMixes, recipesByNetworkId);
     }
 
+    /**
+     * Encodes a furnace recipe when its ingredient can be represented by this protocol.
+     *
+     * @param recipe the source recipe
+     * @param networkId the candidate network ID
+     * @return the encoded recipe, or {@code null} when the ingredient is unsupported
+     */
     protected RecipeData encodeFurnaceRecipe(FurnaceRecipe recipe, int networkId) {
         if (!(recipe.getIngredient() instanceof ItemTypeDescriptor ingredient)) {
             return null;
@@ -736,12 +812,24 @@ public abstract class Protocol {
         }
     }
 
+    /**
+     * Creates an unlocking requirement with an immutable, empty ingredient list.
+     *
+     * @param context the unlocking context
+     * @return the immutable requirement
+     */
     protected static RecipeUnlockingRequirement immutableRequirement(
             RecipeUnlockingRequirement.UnlockingContext context
     ) {
         return new RecipeUnlockingRequirement(context, List.of());
     }
 
+    /**
+     * Encodes recipe outputs against this protocol's definition registries.
+     *
+     * @param outputs the server-side outputs
+     * @return the encoded outputs
+     */
     protected final List<ItemData> buildNetworkOutputs(ItemStack[] outputs) {
         return Arrays.stream(outputs).map(this::encodeItemStack).toList();
     }
@@ -766,42 +854,92 @@ public abstract class Protocol {
                 .toList();
     }
 
+    /**
+     * Encodes an ingredient descriptor against this protocol's item definitions.
+     *
+     * @param descriptor the descriptor to encode
+     * @return the network descriptor
+     */
     protected final ItemDescriptorWithCount encodeItemDescriptorWithCount(
             ItemDescriptor descriptor
     ) {
         return NetworkHelper.toNetworkWithCount(descriptor, itemDefinitionRegistry);
     }
 
+    /**
+     * Encodes an item stack against this protocol's item and block definitions.
+     *
+     * @param itemStack the stack to encode
+     * @return the network item data
+     */
     protected final ItemData encodeItemStack(ItemStack itemStack) {
         return NetworkHelper.toNetwork(itemStack, itemDefinitionRegistry, blockDefinitionRegistry);
     }
 
+    /**
+     * Returns the codec used by this protocol.
+     *
+     * @return the protocol codec
+     */
     public final BedrockCodec getCodec() {
         return codec;
     }
 
+    /**
+     * Returns the numeric Bedrock protocol version.
+     *
+     * @return the protocol version
+     */
     public final int getProtocolVersion() {
         return codec.getProtocolVersion();
     }
 
+    /**
+     * Returns the Minecraft version reported by the codec.
+     *
+     * @return the Minecraft version
+     */
     public final String getMinecraftVersion() {
         return codec.getMinecraftVersion();
     }
 
+    /**
+     * Returns the client family supported by this protocol.
+     *
+     * @return the client variant
+     */
     public final ClientVariant getVariant() {
         return variant;
     }
 
+    /**
+     * Returns the immutable data produced during initialization.
+     *
+     * @return the protocol data
+     * @throws IllegalStateException if this protocol has not been initialized
+     */
     public final ProtocolData getData() {
         ensureInitialized();
         return data;
     }
 
+    /**
+     * Returns the packet encoder created during initialization.
+     *
+     * @return the packet encoder
+     * @throws IllegalStateException if this protocol has not been initialized
+     */
     public final PacketEncoder getEncoder() {
         ensureInitialized();
         return encoder;
     }
 
+    /**
+     * Creates connection-local processor state from this protocol's frozen registry.
+     *
+     * @return a new processor holder
+     * @throws IllegalStateException if this protocol has not been initialized
+     */
     public final PacketProcessorHolder createProcessorHolder() {
         ensureInitialized();
         return new PacketProcessorHolder(processorRegistry);
@@ -817,6 +955,11 @@ public abstract class Protocol {
         return blockDefinitionRegistry;
     }
 
+    /**
+     * Checks whether one-time initialization completed successfully.
+     *
+     * @return {@code true} when this protocol is ready for use
+     */
     public final boolean isInitialized() {
         return initialized;
     }

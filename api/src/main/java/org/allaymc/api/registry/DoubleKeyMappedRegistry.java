@@ -43,6 +43,9 @@ public class DoubleKeyMappedRegistry<K1, K2, VALUE> extends AbstractRegistry<Dou
         content.m2.put(k2, value);
     }
 
+    /**
+     * Freezes this registry by taking unmodifiable snapshots of both key indexes.
+     */
     @Override
     public synchronized void freeze() {
         if (frozen) {

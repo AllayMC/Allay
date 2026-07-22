@@ -20,7 +20,10 @@ import org.allaymc.server.registry.InternalRegistries;
 import java.util.*;
 
 /**
- * Exact protocol lookup keyed by client variant and protocol version.
+ * Stores exact protocol matches keyed by client variant and protocol version.
+ *
+ * <p>Registrations are mutable during startup. {@link #freeze()} publishes an immutable
+ * snapshot that must exist before any lookup is performed.</p>
  */
 public final class ProtocolRegistry {
     private static volatile ProtocolRegistry defaultRegistry;
@@ -28,6 +31,13 @@ public final class ProtocolRegistry {
     private Map<Key, Protocol> mutableProtocols = new HashMap<>();
     private volatile Snapshot frozenSnapshot;
 
+    /**
+     * Registers an initialized protocol under its variant and protocol version.
+     *
+     * @param protocol the protocol to register
+     * @throws IllegalArgumentException if the protocol is uninitialized or duplicates an existing key
+     * @throws IllegalStateException if this registry is frozen
+     */
     public synchronized void register(Protocol protocol) {
         Objects.requireNonNull(protocol, "protocol");
         ensureMutable();
@@ -41,6 +51,11 @@ public final class ProtocolRegistry {
         }
     }
 
+    /**
+     * Publishes an immutable snapshot and prevents further registration.
+     *
+     * @throws IllegalStateException if the registry is empty or already frozen
+     */
     public synchronized void freeze() {
         ensureMutable();
         if (mutableProtocols.isEmpty()) {
@@ -62,34 +77,79 @@ public final class ProtocolRegistry {
         frozenSnapshot = snapshot;
     }
 
+    /**
+     * Resolves an exact protocol match.
+     *
+     * @param variant the client variant
+     * @param protocolVersion the numeric protocol version
+     * @return the matching protocol, or {@code null} when the exact combination is unsupported
+     * @throws IllegalStateException if this registry has not been frozen
+     */
     public Protocol resolve(ClientVariant variant, int protocolVersion) {
         var snapshot = getFrozenSnapshot();
         return snapshot.protocols().get(new Key(Objects.requireNonNull(variant, "variant"), protocolVersion));
     }
 
+    /**
+     * Returns the oldest supported protocol for a client variant.
+     *
+     * @param variant the client variant
+     * @return the oldest protocol, or {@code null} when the variant has no registered protocols
+     * @throws IllegalStateException if this registry has not been frozen
+     */
     public Protocol getLowest(ClientVariant variant) {
         var supported = getSupported(variant);
         return supported.isEmpty() ? null : supported.getFirst();
     }
 
+    /**
+     * Returns the newest supported protocol for a client variant.
+     *
+     * @param variant the client variant
+     * @return the newest protocol, or {@code null} when the variant has no registered protocols
+     * @throws IllegalStateException if this registry has not been frozen
+     */
     public Protocol getLatest(ClientVariant variant) {
         var supported = getSupported(variant);
         return supported.isEmpty() ? null : supported.getLast();
     }
 
+    /**
+     * Returns all supported protocols for a client variant in ascending version order.
+     *
+     * @param variant the client variant
+     * @return an immutable list, which may be empty
+     * @throws IllegalStateException if this registry has not been frozen
+     */
     public List<Protocol> getSupported(ClientVariant variant) {
         var snapshot = getFrozenSnapshot();
         return snapshot.protocolsByVariant().get(Objects.requireNonNull(variant, "variant"));
     }
 
+    /**
+     * Returns every registered protocol without a defined iteration order.
+     *
+     * @return an immutable collection of protocols
+     * @throws IllegalStateException if this registry has not been frozen
+     */
     public Collection<Protocol> getProtocols() {
         return List.copyOf(getFrozenSnapshot().protocols().values());
     }
 
+    /**
+     * Checks whether the immutable lookup snapshot has been published.
+     *
+     * @return {@code true} when lookups are available and mutations are rejected
+     */
     public boolean isFrozen() {
         return frozenSnapshot != null;
     }
 
+    /**
+     * Initializes the built-in protocols from frozen source registries.
+     *
+     * @return a frozen registry containing every built-in protocol
+     */
     public static ProtocolRegistry createDefault() {
         freezeSourceRegistries();
 
@@ -131,6 +191,13 @@ public final class ProtocolRegistry {
         ((AllayCreativeItemRegistry) Registries.CREATIVE_ITEMS).freeze();
     }
 
+    /**
+     * Installs the process-wide default registry once.
+     *
+     * @param registry the frozen registry to install
+     * @throws IllegalArgumentException if the registry is mutable
+     * @throws IllegalStateException if a default registry is already installed
+     */
     public static synchronized void installDefault(ProtocolRegistry registry) {
         Objects.requireNonNull(registry, "registry");
         if (!registry.isFrozen()) {
@@ -142,6 +209,12 @@ public final class ProtocolRegistry {
         defaultRegistry = registry;
     }
 
+    /**
+     * Returns the process-wide default registry.
+     *
+     * @return the installed default registry
+     * @throws IllegalStateException if no default registry has been installed
+     */
     public static ProtocolRegistry getDefault() {
         var registry = defaultRegistry;
         if (registry == null) {
@@ -150,6 +223,11 @@ public final class ProtocolRegistry {
         return registry;
     }
 
+    /**
+     * Checks whether the process-wide default registry is installed.
+     *
+     * @return {@code true} when {@link #getDefault()} is available
+     */
     public static boolean hasDefault() {
         return defaultRegistry != null;
     }

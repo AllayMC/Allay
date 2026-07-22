@@ -10,7 +10,16 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Immutable protocol-specific data produced during protocol initialization.
+ * Immutable protocol-specific payload data produced during protocol initialization.
+ *
+ * <p>All collections are defensively copied.</p>
+ *
+ * @param itemDefinitions item definitions in network order
+ * @param blockDefinitions block definitions in network order
+ * @param creativeGroups creative inventory groups in network order
+ * @param creativeItems creative inventory entries in network order
+ * @param customBlockProperties custom block properties in network order
+ * @param recipeTable encoded recipes and their server-side lookup index
  */
 public record ProtocolData(
         List<ItemDefinition> itemDefinitions,
