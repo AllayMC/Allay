@@ -22,6 +22,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
     protected static final String TAG_PIERCING_LEVEL = "enchantPiercing";
     protected static final String TAG_SHOT_BY_PLAYER = "player";
+    protected static final String TAG_IN_GROUND = "inGround";
 
     @Getter
     @Setter
@@ -43,6 +44,9 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected boolean pickUpDisabled;
     @Getter
     protected boolean critical;
+    @Getter
+    @Setter
+    protected boolean inGround;
 
     @Dependency
     protected EntityPotionComponent potionComponent;
@@ -71,6 +75,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinite = b != 0);
         nbt.listenForByte(TAG_PIERCING_LEVEL, b -> this.piercingLevel = b);
         nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b -> this.pickUpDisabled = !b);
+        nbt.listenForBoolean(TAG_IN_GROUND, b -> this.inGround = b);
     }
 
     @Override
@@ -81,7 +86,8 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
                 .putByte(TAG_PUNCH_LEVEL, (byte) punchLevel)
                 .putByte(TAG_INFINITY_LEVEL, (byte) (infinite ? 1 : 0))
                 .putByte(TAG_PIERCING_LEVEL, (byte) piercingLevel)
-                .putBoolean(TAG_SHOT_BY_PLAYER, !pickUpDisabled);
+                .putBoolean(TAG_SHOT_BY_PLAYER, !pickUpDisabled)
+                .putBoolean(TAG_IN_GROUND, inGround);
 
         return builder.build();
     }

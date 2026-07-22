@@ -193,7 +193,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 .stream()
                 .filter(EntityArrow.class::isInstance)
                 .map(EntityArrow.class::cast)
-                .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
+                .filter(EntityArrow::isInGround)
                 .toList();
         for (var entityArrow : entityArrows) {
             if (entityArrow.willBeDespawnedLater()) {

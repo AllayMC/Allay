@@ -32,8 +32,6 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     @Dependency
     protected EntityProjectileComponent projectileComponent;
 
-    // Indicates whether the arrow has already hit a block
-    protected boolean hitBlock;
     // Track entities that have been hit by piercing arrows to prevent double-hitting
     protected Set<Long> piercedEntities = new HashSet<>();
 
@@ -54,13 +52,15 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     public Vector3d updateMotion(LiquidState liquidState) {
-        if (liquidState.inLiquid() && computeLiquidPhysics()) {
-            return updateMotionInLiquid(liquidState);
+        if (arrowBaseComponent.isInGround()) {
+            if (arrowBaseComponent.checkBlockCollision()) {
+                return new Vector3d();
+            }
+            arrowBaseComponent.setInGround(false);
         }
 
-        if (hitBlock && arrowBaseComponent.checkBlockCollision()) {
-            // Set motion to zero if collided with blocks after hit block
-            return new Vector3d(0, 0, 0);
+        if (liquidState.inLiquid() && computeLiquidPhysics()) {
+            return updateMotionInLiquid(liquidState);
         }
 
         return new Vector3d(
@@ -136,14 +136,15 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedLater() || this.hitBlock) {
+        if (thisEntity.willBeDespawnedLater() || arrowBaseComponent.isInGround()) {
             return;
         }
 
         addHitSound(hitPos);
         this.arrowBaseComponent.applyAction(new ArrowShakeAction(7));
         this.arrowBaseComponent.setCritical(false);
-        this.hitBlock = true;
+        this.arrowBaseComponent.setInGround(true);
+        this.motion.zero();
     }
 
     private void addHitSound(Vector3dc hitPos) {

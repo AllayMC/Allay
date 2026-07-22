@@ -75,7 +75,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         );
         arrow.setShooter(player);
         arrow.setPotionType(potionType);
-        if (infinity || creative) {
+        if (creative || (infinity && potionType == null)) {
             arrow.setInfinite(true);
         }
         arrow.setPowerLevel(powerLevel);
@@ -159,4 +159,5 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
         return arrow;
     }
+
 }
