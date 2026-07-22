@@ -11,7 +11,6 @@ import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
-/** International v898 protocol. */
 public class Protocol_v898 extends Protocol_v860 {
     public Protocol_v898() {
         this(Bedrock_v898.CODEC, ClientVariant.INTERNATIONAL);

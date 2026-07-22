@@ -7,7 +7,6 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 import java.util.List;
 
-/** International v844 encoder. */
 public class PacketEncoder_v844 extends PacketEncoder_v827 {
     public PacketEncoder_v844(ProtocolData data) {
         super(data);

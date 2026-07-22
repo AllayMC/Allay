@@ -116,17 +116,17 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public ItemRegistryPacket encodeItemRegistry() {
         var packet = new ItemRegistryPacket();
-        packet.getItems().addAll(data().itemDefinitions());
+        packet.getItems().addAll(getData().itemDefinitions());
         return packet;
     }
 
     @Override
     public CreativeContentPacket encodeCreativeContent() {
         var packet = new CreativeContentPacket();
-        data().creativeGroups().stream()
+        getData().creativeGroups().stream()
                 .map(group -> new CreativeItemGroup(group.category(), group.name(), copyItemData(group.icon())))
                 .forEach(packet.getGroups()::add);
-        data().creativeItems().stream()
+        getData().creativeItems().stream()
                 .map(item -> new CreativeItemData(copyItemData(item.item()), item.netId(), item.groupId()))
                 .forEach(packet.getContents()::add);
         return packet;
@@ -135,10 +135,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public CraftingDataPacket encodeCraftingData() {
         var packet = new CraftingDataPacket();
-        data().recipeTable().encodedRecipes().stream()
+        getData().recipeTable().encodedRecipes().stream()
                 .map(PacketEncoder_v766::copyRecipeData)
                 .forEach(packet.getCraftingData()::add);
-        packet.getPotionMixData().addAll(data().recipeTable().potionMixes());
+        packet.getPotionMixData().addAll(getData().recipeTable().potionMixes());
         packet.setCleanRecipes(true);
         return packet;
     }
@@ -146,7 +146,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiers() {
         var identifiers = new ArrayList<NbtMap>();
-        for (var entityType : data().source().entityTypes()) {
+        for (var entityType : getData().source().entityTypes()) {
             identifiers.add(NbtMap.builder()
                     .putString("id", entityType.getIdentifier().toString())
                     .build());
@@ -162,7 +162,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public Collection<SyncEntityPropertyPacket> encodeSyncEntityProperties() {
         var packets = new ArrayList<SyncEntityPropertyPacket>();
-        for (var entityType : data().source().entityTypes()) {
+        for (var entityType : getData().source().entityTypes()) {
             if (entityType.getProperties().isEmpty()) {
                 continue;
             }
@@ -203,7 +203,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public BiomeDefinitionListPacket encodeBiomeDefinitions() {
         var definitions = new LinkedHashMap<String, BiomeDefinitionData>();
-        for (var biomeType : data().source().biomeTypes()) {
+        for (var biomeType : getData().source().biomeTypes()) {
             definitions.put(biomeType.getIdentifier().toString(), NetworkHelper.toNetwork(biomeType));
         }
 
@@ -215,7 +215,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public DimensionDataPacket encodeDimensionData() {
         var packet = new DimensionDataPacket();
-        data().source().dimensionTypes().stream()
+        getData().source().dimensionTypes().stream()
                 .filter(PacketEncoder_v766::shouldSendDimensionDefinition)
                 .map(dimensionType -> new DimensionDefinition(
                         dimensionType.getIdentifier().toString(),
@@ -235,14 +235,14 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
     @Override
     public ResourcePacksInfoPacket encodeResourcePacksInfo() {
-        var settings = data().source().encodingSettings();
+        var settings = getData().source().encodingSettings();
         var packet = new ResourcePacksInfoPacket();
         packet.setForcedToAccept(settings.forceResourcePacks());
         packet.setWorldTemplateId(new UUID(0, 0));
         packet.setWorldTemplateVersion("");
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
 
-        for (var pack : data().source().packs()) {
+        for (var pack : getData().source().packs()) {
             boolean scripting = pack.getType() == Pack.Type.SCRIPT;
             if (scripting) {
                 packet.setScriptingEnabled(true);
@@ -265,13 +265,13 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
     @Override
     public ResourcePackStackPacket encodeResourcePackStack() {
-        var settings = data().source().encodingSettings();
+        var settings = getData().source().encodingSettings();
         var packet = new ResourcePackStackPacket();
         packet.setForcedToAccept(settings.forceResourcePacks() && !settings.allowClientResourcePacks());
         packet.setGameVersion("*");
         packet.getExperiments().addAll(createExperiments());
 
-        for (var pack : data().source().packs()) {
+        for (var pack : getData().source().packs()) {
             switch (pack.getType()) {
                 case RESOURCES -> packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
                         pack.getId().toString(), pack.getStringVersion(), ""));
@@ -337,10 +337,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
     @Override
     public TrimDataPacket encodeTrimData() {
         var packet = new TrimDataPacket();
-        data().source().trimPatterns().stream()
+        getData().source().trimPatterns().stream()
                 .map(pattern -> new TrimPattern(pattern.itemType().getIdentifier().toString(), pattern.patternId()))
                 .forEach(packet.getPatterns()::add);
-        data().source().trimMaterials().stream()
+        getData().source().trimMaterials().stream()
                 .map(material -> new TrimMaterial(
                         material.materialId(),
                         material.color(),
@@ -2614,7 +2614,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setDifficulty(worldData.getDifficulty().ordinal());
         packet.setTrustingPlayers(true);
 
-        var settings = data().source().encodingSettings();
+        var settings = getData().source().encodingSettings();
         packet.setLevelName(settings.levelName());
         packet.setLevelId(settings.levelName());
         packet.setDefaultPlayerPermission(PlayerPermission.valueOf(settings.defaultPermission()));
@@ -2645,8 +2645,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setWorldId("");
         packet.setScenarioId("");
         packet.setOwnerId("");
-        packet.getItemDefinitions().addAll(data().itemDefinitions());
-        packet.getBlockProperties().addAll(data().customBlockProperties());
+        packet.getItemDefinitions().addAll(getData().itemDefinitions());
+        packet.getBlockProperties().addAll(getData().customBlockProperties());
         packet.getExperiments().addAll(createExperiments());
         return packet;
     }

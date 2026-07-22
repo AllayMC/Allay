@@ -7,7 +7,6 @@ import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
 import java.util.ArrayList;
 import java.util.List;
 
-/** International v827 encoder. */
 public class PacketEncoder_v827 extends PacketEncoder_v819 {
     public PacketEncoder_v827(ProtocolData data) {
         super(data);

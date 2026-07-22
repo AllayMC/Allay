@@ -4,7 +4,6 @@ import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v818.PacketEncoder_v818;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
-/** International v819 encoder. */
 public class PacketEncoder_v819 extends PacketEncoder_v818 {
     public PacketEncoder_v819(ProtocolData data) {
         super(data);

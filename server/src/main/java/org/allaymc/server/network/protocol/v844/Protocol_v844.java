@@ -7,7 +7,6 @@ import org.allaymc.server.network.protocol.v827.Protocol_v827;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v844.Bedrock_v844;
 
-/** International v844 protocol. */
 public class Protocol_v844 extends Protocol_v827 {
     public Protocol_v844() {
         this(Bedrock_v844.CODEC, ClientVariant.INTERNATIONAL);

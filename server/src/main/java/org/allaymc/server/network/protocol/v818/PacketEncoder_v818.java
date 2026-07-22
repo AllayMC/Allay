@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-/** International v818 encoder. */
 public class PacketEncoder_v818 extends PacketEncoder_v766 {
     public PacketEncoder_v818(ProtocolData data) {
         super(data);

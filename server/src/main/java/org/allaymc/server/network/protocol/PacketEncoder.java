@@ -71,10 +71,6 @@ public abstract class PacketEncoder {
         return data;
     }
 
-    protected final ProtocolData data() {
-        return data;
-    }
-
     public abstract ItemRegistryPacket encodeItemRegistry();
 
     public abstract CreativeContentPacket encodeCreativeContent();

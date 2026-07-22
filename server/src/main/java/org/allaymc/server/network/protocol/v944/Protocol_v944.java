@@ -14,7 +14,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 import java.util.Set;
 
-/** International v944 protocol. */
 public class Protocol_v944 extends Protocol_v924 {
     public Protocol_v944() {
         this(Bedrock_v944.CODEC, ClientVariant.INTERNATIONAL);

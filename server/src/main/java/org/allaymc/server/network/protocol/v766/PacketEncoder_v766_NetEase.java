@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-/** NetEase-specific v766 encoder branch. */
 public class PacketEncoder_v766_NetEase extends PacketEncoder_v766 {
     public PacketEncoder_v766_NetEase(ProtocolData data) {
         super(data);
@@ -21,7 +20,7 @@ public class PacketEncoder_v766_NetEase extends PacketEncoder_v766 {
     @Override
     public BiomeDefinitionListPacket encodeBiomeDefinitions() {
         var definitions = NbtMap.builder();
-        for (var biomeType : data().source().biomeTypes()) {
+        for (var biomeType : getData().source().biomeTypes()) {
             var biome = biomeType.getBiomeData();
             var color = biome.mapWaterColor();
             definitions.putCompound(biomeType.getIdentifier().toString(), NbtMap.builder()

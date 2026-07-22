@@ -13,7 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** International v944 encoder. */
 public class PacketEncoder_v944 extends PacketEncoder_v924 {
     public PacketEncoder_v944(ProtocolData data) {
         super(data);

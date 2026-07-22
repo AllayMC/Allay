@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-/** NetEase-specific v819 encoder branch. */
 public class PacketEncoder_v819_NetEase extends PacketEncoder_v819 {
     public PacketEncoder_v819_NetEase(ProtocolData data) {
         super(data);

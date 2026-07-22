@@ -9,7 +9,6 @@ import org.allaymc.server.network.protocol.ProtocolData;
 import org.cloudburstmc.protocol.bedrock.codec.v766_netease.Bedrock_v766_NetEase;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
-/** NetEase v766 protocol. */
 public class Protocol_v766_NetEase extends Protocol_v766 {
     public Protocol_v766_NetEase() {
         super(Bedrock_v766_NetEase.CODEC, ClientVariant.NETEASE);

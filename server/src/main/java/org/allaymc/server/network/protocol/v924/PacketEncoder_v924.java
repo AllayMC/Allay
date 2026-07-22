@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-/** International v924 encoder. */
 public class PacketEncoder_v924 extends PacketEncoder_v898 {
     public PacketEncoder_v924(ProtocolData data) {
         super(data);
