@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Allay"
+  short_description: "Prepare, validate, and publish Allay releases"
+  default_prompt: "Use $release-allay to prepare and publish the next stable Allay release."
