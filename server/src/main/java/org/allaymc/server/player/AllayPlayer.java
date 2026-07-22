@@ -136,6 +136,7 @@ public class AllayPlayer implements Player {
 
     protected final PacketProcessorHolder bootstrapProcessorHolder;
     private final Object protocolLifecycleLock = new Object();
+    @Getter
     protected volatile ProtocolSession protocolSession;
     protected final AtomicInteger fullyJoinChunkThreshold;
     @Getter
@@ -1439,10 +1440,6 @@ public class AllayPlayer implements Player {
             protocolSession = selectedSession;
             return true;
         }
-    }
-
-    public ProtocolSession getProtocolSession() {
-        return protocolSession;
     }
 
     public Protocol getProtocol() {

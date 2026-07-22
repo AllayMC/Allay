@@ -1,5 +1,6 @@
 package org.allaymc.server.network.processor;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.player.ClientState;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -19,7 +20,9 @@ import java.util.function.Supplier;
 public final class PacketProcessorHolder {
     private final EnumMap<ClientState, Map<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
 
+    @Getter
     private volatile ClientState clientState = ClientState.DISCONNECTED;
+    @Getter
     private volatile ClientState lastClientState = null;
 
     /**
@@ -71,14 +74,6 @@ public final class PacketProcessorHolder {
     public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
         var map = processors.get(clientState);
         return map != null ? map.get(packet.getPacketType()) : null;
-    }
-
-    public ClientState getClientState() {
-        return clientState;
-    }
-
-    public ClientState getLastClientState() {
-        return lastClientState;
     }
 
     public boolean setClientState(ClientState clientState) {

@@ -1,5 +1,7 @@
 package org.allaymc.server.network.protocol;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.server.Server;
@@ -20,10 +22,12 @@ import java.util.Objects;
  * Connection-bound protocol state and packet dispatch.
  */
 @Slf4j
+@Getter
 public final class ProtocolSession {
     private final Protocol protocol;
     private final BedrockServerSession session;
     private final PacketProcessorHolder processorHolder;
+    @Getter(AccessLevel.NONE)
     private boolean codecInstalled;
 
     public ProtocolSession(Protocol protocol, BedrockServerSession session) {
@@ -188,18 +192,6 @@ public final class ProtocolSession {
             session.sendPacket(outgoingPacket);
         }
         return outgoingPacket;
-    }
-
-    public Protocol getProtocol() {
-        return protocol;
-    }
-
-    public BedrockServerSession getSession() {
-        return session;
-    }
-
-    public PacketProcessorHolder getProcessorHolder() {
-        return processorHolder;
     }
 
     public ClientState getClientState() {

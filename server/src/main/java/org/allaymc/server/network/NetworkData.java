@@ -1,5 +1,8 @@
 package org.allaymc.server.network;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.type.EntityType;
@@ -30,6 +33,8 @@ import java.util.UUID;
  * Protocol-independent source data used to build protocol-specific data and packets.
  * The source registries are frozen after plugins have finished registering content.
  */
+@Getter
+@Accessors(fluent = true)
 public final class NetworkData {
     private final List<ItemType<?>> itemTypes;
     private final List<BlockType<?>> blockTypes;
@@ -41,6 +46,7 @@ public final class NetworkData {
     private final List<BiomeType> biomeTypes;
     private final List<DimensionType> dimensionTypes;
     private final List<Pack> packs;
+    @Getter(AccessLevel.NONE)
     private final Map<UUID, Pack> packsById;
     private final List<TrimPattern> trimPatterns;
     private final List<TrimMaterial> trimMaterials;
@@ -136,60 +142,8 @@ public final class NetworkData {
         ((AllayCreativeItemRegistry) Registries.CREATIVE_ITEMS).freeze();
     }
 
-    public List<ItemType<?>> itemTypes() {
-        return itemTypes;
-    }
-
-    public List<BlockType<?>> blockTypes() {
-        return blockTypes;
-    }
-
-    public List<BlockState> blockStates() {
-        return blockStates;
-    }
-
-    public List<Recipe> recipes() {
-        return recipes;
-    }
-
-    public List<CreativeItemGroup> creativeGroups() {
-        return creativeGroups;
-    }
-
-    public List<CreativeItemEntry> creativeItems() {
-        return creativeItems;
-    }
-
-    public List<EntityType<?>> entityTypes() {
-        return entityTypes;
-    }
-
-    public List<BiomeType> biomeTypes() {
-        return biomeTypes;
-    }
-
-    public List<DimensionType> dimensionTypes() {
-        return dimensionTypes;
-    }
-
-    public List<Pack> packs() {
-        return packs;
-    }
-
     public Pack pack(UUID id) {
         return packsById.get(id);
-    }
-
-    public List<TrimPattern> trimPatterns() {
-        return trimPatterns;
-    }
-
-    public List<TrimMaterial> trimMaterials() {
-        return trimMaterials;
-    }
-
-    public EncodingSettings encodingSettings() {
-        return encodingSettings;
     }
 
     /**

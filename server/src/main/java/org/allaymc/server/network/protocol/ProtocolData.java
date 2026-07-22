@@ -1,6 +1,9 @@
 package org.allaymc.server.network.protocol;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
@@ -28,6 +31,8 @@ import java.util.*;
 /**
  * Protocol-specific precomputed data shared by an encoder and packet processors.
  */
+@Getter
+@Accessors(fluent = true)
 public final class ProtocolData {
     private final NetworkData source;
     private final int protocolVersion;
@@ -38,7 +43,9 @@ public final class ProtocolData {
     private final List<CreativeItemData> creativeItems;
     private final List<BlockPropertyData> customBlockProperties;
     private final RecipeTable recipeTable;
+    @Getter(AccessLevel.PACKAGE)
     private final boolean materialInstancesUsePackedBooleans;
+    @Getter(AccessLevel.PACKAGE)
     private final boolean multipleCollisionBoxes;
 
     private ProtocolData(
@@ -129,50 +136,6 @@ public final class ProtocolData {
                 builder.materialInstancesUsePackedBooleans,
                 builder.multipleCollisionBoxes
         );
-    }
-
-    public NetworkData source() {
-        return source;
-    }
-
-    public int protocolVersion() {
-        return protocolVersion;
-    }
-
-    public ClientVariant variant() {
-        return variant;
-    }
-
-    public List<ItemDefinition> itemDefinitions() {
-        return itemDefinitions;
-    }
-
-    public List<BlockDefinition> blockDefinitions() {
-        return blockDefinitions;
-    }
-
-    public List<CreativeItemGroup> creativeGroups() {
-        return creativeGroups;
-    }
-
-    public List<CreativeItemData> creativeItems() {
-        return creativeItems;
-    }
-
-    public List<BlockPropertyData> customBlockProperties() {
-        return customBlockProperties;
-    }
-
-    public RecipeTable recipeTable() {
-        return recipeTable;
-    }
-
-    boolean materialInstancesUsePackedBooleans() {
-        return materialInstancesUsePackedBooleans;
-    }
-
-    boolean multipleCollisionBoxes() {
-        return multipleCollisionBoxes;
     }
 
     private static List<BlockPropertyData> createCustomBlockProperties(

@@ -1,5 +1,6 @@
 package org.allaymc.server.network.processor;
 
+import lombok.Getter;
 import org.allaymc.api.player.ClientState;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
@@ -21,6 +22,7 @@ import java.util.function.Supplier;
 public final class PacketProcessorRegistry {
     private final Map<Key, Supplier<? extends PacketProcessor<?>>> factories = new LinkedHashMap<>();
 
+    @Getter
     private volatile boolean frozen;
     private Map<Key, Supplier<? extends PacketProcessor<?>>> frozenFactories;
 
@@ -88,15 +90,6 @@ public final class PacketProcessorRegistry {
 
         frozenFactories = Collections.unmodifiableMap(new LinkedHashMap<>(factories));
         frozen = true;
-    }
-
-    /**
-     * Check whether this registry has been frozen.
-     *
-     * @return {@code true} if this registry is frozen
-     */
-    public boolean isFrozen() {
-        return frozen;
     }
 
     /**
