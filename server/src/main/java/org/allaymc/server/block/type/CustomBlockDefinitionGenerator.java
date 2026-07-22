@@ -303,8 +303,8 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
      * <p>
      * Uses the 1.21.130+ "boxes" format which supports multiple collision boxes.
      * Each box is defined by minX/minY/minZ/maxX/maxY/maxZ in pixels (0-16).
-     * For older clients, {@code MultiVersionHelper.adaptCollisionBox} converts
-     * to the legacy origin/size format (which only supports a single box).
+     * Protocol-specific encoders convert this to the legacy origin/size format
+     * for older clients, which only support a single box.
      *
      * @param voxelShape the collision shape (can contain multiple AABBs)
      * @return NBT with enabled flag and boxes list

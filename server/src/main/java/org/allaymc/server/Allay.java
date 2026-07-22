@@ -69,6 +69,7 @@ public final class Allay {
     public static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
     public static Dashboard DASHBOARD;
+    private static boolean initialized;
 
     public static void main(String[] args) throws InterruptedException {
         long initialTime = System.currentTimeMillis();
@@ -147,9 +148,13 @@ public final class Allay {
      * which means that you should call initI18n() before call initAllay()!
      */
     @VisibleForTesting
-    public static void initAllay() {
+    public static synchronized void initAllay() {
+        if (initialized) {
+            return;
+        }
         initAllayAPI();
         initRegistries();
+        initialized = true;
     }
 
     private static void initAllayAPI() {

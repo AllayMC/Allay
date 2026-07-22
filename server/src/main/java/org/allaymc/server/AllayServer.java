@@ -25,6 +25,8 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.network.AllayNetworkManager;
 import org.allaymc.server.network.AllayRakNetInterface;
+import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.server.player.AllayEmptyPlayerStorage;
 import org.allaymc.server.player.AllayNBTFilePlayerStorage;
 import org.allaymc.server.player.AllayPlayerManager;
@@ -74,6 +76,10 @@ public final class AllayServer implements Server {
     private final ScoreboardManager scoreboardManager;
     @Getter
     private final AllayPluginManager pluginManager;
+    @Getter
+    private NetworkData networkData;
+    @Getter
+    private ProtocolRegistry protocolRegistry;
     @Getter
     private final Scheduler scheduler;
     private final AllayTerminalConsole terminalConsole;
@@ -183,6 +189,10 @@ public final class AllayServer implements Server {
         this.worldPool.loadWorlds();
         this.scoreboardManager.read();
         this.pluginManager.enablePlugins();
+
+        this.networkData = NetworkData.capture();
+        this.protocolRegistry = ProtocolRegistry.createDefault(networkData);
+        ProtocolRegistry.installDefault(protocolRegistry);
 
         sendTranslatable(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
         this.playerManager.startNetworkInterfaces();

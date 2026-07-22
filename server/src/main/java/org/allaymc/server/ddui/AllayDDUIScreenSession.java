@@ -7,11 +7,8 @@ import org.allaymc.api.ddui.type.CustomFormScreen;
 import org.allaymc.api.ddui.type.DDUIScreen;
 import org.allaymc.api.ddui.type.MessageBoxScreen;
 import org.allaymc.api.player.Player;
-import org.cloudburstmc.protocol.bedrock.data.datastore.DataStoreChange;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.datastore.DataStoreUpdate;
-import org.cloudburstmc.protocol.bedrock.packet.ClientboundDataDrivenUICloseScreenPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ClientboundDataDrivenUIShowScreenPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ClientboundDataStorePacket;
 import org.cloudburstmc.protocol.bedrock.packet.ServerboundDataDrivenScreenClosedPacket;
 
 import java.util.*;
@@ -30,7 +27,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     private static final String MESSAGE_BOX_SCREEN_ID = "minecraft:message_box";
     private static final String MESSAGE_BOX_PROPERTY = "message_box_data";
 
-    private final Player viewer;
+    private final AllayPlayer viewer;
     private final int formId;
     private final DDUIScreen screen;
     private final String screenId;
@@ -46,7 +43,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     private boolean closed;
     private MessageBoxResult messageBoxResult;
 
-    public AllayDDUIScreenSession(Player viewer, int formId, DDUIScreen screen) {
+    public AllayDDUIScreenSession(AllayPlayer viewer, int formId, DDUIScreen screen) {
         this.viewer = viewer;
         this.formId = formId;
         this.screen = screen;
@@ -159,19 +156,9 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     }
 
     public void show() {
-        var dataPacket = new ClientboundDataStorePacket();
-        var change = new DataStoreChange();
-        change.setDataStoreName(DATA_STORE_NAME);
-        change.setProperty(propertyName);
-        change.setNewValue(initialState);
-        change.setUpdateCount(1);
-        dataPacket.getUpdates().add(change);
-        viewer.sendPacket(dataPacket);
-
-        var showPacket = new ClientboundDataDrivenUIShowScreenPacket();
-        showPacket.setScreenId(screenId);
-        showPacket.setFormId(formId);
-        viewer.sendPacket(showPacket);
+        var encoder = viewer.getProtocol().getEncoder();
+        viewer.sendPacket(encoder.encodeDataStoreChange(DATA_STORE_NAME, propertyName, initialState));
+        viewer.sendPacket(encoder.encodeDataDrivenUIShowScreen(screenId, formId));
     }
 
     private void compile() {
@@ -451,9 +438,7 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
     }
 
     private void sendClosePacket(Integer closeFormId) {
-        var packet = new ClientboundDataDrivenUICloseScreenPacket();
-        packet.setFormId(closeFormId);
-        viewer.sendPacket(packet);
+        viewer.sendPacket(viewer.getProtocol().getEncoder().encodeDataDrivenUICloseScreen(closeFormId));
     }
 
     private void cleanup() {
@@ -471,18 +456,12 @@ public final class AllayDDUIScreenSession implements DDUIScreenSession {
             return;
         }
 
-        var packet = new ClientboundDataStorePacket();
-        for (var path : paths) {
-            var update = new DataStoreUpdate();
-            update.setDataStoreName(DATA_STORE_NAME);
-            update.setProperty(propertyName);
-            update.setPath(path);
-            update.setData(value);
-            update.setUpdateCount(1);
-            update.setPathUpdateCount(1);
-            packet.getUpdates().add(update);
-        }
-        viewer.sendPacket(packet);
+        viewer.sendPacket(viewer.getProtocol().getEncoder().encodeDataStoreUpdates(
+                DATA_STORE_NAME,
+                propertyName,
+                paths,
+                value
+        ));
     }
 
     private Map<String, Object> compileValueElementFrame(DDUIElement element, String specificVisibleKey, PropertyBinding<String> label,

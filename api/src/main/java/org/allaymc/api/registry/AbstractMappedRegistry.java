@@ -1,5 +1,7 @@
 package org.allaymc.api.registry;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -67,7 +69,18 @@ public abstract class AbstractMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY
      *
      * @return a new value into this registry with the given key
      */
-    public VALUE register(KEY key, VALUE value) {
+    public synchronized VALUE register(KEY key, VALUE value) {
+        ensureMutable();
         return content.put(key, value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public synchronized void freeze() {
+        if (frozen) {
+            return;
+        }
+        content = (MAPPING) Collections.unmodifiableMap(new LinkedHashMap<>(content));
+        super.freeze();
     }
 }

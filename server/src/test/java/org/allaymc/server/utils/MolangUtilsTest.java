@@ -1,24 +1,17 @@
 package org.allaymc.server.utils;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.property.type.BooleanPropertyType;
-import org.allaymc.api.block.property.type.EnumPropertyType;
-import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.server.block.component.BlockStateDataComponentImpl;
-import org.allaymc.server.block.component.TestComponentImpl;
-import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.block.type.TestBlock;
-import org.allaymc.server.block.type.TestBlockImpl;
 import org.allaymc.server.block.type.TestEnum;
 import org.allaymc.testutils.AllayTestExtension;
+import org.allaymc.testutils.TestRegistryFixtures;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,27 +30,11 @@ class MolangUtilsTest {
 
     @BeforeAll
     static void init() {
-        BOOL_PROP = BooleanPropertyType.of("test_bool", false);
-        INT_PROP = IntPropertyType.of("test_int", 0, 3, 0);
-        ENUM_PROP = EnumPropertyType.of("test_enum", TestEnum.class, TestEnum.A);
-
-        blockTypeWithAllProps = AllayBlockType
-                .builder(TestBlockImpl.class)
-                .identifier("minecraft:molang_test_block")
-                .setProperties(BOOL_PROP, INT_PROP, ENUM_PROP)
-                .setComponents(List.of(
-                        new TestComponentImpl(),
-                        BlockStateDataComponentImpl.ofDefault()))
-                .build();
-
-        blockTypeWithBoolOnly = AllayBlockType
-                .builder(TestBlockImpl.class)
-                .identifier("minecraft:molang_test_bool_block")
-                .setProperties(BOOL_PROP)
-                .setComponents(List.of(
-                        new TestComponentImpl(),
-                        BlockStateDataComponentImpl.ofDefault()))
-                .build();
+        BOOL_PROP = TestRegistryFixtures.molangBooleanProperty();
+        INT_PROP = TestRegistryFixtures.molangIntProperty();
+        ENUM_PROP = TestRegistryFixtures.molangEnumProperty();
+        blockTypeWithAllProps = TestRegistryFixtures.molangBlockTypeWithAllProperties();
+        blockTypeWithBoolOnly = TestRegistryFixtures.molangBlockTypeWithBooleanOnly();
     }
 
     @Test
@@ -164,13 +141,7 @@ class MolangUtilsTest {
 
     @Test
     void testBlockWithNoProperties() {
-        var blockTypeNoProps = AllayBlockType
-                .builder(TestBlockImpl.class)
-                .identifier("minecraft:molang_no_props")
-                .setComponents(List.of(
-                        new TestComponentImpl(),
-                        BlockStateDataComponentImpl.ofDefault()))
-                .build();
+        var blockTypeNoProps = TestRegistryFixtures.molangBlockTypeWithoutProperties();
 
         var state = blockTypeNoProps.getDefaultState();
         var states = Set.of(state);

@@ -15,7 +15,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.allaymc.server.item.recipe.ComplexRecipe;
-import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
@@ -41,8 +41,11 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return handleEnchantTableRecipe(player, recipeNetworkId);
         }
 
-        // The network id for the recipe start from 1, so we need to subtract 1 to get the index in indexedRecipes
-        var recipe = NetworkData.INDEXED_RECIPES.get(recipeNetworkId - 1);
+        var recipe = ((AllayPlayer) player).getProtocol().getData().recipeTable().recipesByNetworkId().get(recipeNetworkId);
+        if (recipe == null) {
+            log.warn("Unknown craft recipe network id {}", recipeNetworkId);
+            return error();
+        }
         var isCraftingRecipe = recipe instanceof ShapedRecipe ||
                                recipe instanceof ShapelessRecipe ||
                                recipe instanceof ComplexRecipe;

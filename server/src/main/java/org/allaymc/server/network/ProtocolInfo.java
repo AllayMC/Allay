@@ -5,22 +5,12 @@ import org.allaymc.api.utils.SemVersion;
 import org.allaymc.updater.block.BlockStateUpdater;
 import org.allaymc.updater.block.BlockStateUpdater_1_21_110;
 import org.allaymc.updater.item.ItemStateUpdater;
-import org.allaymc.updater.item.ItemStateUpdater_1_21_110;
 import org.allaymc.updater.item.ItemStateUpdater_1_26_20;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v1001.Bedrock_v1001;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
-import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
-import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
-import org.cloudburstmc.protocol.bedrock.codec.v844.Bedrock_v844;
-import org.cloudburstmc.protocol.bedrock.codec.v859.Bedrock_v859;
-import org.cloudburstmc.protocol.bedrock.codec.v860.Bedrock_v860;
-import org.cloudburstmc.protocol.bedrock.codec.v898.Bedrock_v898;
-import org.cloudburstmc.protocol.bedrock.codec.v924.Bedrock_v924;
-import org.cloudburstmc.protocol.bedrock.codec.v944.Bedrock_v944;
-import org.cloudburstmc.protocol.bedrock.codec.v975.Bedrock_v975;
-
-import java.util.List;
+import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.ProtocolRegistry;
 
 /**
  * This class contains information about the current protocol version.
@@ -29,24 +19,6 @@ import java.util.List;
  */
 @UtilityClass
 public final class ProtocolInfo {
-
-    /**
-     * A list which contains the supported protocol versions, and the first element is the latest version.
-     */
-    public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
-            // Order is important. The first codec is the latest supported version.
-            Bedrock_v1001.CODEC,
-            Bedrock_v975.CODEC,
-            Bedrock_v944.CODEC,
-            Bedrock_v924.CODEC,
-            Bedrock_v898.CODEC,
-            Bedrock_v860.CODEC,
-            Bedrock_v859.CODEC,
-            Bedrock_v844.CODEC,
-            Bedrock_v827.CODEC,
-            Bedrock_v819.CODEC,
-            Bedrock_v818.CODEC
-    );
 
     /**
      * Feature version is the version of the game from which vanilla features will be used.
@@ -84,7 +56,10 @@ public final class ProtocolInfo {
      * @return the latest codec
      */
     public static BedrockCodec getLatestCodec() {
-        return SUPPORTED_VERSIONS.getFirst();
+        if (ProtocolRegistry.hasDefault()) {
+            return ProtocolRegistry.getDefault().getLatest(ClientVariant.INTERNATIONAL).getCodec();
+        }
+        return Bedrock_v1001.CODEC;
     }
 
     /**
@@ -93,23 +68,10 @@ public final class ProtocolInfo {
      * @return the lowest codec
      */
     public static BedrockCodec getLowestCodec() {
-        return SUPPORTED_VERSIONS.getLast();
-    }
-
-    /**
-     * Find the codec by protocol version.
-     *
-     * @param protocolVersion the protocol version
-     * @return the codec, or {@code null} if not found
-     */
-    public static BedrockCodec findCodec(int protocolVersion) {
-        for (var codec : SUPPORTED_VERSIONS) {
-            if (codec.getProtocolVersion() == protocolVersion) {
-                return codec;
-            }
+        if (ProtocolRegistry.hasDefault()) {
+            return ProtocolRegistry.getDefault().getLowest(ClientVariant.INTERNATIONAL).getCodec();
         }
-
-        return null;
+        return Bedrock_v818.CODEC;
     }
 
     /**

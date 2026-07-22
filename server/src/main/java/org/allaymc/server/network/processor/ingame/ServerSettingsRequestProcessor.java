@@ -3,10 +3,10 @@ package org.allaymc.server.network.processor.ingame;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.ServerSettingsRequestPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ServerSettingsResponsePacket;
 
 /**
  * @author daoge_cmd
@@ -15,6 +15,7 @@ public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettin
 
     @Override
     public PacketSignal handleAsync(Player player, ServerSettingsRequestPacket packet, long receiveTime) {
+        var allayPlayer = (AllayPlayer) player;
         // Geyser: fixes https://bugs.mojang.com/browse/MCPE-94012 because of the delay
         Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
             var serverSettingForm = player.getServerSettingForm();
@@ -22,10 +23,10 @@ public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettin
                 return false;
             }
 
-            var pk = new ServerSettingsResponsePacket();
-            pk.setFormId(serverSettingForm.left());
-            pk.setFormData(serverSettingForm.right().toJson());
-            player.sendPacket(pk);
+            allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeServerSettingsResponse(
+                    serverSettingForm.left(),
+                    serverSettingForm.right().toJson()
+            ));
             return true;
         }, 20);
         return PacketSignal.HANDLED;

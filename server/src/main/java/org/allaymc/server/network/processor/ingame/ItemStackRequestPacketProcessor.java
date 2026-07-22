@@ -8,6 +8,7 @@ import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -18,7 +19,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ItemStackResponsePacket;
 
 import java.util.*;
 
@@ -78,9 +78,8 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
             encodedResponses.add(encodeActionResponses(responses, request.requestId()));
         }
 
-        var itemStackResponsePacket = new ItemStackResponsePacket();
-        itemStackResponsePacket.getEntries().addAll(encodedResponses);
-        player.sendPacket(itemStackResponsePacket);
+        var allayPlayer = (AllayPlayer) player;
+        allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeItemStackResponse(encodedResponses));
     }
 
     private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {

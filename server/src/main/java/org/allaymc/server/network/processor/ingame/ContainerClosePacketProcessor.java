@@ -14,6 +14,7 @@ public class ContainerClosePacketProcessor extends PacketProcessor<ContainerClos
 
     @Override
     public void handleSync(Player player, ContainerClosePacket packet, long receiveTime) {
+        var allayPlayer = (AllayPlayer) player;
         var opened = player.getOpenedContainer(packet.getId());
         var suppressCloseResponse = false;
 
@@ -25,7 +26,6 @@ public class ContainerClosePacketProcessor extends PacketProcessor<ContainerClos
             if (opened != null) {
                 suppressCloseResponse = true;
             } else if (!player.getOpenedContainers().isEmpty()) {
-                var allayPlayer = (AllayPlayer) player;
                 for (var container : player.getOpenedContainers()) {
                     allayPlayer.setSuppressNextContainerClosePacket(true);
                     container.removeViewer(player);
@@ -37,15 +37,14 @@ public class ContainerClosePacketProcessor extends PacketProcessor<ContainerClos
         if (opened == null) {
             // This may be a container closed server-side already removed from the open list, and
             // in that case we can directly respond to the client with a ContainerClosePacket
-            var response = new ContainerClosePacket();
-            response.setId(packet.getId());
-            response.setServerInitiated(false);
-            response.setType(packet.getType());
-            player.sendPacket(response);
+            allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeContainerClose(
+                    packet.getId(),
+                    packet.getType(),
+                    false
+            ));
             return;
         }
 
-        var allayPlayer = (AllayPlayer) player;
         if (suppressCloseResponse) {
             allayPlayer.setSuppressNextContainerClosePacket(true);
         } else {

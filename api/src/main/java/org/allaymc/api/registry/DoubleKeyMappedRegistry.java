@@ -1,5 +1,7 @@
 package org.allaymc.api.registry;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -35,9 +37,22 @@ public class DoubleKeyMappedRegistry<K1, K2, VALUE> extends AbstractRegistry<Dou
         return content.m2.getOrDefault(k2, defaultValue);
     }
 
-    public void register(K1 k1, K2 k2, VALUE value) {
+    public synchronized void register(K1 k1, K2 k2, VALUE value) {
+        ensureMutable();
         content.m1.put(k1, value);
         content.m2.put(k2, value);
+    }
+
+    @Override
+    public synchronized void freeze() {
+        if (frozen) {
+            return;
+        }
+        content = new MapPair<>(
+                Collections.unmodifiableMap(new LinkedHashMap<>(content.m1)),
+                Collections.unmodifiableMap(new LinkedHashMap<>(content.m2))
+        );
+        super.freeze();
     }
 
     public record MapPair<K1, K2, VALUE>(Map<K1, VALUE> m1, Map<K2, VALUE> m2) {

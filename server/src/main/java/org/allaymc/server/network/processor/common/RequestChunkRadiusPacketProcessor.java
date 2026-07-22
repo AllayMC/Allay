@@ -3,8 +3,8 @@ package org.allaymc.server.network.processor.common;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
-import org.cloudburstmc.protocol.bedrock.packet.ChunkRadiusUpdatedPacket;
 import org.cloudburstmc.protocol.bedrock.packet.RequestChunkRadiusPacket;
 
 /**
@@ -15,9 +15,10 @@ public class RequestChunkRadiusPacketProcessor extends PacketProcessor<RequestCh
     public void handleSync(Player player, RequestChunkRadiusPacket packet, long receiveTime) {
         player.getControlledEntity().setChunkLoadingRadius(
                 Math.min(Math.min(packet.getRadius(), packet.getMaxRadius()), AllayServer.getSettings().worldSettings().viewDistance()));
-        var p = new ChunkRadiusUpdatedPacket();
-        p.setRadius(player.getControlledEntity().getChunkLoadingRadius());
-        player.sendPacket(p);
+        var allayPlayer = (AllayPlayer) player;
+        allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeChunkRadiusUpdated(
+                player.getControlledEntity().getChunkLoadingRadius()
+        ));
     }
 
     @Override

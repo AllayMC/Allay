@@ -2,15 +2,17 @@ package org.allaymc.server.player;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.jpountz.xxhash.XXHash64;
 import net.jpountz.xxhash.XXHashFactory;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.network.protocol.PacketEncoder;
 import org.cloudburstmc.protocol.bedrock.packet.ClientCacheMissResponsePacket;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -151,12 +153,19 @@ public final class ChunkCache {
      * Processes acknowledgments (ACKs) by removing resolved blobs from the player's open transactions.
      * For negative acknowledgments (NAKs), builds a miss response packet containing the requested blob data.
      *
+     * @param encoder the current client protocol encoder
      * @param playerId the player's UUID
      * @param acks array of acknowledged blob hashes
      * @param naks array of missing blob hashes (client requests these)
      * @return miss response packet if any NAK blobs were found in cache, {@code null} otherwise
      */
-    public ClientCacheMissResponsePacket handleBlobStatus(UUID playerId, long[] acks, long[] naks) {
+    public ClientCacheMissResponsePacket handleBlobStatus(
+            PacketEncoder encoder,
+            UUID playerId,
+            long[] acks,
+            long[] naks
+    ) {
+        Objects.requireNonNull(encoder, "encoder");
         PlayerCacheState state = getPlayerState(playerId);
 
         synchronized (state) {
@@ -174,19 +183,16 @@ public final class ChunkCache {
             return null;
         }
 
-        var missResponse = new ClientCacheMissResponsePacket();
-        var missBlobs = missResponse.getBlobs();
-        boolean foundAny = false;
+        var missBlobs = new LinkedHashMap<Long, byte[]>();
 
         for (long nak : naks) {
             byte[] blobData = blobs.getIfPresent(nak);
             if (blobData != null) {
-                missBlobs.put(nak, Unpooled.wrappedBuffer(blobData));
-                foundAny = true;
+                missBlobs.put(nak, blobData);
             }
         }
 
-        return foundAny ? missResponse : null;
+        return missBlobs.isEmpty() ? null : encoder.encodeClientCacheMissResponse(missBlobs);
     }
 
     /**

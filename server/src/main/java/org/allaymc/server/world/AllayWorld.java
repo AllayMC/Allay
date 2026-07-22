@@ -29,6 +29,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.player.AllayPlayer;
+import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
 import org.allaymc.server.world.manager.AllayEntityManager;
@@ -141,8 +142,13 @@ public class AllayWorld implements World {
         this.gameLoop.wakeUp();
     }
 
-    public void addSyncPacketToQueue(Player player, BedrockPacket packet, long time) {
-        this.packetQueue.offer(new PacketQueueEntry(player, packet, time));
+    public void addSyncPacketToQueue(
+            Player player,
+            BedrockPacket packet,
+            long time,
+            PacketProcessor<BedrockPacket> processor
+    ) {
+        this.packetQueue.offer(new PacketQueueEntry(player, packet, time, processor));
         this.gameLoop.wakeUp();
     }
 
@@ -163,7 +169,7 @@ public class AllayWorld implements World {
                     continue;
                 }
 
-                ((AllayPlayer) entry.player).handlePacketSync(entry.packet(), entry.time());
+                entry.processor().handleSync(entry.player(), entry.packet(), entry.time());
                 count++;
             }
         } catch (Throwable throwable) {
@@ -460,6 +466,11 @@ public class AllayWorld implements World {
         getPlayers().forEach(player -> player.viewWeather(this.weather));
     }
 
-    protected record PacketQueueEntry(Player player, BedrockPacket packet, long time) {
+    protected record PacketQueueEntry(
+            Player player,
+            BedrockPacket packet,
+            long time,
+            PacketProcessor<BedrockPacket> processor
+    ) {
     }
 }

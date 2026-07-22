@@ -5,25 +5,19 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.action.BlockAction;
-import org.allaymc.api.block.action.ContinueBreakAction;
-import org.allaymc.api.block.action.SimpleBlockAction;
-import org.allaymc.api.block.action.StartBreakAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
@@ -45,12 +39,7 @@ import org.allaymc.api.eventbus.event.server.PlayerLoginEvent;
 import org.allaymc.api.eventbus.event.server.PlayerSpawnEvent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.enchantment.EnchantOption;
-import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.message.I18n;
@@ -80,10 +69,8 @@ import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.dimension.DimensionType;
-import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
@@ -94,46 +81,35 @@ import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.AbstractPlayerContainer;
 import org.allaymc.server.container.impl.FakeContainerImpl;
-import org.allaymc.server.container.impl.UnopenedContainerId;
-import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.ddui.AllayDDUIScreenSession;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
 import org.allaymc.server.network.AllayNetworkInterface;
-import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.NetworkHelper;
-import org.allaymc.server.network.multiversion.MultiVersion;
-import org.allaymc.server.network.multiversion.MultiVersionHelper;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
-import org.allaymc.server.utils.GitProperties;
+import org.allaymc.server.network.processor.PacketProcessorRegistry;
+import org.allaymc.server.network.processor.login.RequestNetworkSettingsPacketProcessor;
+import org.allaymc.server.network.protocol.Protocol;
+import org.allaymc.server.network.protocol.ProtocolFeature;
+import org.allaymc.server.network.protocol.ProtocolSession;
 import org.allaymc.server.utils.JSONUtils;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
-import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.allaymc.server.world.chunk.ChunkEncoder;
-import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.codec.v944.Bedrock_v944;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeAction;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
-import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
-import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.cloudburstmc.protocol.bedrock.util.OptionalBoolean;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -151,7 +127,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNBTUtils.*;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
-import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
 
 /**
  * @author daoge_cmd
@@ -159,7 +134,9 @@ import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
 @Slf4j
 public class AllayPlayer implements Player {
 
-    protected final PacketProcessorHolder packetProcessorHolder;
+    protected final PacketProcessorHolder bootstrapProcessorHolder;
+    private final Object protocolLifecycleLock = new Object();
+    protected volatile ProtocolSession protocolSession;
     protected final AtomicInteger fullyJoinChunkThreshold;
     @Getter
     protected final BedrockServerSession session;
@@ -236,8 +213,7 @@ public class AllayPlayer implements Player {
         this.session = session;
         this.sourceInterface = sourceInterface;
         this.session.setPacketHandler(new AllayPacketHandler());
-        this.packetProcessorHolder = new PacketProcessorHolder();
-        this.packetProcessorHolder.setClientState(ClientState.CONNECTED);
+        this.bootstrapProcessorHolder = createBootstrapProcessorHolder();
         this.fullyJoinChunkThreshold = new AtomicInteger(AllayServer.getSettings().worldSettings().fullyJoinChunkThreshold());
         this.speed = DEFAULT_SPEED;
         this.flySpeed = DEFAULT_FLY_SPEED;
@@ -265,86 +241,17 @@ public class AllayPlayer implements Player {
         this.abilities = EnumSet.noneOf(PlayerAbility.class);
     }
 
-    protected static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk, ChunkCache cache, UUID playerId, int cacheGen) {
-        var dimensionType = chunk.getDimensionType();
-        var packet = new LevelChunkPacket();
-        packet.setDimension(dimensionType.getId());
-        packet.setChunkX(chunk.getX());
-        packet.setChunkZ(chunk.getZ());
-        packet.setRequestSubChunks(true);
-        // NOTICE: Sub chunk limit is bigger than zero
-        packet.setSubChunkLimit(findHighestNonAirSectionY(chunk) - dimensionType.minSectionY());
-
-        if (cache != null) {
-            // Encode biomes blob
-            byte[] biomesBlob = ChunkEncoder.encodeBiomesBlob(chunk);
-            long[] hashes = cache.tryStoreBlobsAndOpenTransaction(playerId, cacheGen, biomesBlob);
-
-            if (hashes != null) {
-                // Cached path
-                packet.setCachingEnabled(true);
-                packet.getBlobIds().add(hashes[0]);
-                packet.setData(Unpooled.wrappedBuffer(new byte[]{0}));
-                return packet;
-            }
-        }
-
-        // Non-cached path
-        packet.setCachingEnabled(false);
-        packet.setData(ChunkEncoder.writeToNetworkBiomeOnly(chunk));
-        return packet;
-    }
-
-    private static int findHighestNonAirSectionY(AllayUnsafeChunk chunk) {
-        var dimensionType = chunk.getDimensionType();
-        for (int highest = dimensionType.maxSectionY(); highest > dimensionType.minSectionY(); highest--) {
-            if (!chunk.getSection(highest).isAirSection()) {
-                return highest;
-            }
-        }
-
-        return dimensionType.minSectionY();
-    }
-
-    protected static LevelChunkPacket createFullLevelChunkPacketChunk(AllayUnsafeChunk chunk, ChunkCache cache, UUID playerId, int cacheGen) {
-        var dimensionType = chunk.getDimensionType();
-        var packet = new LevelChunkPacket();
-        packet.setDimension(dimensionType.getId());
-        packet.setChunkX(chunk.getX());
-        packet.setChunkZ(chunk.getZ());
-        packet.setRequestSubChunks(false);
-        packet.setSubChunksLength(dimensionType.chunkSectionCount());
-
-        if (cache != null) {
-            // Encode all section blobs + biomes blob
-            int sectionCount = dimensionType.chunkSectionCount();
-            byte[][] allBlobs = new byte[sectionCount + 1][];
-            for (int i = 0; i < sectionCount; i++) {
-                allBlobs[i] = ChunkEncoder.encodeSectionBlob(chunk.getSection(dimensionType.minSectionY() + i));
-            }
-            allBlobs[sectionCount] = ChunkEncoder.encodeBiomesBlob(chunk);
-
-            long[] hashes = cache.tryStoreBlobsAndOpenTransaction(playerId, cacheGen, allBlobs);
-
-            if (hashes != null) {
-                // Cached path
-                packet.setCachingEnabled(true);
-                for (long hash : hashes) {
-                    packet.getBlobIds().add(hash);
-                }
-                packet.setData(ChunkEncoder.writeCachedChunkData(chunk));
-                return packet;
-            }
-        }
-
-        // Non-cached path
-        packet.setCachingEnabled(false);
-        packet.setData(ChunkEncoder.writeToNetwork(chunk));
-        return packet;
-    }
-
-    protected static int toNetworkBreakTime(double breakTime) {
-        return breakTime == 0 ? 65535 : (int) (65535 / (breakTime * 20));
+    private static PacketProcessorHolder createBootstrapProcessorHolder() {
+        var registry = new PacketProcessorRegistry();
+        registry.register(
+                ClientState.CONNECTED,
+                BedrockPacketType.REQUEST_NETWORK_SETTINGS,
+                RequestNetworkSettingsPacketProcessor::new
+        );
+        registry.freeze();
+        var holder = new PacketProcessorHolder(registry);
+        holder.setClientState(ClientState.CONNECTED);
+        return holder;
     }
 
     public void tick(long currentTick) {
@@ -368,12 +275,12 @@ public class AllayPlayer implements Player {
     }
 
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
-        var processor = packetProcessorHolder.getProcessor(packet);
-        if (processor == null) {
-            log.debug("Received a sync packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
+        var selectedSession = protocolSession;
+        if (selectedSession == null) {
+            log.debug("Ignoring sync packet before protocol negotiation: {}", packet);
             return;
         }
-        processor.handleSync(this, packet, receiveTime);
+        selectedSession.handleSync(this, packet, receiveTime);
     }
 
     protected byte assignContainerId() {
@@ -431,463 +338,82 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewEntity(Entity entity) {
-        var l = entity.getLocation();
-        var position = Vector3f.from(l.x(), l.y() + NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), l.z());
-        var motion = switch (entity) {
-            case EntityPhysicsComponent physicsComponent -> {
-                var m = physicsComponent.getMotion();
-                yield Vector3f.from(m.x(), m.y(), m.z());
-            }
-            default -> Vector3f.ZERO;
-        };
-        BedrockPacket packet = switch (entity) {
-            case EntityPlayer player -> {
-                var p = new AddPlayerPacket();
-                p.setRuntimeEntityId(player.getRuntimeId());
-                p.setUniqueEntityId(player.getUniqueId().getLeastSignificantBits());
-                p.setUuid(player.getUniqueId());
-                p.setUsername(player.getNameTag());
-                p.setPlatformChatId("");
-                p.setDeviceId("");
-                // NOTICE: Player network offset is not used in AddPlayerPacket
-                p.setPosition(Vector3f.from(l.x(), l.y(), l.z()));
-                p.setMotion(motion);
-                p.setRotation(Vector3f.from(l.pitch(), l.yaw(), getHeadYaw(entity, l.yaw())));
-                p.setGameType(toNetwork(player.getGameMode()));
-                p.getMetadata().putAll(parseMetadata(entity));
-                p.setHand(toNetwork(player.getContainer(ContainerTypes.INVENTORY).getItemInHand()));
-                var properties = NetworkHelper.toNetworkProperties(entity);
-                p.getProperties().intProperties().addAll(properties.intProperties());
-                p.getProperties().floatProperties().addAll(properties.floatProperties());
-                yield p;
-            }
-            case EntityItem item -> {
-                var p = new AddItemEntityPacket();
-                p.setRuntimeEntityId(item.getRuntimeId());
-                p.setUniqueEntityId(item.getUniqueId().getLeastSignificantBits());
-                p.setItemInHand(toNetwork(Objects.requireNonNullElse(item.getItemStack(), ItemAirStack.AIR_STACK)));
-                p.setPosition(position);
-                p.setMotion(motion);
-                p.getMetadata().putAll(parseMetadata(entity));
-                yield p;
-            }
-            case EntityPainting painting -> {
-                var p = new AddPaintingPacket();
-                p.setRuntimeEntityId(painting.getRuntimeId());
-                p.setUniqueEntityId(painting.getUniqueId().getLeastSignificantBits());
-                p.setMotive(painting.getPaintingType().getTitle());
-                // NOTICE: The position being sent in AddPaintingPacket is the center of the painting's
-                // aabb. It is not the position of the painting.
-                var aabb = painting.getOffsetAABB();
-                p.setPosition(Vector3f.from(
-                        (aabb.minX() + aabb.maxX()) / 2,
-                        (aabb.minY() + aabb.maxY()) / 2,
-                        (aabb.minZ() + aabb.maxZ()) / 2
-                ));
-                p.setDirection(painting.getHorizontalFace().getHorizontalIndex());
-                yield p;
-            }
-            default -> {
-                var p = new AddEntityPacket();
-                p.setRuntimeEntityId(entity.getRuntimeId());
-                p.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
-                p.setIdentifier(entity.getEntityType().getIdentifier().toString());
-                p.setPosition(position);
-                p.setMotion(motion);
-                p.setRotation(Vector2f.from(l.pitch(), l.yaw()));
-                p.setHeadRotation((float) getHeadYaw(entity, l.yaw()));
-                p.setBodyRotation((float) l.yaw());
-                p.getMetadata().putAll(parseMetadata(entity));
-                var properties = NetworkHelper.toNetworkProperties(entity);
-                p.getProperties().intProperties().addAll(properties.intProperties());
-                p.getProperties().floatProperties().addAll(properties.floatProperties());
-                yield p;
-            }
-        };
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntitySpawn(entity));
         viewPrimitiveShapes(entity.getAttachedPrimitiveShapes());
     }
 
     @Override
     public void removeEntity(Entity entity) {
         removePrimitiveShapes(entity.getAttachedPrimitiveShapes());
-        var packet = new RemoveEntityPacket();
-        packet.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityRemove(entity));
     }
 
     @Override
     public void viewPlayerGameMode(EntityPlayer player) {
-        var gameMode = player.getGameMode();
-        if (this.controlledEntity == player) {
-            var packet = new SetPlayerGameTypePacket();
-            packet.setGamemode(toNetwork(player.getGameMode()).ordinal());
-            sendPacket(packet);
-
+        boolean self = this.controlledEntity == player;
+        sendPacket(getProtocol().getEncoder().encodePlayerGameMode(player, self));
+        if (self) {
             sendAdventureSettings();
-        } else {
-            var packet = new UpdatePlayerGameTypePacket();
-            packet.setGameType(toNetwork(player.getGameMode()));
-            packet.setEntityId(player.getRuntimeId());
-            sendPacket(packet);
         }
     }
 
     @Override
     public void viewEntityLocation(Entity entity, Location3dc newLocation, boolean teleporting) {
-        BedrockPacket packet;
-        if (this.controlledEntity == entity) {
-            // If the entity is actually the player himself, use MovePlayerPacket instead since
-            // the client has some bugs in handling MoveEntityAbsolutePacket in that case
-            packet = createMovePlayerPacket(entity, newLocation, teleporting);
-        } else {
-            packet = createAbsoluteMovePacket(entity, newLocation, teleporting);
-        }
-        sendPacket(packet);
-    }
-
-    protected BedrockPacket createMovePlayerPacket(Entity entity, Location3dc newLocation, boolean teleporting) {
-        var packet = new MovePlayerPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), newLocation.z()));
-        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
-        packet.setTeleportationCause(MovePlayerPacket.TeleportationCause.UNKNOWN);
-        if (teleporting) {
-            packet.setMode(MovePlayerPacket.Mode.TELEPORT);
-        }
-        return packet;
-    }
-
-    protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3dc newLocation, boolean teleporting) {
-        var packet = new MoveEntityAbsolutePacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), newLocation.z()));
-        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), getHeadYaw(entity, newLocation.yaw())));
-        packet.setTeleported(teleporting);
-        if (entity instanceof EntityPhysicsComponent physicsComponent) {
-            packet.setOnGround(physicsComponent.isOnGround());
-        }
-
-        return packet;
-    }
-
-    /**
-     * Returns the entity's head yaw if it has the {@link EntityHeadYawComponent},
-     * otherwise falls back to the body yaw from the location.
-     */
-    protected static double getHeadYaw(Entity entity, double yaw) {
-        return entity instanceof EntityHeadYawComponent headYawComponent ? headYawComponent.getHeadYaw() : yaw;
+        sendPacket(getProtocol().getEncoder().encodeEntityLocation(
+                entity,
+                newLocation,
+                teleporting,
+                this.controlledEntity == entity
+        ));
     }
 
     @Override
     public <T extends Entity & EntityPhysicsComponent> void viewEntityMotion(T entity, Vector3dc motion) {
-        var packet = new SetEntityMotionPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityMotion(entity, motion));
     }
 
     @Override
     public void viewEntityState(Entity entity) {
-        var packet = new SetEntityDataPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setMetadata(parseMetadata(entity));
-        packet.setProperties(NetworkHelper.toNetworkProperties(entity));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityState(entity));
     }
 
     protected EntityDataMap parseMetadata(Entity entity) {
-        var map = new EntityDataMap();
-        addGenericMetadata(entity, map);
-        addComponentSpecificMetadata(entity, map);
-        addTypeSpecificMetadata(entity, map);
-        return map;
-    }
-
-    /**
-     * Adds generic metadata for the specified {@code entity} to the provided {@code map}.
-     */
-    @MultiVersion(version = "1.21.101", details = "1.21.101 client crashes if HAS_NPC is set to true for EntityItem. Fixed in newer client versions")
-    protected void addGenericMetadata(Entity entity, EntityDataMap map) {
-        map.setFlag(EntityFlag.HAS_COLLISION, entity.hasEntityCollision());
-        map.setFlag(EntityFlag.CAN_CLIMB, true);
-        map.setFlag(EntityFlag.INVISIBLE, entity.isInvisible());
-        map.setFlag(EntityFlag.NO_AI, entity.isImmobile());
-        var aabb = entity.getAABB();
-        var nbt = NbtMap.builder()
-                .putFloat("MinX", 0)
-                .putFloat("MinY", 0)
-                .putFloat("MinZ", 0)
-                .putFloat("MaxX", (float) (aabb.maxX() - aabb.minX()))
-                .putFloat("MaxY", (float) (aabb.maxY() - aabb.minY()))
-                .putFloat("MaxZ", (float) (aabb.maxZ() - aabb.minZ()))
-                .putFloat("PivotX", 0)
-                .putFloat("PivotY", 0)
-                .putFloat("PivotZ", 0)
-                .build();
-        map.put(EntityDataTypes.HITBOX, nbt);
-        map.put(EntityDataTypes.COLLISION_BOX, Vector3f.from(
-                (float) (aabb.maxX() - aabb.minX()),
-                (float) (aabb.maxY() - aabb.minY()),
-                (float) (aabb.maxZ() - aabb.minZ())
-        ));
-        // WIDTH and HEIGHT are required for the client to update the collision box correctly
-        // COLLISION_BOX alone does not affect actual collisions according to protocol documentation
-        map.put(EntityDataTypes.WIDTH, (float) (aabb.maxX() - aabb.minX()));
-        map.put(EntityDataTypes.HEIGHT, (float) (aabb.maxY() - aabb.minY()));
-        map.put(EntityDataTypes.SCALE, (float) entity.getScale());
-        // Minecraft 1.21.101 client crashes if HAS_NPC is set to true for EntityItem.
-        // Other entity types are not affected. The issue is fixed in newer client versions.
-        map.put(EntityDataTypes.HAS_NPC, !(entity instanceof EntityItem));
-        if (entity.hasNameTag()) {
-            map.setFlag(EntityFlag.CAN_SHOW_NAME, true);
-            map.put(EntityDataTypes.NAME, entity.getNameTag());
-            if (entity.isNameTagAlwaysShow()) {
-                map.setFlag(EntityFlag.ALWAYS_SHOW_NAME, true);
-                map.put(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
-            }
-        }
-    }
-
-    /**
-     * Adds component-specific metadata to the {@code map} for the given {@code entity}. This method
-     * applies metadata based on its specific components.
-     */
-    protected void addComponentSpecificMetadata(Entity entity, EntityDataMap map) {
-        if (entity instanceof EntityPhysicsComponent physicsComponent) {
-            map.setFlag(EntityFlag.HAS_GRAVITY, physicsComponent.hasGravity());
-        }
-        if (entity instanceof EntityLivingComponent livingComponent) {
-            map.setFlag(EntityFlag.ON_FIRE, livingComponent.isOnFire());
-            map.setFlag(EntityFlag.BREATHING, livingComponent.canBreathe());
-            map.put(EntityDataTypes.AIR_SUPPLY, (short) livingComponent.getAirSupplyTicks());
-            map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) livingComponent.getAirSupplyMaxTicks());
-            map.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
-            map.put(EntityDataTypes.FREEZING_EFFECT_STRENGTH, livingComponent.getFreezeTicks() / (float) EntityLivingComponent.MAX_FREEZE_TICKS);
-        }
-        if (entity instanceof EntityPotionComponent potionComponent) {
-            var potionType = potionComponent.getPotionType();
-            if (potionType != null) {
-                var data = potionType.ordinal() + 1;
-                map.put(EntityDataTypes.AUX_VALUE_DATA, (short) data);
-                if (data > 4) {
-                    map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) (data + 1));
-                }
-            }
-        }
-        if (entity instanceof EntitySleepableComponent sleepableComponent && sleepableComponent.isSleeping()) {
-            var bedPos = sleepableComponent.getSleepingPos();
-            map.setFlag(EntityFlag.SLEEPING, true);
-            map.put(EntityDataTypes.BED_POSITION, Vector3i.from(bedPos.x(), bedPos.y(), bedPos.z()));
-            map.put(EntityDataTypes.PLAYER_FLAGS, (byte) 2);
-        }
-        if (entity instanceof EntityBabyComponent babyComponent) {
-            map.setFlag(EntityFlag.BABY, babyComponent.isBaby());
-            if (babyComponent.isBaby()) {
-                map.put(EntityDataTypes.SCALE, 0.5f);
-            }
-        }
-        if (entity instanceof EntityDyeableComponent dyeableComponent) {
-            map.put(EntityDataTypes.COLOR, (byte) dyeableComponent.getColor().ordinal());
-        }
-    }
-
-    /**
-     * Adds type-specific metadata for a given entity to the provided {@code EntityDataMap}. Based on
-     * the type of the entity, this method updates the metadata to reflect the entity's specific state,
-     * attributes, and flags.
-     */
-    protected void addTypeSpecificMetadata(Entity entity, EntityDataMap map) {
-        switch (entity) {
-            case EntityTnt tnt -> {
-                map.setFlag(EntityFlag.IGNITED, true);
-                map.put(EntityDataTypes.FUSE_TIME, tnt.getFuseTime());
-            }
-            case EntityPlayer player -> {
-                map.setFlag(EntityFlag.SPRINTING, player.isSprinting());
-                map.setFlag(EntityFlag.SNEAKING, player.isSneaking());
-                map.setFlag(EntityFlag.BLOCKING, player.isBlocking());
-                map.setFlag(EntityFlag.SWIMMING, player.isSwimming());
-                map.setFlag(EntityFlag.GLIDING, player.isGliding());
-                map.setFlag(EntityFlag.CRAWLING, player.isCrawling());
-                map.setFlag(EntityFlag.DAMAGE_NEARBY_MOBS, player.isSpinAttacking());
-                map.setFlag(EntityFlag.USING_ITEM, player.isUsingItemInAir());
-                if (player.hasScoreTag()) {
-                    map.put(EntityDataTypes.SCORE, player.getScoreTag());
-                }
-            }
-            case EntityFallingBlock fallingBlock -> {
-                map.setFlag(EntityFlag.FIRE_IMMUNE, true);
-                map.put(EntityDataTypes.VARIANT, fallingBlock.getBlockState().blockStateHash());
-            }
-            case EntityXpOrb xpOrb -> {
-                map.put(EntityDataTypes.VALUE, xpOrb.getExperienceValue());
-            }
-            case EntityArrow arrow -> {
-                map.setFlag(EntityFlag.CRITICAL, arrow.isCritical());
-            }
-            case EntityThrownTrident trident -> {
-                map.setFlag(EntityFlag.RETURN_TRIDENT, trident.isReturning());
-                if (trident.isReturning()) {
-                    var shooter = trident.getShooter();
-                    map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getUniqueId().getLeastSignificantBits() : -1L);
-                } else {
-                    map.put(EntityDataTypes.OWNER_EID, -1L);
-                }
-            }
-            case EntityFireworksRocket firework -> {
-                var nbt = NbtMap.builder()
-                        .putCompound("Fireworks", NbtMap.builder()
-                                .putList("Explosions", NbtType.COMPOUND, firework.getExplosions().stream().map(FireworkExplosion::saveNBT).toList())
-                                .putByte("Flight", (byte) (firework.getExistenceTicks() / 20))
-                                .build()
-                        )
-                        .build();
-                map.put(EntityDataTypes.DISPLAY_FIREWORK, nbt);
-
-                var attachedPlayer = firework.getAttachedPlayer();
-                if (attachedPlayer != null) {
-                    map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) attachedPlayer.getRuntimeId());
-                }
-            }
-            case EntityEnderCrystal enderCrystal -> {
-                map.setFlag(EntityFlag.SHOW_BOTTOM, enderCrystal.isBaseVisible());
-            }
-            case EntityAreaEffectCloud cloud -> {
-                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_RADIUS, cloud.getRadius());
-                // Set these to invalid values to disable client-sided shrinking of the
-                // cloud since server controls the shrinking
-                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_DURATION, Integer.MAX_VALUE);
-                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP, Float.MIN_VALUE);
-                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_CHANGE_RATE, Float.MIN_VALUE);
-                map.put(EntityDataTypes.EFFECT_COLOR, cloud.getPotionType().getColor().getRGB());
-                map.put(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
-            }
-            case EntityLingeringPotion lingeringPotion -> {
-                map.setFlag(EntityFlag.LINGERING, true);
-            }
-            case EntityFishingHook fishingHook -> {
-                var shooter = fishingHook.getShooter();
-                map.put(EntityDataTypes.OWNER_EID, shooter != null ? shooter.getUniqueId().getLeastSignificantBits() : -1L);
-                var hookedEntity = fishingHook.getHookedEntity();
-                map.put(EntityDataTypes.TARGET_EID, hookedEntity != null ? hookedEntity.getUniqueId().getLeastSignificantBits() : -1L);
-            }
-            case EntityArmorStand armorStand -> {
-                map.put(EntityDataTypes.ARMOR_STAND_POSE_INDEX, armorStand.getPoseIndex());
-                if (armorStand.getLastDamage() != null) {
-                    var interval = armorStand.getTick() - armorStand.getLastDamageTime();
-                    if (interval <= 5) {
-                        map.put(EntityDataTypes.HURT_TICKS, (int) interval);
-                    }
-                }
-            }
-            case EntitySheep sheep -> {
-                map.setFlag(EntityFlag.SHEARED, sheep.isSheared());
-            }
-            default -> {
-            }
-        }
-    }
-
-    protected long encodeVisibleEffects(Collection<EffectInstance> effects) {
-        long visibleEffects = 0;
-        for (var effect : effects) {
-            if (!effect.isVisible()) {
-                continue;
-            }
-
-            visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
-        }
-        return visibleEffects;
+        return getProtocol().getEncoder().encodeEntityMetadata(entity);
     }
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityHand(T entity) {
-        var packet = new MobEquipmentPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
-
-        var handContainer = entity.getContainer(ContainerTypes.ENTITY_HAND);
-        if (handContainer != null) {
-            packet.setItem(toNetwork(handContainer.getItemInHand()));
-            packet.setInventorySlot(0);
-            packet.setHotbarSlot(0);
-        } else {
-            var container = entity.getContainer(ContainerTypes.INVENTORY);
-            var handSlot = container.getHandSlot();
-            packet.setItem(toNetwork(container.getItemInHand()));
-            packet.setInventorySlot(handSlot);
-            packet.setHotbarSlot(handSlot);
-        }
-
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityHand(entity));
     }
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityOffhand(T entity) {
-        var container = entity.getContainer(ContainerTypes.OFFHAND);
-        var packet = new MobEquipmentPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setContainerId(UnopenedContainerId.OFFHAND);
-        packet.setInventorySlot(1);
-        packet.setHotbarSlot(1);
-        packet.setItem(toNetwork(container.getOffhand()));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityOffhand(entity));
     }
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityArmors(T entity) {
-        var container = entity.getContainer(ContainerTypes.ARMOR);
-        var packet = new MobArmorEquipmentPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setBody(toNetwork(ItemAirStack.AIR_STACK));
-        packet.setHelmet(toNetwork(container.getHelmet()));
-        packet.setChestplate(toNetwork(container.getChestplate()));
-        packet.setLeggings(toNetwork(container.getLeggings()));
-        packet.setBoots(toNetwork(container.getBoots()));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityArmor(entity));
     }
 
     @Override
     public void viewEntityAnimation(Entity entity, EntityAnimation animation) {
-        var packet = new AnimateEntityPacket();
-        packet.setAnimation(animation.name());
-        packet.setNextState(animation.nextState());
-        packet.setStopExpression(animation.stopCondition());
-        packet.setController(animation.controller());
-        packet.getRuntimeEntityIds().add(entity.getRuntimeId());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityAnimation(entity, animation));
     }
 
     @Override
     public void viewSleepingIndicator(int sleepingCount, int totalCount) {
-        var nbt = NbtMap.builder()
-                .putInt("ableToSleep", totalCount)
-                .putInt("overworldPlayerCount", totalCount)
-                .putInt("sleepingPlayerCount", sleepingCount)
-                .build();
-        var packet = new LevelEventGenericPacket();
-        packet.setType(LevelEvent.SLEEPING_PLAYERS);
-        packet.setTag(nbt);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeSleepingIndicator(sleepingCount, totalCount));
     }
 
     @Override
     public void viewCommandBlockEditor(Vector3ic pos) {
-        var packet = new ContainerOpenPacket();
-        packet.setId((byte) -1);
-        packet.setType(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.COMMAND_BLOCK);
-        packet.setBlockPosition(toNetwork(pos));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeCommandBlockEditor(pos));
     }
 
     @Override
     public void viewEnchantOptions(List<Pair<Integer, EnchantOption>> enchantOptions) {
-        var packet = new PlayerEnchantOptionsPacket();
-        for (var option : enchantOptions) {
-            packet.getOptions().add(NetworkHelper.toNetwork(option));
-        }
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEnchantOptions(enchantOptions));
     }
 
     @Override
@@ -897,251 +423,33 @@ public class AllayPlayer implements Player {
             return;
         }
 
-        if (player.isActualPlayer()) {
-            viewActualPlayerSkin(player);
-        } else {
-            viewFakePlayerSkin(player);
-        }
-
-        // For NetEase player, we should send an extra ConfirmSkinPacket; otherwise the skin won't be displayed
-        if (this.netEasePlayer) {
-            var entry = new ConfirmSkinPacket.SkinEntry();
-            entry.setValid(true);
-            entry.setUuid(player.getUniqueId());
-            entry.setGeoStr(skin.skinGeometry());
-            entry.setSkinBytes(skin.skinData().data());
-            entry.setUidStr(String.valueOf(getNetEaseUid(player)));
-
-            var packet = new ConfirmSkinPacket();
-            packet.setEntries(List.of(entry));
-            sendPacket(packet);
-        }
-    }
-
-    // Return the player's NetEase uid if it is an actual NetEase player, or generate an uid from the player entity's
-    // unique id if the player is a fake player or a normal bedrock player
-    protected long getNetEaseUid(EntityPlayer player) {
-        if (player.isActualPlayer() && player.getController().isNetEasePlayer()) {
-            return player.getController().getLoginData().getNetEaseData().uid();
-        } else {
-            // For fake or normal bedrock player, let's generate the NetEase uid from the uuid
-            var uid = player.getUniqueId().toString().replace("-", "").hashCode();
-            if (uid < 0) {
-                // The NetEase uid should always be positive, and if the hash code is negative, let's simply invert it
-                uid = -uid;
-            }
-
-            return uid;
-        }
-    }
-
-    // Send the skin of an actual player to the client. Actual player is already in the player list,
-    // so we can send player skin packet directly
-    protected void viewActualPlayerSkin(EntityPlayer player) {
-        var trustSkin = AllayServer.getSettings().resourcePackSettings().trustAllSkins();
-        var skin = SkinConvertor.toSerializedSkin(player.getSkin());
-
-        var packet = new PlayerSkinPacket();
-        packet.setUuid(player.getUniqueId());
-        packet.setSkin(skin);
-        packet.setNewSkinName(skin.getSkinId());
-        // It seems that the old skin name is unused
-        packet.setOldSkinName("");
-        packet.setTrustedSkin(trustSkin);
-        sendPacket(packet);
-    }
-
-    // Send the skin of a fake player to the client, since the fake player is not in the player list,
-    // we should send a player list packet to the client first, so that the client won't ignore the
-    // next player skin packet.
-    // the fake player will be removed from the player list immediately client-side after we sent
-    // the skin
-    protected void viewFakePlayerSkin(EntityPlayer player) {
-        var trustSkin = AllayServer.getSettings().resourcePackSettings().trustAllSkins();
-        var skin = SkinConvertor.toSerializedSkin(player.getSkin());
-
-        var entry = new PlayerListPacket.Entry(player.getUniqueId());
-        entry.setEntityId(player.getUniqueId().getLeastSignificantBits());
-        entry.setName(player.getUniqueId().toString());
-        entry.setXuid("");
-        entry.setPlatformChatId("");
-        entry.setSkin(skin);
-        entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
-        entry.setColor(Color.WHITE);
-
-        var packet1 = new PlayerListPacket();
-        packet1.setAction(PlayerListPacket.Action.ADD);
-        packet1.getEntries().add(entry);
-        sendPacket(packet1);
-
-        var packet2 = new PlayerSkinPacket();
-        packet2.setUuid(player.getUniqueId());
-        packet2.setSkin(skin);
-        packet2.setNewSkinName(skin.getSkinId());
-        // It seems that the old skin name is unused
-        packet2.setOldSkinName("");
-        packet2.setTrustedSkin(trustSkin);
-        sendPacket(packet2);
-
-        var packet3 = new PlayerListPacket();
-        packet3.setAction(PlayerListPacket.Action.REMOVE);
-        packet3.getEntries().add(new PlayerListPacket.Entry(player.getUniqueId()));
-        sendPacket(packet3);
+        boolean trustSkin = AllayServer.getSettings().resourcePackSettings().trustAllSkins();
+        sendPackets(getProtocol().getEncoder().encodePlayerSkin(player, trustSkin));
+        sendPackets(getProtocol().getEncoder().encodeSkinConfirmation(player, skin));
     }
 
     @Override
     public void viewEntityAction(Entity entity, EntityAction action) {
-        switch (action) {
-            case SimpleEntityAction.SWING_ARM -> {
-                if (entity instanceof EntityPlayer player) {
-                    if (this.controlledEntity == player) {
-                        // Do not send it to the player itself
-                        return;
-                    }
-
-                    var packet = new AnimatePacket();
-                    packet.setAction(AnimatePacket.Action.SWING_ARM);
-                    packet.setRuntimeEntityId(entity.getRuntimeId());
-                    sendPacket(packet);
-
-                } else {
-                    var packet = new EntityEventPacket();
-                    packet.setType(EntityEventType.ATTACK_START);
-                    packet.setRuntimeEntityId(entity.getRuntimeId());
-                    sendPacket(packet);
-                }
-            }
-            case SimpleEntityAction.HURT -> {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.HURT);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            case SimpleEntityAction.DEATH -> {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.DEATH);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            case SimpleEntityAction.EAT -> {
-                if (entity instanceof ContainerHolder holder && holder.hasContainer(ContainerTypes.INVENTORY)) {
-                    var item = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand();
-                    var packet = new EntityEventPacket();
-                    packet.setType(EntityEventType.EATING_ITEM);
-                    packet.setRuntimeEntityId(entity.getRuntimeId());
-                    packet.setData((item.getItemType().getRuntimeId() << 16) | item.getMeta());
-                    sendPacket(packet);
-                }
-            }
-            case SimpleEntityAction.FIREWORK_EXPLODE -> {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.FIREWORK_EXPLODE);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            case SimpleEntityAction.TOTEM_USE -> {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.CONSUME_TOTEM);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            case PickedUpAction(Entity picker) -> {
-                var packet = new TakeItemEntityPacket();
-                packet.setRuntimeEntityId(picker.getRuntimeId());
-                packet.setItemRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            case ArrowShakeAction(int times) -> {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.ARROW_SHAKE);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                packet.setData(times);
-                sendPacket(packet);
-            }
-            case CriticalHit(int count) -> {
-                var packet = new AnimatePacket();
-                packet.setAction(AnimatePacket.Action.CRITICAL_HIT);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                packet.setData(count);
-                sendPacket(packet);
-            }
-            case EnchantedHit(int count) -> {
-                var packet = new AnimatePacket();
-                packet.setAction(AnimatePacket.Action.MAGIC_CRITICAL_HIT);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                packet.setData(count);
-                sendPacket(packet);
-            }
-            case SimpleEntityAction.FISHING_HOOK_BITE -> {
-                // Send all three fishing hook events for the bite animation
-                var bubblePacket = new EntityEventPacket();
-                bubblePacket.setType(EntityEventType.FISH_HOOK_BUBBLE);
-                bubblePacket.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(bubblePacket);
-
-                var timePacket = new EntityEventPacket();
-                timePacket.setType(EntityEventType.FISH_HOOK_TIME);
-                timePacket.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(timePacket);
-
-                var teasePacket = new EntityEventPacket();
-                teasePacket.setType(EntityEventType.FISH_HOOK_TEASE);
-                teasePacket.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(teasePacket);
-            }
-            case SimpleEntityAction.WAKE_UP -> {
-                var packet = new AnimatePacket();
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                packet.setAction(AnimatePacket.Action.WAKE_UP);
-                sendPacket(packet);
-            }
-            case SimpleEntityAction.IN_LOVE -> {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.LOVE_PARTICLES);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            case SimpleEntityAction.EAT_GRASS -> {
-                var packet = new EntityEventPacket();
-                packet.setType(EntityEventType.EAT_GRASS);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
-        }
+        sendPackets(getProtocol().getEncoder().encodeEntityAction(
+                entity,
+                action,
+                this.controlledEntity == entity
+        ));
     }
 
     @Override
     public void viewPlayerEmote(EntityPlayer player, UUID emoteId, boolean silence) {
-        var packet = new EmotePacket();
-        packet.setRuntimeEntityId(player.getRuntimeId());
-        packet.setEmoteId(emoteId.toString());
-        packet.setPlatformId("");
-        packet.setXuid("");
-        packet.getFlags().add(EmoteFlag.SERVER_SIDE);
-        if (silence) {
-            packet.getFlags().add(EmoteFlag.MUTE_EMOTE_CHAT);
-        }
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodePlayerEmote(player, emoteId, silence));
     }
 
     @Override
     public void viewEntityEffectChange(Entity entity, EffectInstance newEffect, EffectInstance oldEffect) {
-        var packet = new MobEffectPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        if (newEffect == null) {
-            Preconditions.checkNotNull(oldEffect);
-            // Effect is removed
-            packet.setEffectId(oldEffect.getType().getId());
-            packet.setEvent(MobEffectPacket.Event.REMOVE);
-        } else {
-            packet.setEffectId(newEffect.getType().getId());
-            packet.setAmplifier(newEffect.getAmplifier());
-            packet.setParticles(newEffect.isVisible());
-            packet.setDuration(newEffect.getDuration());
-            packet.setEvent(oldEffect == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
-        }
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeMobEffect(
+                entity,
+                newEffect,
+                oldEffect,
+                Server.getInstance().getTick()
+        ));
     }
 
     @Override
@@ -1158,11 +466,7 @@ public class AllayPlayer implements Player {
     }
 
     protected NetworkChunkPublisherUpdatePacket createNetworkChunkPublisherUpdatePacket() {
-        var packet = new NetworkChunkPublisherUpdatePacket();
-        var location = this.controlledEntity.getLocation();
-        packet.setPosition(Vector3i.from(location.x(), location.y(), location.z()));
-        packet.setRadius(this.controlledEntity.getChunkLoadingRadius() << 4);
-        return packet;
+        return getProtocol().getEncoder().encodeChunkPublisher(this.controlledEntity);
     }
 
     protected LevelChunkPacket createLevelChunkPacket(Chunk chunk) {
@@ -1176,19 +480,13 @@ public class AllayPlayer implements Player {
             cacheGen = cache.getGeneration(playerId);
         }
 
-        var finalCache = cache;
-        var finalPlayerId = playerId;
-        var finalCacheGen = cacheGen;
-
-        var lcp = new LevelChunkPacket[1];
-        chunk.applyOperation(unsafeChunk -> {
-            if (AllayServer.getSettings().worldSettings().useSubChunkSendingSystem()) {
-                lcp[0] = createSubChunkLevelChunkPacket((AllayUnsafeChunk) unsafeChunk, finalCache, finalPlayerId, finalCacheGen);
-            } else {
-                lcp[0] = createFullLevelChunkPacketChunk((AllayUnsafeChunk) unsafeChunk, finalCache, finalPlayerId, finalCacheGen);
-            }
-        }, OperationType.READ, OperationType.READ);
-        return lcp[0];
+        return getProtocol().getEncoder().encodeLevelChunk(
+                chunk,
+                AllayServer.getSettings().worldSettings().useSubChunkSendingSystem(),
+                cache,
+                playerId,
+                cacheGen
+        );
     }
 
     public boolean isCacheEffectivelyEnabled() {
@@ -1206,828 +504,81 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewTime(int timeOfDay) {
-        var packet = new SetTimePacket();
-        packet.setTime(timeOfDay);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeTime(timeOfDay));
     }
 
     @Override
     public void viewGameRules(GameRules gameRules) {
-        var packet = new GameRulesChangedPacket();
-        packet.getGameRules().addAll(NetworkHelper.toNetwork(gameRules.getGameRules()));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeGameRules(gameRules));
     }
 
     @Override
     public void viewBlockUpdate(Vector3ic pos, int layer, BlockState blockState) {
-        var packet = new UpdateBlockPacket();
-        packet.setBlockPosition(toNetwork(pos));
-        packet.setDataLayer(layer);
-        packet.setDefinition(blockState::blockStateHash);
-        packet.getFlags().add(UpdateBlockPacket.Flag.NETWORK);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeBlockUpdate(pos, layer, blockState));
     }
 
     @Override
     public void viewBlockUpdates(Chunk chunk, Collection<BlockUpdate> blockUpdates, Collection<BlockUpdate> extraBlockUpdates) {
-        var packets = new UpdateSubChunkBlocksPacket[chunk.getDimensionType().chunkSectionCount()];
-        encodeBlockUpdates(packets, chunk, blockUpdates, false);
-        encodeBlockUpdates(packets, chunk, extraBlockUpdates, true);
-        for (var packet : packets) {
-            if (packet == null) {
-                // packet can be null if there is no update in a chunk section
-                continue;
-            }
-
-            sendPacket(packet);
-        }
+        sendPackets(getProtocol().getEncoder().encodeBlockUpdates(
+                chunk,
+                blockUpdates,
+                extraBlockUpdates
+        ));
     }
 
     @Override
     public void viewBlockAction(Vector3ic p, BlockAction action) {
-        var pos = toNetwork(p);
-        var pos3f = Vector3f.from(p.x(), p.y(), p.z());
-        switch (action) {
-            case SimpleBlockAction.OPEN -> {
-                var packet = new BlockEventPacket();
-                packet.setBlockPosition(pos);
-                packet.setEventType(NetworkHelper.BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
-                packet.setEventData(NetworkHelper.BLOCK_EVENT_DATA_OPEN_CHEST);
-                sendPacket(packet);
-            }
-            case SimpleBlockAction.CLOSE -> {
-                var packet = new BlockEventPacket();
-                packet.setBlockPosition(pos);
-                packet.setEventType(NetworkHelper.BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
-                packet.setEventData(NetworkHelper.BLOCK_EVENT_DATA_CLOSE_CHEST);
-                sendPacket(packet);
-            }
-            case StartBreakAction(double breakTime) -> {
-                var packet = new LevelEventPacket();
-                packet.setType(LevelEvent.BLOCK_START_BREAK);
-                packet.setPosition(pos3f);
-                packet.setData(toNetworkBreakTime(breakTime));
-                sendPacket(packet);
-            }
-            case ContinueBreakAction(double breakTime) -> {
-                var packet = new LevelEventPacket();
-                packet.setType(LevelEvent.BLOCK_UPDATE_BREAK);
-                packet.setPosition(pos3f);
-                packet.setData(toNetworkBreakTime(breakTime));
-                sendPacket(packet);
-            }
-            case SimpleBlockAction.STOP_BREAK -> {
-                var packet = new LevelEventPacket();
-                packet.setType(LevelEvent.BLOCK_STOP_BREAK);
-                packet.setPosition(pos3f);
-                sendPacket(packet);
-            }
-            default -> throw new IllegalStateException("Unhandled block action type: " + action.getClass().getSimpleName());
-        }
-    }
-
-    protected void encodeBlockUpdates(UpdateSubChunkBlocksPacket[] packets, Chunk chunk, Collection<BlockUpdate> blockUpdates, boolean isExtraLayer) {
-        if (blockUpdates.isEmpty()) {
-            return;
-        }
-
-        for (var update : blockUpdates) {
-            var sectionY = update.y() >> 4;
-            var index = sectionY - chunk.getDimensionType().minSectionY();
-            UpdateSubChunkBlocksPacket packet;
-
-            if ((packet = packets[index]) == null) {
-                packet = new UpdateSubChunkBlocksPacket();
-                packet.setPosition(Vector3i.from(chunk.getX() << 4, sectionY << 4, chunk.getZ() << 4));
-                packets[index] = packet;
-            }
-
-            // updateFlags is a combination of flags that specify the way the block is updated client-side. It is a
-            // combination of the flags above, but typically sending only the BLOCK_UPDATE_NETWORK flag is sufficient.
-            var entry = new BlockChangeEntry(
-                    Vector3i.from(update.x(), update.y(), update.z()), update.blockState()::blockStateHash,
-                    NetworkHelper.BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
-            );
-
-            if (isExtraLayer) {
-                packet.getExtraBlocks().add(entry);
-            } else {
-                packet.getStandardBlocks().add(entry);
-            }
-        }
+        sendPackets(getProtocol().getEncoder().encodeBlockAction(p, action));
     }
 
     @Override
     public void viewSound(Sound sound, Vector3dc p, boolean relative) {
-        LevelSoundEventPacket packet = new LevelSoundEventPacket();
-        var pos = toNetwork(MathUtils.toVec3f(p));
-        packet.setPosition(pos);
-        packet.setIdentifier(":");
-        packet.setExtraData(-1);
-        packet.setRelativeVolumeDisabled(!relative);
-
-        switch (sound) {
-            case SimpleSound.SHIELD_BLOCK -> packet.setSound(SoundEvent.SHIELD_BLOCK);
-            case SimpleSound.FIREWORK_LAUNCH -> packet.setSound(SoundEvent.LAUNCH);
-            case SimpleSound.FIREWORK_HUGE_BLAST -> packet.setSound(SoundEvent.LARGE_BLAST);
-            case SimpleSound.FIREWORK_BLAST -> packet.setSound(SoundEvent.BLAST);
-            case SimpleSound.FIREWORK_FLICKER -> packet.setSound(SoundEvent.TWINKLE);
-            case SimpleSound.FURNACE_CRACKLE -> packet.setSound(SoundEvent.FURNACE_USE);
-            case SimpleSound.CAMPFIRE_CRACKLE -> packet.setSound(SoundEvent.CAMPFIRE_CRACKLE);
-            case SimpleSound.BLAST_FURNACE_CRACKLE -> packet.setSound(SoundEvent.BLAST_FURNACE_USE);
-            case SimpleSound.SMOKER_CRACKLE -> packet.setSound(SoundEvent.SMOKER_USE);
-            case SimpleSound.POTION_BREWED -> packet.setSound(SoundEvent.POTION_BREWED);
-            case SimpleSound.USE_SPYGLASS -> packet.setSound(SoundEvent.USE_SPYGLASS);
-            case SimpleSound.STOP_USING_SPYGLASS -> packet.setSound(SoundEvent.STOP_USING_SPYGLASS);
-            case SimpleSound.FIRE_EXTINGUISH -> packet.setSound(SoundEvent.EXTINGUISH_FIRE);
-            case SimpleSound.IGNITE -> packet.setSound(SoundEvent.IGNITE);
-            case SimpleSound.BURNING -> packet.setSound(SoundEvent.PLAYER_HURT_ON_FIRE);
-            case SimpleSound.DROWNING -> packet.setSound(SoundEvent.PLAYER_HURT_DROWN);
-            case SimpleSound.BURP -> packet.setSound(SoundEvent.BURP);
-            case SimpleSound.DENY -> packet.setSound(SoundEvent.DENY);
-            case SimpleSound.CHEST_CLOSE -> packet.setSound(SoundEvent.CHEST_CLOSED);
-            case SimpleSound.CHEST_OPEN -> packet.setSound(SoundEvent.CHEST_OPEN);
-            case SimpleSound.ENDER_CHEST_CLOSE -> packet.setSound(SoundEvent.ENDERCHEST_CLOSED);
-            case SimpleSound.ENDER_CHEST_OPEN -> packet.setSound(SoundEvent.ENDERCHEST_OPEN);
-            case SimpleSound.SHULKER_BOX_CLOSE -> packet.setSound(SoundEvent.SHULKERBOX_CLOSED);
-            case SimpleSound.SHULKER_BOX_OPEN -> packet.setSound(SoundEvent.SHULKERBOX_OPEN);
-            case SimpleSound.BARREL_CLOSE -> packet.setSound(SoundEvent.BARREL_CLOSE);
-            case SimpleSound.BARREL_OPEN -> packet.setSound(SoundEvent.BARREL_OPEN);
-            case SimpleSound.FIZZ -> packet.setSound(SoundEvent.FIZZ);
-            case SimpleSound.SPONGE_ABSORB -> packet.setSound(SoundEvent.SPONGE_ABSORB);
-            case SimpleSound.GLASS_BREAK -> packet.setSound(SoundEvent.GLASS);
-            case SimpleSound.BOW_SHOOT -> packet.setSound(SoundEvent.BOW);
-            case SimpleSound.CROSSBOW_SHOOT -> packet.setSound(SoundEvent.CROSSBOW_SHOOT);
-            case SimpleSound.ARROW_HIT -> packet.setSound(SoundEvent.BOW_HIT);
-            case SimpleSound.MUSIC_DISC_END -> packet.setSound(SoundEvent.STOP_RECORD);
-            case SimpleSound.COMPOSTER_EMPTY -> packet.setSound(SoundEvent.COMPOSTER_EMPTY);
-            case SimpleSound.COMPOSTER_FILL -> packet.setSound(SoundEvent.COMPOSTER_FILL);
-            case SimpleSound.COMPOSTER_FILL_LAYER -> packet.setSound(SoundEvent.COMPOSTER_FILL_LAYER);
-            case SimpleSound.COMPOSTER_READY -> packet.setSound(SoundEvent.COMPOSTER_READY);
-            case SimpleSound.LECTERN_BOOK_PLACE -> packet.setSound(SoundEvent.LECTERN_BOOK_PLACE);
-            case SimpleSound.WAXED_SIGN_FAILED_INTERACTION -> packet.setSound(SoundEvent.WAXED_SIGN_INTERACT_FAIL);
-            case SimpleSound.TELEPORT -> packet.setSound(SoundEvent.TELEPORT);
-            case SimpleSound.DECORATED_POT_INSERT_FAILED -> packet.setSound(SoundEvent.DECORATED_POT_INSERT_FAILED);
-            case SimpleSound.ITEM_BREAK -> packet.setSound(SoundEvent.BREAK);
-            case SimpleSound.CHORUS_FLOWER_GROW -> packet.setSound(SoundEvent.CHORUS_GROW);
-            case SimpleSound.END_PORTAL_FRAME_FILLED -> packet.setSound(SoundEvent.BLOCK_END_PORTAL_FRAME_FILL);
-            case SimpleSound.END_PORTAL_SPAWN -> packet.setSound(SoundEvent.BLOCK_END_PORTAL_SPAWN);
-            case SimpleSound.MACE_SMASH_AIR -> packet.setSound(SoundEvent.MACE_SMASH_AIR);
-            case SimpleSound.MACE_SMASH_GROUND -> packet.setSound(SoundEvent.MACE_SMASH_GROUND);
-            case SimpleSound.MACE_SMASH_HEAVY_GROUND -> packet.setSound(SoundEvent.MACE_SMASH_HEAVY_GROUND);
-            case SimpleSound.EXPLOSION -> packet.setSound(SoundEvent.EXPLODE);
-            case SimpleSound.WIND_CHARGE_BURST -> packet.setSound(SoundEvent.WIND_CHARGE_BURST);
-            case SimpleSound.BREEZE_WIND_CHARGE_BURST -> packet.setSound(SoundEvent.WIND_CHARGE_BURST);
-            case SimpleSound.PISTON_PUSH -> packet.setSound(SoundEvent.PISTON_OUT);
-            case SimpleSound.PISTON_PULL -> packet.setSound(SoundEvent.PISTON_IN);
-            case SimpleSound.BLOCK_CLICK -> packet.setSound(SoundEvent.BLOCK_CLICK);
-            case SimpleSound.BLOCK_CLICK_FAIL -> packet.setSound(SoundEvent.BLOCK_CLICK_FAIL);
-            case SimpleSound.TRIDENT_THROW -> packet.setSound(SoundEvent.ITEM_TRIDENT_THROW);
-            case SimpleSound.TRIDENT_HIT -> packet.setSound(SoundEvent.ITEM_TRIDENT_HIT);
-            case SimpleSound.TRIDENT_HIT_GROUND -> packet.setSound(SoundEvent.ITEM_TRIDENT_HIT_GROUND);
-            case SimpleSound.TRIDENT_RETURN -> packet.setSound(SoundEvent.ITEM_TRIDENT_RETURN);
-            case SimpleSound.TRIDENT_THUNDER -> packet.setSound(SoundEvent.ITEM_TRIDENT_THUNDER);
-            case SimpleSound.BIG_DRIPLEAF_TILT_DOWN -> packet.setSound(SoundEvent.BIG_DRIPLEAF_TILT_DOWN);
-            case SimpleSound.BIG_DRIPLEAF_TILT_UP -> packet.setSound(SoundEvent.BIG_DRIPLEAF_TILT_UP);
-            case SimpleSound.BELL_HIT -> packet.setSound(SoundEvent.BELL);
-            case SimpleSound.MILKING -> packet.setSound(SoundEvent.MILK);
-            case SimpleSound.EGG_LAY -> packet.setSound(SoundEvent.PLOP);
-            case SimpleSound.POWER_ON -> packet.setSound(SoundEvent.POWER_ON);
-            case SimpleSound.POWER_OFF -> packet.setSound(SoundEvent.POWER_OFF);
-            case SimpleSound.ACTIVATED -> packet.setSound(SoundEvent.ACTIVATE);
-            case SimpleSound.DEACTIVATED -> packet.setSound(SoundEvent.DEACTIVATE);
-            case SimpleSound.RESPAWN_ANCHOR_SET_SPAWN -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_SET_SPAWN);
-            case SimpleSound.RESPAWN_ANCHOR_DEPLETE -> packet.setSound(SoundEvent.RESPAWN_ANCHOR_DEPLETE);
-            case SimpleSound.SHELF_SWAP_SINGLE -> packet.setSound(SoundEvent.SINGLE_ITEM_SWAP);
-            case SimpleSound.SHELF_SWAP_MULTI -> packet.setSound(SoundEvent.MULTI_ITEM_SWAP);
-            case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
-            case TridentRiptideSound riptide -> packet.setSound(switch (riptide.level()) {
-                case 1 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_1;
-                case 2 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_2;
-                case 3 -> SoundEvent.ITEM_TRIDENT_RIPTIDE_3;
-                default -> throw new IllegalArgumentException("Invalid riptide level: " + riptide.level());
-            });
-            case SimpleSound.PAINTING_PLACE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_PLACE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.GLOW_INK_SAC_USED -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_INK_SACE_USED);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.DOOR_CRASH -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ZOMBIE_DOOR_CRASH);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.THUNDER -> {
-                packet.setSound(SoundEvent.THUNDER);
-                packet.setIdentifier("minecraft:lightning_bolt");
-            }
-            case SimpleSound.CLICK -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_CLICK);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.WAXED -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.PARTICLE_WAX_ON);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.WAX_REMOVED -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.PARTICLE_WAX_OFF);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.COPPER_SCRAPED -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.PARTICLE_SCRAPE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.POP -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_INFINITY_ARROW_PICKUP);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ITEM_ADD -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_ITEM_ADD);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ITEM_FRAME_REMOVE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_ITEM_REMOVE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ITEM_FRAME_ROTATE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_ITEM_ROTATE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.GHAST_WARNING -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_GHAST_WARNING);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.GHAST_SHOOT -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_GHAST_FIREBALL);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.TNT -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_FUSE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ANVIL_LAND -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ANVIL_LAND);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ANVIL_USE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ANVIL_USED);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ANVIL_BREAK -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ANVIL_BROKEN);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_FILL_WATER -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_FILL_WATER);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_TAKE_WATER -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_TAKE_WATER);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_FILL_LAVA -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_FILL_LAVA);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_TAKE_LAVA -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_TAKE_LAVA);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_FILL_POWDER_SNOW -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_FILL_POWDER_SNOW);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_TAKE_POWDER_SNOW -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_TAKE_POWDER_SNOW);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_FILL_POTION -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_FILL_POTION);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_TAKE_POTION -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_TAKE_POTION);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_ADD_DYE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_ADD_DYE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_DYE_ARMOR -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_DYE_ARMOR);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_CLEAN_ARMOR -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_CLEAN_ARMOR);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_CLEAN_BANNER -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_CLEAN_BANNER);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.CAULDRON_EXPLODE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.CAULDRON_EXPLODE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.FIRE_CHARGE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_BLAZE_FIREBALL);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.TOTEM -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_TOTEM_USED);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ITEM_THROW -> {
-                packet.setSound(SoundEvent.THROW);
-                packet.setIdentifier("minecraft:player");
-            }
-            case SimpleSound.LEVEL_UP -> {
-                packet.setSound(SoundEvent.LEVELUP);
-                packet.setExtraData(0x10000000);
-            }
-            case SimpleSound.EXPERIENCE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_EXPERIENCE_ORB_PICKUP);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case NoteSound so -> {
-                packet.setSound(SoundEvent.NOTE);
-                packet.setExtraData((so.instrument().ordinal() << 8) | so.pitch());
-            }
-            case FallSound so -> {
-                packet.setIdentifier("minecraft:player");
-                if (so.distance() > 4) {
-                    packet.setSound(SoundEvent.FALL_BIG);
-                } else {
-                    packet.setSound(SoundEvent.FALL_SMALL);
-                }
-            }
-            case DoorSound so -> {
-                packet.setSound(so.open() ? SoundEvent.DOOR_OPEN : SoundEvent.DOOR_CLOSE);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case ButtonPressSound so -> {
-                packet.setSound(SoundEvent.BUTTON_CLICK_ON);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case ButtonReleaseSound so -> {
-                packet.setSound(SoundEvent.BUTTON_CLICK_OFF);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case PressurePlateSound so -> {
-                packet.setSound(so.activated() ? SoundEvent.PRESSURE_PLATE_CLICK_ON : SoundEvent.PRESSURE_PLATE_CLICK_OFF);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case TrapdoorSound so -> {
-                packet.setSound(so.open() ? SoundEvent.TRAPDOOR_OPEN : SoundEvent.TRAPDOOR_CLOSE);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case FenceGateSound so -> {
-                packet.setSound(so.open() ? SoundEvent.FENCE_GATE_OPEN : SoundEvent.FENCE_GATE_CLOSE);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case BlockPlaceSound so -> {
-                packet.setSound(SoundEvent.PLACE);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case BlockBreakingSound so -> {
-                packet.setSound(SoundEvent.HIT);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case ItemUseOnBlockSound so -> {
-                packet.setSound(SoundEvent.ITEM_USE_ON);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case AttackSound so -> {
-                packet.setIdentifier("minecraft:player");
-                if (!so.damage()) {
-                    packet.setSound(SoundEvent.ATTACK_NODAMAGE);
-                } else {
-                    packet.setSound(SoundEvent.ATTACK_STRONG);
-                }
-            }
-            case BucketFillSound so -> {
-                packet.setSound(switch (so.type()) {
-                    case WATER -> SoundEvent.BUCKET_FILL_WATER;
-                    case LAVA -> SoundEvent.BUCKET_FILL_LAVA;
-                    case POWDER_SNOW -> SoundEvent.BUCKET_FILL_POWDER_SNOW;
-                    case FISH -> SoundEvent.BUCKET_FILL_FISH;
-                });
-            }
-            case BucketEmptySound so -> {
-                packet.setSound(switch (so.type()) {
-                    case WATER -> SoundEvent.BUCKET_EMPTY_WATER;
-                    case LAVA -> SoundEvent.BUCKET_EMPTY_LAVA;
-                    case POWDER_SNOW -> SoundEvent.BUCKET_EMPTY_POWDER_SNOW;
-                    case FISH -> SoundEvent.BUCKET_EMPTY_FISH;
-                });
-            }
-            case CrossbowLoadSound so -> {
-                switch (so.stage()) {
-                    case START -> packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_START : SoundEvent.CROSSBOW_LOADING_START);
-                    case MIDDLE -> packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_MIDDLE : SoundEvent.CROSSBOW_LOADING_MIDDLE);
-                    case END -> packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_END : SoundEvent.CROSSBOW_LOADING_END);
-                }
-            }
-            case MusicDiscPlaySound so -> {
-                switch (so.discType()) {
-                    case DISC_13 -> packet.setSound(SoundEvent.RECORD_13);
-                    case DISC_CAT -> packet.setSound(SoundEvent.RECORD_CAT);
-                    case DISC_BLOCKS -> packet.setSound(SoundEvent.RECORD_BLOCKS);
-                    case DISC_CHIRP -> packet.setSound(SoundEvent.RECORD_CHIRP);
-                    case DISC_FAR -> packet.setSound(SoundEvent.RECORD_FAR);
-                    case DISC_MALL -> packet.setSound(SoundEvent.RECORD_MALL);
-                    case DISC_MELLOHI -> packet.setSound(SoundEvent.RECORD_MELLOHI);
-                    case DISC_STAL -> packet.setSound(SoundEvent.RECORD_STAL);
-                    case DISC_STRAD -> packet.setSound(SoundEvent.RECORD_STRAD);
-                    case DISC_WARD -> packet.setSound(SoundEvent.RECORD_WARD);
-                    case DISC_11 -> packet.setSound(SoundEvent.RECORD_11);
-                    case DISC_WAIT -> packet.setSound(SoundEvent.RECORD_WAIT);
-                    case DISC_OTHERSIDE -> packet.setSound(SoundEvent.RECORD_OTHERSIDE);
-                    case DISC_PIGSTEP -> packet.setSound(SoundEvent.RECORD_PIGSTEP);
-                    case DISC_5 -> packet.setSound(SoundEvent.RECORD_5);
-                    case DISC_RELIC -> packet.setSound(SoundEvent.RECORD_RELIC);
-                    case DISC_CREATOR -> packet.setSound(SoundEvent.RECORD_CREATOR);
-                    case DISC_CREATOR_MUSIC_BOX -> packet.setSound(SoundEvent.RECORD_CREATOR_MUSIC_BOX);
-                    case DISC_PRECIPICE -> packet.setSound(SoundEvent.RECORD_PRECIPICE);
-                    case DISC_TEARS -> packet.setSound(SoundEvent.RECORD_TEARS);
-                    case DISC_LAVA_CHICKEN -> packet.setSound(SoundEvent.RECORD_LAVA_CHICKEN);
-                    default -> throw new IllegalArgumentException();
-                }
-            }
-            case PointedDripstoneDripSound so -> {
-                if (so.isWater()) {
-                    packet.setSound(SoundEvent.POINTED_DRIPSTONE_CAULDRON_DRIP_WATER);
-                } else {
-                    packet.setSound(SoundEvent.POINTED_DRIPSTONE_CAULDRON_DRIP_LAVA);
-                }
-            }
-            case RespawnAnchorChargeSound so -> {
-                packet.setSound(SoundEvent.RESPAWN_ANCHOR_CHARGE);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case ChiseledBookshelfSound so -> {
-                PlaySoundPacket playSound = new PlaySoundPacket();
-                playSound.setSound(switch (so.type()) {
-                    case INSERT -> so.enchanted() ? SoundNames.INSERT_ENCHANTED_CHISELED_BOOKSHELF : SoundNames.INSERT_CHISELED_BOOKSHELF;
-                    case PICKUP -> so.enchanted() ? SoundNames.PICKUP_ENCHANTED_CHISELED_BOOKSHELF : SoundNames.PICKUP_CHISELED_BOOKSHELF;
-                });
-                playSound.setPosition(pos);
-                playSound.setVolume(1.0f);
-                playSound.setPitch(1.0f);
-                sendPacket(playSound);
-                return;
-            }
-            case DecoratedPotInsertedSound so -> {
-                PlaySoundPacket playSound = new PlaySoundPacket();
-                playSound.setSound(SoundNames.BLOCK_DECORATED_POT_INSERT);
-                playSound.setPosition(pos);
-                playSound.setVolume(1.0f);
-                playSound.setPitch(0.7f + 0.5f * (float) so.progress());
-                sendPacket(playSound);
-                return;
-            }
-            case SimpleSound.ARMOR_STAND_PLACE -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_PLACE);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ARMOR_STAND_HIT -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_HIT);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ARMOR_STAND_BREAK -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_BREAK);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case SimpleSound.ARMOR_STAND_LAND -> {
-                LevelEventPacket levelEvent = new LevelEventPacket();
-                levelEvent.setType(LevelEvent.SOUND_ARMOR_STAND_LAND);
-                levelEvent.setPosition(pos.toFloat());
-                sendPacket(levelEvent);
-                return;
-            }
-            case CustomSound so -> {
-                PlaySoundPacket playSound = new PlaySoundPacket();
-                playSound.setSound(so.soundName());
-                playSound.setPosition(pos);
-                playSound.setVolume(so.volume());
-                playSound.setPitch(so.pitch());
-                sendPacket(playSound);
-                return;
-            }
-            default -> throw new IllegalArgumentException("Unhandled sound type: " + sound.getClass().getSimpleName());
-        }
-
-        sendPacket(packet);
+        sendPackets(getProtocol().getEncoder().encodeSound(sound, p, relative));
     }
 
     @Override
     public void stopSound(String soundName) {
-        var packet = new StopSoundPacket();
-        packet.setSoundName(Objects.requireNonNullElse(soundName, ""));
-        packet.setStoppingAllSound(soundName == null);
-        sendPacket(packet);
-    }
-
-    protected SoundEvent getEquipSound(ItemType<?> itemType) {
-        if (itemType == ItemTypes.ELYTRA) {
-            return SoundEvent.ARMOR_EQUIP_ELYTRA;
-        }
-
-        return switch (ItemHelper.getArmorTier(itemType)) {
-            case LEATHER -> SoundEvent.ARMOR_EQUIP_LEATHER;
-            case IRON -> SoundEvent.ARMOR_EQUIP_IRON;
-            case CHAIN -> SoundEvent.ARMOR_EQUIP_CHAIN;
-            case GOLD -> SoundEvent.ARMOR_EQUIP_GOLD;
-            case DIAMOND, NETHERITE -> SoundEvent.ARMOR_EQUIP_DIAMOND;
-        };
+        sendPacket(getProtocol().getEncoder().encodeStopSound(soundName));
     }
 
     @Override
     public void viewParticle(Particle particle, Vector3dc p) {
-        var pos = toNetwork(MathUtils.toVec3f(p));
-        var packet = new LevelEventPacket();
-        packet.setPosition(pos);
-        switch (particle) {
-            case SimpleParticle.EXPLODE -> packet.setType(ParticleType.EXPLODE);
-            case SimpleParticle.HUGE_EXPLOSION -> packet.setType(LevelEvent.PARTICLE_EXPLOSION);
-            case SimpleParticle.BONE_MEAL -> packet.setType(LevelEvent.PARTICLE_CROP_GROWTH);
-            case SimpleParticle.BLOCK_FORCE_FIELD -> packet.setType(LevelEvent.PARTICLE_DENY_BLOCK);
-            case SimpleParticle.ENDERMAN_TELEPORT -> packet.setType(LevelEvent.PARTICLE_TELEPORT);
-            case SimpleParticle.EVAPORATE -> packet.setType(LevelEvent.PARTICLE_EVAPORATE_WATER);
-            case SimpleParticle.SNOWBALL_POOF -> packet.setType(ParticleType.SNOWBALL_POOF);
-            case SimpleParticle.ENTITY_FLAME -> packet.setType(ParticleType.MOB_FLAME);
-            case SimpleParticle.WATER_DRIP -> packet.setType(ParticleType.DRIP_WATER);
-            case SimpleParticle.LAVA_DRIP -> packet.setType(ParticleType.DRIP_LAVA);
-            case SimpleParticle.LAVA -> packet.setType(ParticleType.LAVA);
-            case SimpleParticle.DUST_PLUME -> packet.setType(ParticleType.DUST_PLUME);
-            case SimpleParticle.WHITE_SMOKE -> packet.setType(ParticleType.WHITE_SMOKE);
-            case SimpleParticle.FIREWORK_CONTRAIL -> packet.setType(ParticleType.FIREWORKS);
-            case SimpleParticle.SMASH_ATTACK_GROUND_DUST -> packet.setType(LevelEvent.PARTICLE_SMASH_ATTACK_GROUND_DUST);
-            case SimpleParticle.WIND_EXPLOSION -> packet.setType(ParticleType.WIND_EXPLOSION);
-            case SimpleParticle.BREEZE_WIND_EXPLOSION -> packet.setType(ParticleType.BREEZE_WIND_EXPLOSION);
-            case SimpleParticle.WATER_WAKE -> packet.setType(ParticleType.WATER_WAKE);
-            case SimpleParticle.BUBBLE -> packet.setType(ParticleType.BUBBLE);
-            case ShootParticle pa -> {
-                packet.setType(LevelEvent.PARTICLE_SHOOT);
-                int data = 0;
-                switch (pa.face()) {
-                    case DOWN -> {
-                        data = 4;
-                        pos = pos.add(0, -0.9f, 0);
-                    }
-                    case UP -> {
-                        data = 4;
-                        pos = pos.add(0, 0.5f, 0);
-                    }
-                    case NORTH -> {
-                        data = 1;
-                        pos = pos.add(0, -0.2f, -0.7f);
-                    }
-                    case SOUTH -> {
-                        data = 7;
-                        pos = pos.add(0, -0.2f, 0.7f);
-                    }
-                    case WEST -> {
-                        data = 3;
-                        pos = pos.add(-0.7f, -0.2f, 0);
-                    }
-                    case EAST -> {
-                        data = 5;
-                        pos = pos.add(0.7f, -0.2f, 0);
-                    }
-                }
-                packet.setPosition(pos);
-                packet.setData(data);
-            }
-            case CustomParticle pa -> {
-                var pk = new SpawnParticleEffectPacket();
-                pk.setDimensionId(this.controlledEntity.getDimension().getDimensionType().getId());
-                pk.setIdentifier(pa.particleName());
-                pk.setMolangVariablesJson(Optional.ofNullable(pa.moLangVariables()));
-                pk.setPosition(pos);
-                sendPacket(pk);
-                return;
-            }
-            case DragonEggTeleportParticle pa -> {
-                int xSign = pa.diff().x() < 0 ? 1 << 24 : 0;
-                int ySign = pa.diff().y() < 0 ? 1 << 25 : 0;
-                int zSign = pa.diff().z() < 0 ? 1 << 26 : 0;
-                int data = (Math.abs(pa.diff().x()) << 16) |
-                           (Math.abs(pa.diff().y()) << 8) |
-                           (Math.abs(pa.diff().z())) | xSign | ySign | zSign;
-
-                packet.setType(LevelEvent.PARTICLE_DRAGON_EGG);
-                packet.setData(data);
-            }
-            case NoteParticle pa -> {
-                var pk = new BlockEventPacket();
-                pk.setBlockPosition(Vector3i.from((int) p.x(), (int) p.y(), (int) p.z()));
-                pk.setEventType(pa.instrument().ordinal());
-                pk.setEventData(pa.pitch());
-                sendPacket(pk);
-                return;
-            }
-            case BlockBreakParticle pa -> {
-                packet.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
-                packet.setData(pa.blockState().blockStateHash());
-            }
-            case PunchBlockParticle pa -> {
-                packet.setType(switch (Objects.requireNonNull(pa.blockFace())) {
-                    case UP -> LevelEvent.PARTICLE_BREAK_BLOCK_UP;
-                    case DOWN -> LevelEvent.PARTICLE_BREAK_BLOCK_DOWN;
-                    case NORTH -> LevelEvent.PARTICLE_BREAK_BLOCK_NORTH;
-                    case SOUTH -> LevelEvent.PARTICLE_BREAK_BLOCK_SOUTH;
-                    case WEST -> LevelEvent.PARTICLE_BREAK_BLOCK_WEST;
-                    case EAST -> LevelEvent.PARTICLE_BREAK_BLOCK_EAST;
-                });
-                packet.setData(pa.blockState().blockStateHash());
-            }
-            case FlameParticle pa -> {
-                packet.setType(ParticleType.FLAME);
-                packet.setData(pa.color().getRGB());
-            }
-            case ItemBreakParticle pa -> {
-                packet.setType(ParticleType.ICON_CRACK);
-                packet.setData((pa.itemStack().getItemType().getRuntimeId() << 16) | pa.itemStack().getMeta());
-            }
-            case SplashParticle pa -> {
-                packet.setType(LevelEvent.PARTICLE_POTION_SPLASH);
-                packet.setData(pa.color().getRGB());
-            }
-            case EffectParticle pa -> {
-                packet.setType(ParticleType.MOB_SPELL);
-                packet.setData(pa.color().getRGB());
-            }
-            case DustParticle pa -> {
-                packet.setType(ParticleType.FALLING_DUST);
-                packet.setData(pa.color().getRGB());
-            }
-            default -> throw new IllegalArgumentException("Unhandled particle type: " + particle.getClass().getSimpleName());
-        }
-        sendPacket(packet);
+        sendPackets(getProtocol().getEncoder().encodeParticle(
+                particle,
+                p,
+                this.controlledEntity.getDimension().getDimensionType().getId()
+        ));
     }
 
     @Override
     public void viewWeather(Weather weather) {
-        var packet1 = new LevelEventPacket();
-        packet1.setPosition(Vector3f.ZERO);
-        packet1.setType(LevelEvent.STOP_RAINING);
-        if (weather != Weather.CLEAR) {
-            packet1.setType(LevelEvent.START_RAINING);
-            packet1.setData(65535);
-        }
-        sendPacket(packet1);
-
-        var packet2 = new LevelEventPacket();
-        packet2.setPosition(Vector3f.ZERO);
-        packet2.setType(LevelEvent.STOP_THUNDERSTORM);
-        if (weather == Weather.THUNDER) {
-            packet2.setType(LevelEvent.START_THUNDERSTORM);
-            packet2.setData(65535);
-        }
-        sendPacket(packet2);
+        sendPackets(getProtocol().getEncoder().encodeWeather(weather));
     }
 
     @Override
     public void viewPrimitiveShape(PrimitiveShape primitiveShape) {
-        var packet = new PrimitiveShapesPacket();
-        packet.getShapes().add(toNetwork(primitiveShape, this.controlledEntity.getDimension().getDimensionType().getId(), primitiveShape.getAttachedEntity()));
-        sendPacket(packet);
+        sendPackets(getProtocol().getEncoder().encodePrimitiveShapes(
+                List.of(primitiveShape),
+                this.controlledEntity.getDimension().getDimensionType().getId()
+        ));
     }
 
     @Override
     public void viewPrimitiveShapes(Set<PrimitiveShape> primitiveShapes) {
-        var packet = new PrimitiveShapesPacket();
-        for (var primitiveShape : primitiveShapes) {
-            packet.getShapes().add(toNetwork(primitiveShape, this.controlledEntity.getDimension().getDimensionType().getId(), primitiveShape.getAttachedEntity()));
-        }
-        sendPacket(packet);
+        sendPackets(getProtocol().getEncoder().encodePrimitiveShapes(
+                primitiveShapes,
+                this.controlledEntity.getDimension().getDimensionType().getId()
+        ));
     }
 
     @Override
     public void removePrimitiveShape(PrimitiveShape primitiveShape) {
-        var packet = new PrimitiveShapesPacket();
-        packet.getShapes().add(toNetworkRemovalNotice(primitiveShape));
-        sendPacket(packet);
+        sendPackets(getProtocol().getEncoder().encodePrimitiveShapeRemovals(List.of(primitiveShape)));
     }
 
     @Override
     public void removePrimitiveShapes(Set<PrimitiveShape> primitiveShapes) {
-        var packet = new PrimitiveShapesPacket();
-        for (var primitiveShape : primitiveShapes) {
-            packet.getShapes().add(toNetworkRemovalNotice(primitiveShape));
-        }
-        sendPacket(packet);
+        sendPackets(getProtocol().getEncoder().encodePrimitiveShapeRemovals(primitiveShapes));
     }
 
     @Override
@@ -2035,29 +586,17 @@ public class AllayPlayer implements Player {
         if (!((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).sendToClient()) {
             return;
         }
-
-        var packet = new BlockEntityDataPacket();
-        packet.setBlockPosition(toNetwork(blockEntity.getPosition()));
-        packet.setData(blockEntity.saveNBT());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeBlockEntity(blockEntity));
     }
 
     @Override
     public void viewLectern(Vector3ic pos) {
-        var packet = new ContainerOpenPacket();
-        // Use a fixed container ID for lectern (the client doesn't send ContainerClose for lecterns)
-        packet.setId((byte) -1);
-        packet.setType(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.LECTERN);
-        packet.setBlockPosition(toNetwork(pos));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeLectern(pos));
     }
 
     @Override
     public void viewSignEditor(Vector3ic pos, boolean frontSide) {
-        var packet = new OpenSignPacket();
-        packet.setPosition(toNetwork(pos));
-        packet.setFrontSide(frontSide);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeSignEditor(pos, frontSide));
     }
 
     @Override
@@ -2076,13 +615,7 @@ public class AllayPlayer implements Player {
     }
 
     protected void viewContentsWithSpecificContainerId(Container container, int containerId) {
-        var packet = new InventoryContentPacket();
-        packet.setContainerId(containerId);
-        // Client expects both zero if we do not use FullContainerName, and the id of
-        // ContainerSlotType.ANVIL_INPUT is zero
-        packet.setContainerNameData(new FullContainerName(ContainerSlotType.ANVIL_INPUT, null));
-        packet.setContents(NetworkHelper.toNetwork(container.getItemStacks()));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeContainerContents(container, containerId));
     }
 
     @Override
@@ -2108,12 +641,7 @@ public class AllayPlayer implements Player {
     }
 
     protected void viewSlotWithSpecificContainerId(Container container, int slot, int containerId) {
-        var packet = new InventorySlotPacket();
-        packet.setContainerId(containerId);
-        packet.setSlot(ContainerActionProcessor.toNetworkSlotIndex(container, slot));
-        packet.setContainerNameData(new FullContainerName(ContainerActionProcessor.getSlotType(container, slot), null));
-        packet.setItem(NetworkHelper.toNetwork(container.getItemStack(slot)));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeContainerSlot(container, slot, containerId));
     }
 
     @Override
@@ -2143,18 +671,19 @@ public class AllayPlayer implements Player {
 
     @SneakyThrows
     protected void sendContainerOpenPacket(byte assignedId, Container container) {
-        var packet = new ContainerOpenPacket();
-        packet.setId(assignedId);
-        packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
-        switch (container) {
-            case BlockContainer blockContainer -> packet.setBlockPosition(NetworkHelper.toNetwork(blockContainer.getBlockPos()));
-            case FakeContainerImpl fakeContainer -> packet.setBlockPosition(NetworkHelper.toNetwork(fakeContainer.getFakeBlockPos(this)));
+        Vector3ic position = switch (container) {
+            case BlockContainer blockContainer -> blockContainer.getBlockPos();
+            case FakeContainerImpl fakeContainer -> fakeContainer.getFakeBlockPos(this);
             default -> {
                 var location = this.controlledEntity.getLocation();
-                packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
+                yield new org.joml.Vector3i(
+                        (int) Math.floor(location.x()),
+                        (int) Math.floor(location.y()),
+                        (int) Math.floor(location.z())
+                );
             }
-        }
-        this.sendPacket(packet);
+        };
+        sendPacket(getProtocol().getEncoder().encodeContainerOpen(container, assignedId, position));
     }
 
     @Override
@@ -2181,17 +710,14 @@ public class AllayPlayer implements Player {
             return;
         }
 
-        var packet = new ContainerClosePacket();
-        packet.setId(assignedId);
-        packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
-        if (!this.containerClosedByClient) {
-            // Field `serverInitiated` determines whether the server force-closed the container. If this value is
-            // not set correctly, the client may ignore the packet and respond with a `PacketViolationWarningPacket`.
-            packet.setServerInitiated(true);
-        } else {
-            this.containerClosedByClient = false;
-        }
-        sendPacket(packet);
+        // This flag must identify server-forced closes or the client may reject the packet.
+        boolean serverInitiated = !this.containerClosedByClient;
+        this.containerClosedByClient = false;
+        sendPacket(getProtocol().getEncoder().encodeContainerClose(
+                container,
+                assignedId,
+                serverInitiated
+        ));
     }
 
     @Override
@@ -2201,12 +727,7 @@ public class AllayPlayer implements Player {
             throw new IllegalStateException("This viewer did not open the container " + container.getContainerType());
         }
 
-        var packet = new ContainerSetDataPacket();
-        packet.setWindowId(assignedId);
-        packet.setProperty(property);
-        packet.setValue(value);
-
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeContainerData(assignedId, property, value));
     }
 
     @SuppressWarnings("unchecked")
@@ -2283,23 +804,17 @@ public class AllayPlayer implements Player {
         // can use BossEventPacket.Action.UPDATE_XXX to update the existing one, it is much
         // easier to implement by creating a new one.
         clearBossBar();
-        var packet = new BossEventPacket();
-        packet.setBossUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
-        packet.setAction(BossEventPacket.Action.CREATE);
-        packet.setTitle(bossBar.getTitle());
-        packet.setHealthPercentage(bossBar.getProgress());
-        packet.setDarkenSky(bossBar.isDarkenSky() ? 1 : 0);
-        packet.setColor(bossBar.getColor().ordinal());
-        packet.setOverlay(bossBar.getStyle().ordinal());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeBossBar(
+                this.controlledEntity.getUniqueId().getLeastSignificantBits(),
+                bossBar
+        ));
     }
 
     @Override
     public void clearBossBar() {
-        var packet = new BossEventPacket();
-        packet.setBossUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
-        packet.setAction(BossEventPacket.Action.REMOVE);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeBossBarRemoval(
+                this.controlledEntity.getUniqueId().getLeastSignificantBits()
+        ));
     }
 
     @Override
@@ -2321,10 +836,7 @@ public class AllayPlayer implements Player {
         var id = assignFormId();
         this.forms.put(id, form);
 
-        var packet = new ModalFormRequestPacket();
-        packet.setFormId(id);
-        packet.setFormData(form.toJson());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeForm(id, form));
 
         return id;
     }
@@ -2346,14 +858,14 @@ public class AllayPlayer implements Player {
 
     @Override
     public void closeAllForms() {
-        sendPacket(new ClientboundCloseFormPacket());
+        sendPacket(getProtocol().getEncoder().encodeCloseForms());
         this.forms.invalidateAll();
     }
 
     @Override
     public DDUIScreenSession viewScreen(DDUIScreen screen) {
-        if (this.session.getCodec().getProtocolVersion() < Bedrock_v944.CODEC.getProtocolVersion()) {
-            throw new UnsupportedOperationException("DDUI requires Bedrock 1.26.10+ (protocol v944+), current protocol is v" + this.session.getCodec().getProtocolVersion());
+        if (!getProtocol().supports(ProtocolFeature.DATA_DRIVEN_UI)) {
+            throw new UnsupportedOperationException("DDUI is not supported by " + getProtocol());
         }
 
         if (this.activeScreen != null) {
@@ -2389,25 +901,16 @@ public class AllayPlayer implements Player {
 
     @Override
     public void displayScoreboard(Scoreboard scoreboard, DisplaySlot slot) {
-        var packet1 = new SetDisplayObjectivePacket();
-        packet1.setDisplaySlot(slot.getSlotName());
-        packet1.setObjectiveId(scoreboard.getObjectiveName());
-        packet1.setDisplayName(scoreboard.getDisplayName());
-        packet1.setCriteria(scoreboard.getCriteriaName());
-        packet1.setSortOrder(scoreboard.getSortOrder().ordinal());
-        sendPacket(packet1);
-
         // Client won't storage the score of a scoreboard,so we should send the score to client
-        var packet2 = new SetScorePacket();
-        packet2.setInfos(
+        sendPackets(getProtocol().getEncoder().encodeScoreboard(
+                scoreboard,
+                slot,
                 scoreboard.getLines().values()
                         .stream()
                         .map(this::toNetworkScoreInfo)
                         .filter(Objects::nonNull)
                         .toList()
-        );
-        packet2.setAction(SetScorePacket.Action.SET);
-        sendPacket(packet2);
+        ));
 
         var scorer = new PlayerScorer(this);
         var line = scoreboard.getLine(scorer);
@@ -2451,13 +954,7 @@ public class AllayPlayer implements Player {
 
     @Override
     public void hideScoreboardSlot(DisplaySlot slot) {
-        var packet = new SetDisplayObjectivePacket();
-        packet.setDisplaySlot(slot.getSlotName());
-        packet.setObjectiveId("");
-        packet.setDisplayName("");
-        packet.setCriteria("");
-        packet.setSortOrder(SortOrder.ASCENDING.ordinal());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeScoreboardSlotRemoval(slot));
 
         if (slot == DisplaySlot.BELOW_NAME) {
             this.controlledEntity.setScoreTag(null);
@@ -2466,21 +963,15 @@ public class AllayPlayer implements Player {
 
     @Override
     public void removeScoreboard(Scoreboard scoreboard) {
-        var packet = new RemoveObjectivePacket();
-        packet.setObjectiveId(scoreboard.getObjectiveName());
-
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeScoreboardRemoval(scoreboard));
     }
 
     @Override
     public void removeScoreboardLine(ScoreboardLine line) {
-        var packet = new SetScorePacket();
-        packet.setAction(SetScorePacket.Action.REMOVE);
-        var networkInfo = toNetworkScoreInfo(line);
-        if (networkInfo != null) {
-            packet.getInfos().add(networkInfo);
-        }
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeScore(
+                SetScorePacket.Action.REMOVE,
+                toNetworkScoreInfo(line)
+        ));
 
         var scorer = new PlayerScorer(this);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
@@ -2490,13 +981,10 @@ public class AllayPlayer implements Player {
 
     @Override
     public void updateScore(ScoreboardLine line) {
-        var packet = new SetScorePacket();
-        packet.setAction(SetScorePacket.Action.SET);
-        var networkInfo = toNetworkScoreInfo(line);
-        if (networkInfo != null) {
-            packet.getInfos().add(networkInfo);
-        }
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeScore(
+                SetScorePacket.Action.SET,
+                toNetworkScoreInfo(line)
+        ));
 
         var scorer = new PlayerScorer(this);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
@@ -2568,62 +1056,33 @@ public class AllayPlayer implements Player {
 
     @Override
     public void sendCooldown(String category, int duration) {
-        var packet = new PlayerStartItemCooldownPacket();
-        packet.setItemCategory(category);
-        packet.setCooldownDuration(duration);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeCooldown(category, duration));
     }
 
     @Override
     public void sendMapData(long mapId, BufferedImage image) {
-        int imageHW = 128;
-
-        var packet = new ClientboundMapItemDataPacket();
-        packet.setUniqueMapId(mapId);
-        // Required since 1.19.20
-        packet.setOrigin(Vector3i.ZERO);
-        // Required as of 1.19.50
-        packet.getTrackedEntityIds().add(mapId);
-        packet.setHeight(imageHW);
-        packet.setWidth(imageHW);
-        var colors = new int[imageHW * imageHW];
-        int index = 0;
-        for (int y = 0; y < imageHW; y++) {
-            for (int x = 0; x < imageHW; x++) {
-                colors[index++] = toABGR(image.getRGB(x, y));
-            }
-        }
-        packet.setColors(colors);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeMapData(mapId, image));
     }
 
     @Override
     public void sendDeathInfo(Pair<String, String[]> deathInfo) {
-        var packet = new DeathInfoPacket();
-        packet.setCauseAttackName(I18n.get().tr(this.loginData.getLangCode(), deathInfo.left(), (Object[]) deathInfo.right()));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeDeathInfo(
+                I18n.get().tr(this.loginData.getLangCode(), deathInfo.left(), (Object[]) deathInfo.right())
+        ));
     }
 
     @Override
     public void sendItemChargingFinished() {
-        var packet = new EntityEventPacket();
-        packet.setType(EntityEventType.FINISHED_CHARGING_ITEM);
-        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
-        sendPacket(packet);
-    }
-
-    protected static int toABGR(int argb) {
-        return ((argb >> 16) & 0xFF) |      // Blue
-               ((argb >> 8) & 0xFF) << 8 |  // Green
-               ((argb) & 0xFF) << 16 |      // Red
-               ((argb >> 24) & 0xFF) << 24; // Alpha
+        sendPacket(getProtocol().getEncoder().encodeItemChargingFinished(
+                this.controlledEntity.getRuntimeId()
+        ));
     }
 
     protected void sendAttribute(AttributeData attributeData) {
-        var packet = new UpdateAttributesPacket();
-        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
-        packet.getAttributes().add(attributeData);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeAttribute(
+                this.controlledEntity.getRuntimeId(),
+                attributeData
+        ));
     }
 
     @Override
@@ -2667,96 +1126,58 @@ public class AllayPlayer implements Player {
     }
 
     protected void sendSimpleMessage(String message, TextPacket.Type type) {
-        var packet = new TextPacket();
-        packet.setType(type);
-        packet.setXuid(this.loginData.getXuid());
-        packet.setMessage(message);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeText(this.loginData.getXuid(), message, type));
     }
 
     @Override
     public void sendToast(String title, String content) {
-        ToastRequestPacket pk = new ToastRequestPacket();
-        pk.setTitle(title);
-        pk.setContent(content);
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeToast(title, content));
     }
 
     @Override
     public void sendTitle(String title) {
-        var pk = new SetTitlePacket();
-        pk.setText(title);
-        pk.setType(SetTitlePacket.Type.TITLE);
-        pk.setXuid("");
-        pk.setPlatformOnlineId("");
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeTitle(SetTitlePacket.Type.TITLE, title, 0, 0, 0));
     }
 
     @Override
     public void sendSubtitle(String subtitle) {
-        var pk = new SetTitlePacket();
-        pk.setText(subtitle);
-        pk.setType(SetTitlePacket.Type.SUBTITLE);
-        pk.setXuid("");
-        pk.setPlatformOnlineId("");
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeTitle(SetTitlePacket.Type.SUBTITLE, subtitle, 0, 0, 0));
     }
 
     @Override
     public void sendActionBar(String actionBar) {
-        var pk = new SetTitlePacket();
-        pk.setText(actionBar);
-        pk.setType(SetTitlePacket.Type.ACTIONBAR);
-        pk.setXuid("");
-        pk.setPlatformOnlineId("");
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeTitle(SetTitlePacket.Type.ACTIONBAR, actionBar, 0, 0, 0));
     }
 
     @Override
     public void setTitleSettings(int fadeInTime, int duration, int fadeOutTime) {
-        var pk = new SetTitlePacket();
-        pk.setType(SetTitlePacket.Type.TIMES);
-        pk.setFadeInTime(fadeInTime);
-        pk.setFadeOutTime(fadeOutTime);
-        pk.setStayTime(duration);
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeTitle(
+                SetTitlePacket.Type.TIMES,
+                null,
+                fadeInTime,
+                duration,
+                fadeOutTime
+        ));
     }
 
     @Override
     public void resetTitleSettings() {
-        var pk = new SetTitlePacket();
-        pk.setType(SetTitlePacket.Type.RESET);
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeTitle(SetTitlePacket.Type.RESET, null, 0, 0, 0));
     }
 
     @Override
     public void clearTitle() {
-        var pk = new SetTitlePacket();
-        pk.setType(SetTitlePacket.Type.CLEAR);
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeTitle(SetTitlePacket.Type.CLEAR, null, 0, 0, 0));
     }
 
     @Override
     public void shakeCamera(CameraShakeType shakeType, float intensity, float duration) {
-        var pk = new CameraShakePacket();
-        pk.setShakeType(switch (shakeType) {
-            case POSITIONAL -> org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeType.POSITIONAL;
-            case ROTATIONAL -> org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeType.ROTATIONAL;
-        });
-        pk.setIntensity(intensity);
-        pk.setDuration(duration);
-        pk.setShakeAction(CameraShakeAction.ADD);
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeCameraShake(shakeType, intensity, duration));
     }
 
     @Override
     public void stopCameraShake() {
-        var pk = new CameraShakePacket();
-        pk.setShakeAction(CameraShakeAction.STOP);
-        pk.setShakeType(org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeType.POSITIONAL);
-        pk.setIntensity(-1);
-        pk.setDuration(-1);
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeCameraShakeStop());
     }
 
     @Override
@@ -2807,19 +1228,13 @@ public class AllayPlayer implements Player {
     }
 
     protected void sendFogStack() {
-        var pk = new PlayerFogPacket();
-        pk.getFogStack().addAll(fogStack);
-        sendPacket(pk);
+        sendPacket(getProtocol().getEncoder().encodeFogStack(fogStack));
     }
 
     @Override
     public void beginDimensionChange(DimensionType targetDimType, double x, double y, double z) {
         this.changingDimension = true;
-
-        var packet = new ChangeDimensionPacket();
-        packet.setDimension(targetDimType.getId());
-        packet.setPosition(Vector3f.from((float) x, (float) y + 1.62f, (float) z));
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeDimensionChange(targetDimType, x, y, z));
     }
 
     @Override
@@ -2828,20 +1243,62 @@ public class AllayPlayer implements Player {
 
         // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server.
         // Send it after the player has been added to the target dimension.
-        var packet = new PlayerActionPacket();
-        packet.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
-        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
-        packet.setBlockPosition(Vector3i.ZERO);
-        packet.setResultPosition(Vector3i.ZERO);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeDimensionChangeSuccess(
+                this.controlledEntity.getRuntimeId()
+        ));
     }
 
-    @Override
-    public void sendPacket(Object p) {
-        if (!(p instanceof BedrockPacket packet)) {
-            return;
+    public void sendPacket(BedrockPacket packet) {
+        Objects.requireNonNull(packet, "packet");
+        var selectedSession = protocolSession;
+        if (selectedSession != null) {
+            selectedSession.send(this, packet);
+        } else {
+            sendBootstrapPacket(packet, false);
         }
+    }
 
+    public void sendPackets(Collection<? extends BedrockPacket> packets) {
+        Objects.requireNonNull(packets, "packets").forEach(packet ->
+                Objects.requireNonNull(packet, "packets contains null")
+        );
+        var selectedSession = protocolSession;
+        if (selectedSession != null) {
+            selectedSession.send(this, packets);
+        } else {
+            packets.forEach(packet -> sendBootstrapPacket(packet, false));
+        }
+    }
+
+    public void sendPacketImmediately(BedrockPacket packet) {
+        Objects.requireNonNull(packet, "packet");
+        var selectedSession = protocolSession;
+        if (selectedSession != null) {
+            selectedSession.sendImmediately(this, packet);
+        } else {
+            sendBootstrapPacket(packet, true);
+        }
+    }
+
+    public void sendPacketsImmediately(Collection<? extends BedrockPacket> packets) {
+        Objects.requireNonNull(packets, "packets").forEach(packet ->
+                Objects.requireNonNull(packet, "packets contains null")
+        );
+        var selectedSession = protocolSession;
+        if (selectedSession != null) {
+            selectedSession.sendImmediately(this, packets);
+        } else {
+            packets.forEach(packet -> sendBootstrapPacket(packet, true));
+        }
+    }
+
+    private void sendBootstrapPacket(BedrockPacket packet, boolean immediately) {
+        Objects.requireNonNull(packet, "packet");
+        if (!(packet instanceof PlayStatusPacket)) {
+            throw new IllegalStateException(
+                    "Only PlayStatusPacket may be sent before protocol negotiation: " + packet.getPacketType()
+            );
+        }
         if (!getClientState().canHandlePackets()) {
             return;
         }
@@ -2850,26 +1307,24 @@ public class AllayPlayer implements Player {
         if (!event.call()) {
             return;
         }
-
-        this.session.sendPacket(event.getPacket());
-    }
-
-    @Override
-    public void sendPacketImmediately(Object p) {
-        if (!(p instanceof BedrockPacket packet)) {
+        var outgoingPacket = event.getPacket();
+        if (outgoingPacket == null) {
+            throw new IllegalStateException("PacketSendEvent replaced a bootstrap packet with null");
+        }
+        if (!(outgoingPacket instanceof PlayStatusPacket)) {
+            throw new IllegalStateException(
+                    "PacketSendEvent replaced a bootstrap packet with " + outgoingPacket.getPacketType()
+            );
+        }
+        if (!getClientState().canHandlePackets() || !session.isConnected()) {
             return;
         }
 
-        if (!getClientState().canHandlePackets()) {
-            return;
+        if (immediately) {
+            this.session.sendPacketImmediately(outgoingPacket);
+        } else {
+            this.session.sendPacket(outgoingPacket);
         }
-
-        var event = new PacketSendEvent(this, packet);
-        if (!event.call()) {
-            return;
-        }
-
-        this.session.sendPacketImmediately(event.getPacket());
     }
 
     protected CommandData encodeCommand(Command command) {
@@ -2924,13 +1379,18 @@ public class AllayPlayer implements Player {
 
     @Override
     public void disconnect(@MayContainTrKey String reason) {
-        if (!this.packetProcessorHolder.setClientState(ClientState.DISCONNECTED)) {
-            log.warn("Trying to disconnect a player who is already disconnected!");
-            return;
+        ClientState lastClientState;
+        synchronized (protocolLifecycleLock) {
+            var processorHolder = activeProcessorHolder();
+            if (!processorHolder.setClientState(ClientState.DISCONNECTED)) {
+                log.warn("Trying to disconnect a player who is already disconnected!");
+                return;
+            }
+            lastClientState = processorHolder.getLastClientState();
         }
 
         String translatedReason;
-        if (this.packetProcessorHolder.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
+        if (lastClientState.ordinal() >= ClientState.LOGGED_IN.ordinal()) {
             translatedReason = I18n.get().tr(this.loginData.getLangCode(), reason);
         } else {
             // At that time login data is null
@@ -2950,16 +1410,52 @@ public class AllayPlayer implements Player {
 
     @Override
     public ClientState getClientState() {
-        return packetProcessorHolder.getClientState();
+        return activeProcessorHolder().getClientState();
     }
 
     public void setClientState(ClientState state) {
-        this.packetProcessorHolder.setClientState(state);
+        synchronized (protocolLifecycleLock) {
+            activeProcessorHolder().setClientState(state);
+        }
     }
 
     @Override
     public ClientState getLastClientState() {
-        return packetProcessorHolder.getLastClientState();
+        return activeProcessorHolder().getLastClientState();
+    }
+
+    public boolean installProtocol(Protocol protocol) {
+        Objects.requireNonNull(protocol, "protocol");
+        synchronized (protocolLifecycleLock) {
+            if (protocolSession != null) {
+                throw new IllegalStateException("A protocol is already installed for this connection");
+            }
+            if (bootstrapProcessorHolder.getClientState() != ClientState.CONNECTED || !session.isConnected()) {
+                return false;
+            }
+
+            var selectedSession = new ProtocolSession(protocol, session);
+            selectedSession.installCodec();
+            protocolSession = selectedSession;
+            return true;
+        }
+    }
+
+    public ProtocolSession getProtocolSession() {
+        return protocolSession;
+    }
+
+    public Protocol getProtocol() {
+        var selectedSession = protocolSession;
+        if (selectedSession == null) {
+            throw new IllegalStateException("Protocol negotiation has not completed");
+        }
+        return selectedSession.getProtocol();
+    }
+
+    private PacketProcessorHolder activeProcessorHolder() {
+        var selectedSession = protocolSession;
+        return selectedSession == null ? bootstrapProcessorHolder : selectedSession.getProcessorHolder();
     }
 
     @Override
@@ -2987,27 +1483,21 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewPlayerAbilities(Player player) {
-        var packet = new UpdateAbilitiesPacket();
-
         var entity = Preconditions.checkNotNull(player.getControlledEntity());
-        packet.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
         // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
         // If this player does not have specific command permissions, the command description won't even be sent to the client
-        packet.setCommandPermission(entity.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
         // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
-        packet.setPlayerPermission(calculatePlayerPermission(player));
-
-        var layer = new AbilityLayer();
-        layer.setLayerType(AbilityLayer.Type.BASE);
-        layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
-        layer.getAbilityValues().addAll(calculateAbilities(player));
-        // NOTICE: this shouldn't be changed
-        layer.setWalkSpeed((float) DEFAULT_SPEED.calculate());
-        layer.setFlySpeed((float) player.getFlySpeed().calculate());
-        layer.setVerticalFlySpeed((float) player.getVerticalFlySpeed().calculate());
-        packet.getAbilityLayers().add(layer);
-
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodePlayerAbilities(
+                entity.getUniqueId().getLeastSignificantBits(),
+                entity.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean()
+                        ? CommandPermission.GAME_DIRECTORS
+                        : CommandPermission.ANY,
+                calculatePlayerPermission(player),
+                calculateAbilities(player),
+                (float) DEFAULT_SPEED.calculate(),
+                (float) player.getFlySpeed().calculate(),
+                (float) player.getVerticalFlySpeed().calculate()
+        ));
 
         if (player == this) {
             sendAdventureSettings();
@@ -3083,13 +1573,12 @@ public class AllayPlayer implements Player {
             return;
         }
 
-        var packet = new UpdateAdventureSettingsPacket();
-        packet.setNoPvM(!canAttackMobs());
-        packet.setNoMvP(!canAttackMobs());
-        packet.setShowNameTags(this.controlledEntity.getGameMode() != GameMode.SPECTATOR);
-        packet.setImmutableWorld(isImmutableWorld());
-        packet.setAutoJump(true);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeAdventureSettings(
+                !canAttackMobs(),
+                !canAttackMobs(),
+                this.controlledEntity.getGameMode() != GameMode.SPECTATOR,
+                isImmutableWorld()
+        ));
     }
 
     protected static EnumSet<PlayerAbility> createBaseAbilitySet() {
@@ -3349,21 +1838,11 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewPlayerListChange(Collection<Player> players, boolean add) {
-        var packet = new PlayerListPacket();
-        packet.setAction(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE);
-        for (var player : players) {
-            var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
-            entry.setEntityId(Preconditions.checkNotNull(player.getControlledEntity()).getUniqueId().getLeastSignificantBits());
-            entry.setName(player.getOriginName());
-            entry.setXuid(player.getLoginData().getXuid());
-            entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
-            entry.setBuildPlatform(BuildPlatform.from(player.getLoginData().getDeviceInfo().device().getId()));
-            entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
-            entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
-            entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
-            packet.getEntries().add(entry);
-        }
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodePlayerList(
+                players,
+                add,
+                AllayServer.getSettings().resourcePackSettings().trustAllSkins()
+        ));
     }
 
     @Override
@@ -3399,10 +1878,7 @@ public class AllayPlayer implements Player {
 
     @Override
     public void setMotion(Vector3dc m) {
-        var packet = new SetEntityMotionPacket();
-        packet.setMotion(Vector3f.from(m.x(), m.y(), m.z()));
-        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeEntityMotion(this.controlledEntity, m));
     }
 
     @Override
@@ -3427,10 +1903,7 @@ public class AllayPlayer implements Player {
 
     @Override
     public void transfer(String ip, int port) {
-        var packet = new TransferPacket();
-        packet.setAddress(ip);
-        packet.setPort(port);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeTransfer(ip, port));
     }
 
     /**
@@ -3438,7 +1911,6 @@ public class AllayPlayer implements Player {
      * the player entity's current pos and then spawn it. The nbt will be used in EntityPlayer::loadNBT() later in
      * doFirstSpawn() method instead of here because some packets must be sent after the player fully joined the server.
      */
-    @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     public void spawnEntityPlayer() {
         var server = Server.getInstance();
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
@@ -3524,11 +1996,12 @@ public class AllayPlayer implements Player {
             playerManager.getPlayerStorage().savePlayerData(this.getLoginData().getUuid(), playerData);
         }
 
-        this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
+        setClientState(ClientState.SPAWNED);
 
         // Dimension data and voxel shapes should be sent before start game
-        sendPacket(NetworkData.DIMENSION_DATA_PACKET.get());
-        sendPacket(NetworkData.VOXEL_SHAPES_PACKET.get());
+        var encoder = getProtocol().getEncoder();
+        sendPacket(encoder.encodeDimensionData());
+        sendPackets(encoder.encodeVoxelShapes());
 
         // Send StartGamePacket to the client first before we start sending chunks, otherwise
         // the chunks will be ignored by the client, and the client will be unable to join the server
@@ -3537,80 +2010,25 @@ public class AllayPlayer implements Player {
         dimension.addPlayer(this);
         playerManager.addPlayer(this);
 
-        sendPacket(NetworkData.ITEM_REGISTRY_PACKET.get());
-        sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
-        sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
-        for (var pkt : NetworkData.SYNC_ENTITY_PROPERTY_PACKETS.get()) {
-            sendPacket(pkt);
-        }
-        sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
-        sendPacket(MultiVersionHelper.adaptCraftingDataPacket(this, NetworkData.CRAFTING_DATA_PACKET.get()));
-        sendPacket(NetworkData.TRIM_DATA_PACKET.get());
+        sendPacket(encoder.encodeItemRegistry());
+        sendPacket(encoder.encodeCreativeContent());
+        sendPacket(encoder.encodeAvailableEntityIdentifiers());
+        sendPackets(encoder.encodeSyncEntityProperties());
+        sendPacket(encoder.encodeBiomeDefinitions());
+        sendPacket(encoder.encodeCraftingData());
+        sendPacket(encoder.encodeTrimData());
     }
 
     /**
      * Sends {@link StartGamePacket} to the client.
      */
-    @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     protected void startGame(World spawnWorld, PlayerData playerData, Dimension dimension) {
-        var helper = session.getPeer().getCodecHelper();
-        helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
-        helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
-
-        var packet = new StartGamePacket();
-
-        packet.getGamerules().addAll(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameRules().getGameRules()));
-        packet.setUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
-        packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
-        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("PlayerGameMode", NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()).ordinal())));
-        var loc = this.controlledEntity.getLocation();
-        var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
-        packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
-        packet.setPlayerPosition(Vector3f.from(loc.x(), loc.y() + 1.62, loc.z()));
-        packet.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
-        // We don't send world seed to the client for security reason
-        packet.setSeed(0L);
-        packet.setDimensionId(dimension.getDimensionType().getId());
-        packet.setGeneratorId(NetworkData.getVanillaGeneratorType(dimension.getDimensionType()).ordinal());
-        packet.setLevelGameType(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()));
-        packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
-        packet.setTrustingPlayers(true);
-        packet.setLevelName(AllayServer.getSettings().genericSettings().motd());
-        packet.setLevelId(AllayServer.getSettings().genericSettings().motd());
-        packet.setDefaultPlayerPermission(PlayerPermission.valueOf(AllayServer.getSettings().genericSettings().defaultPermission()));
-        packet.setServerChunkTickRange(AllayServer.getSettings().worldSettings().tickRadius());
-        // VanillaVersion is the version of the game from which Vanilla features will be used but * will allow a better compatibility with older client
-        packet.setVanillaVersion("*");
-        // ServerEngine For telemetry purposes send server name and version useful for Mojang's telemetry
-        packet.setServerEngine(AllayAPI.getInstance().getCoreName() + " " + GitProperties.getBuildVersion());
-        packet.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
-        packet.setInventoriesServerAuthoritative(true);
-        packet.setServerAuthoritativeBlockBreaking(true);
-        packet.setCommandsEnabled(true);
-        packet.setMultiplayerGame(true);
-        packet.setBroadcastingToLan(true);
-        packet.setMultiplayerCorrelationId(UUID.randomUUID().toString());
-        packet.setXblBroadcastMode(GamePublishSetting.PUBLIC);
-        packet.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
-        packet.setBlockRegistryChecksum(0L);
-        packet.setPlayerPropertyData(NbtMap.EMPTY);
-        packet.setWorldTemplateId(new UUID(0, 0));
-        packet.setEditorWorldType(WorldType.NON_EDITOR);
-        packet.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
-        packet.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
-        packet.setCustomBiomeName("plains");
-        packet.setEducationProductionId("");
-        packet.setForceExperimentalGameplay(OptionalBoolean.empty());
-        packet.setBlockNetworkIdsHashed(true);
-        packet.setServerId("");
-        packet.setWorldId("");
-        packet.setScenarioId("");
-        packet.setOwnerId("");
-        packet.getBlockProperties().addAll(NetworkData.CUSTOM_BLOCK_PROPERTIES.get());
-        packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
-        MultiVersionHelper.adaptCustomBlockProperties(this, packet.getBlockProperties());
-        MultiVersionHelper.adaptExperimentData(this, packet.getExperiments());
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeStartGame(
+                spawnWorld,
+                playerData,
+                dimension,
+                this.controlledEntity
+        ));
     }
 
     public void completeLogin() {
@@ -3626,9 +2044,9 @@ public class AllayPlayer implements Player {
             return;
         }
 
-        this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
+        setClientState(ClientState.LOGGED_IN);
         sendPlayStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-        sendPacket(NetworkData.RESOURCE_PACKS_INFO_PACKET.get());
+        sendPacket(getProtocol().getEncoder().encodeResourcePacksInfo());
     }
 
     protected void sendPlayStatus(PlayStatusPacket.Status status) {
@@ -3638,63 +2056,21 @@ public class AllayPlayer implements Player {
     }
 
     protected void sendCommands() {
-        var packet = new AvailableCommandsPacket();
-        Registries.COMMANDS.getContent().values().stream()
+        var commands = Registries.COMMANDS.getContent().values().stream()
                 .filter(command -> !command.isServerSideOnly() && this.controlledEntity.hasPermissions(command.getPermissions()))
-                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
-        sendPacket(packet);
+                .map(this::encodeCommand)
+                .toList();
+        sendPacket(getProtocol().getEncoder().encodeCommands(commands));
     }
 
     protected void sendHudElements() {
-        var show = new SetHudPacket();
-        var hide = new SetHudPacket();
-        show.setVisibility(HudVisibility.RESET);
-        hide.setVisibility(HudVisibility.HIDE);
-
-        for (var element : HudElement.values()) {
-            if (getHudElementVisibility(element)) {
-                show.getElements().add(toNetwork(element));
-            } else {
-                hide.getElements().add(toNetwork(element));
-            }
-        }
-
-        if (!show.getElements().isEmpty()) {
-            sendPacket(show);
-        }
-        if (!hide.getElements().isEmpty()) {
-            sendPacket(hide);
-        }
+        sendPackets(getProtocol().getEncoder().encodeHudElements(hiddenHudElements));
     }
 
     @Override
     public void viewDialog(Dialog dialog, Entity entity) {
         this.dialog = new Pair<>(dialog, entity);
-
-        var buttonJson = JSONUtils.to(NetworkHelper.toNetworkDialogButtons(dialog.getButtons()));
-        var modelSettings = dialog.getModelSettings();
-        var portraitOffsetJson = JSONUtils.to(Map.of("portrait_offsets", toNetwork(new ModelSettings(
-                modelSettings.scale(),
-                modelSettings.offset().add(0, NetworkHelper.NETWORK_OFFSETS.getOrDefault(entity.getEntityType().getIdentifier(), 0.0f), 0, new Vector3d()),
-                modelSettings.rotation()
-        ))));
-
-        var metadata = parseMetadata(entity);
-        metadata.put(EntityDataTypes.NPC_DATA, portraitOffsetJson);
-
-        var packet1 = new SetEntityDataPacket();
-        packet1.setRuntimeEntityId(entity.getRuntimeId());
-        packet1.setMetadata(metadata);
-        sendPacket(packet1);
-
-        var packet2 = new NpcDialoguePacket();
-        packet2.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
-        packet2.setAction(NpcDialoguePacket.Action.OPEN);
-        packet2.setDialogue(dialog.getBody());
-        packet2.setSceneName("default");
-        packet2.setNpcName(dialog.getTitle());
-        packet2.setActionJson(buttonJson);
-        sendPacket(packet2);
+        sendPackets(getProtocol().getEncoder().encodeDialog(dialog, entity));
     }
 
     @Override
@@ -3713,69 +2089,57 @@ public class AllayPlayer implements Player {
             return;
         }
 
-        var packet = new NpcDialoguePacket();
-        packet.setUniqueEntityId(this.dialog.right().getUniqueId().getLeastSignificantBits());
-        packet.setDialogue("");
-        packet.setSceneName("");
-        packet.setNpcName("");
-        packet.setActionJson("");
-        packet.setAction(NpcDialoguePacket.Action.CLOSE);
-        sendPacket(packet);
+        sendPacket(getProtocol().getEncoder().encodeDialogClose(this.dialog.right()));
 
         this.dialog = null;
+    }
+
+    private PacketSignal handleBootstrapPacket(BedrockPacket packet) {
+        if (!getClientState().canHandlePackets()) {
+            return PacketSignal.HANDLED;
+        }
+
+        var event = new PacketReceiveEvent(this, packet);
+        if (!event.call()) {
+            return PacketSignal.HANDLED;
+        }
+
+        packet = event.getPacket();
+        if (packet == null) {
+            log.warn("Ignored a null packet produced by PacketReceiveEvent before protocol negotiation");
+            return PacketSignal.HANDLED;
+        }
+        var processor = bootstrapProcessorHolder.getProcessor(packet);
+        if (processor == null) {
+            log.debug("Received a packet before protocol negotiation without a bootstrap processor: {}", packet);
+            return PacketSignal.HANDLED;
+        }
+
+        var receiveTime = Server.getInstance().getTick();
+        if (processor.handleAsync(this, packet, receiveTime) != PacketSignal.HANDLED) {
+            processor.handleSync(this, packet, receiveTime);
+        }
+        return PacketSignal.HANDLED;
     }
 
     private class AllayPacketHandler implements BedrockPacketHandler {
         @Override
         public PacketSignal handlePacket(BedrockPacket packet) {
-            if (!getClientState().canHandlePackets()) {
-                return PacketSignal.HANDLED;
-            }
-
-            var event = new PacketReceiveEvent(AllayPlayer.this, packet);
-            if (!event.call()) {
-                return PacketSignal.HANDLED;
-            }
-
-            packet = event.getPacket();
-
-            var processor = packetProcessorHolder.getProcessor(packet);
-            if (processor == null) {
-                log.debug("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
-                return PacketSignal.HANDLED;
-            }
-
-            World world = null;
-            var time = Server.getInstance().getTick();
-            if (controlledEntity != null) {
-                world = controlledEntity.getWorld();
-                if (world != null) {
-                    // If the player is in any world, use entity tick instead
-                    time = controlledEntity.getTick();
-                }
-            }
-
-            if (processor.handleAsync(AllayPlayer.this, packet, time) != PacketSignal.HANDLED) {
-                if (world == null) {
-                    // Packet processors should make sure that PacketProcessor.handleSync()
-                    // method won't be called if the player is not in any world
-                    log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().name(), AllayPlayer.this);
-                    processor.handleSync(AllayPlayer.this, packet, time);
-                } else {
-                    ((AllayWorld) world).addSyncPacketToQueue(AllayPlayer.this, packet, time);
-                }
-            }
-
-            return PacketSignal.HANDLED;
+            var selectedSession = protocolSession;
+            return selectedSession == null
+                    ? handleBootstrapPacket(packet)
+                    : selectedSession.receive(AllayPlayer.this, packet);
         }
 
         @Override
         public void onDisconnect(String reason) {
-            if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED, false)) {
-                // Failed to set the client state to DISCONNECTED from the current state. This usually
-                // happens when the client has already been disconnected by calling disconnect(). This
-                // is expected and should not be treated as an error
-                return;
+            synchronized (protocolLifecycleLock) {
+                if (!activeProcessorHolder().setClientState(ClientState.DISCONNECTED, false)) {
+                    // Failed to set the client state to DISCONNECTED from the current state. This usually
+                    // happens when the client has already been disconnected by calling disconnect(). This
+                    // is expected and should not be treated as an error
+                    return;
+                }
             }
             AllayPlayer.this.onDisconnect(reason);
         }

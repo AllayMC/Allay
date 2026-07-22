@@ -1,8 +1,8 @@
 package org.allaymc.api.registry;
 
 import lombok.Getter;
-import lombok.Setter;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -40,16 +40,39 @@ import java.util.function.Consumer;
  * @author GeyserMC | daoge_cmd
  */
 @Getter
-@Setter
 public abstract class AbstractRegistry<CONTENT> implements Registry<CONTENT> {
     protected CONTENT content;
+    protected volatile boolean frozen;
 
     protected <INPUT> AbstractRegistry(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
         this.content = registryLoader.load(input);
     }
 
     @Override
-    public void register(Consumer<CONTENT> consumer) {
+    public synchronized void register(Consumer<CONTENT> consumer) {
+        ensureMutable();
         consumer.accept(content);
+    }
+
+    @Override
+    public synchronized void setContent(CONTENT content) {
+        ensureMutable();
+        this.content = Objects.requireNonNull(content, "content");
+    }
+
+    @Override
+    public synchronized void freeze() {
+        frozen = true;
+    }
+
+    @Override
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    protected final void ensureMutable() {
+        if (frozen) {
+            throw new IllegalStateException("Registry is frozen");
+        }
     }
 }

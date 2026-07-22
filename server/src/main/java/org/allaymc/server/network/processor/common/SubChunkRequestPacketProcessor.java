@@ -21,7 +21,6 @@ import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkRequestResult;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
-import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 
 import java.io.IOException;
@@ -46,18 +45,21 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
     @Override
     public PacketSignal handleAsync(Player player, SubChunkRequestPacket packet, long receiveTime) {
+        var allayPlayer = (AllayPlayer) player;
+        var encoder = allayPlayer.getProtocol().getEncoder();
         var entity = player.getControlledEntity();
         var dimensionType = Registries.DIMENSIONS.getByK1(packet.getDimension());
         if (dimensionType == null || dimensionType != entity.getDimension().getDimensionType()) {
             // Outdated sub chunk request from a previous dimension
-            var subChunkPacket = new SubChunkPacket();
-            subChunkPacket.setDimension(packet.getDimension());
-            subChunkPacket.setCenterPosition(packet.getSubChunkPosition());
-            player.sendPacket(subChunkPacket);
+            allayPlayer.sendPacket(encoder.encodeSubChunk(
+                    packet.getDimension(),
+                    packet.getSubChunkPosition(),
+                    false,
+                    List.of()
+            ));
             return PacketSignal.HANDLED;
         }
 
-        var allayPlayer = (AllayPlayer) player;
         ChunkCache cache = null;
         UUID playerId = null;
         int cacheGen = 0;
@@ -76,11 +78,6 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             infos.add(collectSubChunkInfo(player, dimensionType, centerPosition, offset));
         }
 
-        // Phase 2: Decide caching + build SubChunkData
-        var subChunkPacket = new SubChunkPacket();
-        subChunkPacket.setDimension(packet.getDimension());
-        subChunkPacket.setCenterPosition(centerPosition);
-
         // Collect non-null section blobs for caching
         List<byte[]> nonAirBlobs = new ArrayList<>();
         for (var info : infos) {
@@ -94,29 +91,18 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             hashes = cache.tryStoreBlobsAndOpenTransaction(playerId, cacheGen, nonAirBlobs.toArray(new byte[0][]));
         }
 
-        if (hashes != null) {
+        boolean cacheEnabled = hashes != null;
+        var responseData = new ArrayList<SubChunkData>(infos.size());
+        if (cacheEnabled) {
             // Cached path
-            subChunkPacket.setCacheEnabled(true);
             int hashIndex = 0;
-            var responseData = new ArrayList<SubChunkData>(infos.size());
 
             for (var info : infos) {
                 var subChunkData = new SubChunkData();
                 subChunkData.setPosition(info.offset);
                 subChunkData.setResult(info.result);
 
-                // Height maps
-                subChunkData.setHeightMapType(info.hMapType);
-                subChunkData.setRenderHeightMapType(info.hMapType);
-                if (info.hMapData != null) {
-                    ByteBuf hMapBuf = Unpooled.wrappedBuffer(info.hMapData);
-                    subChunkData.setHeightMapData(hMapBuf);
-                    subChunkData.setRenderHeightMapData(hMapBuf);
-                } else {
-                    // TOO_HIGH, TOO_LOW, or NO_DATA - no data buffer needed
-                    subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
-                    subChunkData.setRenderHeightMapData(Unpooled.EMPTY_BUFFER);
-                }
+                setHeightMaps(subChunkData, info.hMapType, info.hMapData);
 
                 // Data
                 if (info.result == SubChunkRequestResult.SUCCESS) {
@@ -134,30 +120,14 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
                 responseData.add(subChunkData);
             }
-
-            subChunkPacket.setSubChunks(responseData);
         } else {
             // Non-cached path
-            subChunkPacket.setCacheEnabled(false);
-            var responseData = new ArrayList<SubChunkData>(infos.size());
-
             for (var info : infos) {
                 var subChunkData = new SubChunkData();
                 subChunkData.setPosition(info.offset);
                 subChunkData.setResult(info.result);
 
-                // Height maps
-                subChunkData.setHeightMapType(info.hMapType);
-                subChunkData.setRenderHeightMapType(info.hMapType);
-                if (info.hMapData != null) {
-                    ByteBuf hMapBuf = Unpooled.wrappedBuffer(info.hMapData);
-                    subChunkData.setHeightMapData(hMapBuf);
-                    subChunkData.setRenderHeightMapData(hMapBuf);
-                } else {
-                    // TOO_HIGH, TOO_LOW, or NO_DATA - no data buffer needed
-                    subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
-                    subChunkData.setRenderHeightMapData(Unpooled.EMPTY_BUFFER);
-                }
+                setHeightMaps(subChunkData, info.hMapType, info.hMapData);
 
                 // Data - combine section blob + block entities
                 if (info.result == SubChunkRequestResult.SUCCESS) {
@@ -173,12 +143,29 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
                 responseData.add(subChunkData);
             }
-
-            subChunkPacket.setSubChunks(responseData);
         }
 
-        player.sendPacket(subChunkPacket);
+        allayPlayer.sendPacket(encoder.encodeSubChunk(
+                packet.getDimension(),
+                centerPosition,
+                cacheEnabled,
+                responseData
+        ));
         return PacketSignal.HANDLED;
+    }
+
+    static void setHeightMaps(SubChunkData subChunkData, HeightMapDataType type, byte[] data) {
+        subChunkData.setHeightMapType(type);
+        subChunkData.setRenderHeightMapType(type);
+        if (data == null) {
+            subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
+            subChunkData.setRenderHeightMapData(Unpooled.EMPTY_BUFFER);
+            return;
+        }
+
+        ByteBuf heightMap = Unpooled.wrappedBuffer(data);
+        subChunkData.setHeightMapData(heightMap);
+        subChunkData.setRenderHeightMapData(heightMap.retainedDuplicate());
     }
 
     private SubChunkInfo collectSubChunkInfo(Player player, DimensionType dimensionType, Vector3i center, Vector3i offset) {

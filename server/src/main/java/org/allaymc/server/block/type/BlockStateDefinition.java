@@ -173,8 +173,8 @@ public record BlockStateDefinition(
      * <p>
      * The NBT encoding uses {@code packed_bools} (1.21.110+ format) to pack
      * {@code faceDimming}, {@code randomUVRotation}, and {@code textureVariation}
-     * into a single byte. For older clients, {@code MultiVersionHelper.adaptMaterialInstances}
-     * converts to the legacy format with separate boolean fields.
+     * into a single byte. Protocol-specific encoders convert it to the legacy
+     * format with separate boolean fields for older clients.
      *
      * @param texture          the texture shortname from terrain_texture.json
      * @param renderMethod     controls transparency and culling behavior

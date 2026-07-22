@@ -1,6 +1,7 @@
 package org.allaymc.api.registry;
 
 import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 
 /**
  * A registry which use {@link BiMap} as the content.
@@ -28,7 +29,17 @@ public class BiMappedRegistry<LEFT, RIGHT> extends AbstractRegistry<BiMap<LEFT, 
         return content.inverse().getOrDefault(right, defaultValue);
     }
 
-    public void register(LEFT left, RIGHT right) {
+    public synchronized void register(LEFT left, RIGHT right) {
+        ensureMutable();
         content.put(left, right);
+    }
+
+    @Override
+    public synchronized void freeze() {
+        if (frozen) {
+            return;
+        }
+        content = ImmutableBiMap.copyOf(content);
+        super.freeze();
     }
 }

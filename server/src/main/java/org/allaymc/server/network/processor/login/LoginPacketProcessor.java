@@ -5,7 +5,6 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayer;
@@ -25,12 +24,9 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
-    @MultiVersion(version = "*-NetEase", details = "NetEase clients allow Chinese player names")
     public void handle(Player player, LoginPacket packet) {
         var allayPlayer = (AllayPlayer) player;
-        boolean isNetEaseClient = allayPlayer.isNetEasePlayer();
-
-        var loginData = AllayLoginData.decode(packet, isNetEaseClient);
+        var loginData = decodeLoginData(packet);
         if (loginData == null) {
             log.warn("Failed to decode login packet received from {}. The client will be disconnected", player.getSocketAddress());
             player.disconnect();
@@ -57,13 +53,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         }
 
         var name = loginData.getXname();
-        // NetEase clients allow Chinese names, skip the standard name pattern validation
-        if (!isNetEaseClient && !NAME_PATTERN.matcher(name).matches()) {
-            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDNAME);
-            return;
-        }
-        // For NetEase clients, only check that name is not empty
-        if (isNetEaseClient && (name == null || name.trim().isEmpty())) {
+        if (!isValidName(name)) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDNAME);
             return;
         }
@@ -97,7 +87,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
 
             var handshakePacket = new ServerToClientHandshakePacket();
             handshakePacket.setJwt(EncryptionUtils.createHandshakeJwt(serverKeyPair, token));
-            player.sendPacketImmediately(handshakePacket);
+            allayPlayer.sendPacketImmediately(handshakePacket);
 
             var encryptionSecretKey = EncryptionUtils.getSecretKey(serverKeyPair.getPrivate(), clientKey, token);
             allayPlayer.getSession().enableEncryption(encryptionSecretKey);
@@ -106,6 +96,26 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             log.warn("Failed to initialize encryption for client {}", name, exception);
             player.disconnect("disconnectionScreen.internalError");
         }
+    }
+
+    /**
+     * Decodes login data for the international protocol branch.
+     *
+     * @param packet the login packet
+     * @return decoded login data, or {@code null} when decoding fails
+     */
+    protected AllayLoginData decodeLoginData(LoginPacket packet) {
+        return AllayLoginData.decode(packet, false);
+    }
+
+    /**
+     * Validates an international player name.
+     *
+     * @param name the decoded player name
+     * @return whether the name is valid for this protocol branch
+     */
+    protected boolean isValidName(String name) {
+        return name != null && NAME_PATTERN.matcher(name).matches();
     }
 
     @Override

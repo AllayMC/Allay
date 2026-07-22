@@ -89,30 +89,47 @@ Generate using `ItemDataProcessor`, based on `items_raw.json`.
 | `BlockClassGen`                            | Requires manual edits:<br>– Delete old blocks<br>– Update properties and logic<br>– Check `BlockTypeInitializer.java` for errors<br>– Add merged blocks in `registerMergedBlocks()` if needed |
 | `ItemIdEnumGen` -> `ItemClassGen`          | Similar to blocks:<br>– Remove old items<br>– Migrate logic if only names changed<br>– Add merged items in `registerMergedItems()` if needed                                                  |
 
-## 6. Update Dependencies and `ProtocolInfo.java`
+## 6. Update Protocol Dependencies
 
 Update to the latest versions of:
 
 - [AllayMC/Protocol](https://github.com/AllayMC/Protocol)
 - [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater)
 
-## 7. Update `ProtocolInfo.java`, `NetworkData.java` and `MultiVersion.java`
+Keep `ProtocolInfo.FEATURE_VERSION` and the block/item state updater constants aligned with the data files. Supported
+client versions are owned by `ProtocolRegistry`, not `ProtocolInfo`.
 
-Update `ProtocolInfo.java`:
-- `ProtocolInfo.SUPPORTED_VERSIONS`
-- `ProtocolInfo.FEATURE_VERSION`
-- `ProtocolInfo.BLOCK_STATE_VERSION`, `ProtocolInfo.BLOCK_STATE_UPDATER`, `ProtocolInfo.ITEM_STATE_UPDATER`
-  and `ProtocolInfo.BLOCK_STATE_VERSION_NUM` (if block state version changed)
+## 7. Add the Protocol Implementation
 
-Update `NetworkData.java`:
-- `NetworkData.encodeExperimentDataList()`
+For a new international protocol version:
 
-Update `MultiVersion.java`
+1. Add `ProtocolV<version>` extending the previous international protocol class.
+2. Add `PacketEncoderV<version>` extending the previous international encoder class.
+3. Override only processor factories, encoded data, packet encoders, or features that changed at that version boundary.
+4. Register the protocol in `ProtocolRegistry.createDefault()`.
 
-## 8. Test and Finalize
+For a NetEase variant, extend the international protocol and encoder with the same protocol number directly. Do not
+inherit another NetEase version, and do not place NetEase behavior in the later international inheritance chain.
 
-1. Run `gradle test` to ensure all tests pass.
-2. Update the client and test connectivity with the server.
-3. Once verified, the update is considered complete.
+Protocol classes must not inspect a player's negotiated version. Version-specific behavior belongs in the applicable
+protocol/data/encoder override. Connection state belongs in processors created by the protocol's processor factory
+table.
+
+## 8. Review Protocol Data and Encoders
+
+- Keep protocol-independent registry snapshots in `NetworkData`.
+- Keep expensive client payloads and stable ID mappings in `ProtocolData`.
+- Build recipe payloads and `recipesByNetworkId` together in the protocol's `RecipeTable`.
+- Construct a new packet for every encoder call. Never cache a `BedrockPacket`.
+- Send normal gameplay output through the negotiated protocol's `PacketEncoder` and `ProtocolSession`.
+- Add an encoder override only where the wire-level behavior actually changes.
+
+## 9. Test and Finalize
+
+1. Add registry and inheritance tests for the new implementation.
+2. Verify representative encoder output with the target codec.
+3. Add boundary regression tests for every overridden processor, data set, encoder, or feature.
+4. Run `./gradlew build`.
+5. Test login and gameplay with each newly supported client variant.
 
 Remember to record all changes in `CHANGELOG.md`.

@@ -56,4 +56,24 @@ public interface Registry<CONTENT> {
      * @param content the underlying value held by this registry
      */
     void setContent(CONTENT content);
+
+    /**
+     * Prevents further registration or replacement of this registry's content.
+     *
+     * <p>The default implementation is a no-op so existing custom registry
+     * implementations remain compatible and mutable unless they opt into freezing.</p>
+     */
+    default void freeze() {
+    }
+
+    /**
+     * Checks whether this registry has been frozen.
+     *
+     * <p>Implementations that support freezing should override this method.</p>
+     *
+     * @return {@code true} if mutations are no longer accepted
+     */
+    default boolean isFrozen() {
+        return false;
+    }
 }
