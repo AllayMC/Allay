@@ -22,6 +22,7 @@ public class SetMaxPlayersCommand extends Command {
             var maxPlayers = Math.max(Server.getInstance().getPlayerManager().getPlayerCount(), context.getResult(0));
 
             AllayServer.getSettings().genericSettings().maxPlayerCount(maxPlayers);
+            AllayServer.getSettings().save();
             Server.getInstance().getPlayerManager().setMaxPlayerCount(maxPlayers);
             context.addOutput(TrKeys.MC_COMMANDS_SETMAXPLAYERS_SUCCESS, maxPlayers);
             return context.success();
