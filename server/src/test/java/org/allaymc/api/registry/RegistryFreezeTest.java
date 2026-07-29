@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -41,7 +43,7 @@ class RegistryFreezeTest {
     }
 
     @Test
-    void mappedRegistryPublishesAnUnmodifiableSnapshot() {
+    void simpleMappedRegistryPublishesAnUnmodifiableSnapshot() {
         var registry = SimpleMappedRegistry.<Void, String, Integer>create(ignored -> new HashMap<>());
         registry.register("before", 1);
         var mutableContent = registry.getContent();
@@ -55,6 +57,23 @@ class RegistryFreezeTest {
         assertThrows(IllegalStateException.class, () -> registry.register("registered", 4));
         assertThrows(IllegalStateException.class, () -> registry.register(content -> content.put("consumer", 5)));
         assertThrows(IllegalStateException.class, () -> registry.setContent(new HashMap<>()));
+    }
+
+    @Test
+    void mappedRegistryPreservesConcreteMapTypeWhenFrozen() {
+        AbstractMappedRegistry<String, Integer, LinkedHashMap<String, Integer>> registry =
+                MappedRegistry.<Void, String, Integer, LinkedHashMap<String, Integer>>of(
+                        ignored -> new LinkedHashMap<>()
+                );
+        registry.register("before", 1);
+
+        registry.freeze();
+
+        LinkedHashMap<String, Integer> frozenContent = registry.getContent();
+        assertEquals(Map.of("before", 1), frozenContent);
+        assertEquals(1, registry.get("before"));
+        assertThrows(IllegalStateException.class, () -> registry.register("after", 2));
+        assertThrows(IllegalStateException.class, () -> registry.setContent(new LinkedHashMap<>()));
     }
 
     @Test

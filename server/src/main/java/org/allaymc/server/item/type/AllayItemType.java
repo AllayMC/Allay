@@ -44,15 +44,14 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final ItemData itemData;
     @Getter
     private final boolean customItem;
-
-    private final Supplier<BlockType<?>> blockType;
-
     /**
      * The protocol-independent client definition for this item, or {@code null} when no custom
      * item definition was configured.
      */
     @Getter
     private final CustomItemDefinition customItemDefinition;
+
+    private final Supplier<BlockType<?>> blockType;
 
     private AllayItemType(
             Function<ItemStackInitInfo, T> instanceCreator,

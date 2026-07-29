@@ -25,6 +25,8 @@
 
 package org.allaymc.api.registry;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -40,6 +42,18 @@ import java.util.function.Supplier;
 public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map<K, V>> {
     protected <I> SimpleMappedRegistry(I input, RegistryLoader<I, Map<K, V>> registryLoader) {
         super(input, registryLoader);
+    }
+
+    /**
+     * Freezes this registry using an insertion-ordered, unmodifiable snapshot of its mappings.
+     */
+    @Override
+    public synchronized void freeze() {
+        if (frozen) {
+            return;
+        }
+        content = Collections.unmodifiableMap(new LinkedHashMap<>(content));
+        super.freeze();
     }
 
     /**
