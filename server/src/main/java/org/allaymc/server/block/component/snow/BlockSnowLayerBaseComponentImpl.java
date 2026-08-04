@@ -4,6 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.interfaces.BlockSnowLayerBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -53,7 +54,7 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var clickedBlockState = placementInfo.getClickedBlock();
-        if (clickedBlockState.getBlockType() == BlockTypes.SNOW_LAYER) {
+        if (clickedBlockState.getBehavior() instanceof BlockSnowLayerBehavior) {
             var height = clickedBlockState.getPropertyValue(HEIGHT);
             if (height == HEIGHT.getMax()) {
                 return false;

@@ -4,9 +4,10 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.interfaces.BlockTripWireBehavior;
+import org.allaymc.api.block.interfaces.BlockTripwireHookBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -94,7 +95,7 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Only handle actual block removal, not property updates
         // When we update hook properties, newBlockState is still TRIPWIRE_HOOK
-        if (newBlockState.getBlockType() == BlockTypes.TRIPWIRE_HOOK) {
+        if (newBlockState.getBehavior() instanceof BlockTripwireHookBehavior) {
             return;
         }
 
@@ -179,9 +180,9 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
         for (int i = 1; i < MAX_DISTANCE; i++) {
             Vector3ic scanPos = hookFacing.offsetPos(hookPos, i);
             Block scannedBlock = new Block(dimension, scanPos);
-            BlockType<?> scannedType = scannedBlock.getBlockType();
+            BlockBehavior scannedBehavior = scannedBlock.getBehavior();
 
-            if (scannedType == BlockTypes.TRIPWIRE_HOOK) {
+            if (scannedBehavior instanceof BlockTripwireHookBehavior) {
                 // Found a hook - check if it faces opposite direction
                 BlockFace otherFacing = getHookFacingFromState(scannedBlock);
                 if (otherFacing == hookFacing.opposite()) {
@@ -190,7 +191,7 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
                 break;
             }
 
-            if (scannedType != BlockTypes.TRIP_WIRE && i != pos) {
+            if (!(scannedBehavior instanceof BlockTripWireBehavior) && i != pos) {
                 // Non-tripwire block breaks the connection
                 wireBlocks[i] = null;
                 canConnect = false;
@@ -199,7 +200,7 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
                     scannedBlock = wireBlock;
                 }
 
-                if (scannedType == BlockTypes.TRIP_WIRE) {
+                if (scannedBehavior instanceof BlockTripWireBehavior) {
                     boolean disarmed = scannedBlock.getPropertyValue(DISARMED_BIT);
                     boolean wirePowered = scannedBlock.getPropertyValue(POWERED_BIT);
                     nextPowered |= (!disarmed && wirePowered);
@@ -223,7 +224,7 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
             BlockState otherHookState = dimension.getBlockState(otherHookPos);
 
             // Verify the opposite hook still exists
-            if (otherHookState.getBlockType() != BlockTypes.TRIPWIRE_HOOK) {
+            if (!(otherHookState.getBehavior() instanceof BlockTripwireHookBehavior)) {
                 return;
             }
 
@@ -271,7 +272,7 @@ public class BlockTripwireHookBaseComponentImpl extends BlockBaseComponentImpl {
         if (wasAttached != canConnect) {
             for (int i = 1; i < distance; i++) {
                 Block wire = wireBlocks[i];
-                if (wire != null && wire.getBlockType() == BlockTypes.TRIP_WIRE) {
+                if (wire != null && wire.getBehavior() instanceof BlockTripWireBehavior) {
                     Vector3ic wirePos = hookFacing.offsetPos(hookPos, i);
                     BlockState wireState = dimension.getBlockState(wirePos);
 

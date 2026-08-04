@@ -5,6 +5,9 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.interfaces.BlockKelpBehavior;
+import org.allaymc.api.block.interfaces.BlockMagmaBehavior;
+import org.allaymc.api.block.interfaces.BlockSoulSandBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -73,12 +76,12 @@ public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         if (face == BlockFace.DOWN) {
-            var downType = neighbor.getBlockType();
-            if (downType != BlockTypes.KELP && !neighbor.getBlockStateData().isSolid()) {
+            var downBehavior = neighbor.getBehavior();
+            if (!(downBehavior instanceof BlockKelpBehavior) && !neighbor.getBlockStateData().isSolid()) {
                 block.breakBlock();
                 return;
             }
-            if (downType == BlockTypes.MAGMA || downType == BlockTypes.SOUL_SAND) {
+            if (downBehavior instanceof BlockMagmaBehavior || downBehavior instanceof BlockSoulSandBehavior) {
                 block.breakBlock();
             }
         }
@@ -131,7 +134,7 @@ public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl {
         // Randomize age of kelp below
         var belowPos = BlockFace.DOWN.offsetPos(block.getPosition());
         var belowState = block.getDimension().getBlockState(belowPos);
-        if (belowState.getBlockType() == BlockTypes.KELP) {
+        if (belowState.getBehavior() instanceof BlockKelpBehavior) {
             var newAge = ThreadLocalRandom.current().nextInt(MAX_AGE);
             var newState = belowState.setPropertyValue(KELP_AGE, newAge);
             block.getDimension().setBlockState(belowPos, newState);

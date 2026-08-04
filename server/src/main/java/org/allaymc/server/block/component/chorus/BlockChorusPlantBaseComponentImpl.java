@@ -3,6 +3,7 @@ package org.allaymc.server.block.component.chorus;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.interfaces.BlockChorusPlantBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -34,7 +35,7 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
         boolean sideSupport = false;
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             var neighbor = current.offsetPos(face);
-            if (neighbor.getBlockType() == BlockTypes.CHORUS_PLANT && hasDownSupport(neighbor)) {
+            if (neighbor.getBehavior() instanceof BlockChorusPlantBehavior && hasDownSupport(neighbor)) {
                 sideSupport = true;
                 break;
             }
@@ -50,8 +51,8 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean hasDownSupport(Block current) {
-        var downType = current.offsetPos(BlockFace.DOWN).getBlockType();
-        return downType == BlockTypes.CHORUS_PLANT || downType == BlockTypes.END_STONE;
+        var downState = current.offsetPos(BlockFace.DOWN);
+        return downState.getBehavior() instanceof BlockChorusPlantBehavior || downState.getBlockType() == BlockTypes.END_STONE;
     }
 
     @Override

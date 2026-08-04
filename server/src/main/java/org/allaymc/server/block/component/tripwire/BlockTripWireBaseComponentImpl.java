@@ -4,6 +4,8 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.interfaces.BlockTripWireBehavior;
+import org.allaymc.api.block.interfaces.BlockTripwireHookBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -152,9 +154,9 @@ public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
             for (int i = 1; i < 42; i++) {
                 Vector3ic scanPos = face.offsetPos(pos, i);
                 BlockState scannedState = dimension.getBlockState(scanPos);
-                BlockType<?> scannedType = scannedState.getBlockType();
+                BlockBehavior scannedBehavior = scannedState.getBehavior();
 
-                if (scannedType == BlockTypes.TRIPWIRE_HOOK) {
+                if (scannedBehavior instanceof BlockTripwireHookBehavior) {
                     // Found a hook - check if it faces this direction
                     int hookDirection = scannedState.getPropertyValue(DIRECTION_4);
                     BlockFace hookFacing = BlockFace.fromHorizontalIndex(hookDirection);
@@ -166,7 +168,7 @@ public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
                     break;
                 }
 
-                if (scannedType != BlockTypes.TRIP_WIRE) {
+                if (!(scannedBehavior instanceof BlockTripWireBehavior)) {
                     // Non-tripwire block, stop searching in this direction
                     break;
                 }

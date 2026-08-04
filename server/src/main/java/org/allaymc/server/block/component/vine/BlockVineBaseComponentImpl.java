@@ -4,6 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.interfaces.BlockVineBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -38,7 +39,7 @@ public class BlockVineBaseComponentImpl extends BlockBaseComponentImpl {
 
         var currentState = dimension.getBlockState(placeBlockPos);
         var newBits = faceToBit(supportFace);
-        if (currentState.getBlockType() == BlockTypes.VINE) {
+        if (currentState.getBehavior() instanceof BlockVineBehavior) {
             var currentBits = currentState.getPropertyValue(BlockPropertyTypes.VINE_DIRECTION_BITS);
             if ((currentBits & newBits) == newBits) {
                 return false;
