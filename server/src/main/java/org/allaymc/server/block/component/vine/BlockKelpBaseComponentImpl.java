@@ -74,16 +74,16 @@ public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
-
-        if (face == BlockFace.DOWN) {
-            var downBehavior = neighbor.getBehavior();
-            if (!(downBehavior instanceof BlockKelpBehavior) && !neighbor.getBlockStateData().isSolid()) {
-                block.breakBlock();
-                return;
-            }
-            if (downBehavior instanceof BlockMagmaBehavior || downBehavior instanceof BlockSoulSandBehavior) {
-                block.breakBlock();
-            }
+        if (face != BlockFace.DOWN) {
+            return;
+        }
+        var behavior = neighbor.getBehavior();
+        if (behavior instanceof BlockMagmaBehavior || behavior instanceof BlockSoulSandBehavior) {
+            block.breakBlock();
+            return;
+        }
+        if (!(behavior instanceof BlockKelpBehavior) && !neighbor.getBlockStateData().isSolid()) {
+            block.breakBlock();
         }
     }
 
