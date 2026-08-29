@@ -7,6 +7,7 @@
   "allay:command.plugin.description": "管理插件",
   "allay:command.status.description": "获取服务器状态",
   "allay:command.tps.description": "获取当前世界的TPS或MSPT",
+  "allay:command.spark.description": "显示 spark 性能分析器命令",
   "allay:command.version.description": "查询服务器版本信息",
   "allay:command.version.output": "此服务器正在运行§b%1§r §a%2§r（§ballay-api§r §a%3§r）。支持版本 §a%4§r（协议版本§a%5§r）",
   "allay:command.world.create.dropdown.generatorpreset.nether": "地狱地形生成器预设",

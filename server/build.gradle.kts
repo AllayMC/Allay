@@ -46,6 +46,7 @@ dependencies {
     }
     api(libs.bstats)
     api(libs.lz4.java)
+    api(libs.spark.common)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -124,6 +125,10 @@ tasks {
         exclude("META-INF/NOTICE")
         exclude("META-INF/NOTICE.txt")
         exclude("META-INF/thirdparty-LICENSE")
+
+        exclude("linux-x64/**")
+        exclude("linux-arm64/**")
+        exclude("macos/**")
     }
 
     runShadow {

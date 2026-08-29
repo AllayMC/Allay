@@ -95,6 +95,10 @@ jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.6" }
 bstats = { group = "org.bstats", name = "bstats-base", version = "3.2.1" }
 # LZ4 compression
 lz4-java = { group = "at.yawk.lz4", name = "lz4-java", version = "1.11.0" }
+spark-common = { group = "me.lucko", name = "spark-common", version = "1.10.172" }
+spark-api = { group = "me.lucko", name = "spark-api", version = "0.1" }
+bytesocks-java-client = { group = "me.lucko", name = "bytesocks-java-client", version = "1.0" }
+adventure-text-feature-pagination = { group = "net.kyori", name = "adventure-text-feature-pagination", version = "4.0.0" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]

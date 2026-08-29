@@ -32,6 +32,7 @@ import org.allaymc.server.player.AllayPlayerManager;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.scroreboard.JsonScoreboardStorage;
+import org.allaymc.server.spark.AllaySparkPlugin;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.utils.AllayForkJoinWorkerThreadFactory;
 import org.allaymc.server.utils.GameLoop;
@@ -189,6 +190,7 @@ public final class AllayServer implements Server {
         this.worldPool.loadWorlds();
         this.scoreboardManager.read();
         this.pluginManager.enablePlugins();
+        AllaySparkPlugin.getInstance().enable();
 
         // Plugins register source data before protocol snapshots freeze it; networking starts afterward.
         this.protocolRegistry = ProtocolRegistry.createDefault();
@@ -253,6 +255,7 @@ public final class AllayServer implements Server {
         this.playerManager.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
         // Shutdown network server to prevent new clients connecting to the server
         this.playerManager.shutdownNetworkInterfaces();
+        AllaySparkPlugin.getInstance().disable();
         this.scheduler.shutdown();
 
         // Disable all plugins

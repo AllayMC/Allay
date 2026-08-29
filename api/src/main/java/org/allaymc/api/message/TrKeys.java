@@ -43,6 +43,7 @@ public interface TrKeys {
      * {@literal Show TPS or MSPT of the current world}
      */
     String ALLAY_COMMAND_TPS_DESCRIPTION = "allay:command.tps.description";
+    String ALLAY_COMMAND_SPARK_DESCRIPTION = "allay:command.spark.description";
 
     /**
      * {@literal Query server version information}

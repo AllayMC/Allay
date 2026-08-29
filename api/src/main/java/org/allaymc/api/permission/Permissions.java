@@ -213,6 +213,7 @@ public interface Permissions {
      * The permission to use /tps command.
      */
     String COMMAND_TPS = "allay.command.tps";
+    String COMMAND_SPARK = "allay.command.spark";
     /**
      * The permission to use /unban command.
      */

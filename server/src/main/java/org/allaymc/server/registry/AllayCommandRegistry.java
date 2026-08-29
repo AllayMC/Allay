@@ -37,6 +37,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new GameModeCommand());
         register(new GameRuleCommand());
         register(new TpsCommand());
+        register(new SparkCommand());
         register(new KickCommand());
         register(new PluginCommand());
         register(new StatusCommand());
