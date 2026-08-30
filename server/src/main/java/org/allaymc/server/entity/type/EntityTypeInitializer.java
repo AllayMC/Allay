@@ -203,7 +203,7 @@ public final class EntityTypeInitializer {
                     var behaviorGroup = BehaviorGroupImpl.builder()
                             .sensor(new NearestPlayerSensor(40, 0, 20))
                             .behavior(BehaviorImpl.builder()
-                                    .executor(new MeleeAttackExecutor(MemoryTypes.ATTACK_TARGET, 0.1f, 40, true, 30))
+                                    .executor(new MeleeAttackExecutor(MemoryTypes.ATTACK_TARGET, 0.1f, 40, true, 30, Math.sqrt(2.5), true))
                                     .evaluator(all(
                                             new MemoryCheckNotEmptyEvaluator(MemoryTypes.ATTACK_TARGET),
                                             entity -> isValidZombieTarget(entity, entity.getMemoryStorage().get(MemoryTypes.ATTACK_TARGET))
@@ -211,7 +211,7 @@ public final class EntityTypeInitializer {
                                     .priority(3)
                                     .build())
                             .behavior(BehaviorImpl.builder()
-                                    .executor(new MeleeAttackExecutor(MemoryTypes.NEAREST_PLAYER, 0.1f, 40, 30))
+                                    .executor(new MeleeAttackExecutor(MemoryTypes.NEAREST_PLAYER, 0.1f, 40, false,30, Math.sqrt(2.5), true))
                                     .evaluator(all(
                                             new MemoryCheckNotEmptyEvaluator(MemoryTypes.NEAREST_PLAYER),
                                             entity -> isValidZombieTarget(entity, entity.getMemoryStorage().get(MemoryTypes.NEAREST_PLAYER))
