@@ -444,7 +444,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
             byte[][] allBlobs = new byte[sectionCount + 1][];
             for (int i = 0; i < sectionCount; i++) {
                 allBlobs[i] = ChunkEncoder.encodeSectionBlob(
-                        chunk.getSection(dimensionType.minSectionY() + i)
+                        chunk,
+                        dimensionType.minSectionY() + i
                 );
             }
             allBlobs[sectionCount] = ChunkEncoder.encodeBiomesBlob(chunk);

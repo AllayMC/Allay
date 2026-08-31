@@ -62,6 +62,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final Queue<WorldViewer.BlockUpdate> extraBlockUpdates;
     protected final Queue<Runnable> chunkTaskQueue;
     protected final AllayChunk safeChunk;
+    protected final ChunkEncoder.NetworkCache networkCache;
     @Getter
     @Setter
     protected volatile ChunkState state;
@@ -105,6 +106,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.extraBlockUpdates = PlatformDependent.newMpscQueue();
         this.chunkTaskQueue = PlatformDependent.newMpscQueue();
         this.safeChunk = new AllayChunk(this);
+        this.networkCache = new ChunkEncoder.NetworkCache(sections.length);
     }
 
     public static AllayChunkBuilder builder() {
@@ -447,6 +449,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public Chunk toSafeChunk() {
         return safeChunk;
+    }
+
+    ChunkEncoder.NetworkCache getNetworkCache() {
+        return networkCache;
     }
 
     public void sendBlockUpdates() {

@@ -41,6 +41,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -73,6 +74,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     // Guards batchMode, batchChunks, and batchEntityRequests to make check-then-enqueue atomic.
     private final Lock batchLock;
     private boolean batchMode;
+    private final Map<EntityWriteKey, CompletableFuture<Void>> entityWriteChains = new ConcurrentHashMap<>();
 
     private World world;
 
@@ -346,6 +348,14 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     private void addEntitiesToBatch(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities, WriteBatch writeBatch) {
+        var entityNbt = new Long2ObjectOpenHashMap<NbtMap>();
+        for (var entry : entities.entrySet()) {
+            entityNbt.put(entry.getKey(), entry.getValue().saveNBT());
+        }
+        addEntityNbtToBatch(chunkX, chunkZ, dimensionType, entityNbt, writeBatch);
+    }
+
+    private void addEntityNbtToBatch(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, NbtMap> entityNbt, WriteBatch writeBatch) {
         var idsBuf = ByteBufAllocator.DEFAULT.buffer();
         try {
             var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionType);
@@ -360,9 +370,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             }
 
             // Write new entities
-            for (var entry : entities.entrySet()) {
+            for (var entry : entityNbt.entrySet()) {
                 idsBuf.writeLongLE(entry.getKey());
-                writeBatch.put(LevelDBKey.indexEntity(entry.getKey()), AllayNBTUtils.nbtToBytesLE(entry.getValue().saveNBT()));
+                writeBatch.put(LevelDBKey.indexEntity(entry.getKey()), AllayNBTUtils.nbtToBytesLE(entry.getValue()));
             }
 
             writeBatch.put(idsKey, ByteBufUtil.getBytes(idsBuf));
@@ -437,47 +447,43 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     protected CompletableFuture<Void> writeEntities0(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities, boolean asyncWrite) {
-        var idsBuf = ByteBufAllocator.DEFAULT.buffer();
+        var entityNbt = new Long2ObjectOpenHashMap<NbtMap>();
+        for (var entry : entities.entrySet()) {
+            entityNbt.put(entry.getKey(), entry.getValue().saveNBT());
+        }
+        if (asyncWrite) {
+            return submitEntityWrite(chunkX, chunkZ, dimensionType, entityNbt);
+        }
         try (var writeBatch = this.db.createWriteBatch()) {
-            var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionType);
-
-            // Delete the old entities in this chunk
-            var oldIds = this.db.get(idsKey);
-            if (oldIds != null) {
-                var oldIdsBuf = Unpooled.wrappedBuffer(oldIds);
-                for (var i = 0; i < oldIds.length; i += Long.BYTES) {
-                    writeBatch.delete(LevelDBKey.indexEntity(oldIdsBuf.readLongLE()));
-                }
-            }
-
-            // Write the new entities
-            for (var entry : entities.entrySet()) {
-                var entity = entry.getValue();
-                idsBuf.writeLongLE(entry.getKey());
-                writeBatch.put(LevelDBKey.indexEntity(entry.getKey()), AllayNBTUtils.nbtToBytesLE(entity.saveNBT()));
-            }
-
-            writeBatch.put(idsKey, ByteBufUtil.getBytes(idsBuf));
-            return handleEntitiesWriteBatch(chunkX, chunkZ, writeBatch, asyncWrite);
+            addEntityNbtToBatch(chunkX, chunkZ, dimensionType, entityNbt, writeBatch);
+            this.db.write(writeBatch);
         } catch (IOException e) {
             throw new WorldStorageException(e);
-        } finally {
-            idsBuf.release();
         }
+        return CompletableFuture.completedFuture(null);
     }
 
-    protected CompletableFuture<Void> handleEntitiesWriteBatch(int chunkX, int chunkZ, WriteBatch writeBatch, boolean asyncWrite) {
-        if (asyncWrite) {
-            return CompletableFuture
-                    .runAsync(() -> this.db.write(writeBatch), Server.getInstance().getVirtualThreadPool())
-                    .exceptionally(t -> {
-                        log.error("Failed to write entities in chunk ({}, {})", chunkX, chunkZ, t);
-                        return null;
-                    });
-        }
+    private CompletableFuture<Void> submitEntityWrite(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, NbtMap> entityNbt) {
+        var key = new EntityWriteKey(chunkX, chunkZ, dimensionType.getId());
+        return entityWriteChains.compute(key, (k, previous) -> {
+            CompletableFuture<Void> next;
+            if (previous == null) {
+                next = CompletableFuture.runAsync(() -> writeEntitiesAsync(chunkX, chunkZ, dimensionType, entityNbt), Server.getInstance().getVirtualThreadPool());
+            } else {
+                next = previous.handle((v, t) -> null).thenRunAsync(() -> writeEntitiesAsync(chunkX, chunkZ, dimensionType, entityNbt), Server.getInstance().getVirtualThreadPool());
+            }
+            next.whenComplete((v, t) -> entityWriteChains.remove(key, next));
+            return next;
+        });
+    }
 
-        this.db.write(writeBatch);
-        return CompletableFuture.completedFuture(null);
+    private void writeEntitiesAsync(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, NbtMap> entityNbt) {
+        try (var writeBatch = this.db.createWriteBatch()) {
+            addEntityNbtToBatch(chunkX, chunkZ, dimensionType, entityNbt, writeBatch);
+            this.db.write(writeBatch);
+        } catch (Throwable e) {
+            log.error("Failed to write entities in chunk ({}, {})", chunkX, chunkZ, e);
+        }
     }
 
     @Override

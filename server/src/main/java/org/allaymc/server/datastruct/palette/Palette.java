@@ -36,6 +36,27 @@ public final class Palette<V> {
     @Setter
     private boolean dirty;
 
+    private volatile long revision;
+    private volatile NetworkSnapshot networkSnapshot;
+
+    private record NetworkSnapshot(long revision, byte[] bytes) {}
+
+    public long revision() {
+        return revision;
+    }
+
+    public byte[] getCachedNetworkBytes() {
+        var snapshot = networkSnapshot;
+        if (snapshot != null && snapshot.revision == revision) {
+            return snapshot.bytes;
+        }
+        return null;
+    }
+
+    public void installNetworkSnapshot(byte[] bytes) {
+        networkSnapshot = new NetworkSnapshot(revision, bytes);
+    }
+
     public Palette(V first) {
         this(first, INITIAL_VERSION);
     }
@@ -87,6 +108,7 @@ public final class Palette<V> {
         var paletteIndex = this.paletteIndexFor(value);
         this.bitArray.set(index, paletteIndex);
         this.dirty = true;
+        this.revision++;
     }
 
     public void writeToNetwork(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
@@ -116,6 +138,7 @@ public final class Palette<V> {
         }
 
         this.dirty = true;
+        this.revision++;
         if (hasCopyLastFlag(header)) {
             if (last == null) {
                 throw new PaletteException("Find copy last flag but last palette is null!");
@@ -172,6 +195,7 @@ public final class Palette<V> {
         }
 
         this.dirty = true;
+        this.revision++;
         this.palette.clear();
         var version = getVersionFromPaletteHeader(header);
         readWords(byteBuf, version);
@@ -216,6 +240,7 @@ public final class Palette<V> {
         }
 
         this.dirty = true;
+        this.revision++;
         if (hasCopyLastFlag(header)) {
             if (last == null) {
                 throw new PaletteException("Find copy last flag but last palette is null!");
@@ -277,6 +302,7 @@ public final class Palette<V> {
         palette.palette.clear();
         palette.palette.addAll(this.palette);
         palette.dirty = true;
+        palette.revision++;
     }
 
     public BitArrayVersion getVersion() {
@@ -308,6 +334,7 @@ public final class Palette<V> {
         this.palette = newPalette;
         this.bitArray = newbitArray;
         this.dirty = true;
+        this.revision++;
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
@@ -329,6 +356,7 @@ public final class Palette<V> {
 
         this.bitArray = newBitArray;
         this.dirty = true;
+        this.revision++;
     }
 
     private int paletteIndexFor(V value) {
