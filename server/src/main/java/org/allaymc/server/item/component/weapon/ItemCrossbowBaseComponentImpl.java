@@ -41,9 +41,9 @@ public class ItemCrossbowBaseComponentImpl extends ItemBaseComponentImpl impleme
 
     protected static final long BASE_CHARGE_DURATION_TICKS = 25; // 1.25 seconds
     protected static final long QUICK_CHARGE_REDUCTION_PER_LEVEL = 5; // 0.25 seconds per level
-    protected static final double ARROW_VELOCITY = 5.25;
+    protected static final double ARROW_VELOCITY = 3.15;
     protected static final double FIREWORK_VELOCITY = 1.6;
-    protected static final float ARROW_BASE_DAMAGE = 9.0f;
+    protected static final float ARROW_BASE_DAMAGE = 2.0f;
     protected static final double MULTISHOT_ANGLE = 10.0;
 
     @Getter
