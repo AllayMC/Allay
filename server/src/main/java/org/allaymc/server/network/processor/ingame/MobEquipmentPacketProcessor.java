@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor.ingame;
 
 import org.allaymc.api.player.Player;
 import org.allaymc.server.container.impl.UnopenedContainerId;
+import org.allaymc.server.network.processor.LatencyCriticalPacketProcessor;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
@@ -9,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
 /**
  * @author Cool_Loong
  */
-public class MobEquipmentPacketProcessor extends PacketProcessor<MobEquipmentPacket> {
+public class MobEquipmentPacketProcessor extends PacketProcessor<MobEquipmentPacket> implements LatencyCriticalPacketProcessor {
     @Override
     public void handleSync(Player player, MobEquipmentPacket packet, long receiveTime) {
         if (packet.getContainerId() != UnopenedContainerId.PLAYER_INVENTORY) {

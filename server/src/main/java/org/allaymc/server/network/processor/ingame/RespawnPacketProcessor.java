@@ -9,6 +9,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.network.processor.LatencyCriticalPacketProcessor;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.world.AllayDimension;
@@ -19,7 +20,7 @@ import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
  * @author IWareQ | daoge_cmd
  */
 @Slf4j
-public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
+public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> implements LatencyCriticalPacketProcessor {
 
     @Override
     public void handleSync(Player player, RespawnPacket packet, long receiveTime) {

@@ -1,7 +1,6 @@
 package org.allaymc.server.world;
 
 import com.google.common.base.Preconditions;
-import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +27,12 @@ import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.network.processor.LatencyCriticalPacketProcessor;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
+import org.allaymc.server.utils.PacketRing;
 import org.allaymc.server.world.manager.AllayEntityManager;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -38,6 +40,7 @@ import org.joml.Vector3i;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.LongAdder;
 
 /**
  * @author daoge_cmd
@@ -58,7 +61,9 @@ public class AllayWorld implements World {
     @Getter
     protected final AllayWorldData worldData;
 
-    protected final Queue<PacketQueueEntry> packetQueue;
+    protected final PacketRing packetQueue;
+    protected final PacketRing priorityPacketQueue;
+    protected final LongAdder droppedPacketCount = new LongAdder();
 
     protected final AtomicReference<WorldState> state;
     protected final Map<DimensionType, Dimension> dimensionMap;
@@ -92,7 +97,8 @@ public class AllayWorld implements World {
         this.worldData = (AllayWorldData) worldStorage.readWorldData();
         this.worldData.setWorld(this);
         this.worldData.increaseWorldStartCount();
-        this.packetQueue = PlatformDependent.newMpscQueue();
+        this.packetQueue = new PacketRing(16_384);
+        this.priorityPacketQueue = new PacketRing(4_096);
         this.state = new AtomicReference<>(WorldState.STARTING);
         this.dimensionMap = new LinkedHashMap<>(3);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
@@ -147,6 +153,13 @@ public class AllayWorld implements World {
      * <p>The processor selected during receipt is retained so a later client-state transition
      * cannot redirect the queued packet to a different processor.</p>
      *
+     * <p>Packets whose processor implements {@link LatencyCriticalPacketProcessor} are queued
+     * in the priority lane and drained ahead of regular packets.</p>
+     *
+     * <p>The queues are bounded ring buffers rather than unbounded queues: when the world thread
+     * falls behind and a ring is full, the packet is dropped instead of the queue growing without
+     * limit. Dropped packets are counted in {@link #droppedPacketCount}.</p>
+     *
      * @param player the receiving player
      * @param packet the received packet
      * @param time the tick at which the packet was received
@@ -158,29 +171,37 @@ public class AllayWorld implements World {
             long time,
             PacketProcessor<BedrockPacket> processor
     ) {
-        this.packetQueue.offer(new PacketQueueEntry(player, packet, time, processor));
+        var ring = processor instanceof LatencyCriticalPacketProcessor ? this.priorityPacketQueue : this.packetQueue;
+        if (!ring.tryOffer(player, packet, time, processor)) {
+            this.droppedPacketCount.increment();
+            if (this.droppedPacketCount.sum() % 512 == 0) {
+                log.warn("Dropped {} sync packets so far: a packet ring is full in world {}", this.droppedPacketCount.sum(), this.name);
+            }
+        }
         this.gameLoop.wakeUp();
     }
 
     protected void handleSyncPackets() {
+        handleSyncPacketsFrom(priorityPacketQueue);
+        handleSyncPacketsFrom(packetQueue);
+    }
+
+    private void handleSyncPacketsFrom(PacketRing ring) {
         try {
-            PacketQueueEntry entry;
-            int count = 0;
-            while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
+            ring.drain(MAX_PACKETS_HANDLE_COUNT_AT_ONCE, (player, packet, receiveTime, processor) -> {
                 // A queued packet belongs to the world that owned the player when it was received.
-                if (entry.player.getControlledEntity().getWorld() != this) {
-                    log.error("Trying to handle sync packet in world {} which the player {} is not in!", name, entry.player.getOriginName());
-                    continue;
+                if (player.getControlledEntity().getWorld() != this) {
+                    log.error("Trying to handle sync packet in world {} which the player {} is not in!", name, player.getOriginName());
+                    return;
                 }
 
                 // The connection may close while the packet waits for the world thread.
-                if (!entry.player.getClientState().canHandlePackets()) {
-                    continue;
+                if (!player.getClientState().canHandlePackets()) {
+                    return;
                 }
 
-                entry.processor().handleSync(entry.player(), entry.packet(), entry.time());
-                count++;
-            }
+                processor.handleSync(player, packet, receiveTime);
+            });
         } catch (Throwable throwable) {
             log.error("Error while handling sync packet in world {}", this.getWorldData().getDisplayName(), throwable);
         }
@@ -208,7 +229,17 @@ public class AllayWorld implements World {
             }
         }
 
+        refreshPlayerSpatialSnapshots(dimensions);
+
         worldStorage.tick(currentTick);
+    }
+
+    protected void refreshPlayerSpatialSnapshots(Iterable<Dimension> dimensions) {
+        for (var dimension : dimensions) {
+            for (var player : dimension.getPlayers()) {
+                ((AllayPlayer) player).refreshSpatialSnapshot();
+            }
+        }
     }
 
     protected void checkFirstTick() {
@@ -473,21 +504,5 @@ public class AllayWorld implements World {
 
         this.weather = weather;
         getPlayers().forEach(player -> player.viewWeather(this.weather));
-    }
-
-    /**
-     * Captures all context needed to finish packet handling without repeating processor selection.
-     *
-     * @param player the receiving player
-     * @param packet the received packet
-     * @param time the receive tick
-     * @param processor the processor selected during receipt
-     */
-    protected record PacketQueueEntry(
-            Player player,
-            BedrockPacket packet,
-            long time,
-            PacketProcessor<BedrockPacket> processor
-    ) {
     }
 }

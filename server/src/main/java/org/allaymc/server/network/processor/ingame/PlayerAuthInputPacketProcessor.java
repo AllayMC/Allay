@@ -13,6 +13,7 @@ import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchAirEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
 import org.allaymc.api.eventbus.event.server.PlayerControlModeUpdateEvent;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
@@ -37,6 +38,7 @@ import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 import java.util.List;
 import java.util.Set;
@@ -79,6 +81,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected void handleMovement(Player player, Vector3f newPos, Vector3f newRot) {
         var entity = player.getControlledEntity();
         var world = entity.getLocation().dimension();
+        // Record the client-declared position so reach pre-filters can use sub-tick-fresh data
+        ((AllayPlayer) player).updateSpatialSnapshot(
+                newPos.getX(), newPos.getY(), newPos.getZ(),
+                newRot.getX(), newRot.getY(),
+                entity.getTick()
+        );
         ((AllayEntityPhysicsEngine) world.getEntityManager().getPhysicsService()).offerClientMove(entity, new Location3d(
                 newPos.getX(), newPos.getY(), newPos.getZ(),
                 newRot.getX(), newRot.getY(), world
@@ -91,7 +99,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.getControlledEntity().canReachBlock(NetworkHelper.fromNetwork(pos))) {
+                    if (!canReachBlockFromSnapshot(player, NetworkHelper.fromNetwork(pos))) {
                         log.debug("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -139,6 +147,55 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 }
             }
         }
+    }
+
+    /**
+     * Reject-only reach check for block actions, evaluated on the network thread against the
+     * player's latest declared position instead of the up-to-one-tick-stale server-side position.
+     * The player AABB is projected onto the snapshot feet position and its eight corners are
+     * tested against the block centre, mirroring {@link EntityPlayerBaseComponent#canReach(double, double, double)}.
+     */
+    protected boolean canReachBlockFromSnapshot(Player player, Vector3ic blockPos) {
+        var entity = player.getControlledEntity();
+        if (entity.isDead()) {
+            return false;
+        }
+
+        var snapshot = ((AllayPlayer) player).getSpatialSnapshot();
+        var aabb = entity.getOffsetAABB();
+        double maxDistanceSquared = entity.getMaxInteractDistance();
+        maxDistanceSquared *= maxDistanceSquared;
+
+        double halfWidth = (aabb.maxX() - aabb.minX()) * 0.5;
+        double height = aabb.maxY() - aabb.minY();
+        double minX = snapshot.getX() - halfWidth;
+        double maxX = snapshot.getX() + halfWidth;
+        double minY = snapshot.getY();
+        double maxY = snapshot.getY() + height;
+        double minZ = snapshot.getZ() - halfWidth;
+        double maxZ = snapshot.getZ() + halfWidth;
+
+        double px = blockPos.x() + 0.5;
+        double py = blockPos.y() + 0.5;
+        double pz = blockPos.z() + 0.5;
+        return withinReach(minX, minY, minZ, px, py, pz, maxDistanceSquared)
+                || withinReach(maxX, minY, minZ, px, py, pz, maxDistanceSquared)
+                || withinReach(minX, maxY, minZ, px, py, pz, maxDistanceSquared)
+                || withinReach(maxX, maxY, minZ, px, py, pz, maxDistanceSquared)
+                || withinReach(minX, minY, maxZ, px, py, pz, maxDistanceSquared)
+                || withinReach(maxX, minY, maxZ, px, py, pz, maxDistanceSquared)
+                || withinReach(minX, maxY, maxZ, px, py, pz, maxDistanceSquared)
+                || withinReach(maxX, maxY, maxZ, px, py, pz, maxDistanceSquared);
+    }
+
+    private static boolean withinReach(
+            double aabbX, double aabbY, double aabbZ,
+            double px, double py, double pz, double maxDistanceSquared
+    ) {
+        double dx = aabbX - px;
+        double dy = aabbY - py;
+        double dz = aabbZ - pz;
+        return dx * dx + dy * dy + dz * dz <= maxDistanceSquared;
     }
 
     protected boolean isBreakingBlock() {

@@ -197,6 +197,46 @@ public class AllayPlayer implements Player {
     @Setter
     protected boolean netEasePlayer;
 
+    // Latest declared spatial state; written from the network thread on auth input and refreshed
+    // by the world thread once per tick. Only used for reject-only reach pre-filtering.
+    @Getter
+    protected final PlayerSpatialSnapshot spatialSnapshot = new PlayerSpatialSnapshot();
+
+    /**
+     * Refreshes the spatial snapshot from the authoritative entity state. Called by the world
+     * thread once per tick after the dimension has ticked.
+     */
+    public void refreshSpatialSnapshot() {
+        var entity = getControlledEntity();
+        if (entity == null) {
+            return;
+        }
+        var location = entity.getLocation();
+        this.spatialSnapshot.update(
+                location.x(), location.y(), location.z(),
+                location.yaw(), location.pitch(),
+                entity.getTick()
+        );
+        this.spatialSnapshot.updateHandSlot(entity.getHandSlot());
+    }
+
+    /**
+     * Updates the spatial snapshot with the position and rotation the client declared in its
+     * latest auth input packet. Called from the network thread so reach checks observe
+     * sub-tick-fresh positions; the snapshot stays stale by contract and must never be used to
+     * pre-approve packets.
+     *
+     * @param x the x coordinate in world units
+     * @param y the y coordinate in world units
+     * @param z the z coordinate in world units
+     * @param yaw the horizontal rotation in degrees
+     * @param pitch the vertical rotation in degrees
+     * @param tick the tick at which the client declared the movement
+     */
+    public void updateSpatialSnapshot(double x, double y, double z, double yaw, double pitch, long tick) {
+        this.spatialSnapshot.update(x, y, z, yaw, pitch, tick);
+    }
+
     public AllayPlayer(BedrockServerSession session, AllayNetworkInterface sourceInterface) {
         this.session = session;
         this.sourceInterface = sourceInterface;

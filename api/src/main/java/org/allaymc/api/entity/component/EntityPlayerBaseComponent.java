@@ -9,7 +9,6 @@ import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.jetbrains.annotations.Range;
-import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -385,20 +384,26 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
         // Check whether there is a point that inside of the player's AABB
         // And can reach the provided pos
         var aabb = getOffsetAABB();
-        double[] aabbXs = new double[]{aabb.minX(), aabb.maxX()};
-        double[] aabbYs = new double[]{aabb.minY(), aabb.maxY()};
-        double[] aabbZs = new double[]{aabb.minZ(), aabb.maxZ()};
-        for (var aabbX : aabbXs) {
-            for (var aabbY : aabbYs) {
-                for (var aabbZ : aabbZs) {
-                    if (new Vector3d(aabbX, aabbY, aabbZ).distanceSquared(x, y, z) <= maxDistance * maxDistance) {
-                        return true;
-                    }
-                }
-            }
-        }
+        double maxDistanceSquared = maxDistance * maxDistance;
         // TODO: check yaw and pitch
-        return false;
+        return withinReach(aabb.minX(), aabb.minY(), aabb.minZ(), x, y, z, maxDistanceSquared)
+                || withinReach(aabb.maxX(), aabb.minY(), aabb.minZ(), x, y, z, maxDistanceSquared)
+                || withinReach(aabb.minX(), aabb.maxY(), aabb.minZ(), x, y, z, maxDistanceSquared)
+                || withinReach(aabb.maxX(), aabb.maxY(), aabb.minZ(), x, y, z, maxDistanceSquared)
+                || withinReach(aabb.minX(), aabb.minY(), aabb.maxZ(), x, y, z, maxDistanceSquared)
+                || withinReach(aabb.maxX(), aabb.minY(), aabb.maxZ(), x, y, z, maxDistanceSquared)
+                || withinReach(aabb.minX(), aabb.maxY(), aabb.maxZ(), x, y, z, maxDistanceSquared)
+                || withinReach(aabb.maxX(), aabb.maxY(), aabb.maxZ(), x, y, z, maxDistanceSquared);
+    }
+
+    private static boolean withinReach(
+            double aabbX, double aabbY, double aabbZ,
+            double x, double y, double z, double maxDistanceSquared
+    ) {
+        double dx = aabbX - x;
+        double dy = aabbY - y;
+        double dz = aabbZ - z;
+        return dx * dx + dy * dy + dz * dz <= maxDistanceSquared;
     }
 
     /**

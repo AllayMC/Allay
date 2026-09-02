@@ -23,6 +23,7 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -37,8 +38,10 @@ import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.VisibleForTesting;
+import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -301,12 +304,24 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        return placeBlock(dimension, placeBlockPos, placementInfo, null);
+    }
+
+    /**
+     * Places the block, judging collisions against the position the placing player declared in
+     * the interaction packet, which is sub-tick fresher than the entity position the world
+     * thread has applied.
+     *
+     * @param declaredPlayerPosition the position the placing player declared at click time, or
+     *                               {@code null} to use the entity's applied position
+     */
+    public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo, Vector3fc declaredPlayerPosition) {
         if (thisItemStack.getItemType().getBlockType() == null) {
             return false;
         }
 
         var blockState = thisItemStack.toBlockState();
-        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo);
+        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo, true, declaredPlayerPosition);
     }
 
     @Override
@@ -336,13 +351,17 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo, true);
+        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo, true, null);
     }
 
     protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo, boolean checkEntityCollision) {
+        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo, checkEntityCollision, null);
+    }
+
+    protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo, boolean checkEntityCollision, Vector3fc declaredPlayerPosition) {
         EntityPlayer player = null;
         if (placementInfo != null) {
-            if (checkEntityCollision && hasEntityCollision(dimension, placeBlockPos, blockState)) {
+            if (checkEntityCollision && hasEntityCollision(dimension, placeBlockPos, blockState, placementInfo.player(), declaredPlayerPosition)) {
                 return false;
             }
             player = placementInfo.player();
@@ -388,13 +407,69 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
     }
 
-    protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
+    protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState, EntityPlayer player, Vector3fc declaredPlayerPosition) {
         var collisionShape = blockState.getBlockStateData().computeOffsetCollisionShape(placePos);
         return dimension.getEntityManager().getPhysicsService()
                 .computeCollidingEntities(collisionShape)
                 .stream()
                 // Shrink the entities' aabb slightly and check if there are still collisions. This allows placing block next to entities like painting
-                .anyMatch(entity -> collisionShape.intersectsAABB(entity.getOffsetAABB().expand(-FAT_AABB_MARGIN, new AABBd())));
+                .anyMatch(entity -> {
+                    if (player != null && entity.getRuntimeId() == player.getRuntimeId()) {
+                        return collidesPlacingPlayer(collisionShape, entity, declaredPlayerPosition);
+                    }
+                    return collisionShape.intersectsAABB(entity.getOffsetAABB().expand(-FAT_AABB_MARGIN, new AABBd()));
+                });
+    }
+
+    /**
+     * Judges the placing player's own body at the position the client declared in the click
+     * packet, which is sub-tick fresher than the entity position the world thread has applied
+     * and lags behind a moving player's actual body. A placement is declined when the block
+     * touches the body box and either its top face would rise above the player's eyes (forcing
+     * them to crawl), or its footprint contains the body's xz centre and spans below eye level
+     * (embedding the lower body). Blocks placed ahead of the player only graze the body and
+     * keep passing.
+     */
+    private boolean collidesPlacingPlayer(VoxelShape collisionShape, Entity entity, Vector3fc declaredPlayerPosition) {
+        var blockAABB = collisionShape.unionAABB();
+        var location = entity.getLocation();
+        // The interaction packet declares the EYE position (live feet + ~1.62), not the feet;
+        // reconstruct the true feet before positioning the body box, and keep the eye line as
+        // the refusal reference: a block whose top face rises above the eyes would force a crawl.
+        var eyeOffset = entity.getEyeHeight();
+        double bodyX = declaredPlayerPosition != null ? declaredPlayerPosition.x() : location.x();
+        double bodyBaseY = declaredPlayerPosition != null ? declaredPlayerPosition.y() - eyeOffset : location.y();
+        double bodyZ = declaredPlayerPosition != null ? declaredPlayerPosition.z() : location.z();
+        double bodyEyeY = bodyBaseY + eyeOffset;
+
+        var freshAABB = entity.getOffsetAABB().translate(
+                bodyX - location.x(),
+                bodyBaseY - location.y(),
+                bodyZ - location.z(),
+                new AABBd());
+        // The full, un-shrunk body box is used here: the FAT_AABB_MARGIN shrink applied to other
+        // entities hides up to 0.2 of their volume and would let a block clip the placing
+        // player's own body by that much.
+        if (!blockAABB.intersectsAABB(freshAABB)) {
+            return false;
+        }
+
+        // Refuse whenever the block's top face would rise above the player's eyes while its
+        // volume touches the body box — including an adjacent cell the player's body clips into,
+        // which would force them to crawl. Blocks placed at or below the player's level pass,
+        // because their top face stays at or under eye level.
+        if (bodyEyeY < blockAABB.maxY()) {
+            return true;
+        }
+
+        // Refuse a block whose footprint contains the body's xz centre and spans below eye level
+        // (e.g. placing straight down into the feet cell while standing in it): the block would
+        // embed the lower body, and unlike the client's simulation the server does not resolve
+        // the player onto the block. Blocks placed in front of the player only graze the body and
+        // their footprint does not contain the centre, so they keep passing.
+        return blockAABB.minY() < bodyEyeY &&
+               bodyX >= blockAABB.minX() && bodyX < blockAABB.maxX() &&
+               bodyZ >= blockAABB.minZ() && bodyZ < blockAABB.maxZ();
     }
 
     @Override
