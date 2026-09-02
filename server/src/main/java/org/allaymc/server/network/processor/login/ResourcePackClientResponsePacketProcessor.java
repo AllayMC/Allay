@@ -4,6 +4,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.ServerSettings.ResourcePackSettings;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -22,9 +23,8 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
             case SEND_PACKS -> {
                 var protocol = allayPlayer.getProtocol();
                 var encoder = protocol.getEncoder();
-                int chunkSize = AllayServer.getSettings()
-                        .resourcePackSettings()
-                        .maxChunkSize() * 1024;
+                var settings = AllayServer.getSettings().resourcePackSettings();
+                int chunkSize = settings.maxChunkSize() * 1024;
                 for (var packId : packet.getPackIds()) {
                     UUID id;
                     try {
@@ -32,6 +32,10 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                     } catch (IllegalArgumentException ignored) {
                         player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_RESOURCEPACK);
                         return;
+                    }
+
+                    if (isUrlPack(settings, id)) {
+                        continue;
                     }
 
                     var pack = Registries.PACKS.get(id);
@@ -63,5 +67,20 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
         }
         int versionSeparator = encodedId.indexOf('_');
         return UUID.fromString(versionSeparator < 0 ? encodedId : encodedId.substring(0, versionSeparator));
+    }
+
+    private static boolean isUrlPack(ResourcePackSettings settings, UUID id) {
+        for (var info : settings.urlPacks()) {
+            if (info.url().isBlank()) {
+                continue;
+            }
+            try {
+                if (UUID.fromString(info.uuid()).equals(id)) {
+                    return true;
+                }
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return false;
     }
 }

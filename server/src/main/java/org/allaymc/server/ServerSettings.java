@@ -10,6 +10,8 @@ import org.allaymc.api.message.LangCode;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.data.Difficulty;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -327,7 +329,17 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("disable-vibrant-visuals")
         private boolean disableVibrantVisuals = false;
 
-        // TODO: URL packs configuration
+        @CustomKey("url-packs")
+        private List<UrlPackInfo> urlPacks = new ArrayList<>();
+
+        @Getter
+        @Setter
+        @Accessors(fluent = true)
+        public static class UrlPackInfo extends OkaeriConfig {
+            private String uuid;
+            private String version;
+            private String url;
+        }
     }
 
     @Getter

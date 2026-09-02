@@ -55,6 +55,8 @@ import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.ServerSettings.ResourcePackSettings;
+import org.allaymc.server.ServerSettings.ResourcePackSettings.UrlPackInfo;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
@@ -233,6 +235,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setWorldTemplateVersion("");
         packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
 
+        var urlPacksById = urlPacksById(settings);
+
         for (var pack : Registries.PACKS.getContent().values()) {
             boolean scripting = pack.getType() == Pack.Type.SCRIPT;
             if (scripting) {
@@ -240,16 +244,35 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
 
             ResourcePacksInfoPacket.Entry entry = switch (pack.getType()) {
-                case RESOURCES -> createResourcePackInfo(pack, scripting, false);
+                case RESOURCES -> createResourcePackInfo(pack, scripting, false, urlPacksById);
                 case DATA -> {
                     packet.setHasAddonPacks(true);
-                    yield createResourcePackInfo(pack, scripting, true);
+                    yield createResourcePackInfo(pack, scripting, true, urlPacksById);
                 }
                 case WORLD_TEMPLATE, SCRIPT -> null;
             };
             if (entry != null) {
                 packet.getResourcePackInfos().add(entry);
             }
+        }
+
+        for (var entry : urlPacksById.entrySet()) {
+            if (Registries.PACKS.getContent().containsKey(entry.getKey())) {
+                continue;
+            }
+            var info = entry.getValue();
+            packet.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(
+                    entry.getKey(),
+                    info.version(),
+                    0,
+                    "",
+                    "",
+                    entry.getKey().toString(),
+                    false,
+                    false,
+                    info.url(),
+                    false
+            ));
         }
         return packet;
     }
@@ -271,6 +294,14 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 case WORLD_TEMPLATE, SCRIPT -> {
                 }
             }
+        }
+
+        for (var entry : urlPacksById(settings).entrySet()) {
+            if (Registries.PACKS.getContent().containsKey(entry.getKey())) {
+                continue;
+            }
+            packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
+                    entry.getKey().toString(), entry.getValue().version(), ""));
         }
         return packet;
     }
@@ -2620,8 +2651,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
     private static ResourcePacksInfoPacket.Entry createResourcePackInfo(
             Pack pack,
             boolean scripting,
-            boolean addon
+            boolean addon,
+            Map<UUID, UrlPackInfo> urlPacksById
     ) {
+        var urlPack = urlPacksById.get(pack.getId());
         return new ResourcePacksInfoPacket.Entry(
                 pack.getId(),
                 pack.getStringVersion(),
@@ -2631,9 +2664,23 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 pack.getId().toString(),
                 scripting,
                 pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                null,
+                urlPack == null ? null : urlPack.url(),
                 addon
         );
+    }
+
+    private static Map<UUID, UrlPackInfo> urlPacksById(ResourcePackSettings settings) {
+        var map = new HashMap<UUID, UrlPackInfo>();
+        for (var info : settings.urlPacks()) {
+            if (info.url().isBlank()) {
+                continue;
+            }
+            try {
+                map.put(UUID.fromString(info.uuid()), info);
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return map;
     }
 
     private static ResourcePackType toNetworkResourcePackType(org.allaymc.api.pack.Pack.Type type) {
