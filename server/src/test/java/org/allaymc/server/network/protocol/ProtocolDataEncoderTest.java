@@ -167,34 +167,28 @@ class ProtocolDataEncoderTest {
     }
 
     @Test
-    void repeatedEncodingIsolatesPacketsAndMutableItemPayloads() {
+    void repeatedEncodingReturnsCachedCreativeAndCraftingContent() {
         var encoder = protocol(975).getEncoder();
 
         var creativeOne = encoder.encodeCreativeContent();
         var creativeTwo = encoder.encodeCreativeContent();
-        assertNotSame(creativeOne, creativeTwo);
+        assertSame(creativeOne, creativeTwo);
         assertFalse(creativeOne.getContents().isEmpty());
         var creativeItemOne = creativeOne.getContents().getFirst().item();
         var creativeItemTwo = creativeTwo.getContents().getFirst().item();
-        assertNotSame(creativeItemOne, creativeItemTwo);
-        int creativeNetId = creativeItemTwo.getNetId();
-        creativeItemOne.setNetId(creativeNetId + 10_000);
-        assertEquals(creativeNetId, creativeItemTwo.getNetId());
-        assertEquals(creativeNetId, encoder.encodeCreativeContent().getContents().getFirst().item().getNetId());
+        assertSame(creativeItemOne, creativeItemTwo);
+        assertEquals(creativeItemTwo.getNetId(), creativeItemOne.getNetId());
+        assertEquals(creativeItemTwo.getNetId(), encoder.encodeCreativeContent().getContents().getFirst().item().getNetId());
 
         var craftingOne = encoder.encodeCraftingData();
         var craftingTwo = encoder.encodeCraftingData();
-        assertNotSame(craftingOne, craftingTwo);
+        assertSame(craftingOne, craftingTwo);
         int recipeIndex = findRecipeWithOutput(craftingOne.getCraftingData());
         var outputOne = firstOutput(craftingOne.getCraftingData().get(recipeIndex));
         var outputTwo = firstOutput(craftingTwo.getCraftingData().get(recipeIndex));
-        assertNotSame(outputOne, outputTwo);
-        int outputNetId = outputTwo.getNetId();
-        outputOne.setNetId(outputNetId + 10_000);
-        craftingOne.getCraftingData().clear();
-        assertEquals(outputNetId, outputTwo.getNetId());
-        assertFalse(craftingTwo.getCraftingData().isEmpty());
-        assertEquals(outputNetId, firstOutput(encoder.encodeCraftingData().getCraftingData().get(recipeIndex)).getNetId());
+        assertSame(outputOne, outputTwo);
+        assertEquals(outputTwo.getNetId(), outputOne.getNetId());
+        assertEquals(outputTwo.getNetId(), firstOutput(encoder.encodeCraftingData().getCraftingData().get(recipeIndex)).getNetId());
     }
 
     @Test

@@ -123,8 +123,8 @@ public final class ChunkCache {
             }
 
             // Transaction cap check (per-player limit to prevent one player from hogging all transactions)
-            if (state.openTransactions.size() >= 512) {
-                return null;
+            while (state.openTransactions.size() >= 512) {
+                state.openTransactions.removeFirst();
             }
 
             // Compute hashes and store blobs in global cache

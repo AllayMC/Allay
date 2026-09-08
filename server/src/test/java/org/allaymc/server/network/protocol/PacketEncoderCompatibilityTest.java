@@ -416,10 +416,8 @@ class PacketEncoderCompatibilityTest {
     void everyProtocolCodecAcceptsAllConnectionIndependentEncoderOutput() {
         for (var protocol : registry.getProtocols()) {
             var encoder = protocol.getEncoder();
-            List<Supplier<? extends BedrockPacket>> encoders = List.of(
+            List<Supplier<? extends BedrockPacket>> freshEncoders = List.of(
                     encoder::encodeItemRegistry,
-                    encoder::encodeCreativeContent,
-                    encoder::encodeCraftingData,
                     encoder::encodeAvailableEntityIdentifiers,
                     encoder::encodeBiomeDefinitions,
                     encoder::encodeDimensionData,
@@ -428,10 +426,23 @@ class PacketEncoderCompatibilityTest {
                     encoder::encodeTrimData
             );
 
-            for (var encode : encoders) {
+            for (var encode : freshEncoders) {
                 var first = encode.get();
                 var second = encode.get();
                 assertNotSame(first, second, () -> protocol + " reused " + first.getPacketType());
+                assertPacketEncodes(protocol, first);
+                assertPacketEncodes(protocol, second);
+            }
+
+            List<Supplier<? extends BedrockPacket>> cachedEncoders = List.of(
+                    encoder::encodeCreativeContent,
+                    encoder::encodeCraftingData
+            );
+
+            for (var encode : cachedEncoders) {
+                var first = encode.get();
+                var second = encode.get();
+                assertSame(first, second, () -> protocol + " reused " + first.getPacketType());
                 assertPacketEncodes(protocol, first);
                 assertPacketEncodes(protocol, second);
             }

@@ -5,6 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -14,12 +15,15 @@ import org.allaymc.api.player.Player;
 import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
@@ -39,20 +43,65 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     public static final int ITEM_RELEASE_RELEASE = 0;
     public static final int ITEM_RELEASE_CONSUME = 1;
 
+    // Mirrors PocketMine-MP's right-click spam filter: the 1.26.30+ client re-sends the same
+    // interaction every simulation tick until it is resolved, so near-identical clicks within
+    // this window are the client retransmitting one interaction, not fresh clicks.
     private static final long SPAM_CLICK_THRESHOLD_MS = 100;
+    private static final double SPAM_CLICK_DISTANCE_SQUARED = 0.00001;
+    // No per-client attack rate limit exists elsewhere; cap how often the world thread processes
+    // damage, reach checks and sound broadcasts from one attacker.
+    private static final long ATTACK_INTERVAL_MS = 250;
+    private static final int MAX_TRACKED_ENTITIES = 1024;
+    private static final long ENTITY_STATE_TTL_MS = 1500;
 
-    private long lastClickTime;
-    private Vector3ic lastBlockPos;
-    private Vector3fc lastClickPos;
+    private final Map<Long, InteractionState> interactionStates = new HashMap<>();
 
-    private boolean isSpamClick(Vector3ic blockPos, Vector3fc clickPos) {
+    private static final class InteractionState {
+        private long lastClickTime;
+        private Vector3ic lastBlockPos;
+        private Vector3fc lastClickPos;
+        private Vector3f lastPlayerPos;
+        private int lastFace;
+        private long lastAttackTime;
+
+        private boolean isExpired(long now) {
+            return now - Math.max(lastClickTime, lastAttackTime) > ENTITY_STATE_TTL_MS;
+        }
+    }
+
+    private InteractionState getOrCreateInteractionState(Entity attacker) {
+        var state = interactionStates.get(attacker.getRuntimeId());
+        if (state == null) {
+            compactInteractionStates();
+            state = new InteractionState();
+            interactionStates.put(attacker.getRuntimeId(), state);
+        } else if (state.isExpired(System.currentTimeMillis())) {
+            state.lastClickTime = 0;
+            state.lastAttackTime = 0;
+        }
+        return state;
+    }
+
+    private void compactInteractionStates() {
+        if (interactionStates.size() < MAX_TRACKED_ENTITIES) {
+            return;
+        }
         var now = System.currentTimeMillis();
-        var spam = now - this.lastClickTime < SPAM_CLICK_THRESHOLD_MS
-                   && blockPos.equals(this.lastBlockPos)
-                   && clickPos.equals(this.lastClickPos);
-        this.lastClickTime = now;
-        this.lastBlockPos = blockPos;
-        this.lastClickPos = clickPos;
+        interactionStates.entrySet().removeIf(entry -> entry.getValue().isExpired(now));
+    }
+
+    private boolean isSpamClick(InteractionState state, Vector3ic blockPos, Vector3fc clickPos, Vector3f playerPos, int face) {
+        var now = System.currentTimeMillis();
+        var spam = now - state.lastClickTime < SPAM_CLICK_THRESHOLD_MS
+                   && face == state.lastFace
+                   && playerPos.distanceSquared(state.lastPlayerPos) < SPAM_CLICK_DISTANCE_SQUARED
+                   && blockPos.equals(state.lastBlockPos)
+                   && clickPos.distanceSquared(state.lastClickPos) < SPAM_CLICK_DISTANCE_SQUARED;
+        state.lastClickTime = now;
+        state.lastBlockPos = blockPos;
+        state.lastClickPos = clickPos;
+        state.lastPlayerPos = playerPos;
+        state.lastFace = face;
         return spam;
     }
 
@@ -78,7 +127,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         var clickBlockPos = NetworkHelper.fromNetwork(packet.getBlockPosition());
                         var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
                         // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
-                        if (isSpamClick(clickBlockPos, clickPos)) {
+                        if (isSpamClick(getOrCreateInteractionState(entity), clickBlockPos, clickPos, packet.getPlayerPosition(), packet.getBlockFace())) {
                             break;
                         }
 
@@ -206,6 +255,16 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         if (!(target instanceof EntityLivingComponent damageable)) {
                             return;
                         }
+                        // Per-attacker rate limit: without this, a flooder can saturate the
+                        // world thread with reach checks, damage evaluation and per-attack
+                        // sound broadcasts to every viewer.
+                        var now = System.currentTimeMillis();
+                        var state = getOrCreateInteractionState(entity);
+                        if (now - state.lastAttackTime < ATTACK_INTERVAL_MS) {
+                            log.debug("Player {} attack packet dropped (rate limited)", player.getOriginName());
+                            return;
+                        }
+                        state.lastAttackTime = now;
                         if (target instanceof EntityPlayer) {
                             if (!player.canAttackPlayers()) {
                                 return;

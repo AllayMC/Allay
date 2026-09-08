@@ -158,7 +158,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("It is recommended to enable this feature, however if clients are kicked due")
         @Comment("to misjudgment (usually when changing skin), disable this feature will help you")
         @CustomKey("enable-encoding-protection")
-        private boolean enableEncodingProtection = true;
+        private boolean enableEncodingProtection = false;
 
         @Comment("Enable support for NetEase (China) Minecraft clients")
         @CustomKey("netease-client-support")
@@ -177,7 +177,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Whether to enable client-side chunk caching using blob hashes, which can significantly reduce bandwidth when players revisit areas")
         @Comment("Please note that you should set network-settings.enable-encoding-protection to false to use this feature")
         @CustomKey("enable-client-chunk-cache")
-        private boolean enableClientChunkCache = false;
+        private boolean enableClientChunkCache = true;
 
         @Comment("Maximum number of chunk blobs to cache globally across all players")
         @Comment("Each blob is typically 1-4KB. Higher values use more memory but improve cache hit rate")

@@ -41,7 +41,6 @@ import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Math.*;
@@ -86,7 +85,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     }
 
     protected Map<Long, Entity> entities = new Long2ObjectOpenHashMap<>();
-    protected Map<Long, Queue<ClientMove>> clientMoveQueue = new Long2ObjectOpenHashMap<>();
+    protected Map<Long, ClientMove> clientMoveQueue = new ConcurrentHashMap<>();
     protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectOpenHashMap<>();
     /**
      * Regardless of the value of the entity's hasEntityCollision(), this aabb tree saves its collision result
@@ -392,46 +391,46 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     }
 
     protected void handleClientMoveQueue() {
-        for (var entry : clientMoveQueue.entrySet()) {
-            var queue = entry.getValue();
-            ClientMove clientMove;
-            while ((clientMove = queue.poll()) != null) {
-                var player = clientMove.player();
-                // The player may have been removed
-                if (!entities.containsKey(player.getRuntimeId())) {
-                    continue;
-                }
-
-                var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
-                if (baseComponent.getExpectedTeleportPos() != null) {
-                    // It is possible that client move already get into the move queue before we set 'awatingTeleportACK' to true,
-                    // so here we should ignore all client moves until 'awatingTeleportACK' become false.
-                    continue;
-                }
-
-                var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
-                if (!event.call()) {
-                    if (event.getRevertTo() != null) {
-                        // Teleport player to the specified revert position.
-                        player.teleport(event.getRevertTo());
-                    }
-                    continue;
-                }
-
-                // Calculate delta pos (motion)
-                var motion = event.getTo().sub(player.getLocation(), new Vector3d());
-                var physicsComponent = ((EntityPlayerPhysicsComponentImpl) ((EntityPlayerImpl) player).getPhysicsComponent());
-                physicsComponent.setMotionValueOnly(motion);
-                if (player.trySetLocation(clientMove.newLoc())) {
-                    entityAABBTree.update(player);
-                }
-                // ClientMove is not calculated by the server, but we need to calculate the onGround status
-                // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
-                var aabb = new AABBd(clientMove.player.getOffsetAABB());
-                // Here we should subtract twice FAT_AABB_MARGIN, because the client pos has an extra FAT_AABB_MARGIN in y coordinate
-                aabb.minY -= 2 * FAT_AABB_MARGIN;
-                physicsComponent.setOnGround(dimension.getCollidingBlockStates(aabb) != null);
+        var iterator = clientMoveQueue.entrySet().iterator();
+        while (iterator.hasNext()) {
+            var entry = iterator.next();
+            iterator.remove();
+            var clientMove = entry.getValue();
+            var player = clientMove.player();
+            // The player may have been removed
+            if (!entities.containsKey(player.getRuntimeId())) {
+                continue;
             }
+
+            var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
+            if (baseComponent.getExpectedTeleportPos() != null) {
+                // It is possible that client move already get into the move queue before we set 'awatingTeleportACK' to true,
+                // so here we should ignore all client moves until 'awatingTeleportACK' become false.
+                continue;
+            }
+
+            var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
+            if (!event.call()) {
+                if (event.getRevertTo() != null) {
+                    // Teleport player to the specified revert position.
+                    player.teleport(event.getRevertTo());
+                }
+                continue;
+            }
+
+            // Calculate delta pos (motion)
+            var motion = event.getTo().sub(player.getLocation(), new Vector3d());
+            var physicsComponent = ((EntityPlayerPhysicsComponentImpl) ((EntityPlayerImpl) player).getPhysicsComponent());
+            physicsComponent.setMotionValueOnly(motion);
+            if (player.trySetLocation(clientMove.newLoc())) {
+                entityAABBTree.update(player);
+            }
+            // ClientMove is not calculated by the server, but we need to calculate the onGround status
+            // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
+            var aabb = new AABBd(clientMove.player.getOffsetAABB());
+            // Here we should subtract twice FAT_AABB_MARGIN, because the client pos has an extra FAT_AABB_MARGIN in y coordinate
+            aabb.minY -= 2 * FAT_AABB_MARGIN;
+            physicsComponent.setOnGround(dimension.getCollidingBlockStates(aabb) != null);
         }
     }
 
@@ -469,7 +468,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
             return;
         }
 
-        clientMoveQueue.computeIfAbsent(player.getRuntimeId(), $ -> new ConcurrentLinkedQueue<>()).offer(new ClientMove(player, newLoc));
+        clientMoveQueue.put(player.getRuntimeId(), new ClientMove(player, newLoc));
     }
 
     @Override

@@ -45,11 +45,14 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -258,6 +261,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public boolean trySetLocation(Location3dc newLocation) {
+        if (newLocation.equals(this.location)) {
+            return false;
+        }
         var event = new EntityMoveEvent(thisEntity, location, newLocation);
         if (!event.call()) {
             return false;
@@ -491,10 +497,51 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
     }
 
+    private final Vector3d lastBroadcastMotion = new Vector3d();
+
     public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {
-        forEachViewers(viewer -> viewer.viewEntityLocation(thisEntity, newLocation, teleporting));
-        if (thisEntity instanceof EntityPhysicsComponent physicsComponent) {
-            forEachViewers(viewer -> viewer.viewEntityMotion((Entity & EntityPhysicsComponent) thisEntity, physicsComponent.getMotion()));
+        if (viewers.isEmpty()) {
+            return;
+        }
+        AllayPlayer firstPlayer = null;
+        var allPlayers = true;
+        for (var viewer : viewers) {
+            if (viewer instanceof AllayPlayer player) {
+                if (firstPlayer == null) {
+                    firstPlayer = player;
+                }
+            } else {
+                allPlayers = false;
+                break;
+            }
+        }
+        if (allPlayers) {
+            var encoder = firstPlayer.getProtocol().getEncoder();
+            var locationPacket = encoder.encodeEntityLocation(thisEntity, newLocation, teleporting, false);
+            BedrockPacket motionPacket = null;
+            if (thisEntity instanceof EntityPhysicsComponent physicsComponent) {
+                var motion = physicsComponent.getMotion();
+                if (teleporting || !motion.equals(lastBroadcastMotion)) {
+                    motionPacket = encoder.encodeEntityMotion((Entity & EntityPhysicsComponent) thisEntity, motion);
+                    lastBroadcastMotion.set(motion);
+                }
+            }
+            for (var viewer : viewers) {
+                var player = (AllayPlayer) viewer;
+                player.sendPacket(locationPacket);
+                if (motionPacket != null) {
+                    player.sendPacket(motionPacket);
+                }
+            }
+        } else {
+            forEachViewers(viewer -> viewer.viewEntityLocation(thisEntity, newLocation, teleporting));
+            if (thisEntity instanceof EntityPhysicsComponent physicsComponent) {
+                var motion = physicsComponent.getMotion();
+                if (teleporting || !motion.equals(lastBroadcastMotion)) {
+                    forEachViewers(viewer -> viewer.viewEntityMotion((Entity & EntityPhysicsComponent) thisEntity, motion));
+                    lastBroadcastMotion.set(motion);
+                }
+            }
         }
     }
 

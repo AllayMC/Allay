@@ -64,6 +64,8 @@ import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.player.ChunkCache;
 import org.allaymc.server.player.SkinConvertor;
 import org.allaymc.server.registry.InternalRegistries;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.allaymc.server.utils.GitProperties;
 import org.allaymc.server.utils.JSONUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -90,6 +92,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.OptionalBoolean;
 import org.joml.Vector3d;
@@ -109,6 +112,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         super(data);
     }
 
+    private volatile CreativeContentPacket creativeContentPacket;
+    private volatile CraftingDataPacket craftingDataPacket;
+    private final Cache<UUID, SerializedSkin> skinCache = Caffeine.newBuilder()
+            .maximumSize(2048)
+            .build();
+
     @Override
     public ItemRegistryPacket encodeItemRegistry() {
         var packet = new ItemRegistryPacket();
@@ -118,25 +127,60 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
     @Override
     public CreativeContentPacket encodeCreativeContent() {
-        var packet = new CreativeContentPacket();
-        getData().creativeGroups().stream()
-                .map(group -> new CreativeItemGroup(group.category(), group.name(), copyItemData(group.icon())))
-                .forEach(packet.getGroups()::add);
-        getData().creativeItems().stream()
-                .map(item -> new CreativeItemData(copyItemData(item.item()), item.netId(), item.groupId()))
-                .forEach(packet.getContents()::add);
-        return packet;
+        var cached = creativeContentPacket;
+        if (cached != null) {
+            return cached;
+        }
+        synchronized (this) {
+            cached = creativeContentPacket;
+            if (cached != null) {
+                return cached;
+            }
+            var packet = new CreativeContentPacket();
+            getData().creativeGroups().stream()
+                    .map(group -> new CreativeItemGroup(group.category(), group.name(), copyItemData(group.icon())))
+                    .forEach(packet.getGroups()::add);
+            getData().creativeItems().stream()
+                    .map(item -> new CreativeItemData(copyItemData(item.item()), item.netId(), item.groupId()))
+                    .forEach(packet.getContents()::add);
+            creativeContentPacket = packet;
+            return packet;
+        }
     }
 
     @Override
     public CraftingDataPacket encodeCraftingData() {
-        var packet = new CraftingDataPacket();
-        getData().recipeTable().encodedRecipes().stream()
-                .map(PacketEncoder_v766::copyRecipeData)
-                .forEach(packet.getCraftingData()::add);
-        packet.getPotionMixData().addAll(getData().recipeTable().potionMixes());
-        packet.setCleanRecipes(true);
-        return packet;
+        var cached = craftingDataPacket;
+        if (cached != null) {
+            return cached;
+        }
+        synchronized (this) {
+            cached = craftingDataPacket;
+            if (cached != null) {
+                return cached;
+            }
+            var packet = new CraftingDataPacket();
+            getData().recipeTable().encodedRecipes().stream()
+                    .map(PacketEncoder_v766::copyRecipeData)
+                    .forEach(recipe -> addRecipeData(packet, recipe));
+            packet.getPotionMixData().addAll(getData().recipeTable().potionMixes());
+            packet.setCleanRecipes(true);
+            craftingDataPacket = packet;
+            return packet;
+        }
+    }
+
+    private static void addRecipeData(CraftingDataPacket packet, RecipeData recipe) {
+        packet.getCraftingData().add(recipe);
+        switch (recipe) {
+            case ShapedRecipeData shaped -> packet.getShapedData().add(shaped);
+            case ShapelessRecipeData shapeless -> packet.getShapelessData().add(shapeless);
+            case SmithingTransformRecipeData smithing -> packet.getSmithingTransformData().add(smithing);
+            case SmithingTrimRecipeData smithing -> packet.getSmithingTrimData().add(smithing);
+            case MultiRecipeData multi -> packet.getMultiData().add(multi);
+            default -> {
+            }
+        }
     }
 
     @Override
@@ -2318,15 +2362,21 @@ public class PacketEncoder_v766 extends PacketEncoder {
         Objects.requireNonNull(players, "players");
         var packet = new PlayerListPacket();
         packet.setAction(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE);
+        var action = packet.getAction();
         for (var player : players) {
             var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
+            entry.setAction(action);
             var entity = Objects.requireNonNull(player.getControlledEntity(), "controlledEntity");
             entry.setEntityId(entity.getUniqueId().getLeastSignificantBits());
             entry.setName(player.getOriginName());
             entry.setXuid(player.getLoginData().getXuid());
-            entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
-            entry.setBuildPlatform(BuildPlatform.from(player.getLoginData().getDeviceInfo().device().getId()));
-            entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
+            var uuid = player.getLoginData().getUuid();
+            var serializedSkin = skinCache.getIfPresent(uuid);
+            if (serializedSkin == null) {
+                serializedSkin = SkinConvertor.toSerializedSkin(player.getLoginData().getSkin());
+                skinCache.put(uuid, serializedSkin);
+            }
+            entry.setSkin(serializedSkin);
             entry.setTrustedSkin(trustSkins);
             entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
             packet.getEntries().add(entry);
