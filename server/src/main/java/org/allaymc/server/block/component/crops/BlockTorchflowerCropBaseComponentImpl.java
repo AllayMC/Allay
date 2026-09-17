@@ -32,7 +32,7 @@ public class BlockTorchflowerCropBaseComponentImpl extends BlockCropsBaseCompone
     }
 
     @Override
-    protected boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
         var growth = crop.getPropertyValue(GROWTH);
         if (growth >= MAX_GROWTH) {
             // Already at max crop stage, transform to torchflower flower block

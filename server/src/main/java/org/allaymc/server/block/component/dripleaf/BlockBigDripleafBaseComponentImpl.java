@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.dripleaf;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -29,7 +30,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 /**
  * @author daoge_cmd
  */
-public class BlockBigDripleafBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockBigDripleafBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     public BlockBigDripleafBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -200,9 +201,17 @@ public class BlockBigDripleafBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var pos = interactInfo.clickedBlockPos();
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
+            interactInfo.player().tryConsumeItemInHand();
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            return true;
+        }
 
-        // Find topmost big dripleaf in column
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
         var topPos = new Vector3i(pos);
         while (true) {
             var abovePos = new Vector3i(topPos).add(0, 1, 0);
@@ -214,7 +223,6 @@ public class BlockBigDripleafBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Check if block above the top is AIR or water
         var aboveTopPos = new Vector3i(topPos).add(0, 1, 0);
         var aboveTopState = dimension.getBlockState(aboveTopPos);
         var aboveTopType = aboveTopState.getBlockType();
@@ -225,21 +233,17 @@ public class BlockBigDripleafBaseComponentImpl extends BlockBaseComponentImpl {
         var topState = dimension.getBlockState(topPos);
         var direction = topState.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
 
-        // Convert current top to stem
         var stemState = topState
                 .setPropertyValue(BIG_DRIPLEAF_HEAD, false)
                 .setPropertyValue(BIG_DRIPLEAF_TILT, BigDripleafTilt.NONE);
         dimension.setBlockState(topPos, stemState);
 
-        // Place new head above
         var newHeadState = blockType.getDefaultState()
                 .setPropertyValue(BIG_DRIPLEAF_HEAD, true)
                 .setPropertyValue(BIG_DRIPLEAF_TILT, BigDripleafTilt.NONE)
                 .setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, direction);
         dimension.setBlockState(aboveTopPos, newHeadState);
 
-        interactInfo.player().tryConsumeItemInHand();
-        dimension.addParticle(MathUtils.center(pos), SimpleParticle.BONE_MEAL);
         return true;
     }
 

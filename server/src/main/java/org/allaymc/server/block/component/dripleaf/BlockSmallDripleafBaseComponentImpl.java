@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.dripleaf;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -27,7 +28,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 /**
  * @author daoge_cmd
  */
-public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     public BlockSmallDripleafBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -108,15 +109,21 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
             return false;
         }
 
-        var pos = interactInfo.clickedBlockPos();
-        var blockState = dimension.getBlockState(pos);
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
+            interactInfo.player().tryConsumeItemInHand();
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            return true;
+        }
 
-        // Find the bottom-most small dripleaf in the column
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
         var bottomPos = new Vector3i(pos);
         if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
             bottomPos.add(0, -1, 0);
         }
-        // Walk down in case of stacked small dripleafs
         while (true) {
             var belowPos = new Vector3i(bottomPos).add(0, -1, 0);
             var belowState = dimension.getBlockState(belowPos);
@@ -130,11 +137,9 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
         var bottomState = dimension.getBlockState(bottomPos);
         var direction = bottomState.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
 
-        // Random height: 2-5 blocks
         var random = ThreadLocalRandom.current();
         int height = random.nextInt(4) + 2;
 
-        // Check if there's enough space
         for (int i = 0; i < height; i++) {
             var checkPos = new Vector3i(bottomPos).add(0, i, 0);
             var checkState = dimension.getBlockState(checkPos);
@@ -146,19 +151,16 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
             }
         }
 
-        // Replace with big dripleaf column
         var bigDripleafType = BlockTypes.BIG_DRIPLEAF;
         for (int i = 0; i < height; i++) {
             var placePos = new Vector3i(bottomPos).add(0, i, 0);
             BlockState newState;
             if (i < height - 1) {
-                // Stem blocks
                 newState = bigDripleafType.getDefaultState()
                         .setPropertyValue(BIG_DRIPLEAF_HEAD, false)
                         .setPropertyValue(BIG_DRIPLEAF_TILT, BigDripleafTilt.NONE)
                         .setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, direction);
             } else {
-                // Head block (top)
                 newState = bigDripleafType.getDefaultState()
                         .setPropertyValue(BIG_DRIPLEAF_HEAD, true)
                         .setPropertyValue(BIG_DRIPLEAF_TILT, BigDripleafTilt.NONE)
@@ -167,8 +169,6 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
             dimension.setBlockState(placePos, newState);
         }
 
-        interactInfo.player().tryConsumeItemInHand();
-        dimension.addParticle(MathUtils.center(pos), SimpleParticle.BONE_MEAL);
         return true;
     }
 

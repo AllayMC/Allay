@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.bamboo;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -28,7 +29,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 /**
  * @author daoge_cmd
  */
-public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockBambooBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -144,21 +145,24 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Find topmost bamboo
-        var pos = interactInfo.clickedBlockPos();
-        var topPos = findTopBamboo(dimension, pos);
-        int totalHeight = countTotalHeight(dimension, topPos);
-        if (totalHeight >= 16) {
-            return false;
-        }
-
-        if (growFromTop(dimension, topPos)) {
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
             interactInfo.player().tryConsumeItemInHand();
             dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var topPos = findTopBamboo(dimension, pos);
+        int totalHeight = countTotalHeight(dimension, topPos);
+        if (totalHeight >= 16) {
+            return false;
+        }
+
+        return growFromTop(dimension, topPos);
     }
 
     @Override

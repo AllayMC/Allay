@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.plant;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -15,6 +16,7 @@ import org.allaymc.api.eventbus.event.block.BlockGrowEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -28,7 +30,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
 /**
  * @author daoge_cmd
  */
-public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockSweetBerryBushBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -92,15 +94,10 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
 
         // Bone meal: +1 growth (max 3)
         if (itemStack != null && itemStack.getItemType() == ItemTypes.BONE_MEAL) {
-            if (growth < 3) {
-                var newState = clickedBlock.getBlockState().setPropertyValue(GROWTH, growth + 1);
-                var event = new BlockGrowEvent(clickedBlock, newState);
-                if (event.call()) {
-                    dimension.setBlockState(interactInfo.clickedBlockPos(), event.getNewBlockState());
-                    interactInfo.player().tryConsumeItemInHand();
-                    dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-                    return true;
-                }
+            if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), clickedBlock.getBlockState())) {
+                interactInfo.player().tryConsumeItemInHand();
+                dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+                return true;
             }
             return false;
         }
@@ -114,6 +111,23 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
 
             var newState = clickedBlock.getBlockState().setPropertyValue(GROWTH, 1);
             dimension.setBlockState(interactInfo.clickedBlockPos(), newState);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var growth = blockState.getPropertyValue(GROWTH);
+        if (growth >= 3) {
+            return false;
+        }
+
+        var newState = blockState.setPropertyValue(GROWTH, growth + 1);
+        var event = new BlockGrowEvent(new Block(blockState, new Position3i(pos, dimension)), newState);
+        if (event.call()) {
+            dimension.setBlockState(pos, event.getNewBlockState());
             return true;
         }
 

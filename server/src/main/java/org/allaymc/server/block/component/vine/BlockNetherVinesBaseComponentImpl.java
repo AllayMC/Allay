@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.vine;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -29,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author daoge_cmd
  */
-public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     protected static final int MAX_AGE = 25;
     protected static final double GROWTH_CHANCE = 0.1;
@@ -137,7 +138,18 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var clickedBlock = interactInfo.getClickedBlock();
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
+            interactInfo.player().tryConsumeItemInHand();
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var clickedBlock = new Block(blockState, new Position3i(pos, dimension));
         var tip = findVineTip(clickedBlock);
         var tipAge = tip.getPropertyValue(ageProperty);
 
@@ -169,13 +181,7 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
             grewAny = true;
         }
 
-        if (grewAny) {
-            interactInfo.player().tryConsumeItemInHand();
-            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-            return true;
-        }
-
-        return false;
+        return grewAny;
     }
 
     @Override

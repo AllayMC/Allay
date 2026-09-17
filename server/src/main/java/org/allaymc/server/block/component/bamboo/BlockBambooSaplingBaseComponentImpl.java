@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.bamboo;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -15,6 +16,7 @@ import org.allaymc.api.eventbus.event.block.BlockGrowEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -29,7 +31,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.BAMBOO_STAL
 /**
  * @author daoge_cmd
  */
-public class BlockBambooSaplingBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockBambooSaplingBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockBambooSaplingBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -100,14 +102,18 @@ public class BlockBambooSaplingBaseComponentImpl extends BlockBaseComponentImpl 
             return false;
         }
 
-        var clickedBlock = interactInfo.getClickedBlock();
-        if (growBambooAbove(clickedBlock)) {
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
             interactInfo.player().tryConsumeItemInHand();
             dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        return growBambooAbove(new Block(blockState, new Position3i(pos, dimension)));
     }
 
     @Override

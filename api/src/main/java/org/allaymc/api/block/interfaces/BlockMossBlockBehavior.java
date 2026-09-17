@@ -1,6 +1,7 @@
 package org.allaymc.api.block.interfaces;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 
-public interface BlockMossBlockBehavior extends BlockBehavior {
+public interface BlockMossBlockBehavior extends BlockBehavior, BlockFertilizableComponent {
 }

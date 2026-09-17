@@ -36,7 +36,7 @@ public class BlockPitcherCropBaseComponentImpl extends BlockCropsBaseComponentIm
     }
 
     @Override
-    protected boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
         // If upper half is clicked, redirect to lower half
         if (crop.getPropertyValue(UPPER_BLOCK_BIT)) {
             var lowerPos = new Vector3i(pos.x(), pos.y() - 1, pos.z());

@@ -12,6 +12,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.world.feature.tree.MangroveTreeFeature;
@@ -152,40 +153,32 @@ public class BlockMangrovePropaguleBaseComponentImpl extends BlockSaplingBaseCom
             return false;
         }
 
-        var block = interactInfo.getClickedBlock();
-        boolean isHanging = block.getPropertyValue(BlockPropertyTypes.HANGING);
+        onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState());
+        dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+        interactInfo.player().tryConsumeItemInHand();
+        return true;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var block = new Block(blockState, new Position3i(pos, dimension));
+        boolean isHanging = blockState.getPropertyValue(BlockPropertyTypes.HANGING);
 
         if (isHanging) {
-            // Bone meal on hanging propagule: increase stage by 1
-            int stage = block.getPropertyValue(BlockPropertyTypes.PROPAGULE_STAGE);
+            int stage = blockState.getPropertyValue(BlockPropertyTypes.PROPAGULE_STAGE);
             if (stage < MAX_PROPAGULE_STAGE) {
                 dimension.setBlockState(
-                        block.getPosition(),
-                        block.getBlockState().setPropertyValue(BlockPropertyTypes.PROPAGULE_STAGE, stage + 1)
+                        pos,
+                        blockState.setPropertyValue(BlockPropertyTypes.PROPAGULE_STAGE, stage + 1)
                 );
             }
-            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-            interactInfo.player().tryConsumeItemInHand();
-            return true;
-        } else {
-            // Bone meal on non-hanging propagule: try to grow tree (with 45% failure rate)
-            if (ThreadLocalRandom.current().nextFloat() < 0.45f) {
-                // Failed, but still consume and show particle
-                dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-                interactInfo.player().tryConsumeItemInHand();
-                return true;
-            }
-
-            if (growTree(block)) {
-                dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-                interactInfo.player().tryConsumeItemInHand();
-                return true;
-            }
-
-            // Growth failed, still show particle and consume
-            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-            interactInfo.player().tryConsumeItemInHand();
             return true;
         }
+
+        if (ThreadLocalRandom.current().nextFloat() < 0.45f) {
+            return false;
+        }
+
+        return growTree(block);
     }
 }

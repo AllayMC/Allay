@@ -1443,7 +1443,7 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.MELON_BLOCK, ItemId.MELON_SEEDS))
                 .build();
         BlockTypes.PUMPKIN_STEM = AllayBlockType
-                .builder(BlockPumpkinBehaviorImpl.class)
+                .builder(BlockPumpkinStemBehaviorImpl.class)
                 .vanillaBlock(BlockId.PUMPKIN_STEM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
                 .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.PUMPKIN, ItemId.PUMPKIN_SEEDS))
