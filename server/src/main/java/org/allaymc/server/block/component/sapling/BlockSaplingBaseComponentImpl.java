@@ -2,6 +2,7 @@ package org.allaymc.server.block.component.sapling;
 
 import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -13,6 +14,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -31,7 +33,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author daoge_cmd
  */
 @Getter
-public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     protected final Identifier treeFeatureId;
     protected final Identifier secondaryTreeFeatureId;
@@ -131,28 +133,22 @@ public class BlockSaplingBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Handle bone meal
         if (itemStack.getItemType() == ItemTypes.BONE_MEAL) {
-            // 45% failure rate
-            if (ThreadLocalRandom.current().nextFloat() < 0.45f) {
-                // Show particle even on failure
-                dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-                interactInfo.player().tryConsumeItemInHand();
-                return true;
-            }
-
-            var block = interactInfo.getClickedBlock();
-            if (growTree(block)) {
-                dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
-                interactInfo.player().tryConsumeItemInHand();
-                return true;
-            }
-
-            // Particle even if growth failed
+            onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState());
             dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
             interactInfo.player().tryConsumeItemInHand();
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        if (ThreadLocalRandom.current().nextFloat() < 0.45f) {
+            return false;
+        }
+
+        return growTree(new Block(blockState, new Position3i(pos, dimension)));
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.vine;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -26,7 +27,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWING_PLA
 /**
  * @author daoge_cmd
  */
-public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     protected static final int MAX_AGE = 25;
 
@@ -119,10 +120,7 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Bone meal on base cave vines: convert to berry variant at max age
         if (itemStack != null && itemStack.getItemType() == ItemTypes.BONE_MEAL) {
-            if (!hasBerries) {
-                var newState = BlockTypes.CAVE_VINES_HEAD_WITH_BERRIES.getDefaultState()
-                        .setPropertyValue(GROWING_PLANT_AGE, MAX_AGE);
-                dimension.setBlockState(interactInfo.clickedBlockPos(), newState);
+            if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
                 interactInfo.player().tryConsumeItemInHand();
                 dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
                 return true;
@@ -143,6 +141,18 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        if (hasBerries) {
+            return false;
+        }
+
+        var newState = BlockTypes.CAVE_VINES_HEAD_WITH_BERRIES.getDefaultState()
+                .setPropertyValue(GROWING_PLANT_AGE, MAX_AGE);
+        dimension.setBlockState(pos, newState);
+        return true;
     }
 
     @Override

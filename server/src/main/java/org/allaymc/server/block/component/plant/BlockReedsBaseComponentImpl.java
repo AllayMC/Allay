@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.plant;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -21,7 +22,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.AGE_16;
 /**
  * @author daoge_cmd
  */
-public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockReedsBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -83,6 +84,20 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
             pos = BlockFace.DOWN.offsetPos(pos);
         }
 
+        if (onBoneMealUsed(dimension, pos, dimension.getBlockState(pos))) {
+            dimension.addParticle(MathUtils.center(pos), SimpleParticle.BONE_MEAL);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        if (dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType() == BlockTypes.REEDS) {
+            pos = BlockFace.DOWN.offsetPos(pos);
+        }
+
         if (canGrowHere(dimension, pos, false)) {
             for (var y = 1; y < 3; y++) {
                 if (dimension.getBlockState(pos.x(), pos.y() + y, pos.z()).getBlockType() == BlockTypes.AIR) {
@@ -90,7 +105,6 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
                 }
             }
 
-            dimension.addParticle(MathUtils.center(pos), SimpleParticle.BONE_MEAL);
             return true;
         }
 

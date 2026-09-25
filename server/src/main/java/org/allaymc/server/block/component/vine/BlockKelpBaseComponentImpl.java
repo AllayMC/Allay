@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.vine;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -28,7 +29,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.KELP_AGE;
 /**
  * @author daoge_cmd
  */
-public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     protected static final int MAX_AGE = 25;
 
@@ -148,8 +149,17 @@ public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Find topmost kelp
-        var pos = interactInfo.clickedBlockPos();
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
+            interactInfo.player().tryConsumeItemInHand();
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
         var topPos = findTopKelp(dimension, pos);
         var topState = dimension.getBlockState(topPos);
         var topAge = topState.getPropertyValue(KELP_AGE);
@@ -163,7 +173,6 @@ public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Set top kelp age to max
         var newState = blockType.getDefaultState().setPropertyValue(KELP_AGE, Math.min(topAge + 1, MAX_AGE));
         var event = new BlockGrowEvent(
                 new Block(topState, new Position3i(topPos, dimension)),
@@ -172,8 +181,6 @@ public class BlockKelpBaseComponentImpl extends BlockBaseComponentImpl {
         if (event.call()) {
             dimension.setBlockState(topPos, topState.setPropertyValue(KELP_AGE, MAX_AGE));
             dimension.setBlockState(abovePos, event.getNewBlockState());
-            interactInfo.player().tryConsumeItemInHand();
-            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
             return true;
         }
 

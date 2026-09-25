@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.vine;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -14,6 +15,7 @@ import org.allaymc.api.eventbus.event.block.BlockGrowEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -27,7 +29,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.SEA_GRASS_T
 /**
  * @author daoge_cmd
  */
-public class BlockSeagrassBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockSeagrassBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     public BlockSeagrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -100,11 +102,19 @@ public class BlockSeagrassBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var pos = interactInfo.clickedBlockPos();
-        var blockState = dimension.getBlockState(pos);
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
+            interactInfo.player().tryConsumeItemInHand();
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
         var seaGrassType = blockState.getPropertyValue(SEA_GRASS_TYPE);
 
-        // Only normal seagrass can be grown with bone meal
         if (seaGrassType != SeaGrassType.DEFAULT) {
             return false;
         }
@@ -120,15 +130,10 @@ public class BlockSeagrassBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var newState = blockType.getDefaultState().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_TOP);
-        var event = new BlockGrowEvent(interactInfo.getClickedBlock(), newState);
+        var event = new BlockGrowEvent(new Block(blockState, new Position3i(pos, dimension)), newState);
         if (event.call()) {
-            // Set bottom half
             dimension.setBlockState(pos, blockType.getDefaultState().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_BOT));
-            // Set top half
             dimension.setBlockState(abovePos, event.getNewBlockState());
-
-            interactInfo.player().tryConsumeItemInHand();
-            dimension.addParticle(MathUtils.center(pos), SimpleParticle.BONE_MEAL);
             return true;
         }
 

@@ -1,8 +1,10 @@
 package org.allaymc.server.block.component.plant;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStack;
@@ -30,7 +32,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK
  *
  * @author daoge_cmd
  */
-public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     private static final int VERTICAL_RANGE = 5;
     private static final float EXTRA_EDGE_COLUMN_CHANCE = 0.75f;
@@ -56,14 +58,20 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var pos = interactInfo.clickedBlockPos();
-
-        // Bonemeal only works if the block above is air
-        if (dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockType() != BlockTypes.AIR) {
+        if (!onBoneMealUsed(dimension, pos, interactInfo.getClickedBlock().getBlockState())) {
             return false;
         }
 
         interactInfo.player().tryConsumeItemInHand();
         dimension.addParticle(MathUtils.center(pos), SimpleParticle.BONE_MEAL);
+        return true;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        if (dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockType() != BlockTypes.AIR) {
+            return false;
+        }
 
         spreadMoss(dimension, pos);
         return true;

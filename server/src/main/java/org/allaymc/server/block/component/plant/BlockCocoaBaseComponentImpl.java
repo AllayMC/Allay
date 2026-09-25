@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.plant;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -12,6 +13,7 @@ import org.allaymc.api.eventbus.event.block.BlockGrowEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -26,7 +28,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.DIRECTION_4
 /**
  * @author daoge_cmd
  */
-public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockCocoaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -101,18 +103,26 @@ public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var clickedBlock = interactInfo.getClickedBlock();
-        var age = clickedBlock.getPropertyValue(AGE_3);
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
+            interactInfo.player().tryConsumeItemInHand();
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var age = blockState.getPropertyValue(AGE_3);
         if (age >= AGE_3.getMax()) {
             return false;
         }
 
-        var newState = clickedBlock.getBlockState().setPropertyValue(AGE_3, age + 1);
-        var event = new BlockGrowEvent(clickedBlock, newState);
+        var newState = blockState.setPropertyValue(AGE_3, age + 1);
+        var event = new BlockGrowEvent(new Block(blockState, new Position3i(pos, dimension)), newState);
         if (event.call()) {
-            dimension.setBlockState(interactInfo.clickedBlockPos(), event.getNewBlockState());
-            interactInfo.player().tryConsumeItemInHand();
-            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            dimension.setBlockState(pos, event.getNewBlockState());
             return true;
         }
 

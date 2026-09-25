@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.plant;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -10,6 +11,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -23,7 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author daoge_cmd
  */
-public class BlockMushroomBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockMushroomBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
 
     protected final Identifier mushroomFeatureId;
 
@@ -61,12 +63,16 @@ public class BlockMushroomBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
+        onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState());
         interactInfo.player().tryConsumeItemInHand();
         dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+        return true;
+    }
 
-        // 40% chance to attempt growth
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
         if (ThreadLocalRandom.current().nextInt(5) < 2) {
-            growMushroom(interactInfo.getClickedBlock());
+            growMushroom(new Block(blockState, new Position3i(pos, dimension)));
         }
 
         return true;

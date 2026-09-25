@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.plant;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -27,7 +28,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.DEAD_BIT;
 /**
  * @author daoge_cmd
  */
-public class BlockSeaPickleBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockSeaPickleBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockSeaPickleBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -125,27 +126,33 @@ public class BlockSeaPickleBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var clickedBlock = interactInfo.getClickedBlock();
-        var dead = clickedBlock.getPropertyValue(DEAD_BIT);
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
+            interactInfo.player().tryConsumeItemInHand();
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var dead = blockState.getPropertyValue(DEAD_BIT);
         if (dead) {
             return false;
         }
 
-        // Check if on coral block
-        var downState = dimension.getBlockState(BlockFace.DOWN.offsetPos(interactInfo.clickedBlockPos()));
+        var downState = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos));
         if (!isCoralBlock(downState)) {
             return false;
         }
 
-        // Fill to 4 first
-        var currentCount = clickedBlock.getPropertyValue(CLUSTER_COUNT);
+        var currentCount = blockState.getPropertyValue(CLUSTER_COUNT);
         if (currentCount < CLUSTER_COUNT.getMax()) {
-            var newState = clickedBlock.getBlockState().setPropertyValue(CLUSTER_COUNT, CLUSTER_COUNT.getMax());
-            dimension.setBlockState(interactInfo.clickedBlockPos(), newState);
+            var newState = blockState.setPropertyValue(CLUSTER_COUNT, CLUSTER_COUNT.getMax());
+            dimension.setBlockState(pos, newState);
         }
 
-        // Spread to nearby coral blocks
-        var pos = interactInfo.clickedBlockPos();
         var random = ThreadLocalRandom.current();
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
@@ -168,8 +175,6 @@ public class BlockSeaPickleBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        interactInfo.player().tryConsumeItemInHand();
-        dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
         return true;
     }
 

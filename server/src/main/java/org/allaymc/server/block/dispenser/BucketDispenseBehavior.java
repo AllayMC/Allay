@@ -9,12 +9,14 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityInitInfo;
+import org.allaymc.api.entity.interfaces.EntityCow;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBucketComponent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.particle.ShootParticle;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.joml.primitives.AABBd;
 
 /**
  * Dispense behavior for bucket items.
@@ -40,6 +42,17 @@ public class BucketDispenseBehavior implements DispenseBehavior {
     protected DispenseResult handleEmptyBucket(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var targetPos = face.offsetPos(block.getPosition());
+
+        var cows = dimension.getEntityManager().getPhysicsService()
+                .computeCollidingEntities(new AABBd(
+                        targetPos.x(), targetPos.y(), targetPos.z(),
+                        targetPos.x() + 1, targetPos.y() + 1, targetPos.z() + 1
+                ), entity -> entity instanceof EntityCow cow && !cow.isBaby());
+        if (!cows.isEmpty()) {
+            dimension.addSound(targetPos, SimpleSound.MILKING);
+            return DispenseResult.success(ItemTypes.MILK_BUCKET.createItemStack(1));
+        }
+
         var targetBlock = dimension.getBlockState(targetPos);
         var targetBlockType = targetBlock.getBlockType();
 

@@ -46,7 +46,6 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
         map.put(ItemTypes.FIREWORK_ROCKET, new FireworksDispenseBehavior());
 
         // Flint and steel
-        // TODO: FlintAndSteelDispenseBehavior - Nether portal creation not yet implemented
         map.put(ItemTypes.FLINT_AND_STEEL, new FlintAndSteelDispenseBehavior());
 
         // Glass bottle
@@ -56,9 +55,9 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
         map.put(ItemTypes.POTION, new WaterBottleDispenseBehavior());
 
         // Buckets
-        // TODO: BucketDispenseBehavior - Milk bucket behavior (entity milking) not implemented
         var bucketBehavior = new BucketDispenseBehavior();
         map.put(ItemTypes.BUCKET, bucketBehavior);
+        map.put(ItemTypes.MILK_BUCKET, bucketBehavior);
         map.put(ItemTypes.WATER_BUCKET, bucketBehavior);
         map.put(ItemTypes.LAVA_BUCKET, bucketBehavior);
         map.put(ItemTypes.POWDER_SNOW_BUCKET, bucketBehavior);
@@ -78,12 +77,59 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
             }
         }
 
-        // TODO: BoatDispenseBehavior - Spawns boat entity on water or above water (all boat variants)
-        // TODO: ChestBoatDispenseBehavior - Spawns chest boat entity on water or above water (all chest boat variants)
-        // TODO: DyeDispenseBehavior - Bone meal/fertilizer functionality on fertilizable blocks
-        // TODO: MinecartDispenseBehavior - Spawns minecart entities on rail blocks (all minecart variants)
-        // TODO: ShearsDispenseBehavior - Shears shearable entities (sheep, snow golem, mooshroom, etc.)
-        // TODO: ShulkerBoxDispenseBehavior - Places shulker boxes in front of dispenser
+        var boatBehavior = new BoatDispenseBehavior();
+        var chestBoatBehavior = new ChestBoatDispenseBehavior();
+        map.put(ItemTypes.BOAT, boatBehavior);
+        map.put(ItemTypes.ACACIA_BOAT, boatBehavior);
+        map.put(ItemTypes.BIRCH_BOAT, boatBehavior);
+        map.put(ItemTypes.CHERRY_BOAT, boatBehavior);
+        map.put(ItemTypes.DARK_OAK_BOAT, boatBehavior);
+        map.put(ItemTypes.JUNGLE_BOAT, boatBehavior);
+        map.put(ItemTypes.MANGROVE_BOAT, boatBehavior);
+        map.put(ItemTypes.OAK_BOAT, boatBehavior);
+        map.put(ItemTypes.PALE_OAK_BOAT, boatBehavior);
+        map.put(ItemTypes.SPRUCE_BOAT, boatBehavior);
+        map.put(ItemTypes.CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.ACACIA_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.BIRCH_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.CHERRY_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.DARK_OAK_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.JUNGLE_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.MANGROVE_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.OAK_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.PALE_OAK_CHEST_BOAT, chestBoatBehavior);
+        map.put(ItemTypes.SPRUCE_CHEST_BOAT, chestBoatBehavior);
+
+        var dyeBehavior = new DyeDispenseBehavior();
+        map.put(ItemTypes.BONE_MEAL, dyeBehavior);
+        map.put(ItemTypes.RAPID_FERTILIZER, dyeBehavior);
+
+        var minecartBehavior = new MinecartDispenseBehavior();
+        map.put(ItemTypes.MINECART, minecartBehavior);
+        map.put(ItemTypes.CHEST_MINECART, minecartBehavior);
+        map.put(ItemTypes.HOPPER_MINECART, minecartBehavior);
+        map.put(ItemTypes.TNT_MINECART, minecartBehavior);
+        map.put(ItemTypes.COMMAND_BLOCK_MINECART, minecartBehavior);
+        map.put(ItemTypes.SHEARS, new ShearsDispenseBehavior());
+
+        var shulkerBoxBehavior = new ShulkerBoxDispenseBehavior();
+        map.put(ItemTypes.UNDYED_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.WHITE_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.ORANGE_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.MAGENTA_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.LIGHT_BLUE_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.YELLOW_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.LIME_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.PINK_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.GRAY_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.LIGHT_GRAY_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.CYAN_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.PURPLE_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.BLUE_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.BROWN_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.GREEN_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.RED_SHULKER_BOX, shulkerBoxBehavior);
+        map.put(ItemTypes.BLACK_SHULKER_BOX, shulkerBoxBehavior);
 
         return map;
     }

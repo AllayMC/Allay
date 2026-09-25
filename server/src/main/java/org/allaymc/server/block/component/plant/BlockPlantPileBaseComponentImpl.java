@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.plant;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -11,6 +12,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -23,7 +25,7 @@ import static org.allaymc.api.block.type.BlockTypes.*;
 /**
  * @author daoge_cmd
  */
-public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockPlantPileBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -74,19 +76,14 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
 
         var center = MathUtils.center(interactInfo.clickedBlockPos());
         var block = interactInfo.getClickedBlock();
-        var growth = block.getPropertyValue(BlockPropertyTypes.GROWTH);
         if (itemStack.getItemType() == ItemTypes.BONE_MEAL) {
-            if (growth < 3) {
-                block.updateBlockProperty(BlockPropertyTypes.GROWTH, growth + 1);
-            } else {
-                interactInfo.player().getDimension().dropItem(this.blockType.getItemType().createItemStack(), center);
-            }
-
+            onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), block.getBlockState());
             dimension.addParticle(center, SimpleParticle.BONE_MEAL);
             interactInfo.player().tryConsumeItemInHand();
             return true;
         }
 
+        var growth = block.getPropertyValue(BlockPropertyTypes.GROWTH);
         if (itemStack.getItemType() == this.blockType.getItemType() && growth < 3) {
             block.updateBlockProperty(BlockPropertyTypes.GROWTH, growth + 1);
             interactInfo.player().tryConsumeItemInHand();
@@ -94,6 +91,19 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var block = new Block(blockState, new Position3i(pos, dimension));
+        var growth = blockState.getPropertyValue(BlockPropertyTypes.GROWTH);
+        if (growth < 3) {
+            block.updateBlockProperty(BlockPropertyTypes.GROWTH, growth + 1);
+        } else {
+            dimension.dropItem(this.blockType.getItemType().createItemStack(), MathUtils.center(pos));
+        }
+
+        return true;
     }
 
     @Override

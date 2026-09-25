@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockFertilizableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -26,7 +27,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
 /**
  * @author Dhaiven | daoge_cmd
  */
-public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
+public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl implements BlockFertilizableComponent {
     public BlockCropsBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -117,7 +118,8 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
         return false;
     }
 
-    protected boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
+    @Override
+    public boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
         var growth = crop.getPropertyValue(GROWTH);
         if (growth == GROWTH.getMax()) {
             return false;
