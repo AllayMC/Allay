@@ -14,6 +14,7 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.IdentifierUtils;
 import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.server.world.AllayWorldPool;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -150,7 +151,12 @@ public class WorldCommand extends Command {
                                             .apply(response.get(12));
                                 }
 
-                                Server.getInstance().getWorldPool().loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
+                                var worldPool = Server.getInstance().getWorldPool();
+                                worldPool.loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
+                                var world = worldPool.getWorld(name);
+                                if (world != null) {
+                                    ((AllayWorldPool) worldPool).saveWorldConfig(world);
+                                }
                             })
                             .sendTo(player.getController());
                     return context.success();

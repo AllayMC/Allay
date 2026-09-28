@@ -66,9 +66,6 @@ public class AllayPlayerManager implements PlayerManager {
 
     public void shutdown() {
         this.playerStorage.shutdown();
-        this.banInfo.save();
-        this.whitelist.save();
-        this.operators.save();
     }
 
     @Override
@@ -112,6 +109,7 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         banInfo.bannedPlayers().add(uuidOrName);
+        banInfo.save();
         players.values().stream()
                 .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect("You are banned!"));
@@ -131,6 +129,7 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         banInfo.bannedPlayers().remove(uuidOrName);
+        banInfo.save();
         return true;
     }
 
@@ -156,6 +155,7 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         banInfo.bannedIps().add(ip);
+        banInfo.save();
         players.values().stream()
                 .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
                 .forEach(player -> player.disconnect(TrKeys.ALLAY_DISCONNECT_BANIP));
@@ -175,6 +175,7 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         banInfo.bannedIps().remove(ip);
+        banInfo.save();
         return true;
     }
 
@@ -196,6 +197,7 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         AllayServer.getSettings().genericSettings().enableWhitelist(enable);
+        AllayServer.getSettings().save();
         if (enable) {
             getPlayers().values().stream()
                     .filter(player -> !isWhitelisted(player))
@@ -219,7 +221,11 @@ public class AllayPlayerManager implements PlayerManager {
             return false;
         }
 
-        return whitelist.whitelist().add(uuidOrName);
+        var added = whitelist.whitelist().add(uuidOrName);
+        if (added) {
+            whitelist.save();
+        }
+        return added;
     }
 
     @Override
@@ -234,6 +240,7 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         whitelist.whitelist().remove(uuidOrName);
+        whitelist.save();
         players.values().stream()
                 .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED));
@@ -261,6 +268,7 @@ public class AllayPlayerManager implements PlayerManager {
         } else {
             operators.operators().remove(uuidOrName);
         }
+        operators.save();
 
         players.values().stream()
                 .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
