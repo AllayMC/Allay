@@ -1,5 +1,6 @@
 package org.allaymc.server.registry;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.BlockTag;
 import org.allaymc.api.block.property.type.BlockPropertyType;
@@ -70,6 +71,7 @@ public final class InternalRegistries {
      * version read from resources for use by version-specific packet encoders.
      */
     public static SimpleMappedRegistry<ItemId, VanillaItemDefinitionData> VANILLA_ITEM_DEFINITIONS;
+    public static SimpleMappedRegistry<ItemId, Int2IntMap> BLOCK_ITEM_META_STATES;
 
     /**
      * Biome metadata indexed by generated biome identifiers. Biome type
