@@ -26,6 +26,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Tipped arrow with infinity now can be picked up.
 - 1.26.50+ clients get the jigsaw structure data they require before `StartGamePacket`, sent with empty rules like
   Geyser and gophertunnel do, so they no longer disconnect with "missing structure data".
+- Ladders, iron bars, string and other flat block items are drawn in hand on 1.26.50+ clients: items without extra
+  data are sent without NBT.
 
 # 0.14.0 (API 0.29.0) - 2026/7/22
 

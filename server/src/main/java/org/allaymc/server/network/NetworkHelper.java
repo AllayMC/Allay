@@ -214,13 +214,16 @@ public final class NetworkHelper {
         if (blockState != null && blockDefinition == null) {
             throw new IllegalStateException("Missing block definition for state " + blockState.blockStateHash());
         }
+        var extraTag = itemStack.saveExtraTag();
         return ItemData
                 .builder()
                 .definition(getItemDefinition(itemType, itemDefinitions))
                 .blockDefinition(blockDefinition)
                 .count(itemStack.getCount())
                 .damage(itemStack.getMeta())
-                .tag(itemStack.saveExtraTag())
+                // Like BDS, an item without extra data is sent without NBT: with an empty compound 1.26.50 clients draw no
+                // held model for flat block items such as ladders, iron bars and string.
+                .tag(extraTag.isEmpty() ? null : extraTag)
                 .usingNetId(itemStack.hasUniqueId())
                 .netId(itemStack.getUniqueId())
                 .build();
