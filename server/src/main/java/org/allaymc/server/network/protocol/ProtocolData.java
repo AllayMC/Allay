@@ -29,6 +29,7 @@ import java.util.Objects;
  *
  * @param recipeTable encoded recipes and their server-side lookup index
  * @param blockPalette the block palette the protocol's clients know block states by
+ * @param itemPalette the items the protocol's clients know
  */
 public record ProtocolData(
         List<ItemDefinition> itemDefinitions,
@@ -37,7 +38,8 @@ public record ProtocolData(
         List<CreativeItemData> creativeItems,
         List<BlockPropertyData> customBlockProperties,
         RecipeTable recipeTable,
-        NetworkBlockPalette blockPalette
+        NetworkBlockPalette blockPalette,
+        NetworkItemPalette itemPalette
 ) {
     /**
      * Creates a protocol payload bundle with copied, unmodifiable lists.
@@ -53,5 +55,6 @@ public record ProtocolData(
         customBlockProperties = List.copyOf(Objects.requireNonNull(customBlockProperties, "customBlockProperties"));
         recipeTable = Objects.requireNonNull(recipeTable, "recipeTable");
         blockPalette = Objects.requireNonNull(blockPalette, "blockPalette");
+        itemPalette = Objects.requireNonNull(itemPalette, "itemPalette");
     }
 }

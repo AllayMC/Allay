@@ -5,6 +5,7 @@ import org.allaymc.api.player.ClientState;
 import org.allaymc.server.network.processor.PacketProcessorRegistry;
 import org.allaymc.server.network.processor.ingame.ServerboundDataStorePacketProcessor;
 import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v860.Protocol_v860;
@@ -72,6 +73,11 @@ public class Protocol_v898 extends Protocol_v860 {
      * supplied data instance. The enclosing initialization lifecycle verifies
      * this shared identity before publishing the protocol for connection use.
      */
+    @Override
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.of("898");
+    }
+
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
         return new PacketEncoder_v898(data);

@@ -977,7 +977,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 // payload layout.
                 packet.setType(ParticleType.ICON_CRACK);
                 packet.setData(
-                        (itemBreak.itemStack().getItemType().getRuntimeId() << 16)
+                        (getData().itemPalette().toNetwork(itemBreak.itemStack().getItemType()).getRuntimeId() << 16)
                         | itemBreak.itemStack().getMeta()
                 );
             }
@@ -1975,7 +1975,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 // Eating uses the same packed runtime item ID and metadata
                 // layout as item particles, preserving which held item supplies
                 // the visual.
-                int data = (item.getItemType().getRuntimeId() << 16) | item.getMeta();
+                int data = (getData().itemPalette().toNetwork(item.getItemType()).getRuntimeId() << 16) | item.getMeta();
                 yield List.of(createEntityEventPacket(entity, EntityEventType.EATING_ITEM, data));
             }
             case SimpleEntityAction.FIREWORK_EXPLODE ->

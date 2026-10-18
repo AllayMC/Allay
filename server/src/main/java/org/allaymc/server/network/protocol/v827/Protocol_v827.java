@@ -2,6 +2,7 @@ package org.allaymc.server.network.protocol.v827;
 
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.NetworkBlockPalette;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v819.Protocol_v819;
@@ -44,6 +45,11 @@ public class Protocol_v827 extends Protocol_v819 {
     @Override
     protected NetworkBlockPalette createBlockPalette() {
         return NetworkBlockPalette.of("827");
+    }
+
+    @Override
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.of("827");
     }
 
     @Override

@@ -200,7 +200,8 @@ class ProtocolDataEncoderTest {
                 ItemAirStack.AIR_STACK,
                 protocol.getItemDefinitionRegistry(),
                 protocol.getBlockDefinitionRegistry(),
-                protocol.getData().blockPalette()
+                protocol.getData().blockPalette(),
+                protocol.getData().itemPalette()
         );
         assertTrue(protocol.getItemDefinitionRegistry().isRegistered(air.getDefinition()));
 
@@ -208,7 +209,8 @@ class ProtocolDataEncoderTest {
                 TestRegistryFixtures.customDefinitionBlockType().getItemType().createItemStack(1),
                 protocol.getItemDefinitionRegistry(),
                 protocol.getBlockDefinitionRegistry(),
-                protocol.getData().blockPalette()
+                protocol.getData().blockPalette(),
+                protocol.getData().itemPalette()
         );
         assertTrue(protocol.getItemDefinitionRegistry().isRegistered(blockItem.getDefinition()));
         assertTrue(protocol.getBlockDefinitionRegistry().isRegistered(blockItem.getBlockDefinition()));
@@ -219,7 +221,7 @@ class ProtocolDataEncoderTest {
 
         var named = TestRegistryFixtures.customDefinitionBlockType().getItemType().createItemStack(1);
         named.setCustomName("Named");
-        var namedItem = NetworkHelper.toNetwork(named, protocol.getItemDefinitionRegistry(), protocol.getBlockDefinitionRegistry(), protocol.getData().blockPalette());
+        var namedItem = NetworkHelper.toNetwork(named, protocol.getItemDefinitionRegistry(), protocol.getBlockDefinitionRegistry(), protocol.getData().blockPalette(), protocol.getData().itemPalette());
         assertNotNull(namedItem.getTag());
         assertFalse(namedItem.getTag().isEmpty());
     }

@@ -66,7 +66,15 @@ class ProtocolRegistryInitializationTest {
         var protocol = ProtocolRegistry.getDefault().resolve(ClientVariant.INTERNATIONAL, 975);
         var data = protocol.getData();
 
-        assertEquals(Registries.ITEMS.getContent().size(), data.itemDefinitions().size());
+        // 975 clients only get the items their version knows.
+        assertEquals(
+                Registries.ITEMS.getContent().values().stream().filter(data.itemPalette()::isKnown).count(),
+                data.itemDefinitions().size()
+        );
+        assertEquals(
+                Registries.ITEMS.getContent().size(),
+                ProtocolRegistry.getDefault().resolve(ClientVariant.INTERNATIONAL, 2193).getData().itemDefinitions().size()
+        );
         // 975 clients know the block states of their own palette.
         assertEquals(data.blockPalette().definitions().size(), data.blockDefinitions().size());
         assertEquals(
@@ -76,7 +84,10 @@ class ProtocolRegistryInitializationTest {
                 ProtocolRegistry.getDefault().resolve(ClientVariant.INTERNATIONAL, 2193).getData().blockDefinitions().size()
         );
         assertEquals(Registries.CREATIVE_ITEMS.getGroups().size(), data.creativeGroups().size());
-        assertEquals(Registries.CREATIVE_ITEMS.getEntries().size(), data.creativeItems().size());
+        assertEquals(
+                Registries.CREATIVE_ITEMS.getEntries().stream().filter(entry -> data.itemPalette().isKnown(entry.itemStack().getItemType())).count(),
+                data.creativeItems().size()
+        );
         assertFalse(data.recipeTable().recipesByNetworkId().isEmpty());
         data.recipeTable().recipesByNetworkId().values().forEach(recipe -> assertSame(
                 recipe,

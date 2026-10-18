@@ -5,6 +5,7 @@ import org.allaymc.server.network.processor.PacketProcessorRegistry;
 import org.allaymc.server.network.processor.ingame.ServerboundDataDrivenScreenClosedPacketProcessor;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.NetworkBlockPalette;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v924.Protocol_v924;
@@ -64,6 +65,11 @@ public class Protocol_v944 extends Protocol_v924 {
     @Override
     protected NetworkBlockPalette createBlockPalette() {
         return NetworkBlockPalette.of("944");
+    }
+
+    @Override
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.of("944");
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.allaymc.server.network.protocol.v1001;
 
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.NetworkBlockPalette;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v975.Protocol_v975;
@@ -44,6 +45,11 @@ public class Protocol_v1001 extends Protocol_v975 {
     @Override
     protected NetworkBlockPalette createBlockPalette() {
         return NetworkBlockPalette.of("1001");
+    }
+
+    @Override
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.of("1001");
     }
 
     @Override

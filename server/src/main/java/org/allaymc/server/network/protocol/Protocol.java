@@ -115,6 +115,12 @@ public abstract class Protocol {
      */
     private NetworkBlockPalette blockPalette;
     /**
+     * {@code itemPalette} holds the items this protocol's clients know, under the
+     * names they know them by; it drives the item registry, creative items and
+     * recipes.
+     */
+    private NetworkItemPalette itemPalette;
+    /**
      * {@code initialized} publishes completion after every required component
      * has been assigned. Guarded accessors read this volatile flag before
      * exposing initialization results to other threads.
@@ -156,6 +162,8 @@ public abstract class Protocol {
         registerProcessors(registry);
         registry.freeze();
 
+        // Item definitions, creative items and recipes depend on the items the clients know.
+        this.itemPalette = Objects.requireNonNull(createItemPalette(), "createItemPalette returned null");
         var encodedItemDefinitions = createItemDefinitions();
         var itemDefinitions = SimpleDefinitionRegistry.<ItemDefinition>builder()
                 .addAll(encodedItemDefinitions)
@@ -179,7 +187,8 @@ public abstract class Protocol {
                     createCreativeItems(),
                     createCustomBlockProperties(),
                     createRecipeTable(),
-                    blockPalette
+                    blockPalette,
+                    itemPalette
             );
             var packetEncoder = Objects.requireNonNull(createEncoder(protocolData), "createEncoder returned null");
             if (packetEncoder.getData() != protocolData) {
@@ -198,6 +207,7 @@ public abstract class Protocol {
             this.itemDefinitionRegistry = null;
             this.blockDefinitionRegistry = null;
             this.blockPalette = null;
+            this.itemPalette = null;
             throw exception;
         }
     }
@@ -228,16 +238,43 @@ public abstract class Protocol {
         return Registries.ITEMS.getContent().values().stream()
                 .sorted(Comparator.comparingInt(org.allaymc.api.item.type.ItemType::getRuntimeId))
                 .map(itemType -> encodeItemDefinition((AllayItemType<?>) itemType))
+                .filter(Objects::nonNull)
                 .toList();
+    }
+
+    /**
+     * Returns the items this protocol's clients know. Protocols older than the current items override this with
+     * their palette.
+     *
+     * @return the item palette
+     */
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.current();
     }
 
     /**
      * Encodes one item using its vanilla definition when available, otherwise
      * its custom definition or an empty {@code NONE} definition. Vanilla
-     * {@code NONE} entries omit component data, while all paths retain the item
-     * type identifier and runtime ID.
+     * {@code NONE} entries omit component data, while these paths retain the item
+     * type identifier and runtime ID. Protocols older than the current items
+     * instead take the definition from their item palette, keeping the runtime ID
+     * but using the name they know, and return {@code null} for an item they lack.
      */
     private ItemDefinition encodeItemDefinition(AllayItemType<?> itemType) {
+        if (!itemType.isCustomItem() && !itemPalette.isCurrent()) {
+            var definition = itemPalette.definition(itemType);
+            if (definition == null) {
+                // The version lacks the item: it is sent as a similar item and stays unregistered.
+                return null;
+            }
+            return new SimpleItemDefinition(
+                    definition.name(),
+                    itemType.getRuntimeId(),
+                    definition.version(),
+                    definition.componentBased(),
+                    definition.version() == ItemVersion.NONE ? NbtMap.EMPTY : definition.components()
+            );
+        }
         if (!itemType.isCustomItem()) {
             var itemId = ItemId.fromIdentifier(itemType.getIdentifier());
             var vanillaDefinition = InternalRegistries.VANILLA_ITEM_DEFINITIONS.get(itemId);
@@ -478,6 +515,8 @@ public abstract class Protocol {
     protected List<CreativeItemData> createCreativeItems() {
         // Creative network IDs are positive; shift the zero-based entry index.
         return Registries.CREATIVE_ITEMS.getEntries().stream()
+                // Items the version lacks would show up as their fallback, next to the fallback itself.
+                .filter(entry -> itemPalette.isKnown(entry.itemStack().getItemType()))
                 .map(entry -> new CreativeItemData(
                         encodeItemStack(entry.itemStack()),
                         entry.index() + 1,
@@ -933,6 +972,10 @@ public abstract class Protocol {
                 .sorted(Comparator.comparing(recipe -> recipe.getIdentifier().toString()))
                 .toList();
         for (var recipe : recipes) {
+            if (!isKnown(recipe)) {
+                // The version lacks one of its items.
+                continue;
+            }
             switch (recipe) {
                 case ShapedRecipe shaped -> {
                     int networkId = nextNetworkId++;
@@ -1045,6 +1088,36 @@ public abstract class Protocol {
                 encodeItemStack(recipe.getOutput()),
                 recipe.getType().name().toLowerCase(Locale.ROOT)
         );
+    }
+
+    private boolean isKnown(Recipe recipe) {
+        if (recipe instanceof ComplexRecipe) {
+            // Complex recipes only name their outputs for a given input.
+            return true;
+        }
+        var outputs = recipe.getOutputs();
+        if (outputs != null) {
+            for (var output : outputs) {
+                if (output != null && !itemPalette.isKnown(output.getItemType())) {
+                    return false;
+                }
+            }
+        }
+        return switch (recipe) {
+            case ShapedRecipe shaped -> shaped.getKeys().values().stream().allMatch(this::isKnown);
+            case ShapelessRecipe shapeless -> Arrays.stream(shapeless.getIngredients()).allMatch(this::isKnown);
+            case FurnaceRecipe furnace -> isKnown(furnace.getIngredient());
+            case PotionRecipe potion -> itemPalette.isKnown(potion.getIngredient().getItemType())
+                                        && itemPalette.isKnown(potion.getReagent().getItemType())
+                                        && itemPalette.isKnown(potion.getOutput().getItemType());
+            case SmithingRecipe smithing -> isKnown(smithing.getTemplate()) && isKnown(smithing.getBase())
+                                            && isKnown(smithing.getAddition());
+            default -> true;
+        };
+    }
+
+    private boolean isKnown(ItemDescriptor descriptor) {
+        return !(descriptor instanceof ItemTypeDescriptor typeDescriptor) || itemPalette.isKnown(typeDescriptor.getItemType());
     }
 
     /**
@@ -1161,7 +1234,7 @@ public abstract class Protocol {
      * identities.
      */
     protected final ItemData encodeItemStack(ItemStack itemStack) {
-        return NetworkHelper.toNetwork(itemStack, itemDefinitionRegistry, blockDefinitionRegistry, blockPalette);
+        return NetworkHelper.toNetwork(itemStack, itemDefinitionRegistry, blockDefinitionRegistry, blockPalette, itemPalette);
     }
 
     /**

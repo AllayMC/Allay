@@ -195,7 +195,8 @@ class ProtocolInitializationTest {
                 List.of(),
                 List.of(),
                 new RecipeTable(List.of(), List.of(), new Int2ObjectOpenHashMap<Recipe>()),
-                NetworkBlockPalette.current()
+                NetworkBlockPalette.current(),
+                NetworkItemPalette.current()
         );
     }
 

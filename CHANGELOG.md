@@ -24,6 +24,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Clients older than 1.26.50 now get the block states of their own version: each protocol sends block states by the
   palette its clients know, with states upgraded from that palette, new properties such as stair corners and fence
   connections dropped, and blocks the version lacks replaced by a block of the same shape (`block_fallbacks.json`).
+- Clients older than 1.26.50 now get the items of their own version: the item registry lists the items the version
+  knows, by the name it knows them by and with its definition data, items it lacks are sent as a similar item
+  (`item_fallbacks.json`, or the item of the fallback block), and creative items and recipes it cannot show are left
+  out.
 
 ### Fixed
 

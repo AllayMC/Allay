@@ -3,6 +3,7 @@ package org.allaymc.server.network.protocol.v975;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.NetworkBlockPalette;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v944.Protocol_v944;
@@ -91,6 +92,11 @@ public class Protocol_v975 extends Protocol_v944 {
     @Override
     protected NetworkBlockPalette createBlockPalette() {
         return NetworkBlockPalette.of("975");
+    }
+
+    @Override
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.of("975");
     }
 
     @Override

@@ -29,6 +29,7 @@ import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.network.protocol.NetworkBlockPalette;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
@@ -283,6 +284,7 @@ public final class NetworkHelper {
      * @param itemDefinitions the target protocol's item definitions
      * @param blockDefinitions the target protocol's block definitions
      * @param blockPalette the target protocol's block palette
+     * @param itemPalette the target protocol's item palette
      * @return the network item data
      * @throws IllegalStateException if a required definition is missing
      */
@@ -290,18 +292,23 @@ public final class NetworkHelper {
             ItemStack itemStack,
             DefinitionRegistry<ItemDefinition> itemDefinitions,
             DefinitionRegistry<BlockDefinition> blockDefinitions,
-            NetworkBlockPalette blockPalette
+            NetworkBlockPalette blockPalette,
+            NetworkItemPalette itemPalette
     ) {
-        var itemType = itemStack.getItemType();
+        var itemType = itemPalette.toNetwork(itemStack.getItemType());
         if (itemType == ItemTypes.AIR) {
             return ItemData.AIR.toBuilder()
                     .definition(getItemDefinition(itemType, itemDefinitions))
                     .build();
         }
 
-        int meta = itemStack.getMeta();
+        // An item the client lacks is sent as a similar one with its count, extra data and stack ID.
+        boolean substituted = itemType != itemStack.getItemType();
+        int meta = substituted ? 0 : itemStack.getMeta();
         Integer blockStateHash = null;
-        var blockState = itemStack.toBlockState();
+        var blockState = substituted
+                ? (itemType.getBlockType() == null ? null : itemType.getBlockType().getDefaultState())
+                : itemStack.toBlockState();
         if (blockState != null) {
             var vanillaItemId = vanillaItemId(itemType);
             if (vanillaItemId == null) {
@@ -349,15 +356,17 @@ public final class NetworkHelper {
      * @param itemDefinitions the target protocol's item definitions
      * @param blockDefinitions the target protocol's block definitions
      * @param blockPalette the target protocol's block palette
+     * @param itemPalette the target protocol's item palette
      * @return the encoded item data in input order
      */
     public static List<ItemData> toNetwork(
             List<ItemStack> items,
             DefinitionRegistry<ItemDefinition> itemDefinitions,
             DefinitionRegistry<BlockDefinition> blockDefinitions,
-            NetworkBlockPalette blockPalette
+            NetworkBlockPalette blockPalette,
+            NetworkItemPalette itemPalette
     ) {
-        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions, blockPalette)).toList();
+        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions, blockPalette, itemPalette)).toList();
     }
 
     /**

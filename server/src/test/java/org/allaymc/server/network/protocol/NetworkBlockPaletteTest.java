@@ -135,7 +135,8 @@ class NetworkBlockPaletteTest {
                 ItemTypes.WHITE_WOOL_STAIRS.createItemStack(1),
                 protocol.getItemDefinitionRegistry(),
                 protocol.getBlockDefinitionRegistry(),
-                palette
+                palette,
+                protocol.getData().itemPalette()
         );
         assertEquals(palette.toNetwork(stairs), item.getBlockDefinition().runtimeId());
     }

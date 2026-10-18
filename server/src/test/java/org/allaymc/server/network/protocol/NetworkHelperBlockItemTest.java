@@ -59,7 +59,8 @@ class NetworkHelperBlockItemTest {
                 itemType.createItemStack(ItemStackInitInfo.builder().count(1).meta(meta).build()),
                 protocol.getItemDefinitionRegistry(),
                 protocol.getBlockDefinitionRegistry(),
-                protocol.getData().blockPalette()
+                protocol.getData().blockPalette(),
+                protocol.getData().itemPalette()
         );
     }
 }
