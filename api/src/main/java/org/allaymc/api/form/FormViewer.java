@@ -48,6 +48,15 @@ public interface FormViewer {
     int viewForm(Form form);
 
     /**
+     * Updates a form that the viewer is viewing currently. The form is sent again with its
+     * current form id, so the client redraws the open screen instead of queueing a new one.
+     *
+     * @param form the form to update, which must have been opened by {@link #viewForm(Form)}
+     * @return {@code true} if the viewer is viewing the form and the update was sent
+     */
+    boolean updateForm(Form form);
+
+    /**
      * Get the forms that the viewer is viewing currently.
      *
      * @return the forms that the viewer is viewing currently
