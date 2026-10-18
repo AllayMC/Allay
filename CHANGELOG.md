@@ -24,6 +24,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Clients older than 1.26.50 now get the block states of their own version: each protocol sends block states by the
   palette its clients know, with states upgraded from that palette, new properties such as stair corners and fence
   connections dropped, and blocks the version lacks replaced by a block of the same shape (`block_fallbacks.json`).
+- Added the `DEBUG` world generator, which lays out every block state on a floor with the newest blocks first, for
+  testing blocks and protocol versions.
 
 ### Fixed
 

@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public final class NetworkBlockPalette {
-    private static final NetworkBlockPalette CURRENT = new NetworkBlockPalette("current", null, null);
+    private static final NetworkBlockPalette CURRENT = new NetworkBlockPalette("current", null, null, null);
     private static final Map<String, NetworkBlockPalette> OLD_PALETTES = new ConcurrentHashMap<>();
     private static final int MAX_FALLBACK_DEPTH = 8;
     private static final Identifier UNKNOWN_ID = new Identifier("minecraft:unknown");
@@ -55,11 +55,18 @@ public final class NetworkBlockPalette {
     private final String name;
     private final Int2IntMap currentToNetwork;
     private final List<BlockDefinition> definitions;
+    private final Set<BlockType<?>> knownBlockTypes;
 
-    private NetworkBlockPalette(String name, Int2IntMap currentToNetwork, List<BlockDefinition> definitions) {
+    private NetworkBlockPalette(
+            String name,
+            Int2IntMap currentToNetwork,
+            List<BlockDefinition> definitions,
+            Set<BlockType<?>> knownBlockTypes
+    ) {
         this.name = name;
         this.currentToNetwork = currentToNetwork;
         this.definitions = definitions;
+        this.knownBlockTypes = knownBlockTypes;
     }
 
     /**
@@ -120,6 +127,17 @@ public final class NetworkBlockPalette {
     }
 
     /**
+     * Returns whether this palette's version has the given block, possibly under an older name or with fewer
+     * properties.
+     *
+     * @param blockType the block type
+     * @return {@code true} if the version has the block
+     */
+    public boolean knows(BlockType<?> blockType) {
+        return knownBlockTypes == null || knownBlockTypes.contains(blockType);
+    }
+
+    /**
      * Returns the block definitions a client of this palette decodes.
      *
      * @return the block definitions
@@ -142,7 +160,7 @@ public final class NetworkBlockPalette {
     private static NetworkBlockPalette load(String name) {
         var oldStates = readPalette("block_palettes/" + name + ".nbt");
         var builder = new Builder(oldStates, readFallbacks());
-        var palette = new NetworkBlockPalette(name, builder.build(), builder.definitions());
+        var palette = new NetworkBlockPalette(name, builder.build(), builder.definitions(), Set.copyOf(builder.oldNames.keySet()));
         if (builder.unknownStates > 0) {
             log.warn("{} block states have no counterpart in block palette {} and are sent as unknown", builder.unknownStates, name);
         }
