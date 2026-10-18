@@ -36,6 +36,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   data are sent without NBT.
 - Doors, hanging signs, cauldrons, frames, crops and other items that place a block without being its block item are
   sent without a block, like BDS, so the client draws them from their item texture.
+- Creative items are sent exactly like BDS 1.26.52: block items keep their meta in their block (e.g. an upward piston)
+  and are sent with meta 0, and banners, writable books and decorated pots carry the same NBT as on BDS.
 
 # 0.14.0 (API 0.29.0) - 2026/7/22
 

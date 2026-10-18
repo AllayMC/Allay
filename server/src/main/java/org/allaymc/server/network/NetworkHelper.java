@@ -254,19 +254,20 @@ public final class NetworkHelper {
     }
 
     /**
-     * Returns whether network item data of the given item type carries its block. Like BDS, a vanilla item does so only
-     * when it is a block item: doors, hanging signs, cauldrons and the like place a block, but the client draws them
-     * from their item texture and expects no block. Custom items keep their block.
+     * Returns the vanilla item id of the given item type, or {@code null} for a custom item.
      *
      * @param itemType the item type
-     * @return {@code true} if the block is sent with the item
+     * @return the vanilla item id, or {@code null}
      */
-    static boolean hasNetworkBlock(ItemType<?> itemType) {
+    private static ItemId vanillaItemId(ItemType<?> itemType) {
         if (!(itemType instanceof AllayItemType<?> allayItemType) || allayItemType.isCustomItem()) {
-            return true;
+            return null;
         }
-        var itemId = ItemId.fromIdentifier(itemType.getIdentifier());
-        var definition = itemId == null ? null : InternalRegistries.VANILLA_ITEM_DEFINITIONS.get(itemId);
+        return ItemId.fromIdentifier(itemType.getIdentifier());
+    }
+
+    private static boolean isBlockItem(ItemId vanillaItemId) {
+        var definition = InternalRegistries.VANILLA_ITEM_DEFINITIONS.get(vanillaItemId);
         return definition != null && definition.isBlockItem();
     }
 
@@ -295,10 +296,28 @@ public final class NetworkHelper {
                     .build();
         }
 
-        var blockState = hasNetworkBlock(itemType) ? itemStack.toBlockState() : null;
-        var blockDefinition = blockState == null ? null : blockDefinitions.getDefinition(blockState.blockStateHash());
-        if (blockState != null && blockDefinition == null) {
-            throw new IllegalStateException("Missing block definition for state " + blockState.blockStateHash());
+        int meta = itemStack.getMeta();
+        Integer blockStateHash = null;
+        var blockState = itemStack.toBlockState();
+        if (blockState != null) {
+            var vanillaItemId = vanillaItemId(itemType);
+            if (vanillaItemId == null) {
+                blockStateHash = blockState.blockStateHash();
+            } else if (isBlockItem(vanillaItemId)) {
+                // Like BDS, a block item keeps its meta in its block, e.g. an upward piston, and is sent with meta 0.
+                var metaStates = InternalRegistries.BLOCK_ITEM_META_STATES.get(vanillaItemId);
+                blockStateHash = metaStates != null && metaStates.containsKey(meta) ? metaStates.get(meta) : blockState.blockStateHash();
+                meta = 0;
+            }
+            // Otherwise, like BDS, no block: doors, hanging signs, cauldrons and the like place a block, but the client
+            // draws them from their item texture.
+        }
+        BlockDefinition blockDefinition = null;
+        if (blockStateHash != null) {
+            blockDefinition = blockDefinitions.getDefinition(blockStateHash);
+            if (blockDefinition == null) {
+                throw new IllegalStateException("Missing block definition for state " + blockStateHash);
+            }
         }
         var extraTag = itemStack.saveExtraTag();
         return ItemData
@@ -306,7 +325,7 @@ public final class NetworkHelper {
                 .definition(getItemDefinition(itemType, itemDefinitions))
                 .blockDefinition(blockDefinition)
                 .count(itemStack.getCount())
-                .damage(itemStack.getMeta())
+                .damage(meta)
                 // Like BDS, an item without extra data is sent without NBT.
                 // With an empty compound, 1.26.50 clients draw no held model
                 // for flat block items such as ladders, iron bars, and string.
