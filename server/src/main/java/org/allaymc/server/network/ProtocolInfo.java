@@ -11,7 +11,7 @@ import org.allaymc.updater.item.ItemStateUpdater_1_26_20;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v1001.Bedrock_v1001;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
-import org.cloudburstmc.protocol.bedrock.codec.v2168.Bedrock_v2168_hotfix4;
+import org.cloudburstmc.protocol.bedrock.codec.v2169.Bedrock_v2169;
 
 /**
  * This class contains information about the current protocol version.
@@ -62,7 +62,7 @@ public final class ProtocolInfo {
         if (ProtocolRegistry.hasDefault()) {
             return ProtocolRegistry.getDefault().getLatest(ClientVariant.INTERNATIONAL).getCodec();
         }
-        return Bedrock_v2168_hotfix4.CODEC;
+        return Bedrock_v2169.CODEC;
     }
 
     /**

@@ -5,12 +5,14 @@ import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.protocol.bedrock.codec.v2168.Bedrock_v2168;
+import org.cloudburstmc.protocol.bedrock.codec.v2169.Bedrock_v2169;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,5 +46,16 @@ class LoginPacketProcessorV2168CodecTest {
         assertTrue(new LoginPacketProcessor().selectV2168Codec(player, "1.26.44.3"));
 
         verify(player, never()).switchProtocolCodec(Bedrock_v2168.CODEC);
+    }
+
+    @Test
+    void keepsTheNegotiatedCodecForAV2169Client() {
+        when(player.getProtocol()).thenReturn(protocol);
+        when(protocol.getVariant()).thenReturn(ClientVariant.INTERNATIONAL);
+        when(protocol.getProtocolVersion()).thenReturn(Bedrock_v2169.CODEC.getProtocolVersion());
+
+        assertTrue(new LoginPacketProcessor().selectV2168Codec(player, "1.26.45.1"));
+
+        verify(player, never()).switchProtocolCodec(any());
     }
 }

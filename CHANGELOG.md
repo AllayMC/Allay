@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Introduced new multi version architecture (mvv2).
+- Added support for Minecraft 1.26.45 (protocol v2169).
 
 ### Fixed
 

@@ -4,6 +4,8 @@ import org.allaymc.server.network.protocol.v1001.PacketEncoder_v1001;
 import org.allaymc.server.network.protocol.v1001.Protocol_v1001;
 import org.allaymc.server.network.protocol.v2168.PacketEncoder_v2168;
 import org.allaymc.server.network.protocol.v2168.Protocol_v2168;
+import org.allaymc.server.network.protocol.v2169.PacketEncoder_v2169;
+import org.allaymc.server.network.protocol.v2169.Protocol_v2169;
 import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.allaymc.server.network.protocol.v766.PacketEncoder_v766_NetEase;
 import org.allaymc.server.network.protocol.v766.Protocol_v766;
@@ -63,7 +65,8 @@ class ProtocolInheritanceTest {
                 Protocol_v944.class,
                 Protocol_v975.class,
                 Protocol_v1001.class,
-                Protocol_v2168.class
+                Protocol_v2168.class,
+                Protocol_v2169.class
         ));
     }
 
@@ -82,7 +85,8 @@ class ProtocolInheritanceTest {
                 PacketEncoder_v944.class,
                 PacketEncoder_v975.class,
                 PacketEncoder_v1001.class,
-                PacketEncoder_v2168.class
+                PacketEncoder_v2168.class,
+                PacketEncoder_v2169.class
         ));
     }
 
@@ -110,9 +114,10 @@ class ProtocolInheritanceTest {
                 new Protocol_v944(),
                 new Protocol_v975(),
                 new Protocol_v1001(),
-                new Protocol_v2168()
+                new Protocol_v2168(),
+                new Protocol_v2169()
         );
-        var expectedVersions = List.of(818, 819, 827, 844, 859, 860, 898, 924, 944, 975, 1001, 2168);
+        var expectedVersions = List.of(818, 819, 827, 844, 859, 860, 898, 924, 944, 975, 1001, 2168, 2169);
 
         for (int index = 0; index < international.size(); index++) {
             var protocol = international.get(index);
