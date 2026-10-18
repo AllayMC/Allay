@@ -1,9 +1,8 @@
 package org.allaymc.api.world.biome;
 
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface BiomeTags {
@@ -24,6 +23,8 @@ public interface BiomeTags {
     BiomeTag OVERWORLD_GENERATION = create("overworld_generation");
 
     BiomeTag HAS_STRUCTURE_TRAIL_RUINS = create("has_structure_trail_ruins");
+
+    BiomeTag HAS_STRUCTURE_ABANDONED_CAMP = create("has_structure_abandoned_camp");
 
     BiomeTag OCEAN = create("ocean");
 
@@ -57,6 +58,8 @@ public interface BiomeTags {
 
     BiomeTag LUKEWARM = create("lukewarm");
 
+    BiomeTag TEMPERATE_OCEAN = create("temperate_ocean");
+
     BiomeTag PLAINS = create("plains");
 
     BiomeTag FROZEN = create("frozen");
@@ -84,6 +87,8 @@ public interface BiomeTags {
     BiomeTag ICE = create("ice");
 
     BiomeTag ICE_PLAINS = create("ice_plains");
+
+    BiomeTag OAK_FOREST = create("oak_forest");
 
     BiomeTag MOUNTAIN = create("mountain");
 
@@ -194,6 +199,10 @@ public interface BiomeTags {
     BiomeTag CHERRY_GROVE = create("cherry_grove");
 
     BiomeTag PALE_GARDEN = create("pale_garden");
+
+    BiomeTag SULFUR_CAVES = create("sulfur_caves");
+
+    BiomeTag DAPPLED_FOREST = create("dappled_forest");
 
     static BiomeTag create(String name) {
         var tag = new BiomeTag(name);

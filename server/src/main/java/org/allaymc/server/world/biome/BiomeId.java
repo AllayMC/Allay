@@ -1,9 +1,8 @@
 package org.allaymc.server.world.biome;
 
+import java.util.HashMap;
 import lombok.Getter;
 import org.allaymc.api.utils.identifier.Identifier;
-
-import java.util.HashMap;
 
 @Getter
 public enum BiomeId {
@@ -179,7 +178,11 @@ public enum BiomeId {
 
     CHERRY_GROVE("minecraft:cherry_grove", 192, "DataDriven"),
 
-    PALE_GARDEN("minecraft:pale_garden", 193, "Forest");
+    PALE_GARDEN("minecraft:pale_garden", 193, "Forest"),
+
+    SULFUR_CAVES("minecraft:sulfur_caves", 194, "DataDriven"),
+
+    DAPPLED_FOREST("minecraft:dappled_forest", 195, "Forest");
 
     private static final BiomeId[] MAP1;
 

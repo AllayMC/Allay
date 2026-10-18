@@ -21,7 +21,7 @@ import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH_8;
 
 /**
  * {@code BlockCropsBaseComponentImpl} implements farmland crop placement, support checks,
@@ -165,13 +165,13 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
      * the event's state without verifying the dimension's write result.
      */
     protected boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
-        var growth = crop.getPropertyValue(GROWTH);
-        if (growth == GROWTH.getMax()) {
+        var growth = crop.getPropertyValue(GROWTH_8);
+        if (growth == GROWTH_8.getMax()) {
             return false;
         }
 
         // Bone meal advances several stages at once while preserving the terminal growth encoding.
-        var newCrop = crop.setPropertyValue(GROWTH, Math.min(growth + ThreadLocalRandom.current().nextInt(4) + 2, 7));
+        var newCrop = crop.setPropertyValue(GROWTH_8, Math.min(growth + ThreadLocalRandom.current().nextInt(4) + 2, 7));
         var event = new BlockGrowEvent(new Block(crop, new Position3i(pos, dimension)), newCrop);
         if (event.call()) {
             dimension.setBlockState(pos, event.getNewBlockState());
@@ -211,9 +211,9 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
                 block.breakBlock();
             }
         } else {
-            var growth = block.getPropertyValue(GROWTH);
-            if (growth < GROWTH.getMax() && ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(block)) {
-                var newCrop = block.setPropertyValue(GROWTH, growth + 1);
+            var growth = block.getPropertyValue(GROWTH_8);
+            if (growth < GROWTH_8.getMax() && ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(block)) {
+                var newCrop = block.setPropertyValue(GROWTH_8, growth + 1);
                 var event = new BlockGrowEvent(block, newCrop.getBlockState());
                 if (event.call()) {
                     block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());

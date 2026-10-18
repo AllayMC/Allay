@@ -59,6 +59,8 @@ public enum EntityId {
 
     CREEPER("minecraft:creeper"),
 
+    CUSHION("minecraft:cushion"),
+
     DOLPHIN("minecraft:dolphin"),
 
     DONKEY("minecraft:donkey"),

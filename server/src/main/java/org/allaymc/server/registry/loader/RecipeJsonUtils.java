@@ -1,6 +1,7 @@
 package org.allaymc.server.registry.loader;
 
 import com.google.gson.JsonObject;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
@@ -9,11 +10,15 @@ import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 
+import java.io.ByteArrayInputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +44,7 @@ public final class RecipeJsonUtils {
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
         var count = jsonObject.get("count").getAsInt();
         var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;
-        var nbtMap = jsonObject.has("nbt") ? AllayNBTUtils.base64ToNbt(jsonObject.get("nbt").getAsString()) : NbtMap.EMPTY;
+        var nbtMap = jsonObject.has("nbt") ? parseUserData(jsonObject.get("nbt").getAsString()) : NbtMap.EMPTY;
         return itemType.createItemStack(
                 ItemStackInitInfo
                         .builder()
@@ -48,6 +53,32 @@ public final class RecipeJsonUtils {
                         .extraTag(nbtMap)
                         .build()
         );
+    }
+
+    /**
+     * Decodes the item user data that recipe exports store in the {@code nbt} field.
+     * <p>
+     * The value uses the Bedrock item user data layout: a little-endian short that is {@code -1} when
+     * a tag follows, then a version byte and a little-endian NBT compound, then the CanPlaceOn and
+     * CanDestroy lists. Recipe outputs never carry those lists, so they are not read.
+     *
+     * @param base64 the Base64 encoded user data
+     * @return the item tag, or {@link NbtMap#EMPTY} when the data has no tag
+     * @throws IllegalArgumentException if the data uses an unsupported version
+     */
+    @SneakyThrows
+    static NbtMap parseUserData(String base64) {
+        var bytes = Base64.getDecoder().decode(base64);
+        var buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
+        if (buffer.getShort() != -1) {
+            return NbtMap.EMPTY;
+        }
+        var version = buffer.get();
+        if (version != 1) {
+            throw new IllegalArgumentException("Unsupported item user data version: " + version);
+        }
+        var input = new ByteArrayInputStream(bytes, buffer.position(), buffer.remaining());
+        return (NbtMap) NbtUtils.createReaderLE(input).readTag();
     }
 
     /**

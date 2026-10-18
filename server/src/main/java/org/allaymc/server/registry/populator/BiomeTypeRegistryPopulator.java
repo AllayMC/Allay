@@ -107,5 +107,7 @@ public class BiomeTypeRegistryPopulator implements Runnable {
         BiomeTypes.MANGROVE_SWAMP = new AllayBiomeType(BiomeId.MANGROVE_SWAMP);
         BiomeTypes.CHERRY_GROVE = new AllayBiomeType(BiomeId.CHERRY_GROVE);
         BiomeTypes.PALE_GARDEN = new AllayBiomeType(BiomeId.PALE_GARDEN);
+        BiomeTypes.SULFUR_CAVES = new AllayBiomeType(BiomeId.SULFUR_CAVES);
+        BiomeTypes.DAPPLED_FOREST = new AllayBiomeType(BiomeId.DAPPLED_FOREST);
     }
 }

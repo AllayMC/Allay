@@ -965,6 +965,11 @@ public interface TrKeys {
     String MC_ACTION_HINT_EXIT_CONSOLE_CHEST_BOAT = "minecraft:action.hint.exit.console.chest_boat";
 
     /**
+     * {@literal Press :_input_key.sneak: to get up}
+     */
+    String MC_ACTION_HINT_EXIT_CONSOLE_CUSHION = "minecraft:action.hint.exit.console.cushion";
+
+    /**
      * {@literal Press :_input_key.sneak: to dismount}
      */
     String MC_ACTION_HINT_EXIT_CONSOLE_DONKEY = "minecraft:action.hint.exit.console.donkey";
@@ -1083,6 +1088,11 @@ public interface TrKeys {
      * {@literal Tap dismount to dismount}
      */
     String MC_ACTION_HINT_EXIT_SCHEME_CAMEL_HUSK = "minecraft:action.hint.exit.scheme.camel_husk";
+
+    /**
+     * {@literal Get Up}
+     */
+    String MC_ACTION_HINT_EXIT_SCHEME_CUSHION = "minecraft:action.hint.exit.scheme.cushion";
 
     /**
      * {@literal Tap dismount to dismount}
@@ -1285,6 +1295,16 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_FISHING = "minecraft:action.interact.fishing";
 
     /**
+     * {@literal Give}
+     */
+    String MC_ACTION_INTERACT_GIVE = "minecraft:action.interact.give";
+
+    /**
+     * {@literal Give Block}
+     */
+    String MC_ACTION_INTERACT_GIVE_SULFUR_CUBE = "minecraft:action.interact.give_sulfur_cube";
+
+    /**
      * {@literal Leash}
      */
     String MC_ACTION_INTERACT_LEASH = "minecraft:action.interact.leash";
@@ -1385,6 +1405,11 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_RIDE_BOAT_TOUCH = "minecraft:action.interact.ride.boat.touch";
 
     /**
+     * {@literal Sit}
+     */
+    String MC_ACTION_INTERACT_RIDE_CUSHION = "minecraft:action.interact.ride.cushion";
+
+    /**
      * {@literal Ride}
      */
     String MC_ACTION_INTERACT_RIDE_HORSE = "minecraft:action.interact.ride.horse";
@@ -1443,6 +1468,11 @@ public interface TrKeys {
      * {@literal Stand}
      */
     String MC_ACTION_INTERACT_STAND = "minecraft:action.interact.stand";
+
+    /**
+     * {@literal Remove Block}
+     */
+    String MC_ACTION_INTERACT_TAKE_SULFUR_CUBE = "minecraft:action.interact.take_sulfur_cube";
 
     /**
      * {@literal Take Picture}
@@ -1595,7 +1625,7 @@ public interface TrKeys {
     String MC_ATTRIBUTE_NAME_GENERIC_ARMOR = "minecraft:attribute.name.generic.armor";
 
     /**
-     * {@literal Armor Toughness}
+     * {@literal Toughness}
      */
     String MC_ATTRIBUTE_NAME_GENERIC_ARMORTOUGHNESS = "minecraft:attribute.name.generic.armorToughness";
 
@@ -1603,6 +1633,16 @@ public interface TrKeys {
      * {@literal Attack Damage}
      */
     String MC_ATTRIBUTE_NAME_GENERIC_ATTACKDAMAGE = "minecraft:attribute.name.generic.attackDamage";
+
+    /**
+     * {@literal Chop Efficiency}
+     */
+    String MC_ATTRIBUTE_NAME_GENERIC_CHOPEFFICIENCY = "minecraft:attribute.name.generic.chopEfficiency";
+
+    /**
+     * {@literal Dig Efficiency}
+     */
+    String MC_ATTRIBUTE_NAME_GENERIC_DIGEFFICIENCY = "minecraft:attribute.name.generic.digEfficiency";
 
     /**
      * {@literal Knockback Resistance}
@@ -1613,6 +1653,11 @@ public interface TrKeys {
      * {@literal Max Health}
      */
     String MC_ATTRIBUTE_NAME_GENERIC_MAXHEALTH = "minecraft:attribute.name.generic.maxHealth";
+
+    /**
+     * {@literal Mining Efficiency}
+     */
+    String MC_ATTRIBUTE_NAME_GENERIC_MININGEFFICIENCY = "minecraft:attribute.name.generic.miningEfficiency";
 
     /**
      * {@literal Horse Jump Strength}
@@ -1723,6 +1768,31 @@ public interface TrKeys {
      * {@literal Beds are great! Craft one to quickly pass the night and set your respawn point.}
      */
     String MC_BEGINNERTIPS_9 = "minecraft:beginnerTips.9";
+
+    /**
+     * {@literal Share your feedback by scanning the QR code with your device.}
+     */
+    String MC_BETAFEEDBACK_QR_BODY_LINE1 = "minecraft:betaFeedback.qr.body.line1";
+
+    /**
+     * {@literal Thanks for helping us improve Minecraft for everyone.}
+     */
+    String MC_BETAFEEDBACK_QR_BODY_LINE2 = "minecraft:betaFeedback.qr.body.line2";
+
+    /**
+     * {@literal Close}
+     */
+    String MC_BETAFEEDBACK_QR_CLOSE = "minecraft:betaFeedback.qr.close";
+
+    /**
+     * {@literal Your opinions matter!}
+     */
+    String MC_BETAFEEDBACK_QR_HEADER = "minecraft:betaFeedback.qr.header";
+
+    /**
+     * {@literal Beta Feedback}
+     */
+    String MC_BETAFEEDBACK_QR_TITLE = "minecraft:betaFeedback.qr.title";
 
     /**
      * {@literal by}
@@ -1905,6 +1975,11 @@ public interface TrKeys {
     String MC_CHAT_LINK_WARNING = "minecraft:chat.link.warning";
 
     /**
+     * {@literal WARNING! Message was filtered - Original Message: %s}
+     */
+    String MC_CHAT_LOGGING_WARNING_MESSAGEFILTERED = "minecraft:chat.logging.warning.messageFiltered";
+
+    /**
      * {@literal mention all players}
      */
     String MC_CHAT_MENTIONS_AUTOCOMPLETE_ALLPLAYERS = "minecraft:chat.mentions.autocomplete.allPlayers";
@@ -2073,6 +2148,41 @@ public interface TrKeys {
      * {@literal <%s> %s}
      */
     String MC_CHAT_TYPE_TEXT = "minecraft:chat.type.text";
+
+    /**
+     * {@literal <%s> sent %s message to <%s>: %s}
+     */
+    String MC_CHAT_TYPE_TITLE = "minecraft:chat.type.title";
+
+    /**
+     * {@literal Actionbar}
+     */
+    String MC_CHAT_TYPE_TITLE_ACTIONBAR = "minecraft:chat.type.title.actionbar";
+
+    /**
+     * {@literal Subtitle}
+     */
+    String MC_CHAT_TYPE_TITLE_SUBTITLE = "minecraft:chat.type.title.subtitle";
+
+    /**
+     * {@literal Title}
+     */
+    String MC_CHAT_TYPE_TITLE_TITLE = "minecraft:chat.type.title.title";
+
+    /**
+     * {@literal <%s> whispered to <%s>: %s}
+     */
+    String MC_CHAT_TYPE_WHISPER = "minecraft:chat.type.whisper";
+
+    /**
+     * {@literal Chat messages may be monitored or reviewed by your school or organization, or their service providers. Chat is here to help you work together and learn.  Be respectful, be helpful, and have fun building!}
+     */
+    String MC_CHATLOGGING_DESCRIPTION = "minecraft:chatlogging.description";
+
+    /**
+     * {@literal Chat Logging}
+     */
+    String MC_CHATLOGGING_TITLE = "minecraft:chatlogging.title";
 
     /**
      * {@literal Large Chest}
@@ -3390,6 +3500,11 @@ public interface TrKeys {
     String MC_COMMANDS_DOWNFALL_SUCCESS = "minecraft:commands.downfall.success";
 
     /**
+     * {@literal Manages the editor allowlist.}
+     */
+    String MC_COMMANDS_EDITOR_ALLOWLIST_DESCRIPTION = "minecraft:commands.editor-allowlist.description";
+
+    /**
      * {@literal Get tenant ID and host status. Intended for CM.}
      */
     String MC_COMMANDS_EDUCLIENTINFO_DESCRIPTION = "minecraft:commands.educlientinfo.description";
@@ -3630,6 +3745,11 @@ public interface TrKeys {
     String MC_COMMANDS_FILL_TOOMANYBLOCKS = "minecraft:commands.fill.tooManyBlocks";
 
     /**
+     * {@literal Cannot fill block '%1#s' at %2#d}
+     */
+    String MC_COMMANDS_FILL_UNFILLABLE = "minecraft:commands.fill.unfillable";
+
+    /**
      * {@literal Add or remove fog settings file}
      */
     String MC_COMMANDS_FOG_DESCRIPTION = "minecraft:commands.fog.description";
@@ -3695,6 +3815,11 @@ public interface TrKeys {
     String MC_COMMANDS_GAMEMODE_DESCRIPTION = "minecraft:commands.gamemode.description";
 
     /**
+     * {@literal Cannot change game mode of editor player(s): %s}
+     */
+    String MC_COMMANDS_GAMEMODE_FAIL_EDITORPLAYER = "minecraft:commands.gamemode.fail.editorPlayer";
+
+    /**
      * {@literal Game mode '%1#s' is invalid}
      */
     String MC_COMMANDS_GAMEMODE_FAIL_INVALID = "minecraft:commands.gamemode.fail.invalid";
@@ -3723,6 +3848,11 @@ public interface TrKeys {
      * {@literal No game rule called '%1#s' is available}
      */
     String MC_COMMANDS_GAMERULE_NORULE = "minecraft:commands.gamerule.norule";
+
+    /**
+     * {@literal Invalid value for playerWaypoints.}
+     */
+    String MC_COMMANDS_GAMERULE_PLAYERWAYPOINTS_INVALID = "minecraft:commands.gamerule.playerwaypoints.invalid";
 
     /**
      * {@literal Game rule %1#s has been updated to %2#s}
@@ -3798,6 +3928,11 @@ public interface TrKeys {
      * {@literal '%1#s' is not true or false}
      */
     String MC_COMMANDS_GENERIC_BOOLEAN_INVALID = "minecraft:commands.generic.boolean.invalid";
+
+    /**
+     * {@literal Command was canceled}
+     */
+    String MC_COMMANDS_GENERIC_CANCELED = "minecraft:commands.generic.canceled";
 
     /**
      * {@literal Specified chunk not found}
@@ -4875,6 +5010,11 @@ public interface TrKeys {
     String MC_COMMANDS_PLAYSOUND_DESCRIPTION = "minecraft:commands.playsound.description";
 
     /**
+     * {@literal The sound is too far away to be heard}
+     */
+    String MC_COMMANDS_PLAYSOUND_FAILED = "minecraft:commands.playsound.failed";
+
+    /**
      * {@literal Player %1#s is too far away to hear the sound}
      */
     String MC_COMMANDS_PLAYSOUND_PLAYERTOOFAR = "minecraft:commands.playsound.playerTooFar";
@@ -4883,6 +5023,16 @@ public interface TrKeys {
      * {@literal Played sound '%1#s' to %2#s}
      */
     String MC_COMMANDS_PLAYSOUND_SUCCESS = "minecraft:commands.playsound.success";
+
+    /**
+     * {@literal Played sound '%1#s' to %2#s players}
+     */
+    String MC_COMMANDS_PLAYSOUND_SUCCESS_MULTIPLE = "minecraft:commands.playsound.success.multiple";
+
+    /**
+     * {@literal Played sound '%1#s' to %2#s}
+     */
+    String MC_COMMANDS_PLAYSOUND_SUCCESS_SINGLE = "minecraft:commands.playsound.success.single";
 
     /**
      * {@literal Toggles on/off coordinates for player.}
@@ -5660,6 +5810,11 @@ public interface TrKeys {
     String MC_COMMANDS_SELECTOR_ERROR_MORETHANONE = "minecraft:commands.selector.error.moreThanOne";
 
     /**
+     * {@literal Manages the server identity key. Use save, delete, or status.}
+     */
+    String MC_COMMANDS_SERVERIDENTITY_DESCRIPTION = "minecraft:commands.serveridentity.description";
+
+    /**
      * {@literal Changes a block to another block.}
      */
     String MC_COMMANDS_SETBLOCK_DESCRIPTION = "minecraft:commands.setblock.description";
@@ -5895,14 +6050,24 @@ public interface TrKeys {
     String MC_COMMANDS_STOPSOUND_DESCRIPTION = "minecraft:commands.stopsound.description";
 
     /**
-     * {@literal Stopped sound %s for %s}
+     * {@literal Stopped sound '%1#s'}
      */
     String MC_COMMANDS_STOPSOUND_SUCCESS = "minecraft:commands.stopsound.success";
 
     /**
-     * {@literal Stopped all sounds for %s}
+     * {@literal Stopped all sounds}
      */
     String MC_COMMANDS_STOPSOUND_SUCCESS_ALL = "minecraft:commands.stopsound.success.all";
+
+    /**
+     * {@literal Stopped all sounds for %s}
+     */
+    String MC_COMMANDS_STOPSOUND_SUCCESS_ALL_PREOUTPUTFIX = "minecraft:commands.stopsound.success.all.preOutputFix";
+
+    /**
+     * {@literal Stopped sound %s for %s}
+     */
+    String MC_COMMANDS_STOPSOUND_SUCCESS_PREOUTPUTFIX = "minecraft:commands.stopsound.success.preOutputFix";
 
     /**
      * {@literal Structure %s deleted.}
@@ -6383,6 +6548,51 @@ public interface TrKeys {
      * {@literal Added %1#d to the time}
      */
     String MC_COMMANDS_TIME_ADDED = "minecraft:commands.time.added";
+
+    /**
+     * {@literal Added %1#d time to '%2#s'. Time is now %3#d}
+     */
+    String MC_COMMANDS_TIME_CLOCK_ADDED = "minecraft:commands.time.clock.added";
+
+    /**
+     * {@literal Cannot find clock '%1#s'}
+     */
+    String MC_COMMANDS_TIME_CLOCK_FAILED = "minecraft:commands.time.clock.failed";
+
+    /**
+     * {@literal Cannot set time to before 0 ticks, the number must be at least %1#d}
+     */
+    String MC_COMMANDS_TIME_CLOCK_NUM_TOOSMALL = "minecraft:commands.time.clock.num.tooSmall";
+
+    /**
+     * {@literal Paused '%1#s' at %2#d}
+     */
+    String MC_COMMANDS_TIME_CLOCK_PAUSED = "minecraft:commands.time.clock.paused";
+
+    /**
+     * {@literal Time of '%1#s' is %2#d}
+     */
+    String MC_COMMANDS_TIME_CLOCK_QUERY_TIME = "minecraft:commands.time.clock.query.time";
+
+    /**
+     * {@literal Resumed '%1#s' at %2#d}
+     */
+    String MC_COMMANDS_TIME_CLOCK_RESUMED = "minecraft:commands.time.clock.resumed";
+
+    /**
+     * {@literal Set the time of '%1#s' to %2#d}
+     */
+    String MC_COMMANDS_TIME_CLOCK_SET = "minecraft:commands.time.clock.set";
+
+    /**
+     * {@literal Cannot find time marker '%1#s' on '%2#s'}
+     */
+    String MC_COMMANDS_TIME_CLOCK_TIMEMARKER_FAILED = "minecraft:commands.time.clock.timemarker.failed";
+
+    /**
+     * {@literal No previous occurrence of '%1#s' on '%2#s'}
+     */
+    String MC_COMMANDS_TIME_CLOCK_TIMEMARKER_PREVIOUS_FAILED = "minecraft:commands.time.clock.timemarker.previous.failed";
 
     /**
      * {@literal Changes or queries the world's game time.}
@@ -7195,6 +7405,11 @@ public interface TrKeys {
     String MC_CONTENTLOG_DELETE_DELETE = "minecraft:contentlog.delete.delete";
 
     /**
+     * {@literal Content logs deleted}
+     */
+    String MC_CONTENTLOG_DELETE_DONE = "minecraft:contentlog.delete.done";
+
+    /**
      * {@literal Deleting Content Logs}
      */
     String MC_CONTENTLOG_DELETE_PROGRESS = "minecraft:contentlog.delete.progress";
@@ -7290,6 +7505,11 @@ public interface TrKeys {
     String MC_CRAFTING_NORECIPESWORKBENCH = "minecraft:crafting.noRecipesWorkbench";
 
     /**
+     * {@literal All items}
+     */
+    String MC_CRAFTINGSCREEN_TAB_ALLITEMS = "minecraft:craftingScreen.tab.allItems";
+
+    /**
      * {@literal All recipes}
      */
     String MC_CRAFTINGSCREEN_TAB_ALLRECIPES = "minecraft:craftingScreen.tab.allRecipes";
@@ -7303,6 +7523,11 @@ public interface TrKeys {
      * {@literal Construction}
      */
     String MC_CRAFTINGSCREEN_TAB_CONSTRUCTION = "minecraft:craftingScreen.tab.construction";
+
+    /**
+     * {@literal Craftable items}
+     */
+    String MC_CRAFTINGSCREEN_TAB_CRAFTABLEITEMS = "minecraft:craftingScreen.tab.craftableItems";
 
     /**
      * {@literal Craftable recipes}
@@ -7325,19 +7550,44 @@ public interface TrKeys {
     String MC_CRAFTINGSCREEN_TAB_NATURE = "minecraft:craftingScreen.tab.nature";
 
     /**
-     * {@literal All}
+     * {@literal Inventory}
      */
-    String MC_CRAFTINGSCREEN_TAB_SEARCH = "minecraft:craftingScreen.tab.search";
+    String MC_CRAFTINGSCREEN_TAB_SURVIVAL = "minecraft:craftingScreen.tab.survival";
 
     /**
-     * {@literal Craftable}
+     * {@literal Crafting Grid}
      */
-    String MC_CRAFTINGSCREEN_TAB_SEARCH_FILTER = "minecraft:craftingScreen.tab.search.filter";
+    String MC_CRAFTINGSCREEN_TTS_TAB_CRAFTING_BIG = "minecraft:craftingScreen.tts.tab.crafting.big";
+
+    /**
+     * {@literal Small Crafting Grid}
+     */
+    String MC_CRAFTINGSCREEN_TTS_TAB_CRAFTING_SMALL = "minecraft:craftingScreen.tts.tab.crafting.small";
+
+    /**
+     * {@literal Extra wide item list}
+     */
+    String MC_CRAFTINGSCREEN_TTS_TAB_FULLSCREEN = "minecraft:craftingScreen.tts.tab.fullscreen";
 
     /**
      * {@literal Inventory}
      */
-    String MC_CRAFTINGSCREEN_TAB_SURVIVAL = "minecraft:craftingScreen.tab.survival";
+    String MC_CRAFTINGSCREEN_TTS_TAB_INVENTORY = "minecraft:craftingScreen.tts.tab.inventory";
+
+    /**
+     * {@literal Inventory Only}
+     */
+    String MC_CRAFTINGSCREEN_TTS_TOGGLE_CREATIVE_INVENTORY_LAYOUT = "minecraft:craftingScreen.tts.toggle.creative.inventory.layout";
+
+    /**
+     * {@literal Item list & Crafting Grid}
+     */
+    String MC_CRAFTINGSCREEN_TTS_TOGGLE_CREATIVE_RECIPEBOOK_LAYOUT = "minecraft:craftingScreen.tts.toggle.creative.recipebook.layout";
+
+    /**
+     * {@literal Wide Item list}
+     */
+    String MC_CRAFTINGSCREEN_TTS_TOGGLE_CREATIVE_WIDELIST_LAYOUT = "minecraft:craftingScreen.tts.toggle.creative.widelist.layout";
 
     /**
      * {@literal Imported Templates}
@@ -7820,6 +8070,11 @@ public interface TrKeys {
     String MC_DEATH_ATTACK_STARVE = "minecraft:death.attack.starve";
 
     /**
+     * {@literal %1#s died because not just the floor is lava}
+     */
+    String MC_DEATH_ATTACK_SULFURCUBE_HOT = "minecraft:death.attack.sulfurCube.hot";
+
+    /**
      * {@literal %1#s was poked to death by a sweet berry bush}
      */
     String MC_DEATH_ATTACK_SWEETBERRY = "minecraft:death.attack.sweetBerry";
@@ -8200,6 +8455,11 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_BODY_DISCOVERYMISMATCH = "minecraft:disconnectionScreen.body.discoveryMismatch";
 
     /**
+     * {@literal Make sure your system clock is set correctly and try again.}
+     */
+    String MC_DISCONNECTIONSCREEN_BODY_EXPIREDTOKEN = "minecraft:disconnectionScreen.body.expiredToken";
+
+    /**
      * {@literal The game version you are using is out of date. Update your game to the latest version and try again.}
      */
     String MC_DISCONNECTIONSCREEN_BODY_GAMEOUTOFDATE = "minecraft:disconnectionScreen.body.gameOutOfDate";
@@ -8385,6 +8645,11 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_EDITOR_CANNOTUSERAYTRACING = "minecraft:disconnectionScreen.editor.cannotUseRayTracing";
 
     /**
+     * {@literal Server policy forbids client join.}
+     */
+    String MC_DISCONNECTIONSCREEN_EDITOR_JOININTENTPOLICYFAILURE = "minecraft:disconnectionScreen.editor.joinIntentPolicyFailure";
+
+    /**
      * {@literal The server is not in Editor Mode. Failed to connect.}
      */
     String MC_DISCONNECTIONSCREEN_EDITOR_MISMATCHEDITORTOVANILLA = "minecraft:disconnectionScreen.editor.mismatchEditorToVanilla";
@@ -8405,7 +8670,12 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_EDITOR_MISMATCHVANILLAWORLD = "minecraft:disconnectionScreen.editor.mismatchVanillaWorld";
 
     /**
-     * {@literal Error Code: }
+     * {@literal You aren't allowed to join this server as an Editor.}
+     */
+    String MC_DISCONNECTIONSCREEN_EDITOR_NOTALLOWED = "minecraft:disconnectionScreen.editor.notAllowed";
+
+    /**
+     * {@literal Error Code:}
      */
     String MC_DISCONNECTIONSCREEN_ERRORCODE = "minecraft:disconnectionScreen.errorCode";
 
@@ -8535,6 +8805,11 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION = "minecraft:disconnectionScreen.loggedinOtherLocation";
 
     /**
+     * {@literal Missing structure data from server.}
+     */
+    String MC_DISCONNECTIONSCREEN_MISSINGSTRUCTUREDATA = "minecraft:disconnectionScreen.missingStructureData";
+
+    /**
      * {@literal The world has been set to single player mode.}
      */
     String MC_DISCONNECTIONSCREEN_MULTIPLAYERDISABLED = "minecraft:disconnectionScreen.multiplayerDisabled";
@@ -8570,7 +8845,7 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_NOTAUTHENTICATED = "minecraft:disconnectionScreen.notAuthenticated";
 
     /**
-     * {@literal It appears you are unable to connect to your network, please connect to a Wi-Fi network or enable 'Use Mobile Data' in profile settings.}
+     * {@literal It appears you are unable to connect to your network, please connect to a Wi-Fi network or enable 'Use Mobile Data' in general settings.}
      */
     String MC_DISCONNECTIONSCREEN_NOWIFI = "minecraft:disconnectionScreen.nowifi";
 
@@ -9248,6 +9523,11 @@ public interface TrKeys {
      * {@literal Please import a .png file of dimensions 64x64, 64x32, or 128x128}
      */
     String MC_DR_CLASSIC_SKINS_INVALIDCUSTOMSKIN = "minecraft:dr.classic_skins.invalidCustomSkin";
+
+    /**
+     * {@literal Something went wrong. This may be due to insufficient storage space. Please check your available storage and try again.}
+     */
+    String MC_DR_CLASSIC_SKINS_INVALIDCUSTOMSKINFILE = "minecraft:dr.classic_skins.invalidCustomSkinFile";
 
     /**
      * {@literal Owned}
@@ -10180,6 +10460,11 @@ public interface TrKeys {
     String MC_DR_NOTIFICATION_PERSONA_DELETE = "minecraft:dr.notification.persona_delete";
 
     /**
+     * {@literal Failed to initialize persona. Proceeding with default skin.}
+     */
+    String MC_DR_NOTIFICATION_PERSONA_INITALIZE_FAILED_START = "minecraft:dr.notification.persona_initalize_failed_start";
+
+    /**
      * {@literal The Character has been saved}
      */
     String MC_DR_NOTIFICATION_PERSONA_SAVE = "minecraft:dr.notification.persona_save";
@@ -10805,6 +11090,11 @@ public interface TrKeys {
     String MC_ENTITY_CREEPER_NAME = "minecraft:entity.creeper.name";
 
     /**
+     * {@literal Cushion}
+     */
+    String MC_ENTITY_CUSHION_NAME = "minecraft:entity.cushion.name";
+
+    /**
      * {@literal Dolphin}
      */
     String MC_ENTITY_DOLPHIN_NAME = "minecraft:entity.dolphin.name";
@@ -11193,6 +11483,11 @@ public interface TrKeys {
      * {@literal Strider}
      */
     String MC_ENTITY_STRIDER_NAME = "minecraft:entity.strider.name";
+
+    /**
+     * {@literal Sulfur Cube}
+     */
+    String MC_ENTITY_SULFUR_CUBE_NAME = "minecraft:entity.sulfur_cube.name";
 
     /**
      * {@literal Tadpole}
@@ -12173,11 +12468,6 @@ public interface TrKeys {
      * {@literal Armadillo Scute}
      */
     String MC_ITEM_ARMADILLO_SCUTE_NAME = "minecraft:item.armadillo_scute.name";
-
-    /**
-     * {@literal Upgrade:}
-     */
-    String MC_ITEM_ARMOR_UPGRADE = "minecraft:item.armor.upgrade";
 
     /**
      * {@literal Armor Stand}
@@ -15960,6 +16250,11 @@ public interface TrKeys {
     String MC_ITEM_BOAT_PALE_OAK_NAME = "minecraft:item.boat.pale_oak.name";
 
     /**
+     * {@literal Poplar Boat}
+     */
+    String MC_ITEM_BOAT_POPLAR_NAME = "minecraft:item.boat.poplar.name";
+
+    /**
      * {@literal Spruce Boat}
      */
     String MC_ITEM_BOAT_SPRUCE_NAME = "minecraft:item.boat.spruce.name";
@@ -16078,6 +16373,16 @@ public interface TrKeys {
      * {@literal Bucket of Salmon}
      */
     String MC_ITEM_BUCKETSALMON_NAME = "minecraft:item.bucketSalmon.name";
+
+    /**
+     * {@literal Contains:}
+     */
+    String MC_ITEM_BUCKETSULFURCUBE_CONTAINS = "minecraft:item.bucketSulfurCube.contains";
+
+    /**
+     * {@literal Bucket of Sulfur Cube}
+     */
+    String MC_ITEM_BUCKETSULFURCUBE_NAME = "minecraft:item.bucketSulfurCube.name";
 
     /**
      * {@literal Bucket of Tadpole}
@@ -16245,6 +16550,11 @@ public interface TrKeys {
     String MC_ITEM_CHEST_BOAT_PALE_OAK_NAME = "minecraft:item.chest_boat.pale_oak.name";
 
     /**
+     * {@literal Poplar Boat with Chest}
+     */
+    String MC_ITEM_CHEST_BOAT_POPLAR_NAME = "minecraft:item.chest_boat.poplar.name";
+
+    /**
      * {@literal Spruce Boat with Chest}
      */
     String MC_ITEM_CHEST_BOAT_SPRUCE_NAME = "minecraft:item.chest_boat.spruce.name";
@@ -16300,7 +16610,7 @@ public interface TrKeys {
     String MC_ITEM_COMMAND_BLOCK_MINECART_NAME = "minecraft:item.command_block_minecart.name";
 
     /**
-     * {@literal Redstone Comparator}
+     * {@literal Comparator}
      */
     String MC_ITEM_COMPARATOR_NAME = "minecraft:item.comparator.name";
 
@@ -16443,6 +16753,86 @@ public interface TrKeys {
      * {@literal Crossbow}
      */
     String MC_ITEM_CROSSBOW_NAME = "minecraft:item.crossbow.name";
+
+    /**
+     * {@literal Black Cushion}
+     */
+    String MC_ITEM_CUSHION_BLACK_NAME = "minecraft:item.cushion.black.name";
+
+    /**
+     * {@literal Blue Cushion}
+     */
+    String MC_ITEM_CUSHION_BLUE_NAME = "minecraft:item.cushion.blue.name";
+
+    /**
+     * {@literal Brown Cushion}
+     */
+    String MC_ITEM_CUSHION_BROWN_NAME = "minecraft:item.cushion.brown.name";
+
+    /**
+     * {@literal Cyan Cushion}
+     */
+    String MC_ITEM_CUSHION_CYAN_NAME = "minecraft:item.cushion.cyan.name";
+
+    /**
+     * {@literal Gray Cushion}
+     */
+    String MC_ITEM_CUSHION_GRAY_NAME = "minecraft:item.cushion.gray.name";
+
+    /**
+     * {@literal Green Cushion}
+     */
+    String MC_ITEM_CUSHION_GREEN_NAME = "minecraft:item.cushion.green.name";
+
+    /**
+     * {@literal Light Blue Cushion}
+     */
+    String MC_ITEM_CUSHION_LIGHTBLUE_NAME = "minecraft:item.cushion.lightBlue.name";
+
+    /**
+     * {@literal Lime Cushion}
+     */
+    String MC_ITEM_CUSHION_LIME_NAME = "minecraft:item.cushion.lime.name";
+
+    /**
+     * {@literal Magenta Cushion}
+     */
+    String MC_ITEM_CUSHION_MAGENTA_NAME = "minecraft:item.cushion.magenta.name";
+
+    /**
+     * {@literal Orange Cushion}
+     */
+    String MC_ITEM_CUSHION_ORANGE_NAME = "minecraft:item.cushion.orange.name";
+
+    /**
+     * {@literal Pink Cushion}
+     */
+    String MC_ITEM_CUSHION_PINK_NAME = "minecraft:item.cushion.pink.name";
+
+    /**
+     * {@literal Purple Cushion}
+     */
+    String MC_ITEM_CUSHION_PURPLE_NAME = "minecraft:item.cushion.purple.name";
+
+    /**
+     * {@literal Red Cushion}
+     */
+    String MC_ITEM_CUSHION_RED_NAME = "minecraft:item.cushion.red.name";
+
+    /**
+     * {@literal Light Gray Cushion}
+     */
+    String MC_ITEM_CUSHION_SILVER_NAME = "minecraft:item.cushion.silver.name";
+
+    /**
+     * {@literal White Cushion}
+     */
+    String MC_ITEM_CUSHION_WHITE_NAME = "minecraft:item.cushion.white.name";
+
+    /**
+     * {@literal Yellow Cushion}
+     */
+    String MC_ITEM_CUSHION_YELLOW_NAME = "minecraft:item.cushion.yellow.name";
 
     /**
      * {@literal Has Custom Properties}
@@ -16865,32 +17255,32 @@ public interface TrKeys {
     String MC_ITEM_FIREWORKSCHARGE_TRAIL = "minecraft:item.fireworksCharge.trail";
 
     /**
-     * {@literal Unknown Shape}
+     * {@literal Unknown shape explosion}
      */
     String MC_ITEM_FIREWORKSCHARGE_TYPE = "minecraft:item.fireworksCharge.type";
 
     /**
-     * {@literal Small Ball}
+     * {@literal Small ball explosion}
      */
     String MC_ITEM_FIREWORKSCHARGE_TYPE_0 = "minecraft:item.fireworksCharge.type.0";
 
     /**
-     * {@literal Large Ball}
+     * {@literal Large ball explosion}
      */
     String MC_ITEM_FIREWORKSCHARGE_TYPE_1 = "minecraft:item.fireworksCharge.type.1";
 
     /**
-     * {@literal Star-shaped}
+     * {@literal Star-shaped explosion}
      */
     String MC_ITEM_FIREWORKSCHARGE_TYPE_2 = "minecraft:item.fireworksCharge.type.2";
 
     /**
-     * {@literal Creeper-shaped}
+     * {@literal Creeper-shaped explosion}
      */
     String MC_ITEM_FIREWORKSCHARGE_TYPE_3 = "minecraft:item.fireworksCharge.type.3";
 
     /**
-     * {@literal Burst}
+     * {@literal Burst explosion}
      */
     String MC_ITEM_FIREWORKSCHARGE_TYPE_4 = "minecraft:item.fireworksCharge.type.4";
 
@@ -17410,9 +17800,64 @@ public interface TrKeys {
     String MC_ITEM_MANGROVE_SIGN_NAME = "minecraft:item.mangrove_sign.name";
 
     /**
+     * {@literal Bamboo Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_BAMBOO_JUNGLE_NAME = "minecraft:item.map.exploration.abandoned_camp_bamboo_jungle.name";
+
+    /**
+     * {@literal Birch Forest Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_BIRCH_FOREST_NAME = "minecraft:item.map.exploration.abandoned_camp_birch_forest.name";
+
+    /**
+     * {@literal Cherry Grove Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_CHERRY_GROVE_NAME = "minecraft:item.map.exploration.abandoned_camp_cherry_grove.name";
+
+    /**
+     * {@literal Dappled Forest Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_DAPPLED_FOREST_NAME = "minecraft:item.map.exploration.abandoned_camp_dappled_forest.name";
+
+    /**
+     * {@literal Windswept Forest Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_EXTREME_HILLS_PLUS_TREES_NAME = "minecraft:item.map.exploration.abandoned_camp_extreme_hills_plus_trees.name";
+
+    /**
+     * {@literal Flower Forest Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_FLOWER_FOREST_NAME = "minecraft:item.map.exploration.abandoned_camp_flower_forest.name";
+
+    /**
+     * {@literal Pale Garden Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_PALE_GARDEN_NAME = "minecraft:item.map.exploration.abandoned_camp_pale_garden.name";
+
+    /**
+     * {@literal Swamp Camp Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_ABANDONED_CAMP_SWAMPLAND_NAME = "minecraft:item.map.exploration.abandoned_camp_swampland.name";
+
+    /**
+     * {@literal Buried Ancient City Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_BURIED_ANCIENT_CITY_NAME = "minecraft:item.map.exploration.buried_ancient_city.name";
+
+    /**
+     * {@literal Buried Mineshaft Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_BURIED_MINESHAFT_NAME = "minecraft:item.map.exploration.buried_mineshaft.name";
+
+    /**
      * {@literal Treasure Map}
      */
     String MC_ITEM_MAP_EXPLORATION_BURIED_TREASURE_NAME = "minecraft:item.map.exploration.buried_treasure.name";
+
+    /**
+     * {@literal Desert Pyramid Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_DESERT_PYRAMID_NAME = "minecraft:item.map.exploration.desert_pyramid.name";
 
     /**
      * {@literal Jungle Explorer Map}
@@ -17468,6 +17913,11 @@ public interface TrKeys {
      * {@literal Taiga Village Map}
      */
     String MC_ITEM_MAP_EXPLORATION_VILLAGE_TAIGA_NAME = "minecraft:item.map.exploration.village_taiga.name";
+
+    /**
+     * {@literal Warm Ocean Ruins Map}
+     */
+    String MC_ITEM_MAP_EXPLORATION_WARM_OCEAN_RUINS_NAME = "minecraft:item.map.exploration.warm_ocean_ruins.name";
 
     /**
      * {@literal Map}
@@ -17765,6 +18215,21 @@ public interface TrKeys {
     String MC_ITEM_POISONOUS_POTATO_NAME = "minecraft:item.poisonous_potato.name";
 
     /**
+     * {@literal Poplar Door}
+     */
+    String MC_ITEM_POPLAR_DOOR_NAME = "minecraft:item.poplar_door.name";
+
+    /**
+     * {@literal Poplar Hanging Sign}
+     */
+    String MC_ITEM_POPLAR_HANGING_SIGN_NAME = "minecraft:item.poplar_hanging_sign.name";
+
+    /**
+     * {@literal Poplar Sign}
+     */
+    String MC_ITEM_POPLAR_SIGN_NAME = "minecraft:item.poplar_sign.name";
+
+    /**
      * {@literal Raw Porkchop}
      */
     String MC_ITEM_PORKCHOP_NAME = "minecraft:item.porkchop.name";
@@ -17893,6 +18358,11 @@ public interface TrKeys {
      * {@literal C418 - blocks}
      */
     String MC_ITEM_RECORD_BLOCKS_DESC = "minecraft:item.record_blocks.desc";
+
+    /**
+     * {@literal fingerspit - Bounce}
+     */
+    String MC_ITEM_RECORD_BOUNCE_DESC = "minecraft:item.record_bounce.desc";
 
     /**
      * {@literal C418 - cat}
@@ -18630,6 +19100,11 @@ public interface TrKeys {
     String MC_ITEM_SPAWN_EGG_ENTITY_STRIDER_NAME = "minecraft:item.spawn_egg.entity.strider.name";
 
     /**
+     * {@literal Sulfur Cube Spawn Egg}
+     */
+    String MC_ITEM_SPAWN_EGG_ENTITY_SULFUR_CUBE_NAME = "minecraft:item.spawn_egg.entity.sulfur_cube.name";
+
+    /**
      * {@literal Tadpole Spawn Egg}
      */
     String MC_ITEM_SPAWN_EGG_ENTITY_TADPOLE_NAME = "minecraft:item.spawn_egg.entity.tadpole.name";
@@ -18813,6 +19288,11 @@ public interface TrKeys {
      * {@literal Stone Sword}
      */
     String MC_ITEM_STONE_SWORD_NAME = "minecraft:item.stone_sword.name";
+
+    /**
+     * {@literal Straw Bed}
+     */
+    String MC_ITEM_STRAW_BED_NAME = "minecraft:item.straw_bed.name";
 
     /**
      * {@literal String}
@@ -19475,6 +19955,11 @@ public interface TrKeys {
     String MC_ITEMGROUP_NAME_CROP = "minecraft:itemGroup.name.crop";
 
     /**
+     * {@literal Cushions}
+     */
+    String MC_ITEMGROUP_NAME_CUSHION = "minecraft:itemGroup.name.cushion";
+
+    /**
      * {@literal Doors}
      */
     String MC_ITEMGROUP_NAME_DOOR = "minecraft:itemGroup.name.door";
@@ -20030,7 +20515,7 @@ public interface TrKeys {
     String MC_KEY_DECLINETOAST = "minecraft:key.declineToast";
 
     /**
-     * {@literal Identify}
+     * {@literal Identify Block}
      */
     String MC_KEY_DESCRIBEBLOCK = "minecraft:key.describeBlock";
 
@@ -20053,6 +20538,11 @@ public interface TrKeys {
      * {@literal Fly Up Slow}
      */
     String MC_KEY_FLYUPSLOW = "minecraft:key.flyUpSlow";
+
+    /**
+     * {@literal Follow}
+     */
+    String MC_KEY_FOLLOWTOAST = "minecraft:key.followToast";
 
     /**
      * {@literal Walk Forwards}
@@ -21425,6 +21915,26 @@ public interface TrKeys {
     String MC_ONLINEPLAY_UNTRUSTEDIP_TITLE = "minecraft:onlinePlay.untrustedIp.title";
 
     /**
+     * {@literal Enchantment cost: %1#d}
+     */
+    String MC_OREUI_GAMEPLAY_ANVIL_COST = "minecraft:oreui.gameplay.anvil.cost";
+
+    /**
+     * {@literal Items incompatible}
+     */
+    String MC_OREUI_GAMEPLAY_ANVIL_INCOMPATIBLE = "minecraft:oreui.gameplay.anvil.incompatible";
+
+    /**
+     * {@literal Item overworked}
+     */
+    String MC_OREUI_GAMEPLAY_ANVIL_OVERWORKED = "minecraft:oreui.gameplay.anvil.overworked";
+
+    /**
+     * {@literal Repair, Name & Enchant}
+     */
+    String MC_OREUI_GAMEPLAY_ANVIL_REPAIR = "minecraft:oreui.gameplay.anvil.repair";
+
+    /**
      * {@literal Author: %s}
      */
     String MC_PACK_AUTHORS_LABEL = "minecraft:pack.authors.label";
@@ -21433,6 +21943,16 @@ public interface TrKeys {
      * {@literal Unknown}
      */
     String MC_PACK_AUTHORS_NONE = "minecraft:pack.authors.none";
+
+    /**
+     * {@literal Sends a message in the party chat}
+     */
+    String MC_PARTIES_CHAT_COMMAND_DESCRIPTION = "minecraft:parties.chat.command.description";
+
+    /**
+     * {@literal You are not currently in a party}
+     */
+    String MC_PARTIES_CHAT_COMMAND_UNAVAILABLE = "minecraft:parties.chat.command.unavailable";
 
     /**
      * {@literal You joined the party}
@@ -21495,6 +22015,16 @@ public interface TrKeys {
     String MC_PARTIES_TOAST_LEADERCHANGED = "minecraft:parties.toast.leaderChanged";
 
     /**
+     * {@literal Party leader is in the menus}
+     */
+    String MC_PARTIES_TOAST_LEADERTRAVELSTOMENU = "minecraft:parties.toast.leaderTravelsToMenu";
+
+    /**
+     * {@literal Party went to an unreachable server}
+     */
+    String MC_PARTIES_TOAST_LEADERTRAVELSTOUNREACHABLESERVER = "minecraft:parties.toast.leaderTravelsToUnreachableServer";
+
+    /**
      * {@literal Failed to leave party}
      */
     String MC_PARTIES_TOAST_LEAVEFAILED = "minecraft:parties.toast.leaveFailed";
@@ -21550,9 +22080,24 @@ public interface TrKeys {
     String MC_PARTIES_TOAST_TRAVELTOMENU = "minecraft:parties.toast.travelToMenu";
 
     /**
-     * {@literal Party moving to %s}
+     * {@literal Party has entered %s}
+     */
+    String MC_PARTIES_TOAST_TRAVELTOSERVER = "minecraft:parties.toast.travelToServer";
+
+    /**
+     * {@literal Your spot is reserved for %d min}
+     */
+    String MC_PARTIES_TOAST_TRAVELTOSERVERSUBTITLE = "minecraft:parties.toast.travelToServerSubtitle";
+
+    /**
+     * {@literal Party loading - %s}
      */
     String MC_PARTIES_TOAST_TRAVELTOWORLD = "minecraft:parties.toast.travelToWorld";
+
+    /**
+     * {@literal Follow to change experience}
+     */
+    String MC_PARTIES_TOAST_TRAVELTOWORLDSUBTITLE = "minecraft:parties.toast.travelToWorldSubtitle";
 
     /**
      * {@literal Party}
@@ -21628,6 +22173,26 @@ public interface TrKeys {
      * {@literal Beta Feedback}
      */
     String MC_PAUSESCREEN_BETAFEEDBACK = "minecraft:pauseScreen.betaFeedback";
+
+    /**
+     * {@literal Close}
+     */
+    String MC_PAUSESCREEN_BETAFEEDBACK_DIALOG_CLOSE = "minecraft:pauseScreen.betaFeedback.dialog.close";
+
+    /**
+     * {@literal Go to Feedback site}
+     */
+    String MC_PAUSESCREEN_BETAFEEDBACK_DIALOG_CONTINUE = "minecraft:pauseScreen.betaFeedback.dialog.continue";
+
+    /**
+     * {@literal You are about to open the Minecraft feedback site in your browser. Share your thoughts and help us improve the game!}
+     */
+    String MC_PAUSESCREEN_BETAFEEDBACK_DIALOG_MESSAGE = "minecraft:pauseScreen.betaFeedback.dialog.message";
+
+    /**
+     * {@literal Beta Feedback}
+     */
+    String MC_PAUSESCREEN_BETAFEEDBACK_DIALOG_TITLE = "minecraft:pauseScreen.betaFeedback.dialog.title";
 
     /**
      * {@literal Current World}
@@ -21710,6 +22275,11 @@ public interface TrKeys {
     String MC_PAUSESCREEN_QUIT = "minecraft:pauseScreen.quit";
 
     /**
+     * {@literal Realm Hub}
+     */
+    String MC_PAUSESCREEN_REALMSHUB = "minecraft:pauseScreen.realmsHub";
+
+    /**
      * {@literal Realms Stories}
      */
     String MC_PAUSESCREEN_REALMSSTORIES = "minecraft:pauseScreen.realmsStories";
@@ -21733,6 +22303,16 @@ public interface TrKeys {
      * {@literal You save %s minecoins with your Marketplace Pass subscription!}
      */
     String MC_PERSONA_CSB_SAVINGS = "minecraft:persona.csb.savings";
+
+    /**
+     * {@literal Try Free}
+     */
+    String MC_PERSONA_CSB_SEE_HASTRIAL = "minecraft:persona.csb.see.hasTrial";
+
+    /**
+     * {@literal Free with Pass}
+     */
+    String MC_PERSONA_CSB_SEE_NOTRIAL = "minecraft:persona.csb.see.noTrial";
 
     /**
      * {@literal In Pass}
@@ -21908,11 +22488,6 @@ public interface TrKeys {
      * {@literal Haste}
      */
     String MC_POTION_DIGSPEED = "minecraft:potion.digSpeed";
-
-    /**
-     * {@literal When Applied:}
-     */
-    String MC_POTION_EFFECTS_WHENDRANK = "minecraft:potion.effects.whenDrank";
 
     /**
      * {@literal No Effects}
@@ -22200,7 +22775,7 @@ public interface TrKeys {
     String MC_POTION_POISON_SPLASH_NAME = "minecraft:potion.poison.splash.name";
 
     /**
-     * {@literal }
+     * {@literal I}
      */
     String MC_POTION_POTENCY_0 = "minecraft:potion.potency.0";
 
@@ -22705,6 +23280,16 @@ public interface TrKeys {
     String MC_SEEDPICKER_TITLE = "minecraft:seedPicker.title";
 
     /**
+     * {@literal Starting Server}
+     */
+    String MC_SERVER_STARTING = "minecraft:server.starting";
+
+    /**
+     * {@literal Stopping Server}
+     */
+    String MC_SERVER_STOPPING = "minecraft:server.stopping";
+
+    /**
      * {@literal Received invalid form json. Error:%s}
      */
     String MC_SERVERUI_ERRORDESCRIPTION = "minecraft:serverUI.errorDescription";
@@ -22718,31 +23303,6 @@ public interface TrKeys {
      * {@literal Edit sign message}
      */
     String MC_SIGN_EDIT = "minecraft:sign.edit";
-
-    /**
-     * {@literal When equipped:}
-     */
-    String MC_SLOT_ARMOR_BODY_WHEN_EQUIPPED = "minecraft:slot.armor.body.when_equipped";
-
-    /**
-     * {@literal When on Chest:}
-     */
-    String MC_SLOT_ARMOR_CHEST_WHEN_EQUIPPED = "minecraft:slot.armor.chest.when_equipped";
-
-    /**
-     * {@literal When on Feet:}
-     */
-    String MC_SLOT_ARMOR_FEET_WHEN_EQUIPPED = "minecraft:slot.armor.feet.when_equipped";
-
-    /**
-     * {@literal When on Head:}
-     */
-    String MC_SLOT_ARMOR_HEAD_WHEN_EQUIPPED = "minecraft:slot.armor.head.when_equipped";
-
-    /**
-     * {@literal When on Legs:}
-     */
-    String MC_SLOT_ARMOR_LEGS_WHEN_EQUIPPED = "minecraft:slot.armor.legs.when_equipped";
 
     /**
      * {@literal Eerie noise}
@@ -22950,11 +23510,6 @@ public interface TrKeys {
     String MC_SUBTITLES_BLOCK_CHEST_CLOSE = "minecraft:subtitles.block.chest.close";
 
     /**
-     * {@literal Chest locked}
-     */
-    String MC_SUBTITLES_BLOCK_CHEST_LOCKED = "minecraft:subtitles.block.chest.locked";
-
-    /**
      * {@literal Chest opens}
      */
     String MC_SUBTITLES_BLOCK_CHEST_OPEN = "minecraft:subtitles.block.chest.open";
@@ -23127,7 +23682,7 @@ public interface TrKeys {
     /**
      * {@literal Enchanting Table used}
      */
-    String MC_SUBTITLES_BLOCK_ENCHANTMENT_TABLE_USE = "minecraft:subtitles.block.enchantment_table.use";
+    String MC_SUBTITLES_BLOCK_ENCHANTING_TABLE_USE = "minecraft:subtitles.block.enchanting_table.use";
 
     /**
      * {@literal End Portal opens}
@@ -23295,6 +23850,21 @@ public interface TrKeys {
     String MC_SUBTITLES_BLOCK_POINTED_DRIPSTONE_LAND = "minecraft:subtitles.block.pointed_dripstone.land";
 
     /**
+     * {@literal Leaves rustle}
+     */
+    String MC_SUBTITLES_BLOCK_POPLAR_LEAVES_AMBIENT = "minecraft:subtitles.block.poplar_leaves.ambient";
+
+    /**
+     * {@literal Jumping on Poplar Leaves}
+     */
+    String MC_SUBTITLES_BLOCK_POPLAR_LEAVES_JUMP = "minecraft:subtitles.block.poplar_leaves.jump";
+
+    /**
+     * {@literal Landing on Poplar Leaves}
+     */
+    String MC_SUBTITLES_BLOCK_POPLAR_LEAVES_LAND = "minecraft:subtitles.block.poplar_leaves.land";
+
+    /**
      * {@literal Portal whooshes}
      */
     String MC_SUBTITLES_BLOCK_PORTAL_AMBIENT = "minecraft:subtitles.block.portal.ambient";
@@ -23308,6 +23878,16 @@ public interface TrKeys {
      * {@literal Portal noise intensifies}
      */
     String MC_SUBTITLES_BLOCK_PORTAL_TRIGGER = "minecraft:subtitles.block.portal.trigger";
+
+    /**
+     * {@literal Sulfur Spring bursts}
+     */
+    String MC_SUBTITLES_BLOCK_POTENT_SULFUR_GEYSER_ERUPTION_START = "minecraft:subtitles.block.potent_sulfur.geyser_eruption_start";
+
+    /**
+     * {@literal Noxious gas appears}
+     */
+    String MC_SUBTITLES_BLOCK_POTENT_SULFUR_NOXIOUS_GAS = "minecraft:subtitles.block.potent_sulfur.noxious_gas";
 
     /**
      * {@literal Pressure Plate clicks}
@@ -23458,6 +24038,11 @@ public interface TrKeys {
      * {@literal Sponge sucks}
      */
     String MC_SUBTITLES_BLOCK_SPONGE_ABSORB = "minecraft:subtitles.block.sponge.absorb";
+
+    /**
+     * {@literal Straw Bed breaks}
+     */
+    String MC_SUBTITLES_BLOCK_STRAW_BED_BREAK_LEAVE = "minecraft:subtitles.block.straw_bed.break_leave";
 
     /**
      * {@literal Berries pop}
@@ -23790,6 +24375,71 @@ public interface TrKeys {
     String MC_SUBTITLES_ENTITY_AXOLOTL_SWIM = "minecraft:subtitles.entity.axolotl.swim";
 
     /**
+     * {@literal Kitten meows}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_CAT_AMBIENT = "minecraft:subtitles.entity.baby_cat.ambient";
+
+    /**
+     * {@literal Kitten dies}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_CAT_DEATH = "minecraft:subtitles.entity.baby_cat.death";
+
+    /**
+     * {@literal Kitten eats}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_CAT_EAT = "minecraft:subtitles.entity.baby_cat.eat";
+
+    /**
+     * {@literal Kitten hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_CAT_HURT = "minecraft:subtitles.entity.baby_cat.hurt";
+
+    /**
+     * {@literal Chick peeps}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_CHICKEN_AMBIENT = "minecraft:subtitles.entity.baby_chicken.ambient";
+
+    /**
+     * {@literal Chick dies}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_CHICKEN_DEATH = "minecraft:subtitles.entity.baby_chicken.death";
+
+    /**
+     * {@literal Chick hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_CHICKEN_HURT = "minecraft:subtitles.entity.baby_chicken.hurt";
+
+    /**
+     * {@literal Foal neighs}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_HORSE_AMBIENT = "minecraft:subtitles.entity.baby_horse.ambient";
+
+    /**
+     * {@literal Foal neighs}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_HORSE_ANGRY = "minecraft:subtitles.entity.baby_horse.angry";
+
+    /**
+     * {@literal Foal breathes}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_HORSE_BREATHE = "minecraft:subtitles.entity.baby_horse.breathe";
+
+    /**
+     * {@literal Foal dies}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_HORSE_DEATH = "minecraft:subtitles.entity.baby_horse.death";
+
+    /**
+     * {@literal Foal eats}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_HORSE_EAT = "minecraft:subtitles.entity.baby_horse.eat";
+
+    /**
+     * {@literal Foal hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_HORSE_HURT = "minecraft:subtitles.entity.baby_horse.hurt";
+
+    /**
      * {@literal Baby Nautilus chitters}
      */
     String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_AMBIENT = "minecraft:subtitles.entity.baby_nautilus.ambient";
@@ -23823,6 +24473,56 @@ public interface TrKeys {
      * {@literal Baby Nautilus hurts}
      */
     String MC_SUBTITLES_ENTITY_BABY_NAUTILUS_HURT_LAND = "minecraft:subtitles.entity.baby_nautilus.hurt_land";
+
+    /**
+     * {@literal Baby Pig oinks}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_PIG_AMBIENT = "minecraft:subtitles.entity.baby_pig.ambient";
+
+    /**
+     * {@literal Baby Pig dies}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_PIG_DEATH = "minecraft:subtitles.entity.baby_pig.death";
+
+    /**
+     * {@literal Baby Pig eats}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_PIG_EAT = "minecraft:subtitles.entity.baby_pig.eat";
+
+    /**
+     * {@literal Baby Pig hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_PIG_HURT = "minecraft:subtitles.entity.baby_pig.hurt";
+
+    /**
+     * {@literal Puppy yips}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_WOLF_AMBIENT = "minecraft:subtitles.entity.baby_wolf.ambient";
+
+    /**
+     * {@literal Puppy dies}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_WOLF_DEATH = "minecraft:subtitles.entity.baby_wolf.death";
+
+    /**
+     * {@literal Puppy growls}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_WOLF_GROWL = "minecraft:subtitles.entity.baby_wolf.growl";
+
+    /**
+     * {@literal Puppy hurts}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_WOLF_HURT = "minecraft:subtitles.entity.baby_wolf.hurt";
+
+    /**
+     * {@literal Puppy pants}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_WOLF_PANT = "minecraft:subtitles.entity.baby_wolf.pant";
+
+    /**
+     * {@literal Puppy whines}
+     */
+    String MC_SUBTITLES_ENTITY_BABY_WOLF_WHINE = "minecraft:subtitles.entity.baby_wolf.whine";
 
     /**
      * {@literal Bat screeches}
@@ -24323,6 +25023,26 @@ public interface TrKeys {
      * {@literal Creeper hisses}
      */
     String MC_SUBTITLES_ENTITY_CREEPER_PRIMED = "minecraft:subtitles.entity.creeper.primed";
+
+    /**
+     * {@literal Cushion breaks}
+     */
+    String MC_SUBTITLES_ENTITY_CUSHION_BREAK = "minecraft:subtitles.entity.cushion.break";
+
+    /**
+     * {@literal Gets up from Cushion}
+     */
+    String MC_SUBTITLES_ENTITY_CUSHION_GET_UP = "minecraft:subtitles.entity.cushion.get_up";
+
+    /**
+     * {@literal Cushion placed}
+     */
+    String MC_SUBTITLES_ENTITY_CUSHION_PLACE = "minecraft:subtitles.entity.cushion.place";
+
+    /**
+     * {@literal Sits on Cushion}
+     */
+    String MC_SUBTITLES_ENTITY_CUSHION_SIT = "minecraft:subtitles.entity.cushion.sit";
 
     /**
      * {@literal Dolphin chirps}
@@ -25113,41 +25833,6 @@ public interface TrKeys {
      * {@literal Husk hurts}
      */
     String MC_SUBTITLES_ENTITY_HUSK_HURT = "minecraft:subtitles.entity.husk.hurt";
-
-    /**
-     * {@literal Illusioner murmurs}
-     */
-    String MC_SUBTITLES_ENTITY_ILLUSIONER_AMBIENT = "minecraft:subtitles.entity.illusioner.ambient";
-
-    /**
-     * {@literal Illusioner casts spell}
-     */
-    String MC_SUBTITLES_ENTITY_ILLUSIONER_CAST_SPELL = "minecraft:subtitles.entity.illusioner.cast_spell";
-
-    /**
-     * {@literal Illusioner dies}
-     */
-    String MC_SUBTITLES_ENTITY_ILLUSIONER_DEATH = "minecraft:subtitles.entity.illusioner.death";
-
-    /**
-     * {@literal Illusioner hurts}
-     */
-    String MC_SUBTITLES_ENTITY_ILLUSIONER_HURT = "minecraft:subtitles.entity.illusioner.hurt";
-
-    /**
-     * {@literal Illusioner displaces}
-     */
-    String MC_SUBTITLES_ENTITY_ILLUSIONER_MIRROR_MOVE = "minecraft:subtitles.entity.illusioner.mirror_move";
-
-    /**
-     * {@literal Illusioner prepares blindness}
-     */
-    String MC_SUBTITLES_ENTITY_ILLUSIONER_PREPARE_BLINDNESS = "minecraft:subtitles.entity.illusioner.prepare_blindness";
-
-    /**
-     * {@literal Illusioner prepares mirror image}
-     */
-    String MC_SUBTITLES_ENTITY_ILLUSIONER_PREPARE_MIRROR = "minecraft:subtitles.entity.illusioner.prepare_mirror";
 
     /**
      * {@literal Iron Golem attacks}
@@ -26395,6 +27080,46 @@ public interface TrKeys {
     String MC_SUBTITLES_ENTITY_STRIDER_RETREAT = "minecraft:subtitles.entity.strider.retreat";
 
     /**
+     * {@literal Sulfur Cube full}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_ABSORB = "minecraft:subtitles.entity.sulfur_cube.absorb";
+
+    /**
+     * {@literal Sulfur Cube bounces}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_BOUNCE = "minecraft:subtitles.entity.sulfur_cube.bounce";
+
+    /**
+     * {@literal Sulfur Cube dies}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_DEATH = "minecraft:subtitles.entity.sulfur_cube.death";
+
+    /**
+     * {@literal Block Removed}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_EJECT = "minecraft:subtitles.entity.sulfur_cube.eject";
+
+    /**
+     * {@literal Sulfur Cube hit}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_HIT = "minecraft:subtitles.entity.sulfur_cube.hit";
+
+    /**
+     * {@literal Sulfur Cube hurts}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_HURT = "minecraft:subtitles.entity.sulfur_cube.hurt";
+
+    /**
+     * {@literal Sulfur Cube pushed}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_PUSH = "minecraft:subtitles.entity.sulfur_cube.push";
+
+    /**
+     * {@literal Sulfur Cube bounces}
+     */
+    String MC_SUBTITLES_ENTITY_SULFUR_CUBE_SQUISH = "minecraft:subtitles.entity.sulfur_cube.squish";
+
+    /**
      * {@literal Tadpole dies}
      */
     String MC_SUBTITLES_ENTITY_TADPOLE_DEATH = "minecraft:subtitles.entity.tadpole.death";
@@ -27045,6 +27770,11 @@ public interface TrKeys {
     String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_HURT_LAND = "minecraft:subtitles.entity.zombie_nautilus.hurt_land";
 
     /**
+     * {@literal Zombie Nautilus swims}
+     */
+    String MC_SUBTITLES_ENTITY_ZOMBIE_NAUTILUS_SWIM = "minecraft:subtitles.entity.zombie_nautilus.swim";
+
+    /**
      * {@literal Zombie Villager groans}
      */
     String MC_SUBTITLES_ENTITY_ZOMBIE_VILLAGER_AMBIENT = "minecraft:subtitles.entity.zombie_villager.ambient";
@@ -27263,6 +27993,11 @@ public interface TrKeys {
      * {@literal Fish captured}
      */
     String MC_SUBTITLES_ITEM_BUCKET_FILL_FISH = "minecraft:subtitles.item.bucket.fill_fish";
+
+    /**
+     * {@literal Sulfur Cube scooped}
+     */
+    String MC_SUBTITLES_ITEM_BUCKET_FILL_SULFUR_CUBE = "minecraft:subtitles.item.bucket.fill_sulfur_cube";
 
     /**
      * {@literal Tadpole captured}
@@ -27725,6 +28460,11 @@ public interface TrKeys {
     String MC_TILE_ANVIL_SLIGHTLYDAMAGED_NAME = "minecraft:tile.anvil.slightlyDamaged.name";
 
     /**
+     * {@literal Repair & enchant tools}
+     */
+    String MC_TILE_ANVIL_TOOLTIP = "minecraft:tile.anvil.tooltip";
+
+    /**
      * {@literal Damaged Anvil}
      */
     String MC_TILE_ANVIL_VERYDAMAGED_NAME = "minecraft:tile.anvil.veryDamaged.name";
@@ -28025,6 +28765,36 @@ public interface TrKeys {
     String MC_TILE_BLACK_CANDLE_CAKE_NAME = "minecraft:tile.black_candle_cake.name";
 
     /**
+     * {@literal Black Concrete Double Slab}
+     */
+    String MC_TILE_BLACK_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.black_concrete_double_slab.name";
+
+    /**
+     * {@literal Black Concrete Slab}
+     */
+    String MC_TILE_BLACK_CONCRETE_SLAB_NAME = "minecraft:tile.black_concrete_slab.name";
+
+    /**
+     * {@literal Black Concrete Stairs}
+     */
+    String MC_TILE_BLACK_CONCRETE_STAIRS_NAME = "minecraft:tile.black_concrete_stairs.name";
+
+    /**
+     * {@literal Black Wool Double Slab}
+     */
+    String MC_TILE_BLACK_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.black_wool_double_slab.name";
+
+    /**
+     * {@literal Black Wool Slab}
+     */
+    String MC_TILE_BLACK_WOOL_SLAB_NAME = "minecraft:tile.black_wool_slab.name";
+
+    /**
+     * {@literal Black Wool Stairs}
+     */
+    String MC_TILE_BLACK_WOOL_STAIRS_NAME = "minecraft:tile.black_wool_stairs.name";
+
+    /**
      * {@literal Blackstone}
      */
     String MC_TILE_BLACKSTONE_NAME = "minecraft:tile.blackstone.name";
@@ -28055,6 +28825,11 @@ public interface TrKeys {
     String MC_TILE_BLAST_FURNACE_NAME = "minecraft:tile.blast_furnace.name";
 
     /**
+     * {@literal Smelt metal faster}
+     */
+    String MC_TILE_BLAST_FURNACE_TOOLTIP = "minecraft:tile.blast_furnace.tooltip";
+
+    /**
      * {@literal Blue Candle}
      */
     String MC_TILE_BLUE_CANDLE_NAME = "minecraft:tile.blue_candle.name";
@@ -28065,9 +28840,39 @@ public interface TrKeys {
     String MC_TILE_BLUE_CANDLE_CAKE_NAME = "minecraft:tile.blue_candle_cake.name";
 
     /**
+     * {@literal Blue Concrete Double Slab}
+     */
+    String MC_TILE_BLUE_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.blue_concrete_double_slab.name";
+
+    /**
+     * {@literal Blue Concrete Slab}
+     */
+    String MC_TILE_BLUE_CONCRETE_SLAB_NAME = "minecraft:tile.blue_concrete_slab.name";
+
+    /**
+     * {@literal Blue Concrete Stairs}
+     */
+    String MC_TILE_BLUE_CONCRETE_STAIRS_NAME = "minecraft:tile.blue_concrete_stairs.name";
+
+    /**
      * {@literal Blue Ice}
      */
     String MC_TILE_BLUE_ICE_NAME = "minecraft:tile.blue_ice.name";
+
+    /**
+     * {@literal Blue Wool Double Slab}
+     */
+    String MC_TILE_BLUE_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.blue_wool_double_slab.name";
+
+    /**
+     * {@literal Blue Wool Slab}
+     */
+    String MC_TILE_BLUE_WOOL_SLAB_NAME = "minecraft:tile.blue_wool_slab.name";
+
+    /**
+     * {@literal Blue Wool Stairs}
+     */
+    String MC_TILE_BLUE_WOOL_STAIRS_NAME = "minecraft:tile.blue_wool_stairs.name";
 
     /**
      * {@literal Bone Block}
@@ -28090,6 +28895,11 @@ public interface TrKeys {
     String MC_TILE_BRAIN_CORAL_WALL_FAN_NAME = "minecraft:tile.brain_coral_wall_fan.name";
 
     /**
+     * {@literal Brew potions}
+     */
+    String MC_TILE_BREWING_STAND_TOOLTIP = "minecraft:tile.brewing_stand.tooltip";
+
+    /**
      * {@literal Bricks}
      */
     String MC_TILE_BRICK_BLOCK_NAME = "minecraft:tile.brick_block.name";
@@ -28110,6 +28920,21 @@ public interface TrKeys {
     String MC_TILE_BROWN_CANDLE_CAKE_NAME = "minecraft:tile.brown_candle_cake.name";
 
     /**
+     * {@literal Brown Concrete Double Slab}
+     */
+    String MC_TILE_BROWN_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.brown_concrete_double_slab.name";
+
+    /**
+     * {@literal Brown Concrete Slab}
+     */
+    String MC_TILE_BROWN_CONCRETE_SLAB_NAME = "minecraft:tile.brown_concrete_slab.name";
+
+    /**
+     * {@literal Brown Concrete Stairs}
+     */
+    String MC_TILE_BROWN_CONCRETE_STAIRS_NAME = "minecraft:tile.brown_concrete_stairs.name";
+
+    /**
      * {@literal Brown Mushroom}
      */
     String MC_TILE_BROWN_MUSHROOM_NAME = "minecraft:tile.brown_mushroom.name";
@@ -28128,6 +28953,26 @@ public interface TrKeys {
      * {@literal Mushroom Stem}
      */
     String MC_TILE_BROWN_MUSHROOM_BLOCK_STEM_NAME = "minecraft:tile.brown_mushroom_block.stem.name";
+
+    /**
+     * {@literal Brown Wool Double Slab}
+     */
+    String MC_TILE_BROWN_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.brown_wool_double_slab.name";
+
+    /**
+     * {@literal Brown Wool Slab}
+     */
+    String MC_TILE_BROWN_WOOL_SLAB_NAME = "minecraft:tile.brown_wool_slab.name";
+
+    /**
+     * {@literal Brown Wool Stairs}
+     */
+    String MC_TILE_BROWN_WOOL_STAIRS_NAME = "minecraft:tile.brown_wool_stairs.name";
+
+    /**
+     * {@literal Excavate & brush}
+     */
+    String MC_TILE_BRUSH_TOOLTIP = "minecraft:tile.brush.tooltip";
 
     /**
      * {@literal Bubble Column}
@@ -28290,6 +29135,11 @@ public interface TrKeys {
     String MC_TILE_CARTOGRAPHY_TABLE_NAME = "minecraft:tile.cartography_table.name";
 
     /**
+     * {@literal Modify Maps}
+     */
+    String MC_TILE_CARTOGRAPHY_TABLE_TOOLTIP = "minecraft:tile.cartography_table.tooltip";
+
+    /**
      * {@literal Carved Pumpkin}
      */
     String MC_TILE_CARVED_PUMPKIN_NAME = "minecraft:tile.carved_pumpkin.name";
@@ -28298,6 +29148,11 @@ public interface TrKeys {
      * {@literal Cauldron}
      */
     String MC_TILE_CAULDRON_NAME = "minecraft:tile.cauldron.name";
+
+    /**
+     * {@literal Holds liquids & potions}
+     */
+    String MC_TILE_CAULDRON_TOOLTIP = "minecraft:tile.cauldron.tooltip";
 
     /**
      * {@literal Cave Vines}
@@ -28445,6 +29300,11 @@ public interface TrKeys {
     String MC_TILE_CHISELED_BOOKSHELF_NAME = "minecraft:tile.chiseled_bookshelf.name";
 
     /**
+     * {@literal Chiseled Cinnabar}
+     */
+    String MC_TILE_CHISELED_CINNABAR_NAME = "minecraft:tile.chiseled_cinnabar.name";
+
+    /**
      * {@literal Chiseled Copper}
      */
     String MC_TILE_CHISELED_COPPER_NAME = "minecraft:tile.chiseled_copper.name";
@@ -28470,6 +29330,11 @@ public interface TrKeys {
     String MC_TILE_CHISELED_RESIN_BRICKS_NAME = "minecraft:tile.chiseled_resin_bricks.name";
 
     /**
+     * {@literal Chiseled Sulfur}
+     */
+    String MC_TILE_CHISELED_SULFUR_NAME = "minecraft:tile.chiseled_sulfur.name";
+
+    /**
      * {@literal Chiseled Tuff}
      */
     String MC_TILE_CHISELED_TUFF_NAME = "minecraft:tile.chiseled_tuff.name";
@@ -28488,6 +29353,56 @@ public interface TrKeys {
      * {@literal Chorus Plant}
      */
     String MC_TILE_CHORUS_PLANT_NAME = "minecraft:tile.chorus_plant.name";
+
+    /**
+     * {@literal Cinnabar}
+     */
+    String MC_TILE_CINNABAR_NAME = "minecraft:tile.cinnabar.name";
+
+    /**
+     * {@literal Cinnabar Brick Double Slab}
+     */
+    String MC_TILE_CINNABAR_BRICK_DOUBLE_SLAB_NAME = "minecraft:tile.cinnabar_brick_double_slab.name";
+
+    /**
+     * {@literal Cinnabar Brick Slab}
+     */
+    String MC_TILE_CINNABAR_BRICK_SLAB_NAME = "minecraft:tile.cinnabar_brick_slab.name";
+
+    /**
+     * {@literal Cinnabar Brick Stairs}
+     */
+    String MC_TILE_CINNABAR_BRICK_STAIRS_NAME = "minecraft:tile.cinnabar_brick_stairs.name";
+
+    /**
+     * {@literal Cinnabar Brick Wall}
+     */
+    String MC_TILE_CINNABAR_BRICK_WALL_NAME = "minecraft:tile.cinnabar_brick_wall.name";
+
+    /**
+     * {@literal Cinnabar Bricks}
+     */
+    String MC_TILE_CINNABAR_BRICKS_NAME = "minecraft:tile.cinnabar_bricks.name";
+
+    /**
+     * {@literal Cinnabar Double Slab}
+     */
+    String MC_TILE_CINNABAR_DOUBLE_SLAB_NAME = "minecraft:tile.cinnabar_double_slab.name";
+
+    /**
+     * {@literal Cinnabar Slab}
+     */
+    String MC_TILE_CINNABAR_SLAB_NAME = "minecraft:tile.cinnabar_slab.name";
+
+    /**
+     * {@literal Cinnabar Stairs}
+     */
+    String MC_TILE_CINNABAR_STAIRS_NAME = "minecraft:tile.cinnabar_stairs.name";
+
+    /**
+     * {@literal Cinnabar Wall}
+     */
+    String MC_TILE_CINNABAR_WALL_NAME = "minecraft:tile.cinnabar_wall.name";
 
     /**
      * {@literal Clay}
@@ -28580,7 +29495,7 @@ public interface TrKeys {
     String MC_TILE_COBBLESTONE_WALL_NETHER_BRICK_NAME = "minecraft:tile.cobblestone_wall.nether_brick.name";
 
     /**
-     * {@literal Cobblestone Wall }
+     * {@literal Cobblestone Wall}
      */
     String MC_TILE_COBBLESTONE_WALL_NORMAL_NAME = "minecraft:tile.cobblestone_wall.normal.name";
 
@@ -28620,9 +29535,24 @@ public interface TrKeys {
     String MC_TILE_COMMAND_BLOCK_NAME = "minecraft:tile.command_block.name";
 
     /**
+     * {@literal Reads signal strength}
+     */
+    String MC_TILE_COMPARATOR_TOOLTIP = "minecraft:tile.comparator.tooltip";
+
+    /**
+     * {@literal Points to world spawn}
+     */
+    String MC_TILE_COMPASS_TOOLTIP = "minecraft:tile.compass.tooltip";
+
+    /**
      * {@literal Composter}
      */
     String MC_TILE_COMPOSTER_NAME = "minecraft:tile.composter.name";
+
+    /**
+     * {@literal Make bone meal}
+     */
+    String MC_TILE_COMPOSTER_TOOLTIP = "minecraft:tile.composter.tooltip";
 
     /**
      * {@literal Black Concrete}
@@ -29025,9 +29955,19 @@ public interface TrKeys {
     String MC_TILE_CRAFTER_NAME = "minecraft:tile.crafter.name";
 
     /**
+     * {@literal Automate crafting}
+     */
+    String MC_TILE_CRAFTER_TOOLTIP = "minecraft:tile.crafter.tooltip";
+
+    /**
      * {@literal Crafting Table}
      */
     String MC_TILE_CRAFTING_TABLE_NAME = "minecraft:tile.crafting_table.name";
+
+    /**
+     * {@literal Make stuff}
+     */
+    String MC_TILE_CRAFTING_TABLE_TOOLTIP = "minecraft:tile.crafting_table.tooltip";
 
     /**
      * {@literal Creaking Heart}
@@ -29158,6 +30098,36 @@ public interface TrKeys {
      * {@literal Cake with Cyan Candle}
      */
     String MC_TILE_CYAN_CANDLE_CAKE_NAME = "minecraft:tile.cyan_candle_cake.name";
+
+    /**
+     * {@literal Cyan Concrete Double Slab}
+     */
+    String MC_TILE_CYAN_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.cyan_concrete_double_slab.name";
+
+    /**
+     * {@literal Cyan Concrete Slab}
+     */
+    String MC_TILE_CYAN_CONCRETE_SLAB_NAME = "minecraft:tile.cyan_concrete_slab.name";
+
+    /**
+     * {@literal Cyan Concrete Stairs}
+     */
+    String MC_TILE_CYAN_CONCRETE_STAIRS_NAME = "minecraft:tile.cyan_concrete_stairs.name";
+
+    /**
+     * {@literal Cyan Wool Double Slab}
+     */
+    String MC_TILE_CYAN_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.cyan_wool_double_slab.name";
+
+    /**
+     * {@literal Cyan Wool Slab}
+     */
+    String MC_TILE_CYAN_WOOL_SLAB_NAME = "minecraft:tile.cyan_wool_slab.name";
+
+    /**
+     * {@literal Cyan Wool Stairs}
+     */
+    String MC_TILE_CYAN_WOOL_STAIRS_NAME = "minecraft:tile.cyan_wool_stairs.name";
 
     /**
      * {@literal Dark Oak Fence}
@@ -29410,6 +30380,11 @@ public interface TrKeys {
     String MC_TILE_DISPENSER_NAME = "minecraft:tile.dispenser.name";
 
     /**
+     * {@literal Automate actions}
+     */
+    String MC_TILE_DISPENSER_TOOLTIP = "minecraft:tile.dispenser.tooltip";
+
+    /**
      * {@literal Wooden Door}
      */
     String MC_TILE_DOORWOOD_NAME = "minecraft:tile.doorWood.name";
@@ -29660,6 +30635,11 @@ public interface TrKeys {
     String MC_TILE_DROPPER_NAME = "minecraft:tile.dropper.name";
 
     /**
+     * {@literal Eject items}
+     */
+    String MC_TILE_DROPPER_TOOLTIP = "minecraft:tile.dropper.tooltip";
+
+    /**
      * {@literal Block of Emerald}
      */
     String MC_TILE_EMERALD_BLOCK_NAME = "minecraft:tile.emerald_block.name";
@@ -29673,6 +30653,11 @@ public interface TrKeys {
      * {@literal Enchanting Table}
      */
     String MC_TILE_ENCHANTING_TABLE_NAME = "minecraft:tile.enchanting_table.name";
+
+    /**
+     * {@literal Enchant tools & books}
+     */
+    String MC_TILE_ENCHANTING_TABLE_TOOLTIP = "minecraft:tile.enchanting_table.tooltip";
 
     /**
      * {@literal End Stone Brick Stairs}
@@ -29835,6 +30820,11 @@ public interface TrKeys {
     String MC_TILE_FLETCHING_TABLE_NAME = "minecraft:tile.fletching_table.name";
 
     /**
+     * {@literal Make fire}
+     */
+    String MC_TILE_FLINT_AND_STEEL_TOOLTIP = "minecraft:tile.flint_and_steel.tooltip";
+
+    /**
      * {@literal Flower Pot}
      */
     String MC_TILE_FLOWER_POT_NAME = "minecraft:tile.flower_pot.name";
@@ -29873,6 +30863,11 @@ public interface TrKeys {
      * {@literal Furnace}
      */
     String MC_TILE_FURNACE_NAME = "minecraft:tile.furnace.name";
+
+    /**
+     * {@literal Smelt & cook}
+     */
+    String MC_TILE_FURNACE_TOOLTIP = "minecraft:tile.furnace.tooltip";
 
     /**
      * {@literal Gilded Blackstone}
@@ -30120,6 +31115,36 @@ public interface TrKeys {
     String MC_TILE_GRAY_CANDLE_CAKE_NAME = "minecraft:tile.gray_candle_cake.name";
 
     /**
+     * {@literal Gray Concrete Double Slab}
+     */
+    String MC_TILE_GRAY_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.gray_concrete_double_slab.name";
+
+    /**
+     * {@literal Gray Concrete Slab}
+     */
+    String MC_TILE_GRAY_CONCRETE_SLAB_NAME = "minecraft:tile.gray_concrete_slab.name";
+
+    /**
+     * {@literal Gray Concrete Stairs}
+     */
+    String MC_TILE_GRAY_CONCRETE_STAIRS_NAME = "minecraft:tile.gray_concrete_stairs.name";
+
+    /**
+     * {@literal Gray Wool Double Slab}
+     */
+    String MC_TILE_GRAY_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.gray_wool_double_slab.name";
+
+    /**
+     * {@literal Gray Wool Slab}
+     */
+    String MC_TILE_GRAY_WOOL_SLAB_NAME = "minecraft:tile.gray_wool_slab.name";
+
+    /**
+     * {@literal Gray Wool Stairs}
+     */
+    String MC_TILE_GRAY_WOOL_STAIRS_NAME = "minecraft:tile.gray_wool_stairs.name";
+
+    /**
      * {@literal Green Candle}
      */
     String MC_TILE_GREEN_CANDLE_NAME = "minecraft:tile.green_candle.name";
@@ -30130,9 +31155,44 @@ public interface TrKeys {
     String MC_TILE_GREEN_CANDLE_CAKE_NAME = "minecraft:tile.green_candle_cake.name";
 
     /**
+     * {@literal Green Concrete Double Slab}
+     */
+    String MC_TILE_GREEN_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.green_concrete_double_slab.name";
+
+    /**
+     * {@literal Green Concrete Slab}
+     */
+    String MC_TILE_GREEN_CONCRETE_SLAB_NAME = "minecraft:tile.green_concrete_slab.name";
+
+    /**
+     * {@literal Green Concrete Stairs}
+     */
+    String MC_TILE_GREEN_CONCRETE_STAIRS_NAME = "minecraft:tile.green_concrete_stairs.name";
+
+    /**
+     * {@literal Green Wool Double Slab}
+     */
+    String MC_TILE_GREEN_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.green_wool_double_slab.name";
+
+    /**
+     * {@literal Green Wool Slab}
+     */
+    String MC_TILE_GREEN_WOOL_SLAB_NAME = "minecraft:tile.green_wool_slab.name";
+
+    /**
+     * {@literal Green Wool Stairs}
+     */
+    String MC_TILE_GREEN_WOOL_STAIRS_NAME = "minecraft:tile.green_wool_stairs.name";
+
+    /**
      * {@literal Grindstone}
      */
     String MC_TILE_GRINDSTONE_NAME = "minecraft:tile.grindstone.name";
+
+    /**
+     * {@literal Remove enchantments}
+     */
+    String MC_TILE_GRINDSTONE_TOOLTIP = "minecraft:tile.grindstone.tooltip";
 
     /**
      * {@literal Hanging Roots}
@@ -30160,6 +31220,11 @@ public interface TrKeys {
     String MC_TILE_HEAVY_WEIGHTED_PRESSURE_PLATE_NAME = "minecraft:tile.heavy_weighted_pressure_plate.name";
 
     /**
+     * {@literal Farming}
+     */
+    String MC_TILE_HOE_TOOLTIP = "minecraft:tile.hoe.tooltip";
+
+    /**
      * {@literal Honey Block}
      */
     String MC_TILE_HONEY_BLOCK_NAME = "minecraft:tile.honey_block.name";
@@ -30173,6 +31238,11 @@ public interface TrKeys {
      * {@literal Hopper}
      */
     String MC_TILE_HOPPER_NAME = "minecraft:tile.hopper.name";
+
+    /**
+     * {@literal Add items to chest}
+     */
+    String MC_TILE_HOPPER_TOOLTIP = "minecraft:tile.hopper.tooltip";
 
     /**
      * {@literal Horn Coral Wall Fan}
@@ -30380,6 +31450,11 @@ public interface TrKeys {
     String MC_TILE_LECTERN_NAME = "minecraft:tile.lectern.name";
 
     /**
+     * {@literal Display books}
+     */
+    String MC_TILE_LECTERN_TOOLTIP = "minecraft:tile.lectern.tooltip";
+
+    /**
      * {@literal Lever}
      */
     String MC_TILE_LEVER_NAME = "minecraft:tile.lever.name";
@@ -30400,6 +31475,36 @@ public interface TrKeys {
     String MC_TILE_LIGHT_BLUE_CANDLE_CAKE_NAME = "minecraft:tile.light_blue_candle_cake.name";
 
     /**
+     * {@literal Light Blue Concrete Double Slab}
+     */
+    String MC_TILE_LIGHT_BLUE_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.light_blue_concrete_double_slab.name";
+
+    /**
+     * {@literal Light Blue Concrete Slab}
+     */
+    String MC_TILE_LIGHT_BLUE_CONCRETE_SLAB_NAME = "minecraft:tile.light_blue_concrete_slab.name";
+
+    /**
+     * {@literal Light Blue Concrete Stairs}
+     */
+    String MC_TILE_LIGHT_BLUE_CONCRETE_STAIRS_NAME = "minecraft:tile.light_blue_concrete_stairs.name";
+
+    /**
+     * {@literal Light Blue Wool Double Slab}
+     */
+    String MC_TILE_LIGHT_BLUE_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.light_blue_wool_double_slab.name";
+
+    /**
+     * {@literal Light Blue Wool Slab}
+     */
+    String MC_TILE_LIGHT_BLUE_WOOL_SLAB_NAME = "minecraft:tile.light_blue_wool_slab.name";
+
+    /**
+     * {@literal Light Blue Wool Stairs}
+     */
+    String MC_TILE_LIGHT_BLUE_WOOL_STAIRS_NAME = "minecraft:tile.light_blue_wool_stairs.name";
+
+    /**
      * {@literal Light Gray Candle}
      */
     String MC_TILE_LIGHT_GRAY_CANDLE_NAME = "minecraft:tile.light_gray_candle.name";
@@ -30408,6 +31513,36 @@ public interface TrKeys {
      * {@literal Cake with Light Gray Candle}
      */
     String MC_TILE_LIGHT_GRAY_CANDLE_CAKE_NAME = "minecraft:tile.light_gray_candle_cake.name";
+
+    /**
+     * {@literal Light Gray Concrete Double Slab}
+     */
+    String MC_TILE_LIGHT_GRAY_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.light_gray_concrete_double_slab.name";
+
+    /**
+     * {@literal Light Gray Concrete Slab}
+     */
+    String MC_TILE_LIGHT_GRAY_CONCRETE_SLAB_NAME = "minecraft:tile.light_gray_concrete_slab.name";
+
+    /**
+     * {@literal Light Gray Concrete Stairs}
+     */
+    String MC_TILE_LIGHT_GRAY_CONCRETE_STAIRS_NAME = "minecraft:tile.light_gray_concrete_stairs.name";
+
+    /**
+     * {@literal Light Gray Wool Double Slab}
+     */
+    String MC_TILE_LIGHT_GRAY_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.light_gray_wool_double_slab.name";
+
+    /**
+     * {@literal Light Gray Wool Slab}
+     */
+    String MC_TILE_LIGHT_GRAY_WOOL_SLAB_NAME = "minecraft:tile.light_gray_wool_slab.name";
+
+    /**
+     * {@literal Light Gray Wool Stairs}
+     */
+    String MC_TILE_LIGHT_GRAY_WOOL_STAIRS_NAME = "minecraft:tile.light_gray_wool_stairs.name";
 
     /**
      * {@literal Light Weighted Pressure Plate}
@@ -30428,6 +31563,36 @@ public interface TrKeys {
      * {@literal Cake with Lime Candle}
      */
     String MC_TILE_LIME_CANDLE_CAKE_NAME = "minecraft:tile.lime_candle_cake.name";
+
+    /**
+     * {@literal Lime Concrete Double Slab}
+     */
+    String MC_TILE_LIME_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.lime_concrete_double_slab.name";
+
+    /**
+     * {@literal Lime Concrete Slab}
+     */
+    String MC_TILE_LIME_CONCRETE_SLAB_NAME = "minecraft:tile.lime_concrete_slab.name";
+
+    /**
+     * {@literal Lime Concrete Stairs}
+     */
+    String MC_TILE_LIME_CONCRETE_STAIRS_NAME = "minecraft:tile.lime_concrete_stairs.name";
+
+    /**
+     * {@literal Lime Wool Double Slab}
+     */
+    String MC_TILE_LIME_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.lime_wool_double_slab.name";
+
+    /**
+     * {@literal Lime Wool Slab}
+     */
+    String MC_TILE_LIME_WOOL_SLAB_NAME = "minecraft:tile.lime_wool_slab.name";
+
+    /**
+     * {@literal Lime Wool Stairs}
+     */
+    String MC_TILE_LIME_WOOL_STAIRS_NAME = "minecraft:tile.lime_wool_stairs.name";
 
     /**
      * {@literal Lit Blast Furnace}
@@ -30475,6 +31640,11 @@ public interface TrKeys {
     String MC_TILE_LODESTONE_NAME = "minecraft:tile.lodestone.name";
 
     /**
+     * {@literal Points to lodestone}
+     */
+    String MC_TILE_LODESTONECOMPASS_TOOLTIP = "minecraft:tile.lodestonecompass.tooltip";
+
+    /**
      * {@literal Acacia Log}
      */
     String MC_TILE_LOG_ACACIA_NAME = "minecraft:tile.log.acacia.name";
@@ -30515,6 +31685,11 @@ public interface TrKeys {
     String MC_TILE_LOOM_NAME = "minecraft:tile.loom.name";
 
     /**
+     * {@literal Decorate banners}
+     */
+    String MC_TILE_LOOM_TOOLTIP = "minecraft:tile.loom.tooltip";
+
+    /**
      * {@literal Magenta Candle}
      */
     String MC_TILE_MAGENTA_CANDLE_NAME = "minecraft:tile.magenta_candle.name";
@@ -30523,6 +31698,36 @@ public interface TrKeys {
      * {@literal Cake with Magenta Candle}
      */
     String MC_TILE_MAGENTA_CANDLE_CAKE_NAME = "minecraft:tile.magenta_candle_cake.name";
+
+    /**
+     * {@literal Magenta Concrete Double Slab}
+     */
+    String MC_TILE_MAGENTA_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.magenta_concrete_double_slab.name";
+
+    /**
+     * {@literal Magenta Concrete Slab}
+     */
+    String MC_TILE_MAGENTA_CONCRETE_SLAB_NAME = "minecraft:tile.magenta_concrete_slab.name";
+
+    /**
+     * {@literal Magenta Concrete Stairs}
+     */
+    String MC_TILE_MAGENTA_CONCRETE_STAIRS_NAME = "minecraft:tile.magenta_concrete_stairs.name";
+
+    /**
+     * {@literal Magenta Wool Double Slab}
+     */
+    String MC_TILE_MAGENTA_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.magenta_wool_double_slab.name";
+
+    /**
+     * {@literal Magenta Wool Slab}
+     */
+    String MC_TILE_MAGENTA_WOOL_SLAB_NAME = "minecraft:tile.magenta_wool_slab.name";
+
+    /**
+     * {@literal Magenta Wool Stairs}
+     */
+    String MC_TILE_MAGENTA_WOOL_STAIRS_NAME = "minecraft:tile.magenta_wool_stairs.name";
 
     /**
      * {@literal Magma Block}
@@ -30860,6 +32065,11 @@ public interface TrKeys {
     String MC_TILE_OBSERVER_NAME = "minecraft:tile.observer.name";
 
     /**
+     * {@literal Detects change}
+     */
+    String MC_TILE_OBSERVER_TOOLTIP = "minecraft:tile.observer.tooltip";
+
+    /**
      * {@literal Obsidian}
      */
     String MC_TILE_OBSIDIAN_NAME = "minecraft:tile.obsidian.name";
@@ -30883,6 +32093,41 @@ public interface TrKeys {
      * {@literal Cake with Orange Candle}
      */
     String MC_TILE_ORANGE_CANDLE_CAKE_NAME = "minecraft:tile.orange_candle_cake.name";
+
+    /**
+     * {@literal Orange Concrete Double Slab}
+     */
+    String MC_TILE_ORANGE_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.orange_concrete_double_slab.name";
+
+    /**
+     * {@literal Orange Concrete Slab}
+     */
+    String MC_TILE_ORANGE_CONCRETE_SLAB_NAME = "minecraft:tile.orange_concrete_slab.name";
+
+    /**
+     * {@literal Orange Concrete Stairs}
+     */
+    String MC_TILE_ORANGE_CONCRETE_STAIRS_NAME = "minecraft:tile.orange_concrete_stairs.name";
+
+    /**
+     * {@literal Orange Poplar Leaves}
+     */
+    String MC_TILE_ORANGE_POPLAR_LEAVES_NAME = "minecraft:tile.orange_poplar_leaves.name";
+
+    /**
+     * {@literal Orange Wool Double Slab}
+     */
+    String MC_TILE_ORANGE_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.orange_wool_double_slab.name";
+
+    /**
+     * {@literal Orange Wool Slab}
+     */
+    String MC_TILE_ORANGE_WOOL_SLAB_NAME = "minecraft:tile.orange_wool_slab.name";
+
+    /**
+     * {@literal Orange Wool Stairs}
+     */
+    String MC_TILE_ORANGE_WOOL_STAIRS_NAME = "minecraft:tile.orange_wool_stairs.name";
 
     /**
      * {@literal Ruby Ore}
@@ -31100,14 +32345,49 @@ public interface TrKeys {
     String MC_TILE_PINK_CANDLE_CAKE_NAME = "minecraft:tile.pink_candle_cake.name";
 
     /**
+     * {@literal Pink Concrete Double Slab}
+     */
+    String MC_TILE_PINK_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.pink_concrete_double_slab.name";
+
+    /**
+     * {@literal Pink Concrete Slab}
+     */
+    String MC_TILE_PINK_CONCRETE_SLAB_NAME = "minecraft:tile.pink_concrete_slab.name";
+
+    /**
+     * {@literal Pink Concrete Stairs}
+     */
+    String MC_TILE_PINK_CONCRETE_STAIRS_NAME = "minecraft:tile.pink_concrete_stairs.name";
+
+    /**
      * {@literal Pink Petals}
      */
     String MC_TILE_PINK_PETALS_NAME = "minecraft:tile.pink_petals.name";
 
     /**
+     * {@literal Pink Wool Double Slab}
+     */
+    String MC_TILE_PINK_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.pink_wool_double_slab.name";
+
+    /**
+     * {@literal Pink Wool Slab}
+     */
+    String MC_TILE_PINK_WOOL_SLAB_NAME = "minecraft:tile.pink_wool_slab.name";
+
+    /**
+     * {@literal Pink Wool Stairs}
+     */
+    String MC_TILE_PINK_WOOL_STAIRS_NAME = "minecraft:tile.pink_wool_stairs.name";
+
+    /**
      * {@literal Piston}
      */
     String MC_TILE_PISTON_NAME = "minecraft:tile.piston.name";
+
+    /**
+     * {@literal Push blocks}
+     */
+    String MC_TILE_PISTON_TOOLTIP = "minecraft:tile.piston.tooltip";
 
     /**
      * {@literal Piston Arm Collision}
@@ -31240,6 +32520,31 @@ public interface TrKeys {
     String MC_TILE_POLISHED_BLACKSTONE_WALL_NAME = "minecraft:tile.polished_blackstone_wall.name";
 
     /**
+     * {@literal Polished Cinnabar}
+     */
+    String MC_TILE_POLISHED_CINNABAR_NAME = "minecraft:tile.polished_cinnabar.name";
+
+    /**
+     * {@literal Polished Cinnabar Double Slab}
+     */
+    String MC_TILE_POLISHED_CINNABAR_DOUBLE_SLAB_NAME = "minecraft:tile.polished_cinnabar_double_slab.name";
+
+    /**
+     * {@literal Polished Cinnabar Slab}
+     */
+    String MC_TILE_POLISHED_CINNABAR_SLAB_NAME = "minecraft:tile.polished_cinnabar_slab.name";
+
+    /**
+     * {@literal Polished Cinnabar Stairs}
+     */
+    String MC_TILE_POLISHED_CINNABAR_STAIRS_NAME = "minecraft:tile.polished_cinnabar_stairs.name";
+
+    /**
+     * {@literal Polished Cinnabar Wall}
+     */
+    String MC_TILE_POLISHED_CINNABAR_WALL_NAME = "minecraft:tile.polished_cinnabar_wall.name";
+
+    /**
      * {@literal Polished Deepslate}
      */
     String MC_TILE_POLISHED_DEEPSLATE_NAME = "minecraft:tile.polished_deepslate.name";
@@ -31275,6 +32580,31 @@ public interface TrKeys {
     String MC_TILE_POLISHED_GRANITE_STAIRS_NAME = "minecraft:tile.polished_granite_stairs.name";
 
     /**
+     * {@literal Polished Sulfur}
+     */
+    String MC_TILE_POLISHED_SULFUR_NAME = "minecraft:tile.polished_sulfur.name";
+
+    /**
+     * {@literal Polished Sulfur Double Slab}
+     */
+    String MC_TILE_POLISHED_SULFUR_DOUBLE_SLAB_NAME = "minecraft:tile.polished_sulfur_double_slab.name";
+
+    /**
+     * {@literal Polished Sulfur Slab}
+     */
+    String MC_TILE_POLISHED_SULFUR_SLAB_NAME = "minecraft:tile.polished_sulfur_slab.name";
+
+    /**
+     * {@literal Polished Sulfur Stairs}
+     */
+    String MC_TILE_POLISHED_SULFUR_STAIRS_NAME = "minecraft:tile.polished_sulfur_stairs.name";
+
+    /**
+     * {@literal Polished Sulfur Wall}
+     */
+    String MC_TILE_POLISHED_SULFUR_WALL_NAME = "minecraft:tile.polished_sulfur_wall.name";
+
+    /**
      * {@literal Polished Tuff}
      */
     String MC_TILE_POLISHED_TUFF_NAME = "minecraft:tile.polished_tuff.name";
@@ -31300,6 +32630,91 @@ public interface TrKeys {
     String MC_TILE_POLISHED_TUFF_WALL_NAME = "minecraft:tile.polished_tuff_wall.name";
 
     /**
+     * {@literal Poplar Button}
+     */
+    String MC_TILE_POPLAR_BUTTON_NAME = "minecraft:tile.poplar_button.name";
+
+    /**
+     * {@literal Poplar Door}
+     */
+    String MC_TILE_POPLAR_DOOR_NAME = "minecraft:tile.poplar_door.name";
+
+    /**
+     * {@literal Poplar Double Slab}
+     */
+    String MC_TILE_POPLAR_DOUBLE_SLAB_NAME = "minecraft:tile.poplar_double_slab.name";
+
+    /**
+     * {@literal Poplar Fence}
+     */
+    String MC_TILE_POPLAR_FENCE_NAME = "minecraft:tile.poplar_fence.name";
+
+    /**
+     * {@literal Poplar Fence Gate}
+     */
+    String MC_TILE_POPLAR_FENCE_GATE_NAME = "minecraft:tile.poplar_fence_gate.name";
+
+    /**
+     * {@literal Poplar Hanging Sign}
+     */
+    String MC_TILE_POPLAR_HANGING_SIGN_NAME = "minecraft:tile.poplar_hanging_sign.name";
+
+    /**
+     * {@literal Poplar Log}
+     */
+    String MC_TILE_POPLAR_LOG_NAME = "minecraft:tile.poplar_log.name";
+
+    /**
+     * {@literal Poplar Planks}
+     */
+    String MC_TILE_POPLAR_PLANKS_NAME = "minecraft:tile.poplar_planks.name";
+
+    /**
+     * {@literal Poplar Pressure Plate}
+     */
+    String MC_TILE_POPLAR_PRESSURE_PLATE_NAME = "minecraft:tile.poplar_pressure_plate.name";
+
+    /**
+     * {@literal Poplar Sapling}
+     */
+    String MC_TILE_POPLAR_SAPLING_NAME = "minecraft:tile.poplar_sapling.name";
+
+    /**
+     * {@literal Poplar Shelf}
+     */
+    String MC_TILE_POPLAR_SHELF_NAME = "minecraft:tile.poplar_shelf.name";
+
+    /**
+     * {@literal Poplar Slab}
+     */
+    String MC_TILE_POPLAR_SLAB_NAME = "minecraft:tile.poplar_slab.name";
+
+    /**
+     * {@literal Poplar Stairs}
+     */
+    String MC_TILE_POPLAR_STAIRS_NAME = "minecraft:tile.poplar_stairs.name";
+
+    /**
+     * {@literal Poplar Sign}
+     */
+    String MC_TILE_POPLAR_STANDING_SIGN_NAME = "minecraft:tile.poplar_standing_sign.name";
+
+    /**
+     * {@literal Poplar Trapdoor}
+     */
+    String MC_TILE_POPLAR_TRAPDOOR_NAME = "minecraft:tile.poplar_trapdoor.name";
+
+    /**
+     * {@literal Poplar Wall Sign}
+     */
+    String MC_TILE_POPLAR_WALL_SIGN_NAME = "minecraft:tile.poplar_wall_sign.name";
+
+    /**
+     * {@literal Poplar Wood}
+     */
+    String MC_TILE_POPLAR_WOOD_NAME = "minecraft:tile.poplar_wood.name";
+
+    /**
      * {@literal Portal}
      */
     String MC_TILE_PORTAL_NAME = "minecraft:tile.portal.name";
@@ -31308,6 +32723,11 @@ public interface TrKeys {
      * {@literal Potatoes}
      */
     String MC_TILE_POTATOES_NAME = "minecraft:tile.potatoes.name";
+
+    /**
+     * {@literal Potent Sulfur}
+     */
+    String MC_TILE_POTENT_SULFUR_NAME = "minecraft:tile.potent_sulfur.name";
 
     /**
      * {@literal Powder Snow}
@@ -31368,6 +32788,36 @@ public interface TrKeys {
      * {@literal Cake with Purple Candle}
      */
     String MC_TILE_PURPLE_CANDLE_CAKE_NAME = "minecraft:tile.purple_candle_cake.name";
+
+    /**
+     * {@literal Purple Concrete Double Slab}
+     */
+    String MC_TILE_PURPLE_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.purple_concrete_double_slab.name";
+
+    /**
+     * {@literal Purple Concrete Slab}
+     */
+    String MC_TILE_PURPLE_CONCRETE_SLAB_NAME = "minecraft:tile.purple_concrete_slab.name";
+
+    /**
+     * {@literal Purple Concrete Stairs}
+     */
+    String MC_TILE_PURPLE_CONCRETE_STAIRS_NAME = "minecraft:tile.purple_concrete_stairs.name";
+
+    /**
+     * {@literal Purple Wool Double Slab}
+     */
+    String MC_TILE_PURPLE_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.purple_wool_double_slab.name";
+
+    /**
+     * {@literal Purple Wool Slab}
+     */
+    String MC_TILE_PURPLE_WOOL_SLAB_NAME = "minecraft:tile.purple_wool_slab.name";
+
+    /**
+     * {@literal Purple Wool Stairs}
+     */
+    String MC_TILE_PURPLE_WOOL_STAIRS_NAME = "minecraft:tile.purple_wool_stairs.name";
 
     /**
      * {@literal Chiseled Purpur}
@@ -31450,6 +32900,11 @@ public interface TrKeys {
     String MC_TILE_RAW_IRON_BLOCK_NAME = "minecraft:tile.raw_iron_block.name";
 
     /**
+     * {@literal See where you died}
+     */
+    String MC_TILE_RECOVERY_COMPASS_TOOLTIP = "minecraft:tile.recovery_compass.tooltip";
+
+    /**
      * {@literal Red Candle}
      */
     String MC_TILE_RED_CANDLE_NAME = "minecraft:tile.red_candle.name";
@@ -31458,6 +32913,21 @@ public interface TrKeys {
      * {@literal Cake with Red Candle}
      */
     String MC_TILE_RED_CANDLE_CAKE_NAME = "minecraft:tile.red_candle_cake.name";
+
+    /**
+     * {@literal Red Concrete Double Slab}
+     */
+    String MC_TILE_RED_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.red_concrete_double_slab.name";
+
+    /**
+     * {@literal Red Concrete Slab}
+     */
+    String MC_TILE_RED_CONCRETE_SLAB_NAME = "minecraft:tile.red_concrete_slab.name";
+
+    /**
+     * {@literal Red Concrete Stairs}
+     */
+    String MC_TILE_RED_CONCRETE_STAIRS_NAME = "minecraft:tile.red_concrete_stairs.name";
 
     /**
      * {@literal Allium}
@@ -31540,6 +33010,11 @@ public interface TrKeys {
     String MC_TILE_RED_NETHER_BRICK_STAIRS_NAME = "minecraft:tile.red_nether_brick_stairs.name";
 
     /**
+     * {@literal Red Poplar Leaves}
+     */
+    String MC_TILE_RED_POPLAR_LEAVES_NAME = "minecraft:tile.red_poplar_leaves.name";
+
+    /**
      * {@literal Chiseled Red Sandstone}
      */
     String MC_TILE_RED_SANDSTONE_CHISELED_NAME = "minecraft:tile.red_sandstone.chiseled.name";
@@ -31568,6 +33043,41 @@ public interface TrKeys {
      * {@literal Red Sandstone Stairs}
      */
     String MC_TILE_RED_SANDSTONE_STAIRS_NAME = "minecraft:tile.red_sandstone_stairs.name";
+
+    /**
+     * {@literal Red Shrub}
+     */
+    String MC_TILE_RED_SHRUB_NAME = "minecraft:tile.red_shrub.name";
+
+    /**
+     * {@literal Red Wool Double Slab}
+     */
+    String MC_TILE_RED_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.red_wool_double_slab.name";
+
+    /**
+     * {@literal Red Wool Slab}
+     */
+    String MC_TILE_RED_WOOL_SLAB_NAME = "minecraft:tile.red_wool_slab.name";
+
+    /**
+     * {@literal Red Wool Stairs}
+     */
+    String MC_TILE_RED_WOOL_STAIRS_NAME = "minecraft:tile.red_wool_stairs.name";
+
+    /**
+     * {@literal Redstone conductor}
+     */
+    String MC_TILE_REDSTONE_TAG_CONDUCTOR = "minecraft:tile.redstone.tag.conductor";
+
+    /**
+     * {@literal Redstone powered}
+     */
+    String MC_TILE_REDSTONE_TAG_POWERED = "minecraft:tile.redstone.tag.powered";
+
+    /**
+     * {@literal Redstone power source}
+     */
+    String MC_TILE_REDSTONE_TAG_SOURCE = "minecraft:tile.redstone.tag.source";
 
     /**
      * {@literal Block of Redstone}
@@ -31780,6 +33290,16 @@ public interface TrKeys {
     String MC_TILE_SEAGRASS_SEAGRASS_NAME = "minecraft:tile.seagrass.seagrass.name";
 
     /**
+     * {@literal Cut & trim}
+     */
+    String MC_TILE_SHEARS_TOOLTIP = "minecraft:tile.shears.tooltip";
+
+    /**
+     * {@literal Shelf Mushroom}
+     */
+    String MC_TILE_SHELF_MUSHROOM_NAME = "minecraft:tile.shelf_mushroom.name";
+
+    /**
      * {@literal Short Dry Grass}
      */
     String MC_TILE_SHORT_DRY_GRASS_NAME = "minecraft:tile.short_dry_grass.name";
@@ -31895,9 +33415,19 @@ public interface TrKeys {
     String MC_TILE_SMITHING_TABLE_NAME = "minecraft:tile.smithing_table.name";
 
     /**
+     * {@literal Upgrade tools & armor}
+     */
+    String MC_TILE_SMITHING_TABLE_TOOLTIP = "minecraft:tile.smithing_table.tooltip";
+
+    /**
      * {@literal Smoker}
      */
     String MC_TILE_SMOKER_NAME = "minecraft:tile.smoker.name";
+
+    /**
+     * {@literal Cook food faster}
+     */
+    String MC_TILE_SMOKER_TOOLTIP = "minecraft:tile.smoker.tooltip";
 
     /**
      * {@literal Smooth Basalt}
@@ -32380,6 +33910,11 @@ public interface TrKeys {
     String MC_TILE_STICKY_PISTON_NAME = "minecraft:tile.sticky_piston.name";
 
     /**
+     * {@literal Pull blocks}
+     */
+    String MC_TILE_STICKY_PISTON_TOOLTIP = "minecraft:tile.sticky_piston.tooltip";
+
+    /**
      * {@literal Sticky Piston Arm Collision}
      */
     String MC_TILE_STICKY_PISTON_ARM_COLLISION_NAME = "minecraft:tile.sticky_piston_arm_collision.name";
@@ -32630,6 +34165,21 @@ public interface TrKeys {
     String MC_TILE_STONECUTTER_BLOCK_NAME = "minecraft:tile.stonecutter_block.name";
 
     /**
+     * {@literal Cut stone & copper}
+     */
+    String MC_TILE_STONECUTTER_BLOCK_TOOLTIP = "minecraft:tile.stonecutter_block.tooltip";
+
+    /**
+     * {@literal Storage}
+     */
+    String MC_TILE_STORAGE_TOOLTIP = "minecraft:tile.storage.tooltip";
+
+    /**
+     * {@literal Straw Bed}
+     */
+    String MC_TILE_STRAW_BED_NAME = "minecraft:tile.straw_bed.name";
+
+    /**
      * {@literal Stripped Acacia Log}
      */
     String MC_TILE_STRIPPED_ACACIA_LOG_NAME = "minecraft:tile.stripped_acacia_log.name";
@@ -32700,6 +34250,16 @@ public interface TrKeys {
     String MC_TILE_STRIPPED_PALE_OAK_WOOD_NAME = "minecraft:tile.stripped_pale_oak_wood.name";
 
     /**
+     * {@literal Stripped Poplar Log}
+     */
+    String MC_TILE_STRIPPED_POPLAR_LOG_NAME = "minecraft:tile.stripped_poplar_log.name";
+
+    /**
+     * {@literal Stripped Poplar Wood}
+     */
+    String MC_TILE_STRIPPED_POPLAR_WOOD_NAME = "minecraft:tile.stripped_poplar_wood.name";
+
+    /**
      * {@literal Stripped Spruce Log}
      */
     String MC_TILE_STRIPPED_SPRUCE_LOG_NAME = "minecraft:tile.stripped_spruce_log.name";
@@ -32723,6 +34283,61 @@ public interface TrKeys {
      * {@literal Structure Void}
      */
     String MC_TILE_STRUCTURE_VOID_NAME = "minecraft:tile.structure_void.name";
+
+    /**
+     * {@literal Sulfur}
+     */
+    String MC_TILE_SULFUR_NAME = "minecraft:tile.sulfur.name";
+
+    /**
+     * {@literal Sulfur Brick Double Slab}
+     */
+    String MC_TILE_SULFUR_BRICK_DOUBLE_SLAB_NAME = "minecraft:tile.sulfur_brick_double_slab.name";
+
+    /**
+     * {@literal Sulfur Brick Slab}
+     */
+    String MC_TILE_SULFUR_BRICK_SLAB_NAME = "minecraft:tile.sulfur_brick_slab.name";
+
+    /**
+     * {@literal Sulfur Brick Stairs}
+     */
+    String MC_TILE_SULFUR_BRICK_STAIRS_NAME = "minecraft:tile.sulfur_brick_stairs.name";
+
+    /**
+     * {@literal Sulfur Brick Wall}
+     */
+    String MC_TILE_SULFUR_BRICK_WALL_NAME = "minecraft:tile.sulfur_brick_wall.name";
+
+    /**
+     * {@literal Sulfur Bricks}
+     */
+    String MC_TILE_SULFUR_BRICKS_NAME = "minecraft:tile.sulfur_bricks.name";
+
+    /**
+     * {@literal Sulfur Double Slab}
+     */
+    String MC_TILE_SULFUR_DOUBLE_SLAB_NAME = "minecraft:tile.sulfur_double_slab.name";
+
+    /**
+     * {@literal Sulfur Slab}
+     */
+    String MC_TILE_SULFUR_SLAB_NAME = "minecraft:tile.sulfur_slab.name";
+
+    /**
+     * {@literal Sulfur Spike}
+     */
+    String MC_TILE_SULFUR_SPIKE_NAME = "minecraft:tile.sulfur_spike.name";
+
+    /**
+     * {@literal Sulfur Stairs}
+     */
+    String MC_TILE_SULFUR_STAIRS_NAME = "minecraft:tile.sulfur_stairs.name";
+
+    /**
+     * {@literal Sulfur Wall}
+     */
+    String MC_TILE_SULFUR_WALL_NAME = "minecraft:tile.sulfur_wall.name";
 
     /**
      * {@literal Suspicious Gravel}
@@ -33465,6 +35080,36 @@ public interface TrKeys {
     String MC_TILE_WHITE_CANDLE_CAKE_NAME = "minecraft:tile.white_candle_cake.name";
 
     /**
+     * {@literal White Concrete Double Slab}
+     */
+    String MC_TILE_WHITE_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.white_concrete_double_slab.name";
+
+    /**
+     * {@literal White Concrete Slab}
+     */
+    String MC_TILE_WHITE_CONCRETE_SLAB_NAME = "minecraft:tile.white_concrete_slab.name";
+
+    /**
+     * {@literal White Concrete Stairs}
+     */
+    String MC_TILE_WHITE_CONCRETE_STAIRS_NAME = "minecraft:tile.white_concrete_stairs.name";
+
+    /**
+     * {@literal White Wool Double Slab}
+     */
+    String MC_TILE_WHITE_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.white_wool_double_slab.name";
+
+    /**
+     * {@literal White Wool Slab}
+     */
+    String MC_TILE_WHITE_WOOL_SLAB_NAME = "minecraft:tile.white_wool_slab.name";
+
+    /**
+     * {@literal White Wool Stairs}
+     */
+    String MC_TILE_WHITE_WOOL_STAIRS_NAME = "minecraft:tile.white_wool_stairs.name";
+
+    /**
      * {@literal Wildflowers}
      */
     String MC_TILE_WILDFLOWERS_NAME = "minecraft:tile.wildflowers.name";
@@ -33680,6 +35325,21 @@ public interface TrKeys {
     String MC_TILE_YELLOW_CANDLE_CAKE_NAME = "minecraft:tile.yellow_candle_cake.name";
 
     /**
+     * {@literal Yellow Concrete Double Slab}
+     */
+    String MC_TILE_YELLOW_CONCRETE_DOUBLE_SLAB_NAME = "minecraft:tile.yellow_concrete_double_slab.name";
+
+    /**
+     * {@literal Yellow Concrete Slab}
+     */
+    String MC_TILE_YELLOW_CONCRETE_SLAB_NAME = "minecraft:tile.yellow_concrete_slab.name";
+
+    /**
+     * {@literal Yellow Concrete Stairs}
+     */
+    String MC_TILE_YELLOW_CONCRETE_STAIRS_NAME = "minecraft:tile.yellow_concrete_stairs.name";
+
+    /**
      * {@literal Dandelion}
      */
     String MC_TILE_YELLOW_FLOWER_DANDELION_NAME = "minecraft:tile.yellow_flower.dandelion.name";
@@ -33688,6 +35348,26 @@ public interface TrKeys {
      * {@literal Flower}
      */
     String MC_TILE_YELLOW_FLOWER_NAME = "minecraft:tile.yellow_flower.name";
+
+    /**
+     * {@literal Yellow Poplar Leaves}
+     */
+    String MC_TILE_YELLOW_POPLAR_LEAVES_NAME = "minecraft:tile.yellow_poplar_leaves.name";
+
+    /**
+     * {@literal Yellow Wool Double Slab}
+     */
+    String MC_TILE_YELLOW_WOOL_DOUBLE_SLAB_NAME = "minecraft:tile.yellow_wool_double_slab.name";
+
+    /**
+     * {@literal Yellow Wool Slab}
+     */
+    String MC_TILE_YELLOW_WOOL_SLAB_NAME = "minecraft:tile.yellow_wool_slab.name";
+
+    /**
+     * {@literal Yellow Wool Stairs}
+     */
+    String MC_TILE_YELLOW_WOOL_STAIRS_NAME = "minecraft:tile.yellow_wool_stairs.name";
 
     /**
      * {@literal Tipped Arrow}
@@ -33885,11 +35565,6 @@ public interface TrKeys {
     String MC_TRADE_LEVELPREFIXANDNAME_MAX = "minecraft:trade.levelPrefixAndName.max";
 
     /**
-     * {@literal dab}
-     */
-    String MC_TRADE_MYSTERIOUSTEXT = "minecraft:trade.mysteriousText";
-
-    /**
      * {@literal %s - %s}
      */
     String MC_TRADE_NAMEANDLEVEL = "minecraft:trade.nameAndLevel";
@@ -33945,152 +35620,147 @@ public interface TrKeys {
     String MC_TRANSLATION_TEST_WORLD = "minecraft:translation.test.world";
 
     /**
-     * {@literal Travel to new World}
-     */
-    String MC_TRAVEL_TOAST = "minecraft:travel.toast";
-
-    /**
-     * {@literal Amethyst Material}
+     * {@literal Amethyst}
      */
     String MC_TRIM_MATERIAL_AMETHYST_NAME = "minecraft:trim_material.amethyst.name";
 
     /**
-     * {@literal Copper Material}
+     * {@literal Copper}
      */
     String MC_TRIM_MATERIAL_COPPER_NAME = "minecraft:trim_material.copper.name";
 
     /**
-     * {@literal Diamond Material}
+     * {@literal Diamond}
      */
     String MC_TRIM_MATERIAL_DIAMOND_NAME = "minecraft:trim_material.diamond.name";
 
     /**
-     * {@literal Emerald Material}
+     * {@literal Emerald}
      */
     String MC_TRIM_MATERIAL_EMERALD_NAME = "minecraft:trim_material.emerald.name";
 
     /**
-     * {@literal Gold Material}
+     * {@literal Gold}
      */
     String MC_TRIM_MATERIAL_GOLD_NAME = "minecraft:trim_material.gold.name";
 
     /**
-     * {@literal Iron Material}
+     * {@literal Iron}
      */
     String MC_TRIM_MATERIAL_IRON_NAME = "minecraft:trim_material.iron.name";
 
     /**
-     * {@literal Lapis Material}
+     * {@literal Lapis}
      */
     String MC_TRIM_MATERIAL_LAPIS_NAME = "minecraft:trim_material.lapis.name";
 
     /**
-     * {@literal Netherite Material}
+     * {@literal Netherite}
      */
     String MC_TRIM_MATERIAL_NETHERITE_NAME = "minecraft:trim_material.netherite.name";
 
     /**
-     * {@literal Quartz Material}
+     * {@literal Quartz}
      */
     String MC_TRIM_MATERIAL_QUARTZ_NAME = "minecraft:trim_material.quartz.name";
 
     /**
-     * {@literal Redstone Material}
+     * {@literal Redstone}
      */
     String MC_TRIM_MATERIAL_REDSTONE_NAME = "minecraft:trim_material.redstone.name";
 
     /**
-     * {@literal Resin Material}
+     * {@literal Resin}
      */
     String MC_TRIM_MATERIAL_RESIN_NAME = "minecraft:trim_material.resin.name";
 
     /**
-     * {@literal Bolt Armor Trim}
+     * {@literal Bolt Trim}
      */
     String MC_TRIM_PATTERN_BOLT_NAME = "minecraft:trim_pattern.bolt.name";
 
     /**
-     * {@literal Coast Armor Trim}
+     * {@literal Coast Trim}
      */
     String MC_TRIM_PATTERN_COAST_NAME = "minecraft:trim_pattern.coast.name";
 
     /**
-     * {@literal Dune Armor Trim}
+     * {@literal Dune Trim}
      */
     String MC_TRIM_PATTERN_DUNE_NAME = "minecraft:trim_pattern.dune.name";
 
     /**
-     * {@literal Eye Armor Trim}
+     * {@literal Eye Trim}
      */
     String MC_TRIM_PATTERN_EYE_NAME = "minecraft:trim_pattern.eye.name";
 
     /**
-     * {@literal Flow Armor Trim}
+     * {@literal Flow Trim}
      */
     String MC_TRIM_PATTERN_FLOW_NAME = "minecraft:trim_pattern.flow.name";
 
     /**
-     * {@literal Host Armor Trim}
+     * {@literal Host Trim}
      */
     String MC_TRIM_PATTERN_HOST_NAME = "minecraft:trim_pattern.host.name";
 
     /**
-     * {@literal Raiser Armor Trim}
+     * {@literal Raiser Trim}
      */
     String MC_TRIM_PATTERN_RAISER_NAME = "minecraft:trim_pattern.raiser.name";
 
     /**
-     * {@literal Rib Armor Trim}
+     * {@literal Rib Trim}
      */
     String MC_TRIM_PATTERN_RIB_NAME = "minecraft:trim_pattern.rib.name";
 
     /**
-     * {@literal Sentry Armor Trim}
+     * {@literal Sentry Trim}
      */
     String MC_TRIM_PATTERN_SENTRY_NAME = "minecraft:trim_pattern.sentry.name";
 
     /**
-     * {@literal Shaper Armor Trim}
+     * {@literal Shaper Trim}
      */
     String MC_TRIM_PATTERN_SHAPER_NAME = "minecraft:trim_pattern.shaper.name";
 
     /**
-     * {@literal Silence Armor Trim}
+     * {@literal Silence Trim}
      */
     String MC_TRIM_PATTERN_SILENCE_NAME = "minecraft:trim_pattern.silence.name";
 
     /**
-     * {@literal Snout Armor Trim}
+     * {@literal Snout Trim}
      */
     String MC_TRIM_PATTERN_SNOUT_NAME = "minecraft:trim_pattern.snout.name";
 
     /**
-     * {@literal Spire Armor Trim}
+     * {@literal Spire Trim}
      */
     String MC_TRIM_PATTERN_SPIRE_NAME = "minecraft:trim_pattern.spire.name";
 
     /**
-     * {@literal Tide Armor Trim}
+     * {@literal Tide Trim}
      */
     String MC_TRIM_PATTERN_TIDE_NAME = "minecraft:trim_pattern.tide.name";
 
     /**
-     * {@literal Vex Armor Trim}
+     * {@literal Vex Trim}
      */
     String MC_TRIM_PATTERN_VEX_NAME = "minecraft:trim_pattern.vex.name";
 
     /**
-     * {@literal Ward Armor Trim}
+     * {@literal Ward Trim}
      */
     String MC_TRIM_PATTERN_WARD_NAME = "minecraft:trim_pattern.ward.name";
 
     /**
-     * {@literal Wayfinder Armor Trim}
+     * {@literal Wayfinder Trim}
      */
     String MC_TRIM_PATTERN_WAYFINDER_NAME = "minecraft:trim_pattern.wayfinder.name";
 
     /**
-     * {@literal Wild Armor Trim}
+     * {@literal Wild Trim}
      */
     String MC_TRIM_PATTERN_WILD_NAME = "minecraft:trim_pattern.wild.name";
 

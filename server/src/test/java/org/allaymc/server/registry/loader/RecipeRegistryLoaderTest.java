@@ -34,7 +34,7 @@ class RecipeRegistryLoaderTest {
         );
 
         assertInstanceOf(FurnaceRecipe.class, recipes.get(tagRecipeId));
-        assertEquals(220, recipes.values().stream().filter(FurnaceRecipe.class::isInstance).count());
+        assertEquals(223, recipes.values().stream().filter(FurnaceRecipe.class::isInstance).count());
     }
 
     /**

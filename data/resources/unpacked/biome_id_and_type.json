@@ -346,5 +346,13 @@
   "pale_garden": {
     "id": 193,
     "type": "Forest"
+  },
+  "sulfur_caves": {
+    "id": 194,
+    "type": "DataDriven"
+  },
+  "dappled_forest": {
+    "id": 195,
+    "type": "Forest"
   }
 }

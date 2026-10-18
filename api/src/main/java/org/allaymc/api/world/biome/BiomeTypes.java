@@ -357,4 +357,6 @@ public final class BiomeTypes {
      * Pale garden biome type.
      */
     public static BiomeType PALE_GARDEN;
+    public static BiomeType SULFUR_CAVES;
+    public static BiomeType DAPPLED_FOREST;
 }
