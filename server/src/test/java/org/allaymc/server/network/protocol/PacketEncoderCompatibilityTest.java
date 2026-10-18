@@ -381,6 +381,31 @@ class PacketEncoderCompatibilityTest {
     }
 
     @Test
+    void everyProtocolCodecAcceptsPlayerListPackets() {
+        var player = mock(org.allaymc.api.player.Player.class, RETURNS_DEEP_STUBS);
+        when(player.getLoginData().getUuid()).thenReturn(UUID.fromString("12345678-abcd-4321-abcd-1234567890ab"));
+        when(player.getLoginData().getXuid()).thenReturn("2535428620255297");
+        when(player.getOriginName()).thenReturn("Steve");
+        when(player.getLoginData().getSkin()).thenReturn(networkSkin());
+        when(player.getLoginData().getDeviceInfo()).thenReturn(new org.allaymc.api.player.LoginData.DeviceInfo(
+                "device", "device-id", 1L, org.allaymc.api.player.LoginData.Device.WINDOWS, org.allaymc.api.player.LoginData.UIProfile.CLASSIC
+        ));
+        when(player.getControlledEntity().getUniqueId()).thenReturn(UUID.fromString("87654321-abcd-4321-abcd-1234567890ab"));
+
+        var fakePlayer = mock(EntityPlayer.class);
+        when(fakePlayer.getUniqueId()).thenReturn(UUID.fromString("11111111-abcd-4321-abcd-1234567890ab"));
+        when(fakePlayer.isActualPlayer()).thenReturn(false);
+        when(fakePlayer.getSkin()).thenReturn(networkSkin());
+
+        for (var protocol : registry.getProtocols()) {
+            var encoder = protocol.getEncoder();
+            assertPacketEncodes(protocol, encoder.encodePlayerList(List.of(player), true, true));
+            assertPacketEncodes(protocol, encoder.encodePlayerList(List.of(player), false, true));
+            encoder.encodePlayerSkin(fakePlayer, true).forEach(packet -> assertPacketEncodes(protocol, packet));
+        }
+    }
+
+    @Test
     void fakePlayerSkinPacketsDoNotShareMutableSkinPayloads() {
         var protocol = protocol(ClientVariant.INTERNATIONAL, 819);
         var player = mock(EntityPlayer.class);

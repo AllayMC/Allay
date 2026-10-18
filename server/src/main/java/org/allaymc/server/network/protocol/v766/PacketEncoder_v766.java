@@ -1395,6 +1395,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
         listEntry.setSkin(SkinConvertor.toSerializedSkin(skin));
         listEntry.setTrustedSkin(trustSkin);
         listEntry.setColor(Color.WHITE);
+        // v2168+ serializes the action per entry; older serializers ignore it.
+        listEntry.setAction(PlayerListPacket.Action.ADD);
 
         var addPacket = new PlayerListPacket();
         addPacket.setAction(PlayerListPacket.Action.ADD);
@@ -1410,7 +1412,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
         var removePacket = new PlayerListPacket();
         removePacket.setAction(PlayerListPacket.Action.REMOVE);
-        removePacket.getEntries().add(new PlayerListPacket.Entry(player.getUniqueId()));
+        var removeEntry = new PlayerListPacket.Entry(player.getUniqueId());
+        removeEntry.setAction(PlayerListPacket.Action.REMOVE);
+        removePacket.getEntries().add(removeEntry);
         return List.of(addPacket, skinPacket, removePacket);
     }
 
@@ -2316,10 +2320,13 @@ public class PacketEncoder_v766 extends PacketEncoder {
             boolean trustSkins
     ) {
         Objects.requireNonNull(players, "players");
+        var action = add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE;
         var packet = new PlayerListPacket();
-        packet.setAction(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE);
+        packet.setAction(action);
         for (var player : players) {
             var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
+            // v2168+ serializes the action per entry; older serializers ignore it.
+            entry.setAction(action);
             var entity = Objects.requireNonNull(player.getControlledEntity(), "controlledEntity");
             entry.setEntityId(entity.getUniqueId().getLeastSignificantBits());
             entry.setName(player.getOriginName());
