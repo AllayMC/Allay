@@ -21,6 +21,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Updated the vanilla feature baseline to MCBE 1.26.50.
 - Introduced new multi version architecture (mvv2).
+- Clients older than 1.26.50 now get the block states of their own version: each protocol sends block states by the
+  palette its clients know, with states upgraded from that palette, new properties such as stair corners and fence
+  connections dropped, and blocks the version lacks replaced by a block of the same shape (`block_fallbacks.json`).
 
 ### Fixed
 

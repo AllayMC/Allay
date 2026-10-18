@@ -1,6 +1,7 @@
 package org.allaymc.server.network.protocol.v2193;
 
 import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v2169.Protocol_v2169;
@@ -50,6 +51,11 @@ public class Protocol_v2193 extends Protocol_v2169 {
         var properties = new ArrayList<>(VanillaData_v2193.DATA_DRIVEN_BLOCK_PROPERTIES);
         properties.addAll(super.createCustomBlockProperties());
         return List.copyOf(properties);
+    }
+
+    @Override
+    protected NetworkBlockPalette createBlockPalette() {
+        return NetworkBlockPalette.current();
     }
 
     @Override

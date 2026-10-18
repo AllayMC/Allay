@@ -28,6 +28,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
@@ -281,13 +282,15 @@ public final class NetworkHelper {
      * @param itemStack the server-side item stack
      * @param itemDefinitions the target protocol's item definitions
      * @param blockDefinitions the target protocol's block definitions
+     * @param blockPalette the target protocol's block palette
      * @return the network item data
      * @throws IllegalStateException if a required definition is missing
      */
     public static ItemData toNetwork(
             ItemStack itemStack,
             DefinitionRegistry<ItemDefinition> itemDefinitions,
-            DefinitionRegistry<BlockDefinition> blockDefinitions
+            DefinitionRegistry<BlockDefinition> blockDefinitions,
+            NetworkBlockPalette blockPalette
     ) {
         var itemType = itemStack.getItemType();
         if (itemType == ItemTypes.AIR) {
@@ -314,6 +317,7 @@ public final class NetworkHelper {
         }
         BlockDefinition blockDefinition = null;
         if (blockStateHash != null) {
+            blockStateHash = blockPalette.toNetwork(blockStateHash);
             blockDefinition = blockDefinitions.getDefinition(blockStateHash);
             if (blockDefinition == null) {
                 throw new IllegalStateException("Missing block definition for state " + blockStateHash);
@@ -344,14 +348,16 @@ public final class NetworkHelper {
      * @param items the server-side item stacks
      * @param itemDefinitions the target protocol's item definitions
      * @param blockDefinitions the target protocol's block definitions
+     * @param blockPalette the target protocol's block palette
      * @return the encoded item data in input order
      */
     public static List<ItemData> toNetwork(
             List<ItemStack> items,
             DefinitionRegistry<ItemDefinition> itemDefinitions,
-            DefinitionRegistry<BlockDefinition> blockDefinitions
+            DefinitionRegistry<BlockDefinition> blockDefinitions,
+            NetworkBlockPalette blockPalette
     ) {
-        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions)).toList();
+        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions, blockPalette)).toList();
     }
 
     /**
