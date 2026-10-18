@@ -53,6 +53,13 @@ public interface LoginData {
     DeviceInfo getDeviceInfo();
 
     /**
+     * Returns the platform online ID the client reported during login. Most
+     * platforms report none, so the value is usually empty; it is never
+     * {@code null}.
+     */
+    String getPlatformOnlineId();
+
+    /**
      * Returns the client language code decoded during login when supplied. The
      * standard decoder leaves this value {@code null} when the client omits its
      * optional language metadata field.

@@ -3038,7 +3038,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
             entry.setEntityId(entity.getUniqueId().getLeastSignificantBits());
             entry.setName(player.getOriginName());
             entry.setXuid(player.getLoginData().getXuid());
-            entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
+            // The field carries the platform online ID, not the device name.
+            entry.setPlatformChatId(player.getLoginData().getPlatformOnlineId());
             entry.setBuildPlatform(BuildPlatform.from(player.getLoginData().getDeviceInfo().device().getId()));
             entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
             entry.setTrustedSkin(trustSkins);
