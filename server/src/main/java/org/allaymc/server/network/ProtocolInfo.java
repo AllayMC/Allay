@@ -5,13 +5,13 @@ import org.allaymc.api.utils.SemVersion;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.updater.block.BlockStateUpdater;
-import org.allaymc.updater.block.BlockStateUpdater_1_21_110;
+import org.allaymc.updater.block.BlockStateUpdater_1_26_30;
 import org.allaymc.updater.item.ItemStateUpdater;
 import org.allaymc.updater.item.ItemStateUpdater_1_26_20;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v1001.Bedrock_v1001;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
-import org.cloudburstmc.protocol.bedrock.codec.v2168.Bedrock_v2168_hotfix4;
+import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
 
 /**
  * This class contains information about the current protocol version.
@@ -37,7 +37,7 @@ public final class ProtocolInfo {
     /**
      * The currently used block state updater instance.
      */
-    public static final BlockStateUpdater BLOCK_STATE_UPDATER = BlockStateUpdater_1_21_110.INSTANCE;
+    public static final BlockStateUpdater BLOCK_STATE_UPDATER = BlockStateUpdater_1_26_30.INSTANCE;
 
     /**
      * The currently used item state updater instance.
@@ -62,7 +62,7 @@ public final class ProtocolInfo {
         if (ProtocolRegistry.hasDefault()) {
             return ProtocolRegistry.getDefault().getLatest(ClientVariant.INTERNATIONAL).getCodec();
         }
-        return Bedrock_v2168_hotfix4.CODEC;
+        return Bedrock_v2193.CODEC;
     }
 
     /**

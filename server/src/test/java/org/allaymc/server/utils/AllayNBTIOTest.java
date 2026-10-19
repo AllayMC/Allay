@@ -9,7 +9,10 @@ import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.NBTIO;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.testutils.AllayTestExtension;
+import org.allaymc.updater.block.BlockStateUpdaters;
+import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -29,6 +32,30 @@ class AllayNBTIOTest {
         var nbt = block1.getBlockStateNBT();
         var block2 = NBTIO.getAPI().fromBlockStateNBT(nbt);
         assertEquals(block1, block2);
+    }
+
+    @Test
+    void upgradesPotentSulfurWithoutAStateProperty() {
+        var oldState = NbtMap.builder()
+                .putString("name", "minecraft:potent_sulfur")
+                .putCompound("states", NbtMap.EMPTY)
+                .build();
+
+        var updated = BlockStateUpdaters.updateBlockState(oldState, ProtocolInfo.BLOCK_STATE_UPDATER.getVersion());
+
+        assertEquals("dry", updated.getCompound("states").getString("potent_sulfur_state"));
+        assertEquals(BlockTypes.POTENT_SULFUR.getDefaultState(), NBTIO.getAPI().fromBlockStateNBT(oldState));
+    }
+
+    @Test
+    void preservesExistingPotentSulfurStatesDuringUpgrade() {
+        for (var state : BlockTypes.POTENT_SULFUR.getAllStates()) {
+            var oldState = state.getBlockStateNBT().toBuilder().putInt("version", 0).build();
+            var updated = BlockStateUpdaters.updateBlockState(oldState, ProtocolInfo.BLOCK_STATE_UPDATER.getVersion());
+
+            assertEquals(oldState.getCompound("states"), updated.getCompound("states"));
+            assertEquals(state, NBTIO.getAPI().fromBlockStateNBT(oldState));
+        }
     }
 
     @Test

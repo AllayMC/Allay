@@ -7,6 +7,8 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.protocol.bedrock.codec.v2168.Bedrock_v2168;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -22,6 +24,18 @@ class LoginPacketProcessorV2168CodecTest {
     private AllayPlayer player;
     @Mock
     private Protocol protocol;
+
+    @ParameterizedTest
+    @ValueSource(ints = {2169, 2193})
+    void keepsTheNegotiatedCodecForLaterProtocols(int version) {
+        when(player.getProtocol()).thenReturn(protocol);
+        when(protocol.getVariant()).thenReturn(ClientVariant.INTERNATIONAL);
+        when(protocol.getProtocolVersion()).thenReturn(version);
+
+        assertTrue(new LoginPacketProcessor().selectV2168Codec(player, "1.26.40.3"));
+
+        verify(player, never()).switchProtocolCodec(Bedrock_v2168.CODEC);
+    }
 
     @Test
     void switchesToTheBaseCodecForA12640Client() {

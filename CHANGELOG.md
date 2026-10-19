@@ -8,12 +8,14 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.14.1 (API 0.30.0) - Unreleased
+# 0.15.0 (API 0.30.0) - Unreleased
 
 <small>[Compare with 0.14.0](https://github.com/AllayMC/Allay/compare/0.14.0...HEAD)</small>
 
 ### Added
 
+- Added support for MCBE 1.26.40 and its 1.26.44 protocol hotfix.
+- Added support for MCBE 1.26.45 and 1.26.50.
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Introduced new multi version architecture (mvv2).
 

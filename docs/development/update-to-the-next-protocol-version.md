@@ -103,10 +103,11 @@ client versions are owned by `ProtocolRegistry`, not `ProtocolInfo`.
 
 For a new international protocol version:
 
-1. Add `ProtocolV<version>` extending the previous international protocol class.
-2. Add `PacketEncoderV<version>` extending the previous international encoder class.
+1. Add `Protocol_v<version>` extending the previous international protocol class.
+2. Add `PacketEncoder_v<version>` extending the previous international encoder class.
 3. Override only processor factories, encoded data, packet encoders, or features that changed at that version boundary.
 4. Register the protocol in `ProtocolRegistry.createDefault()`.
+5. Update the bootstrap codec in `ProtocolInfo.getLatestCodec()` and the supported version in `README.md`.
 
 For a NetEase variant, extend the international protocol and encoder with the same protocol number directly. Do not
 inherit another NetEase version, and do not place NetEase behavior in the later international inheritance chain.
@@ -122,7 +123,8 @@ table.
 - Build recipe payloads and `recipesByNetworkId` together in the protocol's `RecipeTable`.
 - Construct a new packet for every encoder call. Never cache a `BedrockPacket`.
 - Send normal gameplay output through the negotiated protocol's `PacketEncoder` and `ProtocolSession`.
-- Add an encoder override only where the wire-level behavior actually changes.
+- Add an encoder override where packet fields change. For example, v2168 requires an action on each player-list entry
+  and an empty container list for rejected item-stack requests; v2193 requires a default biome in dimension definitions.
 
 ## 9. Test and Finalize
 

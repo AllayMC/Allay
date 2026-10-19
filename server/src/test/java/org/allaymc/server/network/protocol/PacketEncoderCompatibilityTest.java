@@ -13,9 +13,14 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.data.DiscType;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.LoginData;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.primitiveshape.PrimitiveSphere;
+import org.allaymc.api.primitiveshape.PrimitiveText;
+import org.allaymc.api.registry.DoubleKeyMappedRegistry;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -29,6 +34,7 @@ import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.CustomParticle;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.MusicDiscPlaySound;
+import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.container.impl.BaseContainer;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -39,12 +45,20 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus;
 import org.cloudburstmc.protocol.bedrock.definition.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.primitives.AABBd;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.awt.*;
 import java.lang.reflect.Modifier;
@@ -152,6 +166,61 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {2168, 2169, 2193})
+    void textShapesAndCustomSoundsEncodeAcrossTheV2193Boundary(int version) {
+        var protocol = protocol(ClientVariant.INTERNATIONAL, version);
+        var text = new PrimitiveText(new org.joml.Vector3f(1, 2, 3), Color.RED, "First line\nSecond line");
+        var shapePacket = onlyPacket(protocol.getEncoder().encodePrimitiveShapes(List.of(text), 0));
+        assertPacketEncodes(protocol, shapePacket);
+
+        var soundPackets = protocol.getEncoder().encodeSound(
+                new CustomSound("random.click", 0.5f, 1.2f), new org.joml.Vector3d(1, 2, 3), false
+        );
+        assertEquals(1, soundPackets.size());
+        assertPacketEncodes(protocol, soundPackets.iterator().next());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2168, 2169, 2193})
+    @SuppressWarnings("unchecked")
+    void dimensionDefinitionsEncodeWithCustomBuildHeights(int version) {
+        var originalRegistry = Registries.DIMENSIONS;
+        var identifiers = List.of("minecraft:overworld", "minecraft:nether", "minecraft:the_end", "allay_test:custom");
+        var expectedBiomes = List.of("minecraft:plains", "minecraft:hell", "minecraft:the_end", "minecraft:plains");
+        var dimensions = new java.util.LinkedHashMap<Integer, DimensionType>();
+        for (int index = 0; index < identifiers.size(); index++) {
+            var dimension = mock(DimensionType.class);
+            when(dimension.getId()).thenReturn(index);
+            when(dimension.getIdentifier()).thenReturn(new Identifier(identifiers.get(index)));
+            when(dimension.getMinHeight()).thenReturn(-64);
+            when(dimension.getMaxHeight()).thenReturn(511);
+            dimensions.put(index, dimension);
+        }
+
+        var dimensionRegistry = mock(DoubleKeyMappedRegistry.class);
+        when(dimensionRegistry.getContent()).thenReturn(new DoubleKeyMappedRegistry.MapPair<>(dimensions, Map.of()));
+        try {
+            Registries.DIMENSIONS = dimensionRegistry;
+            var protocol = protocol(ClientVariant.INTERNATIONAL, version);
+            var packet = protocol.getEncoder().encodeDimensionData();
+            assertEquals(4, packet.getDefinitions().size());
+            for (int index = 0; index < packet.getDefinitions().size(); index++) {
+                var definition = packet.getDefinitions().get(index);
+                assertEquals(identifiers.get(index), definition.id());
+                assertEquals(-64, definition.minimumHeight());
+                assertEquals(512, definition.maximumHeight());
+                assertEquals(index, definition.dimensionType());
+                if (version >= 2193) {
+                    assertEquals(expectedBiomes.get(index), definition.defaultBiome());
+                }
+            }
+            assertPacketEncodes(protocol, packet);
+        } finally {
+            Registries.DIMENSIONS = originalRegistry;
+        }
+    }
+
     @Test
     void worldEncodersReturnFreshCodecCompatiblePackets() {
         var position = new org.joml.Vector3i(3, 64, -5);
@@ -163,7 +232,10 @@ class PacketEncoderCompatibilityTest {
 
         for (var protocol : List.of(
                 protocol(ClientVariant.NETEASE, 766),
-                protocol(ClientVariant.INTERNATIONAL, 1001)
+                protocol(ClientVariant.INTERNATIONAL, 1001),
+                protocol(ClientVariant.INTERNATIONAL, 2168),
+                protocol(ClientVariant.INTERNATIONAL, 2169),
+                protocol(ClientVariant.INTERNATIONAL, 2193)
         )) {
             var encoder = protocol.getEncoder();
 
@@ -304,9 +376,10 @@ class PacketEncoderCompatibilityTest {
         assertPacketEncodes(protocol, packet);
     }
 
-    @Test
-    void levelChunkPacketsOwnIndependentBuffers() {
-        var protocol = protocol(ClientVariant.INTERNATIONAL, 1001);
+    @ParameterizedTest
+    @ValueSource(ints = {1001, 2168, 2169, 2193})
+    void levelChunkPacketsOwnIndependentBuffers(int version) {
+        var protocol = protocol(ClientVariant.INTERNATIONAL, version);
         var chunk = AllayUnsafeChunk.builder()
                 .voidChunk(2, 3, DimensionTypes.OVERWORLD)
                 .toSafeChunk();
@@ -342,7 +415,10 @@ class PacketEncoderCompatibilityTest {
 
         for (var protocol : List.of(
                 protocol(ClientVariant.NETEASE, 766),
-                protocol(ClientVariant.INTERNATIONAL, 1001)
+                protocol(ClientVariant.INTERNATIONAL, 1001),
+                protocol(ClientVariant.INTERNATIONAL, 2168),
+                protocol(ClientVariant.INTERNATIONAL, 2169),
+                protocol(ClientVariant.INTERNATIONAL, 2193)
         )) {
             var encoder = protocol.getEncoder();
             var firstSpawn = assertInstanceOf(AddEntityPacket.class, encoder.encodeEntitySpawn(entity));
@@ -380,9 +456,10 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
-    @Test
-    void fakePlayerSkinPacketsDoNotShareMutableSkinPayloads() {
-        var protocol = protocol(ClientVariant.INTERNATIONAL, 819);
+    @ParameterizedTest
+    @ValueSource(ints = {819, 2168, 2169, 2193})
+    void fakePlayerSkinPacketsDoNotShareMutableSkinPayloads(int version) {
+        var protocol = protocol(ClientVariant.INTERNATIONAL, version);
         var player = mock(EntityPlayer.class);
         var uniqueId = UUID.fromString("12345678-abcd-4321-abcd-1234567890ab");
         when(player.getUniqueId()).thenReturn(uniqueId);
@@ -398,6 +475,10 @@ class PacketEncoderCompatibilityTest {
             assertPacketEncodes(protocol, firstPackets.get(i));
             assertPacketEncodes(protocol, secondPackets.get(i));
         }
+        if (version >= 2168) {
+            assertEquals(PlayerListPacket.Action.ADD, ((PlayerListPacket) firstPackets.getFirst()).getEntries().getFirst().getAction());
+            assertEquals(PlayerListPacket.Action.REMOVE, ((PlayerListPacket) firstPackets.getLast()).getEntries().getFirst().getAction());
+        }
 
         var listSkin = assertInstanceOf(PlayerListPacket.class, firstPackets.getFirst())
                 .getEntries().getFirst().getSkin();
@@ -410,6 +491,49 @@ class PacketEncoderCompatibilityTest {
         listSkin.getSkinData().getImage()[0] = 99;
         assertEquals(1, directSkin.getSkinData().getImage()[0]);
         assertEquals(1, repeatedSkin.getSkinData().getImage()[0]);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2168, 2169, 2193})
+    void playerListsCarryActionsOnEveryEntry(int version) {
+        var protocol = protocol(ClientVariant.INTERNATIONAL, version);
+        var player = mock(Player.class, RETURNS_DEEP_STUBS);
+        var uniqueId = UUID.fromString("12345678-abcd-4321-abcd-1234567890ab");
+        when(player.getLoginData().getUuid()).thenReturn(uniqueId);
+        when(player.getLoginData().getXuid()).thenReturn("1234");
+        when(player.getLoginData().getSkin()).thenReturn(networkSkin());
+        when(player.getLoginData().getDeviceInfo().deviceName()).thenReturn("test-device");
+        when(player.getLoginData().getDeviceInfo().device()).thenReturn(LoginData.Device.ANDROID);
+        when(player.getControlledEntity().getUniqueId()).thenReturn(uniqueId);
+        when(player.getOriginName()).thenReturn("TestPlayer");
+
+        for (boolean add : new boolean[]{true, false}) {
+            var packet = protocol.getEncoder().encodePlayerList(List.of(player), add, true);
+            assertEquals(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE,
+                    packet.getEntries().getFirst().getAction());
+            assertPacketEncodes(protocol, packet);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2168, 2169, 2193})
+    void itemStackResponsesEncodeErrorsAndOptionalSlotFields(int version) {
+        var protocol = protocol(ClientVariant.INTERNATIONAL, version);
+        var rejected = new ItemStackResponse(ItemStackResponseStatus.ERROR, -1, null);
+        var empty = new ItemStackResponse(ItemStackResponseStatus.OK, -2, List.of());
+        var slots = List.of(
+                new ItemStackResponseSlot(0, 0, 0, 0, "", 0, version >= 2193 ? null : ""),
+                new ItemStackResponseSlot(1, 1, 3, 42, "Named item", 2, "Filtered item")
+        );
+        var accepted = new ItemStackResponse(ItemStackResponseStatus.OK, -3, List.of(
+                new ItemStackResponseContainer(ContainerSlotType.INVENTORY, slots,
+                        new FullContainerName(ContainerSlotType.INVENTORY, null))
+        ));
+        var packet = protocol.getEncoder().encodeItemStackResponse(List.of(rejected, empty, accepted));
+
+        assertNull(rejected.containers());
+        assertTrue(packet.getEntries().getFirst().containers().isEmpty());
+        assertPacketEncodes(protocol, packet);
     }
 
     @Test
@@ -563,7 +687,10 @@ class PacketEncoderCompatibilityTest {
 
         for (var protocol : List.of(
                 protocol(ClientVariant.INTERNATIONAL, 944),
-                protocol(ClientVariant.INTERNATIONAL, 1001)
+                protocol(ClientVariant.INTERNATIONAL, 1001),
+                protocol(ClientVariant.INTERNATIONAL, 2168),
+                protocol(ClientVariant.INTERNATIONAL, 2169),
+                protocol(ClientVariant.INTERNATIONAL, 2193)
         )) {
             var encoder = protocol.getEncoder();
             var source = new java.util.LinkedHashMap<String, Object>();
@@ -709,6 +836,7 @@ class PacketEncoderCompatibilityTest {
                 () -> protocol + " does not register " + packet.getClass().getSimpleName()
         );
         var helper = protocol.getCodec().createHelper();
+        helper.setEncodingSettings(org.cloudburstmc.protocol.bedrock.data.EncodingSettings.CLIENT);
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder()
                 .addAll(protocol.getData().itemDefinitions())
                 .build());
@@ -720,6 +848,22 @@ class PacketEncoderCompatibilityTest {
         try {
             assertDoesNotThrow(() -> protocol.getCodec().tryEncode(helper, buffer, packet), protocol::toString);
             assertTrue(buffer.isReadable());
+            if (protocol.getProtocolVersion() >= 2168) {
+                var definition = protocol.getCodec().getPacketDefinition(packet.getClass());
+                var decoded = assertDoesNotThrow(
+                        () -> protocol.getCodec().tryDecode(helper, buffer, definition.id()),
+                        () -> protocol + " failed to decode " + packet.getPacketType()
+                );
+                try {
+                    assertEquals(packet.getClass(), decoded.getClass());
+                    assertFalse(buffer.isReadable(), () -> protocol + " left unread bytes in " + packet.getPacketType());
+                    if (packet instanceof DimensionDataPacket dimensions) {
+                        assertEquals(dimensions.getDefinitions(), ((DimensionDataPacket) decoded).getDefinitions());
+                    }
+                } finally {
+                    io.netty.util.ReferenceCountUtil.release(decoded);
+                }
+            }
         } finally {
             buffer.release();
         }
