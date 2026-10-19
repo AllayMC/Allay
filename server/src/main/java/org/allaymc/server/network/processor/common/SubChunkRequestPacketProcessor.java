@@ -163,8 +163,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         subChunkData.setHeightMapType(type);
         subChunkData.setRenderHeightMapType(type);
         if (data == null) {
-            subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
-            subChunkData.setRenderHeightMapData(Unpooled.EMPTY_BUFFER);
+            // v2168+ codecs use null to omit the optional height-map payload.
+            subChunkData.setHeightMapData(null);
+            subChunkData.setRenderHeightMapData(null);
             return;
         }
 
