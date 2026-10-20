@@ -18,6 +18,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for MCBE 1.26.45 and 1.26.50.
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Introduced new multi version architecture (mvv2).
+- (API) Added `FormViewer.updateForm(Form)`, which redraws a form the viewer has open by sending it again with its
+  form id.
 
 ### Fixed
 

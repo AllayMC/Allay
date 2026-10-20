@@ -830,6 +830,18 @@ public class AllayPlayer implements Player {
     }
 
     @Override
+    public boolean updateForm(Form form) {
+        for (var entry : this.forms.asMap().entrySet()) {
+            if (entry.getValue() == form) {
+                sendPacket(getProtocol().getEncoder().encodeForm(entry.getKey(), form));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public @UnmodifiableView Map<Integer, Form> getForms() {
         return Collections.unmodifiableMap(this.forms.asMap());
     }
