@@ -24,6 +24,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Fixed
 
 - Tipped arrow with infinity now can be picked up.
+- 1.26.50+ clients get the jigsaw structure data they require before `StartGamePacket`, sent with empty rules like
+  Geyser and gophertunnel do, so they no longer disconnect with "missing structure data".
 
 # 0.14.0 (API 0.29.0) - 2026/7/22
 

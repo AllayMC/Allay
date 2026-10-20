@@ -2060,6 +2060,7 @@ public class AllayPlayer implements Player {
         // Dimension data and voxel shapes should be sent before start game
         var encoder = getProtocol().getEncoder();
         sendPacket(encoder.encodeDimensionData());
+        sendPacket(encoder.encodeJigsawStructureData());
         sendPackets(encoder.encodeVoxelShapes());
 
         // Send StartGamePacket to the client first before we start sending chunks, otherwise

@@ -134,6 +134,11 @@ public abstract class PacketEncoder {
         return null;
     }
 
+    /** Encodes the jigsaw structure data that the target protocol requires before {@code StartGamePacket}. */
+    public JigsawStructureDataPacket encodeJigsawStructureData() {
+        return null;
+    }
+
     /** Encodes metadata for the resource packs offered by the server. */
     public ResourcePacksInfoPacket encodeResourcePacksInfo() {
         return null;
