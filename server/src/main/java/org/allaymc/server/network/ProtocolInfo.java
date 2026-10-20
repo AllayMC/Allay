@@ -7,7 +7,7 @@ import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.updater.block.BlockStateUpdater;
 import org.allaymc.updater.block.BlockStateUpdater_1_26_50;
 import org.allaymc.updater.item.ItemStateUpdater;
-import org.allaymc.updater.item.ItemStateUpdater_1_26_20;
+import org.allaymc.updater.item.ItemStateUpdater_1_26_50;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
@@ -47,7 +47,7 @@ public final class ProtocolInfo {
      * {@code ITEM_STATE_UPDATER} converts stored item data through the selected
      * updater's supported migrations before server item deserialization consumes it.
      */
-    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_26_20.INSTANCE;
+    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_26_50.INSTANCE;
 
     /**
      * {@code BLOCK_STATE_VERSION_NUM} packs {@code BLOCK_STATE_VERSION} into the
