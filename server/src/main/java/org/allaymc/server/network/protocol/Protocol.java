@@ -158,12 +158,16 @@ public abstract class Protocol {
             var itemId = ItemId.fromIdentifier(itemType.getIdentifier());
             var vanillaDefinition = InternalRegistries.VANILLA_ITEM_DEFINITIONS.get(itemId);
             if (vanillaDefinition != null) {
+                // Like BDS, only send component data for items whose version carries it. Items of version NONE get an
+                // empty tag; sending their components (e.g. minecraft:block of block items) makes 1.26.50 clients
+                // reject the item registry.
+                var components = vanillaDefinition.version() == ItemVersion.NONE ? NbtMap.EMPTY : vanillaDefinition.components();
                 return new SimpleItemDefinition(
                         itemType.getIdentifier().toString(),
                         itemType.getRuntimeId(),
                         vanillaDefinition.version(),
                         vanillaDefinition.componentBased(),
-                        vanillaDefinition.components()
+                        components
                 );
             }
         }
