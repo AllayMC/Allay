@@ -164,6 +164,14 @@ class ProtocolDataEncoderTest {
         );
         assertTrue(protocol.getItemDefinitionRegistry().isRegistered(blockItem.getDefinition()));
         assertTrue(protocol.getBlockDefinitionRegistry().isRegistered(blockItem.getBlockDefinition()));
+        // BDS sends items without extra data with no NBT at all, not with an empty compound.
+        assertNull(blockItem.getTag());
+
+        var named = TestRegistryFixtures.customDefinitionBlockType().getItemType().createItemStack(1);
+        named.setCustomName("Named");
+        var namedItem = NetworkHelper.toNetwork(named, protocol.getItemDefinitionRegistry(), protocol.getBlockDefinitionRegistry());
+        assertNotNull(namedItem.getTag());
+        assertFalse(namedItem.getTag().isEmpty());
     }
 
     @Test

@@ -28,6 +28,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   Geyser and gophertunnel do, so they no longer disconnect with "missing structure data".
 - Vanilla items of version `NONE`, block items included, are sent with an empty component tag like BDS does; 1.26.50
   clients reject the item registry when they carry components such as `minecraft:block`.
+- Ladders, iron bars, string and other flat block items are drawn in hand on 1.26.50+ clients: items without extra
+  data are sent without NBT.
 
 # 0.14.0 (API 0.29.0) - 2026/7/22
 
