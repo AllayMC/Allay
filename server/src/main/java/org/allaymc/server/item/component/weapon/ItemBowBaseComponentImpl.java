@@ -35,13 +35,15 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
     @Override
     public boolean useItemInAir(EntityPlayer player, long usedTime) {
-        if (usedTime < 3) {
+        if (usedTime < 5) {
             return false;
         }
 
         var creative = player.getGameMode() == GameMode.CREATIVE;
+        // MCBE (PocketMine reference): arrow speed = 3.0 x force, where force follows the (p^2 + 2p) / 3 curve
         var force = Math.min(usedTime * (usedTime + 40.0) / 1200.0, 1.0);
-        var speed = force * 5;
+        var speed = force * 3;
+        var critical = force >= 1.0;
 
         var infinity = getEnchantmentLevel(EnchantmentTypes.INFINITY) != 0;
         PotionType potionType = null;
@@ -79,11 +81,13 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             arrow.setInfinite(true);
         }
         arrow.setPowerLevel(powerLevel);
+        // MCBE: base damage 2.0, Power adds (level + 1) / 2
+        arrow.setBaseDamage((float) (2.0 + powerLevel * 0.5 + 0.5));
         arrow.setPunchLevel(punchLevel);
         if (flameLevel != 0) {
             arrow.setOnFireTicks(20 * 5);
         }
-        arrow.setCritical(force >= 1.0);
+        arrow.setCritical(critical);
 
         var event = new EntityShootBowEvent(player, thisItemStack, arrow);
         if (!event.call()) {
