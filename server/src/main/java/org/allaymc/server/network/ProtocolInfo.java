@@ -31,11 +31,11 @@ public final class ProtocolInfo {
     public static final BedrockCodec FEATURE_VERSION = Bedrock_v2193.CODEC;
 
     /**
-     * {@code BLOCK_STATE_VERSION} identifies the block-state format written by
-     * server encoders. The value follows block-state compatibility changes rather
-     * than the latest supported client's game version.
+     * {@code BLOCK_STATE_VERSION} identifies the block-state schema serialized by
+     * Allay. The value advances when stored properties change so older states enter
+     * the selected updater before registry lookup, independently of client codecs.
      */
-    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 110, 26, 0);
+    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 26, 50, 0, 0);
 
     /**
      * {@code BLOCK_STATE_UPDATER} converts stored block-state data through the

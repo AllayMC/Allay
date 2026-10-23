@@ -108,9 +108,11 @@ Update to the latest versions of:
 Keep `ProtocolInfo.FEATURE_VERSION` and the block/item state updater constants aligned with the data files. Supported
 client versions are owned by `ProtocolRegistry`, not `ProtocolInfo`.
 
-Compare block-state properties as well as version numbers: exported palettes can retain the same stored version while
-adding properties. Verify that old chunk palette hashes still migrate, and update handwritten block registrations to
-match the generated state domains. Remove custom tags that have become vanilla tags before running `TagGen`.
+Advance `ProtocolInfo.BLOCK_STATE_VERSION` when the registered block-state schema changes. This constant labels states
+serialized by Allay and triggers the existing migration path for older saves; repeated version metadata in exported
+palettes must not prevent that advance. Test migration using fixed historical version numbers, and update handwritten
+block registrations to match the generated state domains. Remove custom tags that have become vanilla tags before
+running `TagGen`.
 
 ## 7. Add the Protocol Implementation
 

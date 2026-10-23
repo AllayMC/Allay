@@ -2,6 +2,7 @@ package org.allaymc.server.world.storage.leveldb.codec;
 
 import org.allaymc.api.block.property.enums.MinecraftCorner;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.network.ProtocolInfo;
@@ -11,6 +12,8 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
@@ -25,24 +28,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChunkSectionCodecTest {
 
     /**
-     * Loads legacy stairs and fences carrying the current storage version.
-     * Missing hashes must trigger migration without consuming the following valid
-     * palette entry or losing the old stair orientation.
+     * Loads legacy stairs and fences with Allay's previous 1.21.110.26 marker or
+     * the exported Bedrock 1.21.60.33 marker. Both older versions must trigger
+     * migration without losing orientation or consuming the following palette entry.
      */
-    @Test
-    void upgradesMissingHashesEvenWhenTheStorageVersionMatches() {
+    @ParameterizedTest
+    @ValueSource(ints = {0x01156e1a, 0x01153c21})
+    void upgradesPreviousBlockStateVersions(int oldVersion) {
+        assertTrue(oldVersion < ProtocolInfo.BLOCK_STATE_VERSION_NUM);
         var oldStairs = NbtMap.builder()
                 .putString("name", "minecraft:oak_stairs")
                 .putCompound("states", NbtMap.builder()
                         .putByte("upside_down_bit", (byte) 1)
                         .putInt("weirdo_direction", 2)
                         .build())
-                .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NUM)
+                .putInt("version", oldVersion)
                 .build();
         var oldFence = NbtMap.builder()
                 .putString("name", "minecraft:oak_fence")
                 .putCompound("states", NbtMap.EMPTY)
-                .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NUM)
+                .putInt("version", oldVersion)
                 .build();
         var palette = new Palette<>(oldStairs);
         palette.set(1, oldFence);
@@ -57,12 +62,47 @@ class ChunkSectionCodecTest {
         var decoded = ChunkSectionCodec.deserialize(bytes, 0, 0, 0);
 
         assertNotNull(decoded);
-        assertEquals(BlockTypes.OAK_STAIRS.getDefaultState()
+        var expectedStairs = BlockTypes.OAK_STAIRS.getDefaultState()
                 .setPropertyValue(UPSIDE_DOWN_BIT, true)
                 .setPropertyValue(WEIRDO_DIRECTION, 2)
-                .setPropertyValue(MINECRAFT_CORNER, MinecraftCorner.NONE), decoded.blockLayers()[0].get(0));
+                .setPropertyValue(MINECRAFT_CORNER, MinecraftCorner.NONE);
+        assertEquals(expectedStairs, decoded.blockLayers()[0].get(0));
         assertEquals(BlockTypes.OAK_FENCE.getDefaultState(), decoded.blockLayers()[0].get(1));
         assertEquals(BlockTypes.DIAMOND_BLOCK.getDefaultState(), decoded.blockLayers()[0].get(2));
+        assertEquals(expectedStairs, NBTIO.getAPI().fromBlockStateNBT(oldStairs));
+        assertEquals(BlockTypes.OAK_FENCE.getDefaultState(), NBTIO.getAPI().fromBlockStateNBT(oldFence));
+    }
+
+    /**
+     * Reloads corner and connection states written by the upgrade checkpoint with
+     * Allay's previous 1.21.110.26 marker. Migration must preserve existing values
+     * while subsequent serialization writes the new schema version.
+     */
+    @Test
+    void preservesExistingPropertiesFromThePreviousStorageVersion() {
+        var stair = BlockTypes.OAK_STAIRS.getDefaultState()
+                .setPropertyValue(MINECRAFT_CORNER, MinecraftCorner.OUTER_RIGHT);
+        var fence = BlockTypes.OAK_FENCE.getDefaultState()
+                .setPropertyValue(MINECRAFT_CONNECTION_EAST, true);
+        var palette = new Palette<>(stair.getBlockStateNBT().toBuilder().putInt("version", 0x01156e1a).build());
+        palette.set(1, fence.getBlockStateNBT().toBuilder().putInt("version", 0x01156e1a).build());
+        var bytes = LevelDBUtils.withByteBufToArray(buffer -> {
+            buffer.writeByte(AllayChunkSection.CURRENT_CHUNK_SECTION_VERSION);
+            buffer.writeByte(1);
+            buffer.writeByte(0);
+            palette.writeToStorage(buffer, state -> state);
+        });
+
+        var decoded = ChunkSectionCodec.deserialize(bytes, 0, 0, 0);
+
+        assertNotNull(decoded);
+        assertEquals(stair, decoded.blockLayers()[0].get(0));
+        assertEquals(fence, decoded.blockLayers()[0].get(1));
+        assertEquals(ProtocolInfo.BLOCK_STATE_VERSION_NUM, decoded.blockLayers()[0].get(0).getBlockStateNBT().getInt("version"));
+        var reloaded = ChunkSectionCodec.deserialize(ChunkSectionCodec.serialize(decoded, 0), 0, 0, 0);
+        assertNotNull(reloaded);
+        assertEquals(stair, reloaded.blockLayers()[0].get(0));
+        assertEquals(fence, reloaded.blockLayers()[0].get(1));
     }
 
     /**

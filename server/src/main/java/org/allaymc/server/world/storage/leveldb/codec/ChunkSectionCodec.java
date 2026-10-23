@@ -35,10 +35,8 @@ import java.util.TreeMap;
  *
  * <p>
  * Block states are resolved through the runtime hash registry. The fast reader
- * handles registered current state data directly; older data and unregistered
- * hashes pass through the block-state updater and canonical property ordering
- * before hashing. A feature update can add properties without changing the
- * stored version, so version equality alone cannot prove that a hash is current.
+ * handles current state data directly; older data passes through the
+ * block-state updater and a canonical property ordering before hashing.
  * Serialization compacts palettes and clears their dirty flags as bytes are
  * produced, before any caller commits those bytes to the database.
  */
@@ -142,9 +140,9 @@ public final class ChunkSectionCodec {
 
     /**
      * Reads one block-state value from the palette buffer and resolves its
-     * runtime state. Registered current-format values use the fast hash reader;
-     * older values and unregistered hashes are reread as NBT and upgraded to the
-     * configured feature baseline, even when the stored version is unchanged.
+     * runtime state. Current-format values use the fast hash reader, while
+     * values requiring conversion are read as NBT and upgraded to the
+     * configured block-state version.
      *
      * <p>
      * Converted property names are sorted, and {@code "name"} precedes
@@ -154,16 +152,15 @@ public final class ChunkSectionCodec {
      * fallback does not recover arbitrary malformed NBT.
      */
     private static BlockState fastBlockStateDeserializer(ByteBuf buffer) {
-        int startIndex = buffer.readerIndex();
         int blockStateHash;
         try (var bufInputStream = new ByteBufInputStream(buffer);
              var input = new LittleEndianDataInputStream(bufInputStream);
              var nbtInputStream = new NBTInputStream(input)) {
             blockStateHash = PaletteUtils.fastReadBlockStateHash(input, buffer);
-            // Feature updates can add properties without changing the stored version.
-            // Rewind missing hashes as well so previously saved states receive those migrations.
-            if (blockStateHash == PaletteUtils.HASH_NOT_LATEST || Registries.BLOCK_STATE_PALETTE.get(blockStateHash) == null) {
-                buffer.readerIndex(startIndex);
+            // The fast reader requests conversion for noncurrent state data, so
+            // restore a runtime registry identity from upgraded NBT instead of
+            // using an obsolete hash.
+            if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
                 var oldNbtMap = (NbtMap) nbtInputStream.readTag();
                 var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, ProtocolInfo.BLOCK_STATE_UPDATER.getVersion());
                 // Registry hashes depend on canonical property order, so sort the upgraded

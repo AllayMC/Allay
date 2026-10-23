@@ -17,12 +17,15 @@ class ProtocolInfoTest {
 
     /**
      * Reads the feature baseline independently of the negotiated client registry.
-     * Its codec and state updaters must describe the imported 1.26.50 data set.
+     * Its codec, serialized block-state version, and state updaters must describe
+     * the imported 1.26.50 data set so older storage versions trigger migration.
      */
     @Test
     void shouldUseThe12650FeatureBaselineAndUpdaters() {
         assertSame(Bedrock_v2193.CODEC, ProtocolInfo.FEATURE_VERSION);
         assertEquals(SemVersion.from("1.26.50"), ProtocolInfo.getFeatureMinecraftVersion());
+        assertEquals(new SemVersion(1, 26, 50, 0, 0), ProtocolInfo.BLOCK_STATE_VERSION);
+        assertEquals(BlockStateUpdater_1_26_50.INSTANCE.getVersion(), ProtocolInfo.BLOCK_STATE_VERSION_NUM);
         assertSame(BlockStateUpdater_1_26_50.INSTANCE, ProtocolInfo.BLOCK_STATE_UPDATER);
         assertSame(ItemStateUpdater_1_26_50.INSTANCE, ProtocolInfo.ITEM_STATE_UPDATER);
     }
