@@ -12,6 +12,7 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDamageBlockedEvent;
+import org.allaymc.api.eventbus.event.player.PlayerDeathEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemShieldBaseComponent;
 import org.allaymc.api.item.interfaces.ItemShieldStack;
@@ -324,7 +325,9 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         var deathInfo = lastDamage != null ?
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
                 DamageType.API.getDeathInfo(thisPlayer, null);
-
+        var event = new PlayerDeathEvent(thisPlayer, deathInfo);
+        if (!event.call()) return;
+        deathInfo = event.getDeathInfo();
         if (thisPlayer.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES)) {
             Server.getInstance().getMessageChannel().broadcastTranslatable(deathInfo.left(), (Object[]) deathInfo.right());
         }
