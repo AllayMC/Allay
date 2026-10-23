@@ -1,0 +1,5 @@
+interface:
+  display_name: "Code Comments"
+  short_description: "Require evidence-based Java comments and Javadoc"
+policy:
+  allow_implicit_invocation: true

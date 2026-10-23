@@ -33,11 +33,16 @@ errors. Preserve relevant thread-safety and API-status annotations.
 
 ## Documentation & Comment Style
 
-- Write all Javadoc and implementation comments in clear English.
-- In `api/`, every class, interface, and method requires Javadoc. In `server/`, also document internal interfaces used by
-  downstream developers; do not document every private helper merely for coverage.
-- Write Javadoc as a concise caller-facing contract. Describe only information the signature cannot express, such as
-  defaults, null behaviour, constraints, units, side effects, failures, ownership, lifetime, and threading requirements.
+- Before writing, modifying, or reviewing handwritten Java code or its comments, load and follow
+  [the code-comments skill](.agents/skills/code-comments/SKILL.md). Apply its scope, mandatory coverage, explanatory
+  roles, minimum lengths, placement, and evidence requirements, including for private declarations and tests.
+- Write all Javadoc and implementation comments in clear English. Use Javadoc for in-scope types, constructors, and
+  methods across all modules, including internal interfaces used by downstream developers.
+- Put each edited production file's overview in its primary type's Javadoc, including interfaces, enums, and records.
+  Combine the overview and type contract in one Javadoc comment.
+- Explain purpose and caller-facing contracts, including meaningful defaults, null behaviour, constraints, units,
+  side effects, failures, ownership, lifetime, and threading requirements. Meet the skill's minimum lengths with
+  verified information, without repetition or filler.
 - Start with a present-tense summary such as "Returns..." or "Creates...". Use `@param`, `@return`, and `@throws` only
   when they add useful information; avoid filler that repeats names, types, or the summary.
 - Use implementation comments to explain non-obvious reasons, invariants, protocol rules, edge cases, concurrency,
