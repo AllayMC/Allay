@@ -31,6 +31,26 @@ for imports and Lombok usage because no repository-wide formatter or linter is c
 annotations such as `@NonNull` or `@Nullable`; they can cause misleading IDE diagnostics and do not prevent null-pointer
 errors. Preserve relevant thread-safety and API-status annotations.
 
+## Coding and Design Workflow
+
+- Before writing or changing code, load and follow the project
+  [code-complete](.agents/skills/code-complete/SKILL.md) skill for implementation guidance. First inspect existing
+  implementations in the relevant module and follow the project's design and coding style.
+- For decisions about method abstractions, interface design, module boundaries, or responsibilities, also load and
+  follow [a-philosophy-of-software-design](.agents/skills/a-philosophy-of-software-design/SKILL.md). When both skills
+  apply, use it for design and abstraction decisions and `code-complete` for implementation.
+- For code-quality reviews, load both skills and use their criteria to assess implementation quality and design.
+  Keep a read-only review read-only unless the user also requests changes.
+- Read each applicable `SKILL.md` in full on first use and use its mini specification by default. Consult the full
+  specification when the mini rules do not resolve the current tradeoff. Reuse material already read while it remains
+  in context; reread it when the content is lost or the relevant instructions change.
+- Apply these skills within Allay's module boundaries and repository conventions. The
+  [code-comments](.agents/skills/code-comments/SKILL.md) skill governs Java comment coverage, explanatory roles,
+  minimum lengths, placement, and accuracy; general advice about comments in the two design skills does not waive
+  those requirements.
+- Before finishing a code task, perform the applicable skills' checklists on the changed code and affected callers.
+  Keep improvements within the task's scope rather than expanding into unrelated refactoring.
+
 ## Documentation & Comment Style
 
 - Before writing, modifying, or reviewing handwritten Java code or its comments, load and follow
