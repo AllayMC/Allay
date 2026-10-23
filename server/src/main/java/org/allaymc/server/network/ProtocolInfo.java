@@ -5,11 +5,10 @@ import org.allaymc.api.utils.SemVersion;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.updater.block.BlockStateUpdater;
-import org.allaymc.updater.block.BlockStateUpdater_1_26_30;
+import org.allaymc.updater.block.BlockStateUpdater_1_26_50;
 import org.allaymc.updater.item.ItemStateUpdater;
-import org.allaymc.updater.item.ItemStateUpdater_1_26_20;
+import org.allaymc.updater.item.ItemStateUpdater_1_26_50;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v1001.Bedrock_v1001;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
 
@@ -29,7 +28,7 @@ public final class ProtocolInfo {
      * {@code FEATURE_VERSION} supplies the game version used as the server's
      * vanilla feature baseline, independently of supported client codec bounds.
      */
-    public static final BedrockCodec FEATURE_VERSION = Bedrock_v1001.CODEC;
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v2193.CODEC;
 
     /**
      * {@code BLOCK_STATE_VERSION} identifies the block-state format written by
@@ -42,13 +41,13 @@ public final class ProtocolInfo {
      * {@code BLOCK_STATE_UPDATER} converts stored block-state data through the
      * selected updater's supported migrations before the server consumes it.
      */
-    public static final BlockStateUpdater BLOCK_STATE_UPDATER = BlockStateUpdater_1_26_30.INSTANCE;
+    public static final BlockStateUpdater BLOCK_STATE_UPDATER = BlockStateUpdater_1_26_50.INSTANCE;
 
     /**
      * {@code ITEM_STATE_UPDATER} converts stored item data through the selected
      * updater's supported migrations before server item deserialization consumes it.
      */
-    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_26_20.INSTANCE;
+    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_26_50.INSTANCE;
 
     /**
      * {@code BLOCK_STATE_VERSION_NUM} packs {@code BLOCK_STATE_VERSION} into the

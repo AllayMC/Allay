@@ -20,7 +20,7 @@ import org.joml.Vector3ic;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH_8;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
 
 /**
@@ -80,7 +80,7 @@ public class BlockPitcherCropBaseComponentImpl extends BlockCropsBaseComponentIm
             return onBoneMealUsed(dimension, lowerPos, lowerState);
         }
 
-        var growth = crop.getPropertyValue(GROWTH);
+        var growth = crop.getPropertyValue(GROWTH_8);
         if (growth >= MAX_GROWTH) {
             return false;
         }
@@ -95,7 +95,7 @@ public class BlockPitcherCropBaseComponentImpl extends BlockCropsBaseComponentIm
             }
         }
 
-        var newCrop = crop.setPropertyValue(GROWTH, newGrowth);
+        var newCrop = crop.setPropertyValue(GROWTH_8, newGrowth);
         var event = new BlockGrowEvent(new Block(crop, new Position3i(pos, dimension)), newCrop);
         if (event.call()) {
             // Derive both halves from the accepted state, but retain the originally
@@ -139,7 +139,7 @@ public class BlockPitcherCropBaseComponentImpl extends BlockCropsBaseComponentIm
             return;
         }
 
-        var growth = block.getPropertyValue(GROWTH);
+        var growth = block.getPropertyValue(GROWTH_8);
         if (growth >= MAX_GROWTH) {
             return;
         }
@@ -154,7 +154,7 @@ public class BlockPitcherCropBaseComponentImpl extends BlockCropsBaseComponentIm
                 }
             }
 
-            var newCrop = block.setPropertyValue(GROWTH, newGrowth);
+            var newCrop = block.setPropertyValue(GROWTH_8, newGrowth);
             var event = new BlockGrowEvent(block, newCrop.getBlockState());
             if (event.call()) {
                 var pos = block.getPosition();
@@ -185,7 +185,7 @@ public class BlockPitcherCropBaseComponentImpl extends BlockCropsBaseComponentIm
                 if (neighbor.getBlockType() != BlockTypes.FARMLAND) {
                     block.breakBlock();
                 }
-            } else if (face == BlockFace.UP && block.getPropertyValue(GROWTH) >= DOUBLE_THRESHOLD) {
+            } else if (face == BlockFace.UP && block.getPropertyValue(GROWTH_8) >= DOUBLE_THRESHOLD) {
                 if (neighbor.getBlockType() != blockType || !neighbor.getPropertyValue(UPPER_BLOCK_BIT)) {
                     block.breakBlock();
                 }
@@ -200,7 +200,7 @@ public class BlockPitcherCropBaseComponentImpl extends BlockCropsBaseComponentIm
      */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        var growth = block.getPropertyValue(GROWTH);
+        var growth = block.getPropertyValue(GROWTH_8);
         if (growth >= MAX_GROWTH) {
             return Set.of(ItemTypes.PITCHER_PLANT.createItemStack());
         }

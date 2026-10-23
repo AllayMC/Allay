@@ -1,5 +1,8 @@
 package org.allaymc.server.network;
 
+import org.allaymc.api.utils.SemVersion;
+import org.allaymc.updater.block.BlockStateUpdater_1_26_50;
+import org.allaymc.updater.item.ItemStateUpdater_1_26_50;
 import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
 import org.junit.jupiter.api.Test;
 
@@ -7,9 +10,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * {@code ProtocolInfoTest} checks the latest codec identity and advertised version metadata.
+ * {@code ProtocolInfoTest} checks feature and client codec identities alongside
+ * the state updaters selected for persisted vanilla data.
  */
 class ProtocolInfoTest {
+
+    /**
+     * Reads the feature baseline independently of the negotiated client registry.
+     * Its codec and state updaters must describe the imported 1.26.50 data set.
+     */
+    @Test
+    void shouldUseThe12650FeatureBaselineAndUpdaters() {
+        assertSame(Bedrock_v2193.CODEC, ProtocolInfo.FEATURE_VERSION);
+        assertEquals(SemVersion.from("1.26.50"), ProtocolInfo.getFeatureMinecraftVersion());
+        assertSame(BlockStateUpdater_1_26_50.INSTANCE, ProtocolInfo.BLOCK_STATE_UPDATER);
+        assertSame(ItemStateUpdater_1_26_50.INSTANCE, ProtocolInfo.ITEM_STATE_UPDATER);
+    }
 
     /**
      * Queries the latest international codec and compares its advertised version.

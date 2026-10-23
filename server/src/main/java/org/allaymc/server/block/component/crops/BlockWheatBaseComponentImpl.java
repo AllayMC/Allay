@@ -10,7 +10,7 @@ import org.allaymc.server.block.FortuneDropHelper;
 
 import java.util.Set;
 
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH_8;
 
 /**
  * {@code BlockWheatBaseComponentImpl} implements wheat harvest drops while inheriting farmland
@@ -35,8 +35,8 @@ public class BlockWheatBaseComponentImpl extends BlockCropsBaseComponentImpl {
      */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        var growth = block.getPropertyValue(GROWTH);
-        if (growth < GROWTH.getMax()) {
+        var growth = block.getPropertyValue(GROWTH_8);
+        if (growth < GROWTH_8.getMax()) {
             return Set.of(ItemTypes.WHEAT_SEEDS.createItemStack());
         }
 

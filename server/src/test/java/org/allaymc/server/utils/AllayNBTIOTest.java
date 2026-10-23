@@ -89,6 +89,24 @@ class AllayNBTIOTest {
     }
 
     /**
+     * Reads the legacy photo identifier with a nondefault stack count. Item
+     * migration must select the renamed photo item and preserve the saved count.
+     */
+    @Test
+    void upgradesLegacyPhotoItems() {
+        var oldItem = NbtMap.builder()
+                .putString("Name", "minecraft:photo")
+                .putByte("Count", (byte) 3)
+                .putShort("Damage", (short) 0)
+                .build();
+
+        var item = NBTIO.getAPI().fromItemStackNBT(oldItem);
+
+        assertEquals(ItemTypes.PHOTO_ITEM, item.getItemType());
+        assertEquals(3, item.getCount());
+    }
+
+    /**
      * Saves a villager and reconstructs it in the spawn dimension. Saving the reconstructed entity
      * must produce NBT equal to the original entity's persisted representation.
      */

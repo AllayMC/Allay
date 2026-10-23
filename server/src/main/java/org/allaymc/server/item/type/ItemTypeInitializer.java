@@ -884,6 +884,7 @@ public final class ItemTypeInitializer {
         ItemTypes.SPRUCE_SIGN = buildSign(ItemId.SPRUCE_SIGN, BlockId.SPRUCE_WALL_SIGN, BlockId.SPRUCE_STANDING_SIGN);
         ItemTypes.WARPED_SIGN = buildSign(ItemId.WARPED_SIGN, BlockId.WARPED_WALL_SIGN, BlockId.WARPED_STANDING_SIGN);
         ItemTypes.PALE_OAK_SIGN = buildSign(ItemId.PALE_OAK_SIGN, BlockId.PALE_OAK_WALL_SIGN, BlockId.PALE_OAK_STANDING_SIGN);
+        ItemTypes.POPLAR_SIGN = buildSign(ItemId.POPLAR_SIGN, BlockId.POPLAR_WALL_SIGN, BlockId.POPLAR_STANDING_SIGN);
     }
 
     /**

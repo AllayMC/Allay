@@ -2,6 +2,8 @@ package org.allaymc.server.network;
 
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.world.biome.BiomeTags;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.server.registry.InternalRegistries;
@@ -18,6 +20,18 @@ import static org.mockito.Mockito.mock;
  */
 @ExtendWith(AllayTestExtension.class)
 class ProtocolRegistryInitializationTest {
+
+    /**
+     * Resolves the newly imported cave and forest biomes through their vanilla IDs.
+     * Both entries must retain the metadata tags used by gameplay and biome encoding.
+     */
+    @Test
+    void registersSulfurCavesAndDappledForestWithTheirMetadata() {
+        assertSame(BiomeTypes.SULFUR_CAVES, Registries.BIOMES.getByK1(194));
+        assertSame(BiomeTypes.DAPPLED_FOREST, Registries.BIOMES.getByK1(195));
+        assertTrue(BiomeTypes.SULFUR_CAVES.getBiomeData().tags().contains(BiomeTags.SULFUR_CAVES));
+        assertTrue(BiomeTypes.DAPPLED_FOREST.getBiomeData().tags().contains(BiomeTags.DAPPLED_FOREST));
+    }
 
     /**
      * Uses the default protocol initialization installed by the test extension.

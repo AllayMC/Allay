@@ -100,7 +100,7 @@ public enum DiscType {
     /**
      * Bounce music disc.
      */
-    DISC_BOUNCE(TrKeys.MC_ITEM_RECORD_NAME, 15);
+    DISC_BOUNCE(TrKeys.MC_ITEM_RECORD_BOUNCE_DESC, 15);
 
     /**
      * Music-disc display translation key.

@@ -58,6 +58,8 @@ public interface CreativeItemGroups {
 
     String STAINED_CLAY = "itemGroup.name.stainedClay";
 
+    String CUSHION = "itemGroup.name.cushion";
+
     String GOAT_HORN = "itemGroup.name.goatHorn";
 
     String CHEST = "itemGroup.name.chest";

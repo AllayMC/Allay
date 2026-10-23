@@ -1,9 +1,8 @@
 package org.allaymc.api.item.data;
 
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface ItemTags {
@@ -44,6 +43,8 @@ public interface ItemTags {
     ItemTag STONE_BRICKS = create("minecraft:stone_bricks");
 
     ItemTag SULFUR_CUBE_ARCHETYPE_SLOW_FLAT = create("minecraft:sulfur_cube_archetype_slow_flat");
+
+    ItemTag MUSHROOMS_FOR_STEW = create("minecraft:mushrooms_for_stew");
 
     ItemTag DOOR = create("minecraft:door");
 

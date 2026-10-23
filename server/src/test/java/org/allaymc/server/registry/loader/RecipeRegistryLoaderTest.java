@@ -23,7 +23,8 @@ class RecipeRegistryLoaderTest {
 
     /**
      * Loads the bundled recipe resource after item registration. The resulting registry must
-     * contain the tag-based log cooking recipe and the expected total number of furnace recipes.
+     * contain the tag-based log cooking recipe and all 223 furnace recipes from
+     * the 1.26.50 export, including the three poplar leaf variants.
      */
     @Test
     void testLoadCurrentFurnaceRecipes() {
@@ -34,7 +35,7 @@ class RecipeRegistryLoaderTest {
         );
 
         assertInstanceOf(FurnaceRecipe.class, recipes.get(tagRecipeId));
-        assertEquals(220, recipes.values().stream().filter(FurnaceRecipe.class::isInstance).count());
+        assertEquals(223, recipes.values().stream().filter(FurnaceRecipe.class::isInstance).count());
     }
 
     /**

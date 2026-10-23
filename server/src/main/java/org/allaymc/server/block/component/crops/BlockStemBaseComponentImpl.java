@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH_8;
 
 /**
  * {@code BlockStemBaseComponentImpl} implements fruit-bearing crop stems with deferred fruit
@@ -126,9 +126,9 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     public void onRandomUpdate(Block block) {
         if (ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(block) &&
             block.getDimension().getLightEngine().getInternalLight(block.getPosition()) >= 8) {
-            var growth = block.getPropertyValue(GROWTH);
-            if (growth < GROWTH.getMax()) {
-                var newCrop = block.setPropertyValue(GROWTH, growth + 1);
+            var growth = block.getPropertyValue(GROWTH_8);
+            if (growth < GROWTH_8.getMax()) {
+                var newCrop = block.setPropertyValue(GROWTH_8, growth + 1);
                 var event = new BlockGrowEvent(block, newCrop.getBlockState());
                 if (event.call()) {
                     block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());

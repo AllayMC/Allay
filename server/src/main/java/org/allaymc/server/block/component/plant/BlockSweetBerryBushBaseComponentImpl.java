@@ -23,7 +23,7 @@ import org.joml.Vector3ic;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH_8;
 
 /**
  * {@code BlockSweetBerryBushBaseComponentImpl} implements sweet-berry bush support, stage
@@ -94,7 +94,7 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
 
-        var growth = block.getPropertyValue(GROWTH);
+        var growth = block.getPropertyValue(GROWTH_8);
         if (growth >= 3) {
             return;
         }
@@ -109,7 +109,7 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
             return;
         }
 
-        var newState = block.getBlockState().setPropertyValue(GROWTH, growth + 1);
+        var newState = block.getBlockState().setPropertyValue(GROWTH_8, growth + 1);
         var event = new BlockGrowEvent(block, newState);
         if (event.call()) {
             block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
@@ -134,11 +134,11 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
         }
 
         var clickedBlock = interactInfo.getClickedBlock();
-        var growth = clickedBlock.getPropertyValue(GROWTH);
+        var growth = clickedBlock.getPropertyValue(GROWTH_8);
 
         if (itemStack != null && itemStack.getItemType() == ItemTypes.BONE_MEAL) {
             if (growth < 3) {
-                var newState = clickedBlock.getBlockState().setPropertyValue(GROWTH, growth + 1);
+                var newState = clickedBlock.getBlockState().setPropertyValue(GROWTH_8, growth + 1);
                 var event = new BlockGrowEvent(clickedBlock, newState);
                 if (event.call()) {
                     dimension.setBlockState(interactInfo.clickedBlockPos(), event.getNewBlockState());
@@ -158,7 +158,7 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
             var dropPos = MathUtils.center(interactInfo.clickedBlockPos());
             dimension.dropItem(ItemTypes.SWEET_BERRIES.createItemStack(dropCount), dropPos);
 
-            var newState = clickedBlock.getBlockState().setPropertyValue(GROWTH, 1);
+            var newState = clickedBlock.getBlockState().setPropertyValue(GROWTH_8, 1);
             dimension.setBlockState(interactInfo.clickedBlockPos(), newState);
             return true;
         }
@@ -173,7 +173,7 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
      */
     @Override
     public void onEntityInside(Block block, Entity entity) {
-        var growth = block.getPropertyValue(GROWTH);
+        var growth = block.getPropertyValue(GROWTH_8);
         if (growth <= 0) {
             return;
         }
@@ -193,7 +193,7 @@ public class BlockSweetBerryBushBaseComponentImpl extends BlockBaseComponentImpl
      */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        var growth = block.getPropertyValue(GROWTH);
+        var growth = block.getPropertyValue(GROWTH_8);
         var random = ThreadLocalRandom.current();
         int count;
         if (growth <= 1) {
