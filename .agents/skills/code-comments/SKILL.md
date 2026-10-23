@@ -26,7 +26,15 @@ Organize a long explanation around a concrete question. Establish the situation,
 
 Describe current behavior in the present tense. Verified history, issues, tests, or dependency behavior can explain a current constraint, but the explanation must stand on its own. Never invent incidents, measurements, vendor behavior, or plausible design motives. Proposals and change narration belong in issues, PRs, or design proposals.
 
-Start Javadoc with a present-tense summary such as "Returns...", "Creates...", or "Represents...". A type may instead start with its name and responsibility. Do not repeat a method name in its summary. Use concrete actors and verbs; name ambiguous objects again. Prefer "Returns whether..." for boolean results; use passive voice when the object's state is the point and the actor is clear. State conditions with `when`, `before`, `after`, `until`, or `unless`. Replace praise and vague labels with behavior and consequences. Keep precise exclusions that prevent misuse; omit unrelated assurances. Compact definitions and field phrases need no extra narrative.
+Match the opening to the documented element:
+
+- Named types: start with a complete present-tense sentence whose subject is the type name, followed by what it represents or does. For example, "BiomeType identifies a registered biome and exposes its metadata." This applies to primary, nested, and additional top-level types. Describe the type's abstraction first; explain construction side effects separately with the constructor as the subject.
+- Methods and constructors: the opening summary may omit the subject, as in "Returns..." or "Creates...", when the documented operation is unambiguous. There is no need to repeat the method name mechanically. Prefer "Returns whether..." for boolean results.
+- Fields, constants, and record components: compact meanings may remain noun phrases, such as "numeric biome palette identifier". Ownership, precedence, lifecycle, and other independent rules need complete sentences naming the field, value, or consumer involved.
+
+Use complete sentences with explicit subjects in explanatory prose. Name the caller, constructor, method, stored value, or other actor when its identity affects the explanation. Preserve concrete field and method names when they distinguish behavior, ownership, or coordination; generic descriptions should not make readers guess which symbol owns a rule. Pronouns are fine when their antecedents are unambiguous; do not repeat the symbol name in every sentence. Compact labels and method/constructor opening summaries follow the exceptions above.
+
+Local operation comments may use imperative sentences, such as "Return the unused slot before waking the next waiter", when the actor and action are clear from the adjacent code. They still need the verified reason or consequence required by their role. Use concrete actors and verbs, and passive voice when the object's state is the point and the actor is clear. State conditions with `when`, `before`, `after`, `until`, or `unless`. Replace praise and vague labels with behavior and consequences. Keep precise exclusions that prevent misuse; omit unrelated assurances. Compact definitions and field phrases need no extra narrative.
 
 ## Mandatory coverage and minimum lengths
 
@@ -34,12 +42,12 @@ Every in-scope item below needs a comment. Meet both its minimum and required in
 
 | Item | Minimum | Information and placement |
 | --- | --- | --- |
-| Purpose overview in primary-type Javadoc | 30 words, 2 sentences | Type responsibility, then the domain rule and how the pieces address it |
-| Design overview in primary-type Javadoc | 80 words, 2 prose paragraphs | Type responsibility, then the problem, consequential choice, and interacting rules |
+| Purpose overview in primary-type Javadoc | 30 words, 2 sentences | Type name as subject and its responsibility, then the domain rule and how the pieces address it |
+| Design overview in primary-type Javadoc | 80 words, 2 prose paragraphs | Type name as subject and its responsibility, then the problem, consequential choice, and interacting rules |
 | Definition method/constructor/initializer | 8 words, 1 sentence | Purpose and result/effect; consumer when it establishes the role |
 | Calling-rule method/constructor/initializer | 25 words, 2 sentences | Purpose and applicable calling rules |
 | Design method/constructor/initializer | 60 words, 3 sentences | Purpose, calling rules, and design conditions/consequences |
-| Named type | 8 words, 1 sentence | Representation or implementation role; shared rules at the owning type or field group |
+| Named type | 8 words, 1 sentence | Type name as subject and its representation or implementation role; shared rules at the owning type or field group |
 | Compact field or record component | 3 words; unit/encoding label may use 1 | Meaning, source, unit, encoding, or literal special value; placement follows Java visibility rules below |
 | Field with an independent conditional, ownership, precedence, or lifecycle rule | 12 words | Meaning, condition, effect; preceding block |
 | Adjacent fields sharing a rule | 20 words for the group, plus each compact field explanation | Name all participating fields and explain their relationship once above the group |
@@ -96,7 +104,7 @@ When two passages answer the same question with the same fact, keep the full exp
 
 ### Type overviews in Java
 
-Before drafting, read or reuse [file-overviews.md](references/file-overviews.md). In a normal Java file, the primary top-level class, interface, enum, or record owns the overview. Start its Javadoc with what the type processes, provides, or produces, such as "Records request durations and builds timing headers." The opening must explain its responsibility before background; a type name is optional.
+Before drafting, read or reuse [file-overviews.md](references/file-overviews.md). In a normal Java file, the primary top-level class, interface, enum, or record owns the overview. Start its Javadoc with the actual type name as the grammatical subject and explain what it represents, processes, provides, or produces, such as "RequestTimings records request durations and builds timing headers." Establish the type's responsibility before background or construction details. Adding a type name to a sentence about the wrong responsibility does not fix the explanation.
 
 After stating the responsibility, develop the relevant domain rules, design choices, conditions, and consequences in the same Javadoc. "Provides utilities" is too vague. Mention symbols to explain relationships rather than inventory their jobs. Lists may clarify cases or sequences while retaining the design overview's prose paragraphs. Do not create a detached overview before or after imports, or a second Javadoc block beside the type contract.
 
@@ -126,7 +134,7 @@ Read or reuse [examples.md](references/examples.md) for tier choices and final r
 1. Read comments with the whole file: can a newcomer follow the problem, flow, and decisions to preserve? Check usefulness, accuracy, and distribution of detail before counts.
 2. Enumerate required items, including currently uncommented ones; assign roles and verify coverage, placement, words, sentences, and paragraphs. Count shared field rules once.
 3. Verify facts and exceptions against implementation and consumers. Identify each local explanation's added fact and each repeated passage's distinct purpose. Recheck unclear guarantees with the evidence/probe rules above.
-4. Check that paragraphs advance their question and compact definitions stay compact. Each production overview must be integrated into the primary type's Javadoc and state its responsibility before background; reject detached file overviews, vague summaries, and declaration inventories. Similar lengths are a signal to inspect padding, not a reason to vary accurate wording; synonym cycling does not improve explanations.
+4. Check that paragraphs advance their question and compact definitions stay compact. Each type description must start with the type name as its subject and explain the type's role, not merely a constructor's side effects. Check explicit subjects and concrete symbols in longer explanations while allowing method/constructor opening summaries, compact field labels, and clear local imperatives. Each production overview belongs in the primary type's Javadoc; reject detached overviews, vague summaries, and declaration inventories. Similar lengths are a signal to inspect padding, not a reason to vary accurate wording; synonym cycling does not improve explanations.
 5. Fix stale comments and inspect placement after formatting. Any missing, short, misplaced, unsupported, or inaccurate required explanation leaves validation incomplete. Fix within scope; report remaining items and reasons. Read-only reviews report without editing.
 
 Lead reports with readability and material gaps, grouping minor presentation issues. Builds and tests do not establish comment quality. Keep comment-only work scoped to comments, validate Javadoc when affected, and follow repository-required checks. Use [evaluation.md](references/evaluation.md) only when comparing revisions of this skill.

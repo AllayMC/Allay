@@ -63,8 +63,13 @@ errors. Preserve relevant thread-safety and API-status annotations.
 - Explain purpose and caller-facing contracts, including meaningful defaults, null behaviour, constraints, units,
   side effects, failures, ownership, lifetime, and threading requirements. Meet the skill's minimum lengths with
   verified information, without repetition or filler.
-- Start with a present-tense summary such as "Returns..." or "Creates...". Use `@param`, `@return`, and `@throws` only
-  when they add useful information; avoid filler that repeats names, types, or the summary.
+- Start type Javadoc with the type name as the subject and explain what it represents or does. Method and constructor
+  opening summaries may use "Returns..." or "Creates...". Use complete sentences with explicit subjects for longer
+  explanations and independent field rules; compact field labels may remain noun phrases.
+- Local implementation comments may use clear imperative sentences when they explain an operation's reason or
+  consequence. Name concrete fields and methods when their identity matters to the explanation.
+- Use `@param`, `@return`, and `@throws` only when they add useful information; avoid filler that repeats names,
+  types, or the summary.
 - Use implementation comments to explain non-obvious reasons, invariants, protocol rules, edge cases, concurrency,
   performance trade-offs, or required ordering. Do not narrate visible checks, assignments, loops, or calls.
 - Keep comments synchronized with behaviour. Remove stale and commented-out code, and make `TODO` and `FIXME` comments

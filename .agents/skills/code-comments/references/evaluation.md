@@ -10,13 +10,15 @@ When delegation is available and authorized, use fresh agent contexts with the s
 
 ## Compare raw results
 
-Preserve original diffs and validation results before any corrections. Agent self-reports do not establish that review passed. Check that each production overview shares one Javadoc with the primary type's contract and states its responsibility before background. Read the whole file for progression from purpose to design, decisions to preserve, useful examples, and distribution of detail. Then inspect:
+Preserve original diffs and validation results before any corrections. Agent self-reports do not establish that review passed. Check that each production overview shares one Javadoc with the primary type's contract, starts with the type name as its subject, and states its responsibility before background. Read the whole file for progression from purpose to design, decisions to preserve, useful examples, and distribution of detail. Then inspect:
 
 - Incorrect or unsupported claims, especially ownership and exceptions.
 - Missing required coverage or calling rules.
 - Repeated facts without additional information.
 - Expanded compact definitions or ungrouped shared rules.
 - Unrelated facts in design paragraphs, or local comments translating expressions.
+- Ambiguous actors in explanatory prose, or type descriptions reduced to constructor side effects. Method/constructor opening summaries, compact field labels, and clear local imperatives remain valid.
+- Generic descriptions that obscure which fields or methods own a documented rule or shared state.
 - Javadoc attached after annotations, broken inline tags, or inherited text counted as a local explanation.
 - Expanded generated accessors, unsupported generated-file exemptions, or record components left undocumented.
 

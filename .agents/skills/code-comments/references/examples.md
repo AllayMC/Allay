@@ -61,7 +61,7 @@ a nested record; a primary production type also needs its overview minimum.
 
 ```java
 /**
- * Represents encoded image data sent in an upstream request.
+ * Image represents encoded image data sent in an upstream request.
  *
  * @param mediaType image MIME type
  * @param data base64
@@ -74,8 +74,9 @@ consumer's ownership rule rather than inferring it from the map type.
 
 ```java
 /**
- * Holds event attributes. After enqueueing the event, callers must leave this map
- * and its mutable values unchanged until the sink finishes reading them.
+ * The fields map holds event attributes. After enqueueing the event, callers
+ * must leave this map and its mutable values unchanged until the sink finishes
+ * reading them.
  */
 private Map<String, Object> fields;
 ```
@@ -98,8 +99,9 @@ Independent field rule: the log sink prefers a nonempty string attribute, then
 
 ```java
 /**
- * Names the event source. The log sink prefers a nonempty string in
- * {@code fields.get("component")} and uses {@code "app"} when both sources are empty.
+ * The component field names the event source. The log sink prefers a nonempty
+ * string in {@code fields.get("component")} and uses {@code "app"} when both
+ * sources are empty.
  */
 private String component;
 ```
@@ -110,8 +112,9 @@ Explicitly handwritten accessors still require method documentation.
 
 ```java
 /**
- * Holds the current packet payload. The generated getter exposes the same array,
- * so consumers must copy it before retaining or modifying its contents.
+ * The payload field holds the current packet bytes. The generated getter exposes
+ * the same array, so consumers must copy it before retaining or modifying its
+ * contents.
  */
 @Getter
 private byte[] payload;
@@ -126,8 +129,8 @@ the group purpose and the constant's meaning, meeting the stronger minimum.
 
 ```java
 /**
- * Allows for connection setup delaying the first arrival. Counting dispatch
- * times alone can admit another request inside the receiver's window.
+ * ARRIVAL_SLACK allows for connection setup delaying the first arrival. Counting
+ * dispatch times alone can admit another request inside the receiver's window.
  */
 private static final Duration ARRIVAL_SLACK = Duration.ofSeconds(1);
 ```
@@ -136,8 +139,8 @@ Assume cancellation arrived after a waiter received its slot. The local
 explanation identifies why returning the slot precedes waking another waiter.
 
 ```java
-// Cancellation arrived after this waiter received a slot. Return its unused slot
-// before waking the next request in the same account queue.
+// Cancellation reaches this waiter after it receives a slot. Return its unused
+// slot before waking the next request in the same account queue.
 lane.busy--;
 lane.grant();
 ```
@@ -153,12 +156,13 @@ if (intervals.size() < MAX_INTERVALS) {
 }
 ```
 
-Assume the handler restores interruption before returning a failed result,
-allowing its executor's caller to observe the cancellation request.
+Assume a handler converts `InterruptedException` from `Thread.sleep` into a
+`false` result. Its caller continues on the same thread and checks that thread's
+interrupt status before starting more work.
 
 ```java
-// Preserve interruption for the executor's caller; converting this operation to
-// a failed result must not consume the request to stop subsequent work.
+// Restore the current thread's interrupt status after sleep clears it, so
+// later checks on this thread still observe the stop request.
 Thread.currentThread().interrupt();
 return false;
 ```
@@ -205,8 +209,9 @@ replaces unusable entries. Calling the pool alone needs no synchronization tutor
 ```java
 /**
  * Returns a reusable buffer whose contents may come from an earlier call.
- * Return it through {@code release} after its consumer finishes, then stop
- * accessing its storage. An unusable pool entry produces a fresh buffer.
+ * Callers must return it through {@code release} after its consumer finishes and
+ * must then stop accessing its storage. An unusable pool entry produces a fresh
+ * buffer.
  */
 ```
 
@@ -276,13 +281,14 @@ general guarantee of Java file operations.
 ```
 
 A claim of an independent copy fails when a mutable timestamp remains shared.
-Assume copying delegates collection copying and retains a mutable `Date` reference:
+Assume `copyRecord` delegates copying of the `items` list and `timings` map, but
+retains the mutable `Date` reference in `finishedAt`:
 
 ```java
 /**
- * Copies the record's item list and timing map so callers can modify those
- * collections independently. The mutable completion timestamp remains shared;
- * callers must leave it unchanged through either record.
+ * Copies the record's {@code items} list and {@code timings} map so callers can
+ * modify those collections independently. The mutable {@code finishedAt}
+ * timestamp remains shared; callers must leave it unchanged through either record.
  */
 ```
 
@@ -293,11 +299,13 @@ readers understand the problem and the decisions to preserve.
 
 | Failure | Correction |
 | --- | --- |
+| A type overview opens with "Registers a biome type..." when constructors perform registration | Start with the type name and what its instances represent; describe registration separately with the constructors as the subject. |
+| A field's ownership explanation opens with "Retained metadata exposed by the getter..." | Use a complete sentence identifying the field or stored value, then name the consumers and their obligations. |
 | "Timings use unions. The collector has a lock. Headers have a limit." | Explain the type's responsibility, then develop one design question through its consequences. |
 | "Stop before the next dependency exceeds the header limit." | Explain what remains available after truncation; translating the comparison adds no fact. |
 | The acquisition example flattened into one paragraph | Keep normal results, cancellation, and cleanup as separate reader questions. |
 | A long component description merely calling it the event's source | Document the sink's override order, as in the field example. |
-| "Returns an independent copy of all its data." | Verify mutable elements and retained references as well as collection containers. |
+| "Returns an independent copy of all its data." | Verify mutable elements and retained references as well as collection containers; name shared fields such as `finishedAt`. |
 | Repeating the borrowing contract at the type, method, and pool call | Keep caller obligations at the method and local reasons at exceptional operations. |
 | A detached overview beside a type's Javadoc | Merge the overview and type contract in one Javadoc, applying the stronger minimum once. |
 | An uncommented private getter, or only `{@inheritDoc}` on an override | Restore local declaration coverage and the role's minimum explanation. |
