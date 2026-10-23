@@ -16,6 +16,3 @@ Follow the [repository workflow](../../../AGENTS.md#coding-and-design-workflow) 
 Use [a-philosophy-of-software-design](../a-philosophy-of-software-design/SKILL.md) for abstraction and module-boundary
 decisions. Allay's [code-comments](../code-comments/SKILL.md) requirements take precedence over this skill's general
 comment advice, including advice to delete comments or rely on self-documenting code.
-
-Imported from [TokenRouter at feeb208d8c01](https://github.com/TokenFlux/TokenRouter/tree/feeb208d8c010408db1f07c55df206663173e06c/.agents/skills/code-complete).
-The original specifications and [MIT license](LICENSE) are preserved; this integration section is specific to Allay.

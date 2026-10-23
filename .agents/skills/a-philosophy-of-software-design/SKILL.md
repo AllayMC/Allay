@@ -16,6 +16,3 @@ Follow the [repository workflow](../../../AGENTS.md#coding-and-design-workflow) 
 Use [code-complete](../code-complete/SKILL.md) for implementation guidance. Allay's
 [code-comments](../code-comments/SKILL.md) requirements take precedence over this skill's general comment advice;
 comment length alone does not justify removing a required explanation.
-
-Imported from [TokenRouter at feeb208d8c01](https://github.com/TokenFlux/TokenRouter/tree/feeb208d8c010408db1f07c55df206663173e06c/.agents/skills/a-philosophy-of-software-design).
-The original specifications and [MIT license](LICENSE) are preserved; this integration section is specific to Allay.
