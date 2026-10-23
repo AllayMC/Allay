@@ -5,7 +5,11 @@ import lombok.Getter;
 import org.allaymc.api.player.Player;
 
 /**
- * Represents an event related to a player issued by the server. This is the base class for all player events.
+ * {@code ServerPlayerEvent} carries a player connection for server and player
+ * lifecycle events.
+ * The player remains the live connection object rather than a snapshot;
+ * available login data and the controlled entity depend on the stage identified
+ * by the concrete event subclass.
  *
  * @author daoge_cmd
  */
@@ -13,7 +17,9 @@ import org.allaymc.api.player.Player;
 @AllArgsConstructor
 public abstract class ServerPlayerEvent extends ServerEvent {
     /**
-     * The {@code Player} instance associated with this event.
+     * {@code player} holds the live connection associated with this event.
+     * Listeners must consult the concrete event's lifecycle stage before assuming
+     * login or spawn.
      */
     protected Player player;
 }

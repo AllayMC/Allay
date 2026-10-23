@@ -6,7 +6,11 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.plugin.Plugin;
 
 /**
- * The base class for all plugin events.
+ * {@code PluginEvent} carries the plugin instance associated with a plugin
+ * lifecycle notification.
+ * Concrete event classes identify the transition and its timing; listeners
+ * register those concrete classes because event dispatch matches exact event
+ * classes rather than this shared base type.
  *
  * @author IWareQ
  */
@@ -14,7 +18,8 @@ import org.allaymc.api.plugin.Plugin;
 @AllArgsConstructor
 public abstract class PluginEvent extends Event {
     /**
-     * The plugin involved in the event.
+     * {@code plugin} holds the live plugin involved in the transition. The
+     * generated getter returns that instance rather than a lifecycle-state snapshot.
      */
     protected Plugin plugin;
 }

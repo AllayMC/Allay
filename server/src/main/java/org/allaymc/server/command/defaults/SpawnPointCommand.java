@@ -14,14 +14,28 @@ import org.joml.Vector3d;
 import java.util.List;
 
 /**
+ * {@code SpawnPointCommand} assigns personal spawn locations to selected players
+ * from a player executor in the overworld. Each stored location uses the
+ * executor's dimension and rotation with truncated target coordinates; feedback
+ * instead displays the original coordinates rounded to two decimals.
+ *
  * @author daoge_cmd
  */
 public class SpawnPointCommand extends Command {
 
+    /**
+     * Creates the {@code /spawnpoint} command with its built-in authorization permission.
+     */
     public SpawnPointCommand() {
         super("spawnpoint", TrKeys.MC_COMMANDS_SPAWNPOINT_DESCRIPTION, Permissions.COMMAND_SPAWNPOINT);
     }
 
+    /**
+     * Installs player-only spawn assignment with required targets and coordinates.
+     * The executor must be in the overworld. Every selected player receives
+     * the executor's dimension and rotation, while fractional coordinates are
+     * truncated toward zero for storage.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -38,6 +52,9 @@ public class SpawnPointCommand extends Command {
                     Vector3d pos = context.getResult(1);
 
                     for (EntityPlayer player : players) {
+                        // Stored block coordinates truncate toward zero,
+                        // while the following feedback preserves rounded
+                        // fractional input for display.
                         player.setSpawnPoint(new Location3i(
                                 (int) pos.x(), (int) pos.y(), (int) pos.z(),
                                 senderLoc.pitch(), senderLoc.yaw(),

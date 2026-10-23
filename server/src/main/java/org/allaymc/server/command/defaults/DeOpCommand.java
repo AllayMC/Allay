@@ -7,14 +7,28 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 /**
+ * {@code DeOpCommand} removes operator membership for a supplied player name or
+ * UUID. Its handler rejects identifiers that are not currently operators, asks
+ * the manager to update membership, and sends a separate notification to every
+ * matching online player after that update.
+ *
  * @author xingchentye
  */
 public class DeOpCommand extends Command {
 
+    /**
+     * Creates the {@code /deop} command with its built-in authorization permission.
+     */
     public DeOpCommand() {
         super("deop", TrKeys.MC_COMMANDS_DEOP_DESCRIPTION, Permissions.COMMAND_DEOP);
     }
 
+    /**
+     * Installs the required operator identifier and revocation handler.
+     * Existing operator membership is checked before mutation; accepted changes
+     * update the manager before command feedback and matching online-player
+     * notifications are emitted.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().wildcardTarget("player").exec(context -> {

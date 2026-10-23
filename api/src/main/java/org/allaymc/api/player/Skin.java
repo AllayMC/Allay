@@ -7,34 +7,37 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Represents the skin of a player, as sent over the network.
- * <p>
- * The skin holds a texture, a model, and optional animations which may be present when the skin is created
- * using the in-game creator (Persona) or bought from the marketplace.
+ * {@code Skin} represents a player's skin textures, geometry, animations, and
+ * Persona metadata. The record retains supplied image arrays and collection
+ * references rather than making a deep immutable copy; callers must coordinate
+ * mutations while another consumer converts or sends the skin.
  *
- * @param skinId                    a unique ID produced for the skin, for example 'c18e65aa-7b21-4637-9b63-8ad63622ef01_Alex' for the default Alex skin
- * @param playFabId                 the PlayFab ID produced for the skin. PlayFab hosts the Marketplace, skins, and other related features. This is the ID used
- *                                  to store the skin within PlayFab
- * @param skinResourcePatch         a JSON encoded object holding fields that point to the skin's geometry. It specifies how the geometry of animations and the
- *                                  default skin are combined
- * @param skinData                  an object containing the dimensions and raw RGBA pixel data for the skin texture
- * @param animations                a list of all animations that the skin has
- * @param capeData                  an object containing the dimensions and raw RGBA pixel data for the cape texture
- * @param skinGeometry              a JSON encoded structure of the skin's geometry data, containing properties such as bones, UVs, pivots, etc.
- * @param animationData             TODO: Find out what value this holds and when it is present
- * @param geometryDataEngineVersion TODO: Find out the usage of this field
- * @param premiumSkin               specifies if this is a skin that was purchased from the marketplace
- * @param personaSkin               specifies if this is a skin that was created using the in-game skin creator (Persona)
- * @param personaCapeOnClassicSkin  specifies if a Persona cape is equipped on a classic skin
- * @param primaryUser               the purpose of this field is unknown
- * @param capeId                    a unique identifier for the cape, which usually contains a UUID
- * @param fullId                    an ID that represents the full skin. The actual functionality is unknown as the client does not appear to send this value
- * @param skinColor                 a hex representation (including #) of the skin's base color, for example '#b37b62'
- * @param armSize                   the size of the player model's arms, which is either 'wide' (generally for male skins) or 'slim' (generally for female skins)
- * @param personaPieces             a list of all Persona pieces that the skin is composed of
- * @param pieceTintColors           a list of specific tint colors for some of the Persona pieces
- * @param overrideAppearance        specifies if the skin should override the player's client-side equipped skin. If false, the client will reject this skin and
- *                                  continue to use its own
+ * @param skinId client skin identifier
+ * @param playFabId skin Marketplace PlayFab identifier
+ * @param skinResourcePatch JSON geometry resource patch
+ * @param skinData skin texture and RGBA bytes
+ * @param animations {@code animations} retains the supplied animation list. Callers
+ * must preserve its elements while another consumer reads this skin.
+ * @param capeData cape texture and RGBA bytes
+ * @param skinGeometry JSON skin geometry payload
+ * @param animationData additional skin animation metadata
+ * @param geometryDataEngineVersion geometry data engine version
+ * @param premiumSkin Marketplace premium skin flag
+ * @param personaSkin Persona character creator flag
+ * @param personaCapeOnClassicSkin Persona cape on classic skin flag
+ * @param primaryUser primary local user flag
+ * @param capeId client cape resource identifier
+ * @param fullId combined skin and cape identifier
+ * @param skinColor legacy hexadecimal skin color
+ * @param armSize arm width token such as {@code "wide"} or {@code "slim"}
+ * @param personaPieces {@code personaPieces} retains the supplied Persona piece
+ * list. This record does not copy its mutable collection storage.
+ * @param pieceTintColors {@code pieceTintColors} retains the supplied tint list and
+ * its nested color lists. Callers must coordinate changes to those shared
+ * collections.
+ * @param overrideAppearance flag requesting override of the locally equipped
+ * appearance
+ *
  * @author gophertunnel | daoge_cmd
  */
 @Builder(toBuilder = true)
@@ -46,43 +49,106 @@ public record Skin(
         List<PersonaPieceTintColor> pieceTintColors, boolean overrideAppearance
 ) {
 
+    /**
+     * {@code ARM_SIZE_WIDE} names the wide arm model variant used by skin metadata
+     * and protocol conversion; it does not change geometry itself.
+     */
     public static final String ARM_SIZE_WIDE = "wide";
+    /**
+     * {@code ARM_SIZE_SLIM} names the slim arm model variant used by skin metadata
+     * and protocol conversion; it does not change geometry itself.
+     */
     public static final String ARM_SIZE_SLIM = "slim";
 
+    /**
+     * Checks the skin identifier, minimum image dimensions and bytes, and
+     * resource-patch structure. The check does not validate every record component;
+     * malformed JSON syntax or a missing image byte array can still throw instead of
+     * returning {@code false}.
+     */
     public boolean isValid() {
         var isValidSkin = skinId != null && !skinId.trim().isEmpty() && skinData != null && skinData.isValid();
         var isValidResourcePatch = skinResourcePatch != null && validateSkinResourcePatch(skinResourcePatch);
         return isValidSkin && isValidResourcePatch;
     }
 
+    /**
+     * Checks whether the JSON patch contains a string-valued
+     * {@code "geometry.default"} entry. Missing or incompatible JSON structure
+     * returns {@code false}; JSON parsing exceptions outside the explicitly caught
+     * structural failures propagate to the caller.
+     */
     private static boolean validateSkinResourcePatch(String skinResourcePatch) {
         try {
             var object = JsonParser.parseString(skinResourcePatch).getAsJsonObject();
             var geometry = object.get("geometry").getAsJsonObject();
             return geometry.has("default") && geometry.get("default").getAsJsonPrimitive().isString();
         } catch (ClassCastException | NullPointerException | IllegalStateException e) {
+            // Missing objects or incompatible JSON node shapes mean the patch cannot identify a default
+            // geometry; return a failed validation for those structural cases.
             return false;
         }
     }
 
     /**
-     * Holds the dimensions and raw data of an image.
+     * {@code ImageData} holds image dimensions and a shared RGBA byte array.
+     * Construction does not validate consistency between dimensions and byte length,
+     * and {@code from} recognizes only the supported canonical skin byte counts.
      *
-     * @param width  the width of the image in pixels
-     * @param height the height of the image in pixels
-     * @param data   the raw image data as a byte array, with pixels in RGBA order. The array length should be width * height * 4
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param data shared RGBA byte array; consumers must preserve its bytes while
+     * another reader uses this image
      */
     @Builder(toBuilder = true)
     public record ImageData(int width, int height, byte[] data) {
+        /**
+         * {@code EMPTY} represents an absent texture with zero dimensions and no
+         * pixel bytes. It is shared by zero-length inference results.
+         */
         public static final ImageData EMPTY = new ImageData(0, 0, new byte[0]);
 
+        /**
+         * {@code PIXEL_SIZE} counts the four RGBA bytes per pixel used when
+         * calculating canonical skin image lengths for dimension inference.
+         */
         private static final int PIXEL_SIZE = 4;
+        /**
+         * {@code SINGLE_SKIN_SIZE} identifies the byte count for a {@code 64} by
+         * {@code 32} RGBA image used by canonical skin dimension inference.
+         */
         private static final int SINGLE_SKIN_SIZE = 64 * 32 * PIXEL_SIZE;
+        /**
+         * {@code DOUBLE_SKIN_SIZE} identifies the byte count for a {@code 64} by
+         * {@code 64} RGBA image used by canonical skin dimension inference.
+         */
         private static final int DOUBLE_SKIN_SIZE = 64 * 64 * PIXEL_SIZE;
+        /**
+         * {@code SKIN_128_64_SIZE} identifies the byte count for a {@code 128} by
+         * {@code 64} RGBA image used by canonical skin dimension inference.
+         */
         private static final int SKIN_128_64_SIZE = 128 * 64 * PIXEL_SIZE;
+        /**
+         * {@code SKIN_128_128_SIZE} identifies the byte count for a {@code 128} by
+         * {@code 128} RGBA image used by canonical skin dimension inference.
+         */
         private static final int SKIN_128_128_SIZE = 128 * 128 * PIXEL_SIZE;
+        /**
+         * {@code SKIN_PERSONA_SIZE} identifies the byte count for a {@code 256} by
+         * {@code 256} RGBA image used by canonical skin dimension inference.
+         */
         private static final int SKIN_PERSONA_SIZE = 256 * 256 * PIXEL_SIZE;
 
+        /**
+         * Infers canonical skin dimensions from the supplied RGBA byte count.
+         * Nonempty arrays are retained without copying, zero bytes return
+         * {@code EMPTY}, and an unsupported byte count is rejected rather than
+         * approximated.
+         *
+         * @throws NullPointerException if {@code data} is {@code null}
+         * @throws IllegalArgumentException if the byte count has no supported
+         * dimension mapping
+         */
         public static ImageData from(byte[] data) {
             return switch (Objects.requireNonNull(data).length) {
                 case 0 -> EMPTY;
@@ -95,22 +161,25 @@ public record Skin(
             };
         }
 
+        /**
+         * Checks the minimum skin width, height, and byte count without verifying
+         * their product. An image must reach {@code 64} by {@code 32} and the
+         * smallest skin byte count; an evaluated {@code null} byte array throws.
+         */
         public boolean isValid() {
             return width >= 64 && height >= 32 && data.length >= ImageData.SINGLE_SKIN_SIZE;
         }
     }
 
     /**
-     * Represents an animation that can be added to a skin.
-     * <p>
-     * The client plays the animation itself, so no server-side intervention is required. The playback rate
-     * appears to be client-controlled.
+     * {@code AnimationData} holds the texture, target region, frame count, and
+     * expression selection for a client-played skin animation. The record retains
+     * its image reference without copying its pixel bytes.
      *
-     * @param imageData      the image data for the animation. It contains all frames of the animation concatenated together. The part of the skin this data
-     *                       applies to depends on the animationType
-     * @param animationType  the type of the animation. This determines how the imageData is applied to the skin
-     * @param frameCount     the total number of frames in the animation
-     * @param expressionType the type of expression for the animation, such as blinking
+     * @param imageData animation texture image data
+     * @param animationType skin region receiving the animation
+     * @param frameCount client animation frame count
+     * @param expressionType animation expression playback selection
      */
     @Builder(toBuilder = true)
     public record AnimationData(
@@ -120,25 +189,16 @@ public record Skin(
     }
 
     /**
-     * Represents a single piece of a Persona skin. All pieces are sent separately.
+     * {@code PersonaPieces} identifies one Persona skin piece and its owning content
+     * pack. The record carries identifiers and the default flag to protocol
+     * conversion without validating Marketplace ownership or resolving any
+     * resources.
      *
-     * @param pieceId   a UUID that uniquely identifies this specific piece
-     * @param pieceType the type of the piece. Known types include:
-     *                  <ul>
-     *                    <li>persona_skeleton</li>
-     *                    <li>persona_body</li>
-     *                    <li>persona_skin</li>
-     *                    <li>persona_bottom</li>
-     *                    <li>persona_feet</li>
-     *                    <li>persona_top</li>
-     *                    <li>persona_mouth</li>
-     *                    <li>persona_hair</li>
-     *                    <li>persona_eyes</li>
-     *                    <li>persona_facial_hair</li>
-     *                  </ul>
-     * @param packId    a UUID that identifies the pack this piece belongs to
-     * @param isDefault specifies if this is a default piece (like those on a Steve or Alex skin)
-     * @param productId a UUID that identifies the piece for marketplace purposes. This is empty for default pieces
+     * @param pieceId Persona piece resource identifier
+     * @param pieceType Persona piece category token
+     * @param packId owning content pack identifier
+     * @param isDefault default Persona piece flag
+     * @param productId Marketplace piece product identifier
      */
     @Builder(toBuilder = true)
     public record PersonaPieces(
@@ -148,50 +208,91 @@ public record Skin(
     }
 
     /**
-     * Describes the tint colors for a specific piece of a Persona skin.
+     * {@code PersonaPieceTintColor} holds color tokens for a Persona piece category.
+     * The record retains the supplied color list rather than copying it, so
+     * consumers must coordinate mutations while a skin is converted or sent.
      *
-     * @param pieceType the type of the Persona piece to which this tint applies. This must correspond to a piece in the personaPieces list. Known tintable
-     *                  piece types include:
-     *                  <ul>
-     *                    <li>persona_mouth</li>
-     *                    <li>persona_eyes</li>
-     *                    <li>persona_hair</li>
-     *                  </ul>
-     * @param colors    a list of up to four colors in ARGB hex format. These apply to different parts of the piece. For example, for 'persona_eyes', the
-     *                  colors might represent the iris, eyebrows, and sclera
+     * @param pieceType target Persona piece category
+     * @param colors shared client color tokens; the record does not enforce their
+     * count or hexadecimal format
      */
     @Builder(toBuilder = true)
     public record PersonaPieceTintColor(String pieceType, List<String> colors) {
     }
 
+    /**
+     * {@code AnimationType} identifies the skin region and texture layout used by an
+     * animation. The constants map to protocol texture categories, and numeric
+     * lookup uses their declaration order directly.
+     */
     public enum AnimationType {
+        /**
+         * No animated texture region.
+         */
         NONE,
         /**
-         * Head animation.
+         * Head and face animation.
          */
         FACE,
         /**
-         * Body animation with 32x32 resolution.
+         * Body animation with a {@code 32} by {@code 32} texture layout.
          */
         BODY_32X32,
         /**
-         * Body animation with 128x128 resolution.
+         * Body animation with a {@code 128} by {@code 128} texture layout.
          */
         BODY_128X128;
 
+        /**
+         * {@code VALUES} caches the enum's declaration-order constants for protocol
+         * lookup. Numeric conversion indexes this array directly and does not
+         * validate its argument.
+         */
         private static final AnimationType[] VALUES = values();
 
+        /**
+         * Returns the animation texture category at the supplied protocol index. The
+         * index must identify a declared constant; unsupported negative or oversized
+         * indexes throw instead of producing a fallback value.
+         *
+         * @throws ArrayIndexOutOfBoundsException if {@code id} is outside the
+         * declared constants
+         */
         public static AnimationType from(int id) {
             return VALUES[id];
         }
     }
 
+    /**
+     * {@code ExpressionType} identifies how the client interprets a skin animation's
+     * expression. The constants map to protocol expression categories, and numeric
+     * lookup uses their declaration order directly.
+     */
     public enum ExpressionType {
+        /**
+         * Linear animation expression selection.
+         */
         LINEAR,
+        /**
+         * Blinking animation expression selection.
+         */
         BLINKING;
 
+        /**
+         * {@code VALUES} caches the enum's declaration-order constants for protocol
+         * lookup. Numeric conversion indexes this array directly and does not
+         * validate its argument.
+         */
         private static final ExpressionType[] VALUES = values();
 
+        /**
+         * Returns the animation expression category at the supplied protocol index.
+         * The index must identify a declared constant; unsupported negative or
+         * oversized indexes throw instead of producing a fallback value.
+         *
+         * @throws ArrayIndexOutOfBoundsException if {@code id} is outside the
+         * declared constants
+         */
         public static ExpressionType from(int id) {
             return VALUES[id];
         }

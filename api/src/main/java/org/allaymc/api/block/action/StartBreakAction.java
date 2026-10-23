@@ -1,10 +1,12 @@
 package org.allaymc.api.block.action;
 
 /**
- * StartBreakAction is a block action to make the cracks in a block start forming, following the break time set in
- * the action.
+ * {@code StartBreakAction} represents the beginning of a block breaking animation
+ * with a duration in seconds. The client uses that duration to progress the visible
+ * cracks, while the dimension supplies the position of the block being broken.
  *
- * @param breakTime the time needs to break the block, in seconds
+ * @param breakTime total breaking duration in seconds
+ *
  * @author daoge_cmd
  */
 public record StartBreakAction(double breakTime) implements BlockAction {

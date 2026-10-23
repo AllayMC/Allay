@@ -9,7 +9,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a furnace finishes smelting an item.
+ * {@code FurnaceSmeltEvent} represents furnace output after the ingredient has already
+ * been consumed. Cancellation prevents result insertion and experience accumulation, but
+ * the furnace does not restore the consumed ingredient or its reset cooking progress.
  *
  * @author daoge_cmd
  */
@@ -18,15 +20,17 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.DIMENSION)
 public class FurnaceSmeltEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The furnace performing the smelt.
+     * Furnace completing the smelting operation.
      */
     protected BlockEntityFurnace furnace;
     /**
-     * The ingredient item stack being smelted.
+     * {@code ingredient} retains the input stack reference used before consumption. Its
+     * count may already be reduced, or its former container slot may already hold air.
      */
     protected ItemStack ingredient;
     /**
-     * The output item stack.
+     * {@code output} references the recipe output read by the furnace after dispatch. It
+     * has no replacement setter, and listeners receive the same mutable stack reference.
      */
     protected ItemStack output;
 }

@@ -18,29 +18,57 @@ import java.time.Duration;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.TORCH_FACING_DIRECTION;
 
 /**
- * Implementation of the redstone torch block.
- * Outputs redstone signal when lit. Turns off when the attached block is powered.
+ * {@code BlockRedstoneTorchBaseComponentImpl} inverts the power detected at a torch's
+ * supporting block and exposes directional output for the lit variant. Neighbor
+ * notifications request a delayed input check, while loss of a valid attachment surface
+ * asks the torch to break. Variant replacement preserves the attachment direction.
+ *
+ * <p>
+ * Input sampling combines direct weak power with strong power entering surrounding
+ * solid blocks. Conducted sampling excludes wire and a designated return face so stored
+ * dust signals do not feed the torch through that path. Position exclusions use object
+ * equality on offset coordinate vectors; a dimension-bearing position wrapper need not
+ * compare equal at identical coordinates. Output changes notify the torch's own
+ * neighbors, the supporting block's neighbors, and the neighborhood above, where lit
+ * torches emit strong power.
  *
  * @author daoge_cmd
  */
 public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl {
 
-    protected static final Duration UPDATE_DELAY = Duration.ofMillis(100); // 2 ticks
+    /**
+     * {@code UPDATE_DELAY} postpones input reevaluation by two game ticks so neighbor
+     * notifications sample the support after the requested delay.
+     */
+    protected static final Duration UPDATE_DELAY = Duration.ofMillis(100);
 
+    /**
+     * {@code lit} identifies this component's registered torch variant. Power queries
+     * and delayed transitions use that fixed identity rather than a mutable light
+     * property.
+     */
     protected final boolean lit;
 
+    /**
+     * Creates a redstone torch component with the supplied fixed lit-variant identity.
+     */
     public BlockRedstoneTorchBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, boolean lit) {
         super(blockType);
         this.lit = lit;
     }
 
+    /**
+     * Places a torch after selecting its attachment encoding and checking support for
+     * player placement. A {@code null} {@code placementInfo} preserves the supplied
+     * state and skips support validation; accepted placement then notifies direct and
+     * second-order neighbors.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null) {
             TorchFacingDirection facing = calculateTorchFacing(placementInfo);
             blockState = blockState.setPropertyValue(TORCH_FACING_DIRECTION, facing);
 
-            // Verify attachment block can support the torch
             BlockFace attachedFace = getAttachedFace(facing);
             Vector3ic attachedPos = attachedFace.offsetPos(placeBlockPos);
             BlockState attachedState = dimension.getBlockState(attachedPos);
@@ -53,12 +81,17 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
             return false;
         }
 
-        // Trigger updates to propagate power
         TorchFacingDirection facing = blockState.getPropertyValue(TORCH_FACING_DIRECTION);
         updateSecondOrderNeighbors(dimension, placeBlockPos, facing);
         return true;
     }
 
+    /**
+     * Checks attachment support after inherited neighbor handling and otherwise
+     * schedules delayed input evaluation. Every surviving neighbor notification
+     * requests a new deadline, so an existing position-based update can be replaced by
+     * this request.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -66,50 +99,58 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         TorchFacingDirection facing = block.getPropertyValue(TORCH_FACING_DIRECTION);
         BlockFace attachedFace = getAttachedFace(facing);
 
-        // Break if attached block no longer supports the torch
         if (face == attachedFace && !canSupportTorch(neighbor.getBlockState(), attachedFace)) {
             block.breakBlock();
             return;
         }
 
-        // Check if attached block is now powered/unpowered
-        // Schedule update to prevent rapid flickering
         block.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(
                 block.getPosition(), UPDATE_DELAY
         );
     }
 
+    /**
+     * Reevaluates the support's input and switches variant when the torch's fixed light
+     * identity disagrees with the required inverted output. Matching lit/input
+     * combinations leave the current torch type unchanged.
+     */
     @Override
     public void onScheduledUpdate(Block block) {
         boolean attachedPowered = isAttachedBlockPowered(block);
 
         if (lit && attachedPowered) {
-            // Turn off
             switchState(block, false);
         } else if (!lit && !attachedPowered) {
-            // Turn on
             switchState(block, true);
         }
     }
 
+    /**
+     * Notifies direct and second-order circuits after inherited replacement handling
+     * finishes. The old snapshot's attachment direction identifies the former
+     * supporting block whose neighbors may need to observe the changed torch output.
+     */
     @Override
     public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterReplaced(oldBlock, newBlockState, placementInfo);
 
-        // When removed, update neighbors
         var dimension = oldBlock.getDimension();
         var pos = oldBlock.getPosition();
         TorchFacingDirection facing = oldBlock.getPropertyValue(TORCH_FACING_DIRECTION);
         updateSecondOrderNeighbors(dimension, pos, facing);
     }
 
+    /**
+     * Returns maximum weak power from a lit torch except toward its supporting block.
+     * Unlit variants and the attachment face return {@code 0}, preventing direct output
+     * into that support direction.
+     */
     @Override
     public int getWeakPower(Block block, BlockFace face) {
         if (!lit) {
             return 0;
         }
 
-        // Don't power the block it's attached to
         TorchFacingDirection facing = block.getPropertyValue(TORCH_FACING_DIRECTION);
         BlockFace attachedFace = getAttachedFace(facing);
         if (face == attachedFace) {
@@ -119,14 +160,17 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         return MAX_REDSTONE_POWER;
     }
 
+    /**
+     * Returns maximum strong power only upward from a lit torch. Unlit variants and
+     * other queried faces return {@code 0}, independently of the torch's wall or floor
+     * attachment encoding.
+     */
     @Override
     public int getStrongPower(Block block, BlockFace face) {
         if (!lit) {
             return 0;
         }
 
-        // Strong power only upward (to block above)
-        // face is the direction the query comes FROM, so UP means the block above is querying
         if (face == BlockFace.UP) {
             return MAX_REDSTONE_POWER;
         }
@@ -134,7 +178,10 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     /**
-     * Checks if the block the torch is attached to is receiving power.
+     * Checks input power around the torch's supporting position while requesting
+     * exclusion of the torch position. The delegated exclusion uses vector object
+     * equality, so coordinate-equivalent values with different runtime classes may not
+     * be excluded.
      */
     protected boolean isAttachedBlockPowered(Block block) {
         TorchFacingDirection facing = block.getPropertyValue(TORCH_FACING_DIRECTION);
@@ -144,18 +191,28 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         var dimension = block.getDimension();
         BlockState attachedState = dimension.getBlockState(attachedPos);
 
-        // Check if the attached block is receiving power from any source except this torch
         return isPoweredExcluding(dimension, attachedPos, block.getPosition());
     }
 
     /**
-     * Checks if a block position is receiving power, excluding a specific source position.
+     * Returns whether surrounding sources power the supplied position through accepted
+     * direct or conducted paths. Each neighbor is compared with {@code excludePos}
+     * using object equality before its weak power is queried. A solid neighbor also
+     * permits a conducted strong-power search that excludes the return face.
+     *
+     * <p>
+     * The conducted helper omits redstone wire and applies the same position-equality
+     * rule. Offset vectors are {@code Vector3i} instances, whose equality requires
+     * matching runtime classes; an equal-coordinate {@code Position3i} exclusion
+     * therefore does not match. The method returns on the first positive accepted
+     * observation.
      */
     protected boolean isPoweredExcluding(Dimension dimension, Vector3ic blockPos, Vector3ic excludePos) {
         for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(blockPos);
 
-            // Skip the excluded position (the torch itself)
+            // Offset vectors use class-sensitive equality. A dimension-bearing
+            // exclusion can share these coordinates without matching, leaving that source in the scan.
             if (neighborPos.equals(excludePos)) {
                 continue;
             }
@@ -163,13 +220,11 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
             BlockState neighborState = dimension.getBlockState(neighborPos);
             Block neighborBlock = new Block(neighborState, new Position3i(neighborPos, dimension));
 
-            // Check weak power
             int weakPower = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
             if (weakPower > 0) {
                 return true;
             }
 
-            // Check power through solid blocks (only strong power can conduct through)
             if (neighborState.getBlockStateData().isSolid()) {
                 int powerThroughBlock = getStrongPowerIntoBlockExcluding(dimension, neighborPos, excludePos, face.opposite());
                 if (powerThroughBlock > 0) {
@@ -181,13 +236,17 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     /**
-     * Gets strong power flowing into a solid block, excluding specific positions.
-     * Only strong power can be conducted through solid blocks.
+     * Combines strong power entering a solid block while omitting one face, a position,
+     * and redstone wire sources. {@code excludeFace} points back toward the position
+     * whose input is being evaluated, while {@code excludePos} is compared using vector
+     * object equality.
      *
-     * @param dimension   the dimension
-     * @param blockPos    the solid block position
-     * @param excludePos  position to exclude (the torch itself)
-     * @param excludeFace face to exclude (pointing back to the torch)
+     * <p>
+     * Wire is skipped even though its behavior can report strong power, preventing that
+     * conducted route from turning the torch off through neighboring solid blocks.
+     * Other sources contribute their maximum directed strong power.
+     * Coordinate-equivalent exclusions of a different runtime vector class may remain
+     * in this scan.
      */
     protected int getStrongPowerIntoBlockExcluding(Dimension dimension, Vector3ic blockPos, Vector3ic excludePos, BlockFace excludeFace) {
         int maxPower = 0;
@@ -201,23 +260,25 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
 
             BlockState state = dimension.getBlockState(checkPos);
 
-            // Skip redstone wire - wire's "strong power" to a solid block should not
-            // propagate to adjacent blocks and cause torch to turn off.
-            // This matches vanilla behavior where wire charging a block doesn't
-            // indirectly power adjacent blocks for torch detection.
+            // Dust can report strong output, but this conducted input route
+            // deliberately omits it so neighboring charged blocks do not feed this torch through wire.
             if (state.getBlockType() == BlockTypes.REDSTONE_WIRE) {
                 continue;
             }
 
             Block checkBlock = new Block(state, new Position3i(checkPos, dimension));
 
-            // Only strong power can be conducted through solid blocks
             int strongPower = state.getBehavior().getStrongPower(checkBlock, face.opposite());
             maxPower = Math.max(maxPower, strongPower);
         }
         return maxPower;
     }
 
+    /**
+     * Requests the selected lit or unlit torch type while preserving attachment
+     * direction. Direct and second-order notifications follow the request without
+     * checking whether the dimension accepted the replacement state.
+     */
     protected void switchState(Block block, boolean newLit) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
@@ -232,27 +293,30 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     /**
-     * Updates second-order neighbors when torch state changes.
-     * This includes neighbors of the attached block and the block above (which receives strong power).
+     * Notifies circuits around the torch, its supporting block, and the block above.
+     * Support and upper neighborhoods can receive a changed conducted signal beyond the
+     * torch's immediate six neighboring positions.
      */
     protected void updateSecondOrderNeighbors(Dimension dimension, Vector3ic pos, TorchFacingDirection facing) {
-        // Update direct neighbors
         dimension.updateAround(pos);
-        // Update around the attached block (second-order neighbors)
         BlockFace attachedFace = getAttachedFace(facing);
         dimension.updateAround(attachedFace.offsetPos(pos));
-        // Update around the block above (receives strong power from torch)
         dimension.updateAround(BlockFace.UP.offsetPos(pos));
     }
 
+    /**
+     * Returns the attachment encoding for the clicked placement face. A clicked ceiling
+     * face selects the floor-standing {@code TOP} encoding instead, so later support
+     * validation examines the block below rather than allowing ceiling attachment.
+     */
     protected TorchFacingDirection calculateTorchFacing(PlayerInteractInfo placementInfo) {
         BlockFace clickedFace = placementInfo.blockFace();
 
-        // Torch facing direction is opposite to the clicked face
-        // (torch points away from the block it's attached to)
         return switch (clickedFace) {
             case UP -> TorchFacingDirection.TOP;
-            case DOWN -> TorchFacingDirection.TOP; // Can't place on ceiling, default to floor
+            // Ceiling clicks have no torch attachment encoding; the standing
+            // fallback still passes through placement's normal support check against the block below.
+            case DOWN -> TorchFacingDirection.TOP;
             case NORTH -> TorchFacingDirection.SOUTH;
             case SOUTH -> TorchFacingDirection.NORTH;
             case WEST -> TorchFacingDirection.EAST;
@@ -260,34 +324,29 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         };
     }
 
+    /**
+     * Returns the direction from the torch toward its supporting block. {@code TOP} and
+     * {@code UNKNOWN} select the block below; wall encodings select their corresponding
+     * horizontal support face.
+     */
     protected BlockFace getAttachedFace(TorchFacingDirection facing) {
-        // TorchFacingDirection indicates which direction the wall is (relative to torch)
         return switch (facing) {
-            case TOP, UNKNOWN -> BlockFace.DOWN; // Attached to floor (block below)
+            case TOP, UNKNOWN -> BlockFace.DOWN;
             case WEST -> BlockFace.WEST;   // Attached to west wall
             case EAST -> BlockFace.EAST;   // Attached to east wall
-            case NORTH -> BlockFace.NORTH; // Attached to north wall
-            case SOUTH -> BlockFace.SOUTH; // Attached to south wall
+            case NORTH -> BlockFace.NORTH;
+            case SOUTH -> BlockFace.SOUTH;
         };
     }
 
     /**
-     * Checks if a block can support a torch on the specified face.
-     * The block needs to have a full surface on the opposite face of attachment.
-     * For top placement (on block below), only center needs to be full (allows fences/walls).
-     * For wall placement, the entire face must be full.
-     *
-     * @param blockState   the block state to check
-     * @param attachedFace the face where the torch attaches (direction from torch to support block)
-     * @return true if the block can support a torch on that face
+     * Returns whether the support surface is sufficient for the specified attachment
+     * direction. Standing torches require only the upper face's center to be full,
+     * while wall placement requires a full opposite collision face.
      */
     protected boolean canSupportTorch(BlockState blockState, BlockFace attachedFace) {
-        // The torch attaches to the opposite face of the support block
-        // e.g., if attachedFace is DOWN (torch on top of block), check if UP face is full
         BlockFace supportFace = attachedFace.opposite();
         var shape = blockState.getBlockStateData().collisionShape();
-        // For top placement, only center needs to be full (allows fences, walls, etc.)
-        // For wall placement, entire face must be full
         return supportFace == BlockFace.UP ? shape.isCenterFull(BlockFace.UP) : shape.isFull(supportFace);
     }
 }

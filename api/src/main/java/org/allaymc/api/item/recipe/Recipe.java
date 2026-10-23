@@ -8,13 +8,11 @@ import org.allaymc.api.utils.identifier.Identified;
 import org.allaymc.api.utils.identifier.Identifier;
 
 /**
- * Represents an abstract recipe used for constructing or crafting specific outputs.
- * A recipe is identified by a unique identifier and specifies its outputs, the block
- * type used for crafting, and a priority which influences recipe selection.
- * <p>
- * The recipe matching logic is defined by the match() method in concrete recipe implementations.
- * Each recipe type can implement its own matching rules for determining if a given input matches
- * the recipe requirements.
+ * {@code Recipe} associates a recipe identifier and priority with output stacks
+ * and an input-matching contract. Concrete subclasses decide which input
+ * representation they accept. Construction retains the supplied output array
+ * and its mutable stacks, and generated accessors expose that same storage
+ * without copying it.
  *
  * @author daoge_cmd
  */
@@ -22,31 +20,32 @@ import org.allaymc.api.utils.identifier.Identifier;
 @AllArgsConstructor
 public abstract class Recipe implements Identified {
     /**
-     * The identifier for this recipe.
+     * Identifier used for recipe registration and lookup.
      */
     protected final Identifier identifier;
     /**
-     * The outputs of this recipe. Can be {@code null} if the recipe has no outputs.
+     * {@code outputs} retains the supplied array and mutable stacks without
+     * copying. {@code getOutputs()} exposes this storage directly; dynamic
+     * recipes may instead use {@code null} and override output access.
      */
     protected final ItemStack[] outputs;
     /**
-     * The priority of this recipe. Recipes with lower priority are preferred compared to recipes
-     * with higher priority.
+     * Recipe selection priority included in network recipe data.
      */
     protected final int priority;
 
     /**
-     * Checks if the input matches the recipe.
-     *
-     * @param input the input to check
-     * @return {@code true} if the input matches the recipe, {@code false} otherwise.
+     * Returns whether the supplied input satisfies this recipe's matching
+     * rules. Concrete implementations select their supported input subtype;
+     * dynamic recipes may construct outputs or update input metadata while
+     * determining whether an input matches.
      */
     public abstract boolean match(RecipeInput input);
 
     /**
-     * Retrieves the primary output of the recipe.
-     *
-     * @return the first output {@link ItemStack} in the recipe's output array.
+     * Returns the first stack in the retained output array without copying it.
+     * Callers must ensure that {@code outputs} is non-{@code null} and
+     * nonempty; this base implementation otherwise fails during array access.
      */
     public ItemStack getOutput() {
         return outputs[0];

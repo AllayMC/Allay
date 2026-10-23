@@ -15,32 +15,36 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
 
 /**
- * Dispense behavior for flint and steel items.
- * Primes TNT blocks, places fire blocks, or damages the item.
+ * {@code FlintAndSteelDispenseBehavior} uses flint and steel to prime adjacent TNT
+ * or ignite supported air above a block. Successful actions return the damaged
+ * tool as a remainder unless it breaks; unsupported targets eject the tool through
+ * the ordinary fallback behavior.
  *
  * @author daoge_cmd
  */
 public class FlintAndSteelDispenseBehavior implements DispenseBehavior {
 
+    /**
+     * Primes adjacent TNT first, otherwise attempts supported fire placement in
+     * air. Successful actions emit effects and attempt tool damage; unsupported
+     * targets use ordinary ejection without applying this handler's durability
+     * step.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
         var dimension = block.getDimension();
         var targetPos = face.offsetPos(block.getPosition());
         var targetBlock = dimension.getBlockState(targetPos);
 
-        // Priority 1: If target is TNT block, prime it
         if (targetBlock.getBlockType() == BlockTypes.TNT) {
             BlockTypes.TNT.getBlockBehavior().prime(new Position3i(targetPos, dimension));
             spawnDispenseEffects(block, face);
             return damageItem(item);
         }
 
-        // Priority 2: If target is air, place fire
         if (targetBlock.getBlockType() == BlockTypes.AIR) {
-            // Check if the block below can support fire
             var supportBlockState = dimension.getBlockState(BlockFace.DOWN.offsetPos(targetPos));
             if (BlockFireBaseComponentImpl.canSupportFire(supportBlockState)) {
-                // Check if the block that supports fire is a soul fire converter
                 var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER)
                         ? BlockTypes.SOUL_FIRE.getDefaultState()
                         : BlockTypes.FIRE.getDefaultState();
@@ -51,12 +55,19 @@ public class FlintAndSteelDispenseBehavior implements DispenseBehavior {
             }
         }
 
-        // Nether portal creation is now handled by fire block's onPlace()
 
-        // Failed to do anything, fall back to default behavior
+        // No TNT or supported fire target accepted the action. Eject the tool
+        // instead so the caller's successful consumption corresponds to a dropped
+        // item.
         return DefaultDispenseBehavior.INSTANCE.dispense(block, face, item);
     }
 
+    /**
+     * Attempts one durability increase and returns the surviving tool reference as
+     * a successful remainder. Durability rejection leaves the tool unchanged,
+     * while a broken tool returns {@code ItemAirStack.AIR_STACK} as no
+     * replacement.
+     */
     protected DispenseResult damageItem(ItemStack item) {
         item.tryIncreaseDamage(1);
         if (item.isBroken()) {
@@ -65,6 +76,9 @@ public class FlintAndSteelDispenseBehavior implements DispenseBehavior {
         return DispenseResult.success(item);
     }
 
+    /**
+     * Emits the dispenser click sound and directional shoot particle.
+     */
     protected void spawnDispenseEffects(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var center = MathUtils.center(block.getPosition());

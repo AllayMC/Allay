@@ -4,66 +4,65 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 
 /**
+ * {@code BlockEntityCampfireBaseComponent} exposes four cooking slots,
+ * remaining cooking times, and a recipe-category selection. The server retains
+ * items until cooking completes or an invalid recipe causes a drop, and the
+ * air-stack sentinel represents an unoccupied slot.
+ *
  * @author daoge_cmd
  */
 public interface BlockEntityCampfireBaseComponent extends BlockEntityBaseComponent {
     /**
-     * The cooking time for campfire recipes in ticks (30 seconds).
+     * {@code COOK_TIME} supplies the remaining game ticks assigned when the
+     * server starts a new campfire recipe for a retained ingredient.
      */
     int COOK_TIME = 600;
 
     /**
-     * Gets the furnace recipe type for this campfire.
-     *
-     * @return the furnace recipe type
+     * Returns the recipe category used to match this campfire's ingredients.
      */
     FurnaceRecipe.Type getFurnaceRecipeType();
 
     /**
-     * Gets the item stack in the specified slot.
-     *
-     * @param slot the slot index (0-3)
-     * @return the item stack in the slot
+     * Returns a retained slot stack, using the air-stack sentinel when empty.
+     * The server also returns that sentinel for indices outside zero through
+     * three; valid results share the stored mutable item.
      */
     ItemStack getItemStack(int slot);
 
     /**
-     * Sets the item stack in the specified slot.
-     *
-     * @param slot the slot index (0-3)
-     * @param item the item stack to set
+     * Assigns a slot stack and resets its remaining cooking time and cached
+     * recipe. The server ignores invalid indices and treats {@code null} as
+     * empty; accepted assignments update viewers and comparator output without
+     * consuming the supplied stack.
      */
     void setItemStack(int slot, ItemStack item);
 
     /**
-     * Gets the remaining cook time for the item in the specified slot.
-     *
-     * @param slot the slot index (0-3)
-     * @return the remaining cook time in ticks
+     * Returns the retained remaining cook time in game ticks for a slot. The
+     * server returns zero for indices outside zero through three, while valid
+     * slots expose their stored counter directly.
      */
     int getCookTime(int slot);
 
     /**
-     * Sets the remaining cook time for the item in the specified slot.
-     *
-     * @param slot     the slot index (0-3)
-     * @param cookTime the cook time in ticks
+     * Replaces a slot's retained remaining cooking ticks without updating
+     * viewers. The server ignores invalid indices and does not clamp the
+     * supplied counter; recipe discovery during ticking can reset it again.
      */
     void setCookTime(int slot, int cookTime);
 
     /**
-     * Checks if the campfire can accept the item.
-     *
-     * @param item the item to check
-     * @return true if the campfire can accept the item
+     * Returns whether an empty slot and a matching campfire recipe are
+     * available. The server rejects {@code null} and the air-stack sentinel;
+     * this query does not reserve a slot or consume the supplied item.
      */
     boolean canAcceptItemStack(ItemStack item);
 
     /**
-     * Tries to add an item to the campfire.
-     *
-     * @param item the item to add
-     * @return true if the item was added successfully
+     * Copies one item into the first available slot when a recipe matches. The
+     * server leaves the supplied stack unchanged, so callers perform any
+     * inventory consumption separately after a successful result.
      */
     boolean tryAddItemStack(ItemStack item);
 }

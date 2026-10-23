@@ -7,21 +7,36 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Represents the four sherds on a decorated pot.
- * <p>
- * Each side can have either a pottery sherd identifier or an empty string for brick.
+ * {@code PotSherds} represents the four decorated-pot face identifiers in front,
+ * back, left, and right order. An empty identifier represents a brick face. The
+ * compact constructor replaces {@code null} identifiers with empty strings so
+ * serialization can produce a complete four-element list.
  *
- * @param front the front sherd identifier
- * @param back  the back sherd identifier
- * @param left  the left sherd identifier
- * @param right the right sherd identifier
+ * @param front front face identifier
+ * @param back back face identifier
+ * @param left left face identifier
+ * @param right right face identifier
+ *
  * @author IWareQ
  */
 public record PotSherds(String front, String back, String left, String right) {
+    /**
+     * {@code TAG_SHERDS} names the ordered NBT string list shared by decorated-pot
+     * item and block-entity persistence.
+     */
     public static final String TAG_SHERDS = "sherds";
 
+    /**
+     * {@code DEFAULT} represents four brick faces and supplies the fallback when
+     * stored data has fewer than four identifiers.
+     */
     public static final PotSherds DEFAULT = new PotSherds("", "", "", "");
 
+    /**
+     * Creates four face identifiers, normalizing each {@code null} value to the
+     * empty brick identifier. Other strings are retained without identifier
+     * validation, and the component order remains front, back, left, then right.
+     */
     public PotSherds {
         front = Objects.requireNonNullElse(front, "");
         back = Objects.requireNonNullElse(back, "");
@@ -30,13 +45,14 @@ public record PotSherds(String front, String back, String left, String right) {
     }
 
     /**
-     * Create PotSherds from NBT.
-     *
-     * @param nbt the NBT map containing the sherds list
-     * @return new PotSherds instance
+     * Reads the first four strings from the stored sherd list. A missing or shorter
+     * list yields {@code DEFAULT}; additional entries are ignored, and the returned
+     * identifiers follow front, back, left, right order.
      */
     public static PotSherds fromNBT(NbtMap nbt) {
         var sherdsList = nbt.getList(TAG_SHERDS, NbtType.STRING);
+        // Incomplete lists cannot describe every pot face, so load four brick faces
+        // instead of partially assigning decorations.
         if (sherdsList == null || sherdsList.size() < 4) {
             return DEFAULT;
         }
@@ -45,9 +61,8 @@ public record PotSherds(String front, String back, String left, String right) {
     }
 
     /**
-     * Convert to NBT list for saving.
-     *
-     * @return list of sherd identifiers
+     * Returns an unmodifiable list of the four identifiers in front, back, left,
+     * and right order.
      */
     public List<String> toNBTList() {
         return List.of(front, back, left, right);

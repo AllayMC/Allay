@@ -9,7 +9,10 @@ import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a viewer opens a container.
+ * {@code ContainerOpenEvent} represents a viewer's attempt to open a container before
+ * window registration. Cancellation stops the normal opening path before the viewer
+ * callback, membership update, and open listeners; an already registered viewer bypasses
+ * this event in the base implementation.
  *
  * @author daoge_cmd
  */
@@ -18,11 +21,11 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.WORLD)
 public class ContainerOpenEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The viewer opening the container.
+     * Viewer requesting the container window.
      */
     protected ContainerViewer viewer;
     /**
-     * The container being opened.
+     * Container targeted by the opening attempt.
      */
     protected Container container;
 }

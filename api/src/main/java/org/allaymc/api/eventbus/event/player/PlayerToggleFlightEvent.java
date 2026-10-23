@@ -6,7 +6,10 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
- * Called when a player starts or stops flying.
+ * {@code PlayerToggleFlightEvent} represents a notification carrying a player
+ * entity's flight state. {@code value} records the state supplied by its producer;
+ * this event is not cancellable, and the current server implementation has no
+ * dispatch site for this event type.
  *
  * @author daoge_cmd
  */
@@ -14,10 +17,15 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 @CallerThread(ThreadType.WORLD)
 public class PlayerToggleFlightEvent extends PlayerEvent {
     /**
-     * Whether flight is enabled.
+     * State reported by this transition.
      */
     protected boolean value;
 
+    /**
+     * Creates a {@code PlayerToggleFlightEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerToggleFlightEvent(EntityPlayer player, boolean value) {
         super(player);
         this.value = value;

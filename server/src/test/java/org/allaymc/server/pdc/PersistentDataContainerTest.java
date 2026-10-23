@@ -27,17 +27,31 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code PersistentDataContainerTest} verifies typed custom metadata, primitive adapters,
+ * nested containers, and item-tag persistence using initialized item registries.
+ *
  * @author IWareQ
  */
 @ExtendWith(AllayTestExtension.class)
 public class PersistentDataContainerTest {
+    /**
+     * {@code VALID_KEY} identifies the common test entry. {@code setup} initializes it before test
+     * methods use containers created from the shared item registries.
+     */
     private static Identifier VALID_KEY;
 
+    /**
+     * Initializes the common identifier used by persistent container test cases.
+     */
     @BeforeAll
     public static void setup() {
         VALID_KEY = new Identifier("test", "validkey");
     }
 
+    /**
+     * Supplies built-in list adapters, representative elements, and element-specific equality
+     * assertions.
+     */
     private static Stream<Arguments> testListTypeArgumentSource() {
         var first = createNewItemStack().getPersistentDataContainer();
         var second = first.getAdapterContext().newPersistentDataContainer();
@@ -65,19 +79,27 @@ public class PersistentDataContainerTest {
         );
     }
 
+    /**
+     * Creates a lowercase key within the test plugin's metadata namespace.
+     */
     private static Identifier requestKey(String keyName) {
         return new Identifier("test-plugin", keyName.toLowerCase(Locale.ROOT));
     }
 
+    /**
+     * Creates a single diamond item with an initially empty metadata container.
+     */
     private static ItemStack createNewItemStack() {
         return ItemTypes.DIAMOND.createItemStack(1);
     }
 
+    /**
+     * Builds an item containing a display name, primitive values, lists, and nested metadata.
+     */
     private ItemStack createComplexItemStack() {
         var itemStack = createNewItemStack();
         itemStack.setCustomName("Item Display Name");
 
-        //Add random primitive values
         itemStack.getPersistentDataContainer().set(requestKey("custom-long"), PersistentDataType.LONG, 4L);
         itemStack.getPersistentDataContainer().set(requestKey("custom-byte-array"), PersistentDataType.BYTE_ARRAY, new byte[]{
                 0, 1, 2, 10
@@ -98,12 +120,20 @@ public class PersistentDataContainerTest {
         return itemStack;
     }
 
+    /**
+     * Attempts to store a value whose primitive class has no adapter. The container must reject
+     * that write with an adapter lookup error.
+     */
     @Test
     public void testSetNoAdapter() {
         var itemStack = createNewItemStack();
         assertThrows(IllegalArgumentException.class, () -> itemStack.getPersistentDataContainer().set(VALID_KEY, new PrimitiveDataType<>(boolean.class), true));
     }
 
+    /**
+     * Checks a present entry using an unsupported primitive class. Presence checking must report
+     * the missing adapter rather than accepting the stored value.
+     */
     @Test
     public void testHasNoAdapter() {
         var itemStack = createNewItemStack();
@@ -111,6 +141,10 @@ public class PersistentDataContainerTest {
         assertThrows(IllegalArgumentException.class, () -> itemStack.getPersistentDataContainer().has(VALID_KEY, new PrimitiveDataType<>(boolean.class)));
     }
 
+    /**
+     * Stores an integer and checks only its key. The untyped presence operation must succeed
+     * without requiring the caller to supply a data converter.
+     */
     @Test
     public void testHasNoType() {
         var itemStack = createNewItemStack();
@@ -118,6 +152,10 @@ public class PersistentDataContainerTest {
         assertTrue(itemStack.getPersistentDataContainer().has(PersistentDataContainerTest.VALID_KEY));
     }
 
+    /**
+     * Reads a present entry with an unsupported primitive class. The typed read must reject that
+     * adapter request rather than returning a fallback value.
+     */
     @Test
     public void testGetNoAdapter() {
         var itemStack = createNewItemStack();
@@ -125,6 +163,10 @@ public class PersistentDataContainerTest {
         assertThrows(IllegalArgumentException.class, () -> itemStack.getPersistentDataContainer().get(VALID_KEY, new PrimitiveDataType<>(boolean.class)));
     }
 
+    /**
+     * Stores an integer and requests the same key as a string. The container must reject the
+     * incompatible stored representation during typed extraction.
+     */
     @Test
     public void testGetWrongType() {
         var itemStack = createNewItemStack();
@@ -132,6 +174,10 @@ public class PersistentDataContainerTest {
         assertThrows(IllegalArgumentException.class, () -> itemStack.getPersistentDataContainer().get(VALID_KEY, PersistentDataType.STRING));
     }
 
+    /**
+     * Stores values with identical paths in two plugin namespaces. Both entries must remain
+     * independently addressable through their complete namespaced identifiers after insertion.
+     */
     @Test
     public void testDifferentNamespace() {
         var identifierA = new Identifier("plugin-a", "damage");
@@ -145,6 +191,10 @@ public class PersistentDataContainerTest {
         assertEquals(160L, itemStack.getPersistentDataContainer().get(identifierB, PersistentDataType.LONG));
     }
 
+    /**
+     * Saves an item containing built-in display data and custom metadata. The resulting NBT must
+     * keep display information separate from the expected primitive and nested custom entries.
+     */
     @Test
     public void testNBTTagStoring() {
         var itemStack = createComplexItemStack();
@@ -173,6 +223,10 @@ public class PersistentDataContainerTest {
         );
     }
 
+    /**
+     * Saves custom strings that resemble numeric values and loads another item. The loaded item
+     * tag must retain the same representation as the original item.
+     */
     @Test
     public void testCorrectType() {
         var complexItemStack = createComplexItemStack();
@@ -185,6 +239,10 @@ public class PersistentDataContainerTest {
         assertEquals(complexItemStack.saveExtraTag(), newItemStack.saveExtraTag());
     }
 
+    /**
+     * Stores strings resembling typed NBT, lists, booleans, and JSON before loading another item.
+     * Typed reads must preserve those strings instead of reinterpreting their syntax.
+     */
     @Test
     public void testStringEdgeCases() {
         var itemStack = createNewItemStack();
@@ -216,6 +274,10 @@ public class PersistentDataContainerTest {
         assertEquals(jsonLookalike, loadedPdc.get(PersistentDataContainerTest.requestKey("string_json_lookalike"), PersistentDataType.STRING));
     }
 
+    /**
+     * Stores a UUID through a custom byte-array converter. Presence and retrieval must use the
+     * primitive adapter while returning the original UUID application value.
+     */
     @Test
     public void storeUUIDOnItemTest() {
         var itemStack = createNewItemStack();
@@ -227,6 +289,10 @@ public class PersistentDataContainerTest {
         assertEquals(randomUUID, itemStack.getPersistentDataContainer().get(PersistentDataContainerTest.VALID_KEY, uuidDataType));
     }
 
+    /**
+     * Builds three levels of nested metadata with the same value key. Reads at each depth must
+     * resolve the correct container without confusing sibling-level values.
+     */
     @Test
     public void encapsulatedContainers() {
         var innerKey = new Identifier("plugin-a", "inner");
@@ -257,6 +323,10 @@ public class PersistentDataContainerTest {
                 .get(PersistentDataContainerTest.VALID_KEY, PersistentDataType.LONG));
     }
 
+    /**
+     * Exercises each built-in scalar and primitive-array adapter on an item container. The shared
+     * helper checks storage, typed presence, retrieval, and removal for every value.
+     */
     @Test
     public void testPrimitiveCustomTags() {
         var itemStack = createNewItemStack();
@@ -279,6 +349,11 @@ public class PersistentDataContainerTest {
         });
     }
 
+    /**
+     * Stores, checks, retrieves, and removes one primitive test value. Arrays use reflective
+     * element comparisons because ordinary object equality would compare their identities rather
+     * than the retrieved contents under test.
+     */
     private <T, Z> void testPrimitiveCustomTag(ItemStack itemStack, PersistentDataType<T, Z> type, Z value) {
         var tagKey = new Identifier("test", String.valueOf(type.hashCode()));
 
@@ -300,6 +375,11 @@ public class PersistentDataContainerTest {
         assertFalse(itemStack.getPersistentDataContainer().has(tagKey, type));
     }
 
+    /**
+     * Stores each supplied built-in list type and reads it through the same adapter. The returned
+     * list must preserve its length and satisfy the supplied element comparison for every
+     * position.
+     */
     @ParameterizedTest
     @MethodSource("testListTypeArgumentSource")
     public <T> void testListType(@NotNull final ListPersistentDataType<T, T> type, @NotNull final List<T> list, @NotNull final BiConsumer<T, T> equalsCheck) {
@@ -320,6 +400,10 @@ public class PersistentDataContainerTest {
         }
     }
 
+    /**
+     * Stores an empty string list and reloads its item tag. Both string-list and byte-list
+     * presence checks must accept the empty list while scalar-string checks reject it.
+     */
     @Test
     public void testEmptyListApplicationToAnyType() {
         var itemStack = createNewItemStack();

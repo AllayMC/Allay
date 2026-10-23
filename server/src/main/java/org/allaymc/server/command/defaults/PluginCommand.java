@@ -8,15 +8,29 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 
 /**
+ * {@code PluginCommand} lists enabled plugins and requests reloads from enabled,
+ * reloadable plugin instances. Individual reloads reject unavailable or
+ * non-reloadable plugins, while bulk reload skips non-reloadable entries;
+ * completed reloads remain effective if a later plugin's reload throws.
+ *
  * @author daoge_cmd
  */
 public class PluginCommand extends Command {
 
+    /**
+     * Creates the authorized {@code /plugin} command and its {@code /pl} alias.
+     */
     public PluginCommand() {
         super("plugin", TrKeys.ALLAY_COMMAND_PLUGIN_DESCRIPTION, Permissions.COMMAND_PLUGIN);
         aliases.add("pl");
     }
 
+    /**
+     * Installs listing, single-plugin reload, and bulk reload branches.
+     * Reload requests call enabled plugin instances directly. Bulk reload
+     * visits reloadable plugins in manager iteration order and provides no
+     * rollback or per-plugin exception recovery.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

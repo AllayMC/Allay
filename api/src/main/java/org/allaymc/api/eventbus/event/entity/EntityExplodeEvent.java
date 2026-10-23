@@ -9,10 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.world.explosion.Explosion;
 
 /**
- * Called when an entity is about to explode. This event is used by some entities like tnt and creeper.
- * <p>
- * Notes that firework does not use this event, but use {@link FireworkExplodeEvent} instead. That's
- * because firework does not use the {@link Explosion} class.
+ * {@code EntityExplodeEvent} exposes a cancellable entity explosion before its
+ * execution. TNT and ender crystal handlers pass their configured {@link
+ * Explosion} through this event, while firework damage uses {@link
+ * FireworkExplodeEvent} because rockets implement their blast separately.
  *
  * @author daoge_cmd
  */
@@ -21,10 +21,17 @@ import org.allaymc.api.world.explosion.Explosion;
 @CallerThread(ThreadType.DIMENSION)
 public class EntityExplodeEvent extends EntityEvent implements CancellableEvent {
     /**
-     * The explosion.
+     * {@code explosion} retains the mutable explosion supplied by the emitter.
+     * Current TNT and crystal emitters execute their original reference, so
+     * handlers adjust that object rather than replace it through the setter.
      */
     protected Explosion explosion;
 
+    /**
+     * Creates an event retaining the supplied entity and explosion references
+     * without copying either object. The emitter decides whether cancellation
+     * prevents entity removal and execution of the configured explosion.
+     */
     public EntityExplodeEvent(Entity entity, Explosion explosion) {
         super(entity);
         this.explosion = explosion;

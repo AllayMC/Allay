@@ -22,12 +22,27 @@ import static org.allaymc.api.item.type.ItemTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code RecipeTest} exercises shaped, shapeless, stonecutting, and furnace
+ * recipe matching with registered item fixtures. The cases protect grid-offset
+ * handling, ingredient cardinality, furnace-category restrictions, tag-based
+ * furnace ingredients, and the identifiers and priorities exposed by
+ * constructed recipes.
+ *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
+    /**
+     * {@code GRASS_KEY} maps the pattern's {@code 'x'} character to grass
+     * blocks for the shaped crafting cases.
+     */
     public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new ItemTypeDescriptor(GRASS_BLOCK));
 
+    /**
+     * Matches several grass-block patterns at different crafting-grid offsets.
+     * Valid translated arrangements must match, while extra occupied positions
+     * and empty grids must fail the exercised pattern checks.
+     */
     @Test
     void testShapedRecipe() {
         var grassMagic1 = new ShapedRecipe(
@@ -177,6 +192,11 @@ class RecipeTest {
         assertTrue(grassMagic3.match(input17));
     }
 
+    /**
+     * Matches three grass-block requirements without a positional pattern. The
+     * recipe must accept three occupied grass slots and reject both an extra
+     * grass slot and a substituted diamond slot.
+     */
     @Test
     void testShapelessRecipe() {
         var grassMagic1 = new ShapelessRecipe(
@@ -206,6 +226,11 @@ class RecipeTest {
         assertFalse(grassMagic1.match(input3));
     }
 
+    /**
+     * Builds a single-position input for a stonecutter recipe. The shapeless
+     * matcher must accept that input when its only occupied stack satisfies the
+     * configured grass-block descriptor.
+     */
     @Test
     void testStonecutterRecipeInput() {
         var stonecutterRecipe = new ShapelessRecipe(
@@ -220,6 +245,12 @@ class RecipeTest {
         assertTrue(stonecutterRecipe.match(input));
     }
 
+    /**
+     * Exercises wildcard item inputs, furnace-category matching, and a
+     * tag-based log recipe. The assertions protect generic-furnace fallback
+     * behavior, generated tag identifiers, explicit priority, and rejection of
+     * an unrelated ingredient.
+     */
     @Test
     void testFurnaceRecipe() {
         var grassMagic1 = new FurnaceRecipe(
@@ -260,18 +291,28 @@ class RecipeTest {
         assertFalse(logRecipe.match(new FurnaceRecipeInput(SAND.createItemStack(), FurnaceRecipe.Type.FURNACE)));
     }
 
+    /**
+     * Creates a count-one diamond stack for recipe outputs and invalid
+     * ingredients.
+     */
     private ItemDiamondStack diamond() {
         return DIAMOND.createItemStack(
                 ItemStackInitInfo.builder().count(1).build()
         );
     }
 
+    /**
+     * Creates a count-one grass-block stack for crafting input fixtures.
+     */
     private ItemGrassBlockStack grass() {
         return GRASS_BLOCK.createItemStack(
                 ItemStackInitInfo.builder().count(1).build()
         );
     }
 
+    /**
+     * Returns the shared air stack used for empty crafting positions.
+     */
     private ItemAirStack air() {
         return AIR.createItemStack(
                 ItemStackInitInfo.builder().count(1).build()

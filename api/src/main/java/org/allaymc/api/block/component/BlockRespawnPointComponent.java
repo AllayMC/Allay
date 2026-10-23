@@ -5,21 +5,22 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3ic;
 
 /**
- * Component for blocks that can provide a custom respawn point for players.
+ * {@code BlockRespawnPointComponent} defines block-specific player respawn
+ * destination lookup. The respawn processor asks the selected spawn block for a
+ * location and uses the global spawn after a {@code null} result. Implementations
+ * determine their standing-space validation and resource-consumption rules; the
+ * default component performs only a coordinate offset.
  *
  * @author IWareQ
  */
 public interface BlockRespawnPointComponent extends BlockComponent {
     /**
-     * Called when a player attempts to respawn at this block.
-     * <p>
-     * This method should validate the respawn point and consume any resources
-     * (e.g., respawn anchor charges) if applicable.
-     *
-     * @param player the player attempting to respawn
-     * @param block  the respawn block
-     * @return the respawn location if valid, or {@code null} if respawn is not possible
-     * (e.g., no charges left or obstructed), in which case the player will respawn at the global spawn point
+     * Returns this implementation's respawn destination, or {@code null} to
+     * decline the request. Specialized implementations may validate standing space
+     * and consume block resources during the call; the default component returns
+     * one block above without those checks. The respawn processor replaces the
+     * player's stored spawn preference with the global spawn after a {@code null}
+     * result.
      */
     Location3ic onPlayerRespawn(EntityPlayer player, Block block);
 }

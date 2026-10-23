@@ -3,91 +3,89 @@ package org.allaymc.api.world.dimension;
 import org.allaymc.api.utils.identifier.Identifier;
 
 /**
- * Represents a dimension type.
+ * {@code DimensionType} defines a dimension's identity, inclusive build-height bounds, and
+ * environmental behavior switches. Chunk indexing derives section coordinates
+ * from those bounds, so implementations must align the minimum to a
+ * sixteen-block section start and the maximum to its final block.
  *
  * @author daoge_cmd
  */
 public interface DimensionType {
     /**
-     * Get the numeric id of the dimension type.
-     *
-     * @return the numeric id
+     * Returns the numeric identifier assigned to this registered dimension
+     * type.
      */
     int getId();
 
     /**
-     * Get the identifier of the dimension type.
-     *
-     * @return the identifier
+     * Returns the namespaced identifier used to register this dimension type.
      */
     Identifier getIdentifier();
 
     /**
-     * Get the minimum build height of the dimension type.
-     *
-     * @return the minimum build height
+     * Returns the inclusive minimum build height in absolute block coordinates.
      */
     int getMinHeight();
 
     /**
-     * Get the maximum build height of the dimension type.
-     *
-     * @return the maximum build height
+     * Returns the inclusive maximum build height in absolute block coordinates.
      */
     int getMaxHeight();
 
     /**
-     * Check whether the dimension type has sky light.
-     *
-     * @return {@code true} if the dimension type has sky light
+     * Returns whether this dimension type supports propagation of sky light.
      */
     boolean hasSkyLight();
 
     /**
-     * Check whether beds work normally in the dimension type.
-     *
-     * @return {@code true} if beds work normally
+     * Returns whether beds provide normal sleeping behavior in this dimension.
      */
     boolean bedWorks();
 
     /**
-     * Check whether respawn anchors work in the dimension type.
-     *
-     * @return {@code true} if respawn anchors work
+     * Returns whether respawn anchors function as respawn points in this
+     * dimension.
      */
     boolean respawnAnchorWorks();
 
     /**
-     * Check whether water evaporates in the dimension type.
-     *
-     * @return {@code true} if water evaporates
+     * Returns whether placed water evaporates under this dimension's
+     * environmental rules.
      */
     boolean waterEvaporates();
 
     /**
-     * Get the number of chunk sections in the dimension type.
-     *
-     * @return the number of chunk sections
+     * Returns the number of sixteen-block sections across the inclusive height
+     * range. Bounds must describe complete aligned sections; integer division
+     * truncates a partial section instead of validating the range.
      */
     default int chunkSectionCount() {
+        // Inclusive block bounds contribute one extra block before conversion
+        // to complete sections.
         return (getMaxHeight() - getMinHeight() + 1) / 16;
     }
 
     /**
-     * Get the minimum section y of the dimension type.
-     *
-     * @return the minimum section y
+     * Returns the absolute section Y containing the minimum build height.
+     * Arithmetic shifting preserves floor-based section coordinates for
+     * negative heights; implementations must align the minimum to the section
+     * start.
      */
     default int minSectionY() {
+        // Arithmetic shifting preserves containing-section coordinates below
+        // absolute height zero.
         return getMinHeight() >> 4;
     }
 
     /**
-     * Get the maximum section y of the dimension type.
-     *
-     * @return the maximum section y
+     * Returns the absolute section Y containing the maximum build height.
+     * Arithmetic shifting preserves floor-based section coordinates for
+     * negative heights; implementations must align the maximum to a section's
+     * last block.
      */
     default int maxSectionY() {
+        // Arithmetic shifting preserves containing-section coordinates below
+        // absolute height zero.
         return getMaxHeight() >> 4;
     }
 }

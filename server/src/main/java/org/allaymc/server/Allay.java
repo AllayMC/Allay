@@ -60,34 +60,80 @@ import java.util.HashMap;
 import static java.lang.Thread.sleep;
 
 /**
+ * {@code Allay} bootstraps server-wide APIs, registries, extensions, and the
+ * executable process.
+ * Internationalization is installed before extensions and registry population
+ * so bootstrap failures can use translated output. Extensions can contribute
+ * resources before the registries consume them, and API implementations are
+ * published before constructing registry entries that use those services.
+ *
+ * <p>
+ * {@code initAllay} marks completion only after all registries return;
+ * partial failures leave prior publications intact and may be retried without
+ * rebinding an already implemented API. The main entry additionally manages
+ * optional GUI setup, process-wide library settings, and explicit process exit.
+ * A fatal startup failure exits without assuming that a partially initialized
+ * server can complete its normal shutdown sequence.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public final class Allay {
 
+    /**
+     * {@code EXTRA_RESOURCE_CLASS_LOADER} supplies shared extension resources.
+     * Extensions add JARs before registry loaders read those resources, and
+     * bootstrap retains the loader for later lookups.
+     */
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
+    /**
+     * {@code EXTENSION_MANAGER} discovers bootstrap extensions beneath the
+     * working directory's {@code extensions} folder and adds their JARs to
+     * {@code EXTRA_RESOURCE_CLASS_LOADER}.
+     */
     public static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
+    /**
+     * {@code DASHBOARD} holds the optional dashboard created during {@code main}.
+     * It remains {@code null} when GUI startup is disabled or fails before assignment.
+     */
     public static Dashboard DASHBOARD;
+    /**
+     * {@code initialized} records completion under the class monitor in
+     * {@code initAllay}. It becomes {@code true} only after API binding and registry
+     * initialization return successfully.
+     */
     private static boolean initialized;
 
+    /**
+     * Starts the executable server process and exits when its main loop returns.
+     * Internationalization and extensions precede API and registry initialization,
+     * followed by server startup on this thread. Headless or failed GUI setup
+     * disables the dashboard while allowing normal startup to continue. Caught
+     * API or server startup failures close logging and exit with status one;
+     * successful return exits with status zero to stop remaining non-daemon
+     * threads. Earlier uncaught setup failures and interruption of error-display
+     * delays still propagate to the process caller.
+     */
     public static void main(String[] args) throws InterruptedException {
         long initialTime = System.currentTimeMillis();
         if (GitProperties.isDevBuild() && !AllayServer.getSettings().genericSettings().forceEnableSentry()) {
-            // Enable sentry only in non-dev build
+            // Development builds close the error-reporting client unless the
+            // explicit override keeps it enabled for investigating development failures.
             Sentry.close();
         }
         ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
-        // Disable scientific notation in joml
+        // Use ordinary decimal formatting in JOML output.
         System.setProperty("joml.format", "false");
-        // Enable async logging
+        // Select asynchronous logger contexts before subsequent bootstrap logging.
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName());
         System.setProperty("bedrock.maxDecompressedBytes", String.valueOf(AllayServer.getSettings().networkSettings().maxDecompressedBytes()));
 
         initI18n();
         EXTENSION_MANAGER.loadExtensions(args);
 
-        // Check if the environment is headless
+        // Disable GUI construction when graphics are unavailable, preserving
+        // command-line startup on servers without a usable desktop environment.
         if (isHeadless()) {
             AllayServer.getSettings().genericSettings().enableGui(false);
         }
@@ -95,6 +141,8 @@ public final class Allay {
             try {
                 DASHBOARD = Dashboard.getInstance();
             } catch (Throwable t) {
+                // A dashboard failure must not prevent console-only startup;
+                // disable later GUI callbacks that would otherwise expect a usable dashboard.
                 log.error("Cannot init Dashboard!", t);
                 AllayServer.getSettings().genericSettings().enableGui(false);
             }
@@ -107,6 +155,8 @@ public final class Allay {
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
             if (DASHBOARD != null) {
+                // Keep a visible dashboard open briefly so its startup error
+                // can be read before process exit closes the logging system.
                 sleep(5000);
             }
             LogManager.shutdown();
@@ -117,9 +167,11 @@ public final class Allay {
             ((AllayServer) Server.getInstance()).start(initialTime);
         } catch (Throwable t) {
             log.error("Error while starting the server!", t);
-            // The server may not be initialized correctly, so we can't call Server::shutdown()
-            // to stop the server
+            // Startup may have left services only partially initialized, so
+            // fatal failure exits directly rather than relying on normal server cleanup.
             if (DASHBOARD != null) {
+                // Leave the failed server startup visible in the dashboard
+                // briefly before terminating the process and discarding its interactive window.
                 sleep(5000);
             }
             LogManager.shutdown();
@@ -127,52 +179,68 @@ public final class Allay {
         }
 
         log.info(I18n.get().tr(TrKeys.ALLAY_SERVER_STOPPED));
-        // Server has been shutdown
-        // Call System.exit(0) to stop other non-daemon threads
+        // The main loop has returned, but background non-daemon threads may
+        // remain; closing logging before explicit process exit preserves the final message.
         LogManager.shutdown();
         System.exit(0);
     }
 
+    /**
+     * Returns the graphics environment's headless result when AWT is accessible.
+     * Reflection avoids a direct dependency on an available desktop module;
+     * any lookup or invocation exception conservatively disables GUI startup.
+     */
     private static boolean isHeadless() {
         try {
             var graphicsEnv = Class.forName("java.awt.GraphicsEnvironment");
             var isHeadless = graphicsEnv.getDeclaredMethod("isHeadless");
             return (boolean) isHeadless.invoke(null);
         } catch (Exception ignore) {
+            // Missing or inaccessible desktop support cannot provide a reliable
+            // graphics environment, so treat the process as headless and retain console startup.
         }
         return true;
     }
 
     /**
-     * Initializes API bindings and registries once.
-     *
-     * <p>{@link #initI18n()} must run first because registry initialization may emit translated output.</p>
+     * Initializes API bindings and registries once after internationalization is
+     * available. The class monitor serializes callers and the completion flag
+     * suppresses later successful repeats. The flag is set only after both
+     * phases return, so failures leave prior bindings and registry publications
+     * intact while allowing a later attempt. That attempt skips API binding
+     * if it already completed, but reruns registry initialization; no rollback
+     * restores the state that existed before a failed attempt.
      */
     @VisibleForTesting
     public static synchronized void initAllay() {
         if (initialized) {
             return;
         }
+        // Registry construction can consume API holders and emit translated
+        // messages, so publish implementations before registries and mark completion only afterward.
         initAllayAPI();
         initRegistries();
         initialized = true;
     }
 
+    /**
+     * Binds the default server implementations unless the API is already marked
+     * implemented. Internationalization must have been installed first; binding
+     * failures propagate, while a successful pass publishes services and logs
+     * server, API, and supported protocol versions.
+     */
     private static void initAllayAPI() {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
 
-        // Common
         api.bind(Server.class, AllayServer::getInstance);
         api.bind(Scheduler.Factory.class, () -> AllayScheduler::new);
         api.bind(EventBus.Factory.class, () -> AllayEventBus::new);
 
-        // Command
         api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);
         api.bind(CommandTree.Factory.class, () -> AllayCommandTree::create);
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
-        // Misc
         api.bind(NBTIO.class, AllayNBTIO::new);
         api.bind(FakeContainerFactory.class, AllayFakeContainerFactory::new);
 
@@ -190,8 +258,18 @@ public final class Allay {
         }
     }
 
+    /**
+     * Constructs runtime registries and publishes their entries in bootstrap order.
+     * API services and internationalization must already be available. Raw item,
+     * block, and biome data precede the corresponding type population, and
+     * custom biome and dimension ID allocation follows their populated registries.
+     * Later registries consume earlier type and resource data. A failure leaves
+     * already assigned global registry references intact, so this method does
+     * not provide transactional initialization or restore previous registry contents.
+     */
     private static void initRegistries() {
-        // Item
+        // Load raw data before type population, and populate type registries
+        // before later content registries resolve their referenced items, blocks, and dimensions.
         DoubleKeyMappedRegistry.create(
                 RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, EnchantmentType>())),
                 r -> Registries.ENCHANTMENTS = r,
@@ -207,17 +285,14 @@ public final class Allay {
         );
         Registries.COMPOSTABLE_ITEMS = SimpleMappedRegistry.create(new CompostableItemRegistryLoader());
 
-        // Fishing
         Registries.FISHING_LOOTS = SimpleMappedRegistry.create(new FishingLootRegistryLoader());
 
-        // BlockEntity
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<String, BlockEntityType<?>>()),
                 r -> Registries.BLOCK_ENTITIES = r,
                 new BlockEntityTypeRegistryPopulator()
         );
 
-        // Block
         InternalRegistries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataRegistryLoader());
         InternalRegistries.BLOCK_TAGS = SimpleMappedRegistry.create(new BlockTagRegistryLoader());
         InternalRegistries.BLOCK_DEFAULT_STATE_HASHES = SimpleMappedRegistry.create(new BlockDefaultStateHashRegistryLoader());
@@ -229,7 +304,6 @@ public final class Allay {
                 new BlockTypeRegistryPopulator()
         );
 
-        // Entity
         DoubleKeyMappedRegistry.create(
                 RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, EffectType>())),
                 r -> Registries.EFFECTS = r,
@@ -241,7 +315,6 @@ public final class Allay {
                 new EntityTypeRegistryPopulator()
         );
 
-        // Biome
         InternalRegistries.BIOME_DATA = SimpleMappedRegistry.create(new BiomeDataRegistryLoader());
         DoubleKeyMappedRegistry.create(
                 RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, BiomeType>())),
@@ -256,7 +329,6 @@ public final class Allay {
         );
         CustomDimensionIdAllocator.init();
 
-        // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
         Registries.WORLD_GENERATOR_FACTORIES = SimpleMappedRegistry.create(new WorldGeneratorFactoryRegistryLoader());
         SimpleMappedRegistry.create(
@@ -265,32 +337,30 @@ public final class Allay {
                 new WorldFeatureRegistryPopulator()
         );
 
-        // POI (Point of Interest)
         Registries.POI_TYPES = SimpleMappedRegistry.create(new PoiTypeRegistryLoader());
 
-        // Creative Item
         Registries.CREATIVE_ITEMS = new AllayCreativeItemRegistry();
 
-        // Recipe
         Registries.RECIPES = SimpleMappedRegistry.create(new RecipeRegistryLoader());
 
-        // Trim Data
         InternalRegistries.TRIM_PATTERNS = SimpleMappedRegistry.create(new TrimPatternRegistryLoader());
         InternalRegistries.TRIM_MATERIALS = SimpleMappedRegistry.create(new TrimMaterialRegistryLoader());
 
-        // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());
 
-        // Command
         Registries.COMMANDS = new AllayCommandRegistry();
 
-        // Persistent Data Container (PDC)
         Registries.PERSISTENT_DATA_TYPES = new AllayPersistentDataTypeRegistry();
 
-        // Dispenser
         Registries.DISPENSER_BEHAVIORS = SimpleMappedRegistry.create(new DispenserBehaviorRegistryLoader());
     }
 
+    /**
+     * Installs the default translation service when its API holder is empty.
+     * Callers invoke this before registry bootstrap and serialize competing initialization;
+     * the check and binding are separate operations rather than an atomic
+     * selection between concurrent translation-service candidates.
+     */
     @VisibleForTesting
     public static void initI18n() {
         if (I18n.get() != null) {

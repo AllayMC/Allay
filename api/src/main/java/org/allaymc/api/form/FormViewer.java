@@ -9,73 +9,70 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * FormViewer represents an object that can view and respond to a form.
+ * {@code FormViewer} displays JSON forms and tracks their protocol identifiers for response
+ * dispatch. Ordinary forms and the server-settings form use separate registrations; update
+ * operations reuse an existing ordinary identifier, while bookkeeping removal does not itself close
+ * a client screen.
  *
  * @author daoge_cmd
  */
 public interface FormViewer {
 
     /**
-     * Gets the server setting form that the viewer is having currently.
-     *
-     * @return a pair of the form's id and the form, or {@code null} if the viewer doesn't
-     * have any active server setting form.
+     * Returns the registered server-settings form and its protocol identifier. The result is
+     * {@code null} when none is registered, and it retains the same mutable form supplied during
+     * registration.
      */
     Pair<Integer, CustomForm> getServerSettingForm();
 
     /**
-     * Sets a server setting form to the viewer.
-     *
-     * @param form the form to set
-     * @return the assigned form id
+     * Registers the server-settings form under a newly assigned protocol identifier and returns
+     * that identifier. This replaces any previous settings registration; registration itself does
+     * not send an ordinary form display packet.
      */
     int setServerSettingForm(CustomForm form);
 
     /**
-     * Removes the server setting form that the viewer is having currently.
-     *
-     * @return a pair of the form's id and the form, or {@code null} if the viewer doesn't
-     * have any active server setting form.
+     * Removes and returns the server-settings registration without sending a client packet. A
+     * {@code null} result means no registration existed, and ordinary form registrations are
+     * unaffected by this operation.
      */
     Pair<Integer, CustomForm> removeServerSettingForm();
 
     /**
-     * Views a form.
-     *
-     * @param form the form to view
-     * @return the assigned form id
+     * Registers and displays the supplied form under a newly assigned protocol identifier. The
+     * identifier associates a later response with this same mutable form, whose callbacks handle
+     * the returned data.
      */
     int viewForm(Form form);
 
     /**
-     * Updates a form that the viewer is viewing currently. The form is sent again with its
-     * current form id, so the client redraws the open screen instead of queueing a new one.
-     *
-     * @param form the form to update, which must have been opened by {@link #viewForm(Form)}
-     * @return {@code true} if the viewer is viewing the form and the update was sent
+     * Resends the first registered ordinary form whose instance is identical to {@code form},
+     * reusing its identifier. The result is {@code false} when no such registration exists,
+     * including settings-only forms.
      */
     boolean updateForm(Form form);
 
     /**
-     * Get the forms that the viewer is viewing currently.
-     *
-     * @return the forms that the viewer is viewing currently
+     * Returns a live unmodifiable view of ordinary form registrations keyed by protocol identifier.
+     * Forms remain mutable through their own API, and the separate server-settings registration is
+     * absent from this map.
      */
     @UnmodifiableView
     Map<Integer, Form> getForms();
 
     /**
-     * Removes a form with the specified form ID that the viewer is currently viewing. This method won't
-     * send any packet to the client.
-     *
-     * @param formId the ID of the form to be removed
-     * @return the removed form if it exists, or {@code null} if no form with the specified ID is found
+     * Removes and returns the ordinary form registered for {@code formId} without sending any
+     * client packet. The result is {@code null} when no entry exists; response dispatch removes
+     * entries before invoking callbacks.
      */
     @ApiStatus.Internal
     Form removeForm(int formId);
 
     /**
-     * Closes all the forms that the viewer is viewing currently.
+     * Requests closure of the viewer's forms and clears ordinary form registrations. This operation
+     * does not invoke individual form callbacks or remove the separately registered server-settings
+     * form.
      */
     void closeAllForms();
 }

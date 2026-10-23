@@ -7,58 +7,60 @@ import org.allaymc.api.message.MessageReceiver;
 import org.allaymc.api.permission.Permissible;
 
 /**
+ * {@code CommandSender} supplies command identity, execution location,
+ * permissions, and feedback delivery for an executor. Entity and player
+ * identity are explicit capabilities: proxy senders may represent an entity
+ * without implementing its type, so callers use the capability checks and
+ * conversion methods together.
+ *
  * @author daoge_cmd
  */
 public interface CommandSender extends MessageReceiver, Permissible {
 
     /**
-     * Get the name of the command sender.
-     *
-     * @return the name of the command sender
+     * Returns the sender name used in command feedback and entity-name
+     * matching.
      */
     String getCommandSenderName();
 
     /**
-     * Get the location where the command was executed.
-     *
-     * @return the location where the command was executed
+     * Returns the location and dimension used as the command execution origin.
      */
     Location3dc getCommandExecuteLocation();
 
     /**
-     * Checks if the sender is a player.
-     *
-     * @return whether the sender is a player
+     * Returns whether this sender represents a player for command execution.
+     * This default implementation returns {@code false}; implementations
+     * reporting {@code true} must provide the represented player through
+     * {@code asPlayer}.
      */
     default boolean isPlayer() {
         return false;
     }
 
     /**
-     * Checks if the sender is an entity.
-     * <p>
-     * Please use this method to check whether the sender is an entity instead of using code {@code "xxx instanceof Entity"}.
-     * Because the sender may not be an instance of {@code "Entity"} but is executing commands as an entity (e.g., {@code "ExecutorCommandSender"}).
-     *
-     * @return whether the sender is an entity
+     * Returns whether this sender represents an entity for command execution.
+     * Callers use this capability instead of {@code instanceof Entity}, because
+     * a proxy can represent an entity without implementing {@code Entity}; the
+     * default is {@code false}.
      */
     default boolean isEntity() {
         return false;
     }
 
     /**
-     * Return the actual entity that executed the command if the sender is an entity.
-     *
-     * @return the actual entity that executed the command
+     * Returns the represented entity, or {@code null} in this default
+     * implementation. Callers check {@code isEntity} first and rely on an
+     * implementing sender to return the entity associated with that capability.
      */
     default Entity asEntity() {
         return null;
     }
 
     /**
-     * Return the actual player that executed the command if the sender is a player.
-     *
-     * @return the actual player that executed the command
+     * Returns the represented player, or {@code null} in this default
+     * implementation. Callers check {@code isPlayer} first and rely on an
+     * implementing sender to return the player associated with that capability.
      */
     default EntityPlayer asPlayer() {
         return null;

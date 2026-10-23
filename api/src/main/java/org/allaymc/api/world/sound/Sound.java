@@ -1,8 +1,11 @@
 package org.allaymc.api.world.sound;
 
 /**
- * Sound represents a sound that may be added to the world. When done, viewers of the world may be able to
- * hear the sound.
+ * {@code Sound} marks sound descriptors accepted by dimension effect
+ * broadcasting. The runtime packet encoder interprets each supported
+ * descriptor and may omit effects unavailable in a client protocol version;
+ * adding an implementation also requires appropriate encoder support to
+ * deliver it.
  *
  * @author daoge_cmd
  */

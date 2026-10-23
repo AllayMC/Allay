@@ -23,18 +23,65 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * {@code ScoreboardCommand} manages objectives, display slots, and scores for
+ * wildcard, selector, or named scorers. Scorer identity determines which line is
+ * updated: actual selected players use {@link PlayerScorer}, while other selected
+ * entities use {@link EntityScorer}. The wildcard {@code "*"} uses existing
+ * scorer keys from one objective or from all objectives, depending on the helper
+ * overload used.
+ *
+ * <p>
+ * Objective creation and display changes validate the selected objective before
+ * updating the manager. Score mutations visit the resolved scorer set. Missing
+ * lines are requested with {@code score} for {@code add} and {@code set}, or
+ * {@code -score} for {@code remove}. Completed mutations have no rollback if
+ * a later operation fails. Literal-name
+ * resolution currently dereferences a missing player before it can construct
+ * a {@link FakeScorer}.
+ *
+ * <p>
+ * Scoreboard events can cancel line insertion or score changes, but the
+ * handlers ignore their boolean results. Single-scorer addition and removal
+ * read the line again for feedback; cancellation of a missing line's insertion
+ * can therefore cause a {@code null} dereference. Bulk changes and setting can still
+ * report success after a cancelled request.
+ *
  * @author daoge_cmd
  */
 public class ScoreboardCommand extends Command {
 
+    /**
+     * Creates the {@code /scoreboard} command with its built-in authorization permission.
+     */
     public ScoreboardCommand() {
         super("scoreboard", TrKeys.MC_COMMANDS_SCOREBOARD_DESCRIPTION, Permissions.COMMAND_SCOREBOARD);
     }
 
+    /**
+     * Resolves scorer identities without restricting the wildcard to one objective.
+     * {@code "*"} collects existing scorer keys from every registered scoreboard;
+     * selectors and literal names follow the same resolution path as the
+     * objective-specific overload.
+     */
     private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr) throws SelectorSyntaxException {
         return parseScorers(sender, wildcardTargetStr, null);
     }
 
+    /**
+     * Resolves a target expression into a distinct set of scorer identities.
+     * {@code "*"} copies existing keys from {@code scoreboard}, or every
+     * registered objective when {@code scoreboard} is {@code null}. Selectors
+     * resolve relative to {@code sender} and distinguish actual player scorers
+     * from other entity scorers.
+     *
+     * <p>
+     * Literal names are looked up as online players before fake-name handling.
+     * The current lookup dereferences its result before checking the controlled
+     * entity, so an absent player throws instead of becoming a fake scorer.
+     *
+     * @throws NullPointerException if a literal name has no online player
+     * @throws SelectorSyntaxException if selector matching rejects the expression
+     */
     private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr, Scoreboard scoreboard) throws SelectorSyntaxException {
         var manager = Server.getInstance().getScoreboardManager();
         Set<Scorer> scorers = new HashSet<>();
@@ -72,10 +119,23 @@ public class ScoreboardCommand extends Command {
         return scorers;
     }
 
+    /**
+     * Installs objective creation, display selection, and player-score mutation.
+     * Empty display names use the objective name, omitted display objectives
+     * clear the slot, and sorting defaults to ascending. Objective creation
+     * accepts only {@code "dummy"} criteria. Score actions resolve
+     * all scorers before mutation and retain completed changes after later
+     * failures.
+     *
+     * <p>
+     * The handlers ignore cancellation results from line insertion and score
+     * changes. Single-scorer addition or removal reads the resulting line for
+     * feedback and can throw when a cancelled insertion leaves it absent;
+     * other paths can report success even when requests were cancelled.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                // Objectives
                 .key("objectives")
                 .key("add")
                 .str("objective")
@@ -126,11 +186,11 @@ public class ScoreboardCommand extends Command {
                     return context.success();
                 })
                 .root()
-                // Players
                 .key("players")
                 .enums("action", "add", "remove", "set")
                 .wildcardTarget("player")
-                // TODO: soft enum
+                // TODO: Offer registered objective names through a soft enum
+                // when dynamic scoreboard suggestions are implemented.
                 .str("targetObjective")
                 .intNum("count")
                 .exec(context -> {
@@ -149,6 +209,9 @@ public class ScoreboardCommand extends Command {
                     try {
                         scorers = parseScorers(context.getSender(), wildcardTargetStr, scoreboard);
                     } catch (SelectorSyntaxException e) {
+                        // Selector resolution fails before any score
+                        // mutations. Report the target argument as invalid
+                        // and retain all existing lines.
                         context.addSyntaxError(2);
                         return context.fail();
                     }

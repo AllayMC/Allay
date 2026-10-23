@@ -15,19 +15,20 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 /**
- * Registry loader for fishing loot items.
- * <p>
- * Vanilla loot distribution:
- * <ul>
- *   <li>Fish: 85% base chance</li>
- *   <li>Treasure: 5% base chance (requires open water)</li>
- *   <li>Junk: 10% base chance</li>
- * </ul>
+ * {@code FishingLootRegistryLoader} builds the built-in fishing loot table with category,
+ * relative weight, item supplier, and declared open-water metadata for each entry. Suppliers create
+ * items when loot is selected; category probabilities belong to the fishing selection logic,
+ * while this table controls the choices within each category.
  *
  * @author daoge_cmd
  */
 public class FishingLootRegistryLoader implements RegistryLoader<Void, Map<Identifier, FishingLoot>> {
 
+    /**
+     * Creates the mutable built-in fishing loot table after item types are initialized. Treasure
+     * entries require open water, suppliers create fresh item stacks, and damage or enchantment
+     * randomization occurs when a supplier is invoked.
+     */
     @Override
     public Map<Identifier, FishingLoot> load(Void $) {
         var map = new HashMap<Identifier, FishingLoot>();
@@ -40,11 +41,11 @@ public class FishingLootRegistryLoader implements RegistryLoader<Void, Map<Ident
         registerLoot(map, "minecraft:pufferfish", FishingLootCategory.FISH, 0.13f, () -> ItemTypes.PUFFERFISH.createItemStack());
 
         // === TREASURE (5% base chance, requires open water) ===
-        // Weights: Enchanted Book 6, others 5 (total 36)
+        // The enchanted book receives weight six and the other six treasure entries receive weight five, for a total of thirty-six.
         registerTreasureLoot(map, "minecraft:bow", FishingLootCategory.TREASURE, 5f,
                 () -> {
                     var bow = ItemTypes.BOW.createItemStack();
-                    // Treasures have some damage in vanilla
+                    // Treasure damage stays below one quarter of maximum durability so this supplier produces a usable but partially worn bow.
                     bow.setDamage(ThreadLocalRandom.current().nextInt(bow.getMaxDamage() / 4));
                     // Apply enchantments using level 22-30 algorithm
                     FishingEnchantmentHelper.applyTreasureEnchantments(bow);
@@ -60,6 +61,8 @@ public class FishingLootRegistryLoader implements RegistryLoader<Void, Map<Ident
         registerTreasureLoot(map, "minecraft:fishing_rod", FishingLootCategory.TREASURE, 5f,
                 () -> {
                     var rod = ItemTypes.FISHING_ROD.createItemStack();
+                    // Treasure damage stays below one quarter of maximum durability so the
+                    // supplied rod retains most of its available durability when it is caught.
                     rod.setDamage(ThreadLocalRandom.current().nextInt(rod.getMaxDamage() / 4));
                     // Apply enchantments using level 22-30 algorithm
                     FishingEnchantmentHelper.applyTreasureEnchantments(rod);
@@ -77,7 +80,7 @@ public class FishingLootRegistryLoader implements RegistryLoader<Void, Map<Ident
         registerLoot(map, "minecraft:fishing_rod_junk", FishingLootCategory.JUNK, 2f,
                 () -> {
                     var rod = ItemTypes.FISHING_ROD.createItemStack();
-                    // Junk fishing rods have random damage
+                    // Junk damage spans approximately ten to ninety percent of maximum damage, making these rods more worn than treasure rods.
                     rod.setDamage((int) (rod.getMaxDamage() * 0.1f + Math.random() * rod.getMaxDamage() * 0.8f));
                     return rod;
                 });
@@ -85,7 +88,7 @@ public class FishingLootRegistryLoader implements RegistryLoader<Void, Map<Ident
         registerLoot(map, "minecraft:leather_boots", FishingLootCategory.JUNK, 10f,
                 () -> {
                     var boots = ItemTypes.LEATHER_BOOTS.createItemStack();
-                    // Junk leather boots have random damage
+                    // Junk boots use the same approximate ten-to-ninety-percent damage range so this supplier produces a partially worn equipment item.
                     boots.setDamage((int) (boots.getMaxDamage() * 0.1f + Math.random() * boots.getMaxDamage() * 0.8f));
                     return boots;
                 });
@@ -105,11 +108,17 @@ public class FishingLootRegistryLoader implements RegistryLoader<Void, Map<Ident
         return map;
     }
 
+    /**
+     * Registers weighted category loot with its declared open-water metadata set to {@code false}.
+     */
     private void registerLoot(Map<Identifier, FishingLoot> map, String id, FishingLootCategory category, float weight, Supplier<ItemStack> supplier) {
         var identifier = new Identifier(id);
         map.put(identifier, new SimpleFishingLoot(identifier, category, weight, supplier, false));
     }
 
+    /**
+     * Registers weighted category loot with its declared open-water metadata set to {@code true}.
+     */
     private void registerTreasureLoot(Map<Identifier, FishingLoot> map, String id, FishingLootCategory category, float weight, Supplier<ItemStack> supplier) {
         var identifier = new Identifier(id);
         map.put(identifier, new SimpleFishingLoot(identifier, category, weight, supplier, true));

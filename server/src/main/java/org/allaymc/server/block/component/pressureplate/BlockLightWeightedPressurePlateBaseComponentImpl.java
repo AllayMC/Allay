@@ -5,21 +5,31 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Implementation of light weighted pressure plate (gold).
- * Signal strength equals the number of entities (max 15).
+ * {@code BlockLightWeightedPressurePlateBaseComponentImpl} specializes pressure plate
+ * signal strength for the light weighted variant. The inherited component manages
+ * support and scheduled entity checks, while this calculation assigns signal units to
+ * each intersecting entity and caps the output at maximum redstone power.
  *
  * @author daoge_cmd
  */
 public class BlockLightWeightedPressurePlateBaseComponentImpl extends BlockPressurePlateBaseComponentImpl {
 
+    /**
+     * Creates the light weighted plate component for the supplied block type.
+     */
     public BlockLightWeightedPressurePlateBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Returns one signal unit per entity intersecting the plate's detection bounds. The
+     * count is capped at {@code MAX_REDSTONE_POWER}, so additional entities cannot
+     * exceed the redstone signal property's range.
+     */
     @Override
     protected int calculateSignal(Block block) {
         int entityCount = countEntitiesOnPlate(block);
-        // Light weighted: 1 entity = 1 signal, max 15
+        // Clamp crowded plates to the signal property's supported redstone range.
         return Math.min(entityCount, MAX_REDSTONE_POWER);
     }
 }

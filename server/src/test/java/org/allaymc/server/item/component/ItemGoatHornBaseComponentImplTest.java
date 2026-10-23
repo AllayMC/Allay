@@ -16,12 +16,17 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.*;
 
 /**
- * Allay Project 2026/7/12
+ * {@code ItemGoatHornBaseComponentImplTest} verifies shared horn cooldowns and range-limited variant playback.
  *
  * @author Miroshka000
  */
 class ItemGoatHornBaseComponentImplTest {
 
+    /**
+     * Activates two horn variants while the mocked cooldown changes from ready to
+     * blocked. Both attempts must query the same category, and only the first
+     * attempt may start the cooldown.
+     */
     @Test
     void shouldUseSharedCooldownCategoryForEveryVariant() {
         var dimension = mock(Dimension.class);
@@ -43,6 +48,11 @@ class ItemGoatHornBaseComponentImplTest {
         );
     }
 
+    /**
+     * Activates the call instrument twice with viewers on and beyond the sound
+     * boundary. Only the ready attempt may start a cooldown and send the matching
+     * sound to the viewer within range.
+     */
     @Test
     void shouldPlayVariantSoundOnceAndOnlyWithinRange() {
         var dimension = mock(Dimension.class);
@@ -53,6 +63,8 @@ class ItemGoatHornBaseComponentImplTest {
         when(source.isCooldownEnd(ItemGoatHornBaseComponentImpl.COOLDOWN_CATEGORY))
                 .thenReturn(true, false);
 
+        // Use the inclusive sound boundary and a point just beyond it so the
+        // test distinguishes equality from an out-of-range viewer.
         var atLimit = viewerAt(dimension, 256);
         var outside = viewerAt(dimension, 256.01);
         when(dimension.getPlayers()).thenReturn(Set.of(atLimit, outside));
@@ -74,6 +86,11 @@ class ItemGoatHornBaseComponentImplTest {
         verify(outside, never()).viewSound(any(), any(), anyBoolean());
     }
 
+    /**
+     * Creates a standalone horn component with the supplied instrument metadata.
+     * The initialization uses one item and disables network-ID allocation so these
+     * interaction tests do not consume the global stack-ID counter.
+     */
     private static ItemGoatHornBaseComponentImpl component(int meta) {
         return new ItemGoatHornBaseComponentImpl(ItemStackInitInfo.builder()
                 .count(1)
@@ -82,6 +99,9 @@ class ItemGoatHornBaseComponentImplTest {
                 .build());
     }
 
+    /**
+     * Creates a viewer mock whose controlled entity occupies the supplied horizontal coordinate.
+     */
     private static Player viewerAt(Dimension dimension, double x) {
         var viewer = mock(Player.class);
         var controlledEntity = mock(EntityPlayer.class);

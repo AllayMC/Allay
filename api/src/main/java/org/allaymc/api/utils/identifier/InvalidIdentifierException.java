@@ -6,6 +6,12 @@ package org.allaymc.api.utils.identifier;
 import lombok.experimental.StandardException;
 
 /**
+ * {@code InvalidIdentifierException} represents rejection of identifier characters during
+ * namespace or path validation. The identifier constructor and assertion helper use this exception
+ * for invalid characters, while {@code null} inputs generally fail through ordinary {@code null} dereferences. The
+ * generated
+ * constructors follow the standard runtime-exception message and cause forms.
+ *
  * @author Cool_Loong
  */
 @StandardException

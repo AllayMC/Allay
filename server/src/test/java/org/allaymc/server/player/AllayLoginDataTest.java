@@ -7,8 +7,17 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code AllayLoginDataTest} verifies authenticated and offline persistent identity
+ * selection through login UUID resolution.
+ */
 class AllayLoginDataTest {
 
+    /**
+     * Supplies an authenticated UUID and a player name to identity resolution. The
+     * UUID must be retained, and an authenticated request without that identity must
+     * fail rather than derive another UUID.
+     */
     @Test
     void testAuthenticatedIdentityIsPreserved() {
         var identity = UUID.nameUUIDFromBytes(
@@ -22,6 +31,11 @@ class AllayLoginDataTest {
         );
     }
 
+    /**
+     * Resolves the same offline name with absent and varying supplied identities.
+     * The resulting UUID must depend on the prefixed name bytes and remain separate
+     * from the authenticated fixture and another name.
+     */
     @Test
     void testOfflineIdentityIsStableAndSeparatedFromOnlineIdentity() {
         var first = AllayLoginData.resolveUuid(false, null, "123456789");
@@ -39,6 +53,11 @@ class AllayLoginDataTest {
         assertNotEquals(first, AllayLoginData.resolveUuid(false, null, "OtherPlayer"));
     }
 
+    /**
+     * Supplies blank and absent names for offline identity resolution. Both requests
+     * must fail because neither supplies the name needed to select a persistent
+     * offline storage key.
+     */
     @Test
     void testOfflineIdentityRejectsBlankName() {
         assertThrows(

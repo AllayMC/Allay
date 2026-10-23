@@ -9,13 +9,26 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3ic;
 
 /**
+ * {@code FakeChestContainerImpl} represents a synthetic twenty-seven-slot chest
+ * interface for plugin use. Its block publication sends one chest state and optional
+ * title metadata to the player, then records the position for delayed window opening and
+ * later world-state restoration.
+ *
  * @author daoge_cmd
  */
 public class FakeChestContainerImpl extends FakeContainerImpl {
+    /**
+     * Creates empty synthetic chest storage using the fake chest identity.
+     */
     public FakeChestContainerImpl() {
         super(ContainerTypes.FAKE_CHEST);
     }
 
+    /**
+     * Publishes one client-side chest and its block-entity coordinates before recording
+     * the player's fake position. {@code customName}, when non-{@code null}, becomes the
+     * title in that metadata; no world block is replaced.
+     */
     @Override
     protected void sendFakeBlocks(Player player) {
         var pos = computeFakeBlockPos(player);
@@ -31,6 +44,8 @@ public class FakeChestContainerImpl extends FakeContainerImpl {
             nbt.putString("CustomName", this.customName);
         }
 
+        // Publish chest metadata after the block state so the delayed open can
+        // identify the fake chest and its optional title.
         var allayPlayer = (AllayPlayer) player;
         allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeBlockEntityData(
                 pos,

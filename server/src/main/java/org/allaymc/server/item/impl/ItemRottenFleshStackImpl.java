@@ -9,10 +9,29 @@ import org.allaymc.server.component.ComponentProvider;
 
 import java.util.List;
 
+/**
+ * {@code ItemRottenFleshStackImpl} implements the rotten flesh item API
+ * through supplied component delegates. {@link ItemStackImpl} supplies
+ * ordinary stack behavior, while {@code edibleComponent} exposes eating
+ * eligibility, eating time, nutrition values, drink behavior, and consumption
+ * callbacks. Callers access these contracts through this stack instance.
+ */
 public class ItemRottenFleshStackImpl extends ItemStackImpl implements ItemRottenFleshStack {
+    /**
+     * {@code edibleComponent} holds the injected {@link ItemEdibleComponent}
+     * implementation. Lombok-generated forwarding methods use this instance
+     * after superclass component initialization completes.
+     */
     @Delegate
     private ItemEdibleComponent edibleComponent;
 
+    /**
+     * Creates the rotten flesh stack using {@code initInfo} and
+     * {@code componentProviders}. {@code componentProviders} must produce
+     * exactly one assignable implementation for each component-typed field,
+     * including inherited fields; superclass construction injects these
+     * instances before this constructor returns.
+     */
     public ItemRottenFleshStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }

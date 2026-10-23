@@ -17,10 +17,22 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Map;
 
 /**
+ * {@code BeaconPaymentActionProcessor} updates beacon effects after validating a payment
+ * item and the immediately following destroy action. The beacon payment action leaves
+ * item removal to that later action and contributes no successful response entry of its
+ * own.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class BeaconPaymentActionProcessor implements ContainerActionProcessor<BeaconPaymentAction> {
+    /**
+     * Applies requested nonzero beacon effects after checking payment and the following
+     * destroy action. Invalid payment, a missing or mismatched destroy action, or an
+     * absent beacon block entity returns an error. The successful {@code null} result
+     * leaves payment consumption to the next action, so later failure does not undo
+     * effect changes.
+     */
     @Override
     public ActionResponse handle(BeaconPaymentAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getControlledEntity().getContainer(ContainerTypes.BEACON);
@@ -56,6 +68,11 @@ public class BeaconPaymentActionProcessor implements ContainerActionProcessor<Be
         return null;
     }
 
+    /**
+     * Returns whether the following destroy removes one item from the beacon payment
+     * category and translated payment slot. This check does not validate the destroy
+     * action's stack ID; its handler performs that separately.
+     */
     protected boolean validateDestoryAction(Container container, DestroyAction destroyAction) {
         var source = destroyAction.source();
         return destroyAction.count() == 1 &&
@@ -63,6 +80,10 @@ public class BeaconPaymentActionProcessor implements ContainerActionProcessor<Be
                ContainerActionProcessor.fromNetworkSlotIndex(container, source.slot()) == BeaconContainer.BEACON_PAYMENT_SLOT;
     }
 
+    /**
+     * Returns the stack-request action type dispatched to {@code
+     * BeaconPaymentActionProcessor}.
+     */
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.BEACON_PAYMENT;

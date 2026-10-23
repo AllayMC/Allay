@@ -7,7 +7,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.interfaces.ItemBucketStack;
 
 /**
- * Represents an event related to a player using a bucket. This is the base class for bucket events.
+ * {@code PlayerBucketEvent} provides the player, bucket stack, and block interaction
+ * shared by cancellable bucket operations. Subclasses distinguish filling from
+ * emptying; the constructor retains the supplied objects so listeners inspect the
+ * same bucket and interaction used by the caller.
  *
  * @author daoge_cmd
  */
@@ -15,14 +18,21 @@ import org.allaymc.api.item.interfaces.ItemBucketStack;
 public abstract class PlayerBucketEvent extends PlayerEvent implements CancellableEvent {
 
     /**
-     * The bucket item involved in the event.
+     * {@code bucketStack} retains the bucket involved in this operation. The event
+     * does not copy the mutable item supplied by its producer.
      */
     protected ItemBucketStack bucketStack;
     /**
-     * The interaction information.
+     * {@code interactInfo} retains the producer's block interaction context. The
+     * caller uses that same context to select affected positions.
      */
     protected PlayerInteractInfo interactInfo;
 
+    /**
+     * Creates a {@code PlayerBucketEvent} for the supplied player and event data.
+     * The constructor retains reference-valued arguments without copying them and
+     * does not dispatch or apply the represented action.
+     */
     public PlayerBucketEvent(EntityPlayer player, ItemBucketStack bucketStack, PlayerInteractInfo interactInfo) {
         super(player);
         this.bucketStack = bucketStack;

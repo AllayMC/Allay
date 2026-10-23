@@ -13,19 +13,22 @@ import org.cloudburstmc.nbt.NbtMap;
 import java.util.*;
 
 /**
- * Describes the protocol-independent client-side appearance of one custom block state.
- * <p>
- * A block type may use one instance for every state or resolve a different instance for each state while the
- * block type is being built. Protocol implementations serialize this model into their own wire format.
- * <p>
- * Physical properties like collision shape, light emission, and friction are still
- * read from {@link BlockStateData} and are not part of this definition.
+ * {@code CustomBlockStateDefinition} represents a custom block state's client
+ * appearance independently of wire encoding. A type can share one definition across
+ * states or resolve definitions during building; protocol implementations later
+ * combine this appearance with physical metadata from {@link BlockStateData}.
  *
- * @param geometry         the geometry component with identifier and advanced properties, {@code null} for default
- * @param materials        material instances for rendering, {@code null} for default
- * @param transformation   transformation applied to the block model, {@code null} for none
- * @param displayName      display name shown in inventory/tooltips, {@code null} to use block identifier
- * @param rawComponents   raw Bedrock components used as an explicit extension point
+ * @param geometry optional geometry component; {@code null} leaves geometry
+ * unspecified
+ * @param materials optional material collection; {@code null} leaves materials
+ * unspecified
+ * @param transformation optional model transform; {@code null} leaves the transform
+ * unspecified
+ * @param displayName optional display label; {@code null} leaves the display-name
+ * component unspecified
+ * @param rawComponents unmodifiable raw component snapshot; {@code null} selects an
+ * empty map, while NBT payload references remain shared
+ *
  * @author daoge_cmd
  */
 @Builder(toBuilder = true)
@@ -37,10 +40,17 @@ public record CustomBlockStateDefinition(
         Map<String, NbtMap> rawComponents
 ) {
     /**
-     * Default definition with no custom properties.
+     * {@code DEFAULT} supplies an appearance definition with every optional
+     * component absent and an empty raw component map.
      */
     public static final CustomBlockStateDefinition DEFAULT = CustomBlockStateDefinition.builder().build();
 
+    /**
+     * Creates an appearance definition and snapshots its raw component map in
+     * insertion order. A {@code null} map becomes empty; supplied names and
+     * payloads must be non-{@code null}, while the other component references are
+     * retained directly.
+     */
     public CustomBlockStateDefinition {
         if (rawComponents == null) {
             rawComponents = Map.of();
@@ -55,86 +65,76 @@ public record CustomBlockStateDefinition(
     }
 
     /**
-     * Creates a definition that renders the same opaque texture on every face.
-     *
-     * @param texture the terrain texture short name
-     * @return the custom block state definition
+     * Creates a definition using one opaque wildcard material with standard
+     * lighting defaults. The texture must be nonblank and non-{@code null};
+     * geometry, transformation, and display name remain unspecified.
      */
     public static CustomBlockStateDefinition ofTexture(String texture) {
         return builder().materials(Materials.builder().any(texture).build()).build();
     }
 
     /**
-     * Render methods for material instances.
-     * <p>
-     * Each method controls transparency handling, back-face culling, and distance-based rendering.
-     *
-     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#render-methods">Render Methods</a>
+     * {@code RenderMethod} identifies the client render-mode token stored in a
+     * material instance.
      */
     @Getter
     public enum RenderMethod {
         /**
-         * Fully opaque rendering with back-face culling. No distance culling.
-         * Use for solid blocks like dirt, stone, and planks.
+         * Opaque client render mode.
          */
         OPAQUE("opaque"),
         /**
-         * Supports full transparency and translucency with back-face culling.
-         * Use for semi-transparent blocks like glass, ice, and stained glass.
+         * Blended client render mode.
          */
         BLEND("blend"),
         /**
-         * Fully opaque rendering without back-face culling (renders both sides).
-         * Use for blocks visible from inside like powder snow.
+         * Double-sided client render mode.
          */
         DOUBLE_SIDED("double_sided"),
         /**
-         * Binary transparency (fully transparent or fully opaque pixels) without back-face culling.
-         * Has distance culling. Use for cross-model blocks like flowers, tall grass, and vines.
+         * Alpha-test client render mode.
          */
         ALPHA_TEST("alpha_test"),
         /**
-         * Binary transparency with back-face culling. Has distance culling.
-         * Use for flat blocks like doors, trapdoors, and saplings.
+         * Single-sided alpha-test render mode.
          */
         ALPHA_TEST_SINGLE_SIDED("alpha_test_single_sided"),
         /**
-         * Like {@link #ALPHA_TEST} but switches to opaque rendering at distance.
-         * Improves performance while maintaining appearance up close.
+         * Alpha-test-to-opaque client render mode.
          */
         ALPHA_TEST_TO_OPAQUE("alpha_test_to_opaque"),
         /**
-         * Like {@link #ALPHA_TEST_SINGLE_SIDED} but switches to opaque rendering at distance.
-         * Improves performance while maintaining appearance up close.
+         * Single-sided alpha-test-to-opaque render mode.
          */
         ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE("alpha_test_single_sided_to_opaque"),
         /**
-         * Like {@link #BLEND} but switches to opaque rendering at distance.
-         * Improves performance while maintaining appearance up close.
+         * Blend-to-opaque client render mode.
          */
         BLEND_TO_OPAQUE("blend_to_opaque");
 
+        /**
+         * Client render-mode serialization token.
+         */
         private final String id;
 
+        /**
+         * Creates a render-method constant retaining its client serialization
+         * token.
+         */
         RenderMethod(String id) {
             this.id = id;
         }
     }
 
     /**
-     * Custom builder extensions for convenience methods.
-     * <p>
-     * Lombok merges this class with its generated builder, allowing
-     * additional overloaded methods alongside the standard ones.
+     * {@code CustomBlockStateDefinitionBuilder} adds geometry shorthand to the
+     * Lombok-generated appearance builder.
      */
     public static class CustomBlockStateDefinitionBuilder {
         /**
-         * Sets the geometry using a string identifier.
-         * <p>
-         * This is a convenience method equivalent to {@code geometry(Geometry.of(identifier))}.
-         *
-         * @param identifier the geometry identifier (e.g., "geometry.custom_block")
-         * @return this builder
+         * Replaces geometry with a simple definition using the supplied identifier.
+         * The identifier must be nonempty and non-{@code null}; all advanced
+         * geometry options remain unspecified in the replacement.
          */
         @Tolerate
         public CustomBlockStateDefinitionBuilder geometry(String identifier) {
@@ -144,18 +144,19 @@ public record CustomBlockStateDefinition(
     }
 
     /**
-     * Represents a material instance for block face rendering.
-     * <p>
-     * Material instances define how each face of a block is rendered,
-     * including texture, transparency, and lighting effects.
-     * @param texture          the texture shortname from terrain_texture.json
-     * @param renderMethod     controls transparency and culling behavior
-     * @param faceDimming      whether faces using the material instance are dimmed by their direction
-     * @param ambientOcclusionIntensity the intensity of ambient occlusion which should be in (0.0, 10.0)
-     * @param randomUVRotation whether texture randomly rotates based on world position, corresponds to "isotropic" in Bedrock documentation
-     * @param textureVariation whether texture variation is enabled
-     * @see RenderMethod
-     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
+     * {@code MaterialInstance} represents one texture and its client rendering and
+     * lighting settings. The constructor validates texture presence and
+     * ambient-occlusion bounds, while convenience factories select opaque rendering
+     * and conventional lighting settings unless another render mode is supplied.
+     *
+     * @param texture terrain texture short name
+     * @param renderMethod client rendering mode; {@code null} selects {@code
+     * OPAQUE}
+     * @param faceDimming directional face-dimming flag
+     * @param ambientOcclusionIntensity ambient-occlusion intensity, inclusive range
+     * {@code 0} to {@code 10}
+     * @param randomUVRotation position-dependent texture-rotation flag
+     * @param textureVariation texture variation enablement flag
      */
     @Builder
     public record MaterialInstance(
@@ -166,6 +167,12 @@ public record CustomBlockStateDefinition(
             boolean randomUVRotation,
             boolean textureVariation
     ) {
+        /**
+         * Creates a material with a required nonblank texture and an optional
+         * render method. A {@code null} method selects {@code OPAQUE}; intensities
+         * below {@code 0} or above {@code 10} are rejected, while {@code NaN} is
+         * not rejected by those comparisons.
+         */
         public MaterialInstance {
             if (texture == null || texture.isBlank()) {
                 throw new IllegalArgumentException("Texture cannot be null or blank");
@@ -179,115 +186,114 @@ public record CustomBlockStateDefinition(
         }
 
         /**
-         * Creates an opaque material with the standard lighting defaults.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates an opaque material with face dimming and ambient-occlusion
+         * intensity {@code 1}. Random UV rotation and texture variation are
+         * disabled, and the required texture must be nonblank and non-{@code null}.
          */
         public static MaterialInstance of(String texture) {
             return new MaterialInstance(texture, RenderMethod.OPAQUE, true, 1.0f, false, false);
         }
 
         /**
-         * Creates a material with a selected render method and the standard lighting defaults.
-         *
-         * @param texture      the terrain texture short name
-         * @param renderMethod the client render method
-         * @return the material instance
+         * Creates a material with the selected render mode and standard lighting
+         * defaults. A {@code null} mode selects {@code OPAQUE}; face dimming is
+         * enabled, ambient-occlusion intensity is {@code 1}, and texture variation
+         * and random UV rotation are disabled.
          */
         public static MaterialInstance of(String texture, RenderMethod renderMethod) {
             return new MaterialInstance(texture, renderMethod, true, 1.0f, false, false);
         }
 
         /**
-         * Creates an opaque material.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code OPAQUE} material with face dimming and ambient-occlusion
+         * intensity {@code 1}. The texture must be nonblank and non-{@code null};
+         * random UV rotation and texture variation are disabled.
          */
         public static MaterialInstance opaque(String texture) {
             return of(texture, RenderMethod.OPAQUE);
         }
 
         /**
-         * Creates a translucent blended material.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code BLEND} material with face dimming and ambient-occlusion
+         * intensity {@code 1}. The texture must be nonblank and non-{@code null};
+         * random UV rotation and texture variation are disabled.
          */
         public static MaterialInstance blend(String texture) {
             return of(texture, RenderMethod.BLEND);
         }
 
         /**
-         * Creates an opaque material rendered from both sides.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code DOUBLE_SIDED} material with face dimming and
+         * ambient-occlusion intensity {@code 1}. The texture must be nonblank and
+         * non-{@code null}; random UV rotation and texture variation are disabled.
          */
         public static MaterialInstance doubleSided(String texture) {
             return of(texture, RenderMethod.DOUBLE_SIDED);
         }
 
         /**
-         * Creates a double-sided alpha-test material.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code ALPHA_TEST} material with face dimming and
+         * ambient-occlusion intensity {@code 1}. The texture must be nonblank and
+         * non-{@code null}; random UV rotation and texture variation are disabled.
          */
         public static MaterialInstance alphaTest(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST);
         }
 
         /**
-         * Creates a single-sided alpha-test material.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code ALPHA_TEST_SINGLE_SIDED} material with face dimming and
+         * ambient-occlusion intensity {@code 1}. The texture must be nonblank and
+         * non-{@code null}; random UV rotation and texture variation are disabled.
          */
         public static MaterialInstance alphaTestSingleSided(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED);
         }
 
         /**
-         * Creates an alpha-test material that becomes opaque at distance.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code ALPHA_TEST_TO_OPAQUE} material with face dimming and
+         * ambient-occlusion intensity {@code 1}. The texture must be nonblank and
+         * non-{@code null}; random UV rotation and texture variation are disabled.
          */
         public static MaterialInstance alphaTestToOpaque(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST_TO_OPAQUE);
         }
 
         /**
-         * Creates a single-sided alpha-test material that becomes opaque at distance.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE} material with face
+         * dimming and ambient-occlusion intensity {@code 1}. The texture must be
+         * nonblank and non-{@code null}; random UV rotation and texture variation
+         * are disabled.
          */
         public static MaterialInstance alphaTestSingleSidedToOpaque(String texture) {
             return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE);
         }
 
         /**
-         * Creates a blended material that becomes opaque at distance.
-         *
-         * @param texture the terrain texture short name
-         * @return the material instance
+         * Creates a {@code BLEND_TO_OPAQUE} material with face dimming and
+         * ambient-occlusion intensity {@code 1}. The texture must be nonblank and
+         * non-{@code null}; random UV rotation and texture variation are disabled.
          */
         public static MaterialInstance blendToOpaque(String texture) {
             return of(texture, RenderMethod.BLEND_TO_OPAQUE);
         }
 
+        /**
+         * {@code MaterialInstanceBuilder} supplies lighting defaults and boolean
+         * ambient-occlusion shorthand for material construction.
+         */
         public static class MaterialInstanceBuilder {
+            /**
+             * Directional face-dimming builder default.
+             */
             private boolean faceDimming = true;
+            /**
+             * Ambient-occlusion builder intensity default.
+             */
             private float ambientOcclusionIntensity = 1f;
 
             /**
-             * Enables or disables ambient occlusion using its conventional intensity.
-             *
-             * @param value whether ambient occlusion is enabled
-             * @return this builder
+             * Sets ambient-occlusion intensity to {@code 1} when enabled or {@code
+             * 0} otherwise, returning this builder.
              */
             public MaterialInstanceBuilder ambientOcclusion(boolean value) {
                 this.ambientOcclusionIntensity = value ? 1.0f : 0.0f;
@@ -297,77 +303,73 @@ public record CustomBlockStateDefinition(
     }
 
     /**
-     * Builder for creating material instances with convenient per-face methods.
-     * <p>
-     * Material instances can be assigned to specific faces or to a wildcard ({@code *})
-     * that applies to all unspecified faces. The client first checks for a face-specific
-     * instance (e.g., "up", "north"), then falls back to the wildcard if not found.
-     * <p>
-     * Named material instances (any string key) can also be used in custom geometry
-     * to reference specific materials for different parts of the model.
-     * <p>
-     * Example usage:
-     * <pre>{@code
-     * Materials.builder()
-     *     .any("default_texture")                           // all faces (wildcard)
-     *     .face(BlockFace.UP, "top_texture")                // override top face
-     *     .face(BlockFace.DOWN, MaterialInstance.blend("bottom_texture"))
-     *     .build()
-     * }</pre>
-     *
-     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#material-instances">Material Instances</a>
+     * {@code Materials} represents a snapshot of materials keyed by face names or
+     * the wildcard face token. Its builder can assign one material to all
+     * unspecified faces, override individual faces, or assign the same material to
+     * the four horizontal faces.
      */
     public static final class Materials {
         /**
-         * Special key for the wildcard face that applies to all unspecified faces.
+         * {@code ANY_FACE} is the wildcard material key used by the builder for
+         * faces without an explicit material assignment.
          */
         public static final String ANY_FACE = "*";
 
+        /**
+         * {@code materials} holds an unmodifiable insertion-ordered map copied at
+         * construction. Its immutable material records remain shared, and later
+         * builder changes do not alter the copied entries.
+         */
         private final Map<String, MaterialInstance> materials;
 
+        /**
+         * Creates a material collection with a shallow insertion-ordered copy of
+         * the supplied map. Later structural changes to the source map cannot
+         * change this collection, while the immutable material records remain
+         * shared values.
+         */
         private Materials(Map<String, MaterialInstance> materials) {
             this.materials = Collections.unmodifiableMap(new LinkedHashMap<>(materials));
         }
 
         /**
-         * Creates a mutable builder for an immutable material collection.
-         *
-         * @return the material builder
+         * Creates an empty mutable builder for a material-collection snapshot.
          */
         public static MaterialsBuilder builder() {
             return new MaterialsBuilder();
         }
 
         /**
-         * Returns the material instances keyed by face or custom material name.
-         *
-         * @return the immutable material map
+         * Returns the unmodifiable material map captured when this collection was
+         * built. Callers cannot add or remove entries through this map, and later
+         * builder changes do not alter its fixed assignments.
          */
         public Map<String, MaterialInstance> materials() {
             return materials;
         }
 
         /**
-         * Checks whether this definition contains any material instances.
-         *
-         * @return {@code true} when no material instances are defined
+         * Returns whether this collection contains no explicit or wildcard material
+         * entries.
          */
         public boolean isEmpty() {
             return materials.isEmpty();
         }
 
         /**
-         * Builds an immutable collection of material instances.
+         * {@code MaterialsBuilder} accumulates face assignments before copying them
+         * into a material collection.
          */
         public static final class MaterialsBuilder {
+            /**
+             * Mutable insertion-ordered face assignments.
+             */
             private final Map<String, MaterialInstance> materials = new LinkedHashMap<>();
 
             /**
-             * Sets the material for a specific block face.
-             *
-             * @param face     the block face
-             * @param material the material instance
-             * @return this builder
+             * Sets or replaces the material for the supplied face and returns this
+             * builder. Both inputs must be non-{@code null}, and the face name is
+             * serialized using locale-independent lowercase spelling.
              */
             public MaterialsBuilder face(BlockFace face, MaterialInstance material) {
                 materials.put(
@@ -378,21 +380,18 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets the material for a specific block face with default opaque rendering.
-             *
-             * @param face    the block face
-             * @param texture the texture name
-             * @return this builder
+             * Sets an opaque material with standard lighting for the supplied face.
+             * The face must be non-{@code null}, and the texture must be nonblank
+             * and non-{@code null}; any prior face assignment is replaced.
              */
             public MaterialsBuilder face(BlockFace face, String texture) {
                 return face(face, MaterialInstance.of(texture));
             }
 
             /**
-             * Sets the material for all unspecified faces (wildcard).
-             *
-             * @param material the material instance
-             * @return this builder
+             * Sets or replaces the wildcard material used for unspecified faces and
+             * returns this builder. The material must be non-{@code null}, and
+             * existing explicit face entries remain present in the builder.
              */
             public MaterialsBuilder any(MaterialInstance material) {
                 materials.put(ANY_FACE, Objects.requireNonNull(material, "material"));
@@ -400,20 +399,19 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets the material for all unspecified faces (wildcard) with default opaque rendering.
-             *
-             * @param texture the texture name
-             * @return this builder
+             * Sets an opaque wildcard material with standard lighting and returns
+             * this builder. The texture must be nonblank and non-{@code null};
+             * explicit face assignments remain available alongside the wildcard
+             * entry.
              */
             public MaterialsBuilder any(String texture) {
                 return any(MaterialInstance.of(texture));
             }
 
             /**
-             * Sets the same material for all horizontal faces (north, south, east, west).
-             *
-             * @param material the material instance
-             * @return this builder
+             * Sets the same non-{@code null} material for every horizontal face and
+             * returns this builder. Existing horizontal entries are replaced, while
+             * up, down, and wildcard assignments retain their current values.
              */
             public MaterialsBuilder sides(MaterialInstance material) {
                 for (var face : BlockFace.getHorizontalBlockFaces()) {
@@ -423,19 +421,18 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets the same material for all horizontal faces (north, south, east, west).
-             *
-             * @param texture the texture name
-             * @return this builder
+             * Sets an opaque material with standard lighting for every horizontal
+             * face. The texture must be nonblank and non-{@code null}, and up,
+             * down, and wildcard assignments retain their current values.
              */
             public MaterialsBuilder sides(String texture) {
                 return sides(MaterialInstance.of(texture));
             }
 
             /**
-             * Builds the immutable material collection.
-             *
-             * @return the material definition
+             * Builds a material collection with an unmodifiable copy of the current
+             * assignments. The builder remains reusable, and later assignment
+             * changes do not affect the collection already returned by this call.
              */
             public Materials build() {
                 return new Materials(materials);
@@ -444,20 +441,20 @@ public record CustomBlockStateDefinition(
     }
 
     /**
-     * Transformation applied to block geometry.
-     * <p>
-     * Rotation values are expressed in degrees and must be multiples of 90.
+     * {@code Transformation} represents model rotation, scale, and translation for
+     * protocol encoding. Rotations accept any integer multiple of ninety degrees,
+     * including negative values; the compact constructor replaces zero scale
+     * components with one so an omitted builder scale produces an unscaled model.
      *
-     * @param rx X-axis rotation in degrees (must be 0, 90, 180, or 270)
-     * @param ry Y-axis rotation in degrees (must be 0, 90, 180, or 270)
-     * @param rz Z-axis rotation in degrees (must be 0, 90, 180, or 270)
-     * @param sx X-axis scale factor (default: 1.0)
-     * @param sy Y-axis scale factor (default: 1.0)
-     * @param sz Z-axis scale factor (default: 1.0)
-     * @param tx X-axis translation in block units
-     * @param ty Y-axis translation in block units
-     * @param tz Z-axis translation in block units
-     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#transformation">Transformation</a>
+     * @param rx X-axis rotation, degrees
+     * @param ry Y-axis rotation, degrees
+     * @param rz Z-axis rotation, degrees
+     * @param sx X-axis scale factor
+     * @param sy Y-axis scale factor
+     * @param sz Z-axis scale factor
+     * @param tx X-axis translation, blocks
+     * @param ty Y-axis translation, blocks
+     * @param tz Z-axis translation, blocks
      */
     @Builder
     public record Transformation(
@@ -465,6 +462,12 @@ public record CustomBlockStateDefinition(
             float sx, float sy, float sz,
             float tx, float ty, float tz
     ) {
+        /**
+         * Creates a transform after requiring every rotation to be a multiple of
+         * ninety degrees. Each zero scale component becomes {@code 1}; nonzero
+         * scales and translations are retained without additional range or
+         * finiteness checks.
+         */
         public Transformation {
             validateRotation(rx, "rx");
             validateRotation(ry, "ry");
@@ -474,6 +477,12 @@ public record CustomBlockStateDefinition(
             if (sz == 0) sz = 1.0f;
         }
 
+        /**
+         * Validates that one rotation is an integer multiple of ninety degrees.
+         * Negative multiples and rotations beyond one turn are accepted, while
+         * other values throw {@code IllegalArgumentException} naming the supplied
+         * axis.
+         */
         private static void validateRotation(int rotation, String axis) {
             if (rotation % 90 != 0) {
                 throw new IllegalArgumentException(axis + " rotation must be a multiple of 90 degrees");
@@ -482,40 +491,21 @@ public record CustomBlockStateDefinition(
     }
 
     /**
-     * Geometry component for custom block models.
-     * <p>
-     * Defines the 3D model (geometry) used for rendering the block, including
-     * bone visibility, culling rules, and UV lock settings.
-     * <p>
-     * A simple identifier is sufficient for ordinary geometry. Bone visibility,
-     * culling, and UV lock settings are available for advanced models.
-     * <p>
-     * Example usage:
-     * <pre>{@code
-     * // Simple string form
-     * Geometry.of("geometry.custom_block")
+     * {@code Geometry} represents a client model identifier with optional bone
+     * visibility, culling, and UV-lock settings. The constructor snapshots supplied
+     * collections but retains their element references. Protocol encoding gives
+     * {@code uvLockAll} precedence over {@code uvLockBones}; a caller can retain
+     * both settings without changing that encoding choice.
      *
-     * // Object form with bone visibility
-     * Geometry.builder()
-     *     .identifier("geometry.door")
-     *     .boneVisibility("hinge", false)
-     *     .boneVisibility("handle", "q.block_state('open') == 1")
-     *     .build()
-     *
-     * // With culling optimization
-     * Geometry.builder()
-     *     .identifier("geometry.leaves")
-     *     .culling("custom:culling.leaves")
-     *     .build()
-     * }</pre>
-     *
-     * @param identifier     geometry identifier (e.g., "geometry.custom_block")
-     * @param boneVisibility map of bone names to visibility conditions (Boolean or Molang String)
-     * @param culling        culling rules identifier (format: namespace:culling.name)
-     * @param cullingLayer   culling layer for optimization
-     * @param uvLockBones    list of bone names to lock UVs, or null for no UV lock
-     * @param uvLockAll      whether to lock UVs for all bones
-     * @see <a href="https://wiki.bedrock.dev/blocks/block-components#geometry">minecraft:geometry</a>
+     * @param identifier required nonempty geometry identifier
+     * @param boneVisibility optional bone-condition snapshot; supplied entries are
+     * not checked for {@code null} keys or values
+     * @param culling optional culling rules identifier
+     * @param cullingLayer optional culling layer identifier
+     * @param uvLockBones optional unmodifiable bone-name list; supplied lists must
+     * contain no {@code null} elements
+     * @param uvLockAll all-bones UV lock; protocol encoding prefers this flag over
+     * the bone-name list when {@code true}
      */
     public record Geometry(
             String identifier,
@@ -525,11 +515,16 @@ public record CustomBlockStateDefinition(
             List<String> uvLockBones,
             boolean uvLockAll
     ) {
+        /**
+         * Creates geometry with a required nonempty identifier and snapshots
+         * optional collections. The identifier is not trimmed; bone-map entries
+         * remain unvalidated, while copying a UV-lock list rejects {@code null}
+         * elements.
+         */
         public Geometry {
             if (identifier == null || identifier.isEmpty()) {
                 throw new IllegalArgumentException("Geometry identifier cannot be null or empty");
             }
-            // Ensure immutability
             if (boneVisibility != null) {
                 boneVisibility = Collections.unmodifiableMap(new LinkedHashMap<>(boneVisibility));
             }
@@ -539,90 +534,97 @@ public record CustomBlockStateDefinition(
         }
 
         /**
-         * Creates a simple geometry with just an identifier.
-         *
-         * @param identifier the geometry identifier
-         * @return a Geometry with only the identifier set
+         * Creates simple geometry using only the supplied required identifier. The
+         * identifier must be nonempty and non-{@code null}; bone visibility,
+         * culling, and bone-list UV locking remain unspecified, and all-bones UV
+         * locking is disabled.
          */
         public static Geometry of(String identifier) {
             return new Geometry(identifier, null, null, null, null, false);
         }
 
         /**
-         * Creates a builder for configuring geometry with advanced properties.
-         *
-         * @return a new GeometryBuilder
+         * Creates an empty mutable geometry builder with every optional setting
+         * absent. Callers must select a nonempty, non-{@code null} identifier
+         * before building; the builder checks that requirement when it constructs
+         * the geometry.
          */
         public static GeometryBuilder builder() {
             return new GeometryBuilder();
         }
 
         /**
-         * Sealed interface for bone visibility values.
-         * Supports static boolean, property-based conditions, and raw Molang expressions.
+         * {@code BoneVisibility} represents a static, property-based, or raw Molang
+         * bone-visibility condition.
          */
         public sealed interface BoneVisibility permits BoneVisibility.Bool, BoneVisibility.Property, BoneVisibility.Molang {
 
             /**
-             * Creates a static boolean visibility.
-             *
-             * @param visible whether the bone is visible
-             * @return a Bool visibility
+             * Returns the shared visibility condition for the supplied boolean
+             * value.
              */
             static BoneVisibility of(boolean visible) {
                 return visible ? Bool.TRUE : Bool.FALSE;
             }
 
             /**
-             * Creates a property-based visibility condition.
-             * The bone is visible when the property equals the specified value.
-             *
-             * @param property the block property type
-             * @param value    the value to compare against
-             * @param <T>      the property value type
-             * @return a Property visibility
+             * Creates a property-equality visibility condition retaining the
+             * supplied domain and raw value. Both inputs must be non-{@code null};
+             * formatting later casts the value by property category without
+             * checking domain membership.
              */
             static <T> BoneVisibility of(BlockPropertyType<T> property, T value) {
                 return new Property(property, value);
             }
 
             /**
-             * Creates a property-based visibility for boolean properties.
-             * The bone is visible when the boolean property is true.
-             *
-             * @param property the boolean property type
-             * @return a Property visibility
+             * Creates a visibility condition requiring the supplied boolean
+             * property to equal {@code true}. The property must be non-{@code
+             * null}, and conversion to a client expression is deferred until {@code
+             * toMolang}.
              */
             static BoneVisibility of(BlockPropertyType<Boolean> property) {
                 return new Property(property, true);
             }
 
             /**
-             * Creates a raw Molang expression visibility (for advanced use cases).
-             *
-             * @param molangExpression the Molang expression
-             * @return a Molang visibility
+             * Creates a condition retaining the supplied nonempty raw Molang
+             * expression. {@code null} and empty strings throw {@code
+             * IllegalArgumentException}, while whitespace and expression syntax are
+             * not validated by this model.
              */
             static BoneVisibility ofMolang(String molangExpression) {
                 return new Molang(molangExpression);
             }
 
             /**
-             * Converts this bone visibility condition to a Molang expression string.
-             *
-             * @return the Molang expression
+             * Returns the client Molang expression represented by this visibility
+             * condition.
              */
             String toMolang();
 
             /**
-             * Static boolean visibility.
+             * {@code Bool} represents a constant truth value used for bone
+             * visibility.
              *
-             * @param visible whether the bone is visible
+             * @param visible constant bone visibility flag
              */
             record Bool(boolean visible) implements BoneVisibility {
+                /**
+                 * {@code TRUE} is the shared visible condition returned by the
+                 * boolean factory instead of allocating repeated {@code true} conditions.
+                 */
                 public static final Bool TRUE = new Bool(true);
+                /**
+                 * {@code FALSE} is the shared hidden condition returned by the
+                 * boolean factory instead of allocating repeated {@code false} conditions.
+                 */
                 public static final Bool FALSE = new Bool(false);
 
+                /**
+                 * Returns the literal Molang truth token matching the stored
+                 * visibility flag.
+                 */
                 @Override
                 public String toMolang() {
                     return visible ? "true" : "false";
@@ -630,22 +632,29 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Property-based visibility condition.
-             * The bone is visible when the block property equals the specified value.
+             * {@code Property} represents bone visibility when one property equals
+             * a retained raw value.
              *
-             * @param property the block property type
-             * @param value    the value to compare against
+             * @param property property domain reference
+             * @param value required raw comparison value
              */
             record Property(BlockPropertyType<?> property, Object value) implements BoneVisibility {
+                /**
+                 * Creates a property comparison after rejecting a {@code null}
+                 * property or value. The constructor retains both references
+                 * without checking domain membership, and formatting later casts
+                 * the value according to the property's category.
+                 */
                 public Property {
                     Objects.requireNonNull(property, "property cannot be null");
                     Objects.requireNonNull(value, "value cannot be null");
                 }
 
                 /**
-                 * Generates the Molang expression for this property condition.
-                 *
-                 * @return the Molang expression string
+                 * Formats the retained comparison through {@code MolangUtils} using
+                 * the property's category. That helper casts the raw value to the
+                 * category's Java type without validating membership, so
+                 * incompatible runtime types can fail during formatting.
                  */
                 @Override
                 public String toMolang() {
@@ -654,17 +663,28 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Raw Molang expression visibility (for advanced use cases).
+             * {@code Molang} represents an unchecked raw expression used for bone
+             * visibility.
              *
-             * @param expression the Molang expression (e.g., "q.block_state('open') == 1")
+             * @param expression nonempty raw expression text
              */
             record Molang(String expression) implements BoneVisibility {
+                /**
+                 * Creates a raw visibility expression after rejecting {@code null}
+                 * or empty text. The constructor retains whitespace and does not
+                 * parse the expression, leaving syntax interpretation to the
+                 * client.
+                 */
                 public Molang {
                     if (expression == null || expression.isEmpty()) {
                         throw new IllegalArgumentException("Molang expression cannot be null or empty");
                     }
                 }
 
+                /**
+                 * Returns the raw expression text retained without parsing or
+                 * normalization.
+                 */
                 @Override
                 public String toMolang() {
                     return expression;
@@ -673,24 +693,49 @@ public record CustomBlockStateDefinition(
         }
 
         /**
-         * Builder for creating Geometry instances with fluent API.
+         * {@code GeometryBuilder} accumulates model identity, visibility, culling,
+         * and UV-lock configuration for a geometry snapshot.
          */
         public static final class GeometryBuilder {
+            /**
+             * Requested client geometry identifier.
+             */
             private String identifier;
+            /**
+             * Mutable bone visibility assignments.
+             */
             private Map<String, BoneVisibility> boneVisibility;
+            /**
+             * Optional culling rules identifier.
+             */
             private String culling;
+            /**
+             * Optional culling layer identifier.
+             */
             private String cullingLayer;
+            /**
+             * {@code uvLockBones} retains a supplied list until build copies it. A
+             * {@code true} {@code uvLockAll} flag takes precedence during protocol encoding
+             * without clearing this list.
+             */
             private List<String> uvLockBones;
+            /**
+             * {@code uvLockAll} requests UV locking for every bone. Once enabled,
+             * this builder has no reset method, and protocol encoding prefers it
+             * over a bone list.
+             */
             private boolean uvLockAll;
 
+            /**
+             * Creates an empty geometry builder with every optional setting
+             * initially absent.
+             */
             private GeometryBuilder() {
             }
 
             /**
-             * Sets the geometry identifier (required).
-             *
-             * @param identifier the geometry identifier
-             * @return this builder
+             * Stores the requested geometry identifier for validation during build
+             * and returns this builder.
              */
             public GeometryBuilder identifier(String identifier) {
                 this.identifier = identifier;
@@ -698,11 +743,8 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets bone visibility using a static boolean value.
-             *
-             * @param boneName the name of the bone
-             * @param visible  whether the bone is visible
-             * @return this builder
+             * Sets or replaces a bone's constant visibility and returns this
+             * geometry builder.
              */
             public GeometryBuilder boneVisibility(String boneName, boolean visible) {
                 if (this.boneVisibility == null) {
@@ -713,20 +755,10 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets bone visibility based on a block property value.
-             * The bone is visible when the property equals the specified value.
-             * <p>
-             * Example:
-             * <pre>{@code
-             * .boneVisibility("handle", BlockPropertyTypes.OPEN_BIT, true)  // visible when open
-             * .boneVisibility("stage_2", BlockPropertyTypes.AGE, 2)         // visible when age == 2
-             * }</pre>
-             *
-             * @param boneName the name of the bone
-             * @param property the block property type
-             * @param value    the value when the bone should be visible
-             * @param <T>      the property value type
-             * @return this builder
+             * Sets or replaces a bone's property-equality condition and returns
+             * this builder. The property and comparison value must be non-{@code
+             * null}; category casts occur during formatting, without validation
+             * against the property's value domain.
              */
             public <T> GeometryBuilder boneVisibility(String boneName, BlockPropertyType<T> property, T value) {
                 if (this.boneVisibility == null) {
@@ -737,16 +769,9 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets bone visibility based on a boolean property being true.
-             * <p>
-             * Example:
-             * <pre>{@code
-             * .boneVisibility("indicator", BlockPropertyTypes.POWERED_BIT)  // visible when powered
-             * }</pre>
-             *
-             * @param boneName the name of the bone
-             * @param property the boolean property type
-             * @return this builder
+             * Sets or replaces a bone's condition requiring a boolean property to
+             * be {@code true}. The property must be non-{@code null}, and the
+             * resulting expression is produced later by the protocol consumer.
              */
             public GeometryBuilder boneVisibility(String boneName, BlockPropertyType<Boolean> property) {
                 if (this.boneVisibility == null) {
@@ -757,14 +782,9 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets bone visibility using a raw Molang expression.
-             * <p>
-             * This method is for advanced use cases where property-based methods
-             * are not sufficient. Prefer using property-based methods when possible.
-             *
-             * @param boneName   the name of the bone
-             * @param expression the Molang expression
-             * @return this builder
+             * Sets or replaces a bone's raw visibility expression and returns this
+             * builder. The expression must be nonempty and non-{@code null}; the
+             * model does not check its Molang syntax.
              */
             public GeometryBuilder boneVisibilityMolang(String boneName, String expression) {
                 if (this.boneVisibility == null) {
@@ -775,10 +795,8 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets the culling rules identifier.
-             *
-             * @param culling the culling identifier (format: namespace:culling.name)
-             * @return this builder
+             * Stores the optional culling rules identifier and returns this
+             * geometry builder.
              */
             public GeometryBuilder culling(String culling) {
                 this.culling = culling;
@@ -786,10 +804,8 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Sets the culling layer.
-             *
-             * @param cullingLayer the culling layer identifier
-             * @return this builder
+             * Stores the optional culling layer identifier and returns this
+             * geometry builder.
              */
             public GeometryBuilder cullingLayer(String cullingLayer) {
                 this.cullingLayer = cullingLayer;
@@ -797,10 +813,9 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Locks UVs for specific bones.
-             *
-             * @param boneNames the bones to lock UVs for
-             * @return this builder
+             * Stores an unmodifiable list of the supplied UV-lock bone names. The
+             * array and its elements must be non-{@code null}; an already enabled
+             * all-bones flag still takes precedence during encoding.
              */
             public GeometryBuilder uvLock(String... boneNames) {
                 this.uvLockBones = List.of(boneNames);
@@ -808,10 +823,10 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Locks UVs for specific bones.
-             *
-             * @param boneNames the bones to lock UVs for
-             * @return this builder
+             * Retains the supplied UV-lock list until build snapshots it, and
+             * returns this builder. A {@code null} list leaves bone-list locking
+             * absent; {@code null} elements fail during build, and all-bones locking still
+             * takes precedence.
              */
             public GeometryBuilder uvLock(List<String> boneNames) {
                 this.uvLockBones = boneNames;
@@ -819,9 +834,9 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Locks UVs for all bones.
-             *
-             * @return this builder
+             * Enables UV locking for every bone and returns this builder. Protocol
+             * encoding prefers this flag over any stored bone-name list, and this
+             * builder exposes no operation to disable the flag.
              */
             public GeometryBuilder uvLockAll() {
                 this.uvLockAll = true;
@@ -829,9 +844,10 @@ public record CustomBlockStateDefinition(
             }
 
             /**
-             * Builds the Geometry instance.
-             *
-             * @return the built Geometry
+             * Builds geometry after validating the identifier and copying optional
+             * collections. The builder remains reusable, and later changes to its
+             * bone map or retained UV-lock list do not alter the built collection
+             * snapshots.
              */
             public Geometry build() {
                 return new Geometry(identifier, boneVisibility, culling, cullingLayer, uvLockBones, uvLockAll);

@@ -30,20 +30,49 @@ import java.util.Set;
 import static org.allaymc.api.block.component.BlockLiquidBaseComponent.*;
 
 /**
+ * {@code BlockLiquidBaseComponentImpl} implements shared liquid scheduling, depth decay,
+ * directional spreading, and entity flow vectors. A liquid block obtains supply from above or
+ * from a stronger horizontal neighbor, while liquid-family checks prevent one liquid from
+ * sustaining another. Placement and neighbor changes request a scheduled update using the
+ * implementation's flow delay.
+ *
+ * <p>
+ * The update separates unsupported decay from spreading. Supported liquid first considers
+ * downward flow, then searches horizontal paths toward lower ground and falls back to outward
+ * spreading when no path exists. Containing blocks restrict exits on the initial step, and
+ * cancellable flow or decay proposals precede their associated writes. Path nodes keep
+ * predecessor identity so selected routes recover their first destination without changing
+ * world blocks during exploration.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImpl implements BlockLiquidBaseComponent {
+    /**
+     * Creates the liquid behavior component for the supplied block type.
+     */
     public BlockLiquidBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Processes source formation followed by the liquid snapshot's normal update. Formation
+     * requires depth {@code 7}, two matching horizontal sources, and a lower position rejected
+     * by the sideways flow predicate. A cancelled formation event ends this invocation before
+     * ordinary flow runs.
+     *
+     * <p>
+     * An accepted proposal writes a source through {@code setLiquid}, but {@code updateLiquid}
+     * still receives {@code block}'s original state. The later calculation therefore uses the
+     * supplied snapshot rather than rereading the newly written source. Callers provide the
+     * block and layer selected by scheduled-update dispatch.
+     */
     @Override
     public void onScheduledUpdate(Block block) {
         var pos = block.getPosition();
         var dimension = block.getDimension();
         if (canFormSource() && getDepth(block.getBlockState()) == 7) {
-            // Attempt to form new water source blocks.
+            // Depth seven identifies the horizontal flow state eligible for source formation.
             var count = 0;
             for (var face : BlockFace.getHorizontalBlockFaces()) {
                 var neighbor = block.offsetPos(face);
@@ -54,8 +83,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
             if (count >= 2) {
                 if (!canFlowInto(dimension, BlockFace.DOWN.offsetPos(pos), true)) {
-                    // Only form a new source block if there either is no water below this block,
-                    // or if the water below this is not falling (full source block).
+                    // A lower matching source rejects sideways entry; a lower flowing state does not.
+                    // Reuse that predicate to gate source formation alongside solid support.
                     var newLiquid = getSourceBlockState();
                     var event = new LiquidFlowEvent(block, pos, newLiquid, true);
                     if (!event.call()) {
@@ -69,40 +98,72 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         updateLiquid(dimension, pos, block.getBlockState(), block.getLayer());
     }
 
+    /**
+     * Dispatches the base placement hook and requests a delayed liquid update. The supplied
+     * block still describes the replaced state, so this hook schedules by position rather than
+     * spreading liquid before placement completes.
+     */
     @Override
     public void onPlace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onPlace(block, newBlockState, placementInfo);
         tryScheduleLiquidUpdate(block);
     }
 
+    /**
+     * Dispatches the base neighbor hook and requests a liquid update at {@code block}'s
+     * position. An update already scheduled for that position remains in place instead of
+     * receiving another delay entry.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         tryScheduleLiquidUpdate(block);
     }
 
+    /**
+     * Schedules a delayed liquid update when the position has no existing scheduled entry. The
+     * delay comes from {@code getFlowSpeed} for the current dimension; this helper does not
+     * replace an earlier scheduled update.
+     */
     protected void tryScheduleLiquidUpdate(Block current) {
         var blockUpdateManager = current.getDimension().getBlockUpdateManager();
+        // Preserve an existing update deadline so repeated neighbor changes do not postpone
+        // or duplicate the liquid work already queued for this position.
         if (!blockUpdateManager.hasScheduledBlockUpdate(current.getPosition())) {
             blockUpdateManager.scheduleBlockUpdateInDelay(current.getPosition(), getFlowSpeed(current.getDimension().getDimensionType()));
         }
     }
 
+    /**
+     * Returns an empty drop set because liquid blocks produce no items.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Collections.emptySet();
     }
 
+    /**
+     * Returns whether liquid contact can clear accumulated entity fall damage.
+     */
     @Override
     public boolean canResetFallDamage() {
         return true;
     }
 
     /**
-     * This method is used in {@link AllayEntityPhysicsEngine}
+     * Calculates the normalized liquid-current vector used by {@link
+     * AllayEntityPhysicsEngine}. Matching neighbors contribute their decay difference; an
+     * enterable nonliquid neighbor also exposes matching liquid one block below. The result is
+     * a new vector, and a zero current remains zero.
+     *
+     * <p>
+     * Falling liquid adds a downward contribution when a horizontal neighbor and the block
+     * above it both reject sideways entry. The calculation normalizes the horizontal
+     * contribution before adding that downward term, then normalizes the final vector without
+     * turning a zero vector into undefined components.
      */
     public Vector3d calculateFlowVector(Dimension dimension, int x, int y, int z, BlockState current) {
-        // TODO: cache the flow vector for better performance
+        // TODO: Invalidate a position-based flow cache when relevant liquid or neighbor states change.
         var vx = 0;
         var vy = 0;
         var vz = 0;
@@ -124,6 +185,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
                 blockDecay = getEffectiveFlowDecay(dimension.getBlockState(sideX, sideY - 1, sideZ));
 
+                // Account for the drop behind an enterable side block so lower
+                // matching liquid contributes a horizontal pull instead of disappearing from the current calculation.
                 if (blockDecay >= 0) {
                     var realDecay = blockDecay - (decay - 8);
                     vx += offset.x() * realDecay;
@@ -147,19 +210,25 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                 var offset = face.getOffset();
                 if (!canFlowInto(dimension, x + offset.x(), y + offset.y(), z + offset.z(), true) &&
                     !canFlowInto(dimension, x + offset.x(), y + offset.y() + 1, z + offset.z(), true)) {
-                    // normalize() should only be called when the vector is not zero,
-                    // otherwise it will produce a vector with three NaN values.
+                    // Preserve a zero horizontal current before adding the downward term;
+                    // normalizing zero directly would propagate undefined components into entity motion.
                     MathUtils.normalizeIfNotZero(vector);
+                    // Give downward pull a six-unit weight before final normalization.
                     vector.add(0, -6, 0);
                     break;
                 }
             }
         }
 
-        // Same to above
+        // A motionless liquid must return zero without introducing undefined velocity components.
         return MathUtils.normalizeIfNotZero(vector);
     }
 
+    /**
+     * Returns the decay contribution for a matching liquid state. Falling states contribute
+     * {@code 0}, horizontal states use their encoded depth difference, and other liquid
+     * families or ordinary blocks return {@code -1}.
+     */
     protected int getEffectiveFlowDecay(BlockState liquid) {
         if (!isSameLiquidType(liquid.getBlockType())) {
             return -1;
@@ -169,17 +238,23 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * Update the liquid block passed at a specific position in the world. Depending on the surroundings
-     * and the liquid block, the liquid will either spread or decrease in depth.
+     * Updates the supplied liquid snapshot by decay or directional spreading. A nonsource
+     * without a qualifying supply proposes a shallower state, or {@code null} for complete
+     * removal, and returns after that cancellable decay attempt. Contained liquid reads its
+     * layer-zero container to constrain exits.
      *
-     * @param dimension The dimension the block is in
-     * @param pos       The position of the liquid block
-     * @param liquid    The block state of the liquid
-     * @param layer     The layer the liquid is in
+     * <p>
+     * Supported liquid tries downward flow before horizontal spreading. Horizontal flow
+     * requires enough remaining depth and either a source or no enterable block below. The
+     * path search favors its shortest discovered routes to lower ground; an empty search falls
+     * back to all permitted horizontal exits. Each destination still passes through {@code
+     * flowInto}, which can reject or cancel an individual write.
      */
     protected void updateLiquid(Dimension dimension, Vector3ic pos, BlockState liquid, int layer) {
         if (!isSource(liquid) && !hasSupplyLiquidAround(dimension, pos, liquid)) {
             BlockState newLiquid = null;
+            // The decay cutoff removes shallow unsupported liquid outright; deeper states
+            // lose twice the dimension-specific horizontal decay before their next update.
             if (getDepth(liquid) - 4 > 0) {
                 newLiquid = getLiquidBlockState(getDepth(liquid) - 2 * getFlowDecay(dimension.getDimensionType()), false);
             }
@@ -209,6 +284,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
         if (isSource(liquid) || !canFlowBelow) {
             var paths = calculateLiquidPaths(dimension, pos, liquid, liquidContainer);
+            // Without a discovered descent, allow every permitted horizontal exit so
+            // liquid can still spread across a level surface instead of stopping.
             if (paths.isEmpty()) {
                 spreadOutwards(dimension, pos, liquid, liquidContainer);
                 return;
@@ -224,12 +301,9 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * Spread the liquid outwards into the horizontal directions.
-     *
-     * @param dimension       The dimension the block is in
-     * @param src             The source position of the liquid
-     * @param liquid          The block state of the liquid
-     * @param liquidContainer The block state that contains this liquid block, can be {@code null} if the liquid is not contained
+     * Attempts horizontal flow through every permitted source exit. {@code liquidContainer}
+     * may be {@code null} for layer-zero liquid; a nonnull container supplies side permissions
+     * and makes the source layer {@code 1}.
      */
     protected void spreadOutwards(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
         for (var face : BlockFace.getHorizontalBlockFaces()) {
@@ -240,16 +314,20 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * Check if there is a supply liquid in the blocks around the position passed.
+     * Returns whether a matching neighboring liquid sustains the supplied state. The block
+     * below is excluded; liquid above always qualifies after containment checks, while
+     * horizontal neighbors must be sources or have greater effective depth.
      *
-     * @param dimension The dimension the block is in
-     * @param pos       The position to check around
-     * @return Whether there is a supply liquid around the position
+     * <p>
+     * For layer-one neighbors, the containing block must permit flow through the face supplied
+     * to its side predicate. The method examines the dimensions' current liquid states rather
+     * than treating every adjacent waterlogged block as an unconditional supply. A missing
+     * liquid or another liquid family cannot sustain this state.
      */
     protected boolean hasSupplyLiquidAround(Dimension dimension, Vector3ic pos, BlockState liquid) {
         for (var face : BlockFace.VALUES) {
             if (face == BlockFace.DOWN) {
-                // We don't care about water below this one.
+                // A lower liquid cannot replenish this level through upward flow.
                 continue;
             }
 
@@ -262,11 +340,10 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             }
 
             if (neighborLiquidLayer == 1) {
-                // The liquid is contained in a block, so we need to check if it can flow into this block.
+                // A layer-one liquid only supplies neighboring flow through an open container
+                // side, so waterlogged blocks with closed sides cannot sustain this state.
                 var layer0 = dimension.getBlockState(neighborPos);
                 if (!layer0.getBehavior().canLiquidFlowIntoSide(layer0, face)) {
-                    // The side towards this liquid was closed, so this
-                    // cannot function as a source for this liquid.
                     continue;
                 }
             }
@@ -281,16 +358,17 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * Make the liquid passed flow into the position passed in a world. If successful, the block at that
-     * position will be broken and the liquid with a lower depth will replace it.
+     * Attempts one liquid destination update and reports whether the target accepts the flow.
+     * Horizontal flow loses the dimension's decay; falling flow retains the supplied depth. A
+     * matching liquid already as deep, or already falling, returns {@code true} without a new
+     * write or event.
      *
-     * @param dimension The dimension the block is in
-     * @param src       The position the liquid is flowing from
-     * @param srcLayer  The layer the liquid is flowing from
-     * @param liquid    The block state of the liquid
-     * @param pos       The position to flow into
-     * @param falling   Whether the liquid is falling or not
-     * @return Whether the liquid successfully flowed into the position
+     * <p>
+     * A different destination liquid receives a hardening attempt and this method returns
+     * {@code false}, even when hardening succeeds. Other targets must be air, removable on
+     * contact, or eligible empty containers. A cancellable flow event precedes destruction and
+     * liquid placement; accepted removable targets follow their configured break reaction
+     * before {@code setLiquid} chooses the destination layer.
      */
     protected boolean flowInto(Dimension dimension, Vector3ic src, int srcLayer, BlockState liquid, Vector3ic pos, boolean falling) {
         var newDepth = getDepth(liquid);
@@ -318,7 +396,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                 return true;
             }
 
-            // Not the same liquid type, try to harden the existing liquid.
+            // Give the existing liquid ownership of the hardening proposal because its
+            // implementation determines the solid replacement and the position that changes.
             existingLiquidBaseComponent.tryHarden(
                     new Block(existing, new Position3i(pos, dimension), 0),
                     new Block(liquid, new Position3i(src, dimension), 0)
@@ -328,26 +407,22 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
         var liquidReactionOnTouch = existing.getBlockStateData().liquidReactionOnTouch();
         var canContainLiquid =
-                // We can't flow into if the liquid cannot be contained (e.g. lava)
                 canBeContained() &&
-                // We can't flow into if the existing block can't contain liquid
                 liquidReactionOnTouch.canLiquidFlowInto();
         if (canContainLiquid) {
             if (dimension.getLiquid(pos).right() != null) {
-                // We've got a liquid displacer, and it's got a liquid within it, so we can't flow into this.
                 return false;
             }
         }
 
-        // If the block can contain liquid source and already has liquid on layer 1,
-        // it is "waterlogged" and should not be destroyed by liquid flow.
+        // Keep an occupied source container intact even when its contact reaction would
+        // otherwise remove the layer-zero block during this incoming flow attempt.
         if (existing.getBlockStateData().canContainLiquidSource() && dimension.getLiquid(pos).right() != null) {
             return false;
         }
 
         var removedOnTouch = liquidReactionOnTouch.shouldRemoveOnTouch();
-        if (!(existing.getBlockType() == BlockTypes.AIR || removedOnTouch) && (!canContainLiquid || !liquidReactionOnTouch.canLiquidFlowInto()/*canContainSpecificLiquid(existing.getBlockStateData(), getLiquidBlockState(newDepth, falling))*/)) {
-            // Can't flow into this block.
+        if (!(existing.getBlockType() == BlockTypes.AIR || removedOnTouch) && (!canContainLiquid || !liquidReactionOnTouch.canLiquidFlowInto())) {
             return false;
         }
 
@@ -359,6 +434,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             return false;
         }
 
+        // Dispatch acceptance precedes both removal and liquid placement, so cancellation
+        // leaves this target intact instead of destroying it before the proposal is decided.
         if (removedOnTouch) {
             switch (liquidReactionOnTouch) {
                 case BROKEN -> dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
@@ -370,15 +447,17 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * Calculate paths in the world that the liquid passed can
-     * flow in to reach lower grounds, starting at the position passed.
-     * If none of these paths can be found, the returned list has a length of 0.
+     * Finds horizontal routes from {@code src} to enterable blocks with an opening below. The
+     * search returns destination arrays excluding the source; an empty list tells {@code
+     * updateLiquid} to use unrestricted outward spreading. World blocks remain unchanged
+     * during exploration.
      *
-     * @param dimension       The dimension the block is in
-     * @param src             The position to start the flow from
-     * @param liquid          The block state of the liquid
-     * @param liquidContainer The block state that contains this liquid block, can be {@code null} if the liquid is not contained
-     * @return A list of paths that the liquid can flow in
+     * <p>
+     * The queue visits predecessor-linked nodes in insertion order, decreases simulated depth
+     * by twice the horizontal decay, and stops extending routes beyond the shortest descent
+     * discovered. A nonnull {@code liquidContainer} restricts the source's first exits only.
+     * Later nodes use ordinary liquid-entry checks, and the caller selects the first step of
+     * the shortest returned paths.
      */
     protected List<Vector3ic[]> calculateLiquidPaths(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
         var queue = new LiquidQueue();
@@ -390,6 +469,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
         while (queue.length() != 0) {
             var node = queue.front();
+            // Simulated paths spend twice the ordinary horizontal decay, limiting the
+            // descent search independently of the actual flow written for its first step.
             var neighbors = node.neighbors(decay * 2);
             var neighborA = neighbors[0]; // WEST
             var neighborB = neighbors[1]; // EAST
@@ -426,20 +507,21 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * spreadNeighbour attempts to spread a path node into the neighbour passed. Note that this
-     * does not spread the liquid, it only spreads the node used to calculate flow paths.
+     * Evaluates one simulated path node and reports whether it reaches an opening below. The
+     * node is rejected when its remaining search depth crosses the cutoff, its path exceeds
+     * {@code shortestPath}, or sideways entry is blocked.
      *
-     * @param dimension The dimension the block is in
-     * @param source    The source position of the liquid
-     * @param node      The node to spread
-     * @param queue     The queue to push the node into if it can spread
-     * @return Whether the node could spread into the neighbour
+     * <p>
+     * An eligible descent returns {@code true} without enqueuing the node. An eligible level
+     * continuation is appended to {@code queue} and returns {@code false}; this result
+     * therefore describes a completed descent rather than every successful queue extension.
+     * The helper never writes liquid into the dimension while calculating a route.
      */
     protected boolean spreadNeighbor(Dimension dimension, Vector3ic source, LiquidNode node, LiquidQueue queue) {
         if (
-            // Depth has reached zero or below, can't spread any further.
+            // The search allows a three-level margin after simulated decay before pruning
+            // a node; the shortest descent bound then prevents exploring longer alternatives.
                 node.depth() + 3 <= 0 ||
-                // This path is longer than any existing path, so don't spread any further.
                 node.length() > queue.shortestPath
         ) {
             return false;
@@ -447,11 +529,9 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
         var pos = new Vector3i(node.x(), source.y(), node.z());
         if (!canFlowInto(dimension, pos, true)) {
-            // Can't flow into this block, can't spread any further.
             return false;
         }
 
-        // Try flow down
         pos.y--;
         if (canFlowInto(dimension, pos, false)) {
             return true;
@@ -462,21 +542,19 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * @see #canFlowInto(Dimension, int, int, int, boolean)
+     * Returns whether the coordinate-based entry predicate accepts {@code pos}. {@code
+     * sideways} distinguishes horizontal entry from downward entry, including the different
+     * rules for existing liquids; this check itself does not place liquid.
      */
     protected boolean canFlowInto(Dimension dimension, Vector3ic pos, boolean sideways) {
         return canFlowInto(dimension, pos.x(), pos.y(), pos.z(), sideways);
     }
 
     /**
-     * Checks if a liquid can flow into the block present in the world at a specific block position.
-     *
-     * @param dimension The dimension the block is in
-     * @param x         The x coordinate of the block
-     * @param y         The y coordinate of the block
-     * @param z         The z coordinate of the block
-     * @param sideways  Whether the flow is sideways or downwards
-     * @return Whether the liquid can flow into the block
+     * Returns whether a target is eligible for a liquid-entry attempt. Air and removable
+     * targets qualify immediately; downward checks accept any liquid, while horizontal checks
+     * require a matching nonsource liquid. Other blocks qualify only when this liquid and the
+     * block's contact reaction permit containment.
      */
     protected boolean canFlowInto(Dimension dimension, int x, int y, int z, boolean sideways) {
         var existing = dimension.getBlockState(x, y, z);
@@ -489,7 +567,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             if (!sideways) {
                 return true;
             }
-            // Can't flow into a source liquid or a different type of liquid.
             return !isSource(existing) && isSameLiquidType(existing.getBlockType());
         }
 
@@ -497,19 +574,19 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * liquidNode represents a position that is part of a flow path for a liquid.
-     *
-     * @param x        The x coordinate of the node
-     * @param z        The z coordinate of the node
-     * @param depth    The depth of the node. Byte is used to save memory
-     * @param previous The previous node in the path
+     * {@code LiquidNode} represents one horizontal search position with its remaining
+     * simulated depth and predecessor. {@code previous} links back to the source node,
+     * allowing route extraction without storing a separate path at every extension.
+     * @param x horizontal x coordinate
+     * @param z horizontal z coordinate
+     * @param depth remaining simulated depth
+     * @param previous predecessor node, or {@code null} at the source
      */
     protected record LiquidNode(int x, int z, byte depth, LiquidNode previous) {
         /**
-         * neighbours returns the four horizontal neighbours of the node with decreased depth.
-         *
-         * @param decay The amount to decrease the depth by
-         * @return The neighbours of the node
+         * Returns west, east, north, and south search nodes in that order. Each node subtracts
+         * {@code decay} from its simulated depth and retains this node as its predecessor
+         * without accessing world state.
          */
         public LiquidNode[] neighbors(int decay) {
             return new LiquidNode[]{
@@ -525,9 +602,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         /**
-         * Get the length of the path created by the node.
-         *
-         * @return The length of the path
+         * Returns the number of predecessor steps between this node and its source.
          */
         public int length() {
             int i = 1;
@@ -542,9 +617,9 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         /**
-         * Convert the liquid node into a path.
-         *
-         * @return The path created by the node
+         * Returns a new source-to-destination coordinate array excluding the source node.
+         * Every coordinate uses {@code sourcePos}'s vertical level; both the array and its
+         * mutable coordinate instances are newly allocated for this extraction.
          */
         public Vector3ic[] path(Vector3ic sourcePos) {
             var node = this;
@@ -564,26 +639,49 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * LiquidQueue represents a queue that may be used to push nodes into and take them out of it.
+     * {@code LiquidQueue} holds pending path nodes in insertion order and the shortest
+     * discovered descent length. The path search removes each front node before examining its
+     * neighbors and uses {@code shortestPath} to prune longer alternatives.
      */
     protected static final class LiquidQueue {
 
+        /**
+         * Pending horizontal search nodes.
+         */
         private final ArrayList<LiquidNode> nodes;
+        /**
+         * {@code shortestPath} bounds further node expansion after a descent is found. {@code
+         * Integer.MAX_VALUE} initially permits every route within the simulated depth limit.
+         */
         private int shortestPath;
 
+        /**
+         * Creates an empty path queue without a discovered descent bound.
+         */
         public LiquidQueue() {
             nodes = new ArrayList<>();
             shortestPath = Integer.MAX_VALUE;
         }
 
+        /**
+         * Appends the supplied search node after the currently pending nodes.
+         */
         public void pushBack(LiquidNode node) {
             nodes.add(node);
         }
 
+        /**
+         * Removes and returns the next pending path node in insertion order. Callers must
+         * first establish that the queue is nonempty; an empty queue propagates the list's
+         * missing-element failure.
+         */
         public LiquidNode front() {
             return nodes.removeFirst();
         }
 
+        /**
+         * Returns the number of search nodes still awaiting path expansion.
+         */
         public int length() {
             return nodes.size();
         }

@@ -19,13 +19,33 @@ import org.joml.Vector3ic;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.AGE_16;
 
 /**
+ * {@code BlockReedsBaseComponentImpl} implements sugar-cane support, age-driven extension, and
+ * bone-meal growth. A valid basal segment rests on sand- or dirt-tagged ground with adjacent
+ * water at ground level. Recursive survival checks walk downward through reeds to that basal
+ * support.
+ *
+ * <p>
+ * Natural updates increment age and, at maturity, use the nonrecursive basal check before
+ * searching two positions above for a new segment. Bone meal moves down at most one segment
+ * and fills air positions in that same two-block region. The bone-meal callback emits
+ * particles without consuming the held item, and both growth paths use direct block writes
+ * without cancellable growth proposals or rollback.
+ *
  * @author daoge_cmd
  */
 public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the reeds behavior component for the supplied block type.
+     */
     public BlockReedsBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places the supplied reed state when recursive support reaches valid watered ground. The
+     * accepted write bypasses ordinary property processing and returns the dimension's result
+     * with the supplied optional placement information.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (!canGrowHere(dimension, placeBlockPos, true)) {
@@ -35,6 +55,11 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
+    /**
+     * Breaks the reed when recursive support no longer reaches valid watered ground. Every
+     * neighboring change invokes that support test; this override does not dispatch the
+     * inherited neighbor hook first.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         if (!canGrowHere(block.getDimension(), block.getPosition(), true)) {
@@ -42,6 +67,18 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Validates recursive support, then increments age or resets a mature age before an
+     * extension attempt. Invalid support breaks the reed immediately. A mature basal segment
+     * checks up to two positions above, passing existing reeds and stopping at the first other
+     * nonair type.
+     *
+     * <p>
+     * The first air position receives default reeds before the updated age is written back.
+     * The method ignores dimension write results and does not dispatch a growth event. The
+     * upper scan is relative to the updated position rather than a separately measured
+     * full-column height.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         var dimension = block.getDimension();
@@ -57,6 +94,8 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
         } else if (age == AGE_16.getMax()) {
             block = block.setPropertyValue(AGE_16, 0);
             if (canGrowHere(dimension, pos, false)) {
+                // The basal support check limits which segment grows, while this two-position
+                // scan bounds extension above that segment without measuring a separate column height.
                 for (var y = 1; y < 3; y++) {
                     var blockType = dimension.getBlockState(pos.x(), pos.y() + y, pos.z()).getBlockType();
                     if (blockType == BlockTypes.AIR) {
@@ -72,6 +111,17 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.setBlockState(pos, block.getBlockState());
     }
 
+    /**
+     * Attempts bone-meal extension from the clicked position or the reed immediately below it.
+     * A valid nonrecursive basal support check permits writes into each air position one and
+     * two blocks above that base.
+     *
+     * <p>
+     * The method can report {@code true} even when those positions already contain reeds or
+     * another occupied state, because success follows support rather than a counted placement.
+     * It emits particles without consuming bone meal, does not run inherited interaction
+     * handling, and does not dispatch a growth event for these writes.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (itemStack.getItemType() != ItemTypes.BONE_MEAL) {
@@ -84,6 +134,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         if (canGrowHere(dimension, pos, false)) {
+            // Bone meal fills both candidate heights without stopping after the first write.
             for (var y = 1; y < 3; y++) {
                 if (dimension.getBlockState(pos.x(), pos.y() + y, pos.z()).getBlockType() == BlockTypes.AIR) {
                     dimension.setBlockState(pos.x(), pos.y() + y, pos.z(), BlockTypes.REEDS.getDefaultState());
@@ -97,18 +148,23 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns whether reeds receive random updates for support and age growth.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
     /**
-     * Check if sugar cane can live/grow here.
+     * Returns whether the reed position reaches watered sand- or dirt-tagged ground. A
+     * recursive check follows lower reeds until it reaches the basal support. The support then
+     * needs water at one of its four horizontal neighbor positions.
      *
-     * @param dimension the dimension that the sugar cane is in
-     * @param pos       the pos of the sugar cane
-     * @param recursive whether to check the block below recursively
-     * @return {@code true} if sugar cane can live/grow here, {@code false} otherwise
+     * <p>
+     * The nonrecursive form requires that qualifying ground directly below the supplied
+     * position, so a segment resting on another reed fails it. Water is read through the
+     * liquid lookup, which can recognize contained water as well as a base-layer water block.
      */
     protected boolean canGrowHere(Dimension dimension, Vector3ic pos, boolean recursive) {
         var downBlockType = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();

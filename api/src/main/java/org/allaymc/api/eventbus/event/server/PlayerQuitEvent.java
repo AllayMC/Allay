@@ -8,10 +8,11 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
- * PlayerQuitEvent will be called when a player quit the server.
- * <p>
- * Different from {@link PlayerDisconnectEvent}, this event will only be called when an already spawned player
- * quit the server. If the client disconnects without spawning in the dimension, this event will not be called.
+ * {@code PlayerQuitEvent} reports cleanup of a disconnected player that reached
+ * the spawned state.
+ * Unlike {@link PlayerDisconnectEvent}, this event excludes earlier login
+ * failures. Listeners may replace or suppress the quit announcement before
+ * dimension removal and player-data saving, but cannot cancel the disconnect.
  *
  * @author daoge_cmd
  */
@@ -19,12 +20,17 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.ANY)
 public class PlayerQuitEvent extends ServerPlayerEvent {
     /**
-     * The message that will be broadcast.
+     * {@code quitMessage} supplies the translatable announcement receiving the
+     * player's original name as an argument. {@code null} or blank text suppresses
+     * the quit broadcast.
      */
     @MayContainTrKey
     @Setter
     protected String quitMessage;
 
+    /**
+     * Creates a quit notification with the initial broadcast message.
+     */
     public PlayerQuitEvent(Player player, String quitMessage) {
         super(player);
         this.quitMessage = quitMessage;

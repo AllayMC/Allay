@@ -15,10 +15,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * {@code ItemDataRegistryLoader} reads bundled item metadata and associates it with built-in
+ * item IDs. The loader skips resource identifiers absent from the runtime's ID table, while
+ * recognized entries use {@code ItemData.fromJson} for their field representation and validation.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class ItemDataRegistryLoader implements RegistryLoader<Void, Map<ItemId, ItemData>> {
+    /**
+     * Loads {@code items.json} into a new mutable item-data map, ignoring the input. Unrecognized
+     * item identities are logged and skipped; malformed recognized entries and resource failures
+     * abort loading rather than returning a partial map.
+     */
     @Override
     @SneakyThrows
     public Map<ItemId, ItemData> load(Void $) {
@@ -27,6 +36,8 @@ public class ItemDataRegistryLoader implements RegistryLoader<Void, Map<ItemId, 
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var id = ItemId.fromIdentifier(new Identifier(entry.getKey()));
                 if (id == null) {
+                    // Resource entries can outpace this runtime's built-in ID table. Keep
+                    // recognized item metadata and omit entries with no usable registry identity.
                     log.warn("Unknown item id: {}", entry.getKey());
                     return;
                 }

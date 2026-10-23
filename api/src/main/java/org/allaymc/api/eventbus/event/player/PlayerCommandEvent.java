@@ -8,7 +8,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player executes a command.
+ * {@code PlayerCommandEvent} holds command text submitted by a player before
+ * registry execution. The command request processor removes the first packet
+ * character before dispatch; listeners can replace {@code command} or cancel the
+ * event to prevent execution of that request.
  *
  * @author daoge_cmd
  */
@@ -17,10 +20,16 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.WORLD)
 public class PlayerCommandEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The command being executed.
+     * {@code command} holds unprefixed command text. The command request processor
+     * reads this value after approval and executes the listener-selected text.
      */
     protected String command;
 
+    /**
+     * Creates a {@code PlayerCommandEvent} for the supplied player and event data.
+     * The constructor retains reference-valued arguments without copying them and
+     * does not dispatch or apply the represented action.
+     */
     public PlayerCommandEvent(EntityPlayer player, String command) {
         super(player);
         this.command = command;

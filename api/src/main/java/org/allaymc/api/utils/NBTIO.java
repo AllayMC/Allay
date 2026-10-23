@@ -11,60 +11,54 @@ import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Responsible for reading and converting NBT data into corresponding in-memory game objects.
- * This interface includes methods for deserializing block states, item stacks, entities,
- * and block entities from their respective NBT representations. Updating will also be applied
- * if the nbt data is outdated.
+ * {@code NBTIO} reconstructs registered game objects from persistent NBT and exposes the
+ * server-installed implementation to API callers. Block and item decoding update older data,
+ * while each object family defines its own unknown-type or malformed-data result instead of
+ * sharing one universal failure sentinel.
  *
  * @author daoge_cmd
  */
 public interface NBTIO {
 
+    /**
+     * {@code API} holds the server-installed NBT decoder implementation. {@code getAPI} resolves
+     * this holder, so callers require API initialization before requesting deserialization
+     * services.
+     */
     AllayAPI.APIInstanceHolder<NBTIO> API = AllayAPI.APIInstanceHolder.create();
 
     /**
-     * Get the API instance.
-     *
-     * @return the API instance
+     * Returns the NBT decoder implementation installed in the API holder.
      */
     static NBTIO getAPI() {
         return API.get();
     }
 
     /**
-     * Get the block state from the block state NBT.
-     *
-     * @param nbt the block state NBT
-     * @return the block state, or the default state of {@link BlockTypes#UNKNOWN}
-     * if the block state is not found, or the block state version is too new.
+     * Decodes a block state after updating older serialized versions and supplying missing
+     * property defaults. Unsupported future versions, unknown types, or rejected state selection
+     * use {@link BlockTypes#UNKNOWN}; other malformed property representations can still throw.
      */
     BlockState fromBlockStateNBT(NbtMap nbt);
 
     /**
-     * Create an {@link ItemStack} from an NBT tag.
-     * <p>
-     * This method will also update the item state to the latest version.
-     *
-     * @param nbt The NBT tag
-     * @return The {@link ItemStack} object, or {@link ItemAirStack#AIR_STACK} if failed to deserialize the nbt
+     * Updates stored item data and creates its registered stack. A missing count defaults to one,
+     * and failed deserialization returns {@link ItemAirStack#AIR_STACK} after the implementation
+     * reports the failure rather than propagating that conversion error.
      */
     ItemStack fromItemStackNBT(NbtMap nbt);
 
     /**
-     * Creates a new entity from a NBT map.
-     *
-     * @param dimension The dimension the entity is in
-     * @param nbt       The NBT map to create the entity from
-     * @return The new entity, or {@code null} if the provided entity type is unknown
+     * Creates an entity in the supplied dimension using its stored registered identifier. Unknown
+     * entity types return {@code null}; malformed identifiers or failures constructing a resolved
+     * type can still propagate to the caller.
      */
     Entity fromEntityNBT(Dimension dimension, NbtMap nbt);
 
     /**
-     * Creates a new block entity from a NBT map.
-     *
-     * @param dimension the dimension the block entity is in
-     * @param nbt       the NBT map to create the block entity from
-     * @return the new block entity, or {@code null} if the provided block entity type is unknown
+     * Creates a block entity in the supplied dimension using its stored type ID. Unknown IDs
+     * return {@code null}, while failures constructing a resolved block-entity type can still
+     * propagate to the caller.
      */
     BlockEntity fromBlockEntityNBT(Dimension dimension, NbtMap nbt);
 }

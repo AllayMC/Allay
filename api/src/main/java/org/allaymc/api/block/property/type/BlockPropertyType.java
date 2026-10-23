@@ -6,17 +6,19 @@ import lombok.Getter;
 import java.util.List;
 
 /**
- * Represents a type of block property.
+ * {@code BlockPropertyType} describes a named boolean, integer, or enum domain used
+ * by block states. Property values pair that domain with a raw value, an index for
+ * packed state lookup, and a serialized representation for NBT and block-state
+ * hashing.
  *
  * @author daoge_cmd
  */
 public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyType {
 
     /**
-     * Get the property type by the class.
-     *
-     * @param clazz the class
-     * @return the property type
+     * Returns the storage category for one of the three concrete property classes.
+     * Any other class, including {@code null}, returns {@code null}; this method
+     * compares classes exactly rather than inspecting assignability.
      */
     static Type getPropertyType(Class<?> clazz) {
         if (clazz == BooleanPropertyType.class) return Type.BOOLEAN;
@@ -26,80 +28,80 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     }
 
     /**
-     * Get the name of this property type.
-     *
-     * @return the name
+     * Returns the serialized name identifying this property within a block type.
      */
     String getName();
 
     /**
-     * Get the default value of this property type.
-     *
-     * @return the default value
+     * Returns the raw value used when constructing the property's default wrapper.
      */
     DATATYPE getDefaultValue();
 
     /**
-     * Get the valid values of this property type.
-     *
-     * @return the valid values
+     * Returns the property domain values prepared by the implementation. Callers
+     * must preserve their contents because wrapper caches and packed-index widths
+     * may already depend on the originally supplied domain.
      */
     List<DATATYPE> getValidValues();
 
     /**
-     * Get the type of this property type.
-     *
-     * @return the type
+     * Returns the boolean, integer, or enum category of this property.
      */
     Type getType();
 
     /**
-     * Create a new value for this property type.
-     *
-     * @param value the value
-     * @return the value
+     * Returns a wrapper for a raw value from this property's domain. Callers must
+     * provide a supported non-{@code null} value; concrete implementations use
+     * cached lookup rather than a uniform validation or failure policy.
      */
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createValue(DATATYPE value);
 
     /**
-     * Try to create a new value for this property type.
-     *
-     * @param value the value
-     * @return the value
-     * @throws IllegalArgumentException if the value is invalid, such as pass a boolean value to an int property type
+     * Converts a supported external representation into this property's cached
+     * value wrapper. Accepted representations and range failures depend on the
+     * concrete type; unsupported input categories produce {@code
+     * IllegalArgumentException} rather than a default value.
      */
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> tryCreateValue(Object value);
 
     /**
-     * Create a default value for this property type.
-     *
-     * @return the value
+     * Returns the wrapper produced by converting this property's configured default
+     * value.
      */
     default BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createDefaultValue() {
         return createValue(getDefaultValue());
     }
 
     /**
-     * Get the bit size of this property type.
-     * <p>
-     * The bit size is used to calculate the special value for a block state.
-     *
-     * @return the bit size
+     * Returns the bit width reserved for this property's index in packed state
+     * keys.
      */
     byte getBitSize();
 
     /**
-     * The type of block property.
+     * {@code Type} identifies the raw domain category of a block property.
      */
     @Getter
     enum Type {
+        /**
+         * Boolean truth value domain.
+         */
         BOOLEAN,
+        /**
+         * Contiguous integer value domain.
+         */
         INT,
+        /**
+         * Named enumeration value domain.
+         */
         ENUM
     }
 
     /**
-     * Represents a block property value, and this is the base class for block property value (boolean, enum, int).
+     * {@code BlockPropertyValue} pairs a property domain with its raw value and
+     * exposes the derived index and serialized value. Concrete subclasses provide
+     * the encodings used for packed lookup and NBT; the generated constructor
+     * retains both supplied references.
      */
     @Getter
     @AllArgsConstructor
@@ -107,26 +109,30 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
             permits BooleanPropertyType.BooleanPropertyValue, EnumPropertyType.EnumPropertyValue, IntPropertyType.IntPropertyValue {
 
         /**
-         * The property type of this value.
+         * Owning property domain reference.
          */
         protected final PROPERTY propertyType;
         /**
-         * The value of this property.
+         * Unserialized property domain value.
          */
         protected final DATATYPE value;
 
+        /**
+         * Returns the value index used when packing this property into a state key.
+         */
         public abstract int getIndex();
 
         /**
-         * Get the serialized value of this property.
-         * <p>
-         * Different from the value, the serialized value is the value that will be stored in the block state nbt.
-         * For example, the value of a boolean property is a boolean, but the serialized value is a byte.
-         *
-         * @return the serialized value
+         * Returns the representation written to NBT and used by state hashing.
+         * Boolean values serialize as bytes, enum values as lowercase names, and
+         * integer values retain their numeric representation.
          */
         public abstract SERIALIZED_DATATYPE getSerializedValue();
 
+        /**
+         * Returns a diagnostic property-name and serialized-value pair separated by
+         * an equals sign.
+         */
         @Override
         public String toString() {
             return propertyType.getName() + "=" + getSerializedValue();

@@ -6,19 +6,22 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 /**
- * A semantic like version for Minecraft.
+ * {@code SemVersion} represents Minecraft-style version components without enforcing
+ * nonnegative values or semantic-version ordering. Array and string conversions retain five
+ * components, while the JSON adapter writes and reads only the first three, so revision and
+ * build are not preserved by that JSON representation.
  *
- * @see <a href="https://semver.org/">Semantic Versioning</a>
+ * @param major major version component
+ * @param minor minor version component
+ * @param patch patch version component
+ * @param revision optional revision component
+ * @param build optional build component
  */
 public record SemVersion(int major, int minor, int patch, int revision, int build) {
     /**
-     * Create a semantic version from an int[] array.
-     * <p>
-     * The length of the array must be bigger than 3.
-     *
-     * @param versions the version array
-     *
-     * @return the semantic version
+     * Creates a version from the first three to five array elements. An empty array produces all
+     * zeroes, lengths one and two are rejected, missing revision or build defaults to zero, and
+     * elements after the fifth are ignored.
      */
     public static SemVersion from(int[] versions) {
         if (versions.length == 0) {
@@ -34,13 +37,9 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
     }
 
     /**
-     * Create a semantic version from a string.
-     * <p>
-     * The string must be in the format of "major.minor.patch[.revision.build]".
-     *
-     * @param versionStr the version string
-     *
-     * @return the semantic version
+     * Parses at least three dot-separated integer components without trimming them. Missing
+     * revision or build defaults to zero, components after the fifth are ignored, and malformed
+     * or empty consumed components fail integer parsing.
      */
     public static SemVersion from(String versionStr) {
         var versions = AllayStringUtils.fastSplit(versionStr, ".");
@@ -53,16 +52,32 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
         return new SemVersion(major, minor, patch, revision, build);
     }
 
+    /**
+     * Returns all five version components in a new primitive integer array.
+     */
     public int[] toArray() {
         return new int[]{major, minor, patch, revision, build};
     }
 
+    /**
+     * Returns all five version components in a new boxed integer array.
+     */
     public Integer[] toBoxedArray() {
         return new Integer[]{major, minor, patch, revision, build};
     }
 
+    /**
+     * {@code Serializer} writes only the major, minor, and patch components as a JSON array.
+     */
     public static class Serializer implements JsonSerializer<SemVersion> {
 
+        /**
+         * Writes a three-element JSON array containing {@code major}, {@code minor}, and {@code
+         * patch}.
+         * The revision and build components are omitted, so callers needing those values must
+         * choose
+         * another representation for a full round trip.
+         */
         @Override
         public JsonElement serialize(SemVersion src, Type typeOfSrc, JsonSerializationContext context) {
             var json = new JsonArray();
@@ -73,8 +88,19 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
         }
     }
 
+    /**
+     * {@code Deserializer} reads three JSON version components and supplies zero revision and
+     * build values.
+     */
     public static class Deserializer implements JsonDeserializer<SemVersion> {
 
+        /**
+         * Reads the first three JSON array elements and constructs zero revision and build
+         * components.
+         * Additional elements are ignored, and missing elements or incompatible component values
+         * fail
+         * rather than producing the empty-array default.
+         */
         @Override
         public SemVersion deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             var array = json.getAsJsonArray();

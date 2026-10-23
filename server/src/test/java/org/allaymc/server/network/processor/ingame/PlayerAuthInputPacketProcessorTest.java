@@ -13,8 +13,17 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * {@code PlayerAuthInputPacketProcessorTest} checks preservation of existing
+ * control modes when protocol enum sentinels appear in received input.
+ */
 class PlayerAuthInputPacketProcessorTest {
 
+    /**
+     * Supplies {@code COUNT} for input mode and interaction model while play mode
+     * remains unchanged. The converter must preserve existing observations and
+     * avoid every corresponding player setter.
+     */
     @Test
     void shouldIgnoreProtocolInputCountMarkers() {
         var player = mock(AllayPlayer.class);
@@ -33,8 +42,15 @@ class PlayerAuthInputPacketProcessorTest {
         verify(player, never()).setInputInteractionModel(any(InputInteractionModel.class));
     }
 
+    /**
+     * {@code TestProcessor} exposes inherited control-mode conversion to the
+     * sentinel-preservation scenario without dispatching a full input packet.
+     */
     private static final class TestProcessor extends PlayerAuthInputPacketProcessor {
 
+        /**
+         * Forwards control-mode conversion to the inherited processor for this test.
+         */
         private void update(AllayPlayer player, PlayerAuthInputPacket packet) {
             super.updatePlayerInputState(player, packet);
         }

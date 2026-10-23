@@ -3,10 +3,15 @@ package org.allaymc.api.world.sound;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * Sound played when a door or trapdoor is opened or closed.
+ * {@code DoorSound} describes opening or closing a door using its block
+ * material. The runtime selects the event from {@code open} and sends the
+ * state hash as its material payload; trapdoors also have a dedicated {@link
+ * TrapdoorSound} descriptor.
  *
- * @param blockState the door/trapdoor block state; the sound typically depends on the block type
- * @param open       whether the door is being opened (true) or closed (false)
+ * @param blockState door state supplying the sound material
+ *
+ * @param open {@code true} for opening, {@code false} for closing
+ *
  * @author daoge_cmd
  */
 public record DoorSound(BlockState blockState, boolean open) implements Sound {

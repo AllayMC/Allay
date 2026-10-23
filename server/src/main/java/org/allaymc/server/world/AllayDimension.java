@@ -51,6 +51,24 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
+ * {@code AllayDimension} coordinates spatial simulation, player membership,
+ * block changes, and manager lifecycle for one world dimension. Its chunk,
+ * entity, block update, scheduler, and light components operate on the same
+ * dimension identity. World execution serializes dimension ticks with idle
+ * entity processing, while the light engine can continue its separate queued
+ * calculations. Player membership and chunk loading requests are established
+ * separately from queued entity admission, so a player-set entry does not
+ * itself prove that entity addition has completed.
+ *
+ * <p>
+ * Block replacement dispatches its event before mutation and runs replacement
+ * behavior before placement behavior to avoid retaining an incompatible block
+ * entity. Main-layer changes update the point-of-interest index after the
+ * block write. Shutdown first rejects new light updates, then batches chunk
+ * cleanup before entity cleanup so chunk-unload callbacks can still reach the
+ * entity manager. These sequences have no encompassing rollback, and a later
+ * exception can leave earlier state changes applied.
+ *
  * @author daoge_cmd | Cool_Loong
  */
 @Slf4j
@@ -58,22 +76,66 @@ import static org.allaymc.api.block.type.BlockTypes.*;
 public class AllayDimension implements Dimension {
 
     /**
-     * The probability of lightning striking per chunk per tick during a thunderstorm.
-     * Based on Minecraft: 1/100,000 chance per chunk per tick.
+     * {@code LIGHTNING_STRIKE_CHANCE} supplies the random selection bound for
+     * one lightning candidate per loaded overworld chunk during each thunder
+     * tick.
      */
     protected static final int LIGHTNING_STRIKE_CHANCE = 100000;
 
+    /**
+     * World owning this spatial simulation instance.
+     */
     protected final AllayWorld world;
+    /**
+     * Registered dimension identity and height bounds.
+     */
     protected final DimensionType dimensionType;
+    /**
+     * {@code worldGenerator} is attached to this dimension after manager
+     * construction; that attachment closes the generator's pre-dimension
+     * configuration phase.
+     */
     protected final WorldGenerator worldGenerator;
+    /**
+     * Manager for chunk availability and lifecycle.
+     */
     protected final AllayChunkManager chunkManager;
+    /**
+     * Manager for entity membership and simulation.
+     */
     protected final AllayEntityManager entityManager;
+    /**
+     * Manager for scheduled and neighboring block updates.
+     */
     protected final AllayBlockUpdateManager blockUpdateManager;
+    /**
+     * Scheduler advanced during this dimension's tick.
+     */
     protected final Scheduler scheduler;
+    /**
+     * {@code lightEngine} uses separate calculation workers when enabled;
+     * shutdown requests its stop before chunk cleanup sends further light
+     * updates.
+     */
     protected final AllayLightEngine lightEngine;
+    // players and primitiveShapes determine shape viewer registration together.
+    // Their concurrent sets support separate membership operations, but changes
+    // spanning both sets and viewer callbacks are not one atomic transition.
+    /**
+     * Controllers currently associated with this dimension.
+     */
     protected final Set<Player> players;
+    /**
+     * Primitive shapes associated with this dimension.
+     */
     protected final Set<PrimitiveShape> primitiveShapes;
 
+    /**
+     * Creates managers and binds a generator to the supplied dimension
+     * identity. The generator attachment occurs after component setup, and
+     * {@code enableLightCalculation} selects either queued calculation or a
+     * constant full-light engine; callers start workers separately.
+     */
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionType dimensionType, boolean enableLightCalculation, boolean useVirtualThread) {
         this.world = world;
         this.dimensionType = dimensionType;
@@ -88,10 +150,22 @@ public class AllayDimension implements Dimension {
         worldGenerator.setDimension(this);
     }
 
+    /**
+     * Starts this dimension's light engine calculation workers when
+     * calculation is enabled. Callers invoke this lifecycle hook once because
+     * the calculating engine does not guard against starting multiple
+     * consumers for its queues.
+     */
     public void startTick() {
         this.lightEngine.startTick();
     }
 
+    /**
+     * Advances lightning, scheduled tasks, entities, chunks, and block updates
+     * in order. The owning world serializes this operation with idle lifecycle
+     * processing; loaded chunks then send accumulated block updates before
+     * performing queued chunk tasks.
+     */
     public void tick(long currentTick) {
         tickLightning();
         this.scheduler.tick();
@@ -105,90 +179,163 @@ public class AllayDimension implements Dimension {
         });
     }
 
+    /**
+     * Stops scheduling and requests light engine shutdown before unloading
+     * managed data. The owning world calls this operation after dimension
+     * ticking has stopped, so direct cleanup does not overlap its normal
+     * manager ticks. Lighting shutdown is a stop request and does not join
+     * calculation workers.
+     *
+     * <p>
+     * Chunk cleanup precedes entity cleanup because chunk-unload callbacks
+     * enqueue entity-related storage work. Both phases run inside the storage
+     * backend's batch hooks, with flushing attempted from {@code finally} even
+     * if cleanup fails. Backend batching determines actual write behavior;
+     * this method provides no rollback after partial cleanup or a failed
+     * flush.
+     */
     public void shutdown() {
         this.scheduler.shutdown();
-        // Shutdown light service first, because when unloading chunks, chunk service
-        // will send updates to light service which is meaningless
+        // Reject new light update requests before chunk unload hooks run, because
+        // those hooks otherwise enqueue recalculation for data this dimension
+        // is releasing during shutdown.
         this.lightEngine.shutdown();
-        // Batch all chunk and entity writes into a single db.write() call for fast shutdown
+        // Keep chunk and entity cleanup inside the backend batch interval. The
+        // finally block attempts its flush after either phase fails, preserving
+        // submissions already admitted by the storage implementation.
         world.getWorldStorage().startBatchWrite();
         try {
             this.chunkManager.shutdown();
-            // EntityService should be shutdown after chunk service, because it requires
-            // the callback AllayEntityService.onChunkUnload() to be called
+            // Chunk unload hooks queue entity persistence checks. Shut down the
+            // entity manager afterward so its queue drain can include those
+            // requests before the backend batch is flushed.
             this.entityManager.shutdown();
         } finally {
             world.getWorldStorage().flushBatchWrite();
         }
     }
 
+    /**
+     * Associates a player and requests entity addition with an empty
+     * completion callback. The controlled entity must exist; membership and
+     * chunk-loader changes follow the full addition path without waiting for
+     * entity admission.
+     */
     public void addPlayer(Player player) {
         addPlayer(player, () -> {
         });
     }
 
+    /**
+     * Associates a player, installs its chunk loader, and requests queued
+     * entity addition. The controlled entity must exist before this operation.
+     * The supplied callback is passed to the entity manager and runs only if
+     * its accepted queued addition reaches the callback.
+     *
+     * <p>
+     * The player set and chunk loader are changed before entity admission
+     * completes, with no compensation if that request is rejected or later
+     * fails. Primitive shapes are sent immediately only for an {@code IN_GAME}
+     * client; login completion performs the corresponding presentation for
+     * joining players.
+     */
     public void addPlayer(Player player, Runnable runnable) {
         var entity = Preconditions.checkNotNull(player.getControlledEntity());
         this.players.add(player);
         this.chunkManager.addChunkLoader(entity);
         this.entityManager.addEntity(entity, runnable);
         if (player.getClientState() == ClientState.IN_GAME) {
-            // Only send primitive shapes to the players when they are in-game. This
-            // solves the issue that primitive shapes won't be displayed if the player
-            // haven't fully joined. When the player join, the primitive shapes will be
-            // sent to the player after the player is fully joined.
-            // See SetLocalPlayerAsInitializedPacketProcessor.
+            // Joining clients receive these shapes from their initialized packet
+            // processor later; sending only to IN_GAME clients here keeps shape
+            // presentation after the client's initial world setup.
             addPrimitiveShapesTo(player);
         }
     }
 
     /**
-     * Set this method to public because it is used in {@link SetLocalPlayerAsInitializedPacketProcessor}
+     * Registers a viewer on every retained shape and sends one combined
+     * presentation. Login completion uses this operation after the client
+     * reaches the presentation phase where primitive shapes can be displayed.
      */
     public void addPrimitiveShapesTo(WorldViewer viewer) {
         for (var primitiveShape : primitiveShapes) {
-            // Let's send all the primitive shapes in one packet to improve performance
+            // Register without individual sends so the combined presentation below
+            // carries all current shapes rather than duplicating each viewer update.
             primitiveShape.addViewer(viewer, false);
         }
         viewer.viewPrimitiveShapes(primitiveShapes);
     }
 
+    /**
+     * Removes a player through the full removal path with an empty callback.
+     * The controlled entity must exist, and any deferred entity cleanup
+     * follows the entity manager's normal request admission.
+     */
     public void removePlayer(Player player) {
         removePlayer(player, () -> {
         });
     }
 
+    /**
+     * Removes player membership and its chunk loader while arranging entity
+     * cleanup. A spawned entity uses the manager's deferred removal and
+     * callback path; an already unspawned entity invokes the callback directly
+     * after membership cleanup. Callers provide an existing controlled entity
+     * and respect dimension execution ordering.
+     *
+     * <p>
+     * The direct path supports respawn transitions where death has already
+     * unloaded the old entity. Rejected deferred removal does not guarantee
+     * callback invocation, and failures do not restore player membership,
+     * loader state, or shape registrations already changed by this sequence.
+     */
     public void removePlayer(Player player, Runnable runnable) {
         var entity = Preconditions.checkNotNull(player.getControlledEntity());
         if (entity.isSpawned()) {
-            // When the player respawns to another dimension after death, the player entity has already been unloaded
-            // Therefore, when unloading the player entity, we need to check if the player entity has been spawned
+            // Respawn can reach this method after death already unloaded the entity.
+            // Only a still-spawned entity needs deferred removal through the
+            // manager; the other path must invoke its callback directly.
             this.entityManager.removeEntity(entity, runnable);
             this.chunkManager.removeChunkLoader(entity);
             this.players.remove(player);
         } else {
             this.chunkManager.removeChunkLoader(entity);
             this.players.remove(player);
-            // Run the callback directly
             runnable.run();
         }
         removePrimitiveShapesFrom(player);
     }
 
+    /**
+     * Removes a viewer from every retained shape and sends one combined
+     * removal. Registration changes suppress per-shape presentation so the
+     * final viewer call carries the batch for this dimension.
+     */
     protected void removePrimitiveShapesFrom(WorldViewer viewer) {
         for (var primitiveShape : primitiveShapes) {
-            // Let's send all the remove notices in one packet to improve performance
+            // Unregister without individual sends so the combined removal below
+            // represents this dimension's shapes without duplicate per-shape notices.
             primitiveShape.removeViewer(viewer, false);
         }
         viewer.removePrimitiveShapes(primitiveShapes);
     }
 
+    /**
+     * Returns an unmodifiable view backed by the dimension's player set. Later
+     * membership changes remain visible through the view, while the player
+     * references continue to be shared with their controllers.
+     */
     @Override
     @UnmodifiableView
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(this.players);
     }
 
+    /**
+     * Associates a shape with this dimension and registers every current
+     * player as a viewer. Set insertion does not gate the viewer loop, so
+     * repeated calls can repeat viewer registration requests.
+     */
     @Override
     public void addPrimitiveShape(PrimitiveShape primitiveShape) {
         this.primitiveShapes.add(primitiveShape);
@@ -197,6 +344,11 @@ public class AllayDimension implements Dimension {
         }
     }
 
+    /**
+     * Removes a shape from this dimension and unregisters every current
+     * player. Viewer removal is requested even when the set did not contain
+     * the shape, and callback failures do not restore membership.
+     */
     @Override
     public void removePrimitiveShape(PrimitiveShape primitiveShape) {
         this.primitiveShapes.remove(primitiveShape);
@@ -205,12 +357,22 @@ public class AllayDimension implements Dimension {
         }
     }
 
+    /**
+     * Returns an unmodifiable view backed by the retained shape set. Later
+     * additions and removals remain visible, and each shape instance remains
+     * shared with its registered viewers and callers.
+     */
     @Override
     @UnmodifiableView
     public Set<PrimitiveShape> getPrimitiveShapes() {
         return Collections.unmodifiableSet(this.primitiveShapes);
     }
 
+    /**
+     * Removes every current player from retained shapes before clearing the
+     * set. A viewer failure can stop the sequence before clearing, leaving
+     * earlier registration removals already applied without rollback.
+     */
     @Override
     public void removeAllPrimitiveShapes() {
         for (var player : players) {
@@ -219,6 +381,20 @@ public class AllayDimension implements Dimension {
         this.primitiveShapes.clear();
     }
 
+    /**
+     * Replaces a block in a loaded chunk after accepted placement-event
+     * dispatch. Missing chunks and cancellation return {@code false}; callers
+     * supply a valid height and layer. The requested state is retained for
+     * placement rather than read back as a replacement from the event.
+     *
+     * <p>
+     * When behavior callbacks are enabled, old replacement behavior runs
+     * before new placement behavior so old block entity cleanup precedes
+     * creation of the new one. The block write then updates main-layer
+     * point-of-interest membership, optional neighboring updates, and
+     * post-placement callbacks. Failures can leave earlier steps applied
+     * because this sequence has no rollback.
+     */
     @Override
     public boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
         var chunk = getChunkManager().getChunkByDimensionPos(x, z);
@@ -238,15 +414,17 @@ public class AllayDimension implements Dimension {
         var blockPos = new Position3i(x, y, z, this);
         var oldBlock = new Block(oldBlockState, blockPos, layer);
         if (callBlockBehavior) {
-            // onReplace must be called before onPlace to ensure the old block entity
-            // is removed before the new one is created. This prevents block entity type
-            // mismatch issues (e.g., when a piston replaces MovingBlock with the original block)
+            // Remove the old block entity before placement creates the replacement.
+            // Reversing these callbacks can leave a block entity whose type
+            // belongs to the state that was just replaced.
             oldBlockState.getBehavior().onReplace(oldBlock, blockState, placementInfo);
             blockState.getBehavior().onPlace(oldBlock, blockState, placementInfo);
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
-        // Update POI index when main-layer blocks change
+        // Points of interest describe main-layer blocks. Updating their index
+        // after the block write keeps later searches aligned with the stored
+        // state rather than treating an extra-layer replacement as a POI change.
         if (layer == 0) {
             var oldPoi = Registries.POI_TYPES.get(oldBlockState.getBlockType());
             var newPoi = Registries.POI_TYPES.get(blockState.getBlockType());
@@ -269,6 +447,18 @@ public class AllayDimension implements Dimension {
         return true;
     }
 
+    /**
+     * Returns a copied position for the nearest matching point of interest in
+     * loaded chunks. The radius selects a square of chunk coordinates around
+     * the query, and unloaded chunks are skipped rather than requested from
+     * storage. No match returns {@code null}.
+     *
+     * <p>
+     * Selection compares squared three-dimensional distance after translating
+     * each chunk-local key to dimension coordinates. Equal distances retain
+     * the first encountered entry, so callers must not rely on a stable tie
+     * choice from the underlying map iteration order.
+     */
     @Override
     public Vector3ic findNearestPoi(PoiType type, int x, int y, int z, int chunkRadius) {
         int cx = x >> 4, cz = z >> 4;
@@ -296,6 +486,20 @@ public class AllayDimension implements Dimension {
         return nearest;
     }
 
+    /**
+     * Dispatches a break event and invokes block break behavior before
+     * requesting air placement. Air and cancelled break events return {@code
+     * false}; a later rejected placement is not checked, so {@code true}
+     * reports this break path's acceptance rather than proof that air was
+     * stored.
+     *
+     * <p>
+     * Optional particles are emitted before break behavior, and player
+     * exhaustion follows the placement request. These effects are not rolled
+     * back if a later operation fails or another placement listener rejects
+     * the air change; callers coordinate the operation with dimension
+     * mutation.
+     */
     @Override
     public boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity, boolean sendParticle) {
         var block = getBlockState(x, y, z);
@@ -329,6 +533,19 @@ public class AllayDimension implements Dimension {
         return true;
     }
 
+    /**
+     * Returns the strongest neighboring weak signal, including conduction
+     * through solid neighbors. Each neighbor's behavior is queried on the face
+     * pointing back toward the target, keeping direction relative to the
+     * emitting block rather than the query position. Missing blocks follow
+     * ordinary dimension lookup behavior.
+     *
+     * <p>
+     * A solid neighbor also contributes strong power received from its other
+     * faces. Excluding the face toward the target avoids feeding the queried
+     * position directly back into the conducting neighbor's contribution; the
+     * maximum across direct and conducted values becomes the result.
+     */
     @Override
     public int getPowerAt(Vector3ic pos) {
         int maxPower = 0;
@@ -337,13 +554,13 @@ public class AllayDimension implements Dimension {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = this.getBlockState(neighborPos);
 
-            // Check direct weak power from neighbor
             Block neighborBlock = new Block(neighborState, new Position3i(neighborPos, this));
             int signal = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
             maxPower = Math.max(maxPower, signal);
 
-            // Check strong power through solid blocks
-            // Exclude face.opposite() because that's the direction pointing back to pos
+            // Exclude the direction back toward pos when checking conduction,
+            // so the solid neighbor does not directly reuse the target's
+            // own signal as its incoming contribution.
             if (neighborState.getBlockStateData().isSolid()) {
                 int strongPower = this.getStrongPowerAt(neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, strongPower);
@@ -353,6 +570,18 @@ public class AllayDimension implements Dimension {
         return maxPower;
     }
 
+    /**
+     * Returns the greatest strong signal emitted toward a position by its
+     * neighbors. {@code excludeFaces} removes selected directions from the
+     * scan, allowing callers that inspect conduction through a solid block to
+     * omit the return path toward their original query.
+     *
+     * <p>
+     * The method samples each remaining neighbor's behavior on its opposite
+     * face and compares the resulting values. An empty set of contributing
+     * signals leaves zero. Callers provide a non-{@code null} face array; the
+     * method performs no clamping beyond selecting the maximum.
+     */
     @Override
     public int getStrongPowerAt(Vector3ic pos, BlockFace... excludeFaces) {
         int maxPower = 0;
@@ -371,6 +600,20 @@ public class AllayDimension implements Dimension {
         return maxPower;
     }
 
+    /**
+     * Returns the greatest direct or solid-conducted weak signal around a
+     * position. {@code excludeFaces} removes selected neighbor directions
+     * before evaluation. Each remaining neighbor is queried on the face
+     * pointing toward the target, and a solid neighbor can additionally
+     * conduct strong power from its other sides.
+     *
+     * <p>
+     * The strong-power scan excludes the face leading back toward this query,
+     * preventing that immediate return path from contributing to the
+     * neighbor's conduction result. The maximum comparison keeps stronger
+     * independent contributions intact, and no contributing signal leaves
+     * zero.
+     */
     @Override
     public int getWeakPowerAt(Vector3ic pos, BlockFace... excludeFaces) {
         int maxPower = 0;
@@ -385,9 +628,9 @@ public class AllayDimension implements Dimension {
             int weakPower = state.getBehavior().getWeakPower(checkBlock, face.opposite());
             maxPower = Math.max(maxPower, weakPower);
 
-            // Check strong power through solid blocks
-            // A solid block receiving strong power provides weak power to adjacent blocks
-            // Exclude face.opposite() because that's the direction pointing back to pos
+            // Strong input through other sides can make this solid block
+            // contribute weak power. Exclude the return path toward pos to
+            // avoid immediately feeding the query back into that input.
             if (state.getBlockStateData().isSolid()) {
                 int strongPower = this.getStrongPowerAt(checkPos, face.opposite());
                 maxPower = Math.max(maxPower, strongPower);
@@ -397,6 +640,9 @@ public class AllayDimension implements Dimension {
         return maxPower;
     }
 
+    /**
+     * Returns whether the supplied array contains the requested face identity.
+     */
     private static boolean containsFace(BlockFace[] faces, BlockFace target) {
         for (BlockFace face : faces) {
             if (face == target) {
@@ -406,10 +652,21 @@ public class AllayDimension implements Dimension {
         return false;
     }
 
+    /**
+     * Queues neighboring updates for horizontal diodes affected by a
+     * comparator-producing block. Direct diode neighbors receive the source
+     * position, while a solid neighbor allows one more position in the same
+     * direction to be checked. Both positions must belong to loaded chunks.
+     *
+     * <p>
+     * The indirect path uses the solid neighbor as the reported update source,
+     * preserving which block is immediately adjacent to the diode. Unloaded
+     * chunks are skipped rather than loaded for this notification, and the
+     * queued update manager determines when diode behavior is evaluated.
+     */
     @Override
     public void updateComparatorOutputLevel(int x, int y, int z) {
         var sourcePos = new Vector3i(x, y, z);
-        // Check horizontal neighbors for diodes
         for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
             var offset = face.getOffset();
             int nx = x + offset.x();
@@ -424,10 +681,11 @@ public class AllayDimension implements Dimension {
             var neighborPos = new Vector3i(nx, ny, nz);
 
             if (isDiode(neighborState)) {
-                // Direct neighbor is a diode, update it
                 blockUpdateManager.neighborBlockUpdate(neighborPos, sourcePos, face.opposite(), null);
             } else if (neighborState.getBlockStateData().isSolid()) {
-                // Neighbor is solid, check if there's a diode on the other side
+                // A solid neighbor can relay the comparator output to a diode
+                // directly behind it; retain that neighbor as the reported
+                // source when enqueueing the indirect update.
                 int nx2 = nx + offset.x();
                 int nz2 = nz + offset.z();
 
@@ -445,7 +703,7 @@ public class AllayDimension implements Dimension {
     }
 
     /**
-     * Checks if a block state is a redstone diode (repeater or comparator).
+     * Returns whether the state is a powered or unpowered redstone diode.
      */
     private boolean isDiode(BlockState state) {
         var type = state.getBlockType();
@@ -456,15 +714,16 @@ public class AllayDimension implements Dimension {
     }
 
     /**
-     * Handles random lightning spawning during thunderstorms.
-     * Lightning has a 1/100,000 chance to strike per loaded chunk per tick.
+     * Attempts natural lightning in loaded overworld chunks during thunder
+     * weather. Each chunk has a one-in-{@code 100000} selection chance per
+     * call, and a selected sky-visible position passes through the cancellable
+     * strike operation.
      */
     protected void tickLightning() {
         if (world.getWeather() != Weather.THUNDER) {
             return;
         }
 
-        // Only spawn lightning in overworld
         if (dimensionType != DimensionTypes.OVERWORLD) {
             return;
         }
@@ -472,26 +731,30 @@ public class AllayDimension implements Dimension {
         var rand = ThreadLocalRandom.current();
         var loadedChunks = chunkManager.getLoadedChunks();
         for (var chunk : loadedChunks) {
-            // 1/100,000 chance per chunk per tick
+            // Sample each loaded chunk independently to select rare natural
+            // strike candidates without weighting the chance by column count.
             if (rand.nextInt(LIGHTNING_STRIKE_CHANCE) != 0) {
                 continue;
             }
 
-            // Random position within the chunk
             int x = (chunk.getX() << 4) + rand.nextInt(16);
             int z = (chunk.getZ() << 4) + rand.nextInt(16);
             int y = getHeight(x, z) + 1;
 
-            // Check if the position can see the sky
             if (!canPosSeeSky(x, y, z)) {
                 continue;
             }
 
-            // Spawn lightning at the position
             strikeLightning(x, y, z, LightningStrikeEvent.Cause.WEATHER);
         }
     }
 
+    /**
+     * Creates a lightning entity and proposes its admission through the strike
+     * event. Cancellation returns {@code false}; accepted dispatch requests
+     * entity-manager addition and returns {@code true} without waiting for
+     * that queued admission to complete.
+     */
     @Override
     public boolean strikeLightning(double x, double y, double z, LightningStrikeEvent.Cause cause) {
         var lightningBolt = EntityTypes.LIGHTNING_BOLT.createEntity(
@@ -510,6 +773,10 @@ public class AllayDimension implements Dimension {
         return true;
     }
 
+    /**
+     * Returns the owning world name and registered dimension identifier for
+     * diagnostics.
+     */
     @Override
     public String toString() {
         return "world=" + this.world.getName() + " dimension=" + this.dimensionType.getIdentifier();

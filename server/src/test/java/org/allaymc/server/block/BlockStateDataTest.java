@@ -16,11 +16,21 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code BlockStateDataTest} checks block metadata deserialization and coverage of
+ * registered vanilla states. A representative JSON fixture exercises shape bounds and
+ * scalar fields, while the registry scan reports missing metadata for any known
+ * vanilla block-state hash.
+ *
  * @author Cool_Loong
  */
 @ExtendWith(AllayTestExtension.class)
 @Slf4j
 class BlockStateDataTest {
+    /**
+     * {@code json} supplies a block metadata fixture with fractional collision
+     * bounds, scalar flags, color, and translation data for deserialization
+     * assertions.
+     */
     @Language("JSON")
     private static final String json = """
             {
@@ -51,6 +61,11 @@ class BlockStateDataTest {
             }
             """;
 
+    /**
+     * Deserializes one metadata fixture containing shape bounds, color, flags, and
+     * numeric properties. The assertions protect the loader's field mapping and the
+     * exact values exposed by the resulting block-state data.
+     */
     @Test
     void testDeserialization() {
         var blockStateData = BlockStateDataRegistryLoader.fromJson(json);
@@ -77,6 +92,11 @@ class BlockStateDataTest {
         assertEquals("abc", blockStateData.translationKey());
     }
 
+    /**
+     * Visits every registered vanilla block type and all of its states. Each state
+     * hash must have loaded metadata, and missing entries are logged before the
+     * aggregate zero-error assertion.
+     */
     @Test
     void testVanillaBlockStateData() {
         int error = 0;

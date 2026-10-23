@@ -1,46 +1,47 @@
 package org.allaymc.api.block.data;
 
 /**
+ * {@code LiquidReactionOnTouch} describes how a block responds when flowing liquid
+ * reaches its position. The constants distinguish replacement from coexistence or
+ * blocked flow; source-liquid containment remains a separate decision represented
+ * by {@link BlockStateData#canContainLiquidSource}.
+ *
  * @author daoge_cmd
  */
 public enum LiquidReactionOnTouch {
     /**
-     * Block breaks without dropping items.
+     * Removal without item drops.
      */
     BROKEN,
     /**
-     * Block drops itself when broken.
+     * Removal with block drops.
      */
     POPPED,
     /**
-     * The block will prevent the liquid from flowing into.
-     * <p>
-     * Compared to {@link BlockStateData#canContainLiquidSource}, this only
-     * affects flowing liquid, not source liquid. That's mean the block
-     * may still can contain source liquid block.
+     * {@code BLOCKING} prevents flowing liquid from entering the block. Source
+     * containment still depends separately on {@link
+     * BlockStateData#canContainLiquidSource}, so blocking flow does not itself
+     * forbid waterlogging.
      */
     BLOCKING,
     /**
-     * Block has no reaction and does not affect liquid flow, similar to air.
+     * Unchanged block allowing flow.
      */
     NOREACTION;
 
     /**
-     * Checks if the block should be removed when touched by liquid.
-     *
-     * @return {@code true} if removed (BROKEN or POPPED), {@code false} otherwise
+     * Returns whether this reaction removes the touched block, with {@code BROKEN}
+     * and {@code POPPED} selecting removal.
      */
     public boolean shouldRemoveOnTouch() {
         return this == BROKEN || this == POPPED;
     }
 
     /**
-     * Checks if liquid can flow into this block.
-     * <p>
-     * Please note that this method only checks if the liquid can flow into this block,
-     * it doesn't mean the block can contain the liquid source block.
-     *
-     * @return {@code true} if flow is allowed (NOREACTION), {@code false} otherwise
+     * Returns whether this reaction permits flow without removing the block. Only
+     * {@code NOREACTION} returns {@code true}; source-liquid containment and
+     * replacement reactions must be considered separately by liquid-placement
+     * callers.
      */
     public boolean canLiquidFlowInto() {
         return this == NOREACTION;

@@ -11,9 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
+ * {@code BlockingQueueWrapperTest} exercises blocking consumption of items offered through
+ * a wrapper over an MPSC queue.
  * @author daoge_cmd
  */
 class BlockingQueueWrapperTest {
+    /**
+     * Offers one hundred items while a separate consumer polls through the blocking
+     * wrapper. After the consumer finishes, the count must match the offers and immediate
+     * polling must report no remaining item.
+     */
     @SneakyThrows
     @Test
     void test() {
@@ -23,7 +30,8 @@ class BlockingQueueWrapperTest {
 
         var thread = Thread.ofPlatform().start(() -> {
             while (running.get() || queue.size() != 0) {
-                // Should block here if queue is empty
+                // Wait for an item permit instead of counting an empty poll as a consumed item
+                // while the producer is still active.
                 queue.poll();
                 integer.incrementAndGet();
             }
@@ -32,6 +40,8 @@ class BlockingQueueWrapperTest {
         for (int i = 0; i < 100; i++) {
             queue.offer(i);
         }
+        // Stop after publishing all offers, then join before checking the count so assertions
+        // observe the completed consumer's increments.
         running.set(false);
         thread.join();
         assertEquals(100, integer.get());

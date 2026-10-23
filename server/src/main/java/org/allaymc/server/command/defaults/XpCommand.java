@@ -10,14 +10,28 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
+ * {@code XpCommand} adds experience points or repeated level-sized increments
+ * to selected players. An uppercase {@code L} suffix selects level mode, which
+ * adds the current level's required experience on each iteration; nonpositive
+ * level amounts perform no iterations but still report success.
+ *
  * @author xingchentye
  */
 public class XpCommand extends Command {
 
+    /**
+     * Creates the {@code /xp} command with its built-in authorization permission.
+     */
     public XpCommand() {
         super("xp", TrKeys.MC_COMMANDS_XP_DESCRIPTION, Permissions.COMMAND_XP);
     }
 
+    /**
+     * Installs required amount text and player targets for experience changes.
+     * Only uppercase {@code L} selects level mode. Empty selections fail, and
+     * malformed or overflowing numeric text propagates {@link NumberFormatException}
+     * before any target receives experience.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().str("amount").playerTarget("player").exec(context -> {

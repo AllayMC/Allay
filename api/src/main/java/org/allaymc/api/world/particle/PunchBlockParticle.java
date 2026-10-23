@@ -4,8 +4,14 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * PunchBlockParticle is a particle shown when a player is punching a block.
- * It shows particles of a specific block type at a particular face of a block.
+ * {@code PunchBlockParticle} describes block-textured debris emitted from a
+ * selected block face. The runtime chooses the directional effect from {@code
+ * blockFace} and uses the state hash for its texture; neither component is
+ * substituted when it is {@code null}.
+ *
+ * @param blockState block state supplying the debris texture
+ *
+ * @param blockFace face receiving the punching effect
  *
  * @author daoge_cmd
  */

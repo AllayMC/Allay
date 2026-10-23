@@ -11,86 +11,86 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
- * PlayerManager is used to manage player related things. It holds all online players,
- * storage implementation for saving player data and ban/whitelist information.
+ * {@code PlayerManager} exposes online players, their storage, and server admission
+ * lists. Player lookup uses persistent UUIDs or exact original names, while ban,
+ * whitelist, and operator changes affect the active server policy; the
+ * implementation defines when those policies are persisted.
  *
  * @author daoge_cmd
  */
 public interface PlayerManager {
 
     /**
-     * Get the online players.
-     *
-     * @return the online players
+     * Returns an unmodifiable live view of online players indexed by persistent
+     * UUID. The view reflects subsequent membership changes, so callers must not
+     * treat it as an independent snapshot or mutate its entries.
      */
     @UnmodifiableView
     Map<UUID, Player> getPlayers();
 
     /**
-     * For-each the online players.
-     *
-     * @param consumer the consumer which will be applied to each player
+     * Applies the consumer to each currently registered player in the live view.
+     * Iteration follows the backing map's behavior; callers must coordinate
+     * membership changes rather than assuming a stable snapshot.
      */
     default void forEachPlayer(Consumer<Player> consumer) {
         getPlayers().values().forEach(consumer);
     }
 
     /**
-     * Get the online player count of the server.
-     *
-     * @return the online player count of the server
+     * Returns the number of player entries currently registered as online.
      */
     default int getPlayerCount() {
         return getPlayers().size();
     }
 
     /**
-     * Get the maximum online player count of the server.
-     *
-     * @return the maximum online player count of the server
+     * Returns the configured maximum player count advertised by the server.
      */
     int getMaxPlayerCount();
 
     /**
-     * Set the maximum online player count of the server.
-     *
-     * @param value the maximum online player count of the server
+     * Changes the maximum online player count advertised by the network interfaces.
+     * The standard implementation stores the supplied value without validation and
+     * does not disconnect existing players when the limit is lowered.
      */
     void setMaxPlayerCount(int value);
 
     /**
-     * Disconnect all players with the default reason.
+     * Disconnects every registered player using
+     * {@code TrKeys.MC_DISCONNECT_DISCONNECTED} as the translated default reason.
+     * Each connection performs its own lifecycle cleanup and language selection
+     * through its disconnect implementation.
      */
     default void disconnectAllPlayers() {
         disconnectAllPlayers(TrKeys.MC_DISCONNECT_DISCONNECTED);
     }
 
     /**
-     * Disconnect all players.
-     *
-     * @param reason the reason of the disconnection
+     * Disconnects every registered player with the supplied reason. Each connection
+     * resolves translation keys using its own login language, and a failure from a
+     * connection can interrupt the iteration.
      */
     default void disconnectAllPlayers(@MayContainTrKey String reason) {
         forEachPlayer(player -> player.disconnect(reason));
     }
 
     /**
-     * Get the used player storage.
-     *
-     * @return the used player storage
+     * Returns the storage implementation used for persistent player data operations.
      */
     PlayerStorage getPlayerStorage();
 
     /**
-     * Save the player data.
+     * Saves current data for registered players that have fully initialized. The
+     * standard implementation performs storage calls sequentially, so a propagated
+     * storage failure prevents later players in that iteration from being saved.
      */
     void savePlayerData();
 
     /**
-     * Find an online player by his name.
-     *
-     * @param playerName the name of the player
-     * @return the player if found, otherwise {@code null}
+     * Returns an online player whose original name exactly equals
+     * {@code playerName}. The comparison is case-sensitive and returns {@code null}
+     * when no current entry matches; display names are not searched.
      */
     default Player getPlayerByName(String playerName) {
         return getPlayers().values().stream()
@@ -100,155 +100,134 @@ public interface PlayerManager {
     }
 
     /**
-     * Check if the player is banned.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is banned, otherwise {@code false}.
+     * Returns whether the exact UUID or name string is in the player ban set.
      */
     boolean isBanned(String uuidOrName);
 
     /**
-     * Ban the player.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is banned, otherwise {@code false}.
+     * Adds an exact UUID or name string to the player ban set and disconnects
+     * matching online players. Existing entries and cancelled ban events return
+     * {@code false}; an accepted new entry returns {@code true}.
      */
     boolean ban(String uuidOrName);
 
     /**
-     * Unban the player.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is unbanned, otherwise {@code false}.
+     * Removes an exact UUID or name string after its unban event is accepted.
+     * Missing entries and cancelled events return {@code false}; successful removal
+     * returns {@code true} without reconnecting previously disconnected players.
      */
     boolean unban(String uuidOrName);
 
     /**
-     * Get the banned players.
-     *
-     * @return the banned players
+     * Returns an unmodifiable live view of banned UUID and name strings. The view
+     * reflects later policy changes and cannot be used to add or remove entries
+     * directly.
      */
     @UnmodifiableView
     Set<String> getBannedPlayers();
 
     /**
-     * Check if the IP is banned.
-     *
-     * @param ip the IP to check
-     * @return {@code true} if the IP is banned, otherwise {@code false}.
+     * Returns whether the exact supplied string appears in the IP ban set.
      */
     boolean isIPBanned(String ip);
 
     /**
-     * Ban the IP.
-     *
-     * @param ip the IP to ban
-     * @return {@code true} if the IP is banned, otherwise {@code false}.
+     * Adds an IP string after its ban event is accepted and disconnects matching
+     * online connections. Existing entries and cancelled events return
+     * {@code false}; the standard implementation matches its parsed socket-address
+     * string.
      */
     boolean banIP(String ip);
 
     /**
-     * Unban the IP.
-     *
-     * @param ip the IP to unban
-     * @return {@code true} if the IP is unbanned, otherwise {@code false}.
+     * Removes an IP string after its unban event is accepted. Missing entries and
+     * cancelled events return {@code false}; successful removal returns {@code true}
+     * without reconnecting previously disconnected clients.
      */
     boolean unbanIP(String ip);
 
     /**
-     * Get the banned IPs.
-     *
-     * @return the banned IPs
+     * Returns an unmodifiable live view of the stored IP ban strings. The view
+     * reflects subsequent policy changes and supplies no normalization or validation
+     * of those values.
      */
     @UnmodifiableView
     Set<String> getBannedIPs();
 
     /**
-     * Retrieves the current status of the whitelist.
-     *
-     * @return {@code true} if the whitelist is enabled, otherwise {@code false}.
+     * Returns whether the current server settings enable admission through the
+     * whitelist.
      */
     boolean getWhitelistStatus();
 
     /**
-     * Set the whitelist status.
-     *
-     * @param enable {@code true} to enable the whitelist, otherwise {@code false}
+     * Changes whitelist enforcement after a cancellable status-change event accepts
+     * the request. Enabling enforcement disconnects registered players who match
+     * neither their UUID nor original name in the whitelist.
      */
     void setWhitelistStatus(boolean enable);
 
     /**
-     * Check if the player is in the whitelist.
-     *
-     * @param player the player to check
-     * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
+     * Returns whether the player's persistent UUID or exact original name is
+     * whitelisted. Either key is sufficient, and login data must already be
+     * available before this convenience check runs.
      */
     default boolean isWhitelisted(Player player) {
         return isWhitelisted(player.getLoginData().getUuid().toString()) || isWhitelisted(player.getOriginName());
     }
 
     /**
-     * Check if the player is in the whitelist.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
+     * Returns whether the exact UUID or name string is currently whitelisted.
      */
     boolean isWhitelisted(String uuidOrName);
 
     /**
-     * Add the player to the whitelist.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is added to the whitelist, otherwise {@code false}.
+     * Adds an exact UUID or name string after a cancellable addition event. Existing
+     * entries and cancelled events return {@code false}; successful set insertion
+     * returns {@code true} and affects later admission checks.
      */
     boolean addToWhitelist(String uuidOrName);
 
     /**
-     * Remove the player from the whitelist.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is removed from the whitelist, otherwise {@code false}.
+     * Removes an exact UUID or name string after its removal event is accepted. The
+     * standard implementation disconnects online players matching that string even
+     * when whitelist enforcement is currently disabled.
      */
     boolean removeFromWhitelist(String uuidOrName);
 
     /**
-     * Get the whitelisted players.
-     *
-     * @return the whitelisted players
+     * Returns an unmodifiable live view of the stored whitelist strings. Changes
+     * through manager operations remain visible, and callers cannot use this view to
+     * modify admission policy directly.
      */
     @UnmodifiableView
     Set<String> getWhitelistedPlayers();
 
     /**
-     * Checks if the specified player is an operator.
-     *
-     * @param player the player whose operator status is to be checked
-     * @return {@code true} if the player is an operator, otherwise {@code false}
+     * Returns whether the player's persistent UUID or exact original name is an
+     * operator entry. Either key is sufficient, and the player must already have
+     * decoded login data.
      */
     default boolean isOperator(Player player) {
         return isOperator(player.getLoginData().getUuid().toString()) || isOperator(player.getOriginName());
     }
 
     /**
-     * Checks if the player, identified by their UUID or name, is an operator.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is an operator, otherwise {@code false}
+     * Returns whether the exact UUID or name string is an operator entry.
      */
     boolean isOperator(String uuidOrName);
 
     /**
-     * Sets the operator status for a specific player identified by their UUID or name.
-     *
-     * @param uuidOrName the UUID or name of the player
-     * @param value      {@code true} to set the player as an operator, {@code false} to remove operator status
+     * Changes the stored operator flag for an exact UUID or name string. The
+     * standard implementation refreshes abilities for the first matching online
+     * player when membership changes; persistent config output is deferred until
+     * manager shutdown.
      */
     void setOperator(String uuidOrName, boolean value);
 
     /**
-     * Get the network manager that manages all network interfaces.
-     *
-     * @return the network manager
+     * Returns the network manager responsible for the server's registered
+     * interfaces.
      */
     NetworkManager getNetworkManager();
 }

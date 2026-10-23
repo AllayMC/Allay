@@ -11,6 +11,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * {@code AABBTreeJMHTest} measures overlap queries, linear box scans, and updates over
+ * prepared random AABB fixtures. Each workload advances through the same fixed-size
+ * fixture arrays and allocates any query result list inside the measured invocation.
  * @author daoge_cmd
  */
 @State(Scope.Benchmark)
@@ -20,15 +23,46 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class AABBTreeJMHTest {
+    /**
+     * Number of fixture objects and prepared query boxes.
+     */
     private final int TEST_ENTITY_COUNT = 2000;
+    /**
+     * Upper bound for randomly sampled fixture side lengths.
+     */
     private final int ENTITY_SIZE = 2;
+    /**
+     * Upper bound for randomly sampled minimum-corner coordinates.
+     */
     private final int RANGE = 500;
+    /**
+     * Tree populated once with the prepared fixture entities.
+     */
     private AABBTree<TestEntity> aabbTree;
+    /**
+     * Prepared entity references used for measured tree updates.
+     */
     private TestEntity[] testEntities;
+    /**
+     * Copied entity bounds used by the linear scan workload.
+     */
     private AABBd[] testEntityAABBs;
+    /**
+     * Prepared random query boxes used by both overlap workloads.
+     */
     private AABBd[] testAABBs;
+    /**
+     * {@code indexCounter} selects the next fixture across measured invocations. Each
+     * workload wraps it at {@code TEST_ENTITY_COUNT}, and the configured single thread
+     * owns these updates.
+     */
     private int indexCounter = 0;
 
+    /**
+     * Creates random entities, inserts them into the tree, and prepares query boxes. Setup
+     * also copies entity bounds for the linear scan so fixture construction occurs outside
+     * measured benchmark invocations.
+     */
     @Setup
     public void init() {
         aabbTree = new AABBTree<>();
@@ -47,6 +81,11 @@ public class AABBTreeJMHTest {
         }
     }
 
+    /**
+     * Returns a fixture with the supplied identifier and independently sampled geometry.
+     * Coordinates use {@code RANGE}, and each side length uses {@code ENTITY_SIZE}; the
+     * returned entity is not added to the tree here.
+     */
     public TestEntity createRandomTestEntity(int id) {
         return new TestEntity(
                 id,
@@ -59,6 +98,11 @@ public class AABBTreeJMHTest {
         );
     }
 
+    /**
+     * Returns a new random box with sampled minimum coordinates and side lengths. Each
+     * minimum lies within {@code RANGE}, while each nonnegative side length lies below
+     * {@code ENTITY_SIZE}.
+     */
     public AABBd createRandomAABB() {
         var x = ThreadLocalRandom.current().nextDouble() * RANGE;
         var y = ThreadLocalRandom.current().nextDouble() * RANGE;
@@ -72,33 +116,56 @@ public class AABBTreeJMHTest {
         );
     }
 
+    /**
+     * Measures a tree overlap query using the next prepared random box. The measured
+     * invocation includes result-list allocation and advances the fixture index; the local
+     * result is not consumed by a blackhole.
+     */
     @Benchmark
     public void testAABBTreeDetectOverlaps() {
         aabbTree.detectOverlaps(testAABBs[indexCounter], new ArrayList<>());
         indexCounter++;
+        // Wrap the prepared-fixture cursor so repeated measured invocations reuse setup data.
         if (indexCounter == TEST_ENTITY_COUNT) {
             indexCounter = 0;
         }
     }
 
+    /**
+     * Measures a linear scan of copied entity bounds against the next prepared box. The
+     * invocation includes result-list allocation and index advancement, and matching boxes
+     * are appended to that local list.
+     */
     @Benchmark
     public void testForEach() {
         forEachDetect(testAABBs[indexCounter], new ArrayList<>());
         indexCounter++;
+        // Wrap the prepared-fixture cursor so repeated measured invocations reuse setup data.
         if (indexCounter == TEST_ENTITY_COUNT) {
             indexCounter = 0;
         }
     }
 
+    /**
+     * Measures updating the next already indexed entity without changing its fixture
+     * bounds. The invocation advances the shared fixture index and includes the tree's
+     * remove-and-reinsert update work.
+     */
     @Benchmark
     public void testAABBTreeUpdate() {
         aabbTree.update(testEntities[indexCounter]);
         indexCounter++;
+        // Wrap the prepared-fixture cursor so repeated measured invocations reuse setup data.
         if (indexCounter == TEST_ENTITY_COUNT) {
             indexCounter = 0;
         }
     }
 
+    /**
+     * Appends copied fixture boxes intersecting {@code aabb} to the supplied result list.
+     * The method scans every prepared entity box, includes boundary contact through JOML,
+     * and does not clear existing result entries.
+     */
     public void forEachDetect(AABBd aabb, List<AABBd> result) {
         for (var entityAABB : testEntityAABBs) {
             if (entityAABB.intersectsAABB(aabb))

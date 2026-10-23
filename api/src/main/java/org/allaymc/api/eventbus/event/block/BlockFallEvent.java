@@ -5,12 +5,18 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.block.dto.Block;
 
 /**
- * Called when a block begins to fall due to gravity. Examples include sand, gravel, and anvils.
+ * {@code BlockFallEvent} represents the start of a block transition into a falling
+ * entity. Falling components dispatch it before adding the entity and removing the
+ * original block; this event supplies a notification without implementing the
+ * cancellable event contract.
  *
  * @author daoge_cmd
  */
 @CallerThread(ThreadType.DIMENSION)
 public class BlockFallEvent extends BlockEvent {
+    /**
+     * Creates a falling notification for the block leaving its position.
+     */
     public BlockFallEvent(Block block) {
         super(block);
     }

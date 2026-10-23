@@ -9,10 +9,21 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+/**
+ * {@code ChunkCacheTest} verifies that independently encoded cache-miss responses do
+ * not share mutable bytes with stored blobs.
+ */
 class ChunkCacheTest {
 
+    /**
+     * Creates two cache-miss responses for the same registered blob and mutates the
+     * first response buffer. Cached source bytes and the second response must retain
+     * their original contents, and both packets must be released.
+     */
     @Test
     void missResponseMutationDoesNotPolluteCachedBlob() throws ReflectiveOperationException {
+        // Construct a private cache instance for this test so its blob mutations and transaction state
+        // do not depend on the process-wide singleton.
         var constructor = ChunkCache.class.getDeclaredConstructor(int.class);
         constructor.setAccessible(true);
         var cache = constructor.newInstance(16);
@@ -27,6 +38,8 @@ class ChunkCacheTest {
             first.getBlobs().get(hash).setByte(0, 99);
             assertArrayEquals(new byte[]{1, 2, 3, 4}, cachedBytes);
         } finally {
+            // Release the first response even when a mutation assertion fails, because the encoded packet
+            // owns reference-counted buffers independent of the cache.
             assertTrue(first.release());
         }
 
@@ -37,6 +50,8 @@ class ChunkCacheTest {
             second.getBlobs().get(hash).getBytes(second.getBlobs().get(hash).readerIndex(), responseBytes);
             assertArrayEquals(new byte[]{1, 2, 3, 4}, responseBytes);
         } finally {
+            // Release the second response after checking its copied bytes so the independently allocated
+            // packet buffers are not retained by this test.
             assertTrue(second.release());
         }
     }

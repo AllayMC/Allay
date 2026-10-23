@@ -15,26 +15,53 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.CommandBlockUpdatePacket;
 
 /**
- * Handles command block update packets from the client.
- * These packets are sent when a player modifies command block settings through the UI.
+ * {@code CommandBlockUpdatePacketProcessor} applies command-block UI settings
+ * for creative players holding the
+ * command-block permission. Nonblock requests and missing command-block
+ * entities are ignored. The requested mode selects a block type, preserving
+ * facing direction while updating the conditional block property before entity
+ * fields are changed.
+ *
+ * <p>
+ * Changing block type can rebuild its block entity, so the handler fetches that
+ * entity again after the world update and stops if it is absent. The
+ * replacement receives command, output, delay, name, and activation settings
+ * before viewer synchronization. An always-active normal block is triggered
+ * after those fields are assigned. The process does not roll back the world
+ * block change or earlier fields if refetching or a later update fails, and
+ * minecart command blocks remain unsupported.
  *
  * @author daoge_cmd
  */
 @Slf4j
 public class CommandBlockUpdatePacketProcessor extends PacketProcessor<CommandBlockUpdatePacket> {
 
+    /**
+     * Applies settings only for a permitted creative player and an existing
+     * command-block target. Minecart requests are ignored, and block type
+     * follows the requested command mode while retaining the original facing
+     * direction.
+     *
+     * <p>
+     * The world block or conditional property changes before the block entity
+     * is fetched again, because a type switch can replace the entity. The
+     * refreshed entity receives clamped delay and other settings, then a normal
+     * always-active block is triggered before broadcasting. A missing refreshed
+     * entity stops processing after the block update; later failures also
+     * propagate without undoing earlier changes.
+     */
     @Override
     public void handleSync(Player player, CommandBlockUpdatePacket packet, long receiveTime) {
         var entity = player.getControlledEntity();
 
-        // Only creative players with command block permission can modify command blocks
         if (!entity.hasPermission(Permissions.BLOCK_USE_COMMAND_BLOCK).asBoolean() || entity.getGameMode() != GameMode.CREATIVE) {
             log.warn("Player {} tried to modify command block without permission", player.getOriginName());
             return;
         }
 
         if (!packet.isBlock()) {
-            // TODO: Minecart command block - not implemented yet
+            // TODO: Add minecart entity lookup and command-setting updates
+            // before accepting the nonblock form of this packet.
             return;
         }
 
@@ -47,7 +74,6 @@ public class CommandBlockUpdatePacketProcessor extends PacketProcessor<CommandBl
             return;
         }
 
-        // Determine which block type to switch to based on mode
         var currentBlockState = dimension.getBlockState(x, y, z);
         var currentBlockType = currentBlockState.getBlockType();
         var targetBlockType = switch (packet.getMode()) {
@@ -56,7 +82,9 @@ public class CommandBlockUpdatePacketProcessor extends PacketProcessor<CommandBl
             default -> BlockTypes.COMMAND_BLOCK;
         };
 
-        // Switch block type first, as this may rebuild the block entity
+        // Change the block representation before editing entity fields, because
+        // a mode-driven type switch can rebuild the block entity and discard
+        // writes made to its old instance.
         if (currentBlockType != targetBlockType) {
             var facingDirection = currentBlockState.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION);
             var newBlockState = targetBlockType.getDefaultState()
@@ -67,17 +95,19 @@ public class CommandBlockUpdatePacketProcessor extends PacketProcessor<CommandBl
             dimension.updateBlockProperty(BlockPropertyTypes.CONDITIONAL_BIT, packet.isConditional(), x, y, z);
         }
 
-        // Re-fetch the block entity after potential rebuild
+        // Fetch the current entity after the world mutation so subsequent
+        // settings target the replacement rather than an instance detached by
+        // the type switch.
         var commandBlock = (BlockEntityCommandBlock) dimension.getBlockEntity(x, y, z);
         if (commandBlock == null) {
             log.warn("Command block entity missing after block type switch at ({}, {}, {})", x, y, z);
             return;
         }
 
-        // Update command block properties
         commandBlock.setCommand(packet.getCommand());
         commandBlock.setTrackingOutput(packet.isOutputTracked());
         commandBlock.setConditional(packet.isConditional());
+        // Clamp to nonnegative integer ticks before narrowing the wire value.
         commandBlock.setTickDelay((int) Math.max(0L, Math.min(packet.getTickDelay(), Integer.MAX_VALUE)));
         commandBlock.setExecuteOnFirstTick(packet.isExecutingOnFirstTick());
 
@@ -88,19 +118,25 @@ public class CommandBlockUpdatePacketProcessor extends PacketProcessor<CommandBl
             commandBlock.setCustomName(null);
         }
 
-        // Redstone mode: when redstoneMode is false, it means "always active" (auto = true)
+        // The packet expresses redstone dependence while the entity stores
+        // automatic activation; invert this flag so both representations
+        // describe the same mode.
         boolean isRedstoneMode = packet.isRedstoneMode();
         commandBlock.setAuto(!isRedstoneMode);
 
-        // If switching to "always active" on a normal command block, trigger it immediately
+        // Normal always-active requests trigger after settings are assigned, so
+        // execution observes the submitted command and delay rather than the
+        // previous block-entity configuration.
         if (!isRedstoneMode && packet.getMode() == CommandBlockMode.NORMAL) {
             commandBlock.trigger();
         }
 
-        // Send updated block entity to viewers
         ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) commandBlock).getBaseComponent()).sendBlockEntityToViewers();
     }
 
+    /**
+     * Returns the command block update packet type handled by this processor.
+     */
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.COMMAND_BLOCK_UPDATE;

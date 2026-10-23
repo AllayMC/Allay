@@ -10,13 +10,11 @@ import org.allaymc.api.message.MayContainTrKey;
 
 
 /**
- * Represents the data associated with an item, including properties such as armor value, enchantability, and damage.
- * <p>
- * This class is designed to be immutable and provides a builder pattern for easy construction of instances.
- * <p>
- * It includes a default instance that can be used as a template or base for creating new `ItemData` objects.
- * <p>
- * Additionally, it supports conversion from a JSON string to an `ItemData` object using Gson.
+ * {@code ItemData} holds gameplay properties shared by instances of an item type,
+ * including durability limits, armor values, stack limits, and furnace data.
+ * The generated builder supplies declared field defaults, while {@code fromJson}
+ * delegates resource decoding directly to Gson. Consumers interpret each property
+ * when performing their gameplay operation.
  *
  * @author daoge_cmd
  */
@@ -26,97 +24,86 @@ import org.allaymc.api.message.MayContainTrKey;
 @EqualsAndHashCode
 public class ItemData {
 
+    /**
+     * {@code GSON} decodes item-data resource entries using Gson's standard mapping
+     * without registering custom adapters or applying gameplay validation.
+     */
     protected static final Gson GSON = new GsonBuilder().create();
 
+    /**
+     * {@code DEFAULT} supplies the shared default data selected by item-type builders.
+     * The reference is initialized from builder defaults and can be replaced by callers.
+     */
     public static ItemData DEFAULT = ItemData.builder().build();
 
     /**
-     * Represents the base armor value of an item. This value is used to determine the protection level provided by the item
-     * when worn as armor.
-     * <p>
-     * The default value is 0, indicating no armor protection.
+     * Armor protection points supplied when this item is equipped.
      */
     @Builder.Default
     protected int armorValue = 0;
     /**
-     * Represents the enchant ability value of an item. This value is used to determine the quality and variety of enchantment
-     * options available when using an enchanting table. A higher enchant value results in better enchantment options.
-     * <p>
-     * The default value is 0, indicating that the item cannot be enchanted.
+     * {@code enchantValue} supplies enchantability for table and fishing selection.
+     * The builder defaults to {@code 0}, which the enchanting-table generator treats
+     * as ineligible for generated options.
      */
     @Builder.Default
     protected int enchantValue = 0;
     /**
-     * Represents the base attack damage of an item. This value is used to determine the amount of damage the item can inflict
-     * when used as a weapon.
-     * <p>
-     * The default value is 0, indicating that the item does not deal any additional damage.
+     * Base attack damage returned by the default item damage calculation.
      */
     @Builder.Default
     protected int attackDamage = 0;
     /**
-     * Indicates whether the item can be damaged and lose durability.
-     * <p>
-     * If set to true, the item can receive damage and may eventually break. If false, the item is not subject to damage and
-     * will not lose durability.
-     * <p>
-     * The default value is false, meaning the item is not damageable by default.
+     * {@code isDamageable} enables default durability setters and broken-item checks.
+     * The builder defaults to {@code false}; damageable items need a positive
+     * {@code maxDamage} for the broken-item check.
      */
     @Builder.Default
     protected boolean isDamageable = false;
     /**
-     * Represents the maximum amount of damage this item can sustain before it is destroyed.
-     * <p>
-     * The default value is 0, indicating that the item does not have a limit on how much damage it can take. If the item is
-     * not intended to be damageable,
-     * this value should remain at 0.
+     * {@code maxDamage} is the durability threshold used for damageable items.
+     * The builder defaults to {@code 0}; the default broken-item check rejects
+     * nonpositive thresholds rather than treating them as unlimited durability.
      */
     @Builder.Default
     protected int maxDamage = 0;
     /**
-     * Represents the maximum number of items that can be stacked in a single inventory slot.
-     * <p>
-     * The default value is 64, which is the standard stack size for most items in Minecraft. This value can be adjusted to
-     * limit or increase the stack size for specific items.
+     * {@code maxStackSize} limits default stack merging and defines a full stack.
+     * The builder defaults to {@code 64}; direct count setters do not enforce this
+     * limit.
      */
     @Builder.Default
     protected int maxStackSize = 64;
     /**
-     * Represents the toughness value of an item. This value is used to determine the additional protection level provided by
-     * the item when worn as armor.
-     * <p>
-     * The default value is 0, indicating no additional toughness.
+     * Armor toughness points included in equipped-armor damage reduction.
      */
     @Builder.Default
     protected int toughnessValue = 0;
     /**
-     * Represents the duration in seconds that an item can burn in a furnace.
-     * <p>
-     * This value is used to determine how long an item will fuel a furnace. A value of 0 indicates
-     * that the item cannot be used as fuel.
+     * {@code furnaceBurnDuration} supplies fuel duration in game ticks. Furnace fuel
+     * checks require a positive value, and the furnace truncates it to an integer
+     * when setting its burn duration; the builder defaults to {@code 0}.
      */
     @Builder.Default
     protected float furnaceBurnDuration = 0;
     /**
-     * Represents the experience multiplier that will be given to the player when an item is smelted in the furnace. This
-     * multiplier directly affects the total amount of experience the player ends up earning
-     * <p>
-     * The default value is 0, indicating no experience the player will get when the item is smelted in the furnace.
+     * {@code furnaceXPMultiplier} supplies expected experience per completed furnace
+     * output. The furnace uses the fractional part as the chance of one additional
+     * point; the builder defaults to {@code 0}.
      */
     @Builder.Default
     protected float furnaceXPMultiplier = 0;
     /**
-     * The translation key of the item.
+     * Item display translation key.
      */
     @MayContainTrKey
     @Builder.Default
     protected String translationKey = "";
 
     /**
-     * Converts a JSON string into an ItemData object.
-     *
-     * @param json the JSON string to be converted into an ItemData object
-     * @return an ItemData object representing the deserialized JSON
+     * Decodes item gameplay data using the shared Gson instance.
+     * This method performs no gameplay range checks or builder merge; callers receive
+     * the deserialized value, including {@code null} for JSON {@code null}.
      */
     public static ItemData fromJson(String json) {
         return GSON.fromJson(json, ItemData.class);

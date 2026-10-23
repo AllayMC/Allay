@@ -14,14 +14,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * {@code GameModeCommand} requests game-mode changes for selected player
+ * entities, or for the player sender when no targets are supplied. Each target
+ * receives feedback independently, and the handler reports the requested mode
+ * without checking whether a game-mode event cancelled or modified the change.
+ *
  * @author daoge_cmd
  */
 public class GameModeCommand extends Command {
+    /**
+     * Creates the authorized {@code /gamemode} command and its {@code /gm} alias.
+     */
     public GameModeCommand() {
         super("gamemode", TrKeys.MC_COMMANDS_GAMEMODE_DESCRIPTION, Permissions.COMMAND_GAMEMODE);
         aliases.add("gm");
     }
 
+    /**
+     * Installs game-mode selection with an optional player target argument.
+     * Omitted targets require {@code context.getSender()} to be an {@link EntityPlayer}
+     * instance; explicit targets must match at least one player. Requests
+     * process every target and retain earlier changes if a later operation fails.
+     * Feedback resolves the mode label using {@link LangCode#en_US}.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -31,7 +46,6 @@ public class GameModeCommand extends Command {
                     GameMode gameMode = context.getResult(0);
                     List<EntityPlayer> players = new ArrayList<>();
                     if (context.getArgCount() == 1) {
-                        // target arg is missing
                         if (context.getSender() instanceof EntityPlayer player) {
                             players.add(player);
                         } else {
@@ -39,7 +53,6 @@ public class GameModeCommand extends Command {
                             return context.fail();
                         }
                     } else {
-                        // target arg is filled, check if the target is matched
                         players.addAll(context.getResult(1));
                         if (players.isEmpty()) {
                             context.addNoTargetMatchError();

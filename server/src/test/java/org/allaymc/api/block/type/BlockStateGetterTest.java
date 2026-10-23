@@ -7,10 +7,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
+ * {@code BlockStateGetterTest} verifies named and legacy block-state requests
+ * through installed NBT migration.
+ *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 public class BlockStateGetterTest {
+    /**
+     * Resolves legacy stone metadata, an old anvil property, and a modern name
+     * without properties. The decoder must migrate the legacy forms and use the
+     * modern block's default state when properties are absent.
+     */
     @Test
     void testBlockStateGetter() {
         var blockState = BlockStateGetter.name("minecraft:stone").val(1).blockState();

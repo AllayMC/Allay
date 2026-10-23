@@ -16,35 +16,58 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 /**
- * Physics component implementation for small fireball entities.
+ * {@code EntitySmallFireballPhysicsComponentImpl} resolves small fireballs
+ * into direct damage and permitted ignition. Entity combustion is offered only
+ * after the living target accepts projectile damage, while block impacts
+ * search for an air cell that can support fire. Free-flight updates use zero
+ * gravity and zero air drag.
+ *
+ * <p>
+ * Fire placement combines occupancy with support or neighboring flammability.
+ * An occupied impact cell triggers an ordered adjacent-cell search, and the
+ * first eligible cell consumes the attempt even if its ignition event is
+ * cancelled. An already empty impact cell is tried directly without an
+ * adjacent fallback. Both impact paths remove the projectile after their
+ * permitted work finishes.
  *
  * @author daoge_cmd
  */
 public class EntitySmallFireballPhysicsComponentImpl extends EntityProjectilePhysicsComponentImpl {
 
     /**
-     * The base damage dealt by the small fireball.
-     * According to Minecraft Wiki, small fireballs deal 5HP damage.
+     * {@code BASE_DAMAGE} supplies the five direct damage points offered to a
+     * living target before combustion is considered.
      */
     protected static final int BASE_DAMAGE = 5;
 
     /**
-     * The duration in seconds that entities are set on fire when hit.
+     * {@code FIRE_DURATION_SECONDS} supplies the initial combustion duration
+     * in seconds, converted to entity ticks before event dispatch.
      */
     protected static final int FIRE_DURATION_SECONDS = 5;
 
+    /**
+     * Returns zero downward acceleration for freely flying small fireballs.
+     */
     @Override
     public double getGravity() {
-        // Small fireballs are not affected by gravity
         return 0;
     }
 
+    /**
+     * Returns zero air drag so free-flight small-fireball motion is retained.
+     */
     @Override
     public double getDragFactorInAir() {
-        // No air drag for fireballs
         return 0;
     }
 
+    /**
+     * Offers projectile damage and, after accepted damage, a cancellable
+     * combustion event. The event can replace fire duration; cancellation
+     * skips ignition while the projectile is still removed after target
+     * processing.
+     */
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
         if (thisEntity.willBeDespawnedLater()) {
@@ -52,10 +75,10 @@ public class EntitySmallFireballPhysicsComponentImpl extends EntityProjectilePhy
         }
 
         if (other instanceof EntityLiving living) {
-            // Deal damage
             var damage = DamageContainer.projectile(thisEntity, BASE_DAMAGE);
             if (living.attack(damage)) {
-                // Set entity on fire if damage was dealt
+                // Convert the five-second combustion default to the twenty-tick
+                // entity clock before handlers can alter the duration.
                 var event = new EntityCombustEvent(
                         other,
                         EntityCombustEvent.CombusterType.ENTITY,
@@ -71,26 +94,33 @@ public class EntitySmallFireballPhysicsComponentImpl extends EntityProjectilePhy
         thisEntity.remove();
     }
 
+    /**
+     * Attempts ignition near the impact position and then requests projectile
+     * removal. A queued removal suppresses both steps, while the block
+     * dimension supplies the world context for placement.
+     */
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
         if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 
-        // Try to place fire at the hit position
         tryPlaceFire(block.getDimension(), hitPos);
         thisEntity.remove();
     }
 
     /**
-     * Attempts to place fire at the hit position.
-     * Fire can be placed if:
-     * 1. The hit position is air
-     * 2. The block below can support fire (solid top surface)
-     * OR there are flammable blocks nearby
+     * Attempts fire placement at the floored impact cell or its first eligible
+     * adjacent cell. An occupied impact cell scans {@code BlockFace.VALUES}
+     * order and requires adjacent air plus placement support. The first
+     * eligible neighbor ends the search after its placement attempt.
      *
-     * @param dimension the dimension
-     * @param hitPos    the hit position
+     * <p>
+     * Ignition-event cancellation does not continue to another neighbor
+     * because {@code placeFireAt} returns no success result. An empty impact
+     * cell is checked directly; failed support there does not start a neighbor
+     * search. The helper does not remove the projectile or report whether a
+     * fire block was installed.
      */
     protected void tryPlaceFire(Dimension dimension, Vector3dc hitPos) {
         var firePos = new Vector3i(
@@ -99,10 +129,10 @@ public class EntitySmallFireballPhysicsComponentImpl extends EntityProjectilePhy
                 (int) Math.floor(hitPos.z())
         );
 
-        // Check if the position is air
         var blockStateAtHit = dimension.getBlockState(firePos);
         if (blockStateAtHit.getBlockType() != BlockTypes.AIR) {
-            // Try adjacent positions
+            // An occupied impact cell uses the first eligible neighbor;
+            // cancellation of that neighbor ignition still ends this search.
             for (BlockFace face : BlockFace.VALUES) {
                 var adjacentPos = face.offsetPos(firePos);
                 var adjacentBlockState = dimension.getBlockState(adjacentPos);
@@ -116,27 +146,22 @@ public class EntitySmallFireballPhysicsComponentImpl extends EntityProjectilePhy
             return;
         }
 
-        // Check if fire can be placed at hit position
         if (canPlaceFireAt(dimension, firePos)) {
             placeFireAt(dimension, firePos);
         }
     }
 
     /**
-     * Checks if fire can be placed at the given position.
-     *
-     * @param dimension the dimension
-     * @param pos       the position to check
-     * @return true if fire can be placed
+     * Returns whether the block below supports fire or a neighboring block has
+     * positive flame odds. The caller must check target occupancy separately,
+     * because this helper does not require the target cell itself to be air.
      */
     protected boolean canPlaceFireAt(Dimension dimension, Vector3ic pos) {
-        // Check if block below can support fire
         var downBlockState = dimension.getBlockState(pos.x(), pos.y() - 1, pos.z());
         if (BlockFireBaseComponentImpl.canSupportFire(downBlockState)) {
             return true;
         }
 
-        // Check if any neighbor is flammable
         for (BlockFace face : BlockFace.VALUES) {
             var neighborPos = face.offsetPos(pos);
             var neighborBlockState = dimension.getBlockState(neighborPos);
@@ -149,10 +174,10 @@ public class EntitySmallFireballPhysicsComponentImpl extends EntityProjectilePhy
     }
 
     /**
-     * Places fire at the given position.
-     *
-     * @param dimension the dimension
-     * @param pos       the position to place fire
+     * Dispatches an ignition event for the block below {@code pos} and
+     * installs fire when permitted. The caller supplies an eligible air
+     * position; this helper does not repeat support or occupancy checks after
+     * event handlers run.
      */
     protected void placeFireAt(Dimension dimension, Vector3ic pos) {
         var supportBlock = new Block(

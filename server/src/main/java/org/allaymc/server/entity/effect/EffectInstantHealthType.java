@@ -9,15 +9,33 @@ import org.allaymc.api.utils.identifier.Identifier;
 import java.awt.*;
 
 /**
+ * {@code EffectInstantHealthType} represents instant health metadata and
+ * applies its health change on addition. Undead-component entities receive the
+ * opposite operation from other living entities, and the supplied effect level
+ * scales the amount exponentially; no repeated tick action is implemented here.
+ *
  * @author daoge_cmd
  */
 public class EffectInstantHealthType extends AbstractEffectType {
+    /**
+     * Creates and registers the built-in instant health effect metadata.
+     * Registration requires an initialized mutable effect registry and can
+     * replace existing associations under this type's fixed numeric or
+     * namespaced key.
+     */
     public EffectInstantHealthType() {
         super(6, new Identifier("minecraft:instant_health"), new Color(0xf82423));
     }
 
+    /**
+     * Applies magic damage to undead-component entities and healing to other
+     * living entities. Healing requests {@code 2 * Math.pow(2, level)} points,
+     * damage requests {@code 3 * Math.pow(2, level)} points, and the living
+     * component invokes this only for a previously absent type.
+     */
     @Override
     public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
+        // One-based levels make level one supply four healing or six damage points.
         var level = effectInstance.getLevel();
 
         if (entity instanceof EntityUndeadComponent) {

@@ -14,21 +14,69 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
+ * {@code ItemClassGen} generates item type catalogs and missing stack skeletons
+ * from the item identifier enumeration. Ordered aliases let related items share
+ * one API interface and server implementation. Existing selected skeletons
+ * survive regeneration so handwritten component methods remain available,
+ * whereas the type catalog and default initializer are replaced on every
+ * generation pass.
+ *
+ * <p>
+ * Filenames follow alias selection, including special names that distinguish
+ * otherwise colliding identifiers on case-insensitive filesystems. Cleanup
+ * removes names absent from the current pass unless explicitly reserved, which
+ * can also remove an obsolete handwritten extension. Writes and deletions are
+ * sequential without rollback. The static initializer builder accumulates
+ * statements across repeated calls in the same JVM.
+ *
  * @author daoge_cmd | IWareQ
  */
 public class ItemClassGen extends BaseClassGen {
 
+    /**
+     * {@code ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER} accumulates guarded
+     * item registrations. {@code generate} appends statements without clearing
+     * earlier calls in this JVM.
+     */
     public static final MethodSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER =
             MethodSpec.methodBuilder("init")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+    /**
+     * {@code IGNORED_FILES} reserves the shared stack implementation and
+     * package documentation during obsolete-file cleanup in both output
+     * directories.
+     */
     public static final Set<String> IGNORED_FILES = Set.of("ItemStackImpl.java", "package-info.java");
 
+    /**
+     * {@code MERGED_ITEMS} maps patterns to shared stack names in selection
+     * order. {@code generateClassSimpleName} selects the first matching entry,
+     * and callers can replace or mutate this public map.
+     */
     public static Map<Pattern, String> MERGED_ITEMS = new LinkedHashMap<>();
 
+    /**
+     * Runs item source generation with paths relative to the repository root.
+     * {@code args} is ignored; output replacement and obsolete-file cleanup
+     * have the same effects as invoking {@link #generate()} directly.
+     */
     public static void main(String[] args) {
         generate();
     }
 
+    /**
+     * Writes the item catalog, missing stack skeletons, and default
+     * registrations from the loaded identifiers. Callers run this generator
+     * from the repository root so the output paths select the intended API and
+     * server source trees. Existing selected skeletons are preserved, but
+     * unselected nonreserved files are removed before the initializer and
+     * catalog are replaced.
+     *
+     * <p>
+     * Alias selection determines both catalog field types and retained
+     * filenames. Failures can leave earlier files changed, and repeated calls
+     * accumulate initializer statements rather than rebuilding an empty method.
+     */
     @SneakyThrows
     public static void generate() {
         registerMergedItems();
@@ -83,6 +131,8 @@ public class ItemClassGen extends BaseClassGen {
             addDefaultItemTypeInitializer(id, implFullName);
         }
 
+        // Cleanup follows alias selection so every currently shared stack name
+        // survives; obsolete names can include files previously extended by hand.
         deleteOldFiles(interfaceDir, generatedFiles, IGNORED_FILES);
         deleteOldFiles(implDir, generatedFiles, IGNORED_FILES);
 
@@ -96,6 +146,12 @@ public class ItemClassGen extends BaseClassGen {
         Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/item/type/" + TypeNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
+    /**
+     * Appends a default registration for the identifier and selected stack
+     * class. The emitted {@code null} guard preserves a type installed before
+     * initialization. {@code ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER}
+     * retains this statement until the JVM exits.
+     */
     private static void addDefaultItemTypeInitializer(ItemId id, ClassName itemClassName) {
         var initializer = CodeBlock.builder();
         initializer
@@ -109,9 +165,17 @@ public class ItemClassGen extends BaseClassGen {
                 .endControlFlow();
     }
 
+    /**
+     * Replaces the default initializer with the accumulated registration
+     * method. The old file is deleted before serialization and writing, so a
+     * later failure can leave it absent instead of preserving its previous
+     * contents.
+     */
     @SneakyThrows
     private static void generateDefaultItemTypeInitializer() {
         var filePath = Path.of("server/src/main/java/org/allaymc/server/item/type/ItemTypeDefaultInitializer.java");
+        // Deletion precedes output construction; a failure below does not restore
+        // the initializer, even though earlier skeleton generation may have succeeded.
         Files.deleteIfExists(filePath);
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath)) {
@@ -131,12 +195,24 @@ public class ItemClassGen extends BaseClassGen {
         Utils.writeFileWithCRLF(filePath, javaFile.toString());
     }
 
+    /**
+     * Selects a shared stack name or derives one from the identifier path.
+     * {@code ItemId.NETHERBRICK} and {@code ItemId.TALLGRASS} receive distinct
+     * names so their source paths do not collide with the underscored
+     * identifiers on case-insensitive filesystems. Other paths replace dots
+     * with underscores before Pascal-case conversion.
+     *
+     * <p>
+     * {@code MERGED_ITEMS} patterns then inspect that Java name in map order;
+     * the first match determines the interface and implementation basename.
+     * These aliases intentionally share behavior classes while catalog fields
+     * still retain their separate item identifiers for registration.
+     */
     private static String generateClassSimpleName(ItemId id) {
+        // These legacy spellings otherwise differ from the underscored item names
+        // only by letter case, causing their source paths to collide on Windows.
         String origin = switch (id) {
-            // The Windows environment is not case-sensitive, so some item IDs need to be specially processed.
-            // netherbrick and nether_brick require special handling
             case NETHERBRICK -> "ItemNetherbrick0Stack";
-            // tallgrass and tall_grass require special handling
             case TALLGRASS -> "ItemTallgrass0Stack";
             default -> "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
         };
@@ -145,18 +221,37 @@ public class ItemClassGen extends BaseClassGen {
                 return entry.getValue();
             }
         }
+        // An unmatched identifier keeps its own stack type, allowing a new item
+        // to receive a skeleton before any shared alias is registered.
         return origin;
     }
 
+    /**
+     * Returns the selected stack name in the API interface package. Selection
+     * uses the current entries in {@code MERGED_ITEMS}, so different
+     * identifiers may intentionally resolve to the same Java type.
+     */
     private static ClassName generateClassFullName(ItemId id) {
         return ClassName.get("org.allaymc.api.item.interfaces", generateClassSimpleName(id));
     }
 
+    /**
+     * Adds a pattern and its shared stack name to the alias map. In the default
+     * insertion-ordered map, earlier matching patterns retain priority over
+     * patterns registered later.
+     */
     private static void registerMergedItem(Pattern regex, String className) {
         MERGED_ITEMS.put(regex, className);
     }
 
+    /**
+     * Registers the built-in stack aliases in their matching priority order.
+     * Existing {@code MERGED_ITEMS} entries remain present, so caller-supplied
+     * earlier patterns can take precedence over these appended defaults.
+     */
     private static void registerMergedItems() {
+        // Sign variants precede the general sign rule because the first matching
+        // pattern selects the API interface shared by each generated item field.
         registerMergedItem(Pattern.compile(".*SpawnEggStack"), "ItemSpawnEggStack");
         registerMergedItem(Pattern.compile(".*SwordStack"), "ItemSwordStack");
         registerMergedItem(Pattern.compile(".*PickaxeStack"), "ItemPickaxeStack");

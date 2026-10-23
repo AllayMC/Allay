@@ -11,353 +11,330 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Component for living entities with health, damage, effects, air supply, fire, freeze, and drop behavior.
+ * {@code EntityLivingComponent} exposes health, damage eligibility, effects,
+ * environmental survival, and death rewards for an entity. Mutable damage and
+ * effect objects participate in event-driven updates, while the server's
+ * ordinary tick advances fire, freezing, breathing, effect duration, and death
+ * processing.
  *
  * @author daoge_cmd
  */
 public interface EntityLivingComponent extends EntityComponent {
 
+    /**
+     * {@code DEFAULT_MAX_AIR_SUPPLY} initializes new living components with
+     * three hundred air ticks for both the current supply and maximum supply.
+     */
     int DEFAULT_MAX_AIR_SUPPLY = 300;
+    /**
+     * {@code DEFAULT_MAX_HEALTH} initializes both current and maximum health
+     * to twenty points before specialized components or NBT loading replace
+     * them.
+     */
     int DEFAULT_MAX_HEALTH = 20;
+    /**
+     * {@code MAX_FREEZE_TICKS} caps accumulated freezing at one hundred forty
+     * ticks and marks the threshold at which periodic freezing damage becomes
+     * eligible.
+     */
     int MAX_FREEZE_TICKS = 140;
 
     /**
-     * Attack this entity with the given damage container.
-     *
-     * @param damage         the damage container
-     * @param ignoreCoolDown {@code true} to ignore the attack cool down, {@code false} otherwise
-     * @return {@code true} if the entity was damaged, {@code false} otherwise.
+     * Attempts the damage pipeline using the supplied mutable damage
+     * container. A {@code true} result means eligibility, cooldown, and
+     * damage-event checks accepted the attempt, although health-event
+     * cancellation can still prevent health assignment. The common server
+     * requires component-backed entity attackers for notification and can fail
+     * after victim effects when an incompatible custom attacker is supplied.
      */
     boolean attack(DamageContainer damage, boolean ignoreCoolDown);
 
     /**
-     * @see #attack(DamageContainer, boolean)
+     * Attempts damage using this entity's ordinary attack cooldown rules. The
+     * supplied container is shared with the server pipeline and listeners, so
+     * callers must use another container when a later attempt needs
+     * independent mutable values.
      */
     default boolean attack(DamageContainer damage) {
         return attack(damage, false);
     }
 
     /**
-     * Attack this entity with the given damage.
-     *
-     * @param damage the damage
-     * @return {@code true} if the entity was damaged, {@code false} otherwise.
+     * Attempts a source-free API attack with the supplied damage amount. The
+     * new container follows ordinary cooldown and event handling, so this
+     * helper does not guarantee that the entity loses health.
      */
     default boolean attack(float damage) {
         return attack(DamageContainer.simpleAttack(damage));
     }
 
     /**
-     * Attack this entity with the given attacker and damage.
-     *
-     * @param attacker the attacker
-     * @param damage   the damage
-     * @return {@code true} if the entity was damaged, {@code false} otherwise.
+     * Attempts an entity-sourced attack with the supplied attacker and amount.
+     * The created damage container follows ordinary cooldown, attacker
+     * modifiers, and listener decisions; a successful pipeline result does not
+     * bypass health-event cancellation.
      */
     default boolean attack(Entity attacker, float damage) {
         return attack(DamageContainer.entityAttack(attacker, damage));
     }
 
     /**
-     * Check if this entity can be attacked with the given damage container. Notes that this method
-     * will not check if the entity is alive or if is in damage cool down.
-     *
-     * @param damage the damage container
-     * @return {@code true} if the entity can be attacked, {@code false} otherwise.
+     * Returns whether the damage category is permitted for this entity's
+     * current capabilities. This check does not establish that the entity is
+     * alive or outside cooldown; {@code attack} checks those conditions
+     * separately.
      */
     boolean canBeAttacked(DamageContainer damage);
 
     /**
-     * Get the last damage that was dealt to this entity.
-     *
-     * @return the last damage container, or {@code null} if there is no last damage
+     * Returns the last damage container accepted by the cooldown gate, or
+     * {@code null} before any acceptance. The reference remains shared, and
+     * even a later-cancelled damage event can leave this recorded container in
+     * place.
      */
     DamageContainer getLastDamage();
 
     /**
-     * Get the time when the last damage was dealt to this entity.
-     *
-     * @return the time in entity ticks, or {@code -1} if no damage has been received
+     * Returns the entity tick recorded at the last cooldown-gate acceptance.
+     * The initial value is {@code -1}; a subsequently cancelled damage event
+     * does not restore the earlier timestamp in the server implementation.
      */
     long getLastDamageTime();
 
     /**
-     * Check if the entity has fall damage.
-     *
-     * @return {@code true} if the entity has fall damage, {@code false} otherwise.
+     * Returns whether this entity's current rules permit fall damage attempts.
      */
     boolean hasFallDamage();
 
     /**
-     * Check if the entity has fire damage.
-     *
-     * @return {@code true} if the entity has fire damage, {@code false} otherwise.
+     * Returns whether current rules permit fire, lava, and burning damage.
      */
     boolean hasFireDamage();
 
     /**
-     * Check if the entity has drowning damage.
-     *
-     * @return {@code true} if the entity has drowning damage, {@code false} otherwise.
+     * Returns whether this entity's current effects permit drowning damage
+     * attempts.
      */
     boolean hasDrowningDamage();
 
     /**
-     * Check if the entity has void damage. Void damage will be applied to the entity every second
-     * when its y coordinate is less than {@code minHeight - 18}.
-     *
-     * @return {@code true} if the entity has void damage, {@code false} otherwise.
+     * Returns whether this entity permits damage from the void category.
      */
     boolean hasVoidDamage();
 
     /**
-     * Check if this entity can against fire damage even if it does not have a fire resistance effect.
-     * For example, netherite items. When return {@code true}, the entity will not be able to be set on
-     * fire and method {@link #setOnFireTicks(int)} will always return {@code false}.
-     *
-     * @return {@code true} if the entity is fireproof, {@code false} otherwise.
+     * Returns whether fire duration assignment is disabled independently of
+     * fire resistance.
      */
     boolean isFireproof();
 
     /**
-     * Get the on fire ticks of the entity.
-     *
-     * @return the on fire ticks, or zero if the entity is not on fire or is fireproof.
-     * @see #isFireproof()
+     * Returns the stored burning duration measured in entity ticks.
      */
     int getOnFireTicks();
 
     /**
-     * Set the on fire ticks of the entity. This method will return {@code false} if the entity is fireproof.
-     *
-     * @param onFireTicks the on fire ticks
-     * @return {@code true} if the on fire ticks were set, {@code false} if the entity is fireproof.
-     * @see #isFireproof()
+     * Attempts to replace the burning duration and returns whether assignment
+     * is allowed. Fireproof entities reject the request; entering a positive
+     * duration can immediately attempt fire-tick damage and broadcast the
+     * changed burning state.
      */
     boolean setOnFireTicks(int onFireTicks);
 
     /**
-     * Extinguishes the entity by resetting its "on fire" ticks to {@code 0}.
+     * Requests a burning duration of zero through the normal fire setter. This
+     * helper discards the setter's result, so a fireproof implementation may
+     * reject the request rather than changing its stored duration.
      */
     default void extinguish() {
         setOnFireTicks(0);
     }
 
     /**
-     * Check if the entity is on fire.
-     *
-     * @return {@code true} if the entity is on fire, {@code false} otherwise.
+     * Returns whether the stored burning duration is greater than zero.
      */
     default boolean isOnFire() {
         return getOnFireTicks() > 0;
     }
 
     /**
-     * Get the current freeze ticks of the entity.
-     * Freeze ticks increase while the entity is inside powder snow, up to {@link #MAX_FREEZE_TICKS}.
-     *
-     * @return the freeze ticks, {@code 0} if not freezing.
+     * Returns the accumulated freezing duration measured in entity ticks.
      */
     int getFreezeTicks();
 
     /**
-     * Set the freeze ticks of the entity.
-     *
-     * @param freezeTicks the freeze ticks to set, clamped to [0, {@link #MAX_FREEZE_TICKS}]
+     * Sets accumulated freezing after clamping the supplied ticks to
+     * {@code [0, MAX_FREEZE_TICKS]}. The server broadcasts the resulting
+     * state, including when the clamped value equals the current value.
      */
     void setFreezeTicks(int freezeTicks);
 
     /**
-     * Check whether the entity was inside powder snow during the last block-collision pass.
-     * This flag is set by the powder-snow block component and cleared at the start of each tick.
-     *
-     * @return {@code true} if the entity was in powder snow last tick
+     * Returns whether the previous block-collision pass observed powder-snow
+     * contact. The living tick consumes and clears this flag before the next
+     * block-collision pass can set it for a later tick.
      */
     boolean isInPowderSnow();
 
     /**
-     * Mark that the entity is (or is not) currently inside powder snow.
-     * Called by the powder-snow block component during block-collision handling.
-     *
-     * @param inPowderSnow {@code true} if the entity is inside powder snow
+     * Records powder-snow contact for the next living tick's freezing update.
      */
     void setInPowderSnow(boolean inPowderSnow);
 
     /**
-     * Check if the entity is fully frozen (freeze ticks have reached {@link #MAX_FREEZE_TICKS}).
-     *
-     * @return {@code true} if the entity is fully frozen
+     * Returns whether freezing has reached the maximum accumulated tick
+     * threshold.
      */
     default boolean isFrozen() {
         return getFreezeTicks() >= MAX_FREEZE_TICKS;
     }
 
     /**
-     * Gets the current number of air supply ticks remaining for this entity.
-     * This value determines how long the entity can stay underwater before taking drowning damage.
-     *
-     * @return The current air supply ticks
+     * Returns the stored air supply measured in remaining entity ticks.
      */
     int getAirSupplyTicks();
 
     /**
-     * Sets the current number of air supply ticks for this entity.
-     * Setting this to 0 will cause the entity to start taking drowning damage if underwater.
-     *
-     * @param ticks The number of air supply ticks to set
+     * Sets the current air supply and broadcasts entity state. The server
+     * stores the value without clamping; a nonbreathing entity loses one tick
+     * at a time and takes drowning damage at the negative damage threshold.
      */
     void setAirSupplyTicks(int ticks);
 
     /**
-     * Gets the maximum number of air supply ticks this entity can have.
-     * This represents the total time the entity can stay underwater before running out of air.
-     *
-     * @return The maximum air supply ticks
+     * Returns the configured maximum air supply measured in entity ticks.
      */
     int getAirSupplyMaxTicks();
 
     /**
-     * Sets the maximum number of air supply ticks this entity can have.
-     * This affects how long the entity can stay underwater before needing to surface for air.
-     *
-     * @param ticks The maximum number of air supply ticks to set
+     * Sets the maximum air supply used by breathing regeneration and
+     * broadcasts state. The server does not clamp the current supply to this
+     * value, so changing the maximum does not immediately normalize existing
+     * air.
      */
     void setAirSupplyMaxTicks(int ticks);
 
     /**
-     * Checks if the entity can breathe.
-     *
-     * @return {@code true} if the entity can breathe, {@code false} otherwise.
+     * Returns whether effects or eye position currently permit breathing.
      */
     boolean canBreathe();
 
     /**
-     * Gets an unmodifiable view of the current effects applied to the entity.
-     * <p>
-     * Each entry in the returned map represents an active effect and its corresponding instance.
-     *
-     * @return an unmodifiable map containing the effects applied to the entity, where the keys are the effect types
-     * and the values are the corresponding effect instances
+     * Returns an unmodifiable live view of the active effect map. The effect
+     * instances themselves remain shared and mutable, so this view prevents
+     * structural edits through the map rather than creating independent effect
+     * copies.
      */
     @UnmodifiableView
     Map<EffectType, EffectInstance> getEffects();
 
     /**
-     * Check if the entity has the specified effect.
-     *
-     * @param effectType the effect type to check
-     * @return {@code true} if the entity has the specified effect, otherwise {@code false}.
+     * Returns whether an active effect entry exists for the supplied type.
      */
     boolean hasEffect(EffectType effectType);
 
     /**
-     * Get the effect level of the specified effect.
-     *
-     * @param effectType the effect type to get
-     * @return the effect level of the specified effect
+     * Returns the active effect's level, or zero when no effect is stored for
+     * that type. The result uses the current mutable effect instance rather
+     * than a separately cached level.
      */
     int getEffectLevel(EffectType effectType);
 
     /**
-     * Add the specified effect to the entity.
-     *
-     * @param effectInstance the effect instance to add
-     * @return {@code true} if the effect is added successfully, otherwise {@code false}.
+     * Attempts to add or replace an active effect after its addition event.
+     * Accepted instances are retained without copying; listeners may replace
+     * the proposed instance, and cancellation leaves the map entry unchanged.
      */
     boolean addEffect(EffectInstance effectInstance);
 
     /**
-     * Remove the specified effect from the entity.
-     *
-     * @param effectType the effect type to remove
+     * Attempts to remove an active effect after its removal event. Missing
+     * types are ignored, and a cancelled event leaves the instance active;
+     * accepted removal invokes the effect hook and updates viewers.
      */
     void removeEffect(EffectType effectType);
 
     /**
-     * Remove all effects from the entity.
+     * Attempts removal for every type present at the start of the operation.
+     * Each individual removal still dispatches its cancellable event, so
+     * listeners can leave some initially active effects installed.
      */
     void removeAllEffects();
 
     /**
-     * Check if the specific effect can apply on the entity.
-     *
-     * @param effectType the specific effect
-     * @return {@code true} if the specific effect can apply on the entity, otherwise {@code false}.
+     * Returns whether this effect type is accepted, with the default accepting
+     * every type.
      */
     default boolean canApplyEffect(EffectType effectType) {
         return true;
     }
 
     /**
-     * Get the items this entity drops on death.
-     *
-     * @param lootingLevel the looting enchantment level of the killer's weapon
-     * @return the list of item stacks to drop
+     * Collects item drops for the supplied looting level through this entity's
+     * drop rules. The server returns the mutable event list with its
+     * contributed item references; callers own any subsequent spawning or
+     * inventory transfer.
      */
     List<ItemStack> getDrops(int lootingLevel);
 
     /**
-     * Get the amount of XP this entity drops on death.
-     *
-     * @return the amount of XP to drop
+     * Returns the experience-point amount contributed by this entity's death
+     * reward rules.
      */
     int getDropXpAmount();
 
     /**
-     * Gets the damage absorption value of this entity. This value represents how much
-     * damage the entity can absorb before taking actual damage.
-     *
-     * @return the damage absorption value as a floating-point number
+     * Returns the stored absorption amount used by the victim damage pipeline.
      */
     float getAbsorption();
 
     /**
-     * Sets the damage absorption value for this entity.
-     *
-     * @param absorption the damage absorption value to set
+     * Sets the absorption amount consulted by subsequent victim damage
+     * processing.
      */
     void setAbsorption(float absorption);
 
     /**
-     * Retrieves the current health of the entity.
-     *
-     * @return the current health of the entity as a floating-point number
+     * Returns the currently stored health amount for this entity.
      */
     float getHealth();
 
     /**
-     * Sets the health of the entity.
-     *
-     * @param health the health value to set for the entity
+     * Proposes replacement health through the cancellable health-change event.
+     * The server prepares a range-clamped proposal and converts positive
+     * values below one to zero, then stores the listener-adjusted value
+     * without applying those checks again.
      */
     void setHealth(float health);
 
     /**
-     * Resets the health of the entity to its maximum value.
-     * This method sets the current health of the entity to the value returned by {@link #getMaxHealth()}.
+     * Requests the current maximum as the entity's health through
+     * {@code setHealth}. The normal health event can cancel or replace that
+     * value, so this helper does not force an unconditional reset.
      */
     default void resetHealth() {
         setHealth(getMaxHealth());
     }
 
     /**
-     * Kills the entity by applying 1,000,000 points of damage.
+     * Attempts a source-free API attack for one million damage points. Normal
+     * cooldown, eligibility, damage modifiers, and event decisions still
+     * apply, so this helper does not guarantee immediate death.
      */
     default void kill() {
         attack(DamageContainer.api(1_000_000));
     }
 
     /**
-     * Returns the maximum health value of the entity.
-     *
-     * @return the maximum health as a floating-point number
+     * Returns the current maximum health used for ordinary health assignments.
      */
     float getMaxHealth();
 
     /**
-     * Sets the maximum health value for the entity.
-     *
-     * @param maxHealth the maximum health value to set, must be a positive floating-point number
+     * Replaces maximum health and lowers current health when it exceeds that
+     * maximum. The server does not validate positivity or dispatch a
+     * health-change event for this direct normalization, so callers must
+     * choose a suitable maximum.
      */
     void setMaxHealth(float maxHealth);
 }

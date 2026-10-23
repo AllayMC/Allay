@@ -5,7 +5,10 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 
 /**
- * EntityArmorStand represents an armor stand entity.
+ * {@code EntityArmorStand} represents an armor stand with living state,
+ * physics, equipment containers, and pose controls. Callers manipulate the
+ * stand's health, movement, held equipment, and armor-stand settings through
+ * the inherited component contracts on one entity reference.
  *
  * @author daoge_cmd
  */

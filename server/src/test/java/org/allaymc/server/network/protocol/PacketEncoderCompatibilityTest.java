@@ -72,15 +72,34 @@ import static org.allaymc.api.item.type.ItemTypes.STONE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * {@code PacketEncoderCompatibilityTest} checks encoder payloads, ownership
+ * boundaries, and selected codec round trips across protocol versions.
+ */
 @ExtendWith(AllayTestExtension.class)
 class PacketEncoderCompatibilityTest {
+    /**
+     * {@code registry} retains the extension-installed default registry after
+     * setup. Every case reuses its initialized protocols and cached definitions
+     * so repeated encodings compare the same source data.
+     */
     private static ProtocolRegistry registry;
 
+    /**
+     * Captures the default registry initialized by the Allay test extension.
+     * Every matrix case resolves versions from this shared snapshot without
+     * rebuilding protocol payloads or replacing the global registry.
+     */
     @BeforeAll
     static void setUpRegistry() {
         registry = ProtocolRegistry.getDefault();
     }
 
+    /**
+     * Compares primitive-shape encoding before and after its supported
+     * boundary. Legacy encoding returns {@code null}, while supported variants
+     * create fresh shape packets and encode them with their own codecs.
+     */
     @Test
     void primitiveShapesFollowProtocolAvailability() {
         var sphere = new PrimitiveSphere(new org.joml.Vector3f(1, 2, 3), Color.RED, 2f, 12);
@@ -110,6 +129,11 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Encodes addition and removal of an ambient effect for two protocol
+     * families. Identity, duration, visibility, tick, and ambient fields must
+     * survive the selected packet construction and codec checks.
+     */
     @Test
     void mobEffectsIncludeTickAndAmbientState() {
         var entity = mock(Entity.class);
@@ -141,6 +165,11 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Probes music-disc and shelf-swap events around their introduction
+     * boundaries. Earlier encoders omit the event, while the first supported
+     * versions and selected NetEase variants emit an encodable sound packet.
+     */
     @Test
     void soundsStartAtTheirProtocolIntroductionBoundary() {
         var position = new org.joml.Vector3d(1, 2, 3);
@@ -166,6 +195,11 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Encodes multiline primitive text and a named custom sound for each recent
+     * version. Both packet forms must pass the target codec checks across the
+     * v2193 transition.
+     */
     @ParameterizedTest
     @ValueSource(ints = {2168, 2169, 2193})
     void textShapesAndCustomSoundsEncodeAcrossTheV2193Boundary(int version) {
@@ -181,6 +215,12 @@ class PacketEncoderCompatibilityTest {
         assertPacketEncodes(protocol, soundPackets.iterator().next());
     }
 
+    /**
+     * Temporarily installs dimensions with custom height bounds for recent
+     * codecs. Encoded definitions must preserve identity, convert the upper
+     * bound, and carry the expected default biomes where that version includes
+     * them.
+     */
     @ParameterizedTest
     @ValueSource(ints = {2168, 2169, 2193})
     @SuppressWarnings("unchecked")
@@ -201,6 +241,9 @@ class PacketEncoderCompatibilityTest {
         var dimensionRegistry = mock(DoubleKeyMappedRegistry.class);
         when(dimensionRegistry.getContent()).thenReturn(new DoubleKeyMappedRegistry.MapPair<>(dimensions, Map.of()));
         try {
+            // Install the replacement only around the encoding probe; restoring
+            // the original registry in finally prevents assertion failures from
+            // contaminating later cases.
             Registries.DIMENSIONS = dimensionRegistry;
             var protocol = protocol(ClientVariant.INTERNATIONAL, version);
             var packet = protocol.getEncoder().encodeDimensionData();
@@ -211,6 +254,9 @@ class PacketEncoderCompatibilityTest {
                 assertEquals(-64, definition.minimumHeight());
                 assertEquals(512, definition.maximumHeight());
                 assertEquals(index, definition.dimensionType());
+                // The default-biome field is asserted only after its v2193
+                // introduction; older definitions are still checked for
+                // identity and height values.
                 if (version >= 2193) {
                     assertEquals(expectedBiomes.get(index), definition.defaultBiome());
                 }
@@ -221,6 +267,11 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Encodes representative world updates twice for selected protocol
+     * families. Packets and selected collections must be fresh, retain their
+     * requested state, and pass target-codec serialization checks.
+     */
     @Test
     void worldEncodersReturnFreshCodecCompatiblePackets() {
         var position = new org.joml.Vector3i(3, 64, -5);
@@ -301,6 +352,12 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Mutates one grouped block update and compares repeated container
+     * encodings. Block-entry collections, inventory items, and container
+     * packets must be independent and use definitions accepted by the selected
+     * protocol.
+     */
     @Test
     void blockAndContainerPayloadsAreIndependentAcrossCalls() {
         var protocol = protocol(ClientVariant.INTERNATIONAL, 1001);
@@ -363,6 +420,11 @@ class PacketEncoderCompatibilityTest {
         assertPacketEncodes(protocol, firstData);
     }
 
+    /**
+     * Creates a chest-open request through the NetEase v860 encoder. The packet
+     * must retain the normal block interaction flag and be accepted by its
+     * variant-specific codec.
+     */
     @Test
     void netEaseV860ContainerOpenUsesTargetCodec() {
         var protocol = protocol(ClientVariant.NETEASE, 860);
@@ -376,6 +438,11 @@ class PacketEncoderCompatibilityTest {
         assertPacketEncodes(protocol, packet);
     }
 
+    /**
+     * Encodes the same uncached void chunk twice for each selected version.
+     * Mutating one packet buffer must preserve the other buffer, and both
+     * packets must remain accepted by the target codec.
+     */
     @ParameterizedTest
     @ValueSource(ints = {1001, 2168, 2169, 2193})
     void levelChunkPacketsOwnIndependentBuffers(int version) {
@@ -403,11 +470,19 @@ class PacketEncoderCompatibilityTest {
             assertPacketEncodes(protocol, first);
             assertPacketEncodes(protocol, second);
         } finally {
+            // These unsent chunk packets retain their own buffers; release both
+            // references after codec probing, including when a mutation
+            // assertion fails.
             assertTrue(first.release());
             assertTrue(second.release());
         }
     }
 
+    /**
+     * Encodes a minimal entity through spawn, state, movement, action, and
+     * removal operations. Repeated packets and metadata must be independent,
+     * and each resulting representation must pass target-codec checks.
+     */
     @Test
     void entityEncodersReturnFreshCodecCompatiblePackets() {
         var entity = simpleEntity();
@@ -456,6 +531,11 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Encodes a simulated player's skin twice across selected protocol
+     * versions. The ordered three-packet sequences must contain independent
+     * skin bytes and, where required, explicit player-list entry actions.
+     */
     @ParameterizedTest
     @ValueSource(ints = {819, 2168, 2169, 2193})
     void fakePlayerSkinPacketsDoNotShareMutableSkinPayloads(int version) {
@@ -475,6 +555,8 @@ class PacketEncoderCompatibilityTest {
             assertPacketEncodes(protocol, firstPackets.get(i));
             assertPacketEncodes(protocol, secondPackets.get(i));
         }
+        // Recent list serialization reads the action from each entry, so the
+        // temporary add and remove entries must retain their distinct actions.
         if (version >= 2168) {
             assertEquals(PlayerListPacket.Action.ADD, ((PlayerListPacket) firstPackets.getFirst()).getEntries().getFirst().getAction());
             assertEquals(PlayerListPacket.Action.REMOVE, ((PlayerListPacket) firstPackets.getLast()).getEntries().getFirst().getAction());
@@ -493,6 +575,11 @@ class PacketEncoderCompatibilityTest {
         assertEquals(1, repeatedSkin.getSkinData().getImage()[0]);
     }
 
+    /**
+     * Creates add and remove list packets for a mocked player on recent
+     * protocols. Each entry must carry the requested action and pass the target
+     * codec checks.
+     */
     @ParameterizedTest
     @ValueSource(ints = {2168, 2169, 2193})
     void playerListsCarryActionsOnEveryEntry(int version) {
@@ -515,12 +602,21 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Combines rejected, empty, and populated item-stack responses for recent
+     * versions. Encoding must normalize a {@code null} container list without
+     * changing the source response and accept the version-specific optional
+     * slot fields.
+     */
     @ParameterizedTest
     @ValueSource(ints = {2168, 2169, 2193})
     void itemStackResponsesEncodeErrorsAndOptionalSlotFields(int version) {
         var protocol = protocol(ClientVariant.INTERNATIONAL, version);
         var rejected = new ItemStackResponse(ItemStackResponseStatus.ERROR, -1, null);
         var empty = new ItemStackResponse(ItemStackResponseStatus.OK, -2, List.of());
+        // Only the v2193 fixture uses an absent filtered-name value, exercising
+        // that format change while earlier codecs receive their expected string
+        // field.
         var slots = List.of(
                 new ItemStackResponseSlot(0, 0, 0, 0, "", 0, version >= 2193 ? null : ""),
                 new ItemStackResponseSlot(1, 1, 3, 42, "Named item", 2, "Filtered item")
@@ -536,6 +632,11 @@ class PacketEncoderCompatibilityTest {
         assertPacketEncodes(protocol, packet);
     }
 
+    /**
+     * Invokes connection-independent encoders for every registered protocol and
+     * repeats each encoding. Packets must be fresh and codec-compatible, with
+     * voxel-shape availability following the asserted version boundary.
+     */
     @Test
     void everyProtocolCodecAcceptsAllConnectionIndependentEncoderOutput() {
         for (var protocol : registry.getProtocols()) {
@@ -562,6 +663,8 @@ class PacketEncoderCompatibilityTest {
 
             var firstVoxelShapes = encoder.encodeVoxelShapes();
             var secondVoxelShapes = encoder.encodeVoxelShapes();
+            // Voxel shapes use a null unsupported result before v924; later
+            // versions must return a real packet even for empty shape data.
             if (protocol.getProtocolVersion() < 924) {
                 assertNull(firstVoxelShapes, protocol::toString);
                 assertNull(secondVoxelShapes, protocol::toString);
@@ -596,6 +699,11 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Builds login packets from a shared world and player fixture for every
+     * protocol. Packets must be fresh, preserve the fixture's identities and
+     * settings, and use the expected network position.
+     */
     @Test
     void startGameIsConstructedFromDomainDataForEveryProtocol() {
         var fixture = startGameFixture();
@@ -619,6 +727,10 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Builds login packets on either side of the v844 experiment override. The
+     * v827-only experiment must appear in v827 and remain absent from v844.
+     */
     @Test
     void startGameExperimentsStayInsideTheirProtocolBranch() {
         var fixture = startGameFixture();
@@ -629,6 +741,11 @@ class PacketEncoderCompatibilityTest {
         assertFalse(hasExperiment(v844, "y_2025_drop_3"));
     }
 
+    /**
+     * Compares skin confirmation across international and NetEase encoders
+     * using a simulated player. Supported variants must return fresh copied
+     * skin bytes and the deterministic UUID-derived fallback identity.
+     */
     @Test
     void skinConfirmationIsNetEaseOnlyAndFresh() {
         var uniqueId = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
@@ -668,6 +785,12 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Reflects over the declared {@code PacketEncoder} operations whose names
+     * begin with {@code "encode"}. None may be abstract, preserving an
+     * inherited implementation for subclasses that support only selected
+     * operations.
+     */
     @Test
     void encoderOperationsHaveConcreteFallbacks() {
         for (var method : PacketEncoder.class.getDeclaredMethods()) {
@@ -677,6 +800,11 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Compares legacy {@code null} results with supported data-store and UI
+     * packet construction. Supported versions must detach copied map
+     * containers, return fresh packets, and pass target-codec checks.
+     */
     @Test
     void unsupportedDataDrivenUIOperationsReturnNull() {
         var legacy = protocol(ClientVariant.INTERNATIONAL, 924).getEncoder();
@@ -728,6 +856,12 @@ class PacketEncoderCompatibilityTest {
         }
     }
 
+    /**
+     * Creates a world and player fixture with distinct world and saved game
+     * modes. Fixed identities, spawn coordinates, and entity location make
+     * login field selection and eye-height conversion observable across all
+     * protocols.
+     */
     private static StartGameFixture startGameFixture() {
         var gameRules = mock(GameRules.class);
         when(gameRules.getGameRules()).thenReturn(Map.of());
@@ -761,6 +895,11 @@ class PacketEncoderCompatibilityTest {
         return new StartGameFixture(world, playerData, dimension, player, uniqueId, runtimeId);
     }
 
+    /**
+     * Creates a minimal entity with fixed identity, bounds, and no custom
+     * properties. The fixture follows the generic spawn path and supplies the
+     * data needed by shared metadata and movement encoders.
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static Entity simpleEntity() {
         var entityType = (EntityType<? extends Entity>) mock(EntityType.class);
@@ -779,7 +918,14 @@ class PacketEncoderCompatibilityTest {
         return entity;
     }
 
+    /**
+     * Creates a complete test skin with one identifiable first pixel. Every
+     * call owns a new image array, while empty animation and persona
+     * collections keep assertions focused on serialization and byte-array
+     * copying.
+     */
     private static Skin networkSkin() {
+        // The fixture stores four channel bytes for every skin pixel.
         byte[] pixels = new byte[64 * 32 * 4];
         pixels[0] = 1;
         return Skin.builder()
@@ -801,17 +947,32 @@ class PacketEncoderCompatibilityTest {
                 .build();
     }
 
+    /**
+     * Returns the initialized protocol for the exact variant and version
+     * requested. A missing registry entry fails immediately, avoiding
+     * accidental substitution of another variant or version in compatibility
+     * assertions.
+     */
     private static Protocol protocol(ClientVariant variant, int version) {
         var protocol = registry.resolve(variant, version);
         assertNotNull(protocol);
         return protocol;
     }
 
+    /**
+     * Returns the sole primitive-shape packet after asserting the collection
+     * size.
+     */
     private static PrimitiveShapesPacket onlyPacket(Collection<PrimitiveShapesPacket> packets) {
         assertEquals(1, packets.size());
         return packets.iterator().next();
     }
 
+    /**
+     * Checks that a sound produces exactly one level-sound event packet. The
+     * packet is then passed through the selected protocol's codec checks, so
+     * empty or differently represented sound results fail this helper.
+     */
     private static void assertSoundEncodes(
             Protocol protocol,
             org.allaymc.api.world.sound.Sound sound,
@@ -823,6 +984,9 @@ class PacketEncoderCompatibilityTest {
         assertPacketEncodes(protocol, packet);
     }
 
+    /**
+     * Returns whether a login packet contains the exact experiment name.
+     */
     private static boolean hasExperiment(
             org.cloudburstmc.protocol.bedrock.packet.StartGamePacket packet,
             String name
@@ -830,6 +994,19 @@ class PacketEncoderCompatibilityTest {
         return packet.getExperiments().stream().anyMatch(experiment -> experiment.name().equals(name));
     }
 
+    /**
+     * Checks registration and serialization using the selected protocol's own
+     * definitions. The temporary helper uses client encoding settings, and
+     * serialization must produce readable bytes without throwing.
+     *
+     * <p> For versions at least 2168, the same bytes are decoded with the
+     * registered packet ID. The decoded class must match, all bytes must be
+     * consumed, and dimension definitions receive an additional equality check;
+     * other packet fields are not compared by this helper. Decoded
+     * reference-counted packets and the output buffer are released on all
+     * corresponding assertion paths, while the supplied packet remains
+     * caller-owned.
+     */
     private static void assertPacketEncodes(Protocol protocol, BedrockPacket packet) {
         assertNotNull(
                 protocol.getCodec().getPacketDefinition(packet.getClass()),
@@ -848,6 +1025,9 @@ class PacketEncoderCompatibilityTest {
         try {
             assertDoesNotThrow(() -> protocol.getCodec().tryEncode(helper, buffer, packet), protocol::toString);
             assertTrue(buffer.isReadable());
+            // Round-trip the recent formats as well as encoding them, so wrong
+            // packet IDs or unconsumed trailing fields fail this compatibility
+            // probe.
             if (protocol.getProtocolVersion() >= 2168) {
                 var definition = protocol.getCodec().getPacketDefinition(packet.getClass());
                 var decoded = assertDoesNotThrow(
@@ -861,14 +1041,38 @@ class PacketEncoderCompatibilityTest {
                         assertEquals(dimensions.getDefinitions(), ((DimensionDataPacket) decoded).getDefinitions());
                     }
                 } finally {
+                    // Decoded packets can own additional buffers, so release
+                    // the reconstructed object even if class or remaining-byte
+                    // assertions fail.
                     io.netty.util.ReferenceCountUtil.release(decoded);
                 }
             }
         } finally {
+            // The temporary output buffer belongs to this probe and must be
+            // released after both encoding and optional decoding assertions.
             buffer.release();
         }
     }
 
+    /**
+     * {@code StartGameFixture} represents mocked world and player inputs
+     * together with the expected identities for login packet assertions.
+     * {@code world}, {@code playerData}, {@code dimension}, and {@code player}
+     * supply the encoder inputs, while {@code uniqueId} and {@code runtimeId}
+     * match the identity values stubbed on {@code player}.
+     *
+     * @param world mocked world and level settings
+     *
+     * @param playerData saved player game-mode data
+     *
+     * @param dimension destination dimension fixture
+     *
+     * @param player live entity location and identity fixture
+     *
+     * @param uniqueId expected persistent player UUID
+     *
+     * @param runtimeId expected runtime entity identifier
+     */
     private record StartGameFixture(
             World world,
             PlayerData playerData,
@@ -877,6 +1081,10 @@ class PacketEncoderCompatibilityTest {
             UUID uniqueId,
             long runtimeId
     ) {
+        /**
+         * Creates a login packet from this fixture through the supplied
+         * encoder.
+         */
         org.cloudburstmc.protocol.bedrock.packet.StartGamePacket encode(PacketEncoder encoder) {
             return encoder.encodeStartGame(world, playerData, dimension, player);
         }

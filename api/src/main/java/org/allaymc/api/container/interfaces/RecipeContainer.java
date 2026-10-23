@@ -4,15 +4,18 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 
 /**
- * RecipeContainer represents a type of container that is used to craft item.
+ * {@code RecipeContainer} exposes container contents as recipe inputs for matching and
+ * crafting actions. Each implementation selects the input representation appropriate to
+ * its workstation; callers must use that representation without assuming that every
+ * implementation copies stored item stacks.
  *
  * @author IWareQ
  */
 public interface RecipeContainer extends Container {
     /**
-     * Creates a {@link RecipeInput} instance for the current container.
-     *
-     * @return a new instance of {@link RecipeInput} representing the input for the recipe
+     * Creates the recipe-input representation of this container's current contents. The
+     * concrete workstation determines its shape and whether input stacks are copied or
+     * remain shared with the container.
      */
     RecipeInput createRecipeInput();
 }

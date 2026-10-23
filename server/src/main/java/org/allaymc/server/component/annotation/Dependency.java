@@ -8,13 +8,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Declares a dependency on another component for injection into a field.
+ * {@code Dependency} declares a dependency on another component for injection
+ * into a field.
  * <p>
- * Marks a field in a component implementation class to indicate a required dependency.
+ * The annotation identifies a dependency field within a component implementation.
  * During object construction, the injector scans fields for this annotation and attempts to
- * resolve the dependency either by inheritance (if {@code identifier} is empty) or by the
+ * resolve the dependency either by assignable type (if {@code identifier} is blank) or by the
  * specified {@code identifier}. The dependency must exist within the provided component list,
  * or a {@link ComponentInjectException} is thrown unless {@code optional} is {@code true}.
+ * Multiple matches are rejected even for optional dependencies. Only fields
+ * whose declared type implements the component interface participate in injection.
  * </p>
  *
  * @author daoge_cmd
@@ -23,20 +26,22 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Dependency {
     /**
-     * Specifies the identifier of the required component.
+     * Returns the identifier text used instead of assignable-type selection.
      * <p>
-     * If left empty, the dependency is resolved by inheritance.
-     * Otherwise, it is matched against the component's explicit identifier.
+     * Empty or whitespace-only text selects by field type. A nonblank value
+     * must exactly match a discovered identifier and still select an instance
+     * assignable to the field; surrounding whitespace is not stripped.
      *
-     * @return the component identifier, or an empty string for inheritance-based resolution
+     * @return identifier text, or a blank string for selection by field type
      */
     String identifier() default "";
 
     /**
-     * Indicates whether the dependency is optional.
+     * Returns whether a missing candidate is permitted during dependency injection.
      * <p>
-     * If {@code true}, the injector does not throw an exception if the dependency is missing.
-     * Otherwise, a {@link ComponentInjectException} is thrown when the dependency is not found.
+     * When {@code true}, no candidate leaves the field's existing value unchanged.
+     * The default {@code false} rejects absence; neither setting permits multiple
+     * matches or an incompatible instance selected by identifier.
      *
      * @return {@code true} if the dependency is optional, {@code false} otherwise
      */

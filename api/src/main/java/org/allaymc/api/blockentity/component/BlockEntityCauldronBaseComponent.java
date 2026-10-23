@@ -5,28 +5,23 @@ import org.allaymc.api.item.data.PotionType;
 import java.awt.*;
 
 /**
- * Component interface for cauldron block entities.
- * <p>
- * Cauldron block entities store potion type and custom color data
- * that cannot be represented by block properties alone.
+ * {@code BlockEntityCauldronBaseComponent} exposes the potion effect, bottle
+ * variant, and optional dyed-water color stored for a cauldron. These values
+ * supplement the surrounding block properties; callers manage effect identity
+ * and bottle variant separately when changing the stored potion.
  *
  * @author daoge_cmd
  */
 public interface BlockEntityCauldronBaseComponent extends BlockEntityBaseComponent {
 
     /**
-     * Represents the type of potion container in a cauldron.
-     * <p>
-     * This enum distinguishes between different potion variants that can be
-     * stored in a cauldron: normal potions, splash potions, and lingering potions.
-     * Each type corresponds to a different bottle type when extracted.
-     * <p>
-     * Note: This is different from {@link PotionType}
-     * which represents the actual potion effect (e.g., healing, swiftness).
+     * {@code CauldronPotionType} distinguishes drinkable, splash, lingering,
+     * and absent potion-container variants independently of the effect
+     * identified by {@link PotionType}.
      */
     enum CauldronPotionType {
         /**
-         * No potion stored - the cauldron contains plain water.
+         * No stored potion-container variant.
          */
         NONE,
         /**
@@ -44,74 +39,72 @@ public interface BlockEntityCauldronBaseComponent extends BlockEntityBaseCompone
     }
 
     /**
-     * Gets the potion type stored in the cauldron.
-     *
-     * @return the potion type, or {@code null} if no potion
+     * Returns the stored potion effect, or {@code null} when absent. This value
+     * is independent of the stored bottle variant, so callers changing a potion
+     * coordinate both selections when needed.
      */
     PotionType getPotionType();
 
     /**
-     * Sets the potion type.
-     *
-     * @param potionType the potion type, or {@code null} to clear
+     * Stores the potion effect independently of the bottle variant and color.
+     * {@code null} clears the effect selection, and the server broadcasts the
+     * changed block-entity state after storing the reference.
      */
     void setPotionType(PotionType potionType);
 
     /**
-     * Gets the cauldron potion type (container type).
-     *
-     * @return the cauldron potion type
+     * Returns the stored bottle variant independently of the potion effect.
      */
     CauldronPotionType getCauldronPotionType();
 
     /**
-     * Sets the cauldron potion type (container type).
-     *
-     * @param type the cauldron potion type
+     * Stores the potion-container variant and sends updated state to viewers.
+     * Callers provide a non-{@code null} variant because the server's NBT
+     * encoder switches on the retained value without validating it.
      */
     void setCauldronPotionType(CauldronPotionType type);
 
     /**
-     * Checks if the cauldron contains a potion.
-     *
-     * @return {@code true} if contains potion
+     * Returns whether the stored potion effect reference is non-{@code null}.
      */
     default boolean hasPotion() {
         return getPotionType() != null;
     }
 
     /**
-     * Gets the custom color of the water in the cauldron.
-     *
-     * @return the custom color, or {@code null} if no custom color
+     * Returns the custom water color, or {@code null} when absent. Potion
+     * effect and bottle variant do not determine this value; callers can clear
+     * or replace the color independently.
      */
     Color getCustomColor();
 
     /**
-     * Sets the custom color of the water.
-     *
-     * @param color the color, or {@code null} to clear
+     * Stores the custom water color independently of the potion selections.
+     * {@code null} removes the color, and the server broadcasts the changed
+     * block-entity state after storing the new reference.
      */
     void setCustomColor(Color color);
 
     /**
-     * Checks if the cauldron has a custom color.
-     *
-     * @return {@code true} if has custom color
+     * Returns whether this cauldron currently stores a custom water color.
      */
     default boolean hasCustomColor() {
         return getCustomColor() != null;
     }
 
     /**
-     * Clears the custom color.
+     * Removes the custom water color through {@code setCustomColor}. Potion
+     * effect and bottle variant remain unchanged; the server follows its
+     * ordinary color-setter broadcast path for this operation.
      */
     default void clearCustomColor() {
         setCustomColor(null);
     }
 
     /**
-     * Clears all potion and color data.
+     * Clears potion effect, bottle variant, and custom water color in sequence.
+     * Each setter retains its ordinary side effects, so the server can
+     * broadcast intermediate states rather than applying one atomic update.
      */
     default void clearPotionData() {
         setPotionType(null);
@@ -120,9 +113,9 @@ public interface BlockEntityCauldronBaseComponent extends BlockEntityBaseCompone
     }
 
     /**
-     * Mixes a new dye color with the existing color.
-     *
-     * @param color the color of the dye to mix
+     * Mixes a supplied dye into the current custom water color. The server
+     * adopts the supplied color when none exists; otherwise it blends RGB
+     * channel pairs and broadcasts the resulting color.
      */
     void mixColor(Color color);
 }

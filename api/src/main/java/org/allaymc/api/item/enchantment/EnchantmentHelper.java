@@ -6,7 +6,10 @@ import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Helper class for enchantments.
+ * {@code EnchantmentHelper} restores enchantment instances from their item NBT
+ * representation. The numeric {@code "id"} selects a registered type, and
+ * {@code "lvl"} supplies its level; unknown identifiers produce a warning and
+ * no instance instead of introducing an unregistered enchantment.
  *
  * @author daoge_cmd
  */
@@ -14,15 +17,18 @@ import org.cloudburstmc.nbt.NbtMap;
 @UtilityClass
 public class EnchantmentHelper {
     /**
-     * Create an enchantment instance from NBT.
-     *
-     * @param nbtMap The NBT map to create the enchantment instance from
-     *
-     * @return The enchantment instance
+     * Restores a cached enchantment instance from {@code "id"} and
+     * {@code "lvl"} short values. Missing or non-short tags use {@code 0},
+     * following {@code NbtMap.getShort}; registered types accept the resulting
+     * level without checking their normal maximum. An unknown numeric
+     * identifier is logged and returns {@code null}, which callers must handle
+     * before reading the instance.
      */
     public EnchantmentInstance fromNBT(NbtMap nbtMap) {
         var id = nbtMap.getShort("id");
         var enchantmentType = Registries.ENCHANTMENTS.getByK1((int) id);
+        // Unknown registry IDs have no type from which to create an instance.
+        // The warning identifies the missing ID, and the return value signals failed resolution.
         if (enchantmentType == null) {
             log.warn("Unknown enchantment id {}", id);
             return null;

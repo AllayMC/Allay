@@ -20,57 +20,86 @@ import java.util.Set;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
- * Implementation of tripwire (string) block behavior.
+ * {@code BlockTripWireBaseComponentImpl} tracks entity activation on tripwire segments
+ * and requests reevaluation by hooks along their horizontal lines. Entry sets the
+ * segment's powered bit regardless of attachment or disarmed state; hook calculation
+ * separately decides whether that segment can contribute output to a complete
+ * connection.
+ *
  * <p>
- * Tripwire blocks are placed between two tripwire hooks to form a detection line.
- * When an entity passes through attached tripwire, it triggers the connected hooks.
- * Breaking tripwire without shears triggers the hooks; breaking with shears disarms it silently.
+ * Powered segments poll entity intersections until no entity remains, then clear their
+ * bit and notify hooks again. Break handling marks a segment disarmed when shears are
+ * used or powered otherwise before inherited drops run. Hook reevaluation is scheduled
+ * rather than performed synchronously, so this component does not guarantee a
+ * break-time pulse or silent removal. Searches stop at the first hook or intervening
+ * non-wire block and use only facing hooks within forty-one block offsets.
  *
  * @author daoge_cmd
  */
 public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
 
     /**
-     * Interval between entity detection checks.
+     * {@code CHECK_INTERVAL} requests entity polling every ten game ticks while a
+     * tripwire snapshot remains powered, allowing departure to clear the segment.
      */
     private static final Duration CHECK_INTERVAL = Duration.ofMillis(500);
 
+    /**
+     * Creates the tripwire segment component for the supplied registered block type.
+     */
     public BlockTripWireBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Requests nearby hook reevaluation after inherited placement handling finishes.
+     * The new-state wrapper supplies the segment position, and the helper schedules
+     * hook callbacks rather than calculating their connection states immediately.
+     */
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
 
-        // Notify nearby hooks about the new tripwire
         Block newBlock = new Block(newBlockState, oldBlock.getPosition());
         updateAdjacentHooks(newBlock);
     }
 
+    /**
+     * Marks an unpowered segment active and requests hook reevaluation plus a later
+     * entity check. Attachment, disarmed state, and the triggering entity's kind do not
+     * gate activation in this callback; an already powered snapshot returns
+     * immediately.
+     */
     @Override
     public void onEntityInside(Block block, Entity entity) {
-        // Only trigger if not already powered
         if (block.getPropertyValue(POWERED_BIT)) {
             return;
         }
 
-        // Set powered state
         Dimension dimension = block.getDimension();
         Vector3ic pos = block.getPosition();
         dimension.updateBlockProperty(POWERED_BIT, true, pos);
 
-        // Notify neighbors of redstone change
         dimension.updateAround(pos);
 
-        // Notify adjacent hooks
         Block updatedBlock = new Block(dimension, pos);
         updateAdjacentHooks(updatedBlock);
 
-        // Schedule update to check if entity has left
         dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(pos, CHECK_INTERVAL);
     }
 
+    /**
+     * Checks whether an activated segment still intersects any dimension entity. The
+     * current block shape supplies offset detection bounds, and the scan accepts every
+     * entity kind. An unpowered supplied snapshot returns without polling or
+     * rescheduling.
+     *
+     * <p>
+     * A remaining intersection requests another delayed check, allowing activation to
+     * continue after entry callbacks stop. No intersection clears the powered bit,
+     * notifies immediate neighbors, and schedules facing hooks to reevaluate. The
+     * property write precedes the fresh block wrapper passed to the hook-search helper.
+     */
     @Override
     public void onScheduledUpdate(Block block) {
         if (!block.getPropertyValue(POWERED_BIT)) {
@@ -80,7 +109,6 @@ public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
         Dimension dimension = block.getDimension();
         Vector3ic pos = block.getPosition();
 
-        // Check if any entity is still on the tripwire
         boolean entityFound = false;
         var detectionAABB = block.getBlockStateData().computeOffsetShape(pos).unionAABB();
 
@@ -91,35 +119,42 @@ public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
+        // Entry callbacks no longer initiate polling once POWERED_BIT is set.
+        // Continue this chain while any entity remains so a later departure can release the segment.
         if (entityFound) {
-            // Entity still present, reschedule check
             dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(pos, CHECK_INTERVAL);
         } else {
-            // No entity, depower the tripwire
             dimension.updateBlockProperty(POWERED_BIT, false, pos);
 
-            // Notify neighbors of redstone change
             dimension.updateAround(pos);
 
-            // Notify adjacent hooks
             Block updatedBlock = new Block(dimension, pos);
             updateAdjacentHooks(updatedBlock);
         }
     }
 
+    /**
+     * Marks the segment disarmed for shears or powered for other break tools before
+     * inherited break handling. Each path obtains a fresh block wrapper and schedules
+     * facing hooks to reevaluate the line; the non-shears path also notifies immediate
+     * neighbors.
+     *
+     * <p>
+     * These callbacks are position-based scheduled work and may observe the wire after
+     * world removal rather than the temporary break-time property. This method does not
+     * call hook calculation with an explicit replacement segment, so setting the bit
+     * alone does not guarantee a later power pulse.
+     */
     @Override
     public void onBreak(Block block, ItemStack usedItem, Entity entity) {
         Dimension dimension = block.getDimension();
         Vector3ic pos = block.getPosition();
 
-        // Check if broken with shears
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
-            // Disarm the tripwire silently
             dimension.updateBlockProperty(DISARMED_BIT, true, pos);
             Block updatedBlock = new Block(dimension, pos);
             updateAdjacentHooks(updatedBlock);
         } else {
-            // Trigger the hooks (broken without shears)
             dimension.updateBlockProperty(POWERED_BIT, true, pos);
             dimension.updateAround(pos);
             Block updatedBlock = new Block(dimension, pos);
@@ -129,9 +164,13 @@ public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
         super.onBreak(block, usedItem, entity);
     }
 
+    /**
+     * Returns one string item when this registered block type has an item mapping. A
+     * type without an item mapping returns an empty set, independently of the tool and
+     * breaking entity.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        // Tripwire always drops string
         if (getBlockType().getItemType() != null) {
             return Set.of(ItemTypes.STRING.createItemStack());
         }
@@ -139,35 +178,42 @@ public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Updates adjacent tripwire hooks about state changes.
+     * Schedules reevaluation for facing hooks reachable along horizontal tripwire
+     * segments. Each direction scans offsets one through forty-one, stopping at its
+     * first hook even when that hook faces elsewhere. An intervening non-wire block
+     * stops that direction before a farther hook is considered.
      *
-     * @param block the tripwire block
+     * <p>
+     * A correctly facing hook receives a ten-millisecond request, which the block
+     * update manager truncates to zero game ticks. The request remains scheduled work
+     * rather than an immediate method call, and another entry at the hook position can
+     * have its deadline replaced.
      */
     private void updateAdjacentHooks(Block block) {
         Dimension dimension = block.getDimension();
         Vector3ic pos = block.getPosition();
 
-        // Search in all horizontal directions for hooks
         for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
+            // The exclusive bound matches hook scanning: a candidate at offset
+            // forty-two is outside the current connection search, even along uninterrupted string.
             for (int i = 1; i < 42; i++) {
                 Vector3ic scanPos = face.offsetPos(pos, i);
                 BlockState scannedState = dimension.getBlockState(scanPos);
                 BlockType<?> scannedType = scannedState.getBlockType();
 
                 if (scannedType == BlockTypes.TRIPWIRE_HOOK) {
-                    // Found a hook - check if it faces this direction
                     int hookDirection = scannedState.getPropertyValue(DIRECTION_4);
                     BlockFace hookFacing = BlockFace.fromHorizontalIndex(hookDirection);
 
                     if (hookFacing == face.opposite()) {
-                        // Hook faces toward this tripwire, schedule an update on the hook
+                        // Ten milliseconds truncates to zero game ticks. Queue
+                        // reevaluation at the current tick deadline instead of synchronously entering the hook calculator.
                         dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(scanPos, Duration.ofMillis(10));
                     }
                     break;
                 }
 
                 if (scannedType != BlockTypes.TRIP_WIRE) {
-                    // Non-tripwire block, stop searching in this direction
                     break;
                 }
             }

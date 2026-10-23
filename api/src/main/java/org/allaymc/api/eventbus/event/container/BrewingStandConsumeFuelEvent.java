@@ -9,7 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a brewing stand consumes fuel (blaze powder).
+ * {@code BrewingStandConsumeFuelEvent} represents an attempt to consume blaze powder
+ * when brewing fuel is empty. Cancellation prevents the fuel decrement and
+ * replenishment; successful dispatch lets the brewing component consume one item and
+ * initialize its fuel counters.
  *
  * @author IWareQ
  */
@@ -18,11 +21,12 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.DIMENSION)
 public class BrewingStandConsumeFuelEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The brewing stand consuming the fuel.
+     * Brewing stand requesting a fuel refill.
      */
     protected BlockEntityBrewingStand brewingStand;
     /**
-     * The fuel item stack being consumed.
+     * {@code fuel} references the stored fuel stack before consumption. The brewing
+     * component reads and changes this same stack after successful event dispatch.
      */
     protected ItemStack fuel;
 }

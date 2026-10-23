@@ -11,15 +11,35 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Acacia tree feature implementation.
- * Generates acacia trees with diagonal trunk and flat canopy.
+ * {@code AcaciaTreeFeature} places acacia trees with a bending trunk, an
+ * optional secondary branch, and flat foliage. Placement first checks
+ * dirt-tagged ground and a clearance profile, then uses successful log
+ * placements to locate canopy attachments.
+ *
+ * <p>
+ * The main trunk can move horizontally near its top, and the secondary branch
+ * is omitted when its sampled direction matches the main bend. Their
+ * attachments use different radius adjustments but share the same two-row
+ * acacia foliage rules. Existing nonreplaceable positions can interrupt
+ * individual logs or leaves after admission without rejecting the completed
+ * attempt. The context controls chunk availability and can discard writes
+ * beyond its source.
  *
  * @author daoge_cmd
  */
 public class AcaciaTreeFeature extends TreeWorldFeature {
 
+    /**
+     * Built-in acacia tree registry key. Runtime feature construction uses
+     * this identifier to register the corresponding placement implementation.
+     */
     public static final Identifier IDENTIFIER = new Identifier("minecraft:acacia_tree");
 
+    /**
+     * Creates and immediately registers the built-in acacia tree feature. The
+     * constructor fixes its log and leaf materials while shared clearance and
+     * replacement behavior remains in the tree base.
+     */
     public AcaciaTreeFeature() {
         super(
                 IDENTIFIER,
@@ -28,6 +48,20 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
         );
     }
 
+    /**
+     * Attempts a bending acacia tree after checking dirt-tagged ground and the
+     * requested height's clearance profile. Failed admission returns {@code
+     * false} before soil or trunk writes, while accepted placement proceeds
+     * incrementally through the context.
+     *
+     * <p>
+     * The main bend direction and successful top log determine its large
+     * canopy attachment. A differently directed secondary branch can add
+     * another attachment only when at least one of its logs is accepted. Flat
+     * foliage is then placed for both attachments using their separate radius
+     * offsets. Individual rejected writes do not change the final {@code true}
+     * result, and later exceptions do not undo earlier mutations.
+     */
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
         var random = ThreadLocalRandom.current();
@@ -48,7 +82,10 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
         int currentZ = z;
         var horizontalFaces = BlockFace.getHorizontalBlockFaces();
         BlockFace primaryDirection = horizontalFaces[random.nextInt(4)];
+        // The sampled bend starts near the trunk top, keeping lower trunk levels
+        // on the original column.
         int bendStart = maxFreeTreeHeight - random.nextInt(4) - 1;
+        // At most three horizontal steps limit the main trunk's lateral drift.
         int bendLength = 3 - random.nextInt(3);
         int lastPlacedY = y;
 
@@ -85,6 +122,8 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
                     }
                 }
             }
+            // A secondary canopy needs an accepted branch log; an entirely rejected
+            // branch must not create a detached foliage attachment.
             if (secondaryTopY >= 0) {
                 attachments.add(new FoliageAttachment(currentX, secondaryTopY, currentZ, 0, false));
             }
@@ -97,6 +136,12 @@ public class AcaciaTreeFeature extends TreeWorldFeature {
         return true;
     }
 
+    /**
+     * Places the broad lower acacia row and overlapping smaller upper rows for
+     * one attachment. Radius offsets affect their extents, while the shared
+     * row helper handles trunk width and records accepted leaves in the
+     * supplied list.
+     */
     private void placeAcaciaFoliage(
             WorldFeatureContext context,
             FoliageAttachment attachment,

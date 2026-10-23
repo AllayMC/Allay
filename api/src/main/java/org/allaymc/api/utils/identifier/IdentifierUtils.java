@@ -3,60 +3,58 @@ package org.allaymc.api.utils.identifier;
 import org.allaymc.api.utils.AllayStringUtils;
 
 /**
- * IdentifierUtils provides some helper methods for {@link Identifier}.
+ * {@code IdentifierUtils} validates and constructs namespaced identifiers with optional
+ * failure sentinels. Component validators accept uppercase ASCII letters and empty components,
+ * while {@code isCharValid} is a separate character-screening helper that accepts lowercase
+ * letters, separators, and slash characters under different rules.
  *
  * @author daoge_cmd
  */
 public final class IdentifierUtils {
     /**
-     * Split the given identifier by the given delimiter and create an {@link Identifier} object.
-     *
-     * @param identifier the identifier
-     * @param delimiter  the delimiter
-     *
-     * @return the identifier
+     * Creates an identifier using the first occurrence of the supplied delimiter. A missing or
+     * leading delimiter keeps {@code Identifier.DEFAULT_NAMESPACE}; the remaining path is
+     * validated
+     * by the canonical identifier constructor without trimming or case changes.
      */
     public static Identifier splitOn(String identifier, String delimiter) {
         return new Identifier(AllayStringUtils.fastTwoPartSplit(identifier, delimiter, Identifier.DEFAULT_NAMESPACE));
     }
 
     /**
-     * Try to parse the given identifier to an {@link Identifier} object.
-     *
-     * @param identifier the identifier
-     *
-     * @return the identifier or {@code null} if the identifier is invalid
+     * Parses an identifier and returns {@code null} when canonical character validation rejects
+     * it. Only {@code InvalidIdentifierException} is suppressed; {@code null} input and other
+     * construction failures still propagate instead of producing that sentinel.
      */
     public static Identifier tryParse(String identifier) {
         try {
             return new Identifier(identifier);
         } catch (InvalidIdentifierException lv) {
+            // Character rejection is the recoverable parse result here. Preserve other
+            // failures so callers can distinguish invalid names from missing inputs or setup errors.
             return null;
         }
     }
 
     /**
-     * Create a new identifier from the given namespace and path.
-     *
-     * @param namespace the namespace
-     * @param path      the path
-     *
-     * @return the identifier
+     * Creates an identifier from separate namespace and path values, returning {@code null} for
+     * rejected characters. Empty namespace defaulting still applies, but {@code null} components
+     * and other construction failures are not suppressed by this helper.
      */
     public static Identifier of(String namespace, String path) {
         try {
             return new Identifier(namespace, path);
         } catch (InvalidIdentifierException lv) {
+            // Invalid component characters are an expected construction failure for this
+            // helper. Return absence for that case without suppressing unrelated runtime failures.
             return null;
         }
     }
 
     /**
-     * Check if the given identifier is valid.
-     *
-     * @param identifier the identifier
-     *
-     * @return {@code true} if the identifier is valid, otherwise {@code false}.
+     * Returns whether defaulted namespace and path components pass canonical character validation.
+     * Empty paths are accepted and uppercase ASCII letters are allowed, while {@code null}
+     * input fails rather than returning {@code false}.
      */
     public static boolean isValid(String identifier) {
         String[] strings = AllayStringUtils.fastTwoPartSplit(identifier, Identifier.NAMESPACE_SEPARATOR, Identifier.DEFAULT_NAMESPACE);
@@ -64,22 +62,19 @@ public final class IdentifierUtils {
     }
 
     /**
-     * Check if the given character is valid.
-     *
-     * @param c the character
-     *
-     * @return {@code true} if the character is valid, otherwise {@code false}.
+     * Returns whether a character belongs to this helper's lowercase identifier-input set.
+     * This check allows colon and slash but rejects uppercase letters, so it is not equivalent
+     * to canonical namespace or path validation.
      */
     public static boolean isCharValid(char c) {
         return c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c == '_' || c == ':' || c == '/' || c == '.' || c == '-';
     }
 
     /**
-     * Assert that the given identifier is valid.
-     *
-     * @param identifier the identifier
-     *
-     * @throws InvalidIdentifierException if the identifier is invalid
+     * Validates the defaulted namespace and path without constructing an identifier. The rules
+     * match canonical component validation, including uppercase letters and empty paths; invalid
+     * characters raise {@code InvalidIdentifierException}, while {@code null} input is not
+     * accepted.
      */
     public static void assertValid(String identifier) {
         String[] strings = AllayStringUtils.fastTwoPartSplit(identifier, Identifier.NAMESPACE_SEPARATOR, Identifier.DEFAULT_NAMESPACE);
@@ -94,11 +89,9 @@ public final class IdentifierUtils {
     }
 
     /**
-     * Check if the path is valid.
-     *
-     * @param path the path
-     *
-     * @return {@code true} if the path is valid, otherwise {@code false}.
+     * Returns whether every path character passes {@code isPathCharacterValid}. Empty paths pass
+     * because no character is rejected, while {@code null} fails during length access rather than
+     * returning a validation result.
      */
     public static boolean isPathValid(String path) {
         for (int i = 0; i < path.length(); ++i) {
@@ -110,22 +103,17 @@ public final class IdentifierUtils {
     }
 
     /**
-     * Check if the character is a valid path character.
-     *
-     * @param character the character
-     *
-     * @return {@code true} if the character is a valid path character, otherwise {@code false}.
+     * Returns whether a path character is an ASCII letter, digit, underscore, hyphen, or period.
      */
     public static boolean isPathCharacterValid(char character) {
-        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9'/* || character == '/'*/ || character == '.';
+        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.';
     }
 
     /**
-     * Check if the namespace is valid.
-     *
-     * @param namespace the namespace
-     *
-     * @return {@code true} if the namespace is valid, otherwise {@code false}.
+     * Returns whether every namespace character passes {@code isNamespaceCharacterValid}. Empty
+     * namespaces pass this character test, while {@code null} fails during length access;
+     * namespace
+     * defaulting is the identifier constructor's separate responsibility.
      */
     public static boolean isNamespaceValid(String namespace) {
         for (int i = 0; i < namespace.length(); ++i) {
@@ -137,11 +125,8 @@ public final class IdentifierUtils {
     }
 
     /**
-     * Check if the character is a valid namespace character.
-     *
-     * @param character the character
-     *
-     * @return {@code true} if the character is a valid namespace character, otherwise {@code false}.
+     * Returns whether a namespace character is an ASCII letter, digit, underscore, hyphen, or
+     * period.
      */
     public static boolean isNamespaceCharacterValid(char character) {
         return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.';

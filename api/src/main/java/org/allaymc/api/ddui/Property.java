@@ -1,55 +1,52 @@
 package org.allaymc.api.ddui;
 
 /**
- * Configured property value of a DDUI screen or element.
- * <p>
- * A property either stores a literal value or points at an {@link Observable} that supplies runtime updates after
- * a screen has been shown.
- *
- * @param <T> the property value type
+ * {@code Property} stores a DDUI template value and an optional observable binding. {@code bind}
+ * captures the observable's current value, while runtime session compilation reads its latest
+ * value; {@code value()} continues to expose the stored template snapshot until reconfiguration.
  *
  * @author daoge_cmd | SerenityJS
  */
 public final class Property<T> {
+    /**
+     * Stored template value snapshot.
+     */
     private T value;
+    /**
+     * {@code observable} supplies runtime updates when bound. {@code set} clears this reference
+     * while replacing the stored literal snapshot.
+     */
     private Observable<T> observable;
 
     /**
-     * Creates a property with an initial literal value.
-     *
-     * @param value the initial value
+     * Creates an unbound template property holding the supplied value reference.
      */
     public Property(T value) {
         this.value = value;
     }
 
     /**
-    /**
-     * Gets the stored value snapshot of this property.
-     * <p>
-     * When this property is bound to an observable, the returned value is the snapshot captured when the property
-     * was last configured with {@link #set(Object)} or {@link #bind(Observable)}.
-     *
-     * @return the stored value snapshot
+     * Returns the stored template snapshot without consulting a bound observable. Observable
+     * updates do not refresh this snapshot; {@code set} and {@code bind} replace it when the
+     * template is reconfigured.
      */
     public T value() {
         return value;
     }
 
     /**
-    /**
-     * Gets the observable backing this property.
-     *
-     * @return the observable, or {@code null} if this property currently holds a literal value
+     * Returns the observable currently bound to this template property. The result is {@code null}
+     * for literal properties, and callers receive the same source reference supplied to
+     * {@code bind}.
      */
     public Observable<T> observable() {
         return observable;
     }
 
     /**
-     * Sets a new literal value and clears any observable binding.
-     *
-     * @param value the new literal value
+     * Stores the supplied literal reference and clears the observable binding. Existing runtime
+     * sessions keep their compiled bindings, so this template change affects subsequent compilation
+     * rather than sending a live update.
      */
     public void set(T value) {
         this.value = value;
@@ -57,10 +54,9 @@ public final class Property<T> {
     }
 
     /**
-    /**
-     * Binds this property to an observable and snapshots its current value as the initial value.
-     *
-     * @param observable the observable binding
+     * Binds the supplied observable and captures its current value as the template snapshot.
+     * Existing sessions retain their compiled bindings; a {@code null} observable fails before
+     * either stored property reference changes.
      */
     public void bind(Observable<T> observable) {
         this.value = observable.get();

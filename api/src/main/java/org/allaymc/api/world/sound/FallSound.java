@@ -1,9 +1,12 @@
 package org.allaymc.api.world.sound;
 
 /**
- * Sound played when an entity falls and hits the ground.
+ * {@code FallSound} describes the landing sound selected from an entity's fall
+ * distance. The current runtime chooses the large-fall event above four blocks
+ * and the small-fall event otherwise; constructing this descriptor neither
+ * computes nor applies fall damage.
  *
- * @param distance the distance the entity fell (units are implementation-specific, commonly measured in blocks)
+ * @param distance fall distance in blocks
  */
 public record FallSound(double distance) implements Sound {
 }

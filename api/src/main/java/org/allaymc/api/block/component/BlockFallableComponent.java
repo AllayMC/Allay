@@ -5,37 +5,32 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.math.location.Location3d;
 
 /**
- * Component for blocks that can fall as entities and apply impact effects after landing.
+ * {@code BlockFallableComponent} defines landing effects and impact damage for blocks
+ * represented by falling entities. The falling entity uses the damage calculation
+ * before invoking landing behavior, while the default calculation produces no damage
+ * and the default container identifies falling-block damage.
  *
  * @author IWareQ
  */
 public interface BlockFallableComponent extends BlockComponent {
     /**
-     * Called when the block has landed after falling.
-     *
-     * @param location     the location where the block lands
-     * @param fallDistance the distance the block has fallen
-     * @param blockState   the block state to be placed
+     * Handles a falling block reaching its landing position after entity removal.
+     * {@code fallDistance} measures the descent in blocks, and {@code blockState}
+     * supplies the state available for placement or specialized landing effects.
      */
     void onLanded(Location3d location, double fallDistance, BlockState blockState);
 
     /**
-     * Calculates the damage based on the fall distance.
-     *
-     * @param fallDistance the distance the block has fallen
-     *
-     * @return the calculated damage
+     * Returns the impact damage for a fall distance measured in blocks. The default
+     * returns {@code 0}, so falling blocks without a specialized calculation do not
+     * attack nearby entities on landing.
      */
     default float calculateDamage(double fallDistance) {
         return 0;
     }
 
     /**
-     * Creates the damage container for this falling block.
-     *
-     * @param damage the damage amount
-     *
-     * @return the damage container
+     * Creates the falling-block damage descriptor for the supplied damage amount.
      */
     default DamageContainer createDamageContainer(float damage) {
         return DamageContainer.fallingBlock(damage);

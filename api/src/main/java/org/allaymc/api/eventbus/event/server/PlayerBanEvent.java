@@ -7,7 +7,10 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player is banned from the server.
+ * {@code PlayerBanEvent} represents a request to ban a player UUID string or name.
+ * The player manager dispatches this event before adding a previously absent
+ * entry and disconnecting matching online players. Cancellation prevents the
+ * requested ban and its associated disconnections.
  *
  * @author daoge_cmd
  */

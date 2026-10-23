@@ -20,26 +20,55 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Binds an initialized protocol to one connection and owns its packet processors and client state.
+ * {@code ProtocolSession} binds an initialized protocol to one transport
+ * connection and selects its connection-local packet processors. Receive and
+ * send events may replace packets, so dispatch and outbound validation use the
+ * post-event value. Each session starts in the connected state independently of
+ * other sessions using the same protocol.
  *
- * <p>Inbound and outbound events are applied here so validation and dispatch always use the packet
- * that event listeners leave behind.</p>
+ * <p> Codec installation and switching update the transport before assigning
+ * the selected protocol's definition registries to the resulting helper.
+ * Runtime failures trigger an attempt to restore the previous codec and
+ * definitions; restoration itself can fail and cannot guarantee an unchanged
+ * transport. Inbound asynchronous processing decides whether synchronous work
+ * is needed, while queued work retains the selected processor and receive tick
+ * rather than reconstructing their identities later.
  */
 @Slf4j
 @Getter
 public final class ProtocolSession {
+    /**
+     * {@code protocol} identifies the initialized protocol selected for this
+     * connection. {@code getProtocol()} exposes the same instance, including
+     * its shared encoder and cached payload bundle.
+     */
     private final Protocol protocol;
+    /**
+     * {@code session} holds the transport connection supplied at construction.
+     * {@code getSession()} exposes that same mutable object; codec lifecycle
+     * synchronization covers calls through this wrapper.
+     */
     private final BedrockServerSession session;
+    /**
+     * {@code processorHolder} owns this connection's processor instances and
+     * client state. {@code getProcessorHolder()} exposes the same holder used
+     * by receive dispatch and state-transition methods.
+     */
     private final PacketProcessorHolder processorHolder;
+    /**
+     * {@code codecInstalled} records successful initial codec installation.
+     * Synchronized {@code installCodec} and {@code switchCodec} operations read
+     * or update it; failed installation leaves it {@code false} even if
+     * rollback also fails.
+     */
     @Getter(AccessLevel.NONE)
     private boolean codecInstalled;
 
     /**
-     * Creates connection-local state for an initialized protocol.
-     *
-     * @param protocol the selected protocol
-     * @param session the connection that will use the protocol
-     * @throws IllegalArgumentException if the protocol is not initialized
+     * Creates processors for a nonnull, initialized protocol and a nonnull
+     * transport session. The holder must accept the transition to
+     * {@code CONNECTED}; construction rejects an uninitialized protocol or an
+     * unsuccessful initial state transition.
      */
     public ProtocolSession(Protocol protocol, BedrockServerSession session) {
         this.protocol = Objects.requireNonNull(protocol, "protocol");
@@ -54,11 +83,17 @@ public final class ProtocolSession {
     }
 
     /**
-     * Installs the selected codec and its immutable definition registries.
+     * Installs the selected codec and definition registries once successfully.
+     * The connection must already have a bootstrap codec, and a previous
+     * successful installation causes another call to throw before touching the
+     * transport.
      *
-     * <p>If installation fails, the previous bootstrap codec and definition registries are restored.</p>
-     *
-     * @throws IllegalStateException if installation already ran or no bootstrap codec is present
+     * <p> The session monitor serializes this success check with codec
+     * application and recording completion. Runtime failures leave the
+     * completion flag unset and attempt to restore the previous transport
+     * state, allowing a later retry. Restoration can also fail, so an unset
+     * flag does not itself prove that the bootstrap codec and definitions
+     * remain installed.
      */
     public synchronized void installCodec() {
         if (codecInstalled) {
@@ -70,14 +105,12 @@ public final class ProtocolSession {
     }
 
     /**
-     * Replaces the transport codec before login completes.
-     *
-     * <p>The replacement must use the negotiated wire protocol number. Packet processors and
-     * definition registries stay tied to the negotiated protocol.</p>
-     *
-     * @param codec the replacement codec
-     * @throws IllegalArgumentException if the codec uses another wire protocol number
-     * @throws IllegalStateException if no codec is installed or login has already advanced
+     * Replaces the transport codec after checking that the client state is
+     * {@code CONNECTED}. Installation must have succeeded and the replacement
+     * must use the negotiated wire version; the same codec instance is a no-op.
+     * {@code Protocol} processors and definitions remain selected from the
+     * original protocol, and state transitions use the holder's separate
+     * synchronization.
      */
     public synchronized void switchCodec(BedrockCodec codec) {
         codec = Objects.requireNonNull(codec, "codec");
@@ -96,6 +129,18 @@ public final class ProtocolSession {
         applyCodec(codec);
     }
 
+    /**
+     * Replaces the transport codec and installs the negotiated protocol's
+     * definition registries. A bootstrap codec must already be present so its
+     * codec and helper definitions can be captured before mutation.
+     *
+     * <p> Changing the codec may replace the transport helper, so definitions
+     * are installed on the helper obtained afterward. A
+     * {@code RuntimeException} triggers restoration through another codec
+     * replacement and a newly obtained helper. If restoration also throws, that
+     * exception is suppressed on the original failure; callers must not assume
+     * that the transport has been restored.
+     */
     private void applyCodec(BedrockCodec codec) {
         var previousCodec = session.getCodec();
         if (previousCodec == null) {
@@ -104,18 +149,26 @@ public final class ProtocolSession {
         var previousHelper = session.getPeer().getCodecHelper();
         var previousItemDefinitions = previousHelper.getItemDefinitions();
         var previousBlockDefinitions = previousHelper.getBlockDefinitions();
+        // Codec replacement can create a different helper; install both
+        // registries on that helper to preserve negotiated definition
+        // identities.
         try {
             session.setCodec(codec);
             var helper = session.getPeer().getCodecHelper();
             helper.setItemDefinitions(protocol.getItemDefinitionRegistry());
             helper.setBlockDefinitions(protocol.getBlockDefinitionRegistry());
         } catch (RuntimeException exception) {
+            // Restore the codec before its definitions because restoring the
+            // codec can replace the helper a second time.
             try {
                 session.setCodec(previousCodec);
                 var restoredHelper = session.getPeer().getCodecHelper();
                 restoredHelper.setItemDefinitions(previousItemDefinitions);
                 restoredHelper.setBlockDefinitions(previousBlockDefinitions);
             } catch (RuntimeException rollbackException) {
+                // Preserve the original installation failure while exposing
+                // incomplete restoration to the caller through its suppressed
+                // exception.
                 exception.addSuppressed(rollbackException);
             }
             throw exception;
@@ -123,14 +176,17 @@ public final class ProtocolSession {
     }
 
     /**
-     * Applies the receive event and dispatches an inbound packet to this connection's processor.
+     * Applies receive listeners and dispatches the resulting packet for this
+     * session. Disabled packet handling, cancellation, {@code null}
+     * replacements, and absent processors consume the packet without further
+     * processing.
      *
-     * <p>Processors run their asynchronous phase immediately. When they request synchronous work,
-     * that work is queued on the player's world or run directly if no world is available.</p>
-     *
-     * @param player the receiving player
-     * @param packet the inbound packet
-     * @return {@link PacketSignal#HANDLED}; protocol dispatch consumes every inbound packet
+     * <p> The selected processor receives its asynchronous phase immediately.
+     * If it requests further handling, the packet, receive tick, and processor
+     * travel together to the player's world queue; without a world, the
+     * synchronous phase runs directly on the calling thread. The method always
+     * returns {@code HANDLED} after normal completion, while listener or
+     * processor exceptions propagate.
      */
     public PacketSignal receive(AllayPlayer player, BedrockPacket packet) {
         Objects.requireNonNull(player, "player");
@@ -144,11 +200,15 @@ public final class ProtocolSession {
             return PacketSignal.HANDLED;
         }
 
+        // Listeners may replace packet identity or type; dispatch must use
+        // their final value rather than the original input.
         packet = event.getPacket();
         if (packet == null) {
             log.warn("Ignored a null packet produced by PacketReceiveEvent for {}", protocol);
             return PacketSignal.HANDLED;
         }
+        // A packet can lack a handler in the current state; consume it without
+        // invoking a processor registered for a different phase.
         var processor = processorHolder.getProcessor(packet);
         if (processor == null) {
             log.debug("Received a packet without a processor: {}, client state: {}", packet, getClientState());
@@ -161,6 +221,8 @@ public final class ProtocolSession {
             return PacketSignal.HANDLED;
         }
 
+        // Preserve the chosen processor and receive tick across dispatch;
+        // worldless connections cannot defer work to a world queue.
         if (world == null) {
             log.warn(
                     "Cannot queue sync packet {} for player {} because the player is not in a world",
@@ -175,13 +237,14 @@ public final class ProtocolSession {
     }
 
     /**
-     * Runs the synchronous phase of the processor selected for the current client state.
-     *
-     * @param player the receiving player
-     * @param packet the inbound packet
-     * @param receiveTime the tick at which the packet was received
+     * Runs the synchronous phase selected from the current client state. Unlike
+     * receive-time queued dispatch, this method resolves the processor again;
+     * an absent registration is logged and ignored, and {@code receiveTime} is
+     * the original receive tick.
      */
     public void handleSync(AllayPlayer player, BedrockPacket packet, long receiveTime) {
+        // A packet can lack a handler in the current state; consume it without
+        // invoking a processor registered for a different phase.
         var processor = processorHolder.getProcessor(packet);
         if (processor == null) {
             log.debug("Received a sync packet without a processor: {}, client state: {}", packet, getClientState());
@@ -191,41 +254,39 @@ public final class ProtocolSession {
     }
 
     /**
-     * Applies the send event and queues a packet for transmission.
-     *
-     * @param player the sending player
-     * @param packet the outbound packet
+     * Applies send listeners and queues the accepted packet for this
+     * connection. Cancellation, disabled state, disconnection, unsupported
+     * packet classes, and serverbound replacements prevent transmission;
+     * listeners may replace the supplied packet.
      */
     public void send(AllayPlayer player, BedrockPacket packet) {
         sendPacket(player, packet, false);
     }
 
     /**
-     * Applies the send event and transmits a packet immediately.
-     *
-     * @param player the sending player
-     * @param packet the outbound packet
+     * Applies send listeners and immediately submits the accepted packet to the
+     * transport. The same rejection rules as queued sending apply, including
+     * validation of a listener replacement against the negotiated protocol.
      */
     public void sendImmediately(AllayPlayer player, BedrockPacket packet) {
         sendPacket(player, packet, true);
     }
 
     /**
-     * Applies the send event, transmits a packet immediately, and returns the actual packet sent.
-     *
-     * @param player the sending player
-     * @param packet the original outbound packet
-     * @return the post-event packet, or {@code null} if transmission was rejected or cancelled
+     * Applies send listeners and immediately submits the accepted packet,
+     * returning that exact object. A {@code null} result means sending was
+     * cancelled or rejected; a nonnull result confirms submission, not delivery
+     * to the remote client.
      */
     public BedrockPacket sendImmediatelyAndGet(AllayPlayer player, BedrockPacket packet) {
         return sendPacket(player, packet, true);
     }
 
     /**
-     * Queues each packet for transmission, applying the send event separately to every packet.
-     *
-     * @param player the sending player
-     * @param packets the outbound packets
+     * Queues collection entries in iteration order, applying send listeners
+     * separately to each packet. Rejection of one entry does not prevent later
+     * entries, while an exception terminates the iteration and leaves prior
+     * submissions intact.
      */
     public void send(AllayPlayer player, Collection<? extends BedrockPacket> packets) {
         for (var packet : packets) {
@@ -234,10 +295,10 @@ public final class ProtocolSession {
     }
 
     /**
-     * Transmits each packet immediately, applying the send event separately to every packet.
-     *
-     * @param player the sending player
-     * @param packets the outbound packets
+     * Immediately submits collection entries in iteration order with separate
+     * send events. Rejected entries are skipped individually; an exception
+     * stops processing subsequent entries without undoing packets already
+     * submitted to the transport.
      */
     public void sendImmediately(AllayPlayer player, Collection<? extends BedrockPacket> packets) {
         for (var packet : packets) {
@@ -245,6 +306,12 @@ public final class ProtocolSession {
         }
     }
 
+    /**
+     * Validates and submits the packet left by send listeners, or returns
+     * {@code null} when rejected. State and transport connectivity are checked
+     * after the event because listeners can disconnect the player; registration
+     * and recipient checks use the negotiated protocol codec.
+     */
     private BedrockPacket sendPacket(AllayPlayer player, BedrockPacket packet, boolean immediately) {
         Objects.requireNonNull(player, "player");
         Objects.requireNonNull(packet, "packet");
@@ -256,6 +323,8 @@ public final class ProtocolSession {
         if (!event.call()) {
             return null;
         }
+        // A listener replacement may be unsupported or serverbound, so validate
+        // the resulting object before choosing either transport send mode.
         var outgoingPacket = event.getPacket();
         if (outgoingPacket == null) {
             log.warn("Refused to send a null packet produced by PacketSendEvent for {}", protocol);
@@ -291,39 +360,37 @@ public final class ProtocolSession {
     }
 
     /**
-     * Returns the current packet-processing state.
-     *
-     * @return the current client state
+     * Returns the packet-processing state currently held by this connection.
      */
     public ClientState getClientState() {
         return processorHolder.getClientState();
     }
 
     /**
-     * Returns the state preceding the most recent successful transition.
-     *
-     * @return the previous state, or {@code null} before the first transition
+     * Returns the state preceding the most recent successful holder transition.
+     * The {@code ProtocolSession} constructor transitions its holder from
+     * {@code DISCONNECTED} to {@code CONNECTED}, so a normally created session
+     * begins with {@code DISCONNECTED} as its previous state.
      */
     public ClientState getLastClientState() {
         return processorHolder.getLastClientState();
     }
 
     /**
-     * Advances the packet-processing state when the requested transition is valid.
-     *
-     * @param state the target state
-     * @return {@code true} if the state changed
+     * Requests a state transition and logs a rejected request. Repeating the
+     * current state or violating the target state predecessor rule returns
+     * {@code false}; success records the former state before publishing the new
+     * state.
      */
     public boolean setClientState(ClientState state) {
         return processorHolder.setClientState(state);
     }
 
     /**
-     * Advances the packet-processing state when the requested transition is valid.
-     *
-     * @param state the target state
-     * @param warnIfFailed whether to log rejected transitions
-     * @return {@code true} if the state changed
+     * Requests a transition with optional warnings for rejected requests. The
+     * holder serializes predecessor validation and updates; repeated states and
+     * invalid predecessors return {@code false}, while successful transitions
+     * retain the previous state.
      */
     public boolean setClientState(ClientState state, boolean warnIfFailed) {
         return processorHolder.setClientState(state, warnIfFailed);

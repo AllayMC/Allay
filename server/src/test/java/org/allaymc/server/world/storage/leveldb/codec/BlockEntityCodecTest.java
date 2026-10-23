@@ -14,14 +14,29 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code BlockEntityCodecTest} checks
+ * empty block-entity records and reconstruction of a stored barrel
+ * position.
+ */
 @ExtendWith(AllayTestExtension.class)
 class BlockEntityCodecTest {
 
+    /**
+     * Serializes a collection that contains no block entities to persist. The
+     * codec must return {@code null}, which the storage layer uses to delete an older
+     * block-entity record.
+     */
     @Test
     void testSerializeEmptyReturnsNull() {
         assertNull(BlockEntityCodec.serialize(List.of()));
     }
 
+    /**
+     * Encodes one barrel block entity and reconstructs it using a mock world
+     * dimension. The result must contain one entity at the original block
+     * coordinates.
+     */
     @Test
     void testSerializeAndDeserialize() {
         var blockEntity = BlockEntityTypes.BARREL.createBlockEntity(
@@ -33,7 +48,8 @@ class BlockEntityCodecTest {
         byte[] data = BlockEntityCodec.serialize(List.of(blockEntity));
         assertNotNull(data);
 
-        // Set up mock world and dimension
+        // Block-entity reconstruction resolves the saved type in the requested world
+        // dimension, so provide that lookup without starting a complete world lifecycle.
         var mockWorld = Mockito.mock(World.class);
         var mockDimension = Mockito.mock(Dimension.class);
         Mockito.when(mockWorld.getDimension(DimensionTypes.OVERWORLD)).thenReturn(mockDimension);
@@ -41,7 +57,6 @@ class BlockEntityCodecTest {
         var deserialized = BlockEntityCodec.deserialize(data, mockWorld, DimensionTypes.OVERWORLD);
         assertFalse(deserialized.isEmpty());
 
-        // Find the block entity - there should be exactly one
         assertEquals(1, deserialized.size());
         var recovered = deserialized.values().iterator().next();
         assertNotNull(recovered);

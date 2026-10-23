@@ -13,16 +13,31 @@ import org.joml.Vector3ic;
 import org.joml.primitives.AABBd;
 
 /**
- * Item component for armor stand placement.
+ * {@code ItemArmorStandBaseComponentImpl} places armor stand entities from item
+ * interactions. Placement checks two replaceable block spaces and rejects an
+ * existing armor stand in the prospective bounds; successful placement copies
+ * the item name, plays a sound, and consumes the held item outside creative mode.
  *
  * @author daoge_cmd
  */
 public class ItemArmorStandBaseComponentImpl extends ItemBaseComponentImpl {
 
+    /**
+     * Creates an armor stand item component from the stack initialization data.
+     */
     public ItemArmorStandBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Handles component-defined use first, then attempts armor stand placement.
+     * After inherited handling declines, a {@code null} interaction, adventure
+     * or spectator player, occupied block space, or overlapping armor stand
+     * returns {@code false}; other entity types
+     * do not reject placement. Successful placement snaps facing to sixteen
+     * directions, copies a nonempty custom name, adds the stand, plays its sound,
+     * and then asks the player to consume the held item.
+     */
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         if (super.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
@@ -36,47 +51,43 @@ public class ItemArmorStandBaseComponentImpl extends ItemBaseComponentImpl {
         var player = interactInfo.player();
         var gameMode = player.getGameMode();
 
-        // Adventure and spectator modes cannot place armor stands
         if (gameMode == GameMode.ADVENTURE || gameMode == GameMode.SPECTATOR) {
             return false;
         }
 
-        // Check if the block at placement position is replaceable
         var blockState = dimension.getBlockState(placeBlockPos);
         if (!blockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return false;
         }
 
-        // Check if the block above is also replaceable (armor stand is 2 blocks tall)
+        // Require the upper space as well because the stand extends beyond its base block.
         var abovePos = new org.joml.Vector3i(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
         var aboveBlockState = dimension.getBlockState(abovePos);
         if (!aboveBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return false;
         }
 
-        // Check for entity collisions at the placement position
         double x = placeBlockPos.x() + 0.5;
         double y = placeBlockPos.y();
         double z = placeBlockPos.z() + 0.5;
+        // Match the stand's placement bounds so an existing stand cannot be stacked into this footprint.
         var armorStandAABB = new AABBd(x - 0.25, y, z - 0.25, x + 0.25, y + 1.975, z + 0.25);
 
         var collidingEntities = dimension.getEntityManager().getPhysicsService()
                 .computeCollidingEntities(armorStandAABB);
 
-        // Check if any colliding entity is an armor stand (prevent stacking)
         for (var entity : collidingEntities) {
             if (entity instanceof EntityArmorStand) {
                 return false;
             }
         }
 
-        // Calculate yaw based on player's facing direction (opposite direction)
+        // Face the stand toward the player, then snap its rotation to the sixteen
+        // placement directions represented by increments of 22.5 degrees.
         double yaw = (player.getLocation().yaw() + 180) % 360;
 
-        // Round yaw to nearest 22.5 degrees for 16-direction precision (like Bedrock)
         yaw = Math.round(yaw / 22.5) * 22.5;
 
-        // Create and spawn the armor stand
         var entity = EntityTypes.ARMOR_STAND.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
@@ -85,7 +96,6 @@ public class ItemArmorStandBaseComponentImpl extends ItemBaseComponentImpl {
                         .build()
         );
 
-        // Apply custom name from item if present
         var customName = thisItemStack.getCustomName();
         if (customName != null && !customName.isEmpty()) {
             entity.setNameTag(customName);
@@ -93,13 +103,11 @@ public class ItemArmorStandBaseComponentImpl extends ItemBaseComponentImpl {
 
         dimension.getEntityManager().addEntity(entity);
 
-        // Play placement sound
         dimension.addSound(
                 entity.getLocation(),
                 SimpleSound.ARMOR_STAND_PLACE
         );
 
-        // Consume item in survival/adventure mode
         player.tryConsumeItemInHand();
 
         return true;

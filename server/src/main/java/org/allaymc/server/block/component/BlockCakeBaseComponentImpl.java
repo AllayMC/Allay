@@ -20,23 +20,42 @@ import java.util.Set;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.BITE_COUNTER;
 
 /**
- * Base component for cake block behavior.
- * <p>
- * Cake can be eaten in 7 bites (bite_counter 0-6), each bite restores 2 food and 0.4 saturation.
- * Candles can be placed on a full cake (bite_counter = 0) to create candle cake.
+ * {@code BlockCakeBaseComponentImpl} implements cake eating, support loss, and
+ * comparator output. {@code FOOD_POINTS_PER_SLICE} and {@code SATURATION_PER_SLICE}
+ * define nourishment for each consumed slice, while {@code MAX_BITES} identifies the
+ * last stored bite count before a further bite removes the cake.
  *
  * @author daoge_cmd
  */
 public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * Food points per slice.
+     */
     public static final int FOOD_POINTS_PER_SLICE = 2;
+    /**
+     * Saturation points per slice.
+     */
     public static final float SATURATION_PER_SLICE = 0.4f;
+    /**
+     * Last stored bite count.
+     */
     public static final int MAX_BITES = 6;
 
+    /**
+     * Creates the cake block behavior for the supplied block type.
+     */
     public BlockCakeBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Handles one cake bite when player context is present and the player can eat. A
+     * candle on an unbitten cake returns {@code false} so item placement can handle
+     * the interaction. Eating attempts the bite-state write before notifying
+     * comparators, nourishing the player, and playing its sound; a refused state
+     * change still permits those later effects and a {@code true} result.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) {
@@ -47,45 +66,36 @@ public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
         var pos = interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
         var bites = blockState.getPropertyValue(BlockPropertyTypes.BITE_COUNTER);
-
-        // If player is holding a candle and cake is full, let the candle handle placement
+        // An unbitten cake can receive a candle. Leave this interaction unhandled so
+        // the candle item can perform its placement behavior.
         if (bites == 0 && itemStack instanceof ItemCandleStack) {
             return false;
         }
-
-        // Check if player can eat
         if (!player.canEat()) {
             return false;
         }
-
-        // Increment bite counter
         var newBites = bites + 1;
 
         if (newBites > MAX_BITES) {
-            // Cake is fully eaten, break the block
             dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
         } else {
-            // Update bite counter
             dimension.updateBlockProperty(BlockPropertyTypes.BITE_COUNTER, newBites, pos);
         }
-
-        // Update comparators that may be reading this cake
         dimension.updateComparatorOutputLevel(pos);
-
-        // Add food and saturation to player
         player.saturate(FOOD_POINTS_PER_SLICE, SATURATION_PER_SLICE);
-
-        // Play eating sound
         dimension.addSound(MathUtils.center(pos), SimpleSound.BURP);
 
         return true;
     }
 
+    /**
+     * Forwards the neighbor event and breaks the cake when its lower support becomes
+     * nonsolid. Other neighbor faces leave support handling unchanged, and break
+     * handling supplies the ordinary empty cake drops.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
-
-        // Break cake if support block is removed
         if (face == BlockFace.DOWN) {
             var belowState = neighbor.getBlockState();
             if (!belowState.getBlockStateData().isSolid()) {
@@ -94,22 +104,33 @@ public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns an empty ordinary drop set when cake is broken. Cake eating is handled
+     * by the interaction hook, and breaking does not produce cake items through this
+     * drop selection.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        // Cake doesn't drop anything when broken
         return Set.of();
     }
 
+    /**
+     * Returns whether cake supports comparator input regardless of remaining slices.
+     */
     @Override
     public boolean hasComparatorInputOverride() {
         return true;
     }
 
+    /**
+     * Returns two comparator power units per remaining cake slice. A full cake
+     * produces {@code 14}, and the last stored bite count produces {@code 2} before
+     * another bite removes the block.
+     */
     @Override
     public int getComparatorInputOverride(Block block) {
-        // Signal = (7 - bites) * 2
-        // Full cake (0 bites) = 14, 1 bite = 12, ..., 6 bites = 2
         int bites = block.getPropertyValue(BITE_COUNTER);
+        // Two power units per slice make an untouched seven-slice cake emit fourteen.
         return (MAX_BITES + 1 - bites) * 2;
     }
 }

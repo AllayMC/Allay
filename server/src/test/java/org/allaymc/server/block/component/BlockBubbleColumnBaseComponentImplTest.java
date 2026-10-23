@@ -19,15 +19,31 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Allay Project 2026/7/12
+ * {@code BlockBubbleColumnBaseComponentImplTest} exercises bubble column conversion,
+ * direction changes, restoration, and flowing-water boundaries. A mocked dimension
+ * stores states by height and layer so each case can inspect foreground columns and
+ * their retained water independently.
  *
  * @author Miroshka000
  */
 @ExtendWith(AllayTestExtension.class)
 class BlockBubbleColumnBaseComponentImplTest {
+    /**
+     * {@code blocks} stores foreground and retained-layer states for this test
+     * instance. {@code setUp} connects mocked dimension reads and accepted writes to
+     * this shared map.
+     */
     private final Map<Cell, BlockState> blocks = new HashMap<>();
+    /**
+     * Mocked dimension under test.
+     */
     private Dimension dimension;
 
+    /**
+     * Connects a real-default-method dimension mock to the test's height-and-layer
+     * state map. Reads return air for absent cells, writes always succeed, and the
+     * mock accepts all queried heights.
+     */
     @BeforeEach
     void setUp() {
         dimension = mock(Dimension.class, CALLS_REAL_METHODS);
@@ -47,6 +63,11 @@ class BlockBubbleColumnBaseComponentImplTest {
         );
     }
 
+    /**
+     * Builds a three-block source-water column above soul sand and below stone. Every
+     * source position must become an upward bubble column with retained source water,
+     * and stone must remain unchanged.
+     */
     @Test
     void shouldBuildBubbleColumnThroughAllSourceWaterBlocks() {
         setMainBlock(0, BlockTypes.SOUL_SAND.getDefaultState());
@@ -66,6 +87,11 @@ class BlockBubbleColumnBaseComponentImplTest {
         assertEquals(BlockTypes.STONE, getBlock(4, 0).getBlockType());
     }
 
+    /**
+     * Builds an upward column and replaces its soul sand generator with magma.
+     * Refreshing the same starting position must switch every existing column block
+     * to downward drag.
+     */
     @Test
     void shouldUpdateDirectionForTheWholeExistingColumn() {
         setMainBlock(0, BlockTypes.SOUL_SAND.getDefaultState());
@@ -82,6 +108,11 @@ class BlockBubbleColumnBaseComponentImplTest {
         }
     }
 
+    /**
+     * Builds a two-block column and replaces its generator with ordinary stone.
+     * Refreshing must restore foreground source water at both heights and clear the
+     * previously retained water layer.
+     */
     @Test
     void shouldRestoreWaterWhenGeneratorIsRemoved() {
         setMainBlock(0, BlockTypes.SOUL_SAND.getDefaultState());
@@ -100,6 +131,11 @@ class BlockBubbleColumnBaseComponentImplTest {
         }
     }
 
+    /**
+     * Places source water below a flowing-water state with nonzero depth. The source
+     * position must convert to a bubble column while the flowing position remains
+     * unchanged.
+     */
     @Test
     void shouldStopAtFlowingWater() {
         setMainBlock(0, BlockTypes.SOUL_SAND.getDefaultState());
@@ -113,14 +149,28 @@ class BlockBubbleColumnBaseComponentImplTest {
         assertEquals(BlockTypes.FLOWING_WATER, getBlock(2, 0).getBlockType());
     }
 
+    /**
+     * Stores the supplied state at one height in the foreground layer.
+     */
     private void setMainBlock(int y, BlockState state) {
         blocks.put(new Cell(y, 0), state);
     }
 
+    /**
+     * Returns the stored state at the requested height and layer. An absent cell
+     * returns the registered default air state, matching the mocked dimension's
+     * empty-position behavior in these tests.
+     */
     private BlockState getBlock(int y, int layer) {
         return blocks.getOrDefault(new Cell(y, layer), BlockTypes.AIR.getDefaultState());
     }
 
+    /**
+     * {@code Cell} identifies one mocked block position by height and layer.
+     *
+     * @param y block height coordinate
+     * @param layer block storage layer index
+     */
     private record Cell(int y, int layer) {
     }
 }

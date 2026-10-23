@@ -5,29 +5,61 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.feature.WorldFeatureContext;
 
 /**
- * Huge brown mushroom feature.
- * Generates a mushroom with a flat 7x7 cap at the top.
+ * {@code HugeBrownMushroomFeature} places a brown mushroom with a flat
+ * seven-by-seven cap whose four outer corners are omitted. Shared mushroom
+ * checks validate the substrate, stem column, and complete cap square before
+ * any feature writes begin.
+ *
+ * <p>
+ * Cap metadata combines independent horizontal edge observations: west or east
+ * changes the center value by one, while north or south changes it by three.
+ * Interior positions retain the center value, and omitted outer corners are
+ * never written by the cap loop. The clearance square still includes those
+ * omitted corners, so an obstruction there can reject growth before placement.
+ * After admission, each selected position is rechecked for replaceability and
+ * skipped if blocked, without undoing earlier stem or cap writes.
  *
  * @author daoge_cmd
  */
 public class HugeBrownMushroomFeature extends HugeMushroomFeature {
 
+    /**
+     * Registered brown huge-mushroom feature key. The runtime uses this
+     * identifier when constructing the built-in placement feature.
+     */
     public static final Identifier IDENTIFIER = new Identifier("minecraft:huge_brown_mushroom");
 
+    /**
+     * Creates and immediately registers the built-in brown huge-mushroom
+     * feature. The constructor selects its fixed cap material, while shared
+     * height sampling and substrate checks remain in the mushroom base.
+     */
     public HugeBrownMushroomFeature() {
         super(IDENTIFIER, BlockTypes.BROWN_MUSHROOM_BLOCK);
     }
 
+    /**
+     * Returns the horizontal clearance radius of three for the brown cap.
+     */
     @Override
     protected int getCapRadius() {
         return 3;
     }
 
+    /**
+     * Returns the stem height as the single brown cap layer.
+     */
     @Override
     protected int getCapStartY(int height) {
-        return height; // Single layer at the top
+        return height; // cap occupies the level above the stem
     }
 
+    /**
+     * Attempts brown mushroom placement after shared substrate and
+     * complete-volume checks. Rejection returns {@code false} before mutation;
+     * accepted placement writes the stem before the cap and provides no
+     * rollback for later exceptions.
+     */
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
         int height = calculateHeight();
@@ -42,13 +74,18 @@ public class HugeBrownMushroomFeature extends HugeMushroomFeature {
         return true;
     }
 
+    /**
+     * Places the brown cap at the level above the stem using a seven-by-seven
+     * square without outer corners. Each remaining position receives
+     * directional metadata only when its current state remains replaceable.
+     */
     @Override
     protected void placeCap(WorldFeatureContext context, int x, int y, int z, int height) {
         int capY = y + height;
 
         for (int dx = -3; dx <= 3; dx++) {
             for (int dz = -3; dz <= 3; dz++) {
-                // Skip corners (where both x and z are at +-3)
+                // Omitting the four outer corners rounds the flat brown cap outline.
                 if (Math.abs(dx) == 3 && Math.abs(dz) == 3) {
                     continue;
                 }
@@ -62,16 +99,22 @@ public class HugeBrownMushroomFeature extends HugeMushroomFeature {
     }
 
     /**
-     * Calculate the HUGE_MUSHROOM_BITS metadata for a brown mushroom cap position.
+     * Returns mushroom-face metadata by combining the position's X and Z edge
+     * classifications. The cap loop calls this helper for coordinates within
+     * radius three after omitting the four outer corners.
+     *
      * <p>
-     * Cap metadata values:
-     * 1=NW, 2=N, 3=NE, 4=W, 5=CENTER, 6=E, 7=SW, 8=S, 9=SE, 14=ALL_OUTSIDE
-     * <p>
-     * For the flat brown cap, edge/corner positions get directional metadata,
-     * interior positions get CENTER (5) with cap on top only.
+     * The center value starts at five. West and east edges contribute negative
+     * or positive one, while north and south contribute negative or positive
+     * three, preserving both axes in one metadata index. Interior positions
+     * contribute neither adjustment and retain the center value; the helper
+     * itself performs no radius validation or block writes.
      */
     private int calculateCapBits(int dx, int dz) {
-        int bits = 5; // CENTER
+        // The cap combines two independent edge offsets into one mushroom
+        // metadata value, preserving X and Z contributions through separate
+        // increments before block-state construction.
+        int bits = 5;
 
         if (dx == -3) bits--; // west edge
         if (dx == 3) bits++; // east edge

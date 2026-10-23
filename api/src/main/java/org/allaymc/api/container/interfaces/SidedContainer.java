@@ -5,25 +5,25 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * A container that restricts insertion/extraction by side.
+ * {@code SidedContainer} describes which container slots automation may insert into or
+ * extract from for a block face. Implementations return candidate indices rather than
+ * moving items; an empty result denies access, and consumers must handle {@code null} as
+ * the unrestricted sentinel.
  *
  * @author ClexaGod
  */
 public interface SidedContainer extends Container {
     /**
-     * Gets the allowed insert slots for the given side and item.
-     *
-     * @param side  the side the item is inserted from
-     * @param stack the item being inserted
-     * @return allowed slots, empty for none, or {@code null} for no restriction
+     * Returns insertion candidates for the supplied face and item stack. An empty array
+     * denies insertion, while {@code null} lets transfer code consider every slot;
+     * callers still perform capacity and merging checks.
      */
     int[] getAllowedInsertSlots(BlockFace side, ItemStack stack);
 
     /**
-     * Gets the allowed extract slots for the given side.
-     *
-     * @param side the side the item is extracted from
-     * @return allowed slots, empty for none, or {@code null} for no restriction
+     * Returns extraction candidates for the supplied block face. An empty array denies
+     * extraction, while {@code null} represents unrestricted access; consumers must
+     * handle that sentinel before iterating the returned slot indices.
      */
     int[] getAllowedExtractSlots(BlockFace side);
 }

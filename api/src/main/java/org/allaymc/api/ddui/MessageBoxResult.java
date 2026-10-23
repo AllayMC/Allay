@@ -1,7 +1,9 @@
 package org.allaymc.api.ddui;
 
 /**
- * Button results produced by {@link org.allaymc.api.ddui.type.MessageBoxScreen}.
+ * {@code MessageBoxResult} identifies which message-box button the viewer selected. A message-box
+ * session reports a button result through response callbacks; closing the screen without selecting
+ * a button instead uses the separate screen-close callback and reason.
  *
  * @author daoge_cmd | SerenityJS
  */

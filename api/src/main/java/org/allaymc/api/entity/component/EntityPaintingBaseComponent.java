@@ -3,23 +3,25 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.entity.data.PaintingType;
 
 /**
- * Shared component for painting entities that store their selected painting variant.
+ * {@code EntityPaintingBaseComponent} exposes the painting variant attached to
+ * a painting entity. The selected {@link PaintingType} determines its title
+ * and dimensions for persistence and client presentation, while the common
+ * base component continues to provide location and lifecycle behavior.
  *
  * @author daoge_cmd
  */
 public interface EntityPaintingBaseComponent extends EntityBaseComponent {
     /**
-     * Retrieves the type of painting associated with this component.
-     *
-     * @return the {@code PaintingType} of this entity's painting
+     * Returns the painting variant currently assigned to this entity.
      */
     PaintingType getPaintingType();
 
     /**
-     * Sets the type of the painting for this entity.
+     * Selects the painting variant used by this entity's presentation and
+     * bounds. The server rejects {@code null}; changing this value does not
+     * itself respawn the painting to existing viewers.
      *
-     * @param paintingType the {@code PaintingType} to be set for the painting.
-     *                     Must not be {@code null}.
+     * @throws NullPointerException if {@code paintingType} is {@code null}
      */
     void setPaintingType(PaintingType paintingType);
 }

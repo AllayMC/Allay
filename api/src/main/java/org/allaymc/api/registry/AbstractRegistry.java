@@ -6,22 +6,22 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * A wrapper around a value which is loaded based on the output from the provided
- * {@link RegistryLoader}. This class is primarily designed to hold a registration
- * of some kind, however no limits are set on what it can hold, as long as the
- * specified RegistryLoader returns the same value type that is specified in the
- * generic.
+ * {@code AbstractRegistry} holds loaded content and controls mutations made
+ * through the registry's methods. {@code register} and {@code setContent} check
+ * {@code frozen} while holding the registry monitor. {@code freeze} takes that same
+ * monitor, so another thread cannot begin a registry mutation after freezing
+ * has acquired it and set the flag.
  *
  * <p>
- * Below, a RegistryLoader is taken in the constructor. RegistryLoaders have two
- * generic types: the input, and the output. The input is what it takes in, whether
- * it be a string which references to a file, or nothing more than an integer. The
- * output is what it generates based on the input, and should be the same type as
- * the {@link CONTENT} generic specified in the registry.
+ * {@code content} is retained and exposed by reference. This base class does not copy
+ * or make the content immutable when frozen; subclasses may replace it with
+ * a snapshot. Direct mutation through an exposed reference bypasses registry
+ * checks, and a registration callback can reenter synchronized methods on the
+ * same thread. Unsynchronized content reads require appropriate publication
+ * or caller coordination when content is replaced concurrently.
  *
  * <p>
- * Registries can be very simple to create. Here is an example that simply parses a
- * number given a string:
+ * A loader can transform an input value directly:
  *
  * <pre>
  * {@code
@@ -29,49 +29,84 @@ import java.util.function.Consumer;
  * }
  * </pre>
  *
- * <p>
- * This is a simple example which really wouldn't have much of a practical use,
- * however it demonstrates a fairly basic use case of how this system works. Typically
- * though, the first parameter would be a location of some sort, such as a file path
- * where the loader will load the mappings from.
- *
  * @param <CONTENT> the value being held by the registry
  *
  * @author GeyserMC | daoge_cmd
  */
 @Getter
 public abstract class AbstractRegistry<CONTENT> implements Registry<CONTENT> {
+    /**
+     * {@code content} holds the loader result or last replacement.
+     * {@code getContent()} returns this same reference, whose mutability
+     * depends on the concrete registry.
+     */
     protected CONTENT content;
+    /**
+     * {@code frozen} makes registry mutation checks reject changes once set.
+     * Its volatile read exposes freeze state without acquiring the mutation
+     * monitor.
+     */
     protected volatile boolean frozen;
 
+    /**
+     * Loads initial content immediately using the supplied input and loader.
+     * The result is stored without copying or {@code null} validation, so the
+     * loader defines the initial content's ownership and validity.
+     */
     protected <INPUT> AbstractRegistry(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
         this.content = registryLoader.load(input);
     }
 
+    /**
+     * Passes current content to the consumer after checking that mutation is
+     * allowed. The consumer runs under the registry monitor; exceptions retain
+     * any mutations already made, and retained content references bypass later
+     * freeze checks.
+     *
+     * @throws IllegalStateException if the registry is already frozen
+     */
     @Override
     public synchronized void register(Consumer<CONTENT> consumer) {
         ensureMutable();
         consumer.accept(content);
     }
 
+    /**
+     * Replaces the stored reference with the supplied nonnull content. Existing
+     * references to the previous value remain usable; this method neither
+     * clears nor closes the previous content.
+     *
+     * @throws IllegalStateException if the registry is frozen
+     * @throws NullPointerException if {@code content} is {@code null}
+     */
     @Override
     public synchronized void setContent(CONTENT content) {
         ensureMutable();
         this.content = Objects.requireNonNull(content, "content");
     }
 
+    /**
+     * Marks the registry frozen while holding its mutation monitor. Repeated
+     * calls leave it frozen, but the underlying content reference remains
+     * unchanged and can still expose mutable objects.
+     */
     @Override
     public synchronized void freeze() {
         frozen = true;
     }
 
+    /**
+     * Returns whether the registry's mutation checks now reject changes.
+     */
     @Override
     public boolean isFrozen() {
         return frozen;
     }
 
     /**
-     * Ensures that a mutating operation may still proceed.
+     * Rejects a mutation when this registry has been frozen. Callers must hold
+     * the registry monitor across this check and their mutation when
+     * coordinating with concurrent {@code freeze} calls.
      *
      * @throws IllegalStateException if this registry is frozen
      */

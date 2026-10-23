@@ -9,7 +9,11 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
- * Called when a player joins the server.
+ * {@code PlayerJoinEvent} represents the client's completed local-player
+ * initialization awaiting server acceptance.
+ * The player has passed the spawn stage, but the server enters its in-game
+ * state only after this event is accepted. Cancellation disconnects the player;
+ * acceptance permits the configurable join announcement.
  *
  * @author daoge_cmd
  */
@@ -17,19 +21,25 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.NETWORK)
 public class PlayerJoinEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
-     * The message that will be broadcast if the event is not cancelled.
+     * {@code joinMessage} supplies the translatable announcement after acceptance,
+     * with the player's name as an argument. {@code null} or blank text suppresses
+     * the broadcast.
      */
     @MayContainTrKey
     @Setter
     protected String joinMessage;
 
     /**
-     * The reason that will be shown to the player if the event is cancelled.
+     * {@code disconnectReason} supplies the text shown to the player when this
+     * event is cancelled before the session enters its in-game state.
      */
     @MayContainTrKey
     @Setter
     protected String disconnectReason;
 
+    /**
+     * Creates an initialization request carrying announcement and rejection text.
+     */
     public PlayerJoinEvent(Player player, String joinMessage, String disconnectReason) {
         super(player);
         this.joinMessage = joinMessage;

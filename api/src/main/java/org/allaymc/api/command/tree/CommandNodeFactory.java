@@ -16,324 +16,271 @@ import org.joml.Vector3fc;
 import java.util.List;
 
 /**
- * The {@code CommandNodeFactory} interface defines the structure for creating various types of
- * command nodes. Each command node can hold a specific type of data, such as strings, numbers,
- * game elements, and entities, and it defines how arguments are processed in the command execution tree.
- * <p>
- * This factory is held as an {@link AllayAPI.APIInstanceHolder} and can be accessed using {@link #getFactory()}.
- * The factory allows users to create nodes with different types, and their default values, which are
- * used in command arguments parsing.
+ * {@code CommandNodeFactory} creates parameter nodes for the installed
+ * command-tree implementation. Factory methods retain a parent reference but do
+ * not attach the new node; callers use {@code CommandNode.addLeaf} to complete
+ * attachment. Supplied defaults are stored directly and become omission results
+ * only after callers mark a node optional.
  *
  * @author daoge_cmd
  */
 public interface CommandNodeFactory {
+    /**
+     * {@code FACTORY} holds the installed parameter-node factory. Server
+     * initialization must populate it before fluent tree builders request nodes
+     * through {@code getFactory}.
+     */
     AllayAPI.APIInstanceHolder<CommandNodeFactory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
+    /**
+     * Returns the installed node factory from its shared API instance holder.
+     */
     static CommandNodeFactory getFactory() {
         return FACTORY.get();
     }
 
     /**
-     * Creates a command node for a key-based argument.
-     *
-     * @param key          the key name
-     * @param parent       the parent node
-     * @param defaultValue the default value of the key
-     * @return a new {@code CommandNode} for the key
+     * Creates an unattached literal-key node producing {@code String} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The configured key
+     * is lowercased at construction and matching is case-sensitive.
      */
     CommandNode key(String key, CommandNode parent, String defaultValue);
 
     /**
-     * Creates a command node for a string-based argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default string value
-     * @return a new {@code CommandNode} for the string argument
+     * Creates an unattached single-token string node producing {@code String}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher retains
+     * the supplied token without additional quote processing.
      */
     CommandNode str(String name, CommandNode parent, String defaultValue);
 
     /**
-     * Creates a command node for a short number argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default short value
-     * @return a new {@code CommandNode} for the short number argument
+     * Creates an unattached short integer node producing {@code Short} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher uses the
+     * signed decimal short parser.
      */
     CommandNode shortNum(String name, CommandNode parent, short defaultValue);
 
     /**
-     * Creates a command node for an integer argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default integer value
-     * @return a new {@code CommandNode} for the integer argument
+     * Creates an unattached integer node producing {@code Integer} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher uses the
+     * signed decimal integer parser.
      */
     CommandNode intNum(String name, CommandNode parent, int defaultValue);
 
     /**
-     * Creates a command node for a long number argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default long value
-     * @return a new {@code CommandNode} for the long number argument
+     * Creates an unattached long integer node producing {@code Long} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher uses the
+     * signed decimal long parser.
      */
     CommandNode longNum(String name, CommandNode parent, long defaultValue);
 
     /**
-     * Creates a command node for a float number argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default float value
-     * @return a new {@code CommandNode} for the float number argument
+     * Creates an unattached floating-point node producing {@code Float} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher uses the
+     * Java floating-point parser.
      */
     CommandNode floatNum(String name, CommandNode parent, float defaultValue);
 
     /**
-     * Creates a command node for a double number argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default double value
-     * @return a new {@code CommandNode} for the double number argument
+     * Creates an unattached double-precision node producing {@code Double}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher uses the
+     * Java double-precision parser.
      */
     CommandNode doubleNum(String name, CommandNode parent, double defaultValue);
 
     /**
-     * Creates a command node for a boolean argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default boolean value
-     * @return a new {@code CommandNode} for the boolean argument
+     * Creates an unattached boolean node producing {@code Boolean} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher accepts
+     * only the exact tokens {@code "true"} and {@code "false"}.
      */
     CommandNode bool(String name, CommandNode parent, boolean defaultValue);
 
     /**
-     * Creates a command node for an enum argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default enum value as a string
-     * @param enums        the available enum options
-     * @return a new {@code CommandNode} for the enum argument
+     * Creates an unattached case-sensitive enumeration node producing
+     * {@code String} during parsing. The node retains {@code parent} and
+     * {@code defaultValue}; callers attach it and enable optionality
+     * separately. The server lowercases the supplied values array in place
+     * during construction.
      */
     CommandNode enums(String name, CommandNode parent, String defaultValue, String[] enums);
 
     /**
-     * Creates a command node for an enum argument, allowing a custom enum name.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param enumName     the name of the enum
-     * @param defaultValue the default enum value as a string
-     * @param values       the available enum options
-     * @return a new {@code CommandNode} for the enum argument
+     * Creates an unattached case-sensitive enumeration node producing
+     * {@code String} during parsing. The node retains {@code parent} and
+     * {@code defaultValue}; callers attach it and enable optionality
+     * separately. The server lowercases the supplied values array in place
+     * during construction.
      */
     CommandNode enums(String name, CommandNode parent, String enumName, String defaultValue, String[] values);
 
     /**
-     * Creates a command node for an enum argument, ignoring case.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default enum value as a string
-     * @param enums        the available enum options
-     * @return a new {@code CommandNode} for the case-insensitive enum argument
+     * Creates an unattached case-insensitive enumeration node producing
+     * {@code String} during parsing. The node retains {@code parent} and
+     * {@code defaultValue}; callers attach it and enable optionality
+     * separately. The server lowercases the supplied values array in place
+     * while preserving matched input in the result.
      */
     CommandNode enumsIgnoreCase(String name, CommandNode parent, String defaultValue, String[] enums);
 
     /**
-     * Creates a command node for an enum argument with a custom name, ignoring case.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param enumName     the custom name of the enum
-     * @param defaultValue the default enum value as a string
-     * @param enums        the available enum options
-     * @return a new {@code CommandNode} for the case-insensitive enum argument
+     * Creates an unattached case-insensitive enumeration node producing
+     * {@code String} during parsing. The node retains {@code parent} and
+     * {@code defaultValue}; callers attach it and enable optionality
+     * separately. The server lowercases the supplied values array in place
+     * while preserving matched input in the result.
      */
     CommandNode enumsIgnoreCase(String name, CommandNode parent, String enumName, String defaultValue, String[] enums);
 
     /**
-     * Creates a command node for an enum argument to this command node based on the specified enum class.
-     * Unlike {@link #enums}, the string result will then be mapped back to the type of
-     * the provided enum class, which means that you don't need to map string back to
-     * enum manually.
-     *
-     * @param name      the name of the parameter
-     * @param parent    the parent node
-     * @param enumClass the class of the enum type
-     * @return a new {@code CommandNode} for the enum class argument
+     * Creates an unattached enum-class node producing the matching enum
+     * constant during parsing. The node retains {@code parent} and
+     * {@code defaultValue}; callers attach it and enable optionality
+     * separately. The matcher accepts enum constant names without case
+     * sensitivity.
      */
     <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, Class<T> enumClass);
 
 
     /**
-     * Creates a command node for an enum argument to this command node based on the specified enum class.
-     * Unlike {@link #enums}, the string result will then be mapped back to the type of
-     * the provided enum class, which means that you don't need to map string back to
-     * enum manually.
-     *
-     * @param name      the name of the parameter
-     * @param parent    the parent node
-     * @param enumName  the custom name of the enum
-     * @param enumClass the class of the enum type
-     * @return a new {@code CommandNode} for the enum class argument
+     * Creates an unattached enum-class node producing the matching enum
+     * constant during parsing. The node retains {@code parent} and
+     * {@code defaultValue}; callers attach it and enable optionality
+     * separately. The matcher accepts enum constant names without case
+     * sensitivity.
      */
     <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, String enumName, Class<T> enumClass);
 
     /**
-     * Creates a command node for a message argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default message value
-     * @return a new {@code CommandNode} for the message argument
+     * Creates an unattached remaining-message node producing {@code String}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher consumes
+     * all remaining tokens and joins them with spaces.
      */
     CommandNode msg(String name, CommandNode parent, String defaultValue);
 
     /**
-     * Creates a command node for the remaining arguments.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default value for the remaining arguments
-     * @return a new {@code CommandNode} for the remaining arguments
+     * Creates an unattached remaining-token node producing {@code List<String>}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher consumes
+     * all remaining tokens and keeps their individual values in a new list.
      */
     CommandNode remain(String name, CommandNode parent, List<String> defaultValue);
 
     /**
-     * Creates a command node for a target argument that allows selecting multiple entities.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default target entities
-     * @return a new {@code CommandNode} for the target argument
+     * Creates an unattached entity-target node producing {@code List<Entity>}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher accepts
+     * a selector or player name and permits an empty selection.
      */
     CommandNode target(String name, CommandNode parent, List<Entity> defaultValue);
 
     /**
-     * Creates a command node for a player target argument that allows selecting multiple player entities.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default target player entities
-     * @return a new {@code CommandNode} for the player target argument
+     * Creates an unattached player-target node producing
+     * {@code List<EntityPlayer>} during parsing. The node retains
+     * {@code parent} and {@code defaultValue}; callers attach it and enable
+     * optionality separately. The matcher accepts a selector or player name and
+     * removes non-player entities.
      */
     CommandNode playerTarget(String name, CommandNode parent, List<EntityPlayer> defaultValue);
 
     /**
-     * Creates a command node for a game mode argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default game mode
-     * @return a new {@code CommandNode} for the game mode argument
+     * Creates an unattached game-mode node producing {@code GameMode} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher accepts
+     * exact lowercase aliases, including {@code "3"}, {@code "spectator"}, and
+     * {@code "spc"} for spectator mode.
      */
     CommandNode gameMode(String name, CommandNode parent, GameMode defaultValue);
 
     /**
-     * Creates a command node for a position argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default position (vector)
-     * @return a new {@code CommandNode} for the position argument
+     * Creates an unattached position node whose matched result is
+     * {@code org.joml.Vector3d}. Optional omission instead returns the retained
+     * {@code Vector3fc} default without conversion, so executors must
+     * distinguish those result types. The caller attaches the node and
+     * configures optionality separately.
      */
     CommandNode pos(String name, CommandNode parent, Vector3fc defaultValue);
 
     /**
-     * Creates a command node for a wildcard target argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default wildcard target
-     * @return a new {@code CommandNode} for the wildcard target argument
+     * Creates an unattached wildcard-target node producing {@code String}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher accepts
+     * one token without resolving it into entities.
      */
     CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue);
 
     /**
-     * Creates a command node for an enchantment type argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default enchantment type
-     * @return a new {@code CommandNode} for the enchantment type argument
+     * Creates an unattached enchantment-type node producing
+     * {@code EnchantmentType} during parsing. The node retains {@code parent}
+     * and {@code defaultValue}; callers attach it and enable optionality
+     * separately. The matcher accepts snapshotted full enchantment identifiers
+     * or their bare paths; bare paths use the default namespace for lookup.
      */
     CommandNode enchantment(String name, CommandNode parent, EnchantmentType defaultValue);
 
     /**
-     * Creates a command node for an effect type argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default effect type
-     * @return a new {@code CommandNode} for the effect type argument
+     * Creates an unattached effect-type node producing {@code EffectType}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher accepts
+     * snapshotted bare effect paths and resolves them in the default namespace.
      */
     CommandNode effect(String name, CommandNode parent, EffectType defaultValue);
 
     /**
-     * Creates a command node for an item type argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default item type
-     * @return a new {@code CommandNode} for the item type argument
+     * Creates an unattached item-type node producing {@code ItemType<?>} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher resolves
+     * a registered item identifier through the item registry.
      */
     CommandNode itemType(String name, CommandNode parent, ItemType<?> defaultValue);
 
     /**
-     * Creates a command node for a block type argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default block type
-     * @return a new {@code CommandNode} for the block type argument
+     * Creates an unattached block-type node producing {@code BlockType<?>}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher resolves
+     * a registered block identifier through the block registry.
      */
     CommandNode blockType(String name, CommandNode parent, BlockType<?> defaultValue);
 
     /**
-     * Creates a command node for an entity type argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default entity type
-     * @return a new {@code CommandNode} for the entity type argument
+     * Creates an unattached entity-type node producing {@code EntityType<?>}
+     * during parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher resolves
+     * a registered entity identifier through the entity registry.
      */
     CommandNode entityType(String name, CommandNode parent, EntityType<?> defaultValue);
 
     /**
-     * Creates a command node for a difficulty argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default difficulty level
-     * @return a new {@code CommandNode} for the difficulty argument
+     * Creates an unattached difficulty node producing {@code Difficulty} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The matcher
+     * recognizes the difficulty parser's supported numeric and named aliases.
      */
     CommandNode difficulty(String name, CommandNode parent, Difficulty defaultValue);
 
     /**
-     * Creates a command node for block property values.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default list of block property values
-     * @return a new {@code CommandNode} for block property values
+     * Creates an unattached block-property node producing
+     * {@code List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>} during
+     * parsing. The node retains {@code parent} and {@code defaultValue};
+     * callers attach it and enable optionality separately. The parent must be a
+     * block-type node because parsing reads the preceding block result.
      */
     CommandNode blockPropertyValues(String name, CommandNode parent, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue);
 
     /**
-     * Creates a command node for a command argument.
-     *
-     * @param name         the name of the argument
-     * @param parent       the parent node
-     * @param defaultValue the default command
-     * @return a new {@code CommandNode} for the command argument
+     * Creates an unattached node for reconstructing remaining tokens as command
+     * text. Matching joins and trims tokens, re-quotes literal-space tokens,
+     * and leaves embedded quotes unescaped; redispatch callers must account for
+     * those limits. Optional omission inserts the retained
+     * {@code defaultValue}.
      */
     CommandNode cmd(String name, CommandNode parent, String defaultValue);
 }

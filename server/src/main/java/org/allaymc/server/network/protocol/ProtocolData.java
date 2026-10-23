@@ -10,15 +10,23 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Immutable protocol-specific payload data produced during protocol initialization.
- *
- * <p>All collections are defensively copied.</p>
+ * {@code ProtocolData} represents the definitions, creative inventory, custom
+ * blocks, and recipe table prepared for one protocol. The constructor copies
+ * {@code itemDefinitions}, {@code blockDefinitions}, {@code creativeGroups},
+ * {@code creativeItems}, and {@code customBlockProperties} into unmodifiable
+ * list containers. Their element objects and {@code recipeTable} remain shared;
+ * this record does not provide a deep snapshot of mutable payloads.
  *
  * @param itemDefinitions item definitions in network order
- * @param blockDefinitions block definitions in network order
+ *
+ * @param blockDefinitions block definitions in source registry order
+ *
  * @param creativeGroups creative inventory groups in network order
+ *
  * @param creativeItems creative inventory entries in network order
+ *
  * @param customBlockProperties custom block properties in network order
+ *
  * @param recipeTable encoded recipes and their server-side lookup index
  */
 public record ProtocolData(
@@ -29,6 +37,12 @@ public record ProtocolData(
         List<BlockPropertyData> customBlockProperties,
         RecipeTable recipeTable
 ) {
+    /**
+     * Creates a protocol payload bundle with copied, unmodifiable lists.
+     * {@code null} lists, {@code null} list elements, and a {@code null} recipe
+     * table are rejected; element objects and the recipe table retain their
+     * supplied identities.
+     */
     public ProtocolData {
         itemDefinitions = List.copyOf(Objects.requireNonNull(itemDefinitions, "itemDefinitions"));
         blockDefinitions = List.copyOf(Objects.requireNonNull(blockDefinitions, "blockDefinitions"));

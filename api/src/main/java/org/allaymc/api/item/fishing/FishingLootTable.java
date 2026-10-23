@@ -9,53 +9,69 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Utility class for selecting fishing loot based on enchantments and conditions.
+ * {@code FishingLootTable} selects fishing catches from the registered
+ * category and entry weights. Category probabilities combine Luck of the Sea
+ * and Lure levels, and open-water state determines whether a treasure roll
+ * remains treasure or becomes junk. The selector then reads all entries in
+ * that chosen category and performs a second draw using their relative
+ * weights.
+ *
+ * <p>
+ * An empty category or nonpositive total weight produces a new cod stack
+ * instead of an absent catch. Otherwise the selected entry creates the result,
+ * with the final entry providing a fallback if cumulative comparisons do not
+ * match. The implementation checks category water eligibility directly and
+ * does not consult each entry's {@code requiresOpenWater} property.
  *
  * @author daoge_cmd
  */
 public final class FishingLootTable {
 
+    /**
+     * Prevents construction of the static fishing-loot selection utility
+     * class.
+     */
     private FishingLootTable() {
     }
 
     /**
-     * Selects a random loot item based on the given parameters.
-     * <p>
-     * In Bedrock Edition, Lure also affects loot chances (unlike Java Edition).
+     * Selects a category and then a weighted registered entry using the
+     * supplied fishing conditions. {@code luckOfTheSeaLevel} increases
+     * treasure probability, while {@code lureLevel} reduces it; both levels
+     * reduce junk probability and fish receives the remainder. The expected
+     * enchantment range is {@code 0} through {@code 3}, but this method does
+     * not enforce that range.
      *
-     * @param luckOfTheSeaLevel the level of Luck of the Sea enchantment (0-3)
-     * @param lureLevel         the level of Lure enchantment (0-3)
-     * @param isOpenWater       whether the fishing hook is in open water (required for treasure)
-     * @return the selected item stack
-     * @see <a href="https://minecraft.wiki/w/Fishing">Fishing</a>
-     * @see <a href="https://minecraft.wiki/w/Luck_of_the_Sea">Luck of the Sea</a>
+     * <p>
+     * A treasure roll without open water becomes a junk roll before candidate
+     * entries are gathered. Empty categories and nonpositive aggregate weights
+     * return cod; other registered weights are used without finite or
+     * nonnegative validation. The chosen entry's factory supplies the result,
+     * and the final candidate handles a draw left unmatched by cumulative
+     * weight comparisons.
      */
     public static ItemStack selectLoot(int luckOfTheSeaLevel, int lureLevel, boolean isOpenWater) {
         var random = ThreadLocalRandom.current();
 
-        // Calculate category chances based on enchantments (Bedrock Edition)
-        // Base chances: Fish 85%, Treasure 5%, Junk 10%
-        // Luck of the Sea: +2.1% treasure per level, -1.95% junk per level
-        // Lure (Bedrock only): -2.1% treasure per level, -1.95% junk per level
-        // In BE, Lure increases fish chance at the cost of treasure and junk
+        // These constants are category probabilities. Luck raises treasure while both
+        // enchantments reduce junk, leaving fish with the remaining probability mass.
         float treasureChance = Math.max(0, 0.05f + 0.021f * luckOfTheSeaLevel - 0.021f * lureLevel);
         float junkChance = Math.max(0, 0.10f - 0.0195f * luckOfTheSeaLevel - 0.0195f * lureLevel);
 
         float fishChance = 1.0f - treasureChance - junkChance;
 
-        // Select category
         float roll = random.nextFloat();
         FishingLootCategory selectedCategory;
         if (roll < fishChance) {
             selectedCategory = FishingLootCategory.FISH;
         } else if (roll < fishChance + treasureChance) {
-            // Treasure requires open water; if not in open water, becomes junk
+            // Redirect this treasure-category roll before entry selection, so missing
+            // open water produces a junk catch rather than choosing a treasure entry.
             selectedCategory = isOpenWater ? FishingLootCategory.TREASURE : FishingLootCategory.JUNK;
         } else {
             selectedCategory = FishingLootCategory.JUNK;
         }
 
-        // Get all loots in the selected category
         List<FishingLoot> categoryLoots = new ArrayList<>();
         float totalWeight = 0;
 
@@ -66,12 +82,12 @@ public final class FishingLootTable {
             }
         }
 
-        // Fallback to cod if no loot found
+        // Empty categories and nonpositive total weights cannot support a weighted
+        // draw. Return cod so the fishing outcome still receives an item result.
         if (categoryLoots.isEmpty() || totalWeight <= 0) {
             return ItemTypes.COD.createItemStack();
         }
 
-        // Weighted random selection within category
         float weightRoll = random.nextFloat() * totalWeight;
         float currentWeight = 0;
 
@@ -82,7 +98,8 @@ public final class FishingLootTable {
             }
         }
 
-        // Fallback (should not reach here)
+        // Floating-point accumulation or unusual registered weights can leave a draw
+        // unmatched. Use the final candidate instead of returning no catch item.
         return categoryLoots.getLast().createItemStack();
     }
 }

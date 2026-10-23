@@ -102,13 +102,38 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Complete packet encoder baseline for protocol v766.
+ * {@code PacketEncoder_v766} converts Allay world, entity, inventory, and login
+ * data into Bedrock packet payloads for the v766 encoder family. Later protocol
+ * encoders inherit these mappings and override version differences. Each
+ * implemented packet-producing operation constructs new packets, while protocol
+ * definitions and selected nested payload values remain shared; a new packet
+ * does not imply a deep copy of every referenced object.
+ *
+ * <p> {@code Chunk} responses advertise blob hashes only after
+ * {@code ChunkCache} accepts the matching transaction; refused admission
+ * selects inline data. {@code Entity} encodings distinguish runtime IDs from
+ * persistent UUID low bits, and skin, scoreboard, and dialog updates expose
+ * packet sequences whose order callers must preserve. Cached recipes and
+ * creative items are rebuilt at mutable collection and item-array boundaries
+ * while retaining their identities. {@code supportsSoundEvent} runs after
+ * common sound selection so subclasses can enable newer events without
+ * duplicating those mappings.
  */
 public class PacketEncoder_v766 extends PacketEncoder {
+    /**
+     * Creates the baseline encoder using the supplied protocol payload bundle.
+     * The superclass retains this nonnull bundle by reference, and every
+     * inherited version uses it for item definitions and cached recipe data.
+     */
     public PacketEncoder_v766(ProtocolData data) {
         super(data);
     }
 
+    /**
+     * Creates an item registry packet containing this protocol's definition
+     * objects. The packet owns its item list, while individual definitions
+     * retain their identities from the initialized protocol payload bundle.
+     */
     @Override
     public ItemRegistryPacket encodeItemRegistry() {
         var packet = new ItemRegistryPacket();
@@ -116,9 +141,18 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates creative groups and entries with fresh item payloads. Group and
+     * entry IDs remain unchanged, while item restriction arrays are copied;
+     * nested item tags and definition objects remain shared with the cached
+     * data.
+     */
     @Override
     public CreativeContentPacket encodeCreativeContent() {
         var packet = new CreativeContentPacket();
+        // Rebuild item wrappers and restriction arrays for packet
+        // customization; retaining group IDs and item network IDs preserves
+        // their cached associations.
         getData().creativeGroups().stream()
                 .map(group -> new CreativeItemGroup(group.category(), group.name(), copyItemData(group.icon())))
                 .forEach(packet.getGroups()::add);
@@ -128,9 +162,17 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a replacement crafting table from this protocol's cached recipes.
+     * Supported recipe structures and result items are copied, potion mix
+     * objects remain shared, and the clean flag instructs the client to replace
+     * its previous recipes.
+     */
     @Override
     public CraftingDataPacket encodeCraftingData() {
         var packet = new CraftingDataPacket();
+        // Packet recipe collections may be changed after encoding, so detach
+        // their mutable containers before exposing any cached recipe payloads.
         getData().recipeTable().encodedRecipes().stream()
                 .map(PacketEncoder_v766::copyRecipeData)
                 .forEach(packet.getCraftingData()::add);
@@ -139,6 +181,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates the entity identifier list from the current entity registry.
+     */
     @Override
     public AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiers() {
         var identifiers = new ArrayList<NbtMap>();
@@ -155,6 +200,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates one property definition packet for each entity type declaring
+     * properties. Types without properties are omitted, and the returned
+     * mutable collection contains newly constructed packets with client
+     * synchronization enabled.
+     */
     @Override
     public Collection<SyncEntityPropertyPacket> encodeSyncEntityProperties() {
         var packets = new ArrayList<SyncEntityPropertyPacket>();
@@ -196,6 +247,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packets;
     }
 
+    /**
+     * Creates biome definitions by converting the current registry in iteration
+     * order.
+     */
     @Override
     public BiomeDefinitionListPacket encodeBiomeDefinitions() {
         var definitions = new LinkedHashMap<String, BiomeDefinitionData>();
@@ -208,11 +263,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates dimension definitions for custom dimensions and altered vanilla
+     * bounds. Vanilla dimensions retaining default bounds are omitted; maximum
+     * heights become exclusive, and altered vanilla definitions advertise the
+     * void generator.
+     */
     @Override
     public DimensionDataPacket encodeDimensionData() {
         var packet = new DimensionDataPacket();
         Registries.DIMENSIONS.getContent().m1().values().stream()
                 .filter(PacketEncoder_v766::shouldSendDimensionDefinition)
+                // Dimension definitions use an exclusive upper height, unlike
+                // the inclusive maximum stored by the server dimension type.
                 .map(dimensionType -> new DimensionDefinition(
                         dimensionType.getIdentifier().toString(),
                         dimensionType.getMaxHeight() + 1,
@@ -224,6 +287,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates pack download metadata using current server resource-pack
+     * settings. Resource and data packs receive entries, script packs only
+     * enable the scripting flag, and world templates are omitted from this
+     * announcement.
+     */
     @Override
     public ResourcePacksInfoPacket encodeResourcePacksInfo() {
         var settings = AllayServer.getSettings().resourcePackSettings();
@@ -254,6 +323,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates the resource and behavior pack stack with this encoder's
+     * experiment set. Acceptance is forced only when server packs are mandatory
+     * and client resource packs are disallowed; script and world-template packs
+     * are omitted.
+     */
     @Override
     public ResourcePackStackPacket encodeResourcePackStack() {
         var settings = AllayServer.getSettings().resourcePackSettings();
@@ -275,6 +350,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates transfer metadata for a nonnull pack and positive chunk size in
+     * bytes. Invalid chunk sizes throw {@code IllegalArgumentException}, the
+     * chunk count rounds upward, and the packet receives a copy of the pack
+     * hash.
+     */
     @Override
     public ResourcePackDataInfoPacket encodeResourcePackDataInfo(
             Pack pack,
@@ -289,6 +370,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setPackId(pack.getId());
         packet.setPackVersion(pack.getStringVersion());
         packet.setMaxChunkSize(maxChunkSize);
+        // Round upward so a partial final chunk remains downloadable.
         packet.setChunkCount((pack.getSize() + (long) maxChunkSize - 1) / maxChunkSize);
         packet.setCompressedPackSize(pack.getSize());
         packet.setHash(pack.getHash().clone());
@@ -296,6 +378,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates one resource-pack transfer chunk addressed by a zero-based index.
+     * The pack must be nonnull, the chunk size must be positive, and the index
+     * must select an existing chunk; invalid numeric inputs throw
+     * {@code IllegalArgumentException}.
+     *
+     * <p> The same chunk size determines both the total count and the byte
+     * offset, keeping the advertised index aligned with the selected bytes.
+     * Progress reports the starting offset, not the end of this chunk. The
+     * returned packet owns a reference-counted buffer wrapping the array
+     * returned by the pack; callers transfer that ownership to the transport or
+     * release the packet when discarding it.
+     */
     @Override
     public ResourcePackChunkDataPacket encodeResourcePackChunkData(
             Pack pack,
@@ -310,6 +405,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
             throw new IllegalArgumentException("Resource-pack chunk index cannot be negative");
         }
 
+        // Use long arithmetic for count and offset so positive chunk sizes
+        // cannot overflow intermediate addition or multiplication before bounds
+        // validation.
         long chunkCount = (pack.getSize() + (long) maxChunkSize - 1) / maxChunkSize;
         if (chunkIndex >= chunkCount) {
             throw new IllegalArgumentException("Resource-pack chunk index is out of bounds: " + chunkIndex);
@@ -325,6 +423,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates armor trim definitions from the internal pattern and material
+     * registries.
+     */
     @Override
     public TrimDataPacket encodeTrimData() {
         var packet = new TrimDataPacket();
@@ -341,16 +443,28 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates the chunk publisher position and loading radius for a nonnull
+     * player. The radius is converted from chunks to blocks, and the player
+     * location is converted to an integer block position.
+     */
     @Override
     public NetworkChunkPublisherUpdatePacket encodeChunkPublisher(EntityPlayer player) {
         Objects.requireNonNull(player, "player");
         var location = player.getLocation();
         var packet = new NetworkChunkPublisherUpdatePacket();
         packet.setPosition(Vector3i.from(location.x(), location.y(), location.z()));
+        // Publisher radius uses blocks, whereas loading radius uses chunks.
         packet.setRadius(player.getChunkLoadingRadius() << 4);
         return packet;
     }
 
+    /**
+     * Creates a full or sub-chunk-request payload while holding the chunk's
+     * read operation. A {@code null} cache disables blob caching; otherwise the
+     * player ID and generation are passed to cache admission, whose refusal
+     * falls back to uncached data.
+     */
     @Override
     public LevelChunkPacket encodeLevelChunk(
             Chunk chunk,
@@ -361,6 +475,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
     ) {
         Objects.requireNonNull(chunk, "chunk");
         var packet = new LevelChunkPacket[1];
+        // The read operation covers both terrain and height-dependent packet
+        // construction, keeping section data accessible while the unsafe chunk
+        // is encoded.
         chunk.applyOperation(unsafeChunk -> packet[0] = useSubChunkSending
                         ? createSubChunkLevelChunkPacket(
                                 (AllayUnsafeChunk) unsafeChunk,
@@ -380,6 +497,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet[0];
     }
 
+    /**
+     * Creates the initial biome payload for subsequent sub-chunk requests. The
+     * caller supplies a chunk already protected for reading, and an optional
+     * cache receives the player ID and expected generation.
+     *
+     * <p> Only successful cache admission allows the packet to advertise the
+     * biome hash. A stale generation or transaction limit therefore leaves no
+     * hash-only response for data the cache declined to retain. Missing or
+     * refused caching selects inline biome bytes instead. In either
+     * representation, the request limit uses {@code findHighestNonAirSectionY}
+     * relative to the dimension minimum and inherits that helper's
+     * air-classification limitation.
+     */
     private static LevelChunkPacket createSubChunkLevelChunkPacket(
             AllayUnsafeChunk chunk,
             ChunkCache cache,
@@ -392,11 +522,14 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.setChunkX(chunk.getX());
         packet.setChunkZ(chunk.getZ());
         packet.setRequestSubChunks(true);
-        // Sub-chunk limit is always relative to the dimension's minimum section.
+        // The request limit uses a section offset, not an absolute section Y.
         packet.setSubChunkLimit(findHighestNonAirSectionY(chunk) - dimensionType.minSectionY());
 
         if (cache != null) {
             byte[] biomesBlob = ChunkEncoder.encodeBiomesBlob(chunk);
+            // Advertise the biome hash only after cache admission; otherwise a
+            // stale generation or full transaction queue requires inline biome
+            // data.
             long[] hashes = cache.tryStoreBlobsAndOpenTransaction(
                     playerId,
                     cacheGeneration,
@@ -410,11 +543,21 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
         }
 
+        // No accepted transaction backs blob references here, so send biome
+        // bytes directly and leave the client cache path disabled.
         packet.setCachingEnabled(false);
         packet.setData(ChunkEncoder.writeToNetworkBiomeOnly(chunk));
         return packet;
     }
 
+    /**
+     * Returns the highest section above the dimension minimum whose
+     * {@code isAirSection()} result is {@code false}, or the minimum when no
+     * section qualifies. The predicate also returns {@code true} for a
+     * one-entry non-air layer-zero palette, so this result can omit occupied
+     * sections. Callers receive an absolute section coordinate for the request
+     * limit, rather than a verified highest occupied block or a section count.
+     */
     private static int findHighestNonAirSectionY(AllayUnsafeChunk chunk) {
         var dimensionType = chunk.getDimensionType();
         for (int highest = dimensionType.maxSectionY(); highest > dimensionType.minSectionY(); highest--) {
@@ -422,9 +565,23 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 return highest;
             }
         }
+        // An empty chunk still needs a nonnegative request limit relative to
+        // minSectionY, so use the dimension minimum as its fallback section.
         return dimensionType.minSectionY();
     }
 
+    /**
+     * Creates a complete chunk payload with optional blob caching. The caller
+     * must already protect the unsafe chunk for reading, and cache admission
+     * uses the supplied player identity and generation.
+     *
+     * <p> Section blobs are placed from the dimension minimum upward, followed
+     * by the biome blob, so advertised hashes retain the payload order expected
+     * by the client. Hashes are published only after cache admission succeeds.
+     * Missing or refused caching instead produces ordinary chunk bytes;
+     * successful caching still includes the uncached chunk tail such as block
+     * entity data.
+     */
     private static LevelChunkPacket createFullLevelChunkPacket(
             AllayUnsafeChunk chunk,
             ChunkCache cache,
@@ -441,6 +598,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
         if (cache != null) {
             int sectionCount = dimensionType.chunkSectionCount();
+            // Place biomes after every section so the client interprets each
+            // advertised hash in the same order as full chunk encoding.
             byte[][] allBlobs = new byte[sectionCount + 1][];
             for (int i = 0; i < sectionCount; i++) {
                 allBlobs[i] = ChunkEncoder.encodeSectionBlob(
@@ -449,6 +608,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             allBlobs[sectionCount] = ChunkEncoder.encodeBiomesBlob(chunk);
 
+            // The hash sequence must match section order followed by biomes,
+            // and cache admission must succeed before publishing that
+            // reference-only representation.
             long[] hashes = cache.tryStoreBlobsAndOpenTransaction(
                     playerId,
                     cacheGeneration,
@@ -464,11 +626,17 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
         }
 
+        // Without an accepted cache transaction, use the full inline encoding
+        // path rather than publishing hashes for blobs that admission did not
+        // accept.
         packet.setCachingEnabled(false);
         packet.setData(ChunkEncoder.writeToNetwork(chunk));
         return packet;
     }
 
+    /**
+     * Creates a world-time packet using the supplied time-of-day tick value.
+     */
     @Override
     public SetTimePacket encodeTime(int timeOfDay) {
         var packet = new SetTimePacket();
@@ -476,6 +644,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a gamerule update by converting the nonnull rule collection.
+     */
     @Override
     public GameRulesChangedPacket encodeGameRules(GameRules gameRules) {
         Objects.requireNonNull(gameRules, "gameRules");
@@ -484,6 +655,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a single block update using the state hash as its definition ID.
+     * Position and state must be nonnull, the supplied layer is retained, and
+     * the network update flag is always enabled.
+     */
     @Override
     public UpdateBlockPacket encodeBlockUpdate(Vector3ic position, int layer, BlockState blockState) {
         Objects.requireNonNull(position, "position");
@@ -496,6 +672,18 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Groups normal and extra-layer updates into packets for occupied chunk
+     * sections. All inputs must be nonnull, and update heights must lie within
+     * the supplied chunk dimension because section indexes are used without
+     * bounds recovery.
+     *
+     * <p> Both input collections share one packet array indexed relative to the
+     * dimension minimum. This keeps two layers at the same section address
+     * together without mixing their entry lists. Returned packets follow
+     * ascending section order, omit unused sections, and retain the update
+     * order within each layer.
+     */
     @Override
     public Collection<UpdateSubChunkBlocksPacket> encodeBlockUpdates(
             Chunk chunk,
@@ -511,6 +699,18 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return Arrays.stream(packets).filter(Objects::nonNull).toList();
     }
 
+    /**
+     * Adds one layer of block changes to the shared section-indexed packet
+     * array. Update heights must belong to the chunk dimension, since the
+     * method indexes directly into the supplied array.
+     *
+     * <p> Subtracting the dimension's minimum section converts absolute section
+     * coordinates into array positions without changing each packet's
+     * world-space origin. Reusing an existing packet lets the second layer join
+     * the first layer's section while preserving separate entry lists. Each
+     * block definition continues to use the block-state hash, keeping identity
+     * independent of registry enumeration order.
+     */
     private static void encodeBlockUpdates(
             UpdateSubChunkBlocksPacket[] packets,
             Chunk chunk,
@@ -519,6 +719,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
     ) {
         for (var update : blockUpdates) {
             var sectionY = update.y() >> 4;
+            // Sections can start below zero; subtracting the dimension minimum
+            // preserves the correspondence between absolute update heights and
+            // array slots.
             var index = sectionY - chunk.getDimensionType().minSectionY();
             var packet = packets[index];
             if (packet == null) {
@@ -546,6 +749,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         }
     }
 
+    /**
+     * Creates the packet for a chest-state or block-breaking action at the
+     * given position. Inputs must be nonnull, unsupported action
+     * implementations throw {@code IllegalStateException}, and the result is an
+     * unmodifiable singleton packet list.
+     */
     @Override
     public Collection<BedrockPacket> encodeBlockAction(Vector3ic position, BlockAction action) {
         Objects.requireNonNull(position, "position");
@@ -594,10 +803,22 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return List.of(packet);
     }
 
+    /**
+     * Converts breaking seconds to the integer progress increment used per game
+     * tick. Zero duration selects the maximum increment; other values divide
+     * that maximum by twenty ticks per second and truncate the result.
+     */
     private static int toNetworkBreakTime(double breakTime) {
+        // Convert seconds to per-tick progress; zero requests instantaneous
+        // completion.
         return breakTime == 0 ? 65535 : (int) (65535 / (breakTime * 20));
     }
 
+    /**
+     * Creates a request to stop one named sound or all sounds. A {@code null}
+     * name selects the stop-all flag and an empty encoded name; an empty
+     * nonnull name does not select that flag.
+     */
     @Override
     public StopSoundPacket encodeStopSound(String soundName) {
         var packet = new StopSoundPacket();
@@ -606,6 +827,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates the packet representation for a particle at a nonnull position.
+     * Most particles use a level event; custom effects use their supplied
+     * dimension and optional Molang data, while note particles use a block
+     * event. Unsupported particle implementations throw
+     * {@code IllegalArgumentException}.
+     *
+     * <p> Some event payloads combine multiple meanings into one integer.
+     * Dragon-egg movement stores separate magnitudes and sign bits, and item
+     * break effects combine runtime item identity with metadata. Callers must
+     * provide values representable by those layouts, because this method does
+     * not mask oversized inputs before combining them.
+     */
     @Override
     public Collection<BedrockPacket> encodeParticle(
             Particle particle,
@@ -639,6 +873,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                     packet.setType(ParticleType.BREEZE_WIND_EXPLOSION);
             case SimpleParticle.WATER_WAKE -> packet.setType(ParticleType.WATER_WAKE);
             case SimpleParticle.BUBBLE -> packet.setType(ParticleType.BUBBLE);
+            // Direction codes and positional offsets jointly place the shooting
+            // effect on its selected face; changing only one misaligns its
+            // presentation.
             case ShootParticle shoot -> {
                 packet.setType(LevelEvent.PARTICLE_SHOOT);
                 int data = 0;
@@ -680,6 +917,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 return List.of(customPacket);
             }
             case DragonEggTeleportParticle teleport -> {
+                // Magnitudes occupy three byte positions and signs occupy
+                // separate high bits; callers must keep offsets small enough to
+                // avoid field overlap.
                 int xSign = teleport.diff().x() < 0 ? 1 << 24 : 0;
                 int ySign = teleport.diff().y() < 0 ? 1 << 25 : 0;
                 int zSign = teleport.diff().z() < 0 ? 1 << 26 : 0;
@@ -693,6 +933,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 packet.setData(data);
             }
             case NoteParticle note -> {
+                // Note particles address blocks, so fractional coordinates are
+                // truncated toward zero.
                 var notePacket = new BlockEventPacket();
                 notePacket.setBlockPosition(Vector3i.from(
                         (int) position.x(),
@@ -723,6 +965,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 packet.setData(flame.color().getRGB());
             }
             case ItemBreakParticle itemBreak -> {
+                // Combine runtime item identity in the upper bits with item
+                // metadata below it, matching the item-specific particle
+                // payload layout.
                 packet.setType(ParticleType.ICON_CRACK);
                 packet.setData(
                         (itemBreak.itemStack().getItemType().getRuntimeId() << 16)
@@ -748,14 +993,30 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return List.of(packet);
     }
 
+    /**
+     * Creates rain and thunder updates that together represent the selected
+     * weather. The returned list contains the rain packet before the thunder
+     * packet, including both stop events when {@code weather} is {@code CLEAR}.
+     *
+     * <p> Rain and thunder have separate client event channels, so encoding
+     * only the active effect could leave an earlier thunderstorm or
+     * precipitation state visible. Each invocation explicitly starts or stops
+     * both channels. Active channels use the full event intensity, and the
+     * packets carry zero positions because these events describe weather rather
+     * than one localized effect.
+     */
     @Override
     public Collection<LevelEventPacket> encodeWeather(Weather weather) {
         Objects.requireNonNull(weather, "weather");
+        // Send both channels every time so changing from thunder to rain or
+        // clear weather also stops effects no longer selected.
         var rainPacket = new LevelEventPacket();
         rainPacket.setPosition(Vector3f.ZERO);
         rainPacket.setType(LevelEvent.STOP_RAINING);
         if (weather != Weather.CLEAR) {
             rainPacket.setType(LevelEvent.START_RAINING);
+            // Selected precipitation uses full event intensity without gradual
+            // transitions.
             rainPacket.setData(65535);
         }
 
@@ -764,28 +1025,43 @@ public class PacketEncoder_v766 extends PacketEncoder {
         thunderPacket.setType(LevelEvent.STOP_THUNDERSTORM);
         if (weather == Weather.THUNDER) {
             thunderPacket.setType(LevelEvent.START_THUNDERSTORM);
+            // Selected thunder uses the same full-intensity event scale.
             thunderPacket.setData(65535);
         }
         return List.of(rainPacket, thunderPacket);
     }
 
+    /**
+     * Creates block-entity synchronization from the entity's current position
+     * and saved NBT.
+     */
     @Override
     public BlockEntityDataPacket encodeBlockEntity(BlockEntity blockEntity) {
         Objects.requireNonNull(blockEntity, "blockEntity");
         return encodeBlockEntityData(blockEntity.getPosition(), blockEntity.saveNBT());
     }
 
+    /**
+     * Creates a lectern-open packet using the fixed container ID minus one. The
+     * position must be nonnull, and this packet does not allocate or register a
+     * server-side container session.
+     */
     @Override
     public ContainerOpenPacket encodeLectern(Vector3ic position) {
         Objects.requireNonNull(position, "position");
         var packet = new ContainerOpenPacket();
-        // The client does not send ContainerClose for lecterns, so use a fixed ID.
+        // Use the fixed editor identity rather than consuming a normal
+        // container ID; this packet has no matching server-side container
+        // allocation.
         packet.setId((byte) -1);
         packet.setType(ContainerType.LECTERN);
         packet.setBlockPosition(NetworkHelper.toNetwork(position));
         return packet;
     }
 
+    /**
+     * Creates a sign editor request for the selected side and block position.
+     */
     @Override
     public OpenSignPacket encodeSignEditor(Vector3ic position, boolean frontSide) {
         Objects.requireNonNull(position, "position");
@@ -795,22 +1071,37 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a complete inventory-content packet for the supplied container
+     * ID. Items are encoded from the container, and the otherwise unused
+     * full-container name uses the baseline zero-valued slot type with no
+     * dynamic ID.
+     */
     @Override
     public InventoryContentPacket encodeContainerContents(Container container, int containerId) {
         Objects.requireNonNull(container, "container");
         var packet = new InventoryContentPacket();
         packet.setContainerId(containerId);
-        // Both fields must be zero when FullContainerName is otherwise unused.
+        // This packet addresses the inventory through containerId; encode the
+        // unused full-container name as the zero slot type with no dynamic ID.
         packet.setContainerNameData(new FullContainerName(ContainerSlotType.ANVIL_INPUT, null));
         packet.setContents(encodeItemStacks(container.getItemStacks()));
         return packet;
     }
 
+    /**
+     * Creates a single-slot update using the container's network slot mapping.
+     * The container must be nonnull and the slot must be valid for its
+     * implementation; slot type and item payload are derived from that same
+     * slot.
+     */
     @Override
     public InventorySlotPacket encodeContainerSlot(Container container, int slot, int containerId) {
         Objects.requireNonNull(container, "container");
         var packet = new InventorySlotPacket();
         packet.setContainerId(containerId);
+        // Container-local indexes are not always network indexes; derive both
+        // the slot number and slot type from the same container mapping.
         packet.setSlot(ContainerActionProcessor.toNetworkSlotIndex(container, slot));
         packet.setContainerNameData(new FullContainerName(
                 ContainerActionProcessor.getSlotType(container, slot),
@@ -820,6 +1111,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a container-open packet with the registered network container
+     * type. The container and position must be nonnull, and the caller supplies
+     * the already selected byte-sized container ID without allocating it here.
+     */
     @Override
     public ContainerOpenPacket encodeContainerOpen(
             Container container,
@@ -835,6 +1131,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a close request using the supplied container's registered network
+     * type. The caller supplies its existing byte ID and initiation flag, and
+     * this method does not change the server container lifecycle.
+     */
     @Override
     public ContainerClosePacket encodeContainerClose(
             Container container,
@@ -849,15 +1150,34 @@ public class PacketEncoder_v766 extends PacketEncoder {
         );
     }
 
+    /**
+     * Creates a container property update using the supplied property and
+     * value. The container ID is narrowed to one byte without validation, so
+     * callers must supply an ID representable by the protocol field.
+     */
     @Override
     public ContainerSetDataPacket encodeContainerData(int containerId, int property, int value) {
         var packet = new ContainerSetDataPacket();
+        // Only the low byte survives the window-ID conversion.
         packet.setWindowId((byte) containerId);
         packet.setProperty(property);
         packet.setValue(value);
         return packet;
     }
 
+    /**
+     * Creates the spawn packet appropriate to the entity's concrete kind.
+     * Players, dropped items, paintings, and other entities use different
+     * packet layouts, while runtime IDs and persistent UUID low bits fill
+     * distinct identity fields.
+     *
+     * <p> General entities use the configured network position offset; player
+     * spawn packets instead retain the unshifted location, and paintings use
+     * their bounding-box center. Entities without physics advertise zero
+     * motion, and dropped items without an item stack use air. Metadata and
+     * properties are included only where the selected packet exposes those
+     * fields.
+     */
     @Override
     public BedrockPacket encodeEntitySpawn(Entity entity) {
         Objects.requireNonNull(entity, "entity");
@@ -869,6 +1189,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 ),
                 location.z()
         );
+        // Entities without physics have no motion component to read, so their
+        // spawn representation uses zero velocity while retaining position and
+        // identity.
         var motion = switch (entity) {
             case EntityPhysicsComponent physicsComponent -> {
                 var entityMotion = physicsComponent.getMotion();
@@ -886,7 +1209,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 packet.setUsername(player.getNameTag());
                 packet.setPlatformChatId("");
                 packet.setDeviceId("");
-                // AddPlayerPacket does not use the per-entity network position offset.
+                // Player spawn uses the unshifted entity location even though
+                // subsequent movement packets apply network offsets; retain
+                // that packet-specific coordinate convention when sharing
+                // entity helpers.
                 packet.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
                 packet.setMotion(motion);
                 packet.setRotation(Vector3f.from(
@@ -907,6 +1233,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 packet.setRuntimeEntityId(item.getRuntimeId());
                 packet.setUniqueEntityId(item.getUniqueId().getLeastSignificantBits());
                 packet.setItemInHand(encodeItemStack(
+                        // An unset dropped-item stack still needs a
+                        // serializable item payload; air preserves the spawn
+                        // packet structure without inventing contents.
                         Objects.requireNonNullElse(item.getItemStack(), ItemAirStack.AIR_STACK)
                 ));
                 packet.setPosition(position);
@@ -919,6 +1248,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 packet.setRuntimeEntityId(painting.getRuntimeId());
                 packet.setUniqueEntityId(painting.getUniqueId().getLeastSignificantBits());
                 packet.setMotive(painting.getPaintingType().getTitle());
+                // Paintings use their bounding-box center rather than the
+                // general entity origin, preserving placement for motives with
+                // different dimensions.
                 var aabb = painting.getOffsetAABB();
                 packet.setPosition(Vector3f.from(
                         (aabb.minX() + aabb.maxX()) / 2,
@@ -947,6 +1279,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         };
     }
 
+    /**
+     * Creates an entity-removal packet addressed by the persistent UUID's low
+     * bits.
+     */
     @Override
     public RemoveEntityPacket encodeEntityRemove(Entity entity) {
         Objects.requireNonNull(entity, "entity");
@@ -955,6 +1291,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates the game-mode update appropriate to the packet recipient. A self
+     * update carries only the local mode, while updates for other players
+     * include the target player's runtime entity ID.
+     */
     @Override
     public BedrockPacket encodePlayerGameMode(EntityPlayer player, boolean self) {
         Objects.requireNonNull(player, "player");
@@ -970,6 +1311,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a self-player movement packet or an absolute remote-entity
+     * movement packet. {@code Entity} and location must be nonnull, both
+     * representations apply the entity network offset, and the teleport flag is
+     * passed to the selected format.
+     */
     @Override
     public BedrockPacket encodeEntityLocation(
             Entity entity,
@@ -984,6 +1331,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 : createAbsoluteMovePacket(entity, location, teleporting);
     }
 
+    /**
+     * Creates a movement packet for the controlling player using the entity's
+     * network offset. Teleports explicitly select teleport mode with an unknown
+     * cause, while ordinary movement retains the packet's default mode.
+     */
     private static MovePlayerPacket createMovePlayerPacket(
             Entity entity,
             Location3dc location,
@@ -1006,6 +1358,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an absolute movement packet for observers using the entity's
+     * network offset. Ground state is included when the entity has physics, and
+     * the supplied teleport flag marks the movement as teleported.
+     */
     private static MoveEntityAbsolutePacket createAbsoluteMovePacket(
             Entity entity,
             Location3dc location,
@@ -1028,10 +1385,21 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Returns independent head yaw when the entity provides that component.
+     * Entities without it use the supplied body yaw, keeping their encoded head
+     * direction aligned with their body rotation.
+     */
     private static double getHeadYaw(Entity entity, double yaw) {
+        // Independent head rotation exists only on the head-yaw component;
+        // other entities must align their encoded head with the supplied body
+        // direction.
         return entity instanceof EntityHeadYawComponent headYawComponent ? headYawComponent.getHeadYaw() : yaw;
     }
 
+    /**
+     * Creates a velocity packet for the nonnull entity and motion vector.
+     */
     @Override
     public SetEntityMotionPacket encodeEntityMotion(Entity entity, Vector3dc motion) {
         Objects.requireNonNull(entity, "entity");
@@ -1042,16 +1410,34 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Builds metadata by applying generic, component, and concrete-type
+     * contributions in order. The entity must be nonnull, and each call returns
+     * a newly allocated metadata map rather than updating a previously sent
+     * packet.
+     *
+     * <p> Later contributions may replace values written by earlier stages. In
+     * particular, a baby component writes a half scale after generic scale has
+     * been recorded, while type-specific flags and payloads augment the common
+     * shape and naming information. Preserving this order keeps those more
+     * specific representations authoritative wherever metadata keys overlap.
+     */
     @Override
     public EntityDataMap encodeEntityMetadata(Entity entity) {
         Objects.requireNonNull(entity, "entity");
         var metadata = new EntityDataMap();
+        // Apply broad defaults before component and concrete-type contributions
+        // so specialized metadata, such as baby scale, wins when keys overlap.
         addGenericMetadata(entity, metadata);
         addComponentSpecificMetadata(entity, metadata);
         addTypeSpecificMetadata(entity, metadata);
         return metadata;
     }
 
+    /**
+     * Creates a complete entity-state update containing metadata and network
+     * properties.
+     */
     @Override
     public SetEntityDataPacket encodeEntityState(Entity entity) {
         Objects.requireNonNull(entity, "entity");
@@ -1062,6 +1448,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Adds collision dimensions, naming data, scale, and common entity flags to
+     * the supplied metadata map. Item entities explicitly disable NPC metadata,
+     * and entities without name tags leave the name-specific entries absent.
+     */
     private static void addGenericMetadata(Entity entity, EntityDataMap metadata) {
         metadata.setFlag(EntityFlag.HAS_COLLISION, entity.hasEntityCollision());
         metadata.setFlag(EntityFlag.CAN_CLIMB, true);
@@ -1088,7 +1479,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         metadata.put(EntityDataTypes.WIDTH, (float) (aabb.maxX() - aabb.minX()));
         metadata.put(EntityDataTypes.HEIGHT, (float) (aabb.maxY() - aabb.minY()));
         metadata.put(EntityDataTypes.SCALE, (float) entity.getScale());
-        // v766-v827 clients crash if HAS_NPC is true for an item entity.
+        // Item entities use their dedicated spawn representation; disable NPC
+        // metadata for them while retaining the baseline NPC flag on other
+        // types.
         metadata.put(EntityDataTypes.HAS_NPC, !(entity instanceof EntityItem));
         if (entity.hasNameTag()) {
             metadata.setFlag(EntityFlag.CAN_SHOW_NAME, true);
@@ -1100,6 +1493,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         }
     }
 
+    /**
+     * Adds metadata for the optional components implemented by an entity.
+     * Existing entries may be replaced, including generic scale for babies;
+     * absent components leave their corresponding metadata keys untouched in
+     * the supplied map.
+     */
     private static void addComponentSpecificMetadata(Entity entity, EntityDataMap metadata) {
         if (entity instanceof EntityPhysicsComponent physicsComponent) {
             metadata.setFlag(EntityFlag.HAS_GRAVITY, physicsComponent.hasGravity());
@@ -1107,9 +1506,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         if (entity instanceof EntityLivingComponent livingComponent) {
             metadata.setFlag(EntityFlag.ON_FIRE, livingComponent.isOnFire());
             metadata.setFlag(EntityFlag.BREATHING, livingComponent.canBreathe());
+            // Air values retain tick units but narrow to signed shorts.
             metadata.put(EntityDataTypes.AIR_SUPPLY, (short) livingComponent.getAirSupplyTicks());
             metadata.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) livingComponent.getAirSupplyMaxTicks());
             metadata.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
+            // Convert freeze ticks to a fraction without clamping overfull
+            // values.
             metadata.put(
                     EntityDataTypes.FREEZING_EFFECT_STRENGTH,
                     livingComponent.getFreezeTicks() / (float) EntityLivingComponent.MAX_FREEZE_TICKS
@@ -1118,6 +1520,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         if (entity instanceof EntityPotionComponent potionComponent) {
             var potionType = potionComponent.getPotionType();
             if (potionType != null) {
+                // Potion metadata reserves zero before the enum values, while
+                // the custom-display encoding skips another entry after the
+                // first four values.
                 var data = potionType.ordinal() + 1;
                 metadata.put(EntityDataTypes.AUX_VALUE_DATA, (short) data);
                 if (data > 4) {
@@ -1136,6 +1541,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
         if (entity instanceof EntityBabyComponent babyComponent) {
             metadata.setFlag(EntityFlag.BABY, babyComponent.isBaby());
             if (babyComponent.isBaby()) {
+                // Baby scale replaces, rather than multiplies, the generic
+                // scale.
                 metadata.put(EntityDataTypes.SCALE, 0.5f);
             }
         }
@@ -1144,6 +1551,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         }
     }
 
+    /**
+     * Adds metadata unique to supported concrete entity kinds. Missing
+     * projectile owners use minus one, optional name or damage information is
+     * omitted when unavailable, and unrecognized entity kinds add no further
+     * entries.
+     */
     private static void addTypeSpecificMetadata(Entity entity, EntityDataMap metadata) {
         switch (entity) {
             case EntityTnt tnt -> {
@@ -1169,6 +1582,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             case EntityXpOrb xpOrb -> metadata.put(EntityDataTypes.VALUE, xpOrb.getExperienceValue());
             case EntityArrow arrow -> metadata.setFlag(EntityFlag.CRITICAL, arrow.isCritical());
+            // Only a returning trident exposes its shooter as owner here;
+            // absent shooters and nonreturning tridents use the no-owner
+            // sentinel.
             case EntityThrownTrident trident -> {
                 metadata.setFlag(EntityFlag.RETURN_TRIDENT, trident.isReturning());
                 if (trident.isReturning()) {
@@ -1189,6 +1605,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
                                         NbtType.COMPOUND,
                                         firework.getExplosions().stream().map(FireworkExplosion::saveNBT).toList()
                                 )
+                                // Flight stores whole seconds narrowed to a
+                                // byte.
                                 .putByte("Flight", (byte) (firework.getExistenceTicks() / 20))
                                 .build()
                         )
@@ -1197,6 +1615,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
                 var attachedPlayer = firework.getAttachedPlayer();
                 if (attachedPlayer != null) {
+                    // The attachment field retains only the runtime ID's low
+                    // byte.
                     metadata.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) attachedPlayer.getRuntimeId());
                 }
             }
@@ -1204,6 +1624,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                     metadata.setFlag(EntityFlag.SHOW_BOTTOM, enderCrystal.isBaseVisible());
             case EntityAreaEffectCloud cloud -> {
                 metadata.put(EntityDataTypes.AREA_EFFECT_CLOUD_RADIUS, cloud.getRadius());
+                // The cloud advertises maximum duration and tiny positive
+                // change values rather than its server lifetime, leaving visual
+                // persistence separate from server removal.
                 metadata.put(EntityDataTypes.AREA_EFFECT_CLOUD_DURATION, Integer.MAX_VALUE);
                 metadata.put(EntityDataTypes.AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP, Float.MIN_VALUE);
                 metadata.put(EntityDataTypes.AREA_EFFECT_CLOUD_CHANGE_RATE, Float.MIN_VALUE);
@@ -1211,6 +1634,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 metadata.put(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
             }
             case EntityLingeringPotion ignored -> metadata.setFlag(EntityFlag.LINGERING, true);
+            // Owner and target are independent optional associations; encode
+            // the no-entity sentinel for each missing relationship without
+            // substituting the other identity.
             case EntityFishingHook fishingHook -> {
                 var shooter = fishingHook.getShooter();
                 metadata.put(
@@ -1227,6 +1653,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 metadata.put(EntityDataTypes.ARMOR_STAND_POSE_INDEX, armorStand.getPoseIndex());
                 if (armorStand.getLastDamage() != null) {
                     var interval = armorStand.getTick() - armorStand.getLastDamageTime();
+                    // Expose the recent hurt animation for five ticks only.
                     if (interval <= 5) {
                         metadata.put(EntityDataTypes.HURT_TICKS, (int) interval);
                     }
@@ -1238,10 +1665,25 @@ public class PacketEncoder_v766 extends PacketEncoder {
         }
     }
 
+    /**
+     * Packs visible effect identities and ambient flags into one metadata
+     * value. Invisible effects contribute no bits, and visible effects retain
+     * the iteration order supplied by the collection.
+     *
+     * <p> Each appended effect shifts existing data by seven bits, stores its
+     * ID above the ambient bit, and uses that low bit for ambience. A
+     * {@code long} holds at most nine complete seven-bit entries, and an ID
+     * must fit six nonnegative bits. This method validates neither limit:
+     * excessive entries shift earlier information out of the result, while
+     * oversized IDs can overlap adjacent fields.
+     */
     private static long encodeVisibleEffects(Collection<EffectInstance> effects) {
         long visibleEffects = 0;
         for (var effect : effects) {
             if (effect.isVisible()) {
+                // Append the effect ID and ambient flag together; preserving
+                // seven-bit boundaries keeps each visible effect associated
+                // with its own ambience bit.
                 visibleEffects = (visibleEffects << 7)
                         | ((long) effect.getType().getId() << 1)
                         | (effect.isAmbient() ? 1 : 0);
@@ -1250,6 +1692,18 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return visibleEffects;
     }
 
+    /**
+     * Creates an add, modify, or remove effect packet carrying the supplied
+     * tick. {@code newEffect} supplies the payload whenever it is present;
+     * otherwise {@code oldEffect} must supply the identity and ambient state
+     * for removal.
+     *
+     * <p> An absent {@code oldEffect} selects addition, while the presence of
+     * both values selects modification using the new effect's data. This method
+     * does not compare the two effect types before selecting modification.
+     * Callers must therefore pair the effects consistently when requesting a
+     * change to one existing effect.
+     */
     @Override
     public MobEffectPacket encodeMobEffect(
             Entity entity,
@@ -1258,6 +1712,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
             long tick
     ) {
         Objects.requireNonNull(entity, "entity");
+        // Removal has no new effect payload, so retain the old effect identity
+        // and ambient state when constructing its removal event.
         var effect = newEffect != null ? newEffect : Objects.requireNonNull(oldEffect, "oldEffect");
 
         var packet = new MobEffectPacket();
@@ -1276,6 +1732,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates main-hand equipment using the dedicated entity-hand container
+     * when present. Otherwise the entity must have a player inventory, whose
+     * selected hand slot supplies both network slot fields and the item.
+     */
     @Override
     public <T extends Entity & EntityContainerHolderComponent> MobEquipmentPacket encodeEntityHand(T entity) {
         Objects.requireNonNull(entity, "entity");
@@ -1289,6 +1750,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
             packet.setInventorySlot(0);
             packet.setHotbarSlot(0);
         } else {
+            // Without a dedicated entity-hand container, use the selected
+            // player inventory slot so the item and both slot identifiers stay
+            // aligned.
             var inventory = entity.getContainer(ContainerTypes.INVENTORY);
             var handSlot = inventory.getHandSlot();
             packet.setItem(encodeItemStack(inventory.getItemInHand()));
@@ -1298,6 +1762,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates offhand equipment using the fixed offhand container and slot
+     * identifiers. The entity must be nonnull and provide an offhand container;
+     * its current offhand item is encoded into a new packet.
+     */
     @Override
     public <T extends Entity & EntityContainerHolderComponent> MobEquipmentPacket encodeEntityOffhand(T entity) {
         Objects.requireNonNull(entity, "entity");
@@ -1311,6 +1780,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an armor update from the entity's armor container. The entity
+     * must provide that container, and the separate body slot is explicitly
+     * encoded as air while the four armor slots retain their contents.
+     */
     @Override
     public <T extends Entity & EntityContainerHolderComponent> MobArmorEquipmentPacket encodeEntityArmor(T entity) {
         Objects.requireNonNull(entity, "entity");
@@ -1325,6 +1799,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an animation request for one entity from the supplied animation
+     * settings.
+     */
     @Override
     public AnimateEntityPacket encodeEntityAnimation(Entity entity, EntityAnimation animation) {
         Objects.requireNonNull(entity, "entity");
@@ -1338,6 +1816,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates sleeping-player counts using the total for both population
+     * fields.
+     */
     @Override
     public LevelEventGenericPacket encodeSleepingIndicator(int sleepingCount, int totalCount) {
         var packet = new LevelEventGenericPacket();
@@ -1350,6 +1832,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a command-block editor request with the fixed container ID minus
+     * one. The position must be nonnull, and opening this editor does not
+     * allocate a normal container session here.
+     */
     @Override
     public ContainerOpenPacket encodeCommandBlockEditor(Vector3ic position) {
         Objects.requireNonNull(position, "position");
@@ -1360,6 +1847,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an enchantment-option packet by converting each supplied option
+     * pair.
+     */
     @Override
     public PlayerEnchantOptionsPacket encodeEnchantOptions(
             Collection<Pair<Integer, EnchantOption>> enchantOptions
@@ -1372,6 +1863,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates skin-update packets for an actual or simulated player entity.
+     * {@code player} and its skin must be nonnull, and {@code trustSkin} is
+     * copied into each relevant skin payload.
+     *
+     * <p> For an actual player, this method returns one
+     * {@code PlayerSkinPacket}. For a simulated player, it returns a
+     * player-list addition, skin update, and player-list removal, all keyed by
+     * that entity's UUID. The temporary list entry supplies the simulated
+     * player's identity and serialized skin without leaving it in the visible
+     * player list. Callers must preserve the returned packet order when sending
+     * that sequence.
+     */
     @Override
     public Collection<BedrockPacket> encodePlayerSkin(EntityPlayer player, boolean trustSkin) {
         Objects.requireNonNull(player, "player");
@@ -1387,6 +1891,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
             return List.of(packet);
         }
 
+        // Simulated players need a temporary list identity around the skin
+        // update; add and remove the same UUID in the returned sequence.
         var listEntry = new PlayerListPacket.Entry(player.getUniqueId());
         listEntry.setEntityId(player.getUniqueId().getLeastSignificantBits());
         listEntry.setName(player.getUniqueId().toString());
@@ -1414,6 +1920,18 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return List.of(addPacket, skinPacket, removePacket);
     }
 
+    /**
+     * Creates the packets representing an entity action for its recipient. A
+     * self-player arm swing and eating without an inventory produce an empty
+     * list; unsupported action implementations throw
+     * {@code IllegalStateException}.
+     *
+     * <p> Eating combines the held item's runtime ID and metadata into one
+     * event integer, so the event continues to identify the displayed item. A
+     * fishing bite returns three ordered events addressed to the same runtime
+     * entity. Callers must preserve that sequence to transmit the complete bite
+     * effect rather than selecting only one returned packet.
+     */
     @Override
     public Collection<BedrockPacket> encodeEntityAction(Entity entity, EntityAction action, boolean self) {
         Objects.requireNonNull(entity, "entity");
@@ -1421,6 +1939,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return switch (action) {
             case SimpleEntityAction.SWING_ARM -> {
                 if (entity instanceof EntityPlayer) {
+                    // The controlling player supplies its own arm swing, so
+                    // suppress the echoed animation while observers still
+                    // receive the entity's swing packet.
                     yield self
                             ? List.of()
                             : List.of(createAnimatePacket(entity, AnimatePacket.Action.SWING_ARM, 0));
@@ -1432,11 +1953,17 @@ public class PacketEncoder_v766 extends PacketEncoder {
             case SimpleEntityAction.DEATH ->
                     List.of(createEntityEventPacket(entity, EntityEventType.DEATH, 0));
             case SimpleEntityAction.EAT -> {
+                // Eating needs an inventory item identity for its event
+                // payload; without that source, omit the event rather than
+                // fabricating an item.
                 if (!(entity instanceof ContainerHolder holder)
                         || !holder.hasContainer(ContainerTypes.INVENTORY)) {
                     yield List.of();
                 }
                 var item = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand();
+                // Eating uses the same packed runtime item ID and metadata
+                // layout as item particles, preserving which held item supplies
+                // the visual.
                 int data = (item.getItemType().getRuntimeId() << 16) | item.getMeta();
                 yield List.of(createEntityEventPacket(entity, EntityEventType.EATING_ITEM, data));
             }
@@ -1456,6 +1983,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                     List.of(createAnimatePacket(entity, AnimatePacket.Action.CRITICAL_HIT, count));
             case EnchantedHit(int count) ->
                     List.of(createAnimatePacket(entity, AnimatePacket.Action.MAGIC_CRITICAL_HIT, count));
+            // One fishing bite expands into three events for the same runtime
+            // entity; keep them together so callers preserve the complete
+            // effect.
             case SimpleEntityAction.FISHING_HOOK_BITE -> List.of(
                     createEntityEventPacket(entity, EntityEventType.FISH_HOOK_BUBBLE, 0),
                     createEntityEventPacket(entity, EntityEventType.FISH_HOOK_TIME, 0),
@@ -1473,6 +2003,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         };
     }
 
+    /**
+     * Creates a server-side emote packet for the specified player and emote
+     * UUID. Both inputs must be nonnull, and silence adds the mute-chat flag
+     * without changing the selected emote or player identity.
+     */
     @Override
     public EmotePacket encodePlayerEmote(EntityPlayer player, UUID emoteId, boolean silence) {
         Objects.requireNonNull(player, "player");
@@ -1489,6 +2024,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an entity event using runtime identity and event-specific integer
+     * data.
+     */
     private static EntityEventPacket createEntityEventPacket(
             Entity entity,
             EntityEventType eventType,
@@ -1501,6 +2040,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an animation event using runtime identity and action-specific
+     * float data.
+     */
     private static AnimatePacket createAnimatePacket(Entity entity, AnimatePacket.Action action, float data) {
         var packet = new AnimatePacket();
         packet.setAction(action);
@@ -1509,6 +2052,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates the packet representation of a sound at the supplied position.
+     * Named custom sounds and selected block or interface effects use dedicated
+     * packet forms, while ordinary sound events carry identifiers or extra data
+     * required by their category. Unsupported sound implementations and invalid
+     * riptide levels throw {@code IllegalArgumentException}.
+     *
+     * <p> The relative-volume flag applies to ordinary level sound events.
+     * After an event is selected, the version support hook can suppress it with
+     * an empty result, allowing newer subclasses to enable additional events.
+     * Direct play-sound and level-event returns bypass that hook and preserve
+     * their own volume, pitch, or event representation.
+     */
     @Override
     public Collection<BedrockPacket> encodeSound(Sound sound, Vector3dc p, boolean relative) {
         LevelSoundEventPacket packet = new LevelSoundEventPacket();
@@ -1801,6 +2357,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             case SimpleSound.LEVEL_UP -> {
                 packet.setSound(SoundEvent.LEVELUP);
+                // Use the fixed level-up payload instead of the ordinary
+                // no-extra-data sentinel; this event has its own integer
+                // parameter representation.
                 packet.setExtraData(0x10000000);
             }
             case SimpleSound.EXPERIENCE -> {
@@ -1811,10 +2370,14 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             case NoteSound so -> {
                 packet.setSound(SoundEvent.NOTE);
+                // Pack instrument and pitch into separate byte positions so one
+                // note event retains both its sound source and selected musical
+                // pitch.
                 packet.setExtraData((so.instrument().ordinal() << 8) | so.pitch());
             }
             case FallSound so -> {
                 packet.setIdentifier("minecraft:player");
+                // Falls above four blocks select the larger impact sound.
                 if (so.distance() > 4) {
                     packet.setSound(SoundEvent.FALL_BIG);
                 } else {
@@ -1941,6 +2504,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 playSound.setSound(SoundNames.BLOCK_DECORATED_POT_INSERT);
                 playSound.setPosition(pos);
                 playSound.setVolume(1.0f);
+                // Insertion progress raises pitch linearly without clamping the
+                // input.
                 playSound.setPitch(0.7f + 0.5f * (float) so.progress());
                 return List.of(playSound);
             }
@@ -1979,22 +2544,33 @@ public class PacketEncoder_v766 extends PacketEncoder {
             default -> throw new IllegalArgumentException("Unhandled sound type: " + sound.getClass().getSimpleName());
         }
 
+        // A mapped event can still be unavailable in this version; omit it
+        // instead of sending a numeric event the client cannot represent.
         return supportsSoundEvent(packet.getSound()) ? List.of(packet) : List.of();
     }
 
     /**
-     * Checks whether this protocol can represent a sound event.
-     *
-     * @param soundEvent the sound event to check
-     * @return {@code true} if the event may be sent to this client
+     * Returns whether the baseline permits the selected level sound event.
+     * {@code RECORD_TEARS}, {@code RECORD_LAVA_CHICKEN},
+     * {@code SINGLE_ITEM_SWAP}, and {@code MULTI_ITEM_SWAP} are excluded here;
+     * subclasses enable them when their codec assigns the corresponding event
+     * IDs.
      */
     protected boolean supportsSoundEvent(SoundEvent soundEvent) {
+        // Later codec maps introduce these event IDs; omit their common
+        // mappings here until a version-specific override explicitly enables
+        // them.
         return switch (soundEvent) {
             case RECORD_TEARS, RECORD_LAVA_CHICKEN, SINGLE_ITEM_SWAP, MULTI_ITEM_SWAP -> false;
             default -> true;
         };
     }
 
+    /**
+     * Returns the equip sound for elytra or a recognized armor tier. Netherite
+     * shares the diamond event; items without an armor tier other than elytra
+     * produce a null-switch failure rather than a generic equip sound.
+     */
     private static SoundEvent getEquipSound(ItemType<?> itemType) {
         if (itemType == ItemTypes.ELYTRA) {
             return SoundEvent.ARMOR_EQUIP_ELYTRA;
@@ -2005,10 +2581,16 @@ public class PacketEncoder_v766 extends PacketEncoder {
             case IRON -> SoundEvent.ARMOR_EQUIP_IRON;
             case CHAIN -> SoundEvent.ARMOR_EQUIP_CHAIN;
             case GOLD -> SoundEvent.ARMOR_EQUIP_GOLD;
+            // Netherite reuses the diamond equip event in this baseline, so
+            // newer armor remains audible without introducing a separate event
+            // mapping.
             case DIAMOND, NETHERITE -> SoundEvent.ARMOR_EQUIP_DIAMOND;
         };
     }
 
+    /**
+     * Creates a boss-bar creation packet from the supplied bar state.
+     */
     @Override
     public BossEventPacket encodeBossBar(long bossEntityId, BossBar bossBar) {
         Objects.requireNonNull(bossBar, "bossBar");
@@ -2023,6 +2605,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a boss-bar removal packet addressed by the supplied unique entity
+     * ID.
+     */
     @Override
     public BossEventPacket encodeBossBarRemoval(long bossEntityId) {
         var packet = new BossEventPacket();
@@ -2031,6 +2617,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a modal form request using the form's JSON serialization.
+     */
     @Override
     public ModalFormRequestPacket encodeForm(int formId, Form form) {
         Objects.requireNonNull(form, "form");
@@ -2040,11 +2629,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a request to close the client's currently displayed forms.
+     */
     @Override
     public ClientboundCloseFormPacket encodeCloseForms() {
         return new ClientboundCloseFormPacket();
     }
 
+    /**
+     * Creates the display-objective packet followed by the initial score
+     * update. All inputs must be nonnull, callers must preserve that order, and
+     * score objects remain shared inside a newly copied list.
+     */
     @Override
     public Collection<BedrockPacket> encodeScoreboard(
             Scoreboard scoreboard,
@@ -2065,9 +2662,16 @@ public class PacketEncoder_v766 extends PacketEncoder {
         var scorePacket = new SetScorePacket();
         scorePacket.setInfos(new ArrayList<>(scores));
         scorePacket.setAction(SetScorePacket.Action.SET);
+        // The objective announcement precedes scores that refer to it; retain
+        // this order when sending both packets to the viewer.
         return List.of(objective, scorePacket);
     }
 
+    /**
+     * Creates a display-slot update with empty objective fields to clear the
+     * slot. The slot must be nonnull, and clearing this display association
+     * does not emit a separate objective-removal packet.
+     */
     @Override
     public SetDisplayObjectivePacket encodeScoreboardSlotRemoval(DisplaySlot slot) {
         Objects.requireNonNull(slot, "slot");
@@ -2080,6 +2684,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an objective-removal packet using the scoreboard's objective
+     * identifier.
+     */
     @Override
     public RemoveObjectivePacket encodeScoreboardRemoval(Scoreboard scoreboard) {
         Objects.requireNonNull(scoreboard, "scoreboard");
@@ -2088,6 +2696,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a score update for the required action and optional score entry.
+     * A {@code null} score yields an empty packet entry list, while a supplied
+     * score object is retained by reference.
+     */
     @Override
     public SetScorePacket encodeScore(SetScorePacket.Action action, ScoreInfo score) {
         Objects.requireNonNull(action, "action");
@@ -2099,6 +2712,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an item cooldown packet using the category and duration in ticks.
+     */
     @Override
     public PlayerStartItemCooldownPacket encodeCooldown(String category, int duration) {
         Objects.requireNonNull(category, "category");
@@ -2108,9 +2724,21 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a map update from the top-left 128-by-128 image region. The image
+     * must be nonnull and at least that large in both dimensions; smaller
+     * images fail during pixel access, while excess pixels are ignored.
+     *
+     * <p> Pixels are traversed row by row into a fresh color array. Each Java
+     * ARGB color is reordered to the packet's ABGR layout without changing
+     * alpha, preserving channel meaning across the image and network
+     * representations. The map ID also identifies the tracked entry, and the
+     * update starts at the zero origin.
+     */
     @Override
     public ClientboundMapItemDataPacket encodeMapData(long mapId, BufferedImage image) {
         Objects.requireNonNull(image, "image");
+        // Map textures use a fixed square pixel region without resampling.
         int imageSize = 128;
         var packet = new ClientboundMapItemDataPacket();
         packet.setUniqueMapId(mapId);
@@ -2130,13 +2758,30 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Reorders one ARGB pixel into the ABGR layout consumed by map packets. The
+     * result preserves all four eight-bit channel values, including alpha,
+     * while exchanging the red and blue positions.
+     *
+     * <p> Each channel is masked before the shifted values are combined. Those
+     * masks prevent Java's sign-extending right shifts from spreading a
+     * channel's high bit into neighboring channels, so opaque pixels and
+     * channels above 127 retain the same values after reordering.
+     */
     private static int toAbgr(int argb) {
+        // Exchange red and blue byte positions; masking preserves channel
+        // values while the unchanged alpha byte retains the source
+        // transparency.
         return ((argb >> 16) & 0xFF) |
                ((argb >> 8) & 0xFF) << 8 |
                (argb & 0xFF) << 16 |
                ((argb >> 24) & 0xFF) << 24;
     }
 
+    /**
+     * Creates death-screen information using the supplied nonnull cause
+     * message.
+     */
     @Override
     public DeathInfoPacket encodeDeathInfo(String message) {
         Objects.requireNonNull(message, "message");
@@ -2145,6 +2790,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an item-charge completion event for the supplied runtime entity
+     * ID.
+     */
     @Override
     public EntityEventPacket encodeItemChargingFinished(long runtimeEntityId) {
         var packet = new EntityEventPacket();
@@ -2153,6 +2802,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a single-attribute update retaining the supplied attribute object
+     * by reference. The attribute must be nonnull, and any mutable state on
+     * that object remains shared with the resulting packet.
+     */
     @Override
     public UpdateAttributesPacket encodeAttribute(long runtimeEntityId, AttributeData attribute) {
         Objects.requireNonNull(attribute, "attribute");
@@ -2162,6 +2816,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a text packet with the supplied sender XUID, message, and type.
+     */
     @Override
     public TextPacket encodeText(String xuid, String message, TextPacket.Type type) {
         Objects.requireNonNull(xuid, "xuid");
@@ -2174,6 +2831,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a toast notification containing the nonnull title and content
+     * strings.
+     */
     @Override
     public ToastRequestPacket encodeToast(String title, String content) {
         Objects.requireNonNull(title, "title");
@@ -2184,6 +2845,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a title operation using the supplied nonnull packet type.
+     * {@code null} text leaves the packet's text defaults unchanged, and
+     * fade-in, stay, and fade-out tick values are applied only to timing
+     * operations.
+     */
     @Override
     public SetTitlePacket encodeTitle(
             SetTitlePacket.Type type,
@@ -2208,6 +2875,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a positional or rotational camera-shake request with the supplied
+     * intensity. Duration is expressed in seconds, the shake type must be
+     * nonnull, and this method does not clamp either numeric input.
+     */
     @Override
     public CameraShakePacket encodeCameraShake(CameraShakeType shakeType, float intensity, float duration) {
         Objects.requireNonNull(shakeType, "shakeType");
@@ -2222,6 +2894,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a camera-shake stop request with sentinel intensity and duration
+     * values. The positional type accompanies the stop action, and both numeric
+     * fields are set to minus one rather than a new shake magnitude.
+     */
     @Override
     public CameraShakePacket encodeCameraShakeStop() {
         var packet = new CameraShakePacket();
@@ -2232,6 +2909,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a fog-stack packet preserving the supplied collection's iteration
+     * order.
+     */
     @Override
     public PlayerFogPacket encodeFogStack(Collection<String> fogStack) {
         Objects.requireNonNull(fogStack, "fogStack");
@@ -2240,6 +2921,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a dimension-change request with coordinates converted to network
+     * floats. The destination dimension must be nonnull, and the vertical
+     * position receives the player eye-height offset of 1.62 blocks.
+     */
     @Override
     public ChangeDimensionPacket encodeDimensionChange(
             DimensionType dimensionType,
@@ -2250,10 +2936,16 @@ public class PacketEncoder_v766 extends PacketEncoder {
         Objects.requireNonNull(dimensionType, "dimensionType");
         var packet = new ChangeDimensionPacket();
         packet.setDimension(dimensionType.getId());
+        // Dimension-change coordinates use player eye height rather than feet
+        // height.
         packet.setPosition(Vector3f.from((float) x, (float) y + 1.62f, (float) z));
         return packet;
     }
 
+    /**
+     * Creates a dimension-change acknowledgement for the supplied runtime
+     * entity ID.
+     */
     @Override
     public PlayerActionPacket encodeDimensionChangeSuccess(long runtimeEntityId) {
         var packet = new PlayerActionPacket();
@@ -2264,6 +2956,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a base ability layer with the supplied permission levels and
+     * speeds. Every known ability is included in the layer's defined set, while
+     * only the supplied abilities are enabled in its value set.
+     */
     @Override
     public UpdateAbilitiesPacket encodePlayerAbilities(
             long uniqueEntityId,
@@ -2293,6 +2990,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates adventure settings from the supplied interaction and visibility
+     * flags. Auto-jump is always enabled in this packet, independently of those
+     * flags, and no player-specific settings are read during encoding.
+     */
     @Override
     public UpdateAdventureSettingsPacket encodeAdventureSettings(
             boolean noPlayerVersusMob,
@@ -2309,6 +3011,18 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an add or remove player-list packet from the supplied players.
+     * Each player must have login data and a controlled entity even for
+     * removal, because both packet actions populate the same complete entry
+     * structure.
+     *
+     * <p> The entry UUID comes from login data, whereas the entity ID uses the
+     * controlled entity UUID's low bits. Keeping these identity sources
+     * distinct associates the list entry with the account and its current
+     * entity. Skins use the requested trust flag, and the origin-name hash
+     * supplies a deterministic RGB display color.
+     */
     @Override
     public PlayerListPacket encodePlayerList(
             Collection<? extends Player> players,
@@ -2328,12 +3042,16 @@ public class PacketEncoder_v766 extends PacketEncoder {
             entry.setBuildPlatform(BuildPlatform.from(player.getLoginData().getDeviceInfo().device().getId()));
             entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
             entry.setTrustedSkin(trustSkins);
+            // Only the low twenty-four hash bits form the display RGB color.
             entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
             packet.getEntries().add(entry);
         }
         return packet;
     }
 
+    /**
+     * Creates a transfer request using the nonnull address and supplied port.
+     */
     @Override
     public TransferPacket encodeTransfer(String address, int port) {
         Objects.requireNonNull(address, "address");
@@ -2343,6 +3061,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates command availability using a fresh list of supplied command
+     * objects. The collection must be nonnull, while the individual command
+     * definitions remain shared with the caller rather than being copied.
+     */
     @Override
     public AvailableCommandsPacket encodeCommands(Collection<CommandData> commands) {
         Objects.requireNonNull(commands, "commands");
@@ -2351,6 +3074,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates HUD visibility updates covering all known HUD elements. Requested
+     * elements are hidden, all others are reset, and empty reset or hide
+     * packets are omitted from the returned mutable list.
+     */
     @Override
     public Collection<SetHudPacket> encodeHudElements(Collection<HudElement> hiddenElements) {
         Objects.requireNonNull(hiddenElements, "hiddenElements");
@@ -2377,6 +3105,18 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packets;
     }
 
+    /**
+     * Creates the metadata update and dialogue-open packet for an entity-backed
+     * dialog. {@code Dialog} and entity must be nonnull, and callers must send
+     * the returned metadata packet before the dialogue packet.
+     *
+     * <p> Portrait settings are encoded into NPC metadata with the entity's
+     * network vertical offset added to a new vector, leaving the supplied model
+     * offset unchanged. The metadata packet uses runtime identity while the
+     * dialogue uses persistent UUID low bits. This paired representation
+     * prepares the portrait before opening the scene associated with that same
+     * entity.
+     */
     @Override
     public Collection<BedrockPacket> encodeDialog(Dialog dialog, Entity entity) {
         Objects.requireNonNull(dialog, "dialog");
@@ -2394,6 +3134,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 modelSettings.rotation()
         ))));
 
+        // The dialogue references an entity whose portrait offsets live in
+        // metadata; send that preparation first so the opening scene uses the
+        // selected model settings.
         var metadata = encodeEntityMetadata(entity);
         metadata.put(EntityDataTypes.NPC_DATA, portraitOffsetJson);
         var entityData = new SetEntityDataPacket();
@@ -2410,6 +3153,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return List.of(entityData, dialogue);
     }
 
+    /**
+     * Creates a dialogue-close packet addressed by the entity's persistent UUID
+     * low bits.
+     */
     @Override
     public NpcDialoguePacket encodeDialogClose(Entity entity) {
         Objects.requireNonNull(entity, "entity");
@@ -2423,9 +3170,25 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a cache-miss response with copied byte arrays for every supplied
+     * blob hash. {@code blobs}, its keys, and its values must be nonnull, and
+     * callers must transfer the returned packet to the transport or release it
+     * when discarding it.
+     *
+     * <p> This method validates and clones the complete input map before
+     * allocating reference-counted buffers. An invalid later entry therefore
+     * cannot strand a buffer created for an earlier entry. Each buffer wraps
+     * its cloned array, and releasing the returned
+     * {@code ClientCacheMissResponsePacket} releases those buffers;
+     * source-array edits cannot change the packet bytes.
+     */
     @Override
     public ClientCacheMissResponsePacket encodeClientCacheMissResponse(Map<Long, byte[]> blobs) {
         Objects.requireNonNull(blobs, "blobs");
+        // Validate and clone every blob before allocating reference-counted
+        // buffers, so a bad later entry cannot strand buffers created for
+        // earlier entries.
         var copiedBlobs = new LinkedHashMap<Long, byte[]>();
         for (var entry : blobs.entrySet()) {
             copiedBlobs.put(
@@ -2439,6 +3202,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates block-entity data using the supplied nonnull position and NBT
+     * map. The outer NBT map is rebuilt through its builder; this method does
+     * not explicitly copy every nested value or array.
+     */
     @Override
     public BlockEntityDataPacket encodeBlockEntityData(Vector3ic position, NbtMap data) {
         Objects.requireNonNull(position, "position");
@@ -2449,6 +3217,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a chunk-radius acknowledgement with the supplied radius in
+     * chunks.
+     */
     @Override
     public ChunkRadiusUpdatedPacket encodeChunkRadiusUpdated(int radius) {
         var packet = new ChunkRadiusUpdatedPacket();
@@ -2456,6 +3228,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a sub-chunk response with a copied list of payload entries.
+     * {@code centerPosition} and {@code subChunks} must be nonnull, and a
+     * {@code null} entry causes {@code IllegalArgumentException} before packet
+     * construction.
+     *
+     * <p> The packet shares each {@code SubChunkData} object without retaining
+     * it. Releasing the packet releases its entries and their buffers, so
+     * callers transfer entry ownership with the packet and must retain entries
+     * separately before using or releasing them independently. Copying the list
+     * only separates membership changes; it does not duplicate payload objects
+     * or their storage.
+     */
     @Override
     public SubChunkPacket encodeSubChunk(
             int dimension,
@@ -2481,6 +3266,11 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a container-close packet from its explicit network identity and
+     * type. The type must be nonnull, and the server-initiated flag is retained
+     * without changing any container state here.
+     */
     @Override
     public ContainerClosePacket encodeContainerClose(
             byte id,
@@ -2494,6 +3284,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates an item-stack response packet containing the supplied response
+     * objects. The collection must be nonnull and contain no {@code null}
+     * entries; entries remain shared, and this baseline does not normalize
+     * their nested containers.
+     */
     @Override
     public ItemStackResponsePacket encodeItemStackResponse(Collection<ItemStackResponse> responses) {
         Objects.requireNonNull(responses, "responses");
@@ -2506,6 +3302,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a server-ready respawn packet at the supplied nonnull block
+     * position.
+     */
     @Override
     public RespawnPacket encodeRespawn(Vector3ic position) {
         Objects.requireNonNull(position, "position");
@@ -2515,6 +3315,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates a server settings form response from the supplied ID and JSON.
+     */
     @Override
     public ServerSettingsResponsePacket encodeServerSettingsResponse(int formId, String formData) {
         var packet = new ServerSettingsResponsePacket();
@@ -2523,6 +3326,20 @@ public class PacketEncoder_v766 extends PacketEncoder {
         return packet;
     }
 
+    /**
+     * Creates the initial game description from world settings, saved player
+     * data, a destination dimension, and the player entity. All four inputs
+     * must be nonnull, and the caller is responsible for supplying mutually
+     * consistent world, dimension, and entity state.
+     *
+     * <p> The saved player game mode overrides the world mode when present,
+     * while world defaults continue to populate level-wide settings.
+     * {@code Entity} identity and location come from the live player, including
+     * the eye-height offset used by the initial position. The seed is sent as
+     * zero, server authority flags are enabled, and this protocol's cached
+     * definitions and selected experiments are attached to align subsequent
+     * packet decoding with the login description.
+     */
     @Override
     public StartGamePacket encodeStartGame(
             World spawnWorld,
@@ -2540,6 +3357,9 @@ public class PacketEncoder_v766 extends PacketEncoder {
         packet.getGamerules().addAll(NetworkHelper.toNetwork(worldData.getGameRules().getGameRules()));
         packet.setUniqueEntityId(player.getUniqueId().getLeastSignificantBits());
         packet.setRuntimeEntityId(player.getRuntimeId());
+        // A saved player mode takes precedence over the world default,
+        // preserving personal game mode while the level still advertises
+        // world-wide settings.
         packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt(
                 "PlayerGameMode",
                 NetworkHelper.toNetwork(worldData.getGameMode()).ordinal()
@@ -2548,6 +3368,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
         var location = player.getLocation();
         var worldSpawn = worldData.getSpawnPoint();
         packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
+        // Initial player position uses eye height above the entity location.
         packet.setPlayerPosition(Vector3f.from(location.x(), location.y() + 1.62, location.z()));
         packet.setRotation(Vector2f.from(location.pitch(), location.yaw()));
         // The world seed is intentionally hidden from clients.
@@ -2597,17 +3418,19 @@ public class PacketEncoder_v766 extends PacketEncoder {
     }
 
     /**
-     * Creates experiment data for this exact protocol. This intentionally returns fresh payload
-     * objects instead of caching small data.
+     * Creates the experiment set used by this encoder's pack-stack and login
+     * packets. This baseline delegates to the common default set, while
+     * subclasses can choose a different set for their protocol branch.
      */
     protected List<ExperimentData> createExperiments() {
         return createDefaultExperiments();
     }
 
     /**
-     * Creates the experiment set shared by protocol versions that use this baseline.
-     *
-     * @return fresh experiment payloads
+     * Creates the three enabled baseline experiments with fresh payload
+     * objects. The returned list is unmodifiable, and later encoders can call
+     * this final helper to omit experiments introduced only by an intermediate
+     * superclass.
      */
     protected final List<ExperimentData> createDefaultExperiments() {
         return List.of(
@@ -2617,6 +3440,12 @@ public class PacketEncoder_v766 extends PacketEncoder {
         );
     }
 
+    /**
+     * Creates one pack announcement entry using manifest capabilities and
+     * caller-selected flags. {@code Pack} identity is used for both the UUID
+     * and content identity, while optional subpack and download fields retain
+     * their empty or {@code null} defaults.
+     */
     private static ResourcePacksInfoPacket.Entry createResourcePackInfo(
             Pack pack,
             boolean scripting,
@@ -2636,6 +3465,10 @@ public class PacketEncoder_v766 extends PacketEncoder {
         );
     }
 
+    /**
+     * Converts each supported pack category to its network transfer
+     * classification.
+     */
     private static ResourcePackType toNetworkResourcePackType(org.allaymc.api.pack.Pack.Type type) {
         return switch (type) {
             case RESOURCES -> ResourcePackType.RESOURCES;
@@ -2645,27 +3478,69 @@ public class PacketEncoder_v766 extends PacketEncoder {
         };
     }
 
+    /**
+     * Returns whether a dimension requires an explicit bounds definition.
+     * Custom identifiers always qualify, while recognized vanilla identifiers
+     * qualify only when their configured minimum or maximum differs from the
+     * corresponding default.
+     */
     private static boolean shouldSendDimensionDefinition(org.allaymc.api.world.dimension.DimensionType dimensionType) {
         var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        // Custom identities still need explicit definitions when their numeric
+        // bounds match vanilla; only a recognized vanilla identity can omit one.
         return dimensionId == null || !dimensionId.isDefaultBounds(dimensionType);
     }
 
+    /**
+     * Returns the generator advertised alongside an explicit dimension
+     * definition. Recognized vanilla dimensions with changed bounds use void,
+     * while other dimensions use the ordinary vanilla-generator selection
+     * shared with the login packet.
+     */
     private static VanillaGeneratorType getDimensionDefinitionGeneratorType(org.allaymc.api.world.dimension.DimensionType dimensionType) {
         var dimensionId = DimensionId.fromDimensionType(dimensionType);
         if (dimensionId != null && !dimensionId.isDefaultBounds(dimensionType)) {
+            // Changed vanilla bounds require their explicit definition to use
+            // the void generator, while StartGame keeps the ordinary dimension
+            // generator selection.
             return VanillaGeneratorType.VOID;
         }
         return getVanillaGeneratorType(dimensionType);
     }
 
+    /**
+     * Returns the vanilla generator associated with a recognized dimension
+     * identifier. Custom dimension identifiers fall back to the overworld
+     * generator; this helper does not inspect height bounds when selecting that
+     * default.
+     */
     private static VanillaGeneratorType getVanillaGeneratorType(DimensionType dimensionType) {
         var dimensionId = DimensionId.fromDimensionType(dimensionType);
+        // Custom identifiers have no vanilla generator mapping; use the
+        // overworld generator as the shared fallback for login and dimension
+        // definition payloads.
         return dimensionId == null ?
                 DimensionId.OVERWORLD.getVanillaGeneratorType() :
                 dimensionId.getVanillaGeneratorType();
     }
 
+    /**
+     * Copies a supported cached recipe into a packet-owned recipe structure.
+     * Shaped, shapeless, smithing, multi, and furnace payloads retain their
+     * identifying fields and network IDs while copying the mutable collections
+     * and result item structures available in each format.
+     *
+     * <p> Ingredient descriptor objects remain shared, as do item definitions
+     * and nested item tags. Unlocking requirements receive new ingredient lists
+     * without duplicating their elements. An unsupported recipe implementation
+     * throws {@code IllegalStateException} rather than returning the cached
+     * object, preventing an unknown mutable payload shape from silently
+     * bypassing the copy boundary.
+     */
     private static RecipeData copyRecipeData(RecipeData recipe) {
+        // Reconstruct each supported payload shape instead of returning cached
+        // instances; preserve identity fields while detaching lists and mutable
+        // result-item storage.
         return switch (recipe) {
             case ShapedRecipeData shaped -> ShapedRecipeData.of(
                     shaped.getType(), shaped.getId(), shaped.getWidth(), shaped.getHeight(),
@@ -2695,16 +3570,32 @@ public class PacketEncoder_v766 extends PacketEncoder {
         };
     }
 
+    /**
+     * Creates an unlocking requirement with the same context and a fresh
+     * ingredient list. Ingredient descriptor objects remain shared, and both
+     * the requirement and its source ingredient list must be nonnull.
+     */
     private static RecipeUnlockingRequirement copyRequirement(RecipeUnlockingRequirement requirement) {
         return new RecipeUnlockingRequirement(requirement.context(), new ArrayList<>(requirement.ingredients()));
     }
 
+    /**
+     * Creates a mutable list of copied item payloads in source order. Item
+     * objects and their restriction arrays are rebuilt, while definitions and
+     * nested tags retain the sharing described by the item-copy helper.
+     */
     private static List<ItemData> copyItems(List<ItemData> items) {
         return items.stream()
                 .map(PacketEncoder_v766::copyItemData)
                 .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Creates an item payload with copied placement and breaking restriction
+     * arrays. Item and block definitions and the NBT tag remain shared, while
+     * scalar properties, network identity, and stack count retain their
+     * original values.
+     */
     private static ItemData copyItemData(ItemData item) {
         return ItemData.builder()
                 .definition(item.getDefinition())

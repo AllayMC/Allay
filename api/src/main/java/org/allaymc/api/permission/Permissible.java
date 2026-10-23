@@ -3,15 +3,19 @@ package org.allaymc.api.permission;
 import java.util.Collection;
 
 /**
- * Represents an object that can have permissions.
+ * {@code Permissible} represents a subject whose permission queries can be
+ * delegated to a replaceable {@link PermissionCalculator}. The default query
+ * methods preserve individual tristate decisions and require every requested
+ * permission to be granted for a bulk check to succeed.
  *
  * @author daoge_cmd
  */
 public interface Permissible {
 
     /**
-     * Checks if this permissible object has a certain permission. This is simply done by
-     * calling {@link PermissionCalculator#calculatePermission(String)}.
+     * Returns this subject's decision for the supplied permission name.
+     * A missing calculator produces {@link Tristate#UNDEFINED}; otherwise the
+     * calculator receives the name unchanged and supplies the result directly.
      *
      * @param permission the permission to check
      * @return the {@link Tristate} state of the permission
@@ -26,9 +30,9 @@ public interface Permissible {
     }
 
     /**
-     * Checks if this permissible object has all the specified permissions.
-     * Each permission is evaluated, and the method returns {@code true}
-     * only if all permissions resolve to {@link Tristate#TRUE}.
+     * Returns whether all requested permissions convert to granted decisions.
+     * Evaluation stops at the first result whose {@link Tristate#asBoolean()}
+     * value is {@code false}; an empty collection returns {@code true}.
      *
      * @param permissions a collection of permission strings to check
      * @return {@code true} if all permissions resolve to {@link Tristate#TRUE};
@@ -39,9 +43,10 @@ public interface Permissible {
     }
 
     /**
-     * Retrieves the {@code PermissionCalculator} associated with this permissible object.
-     * The {@code PermissionCalculator} is responsible for determining whether a certain
-     * permission is granted to a subject.
+     * Returns the calculator currently associated with this subject.
+     * A {@code null} result makes the default {@link #hasPermission(String)}
+     * implementation return {@link Tristate#UNDEFINED} without invoking any
+     * calculator for that permission query.
      *
      * @return the {@code PermissionCalculator} instance currently associated with this object,
      * or {@code null} if no {@code PermissionCalculator} has been assigned (in that case, any
@@ -50,8 +55,10 @@ public interface Permissible {
     PermissionCalculator getPermissionCalculator();
 
     /**
-     * Sets the {@link PermissionCalculator} instance to be used for calculating permissions
-     * associated with this object.
+     * Replaces the calculator used to answer this subject's permission queries.
+     * A {@code null} calculator disables delegation in the default
+     * {@link #hasPermission(String)} implementation and makes subsequent queries
+     * return {@link Tristate#UNDEFINED}.
      *
      * @param calculator the {@link PermissionCalculator} to assign. If set to {@code null},
      *                   any permission check will return {@link Tristate#UNDEFINED}.
@@ -59,16 +66,12 @@ public interface Permissible {
     void setPermissionCalculator(PermissionCalculator calculator);
 
     /**
-     * Called when the permissions associated with this permissible object change. This method
-     * is used to update the state of the permissible object if any permission changes.
-     * <p>
-     * For example, if a player's "flight permission" changes, the server should send an update
-     * to the client to enable the player to fly.
-     * <p>
-     * This method is expected to be called by the implementation of the {@link PermissionCalculator},
-     * since the permissible itself won't know if any permissions have changed.
+     * Notifies this subject that its externally calculated permissions changed.
+     * Calculator implementations call this hook when dependent state needs
+     * refreshing; the default implementation performs no work, while subjects
+     * may override it to update client-visible abilities.
      */
     default void onPermissionChange() {
-        // no-op
+        // The default subject has no permission-dependent state to refresh.
     }
 }

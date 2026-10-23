@@ -4,104 +4,104 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Shared component for fishing hook entities, covering hook state, catch state, and reeling behavior.
+ * {@code EntityFishingHookBaseComponent} exposes the state of a cast hook and
+ * its associated fishing rod. A hook may follow a caught entity or progress
+ * through water-based fishing phases; reeling resolves the applicable catch
+ * and ends the cast.
  *
  * @author daoge_cmd
  */
 public interface EntityFishingHookBaseComponent extends EntityComponent {
     /**
-     * The fishing hook state.
+     * {@code FishingState} identifies the current phase of a cast fishing
+     * hook.
      */
     enum FishingState {
         /**
-         * The hook is in the air, flying towards water.
+         * Airborne or outside the water-based fishing state machine.
          */
         FLYING,
         /**
-         * The hook is in water, waiting for a fish.
+         * Waiting in water before a virtual fish approaches.
          */
         WAITING,
         /**
-         * A fish is being attracted to the hook.
+         * A virtual fish approaching the hook through wake particles.
          */
         ATTRACTING,
         /**
-         * A fish has bitten the hook.
+         * A bite awaiting reeling before its catch window expires.
          */
         CAUGHT
     }
 
     /**
-     * Gets the entity that has been hooked by this fishing hook.
-     *
-     * @return the hooked entity, or {@code null} if none
+     * Returns the currently hooked entity, or {@code null} when no entity is
+     * retained. A hooked entity takes precedence over the water-based catch
+     * state during reeling and tick processing.
      */
     Entity getHookedEntity();
 
     /**
-     * Sets the entity that has been hooked by this fishing hook.
-     *
-     * @param entity the entity to hook, can be {@code null} to clear
+     * Stores the entity followed by this hook on subsequent ticks. Passing
+     * {@code null} clears the target so water-based fishing phases can resume,
+     * while a nonnull target takes precedence over catch loot.
      */
     void setHookedEntity(Entity entity);
 
     /**
-     * Checks if this fishing hook has hooked an entity.
-     *
-     * @return {@code true} if an entity is hooked
+     * Returns whether the hook currently retains a nonnull entity target.
      */
     default boolean hasHookedEntity() {
         return getHookedEntity() != null;
     }
 
     /**
-     * Gets the fishing rod item stack associated with this hook.
-     *
-     * @return the fishing rod, or {@code null} if not set
+     * Returns the retained fishing rod reference, or {@code null} when none is
+     * assigned. Fishing calculations read enchantments from this same stack
+     * rather than a copy captured at cast time.
      */
     ItemStack getFishingRod();
 
     /**
-     * Sets the fishing rod item stack associated with this hook.
-     *
-     * @param fishingRod the fishing rod, can be {@code null}
+     * Retains the supplied fishing rod stack without copying its contents.
+     * Passing {@code null} removes its enchantment contribution, and later
+     * stack changes affect subsequent wait-time and loot calculations.
      */
     void setFishingRod(ItemStack fishingRod);
 
     /**
-     * Gets the current fishing state.
-     *
-     * @return the fishing state
+     * Returns the fishing phase currently recorded for this hook.
      */
     FishingState getFishingState();
 
     /**
-     * Sets the current fishing state.
-     *
-     * @param state the fishing state
+     * Stores the current phase without initializing the associated fishing
+     * timers. Normal phase transitions set those timers separately, so callers
+     * changing this value must account for the existing timer state.
      */
     void setFishingState(FishingState state);
 
     /**
-     * Checks if a fish has bitten the hook and is ready to be reeled in.
-     *
-     * @return {@code true} if a fish has been caught
+     * Returns whether the recorded fishing phase equals {@code
+     * FishingState.CAUGHT}.
      */
     default boolean isCaught() {
         return getFishingState() == FishingState.CAUGHT;
     }
 
     /**
-     * Reels in the fishing line, potentially catching a fish or pulling a hooked entity.
-     * This method handles loot generation and experience dropping.
+     * Resolves this cast by pulling a hooked entity or generating caught loot
+     * and experience. Event cancellation suppresses the corresponding reward
+     * or motion, but reeling still removes the hook and clears the player cast
+     * reference.
      */
     void reelLine();
 
     /**
-     * Checks if the fishing hook is in open water.
-     * Open water is required for catching treasure items.
-     *
-     * @return {@code true} if in open water
+     * Returns the cached open-water eligibility used for treasure selection.
+     * Water-based ticking refreshes the surrounding-block check periodically,
+     * so this value may lag behind recent changes around the hook.
      */
     boolean isInOpenWater();
 }

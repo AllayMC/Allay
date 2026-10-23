@@ -8,34 +8,49 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Dialog represents a dialogue menu. This menu can consist of a title, a
- * body and up to 6 different buttons. The menu also shows a 3D render of the
- * entity that is sending the dialogue.
+ * {@code Dialog} represents an entity dialog containing a title, body, model settings, and text
+ * buttons. Button actions can link to another dialog for menu transitions. {@code button} limits
+ * additions to six entries, while the generated list getter exposes the mutable backing list.
  *
  * @author daoge_cmd
  */
 @Getter
 public final class Dialog {
 
+    /**
+     * {@code buttons} holds actions in display order. {@code getButtons()} exposes this mutable
+     * list, so direct changes bypass the six-button check and owner assignment.
+     */
     private final List<Button> buttons;
 
+    /**
+     * Dialog window title text.
+     */
     private String title;
+    /**
+     * Dialog main body text.
+     */
     private String body;
+    /**
+     * Entity model display settings.
+     */
     private ModelSettings modelSettings;
+    /**
+     * {@code onClose} runs when a final client close notification is processed for the stored
+     * dialog. Explicit server closure removes that dialog reference first.
+     */
     private Runnable onClose;
 
     /**
-     * Creates and returns a new instance of {@code Dialog}. The created dialog will have no title, no body,
-     * and no buttons by default.
-     *
-     * @return a new instance of {@code Dialog}
+     * Creates a new dialog with no buttons and default model settings.
      */
     public static Dialog create() {
         return new Dialog();
     }
 
     /**
-     * Create a new dialog, with no title, body, and buttons.
+     * Creates a dialog with empty title and body text and no buttons. The model uses the shared
+     * {@code ModelSettings.DEFAULT} reference, and the initial close callback performs no action.
      */
     public Dialog() {
         this.buttons = new ArrayList<>();
@@ -47,10 +62,7 @@ public final class Dialog {
     }
 
     /**
-     * Sets the title of this dialog.
-     *
-     * @param title the title to set for the dialog
-     * @return the updated {@link Dialog} object for method chaining
+     * Stores the title text and returns this dialog for configuration.
      */
     public Dialog title(String title) {
         this.title = title;
@@ -58,10 +70,7 @@ public final class Dialog {
     }
 
     /**
-     * Sets the body text of the dialog.
-     *
-     * @param body the body text to set
-     * @return the current instance of {@link Dialog} for method chaining
+     * Stores the body text and returns this dialog for configuration.
      */
     public Dialog body(String body) {
         this.body = body;
@@ -69,12 +78,11 @@ public final class Dialog {
     }
 
     /**
-     * Adds the given button to the dialog. A dialog can contain a maximum of 6 buttons.
-     * The dialog instance is assigned to the button.
+     * Adds a button, assigns this dialog as its owner, and returns the attached button. Six
+     * existing entries reject the addition before owner assignment; adding the same button again is
+     * otherwise allowed.
      *
-     * @param button the button to be added to the dialog
-     * @return the button that was added to the dialog
-     * @throws IllegalArgumentException if more than 6 buttons are added to the dialog
+     * @throws IllegalArgumentException if six buttons are already present
      */
     public Button button(Button button) {
         if (this.buttons.size() >= 6) {
@@ -87,37 +95,25 @@ public final class Dialog {
     }
 
     /**
-     * Adds a new button with the specified text to the dialog.
-     * If the maximum number of buttons (6) has already been added, an
-     * {@link IllegalArgumentException} is thrown.
-     *
-     * @param text the text to display on the button
-     * @return the created {@link Button} instance
-     * @throws IllegalArgumentException if more than 6 buttons are added to the dialog
+     * Creates a button with the supplied text, adds it to this dialog, and returns the attached
+     * instance. Six existing entries reject attachment; equal labels are allowed because each call
+     * creates a separate button.
      */
     public Button button(String text) {
         return button(new Button(text));
     }
 
     /**
-     * Creates a new {@code Button} instance with the specified text and click behavior,
-     * then adds it to the dialog. The dialog instance is assigned to the button.
-     *
-     * @param text    the text to display on the button
-     * @param onClick a {@link Consumer} that accepts a {@link Button} instance and defines the behavior to execute when the button is clicked
-     * @return the created {@link Button} instance that was added to the dialog
-     * @throws IllegalArgumentException if more than 6 buttons are added to the dialog
+     * Creates a button with the supplied text, adds it to this dialog, and returns the attached
+     * instance. Six existing entries reject attachment; equal labels are allowed because each call
+     * creates a separate button.
      */
     public Button button(String text, Consumer<Button> onClick) {
         return button(new Button(text, onClick));
     }
 
     /**
-     * Sets the {@link ModelSettings} for this dialog, which modifies how the entity shown in the dialog is displayed,
-     * including its scale, offset, and rotation.
-     *
-     * @param modelSettings the {@link ModelSettings} object that defines the appearance settings for the dialog entity
-     * @return the current instance of {@link Dialog} for method chaining
+     * Stores the model settings reference and returns this dialog for configuration.
      */
     public Dialog modelSettings(ModelSettings modelSettings) {
         this.modelSettings = modelSettings;
@@ -125,10 +121,9 @@ public final class Dialog {
     }
 
     /**
-     * Sets a callback to be executed when the dialog is closed directly without clicking any button.
-     *
-     * @param onClose a {@link Runnable} that will be triggered when the dialog is closed.
-     * @return the updated {@link Dialog} instance for method chaining.
+     * Stores the callback for a final client close notification and returns this dialog. The
+     * processor removes the stored dialog before invocation; direct server closure removes it
+     * without invoking this callback.
      */
     public Dialog onClose(Runnable onClose) {
         this.onClose = onClose;
@@ -136,11 +131,9 @@ public final class Dialog {
     }
 
     /**
-     * Sends this dialog to the specified {@link DialogViewer}.
-     *
-     * @param viewer the {@link DialogViewer} to send the dialog to
-     * @param entity the entity to render in the dialog
-     * @see DialogViewer#viewDialog(Dialog, Entity)
+     * Displays this dialog through the supplied viewer using the supplied entity model. The viewer
+     * retains the same dialog reference, so later button requests are handled against this mutable
+     * configuration.
      */
     public void sendTo(DialogViewer viewer, Entity entity) {
         viewer.viewDialog(this, entity);

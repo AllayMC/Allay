@@ -9,30 +9,49 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * SkinConvertor is a utility class to convert between the API's Skin object and the protocol's SerializedSkin object.
+ * {@code SkinConvertor} maps API skin values to protocol skin objects and back. Both
+ * representations expose mutable image arrays and nested collection data, so
+ * conversion creates new image buffers, animation containers, Persona piece
+ * containers, and tint-color lists rather than retaining those mutable sources.
+ *
+ * <p>
+ * Each direction explicitly maps the texture and expression enums and carries the
+ * API-represented metadata into the destination. Protocol builder normalization and
+ * fields absent from the API still limit round-trip equivalence: the current builder
+ * can represent color separately from its legacy string, and trust and profile-hash
+ * fields have no API components. Callers must supply non-{@code null} images, lists,
+ * and enum values needed by the selected conversion.
  */
 @UtilityClass
 public final class SkinConvertor {
     /**
-     * Converts an API Skin object into a protocol SerializedSkin object for network transmission.
+     * Creates a protocol skin from the API-represented metadata and copied mutable
+     * payloads. Images, animation image bytes, and nested tint lists are copied so
+     * later source mutations cannot change those destination buffers.
      *
-     * @param skin the API Skin object to convert
-     * @return a new SerializedSkin instance containing the data from the Skin object
+     * <p>
+     * The input must provide its skin and cape images and all three collections;
+     * {@code null} collection elements also fail through their accessors. The protocol
+     * builder supplies its own defaults and color representation, so this conversion
+     * does not promise byte-for-byte metadata round trips or preservation of
+     * protocol-only fields.
      */
     public static SerializedSkin toSerializedSkin(Skin skin) {
-        // Convert ImageData for skin and cape
+        // Clone both texture arrays before constructing the destination so mutable pixels are not
+        // shared across the API and protocol representations.
         ImageData serializedSkinData = ImageData.of(
                 skin.skinData().width(), skin.skinData().height(), skin.skinData().data().clone());
 
         ImageData serializedCapeData = ImageData.of(
                 skin.capeData().width(), skin.capeData().height(), skin.capeData().data().clone());
 
-        // Convert list of animations
+        // Convert each animation through the helper that clones its image bytes, keeping nested
+        // animation payloads independent as well as the outer destination list.
         List<AnimationData> serializedAnimations = skin.animations().stream()
                 .map(SkinConvertor::convertAnimationToSerialized)
                 .collect(Collectors.toList());
 
-        // Convert list of persona pieces
+
         List<PersonaPieceData> serializedPersonaPieces = skin.personaPieces().stream()
                 .map(piece -> new PersonaPieceData(
                         piece.pieceId(),
@@ -43,7 +62,8 @@ public final class SkinConvertor {
                 ))
                 .collect(Collectors.toList());
 
-        // Convert list of persona piece tint colors
+        // Copy the nested color lists as well as their outer containers so later tint edits cannot
+        // cross the API/protocol conversion boundary.
         List<PersonaPieceTintData> serializedTintColors = skin.pieceTintColors().stream()
                 .map(tint -> new PersonaPieceTintData(
                         tint.pieceType(),
@@ -51,7 +71,7 @@ public final class SkinConvertor {
                 ))
                 .collect(Collectors.toList());
 
-        // Use the SerializedSkin builder to construct the final object
+
         return SerializedSkin.builder()
                 .skinId(skin.skinId())
                 .playFabId(skin.playFabId())
@@ -77,13 +97,20 @@ public final class SkinConvertor {
     }
 
     /**
-     * Converts a protocol SerializedSkin object into an API Skin object.
+     * Creates an API skin from the fields exposed by the protocol object. Images,
+     * animation image bytes, and nested tint lists receive new mutable storage
+     * rather than sharing their source arrays or lists.
      *
-     * @param serializedSkin the protocol SerializedSkin object to convert
-     * @return a new API Skin instance containing the data from the SerializedSkin object
+     * <p>
+     * Required image and collection values must be present. The conversion reads the
+     * protocol's legacy {@code getSkinColor} value directly; a color held only by
+     * its separate color component therefore does not reconstruct that text.
+     * Protocol-only trust and profile-hash fields have no destination API component
+     * and are not preserved.
      */
     public static Skin fromSerializedSkin(SerializedSkin serializedSkin) {
-        // Convert ImageData for skin and cape
+        // Clone both texture arrays before constructing the destination so mutable pixels are not
+        // shared across the API and protocol representations.
         Skin.ImageData skinData = new Skin.ImageData(
                 serializedSkin.getSkinData().getWidth(),
                 serializedSkin.getSkinData().getHeight(),
@@ -96,12 +123,13 @@ public final class SkinConvertor {
                 serializedSkin.getCapeData().getImage().clone()
         );
 
-        // Convert list of animations
+        // Convert each animation through the helper that clones its image bytes, keeping nested
+        // animation payloads independent as well as the outer destination list.
         List<Skin.AnimationData> animations = serializedSkin.getAnimations().stream()
                 .map(SkinConvertor::convertAnimationFromSerialized)
                 .collect(Collectors.toList());
 
-        // Convert list of persona pieces
+
         List<Skin.PersonaPieces> personaPieces = serializedSkin.getPersonaPieces().stream()
                 .map(piece -> new Skin.PersonaPieces(
                         piece.id(),
@@ -112,7 +140,8 @@ public final class SkinConvertor {
                 ))
                 .collect(Collectors.toList());
 
-        // Convert list of persona piece tint colors
+        // Copy the nested color lists as well as their outer containers so later tint edits cannot
+        // cross the API/protocol conversion boundary.
         List<Skin.PersonaPieceTintColor> tintColors = serializedSkin.getTintColors().stream()
                 .map(tint -> new Skin.PersonaPieceTintColor(
                         tint.type(),
@@ -120,7 +149,7 @@ public final class SkinConvertor {
                 ))
                 .collect(Collectors.toList());
 
-        // Construct the API Skin record
+
         return new Skin(
                 serializedSkin.getSkinId(),
                 serializedSkin.getPlayFabId(),
@@ -145,7 +174,14 @@ public final class SkinConvertor {
         );
     }
 
+    /**
+     * Creates a protocol animation with a copied pixel array and mapped enum values.
+     * The supplied animation, its image, its byte array, and both enum selections
+     * must be non-{@code null}.
+     */
     private static AnimationData convertAnimationToSerialized(Skin.AnimationData data) {
+        // Copy the animation pixel array before mapping the wrapper so nested image mutations cannot
+        // leak into the source skin representation.
         return new AnimationData(
                 ImageData.of(
                         data.imageData().width(),
@@ -158,7 +194,14 @@ public final class SkinConvertor {
         );
     }
 
+    /**
+     * Creates an API animation with a copied pixel array and mapped enum values. The
+     * supplied animation, its image, its byte array, and both enum selections must
+     * be non-{@code null}.
+     */
     private static Skin.AnimationData convertAnimationFromSerialized(AnimationData data) {
+        // Copy the animation pixel array before mapping the wrapper so nested image mutations cannot
+        // leak into the source skin representation.
         return new Skin.AnimationData(
                 new Skin.ImageData(
                         data.image().getWidth(),
@@ -171,6 +214,11 @@ public final class SkinConvertor {
         );
     }
 
+    /**
+     * Maps the animation texture category to the other representation. The explicit
+     * face and body categories retain their identity, while the remaining category
+     * selects the destination's {@code NONE} value.
+     */
     private static AnimatedTextureType convertAnimationType(Skin.AnimationType type) {
         return switch (type) {
             case FACE -> AnimatedTextureType.FACE;
@@ -180,6 +228,11 @@ public final class SkinConvertor {
         };
     }
 
+    /**
+     * Maps the animation texture category to the other representation. The explicit
+     * face and body categories retain their identity, while the remaining category
+     * selects the destination's {@code NONE} value.
+     */
     private static Skin.AnimationType convertAnimationType(AnimatedTextureType type) {
         return switch (type) {
             case FACE -> Skin.AnimationType.FACE;
@@ -189,6 +242,10 @@ public final class SkinConvertor {
         };
     }
 
+    /**
+     * Maps the animation expression selection to its corresponding destination enum
+     * constant.
+     */
     private static AnimationExpressionType convertExpressionType(Skin.ExpressionType type) {
         return switch (type) {
             case LINEAR -> AnimationExpressionType.LINEAR;
@@ -196,6 +253,10 @@ public final class SkinConvertor {
         };
     }
 
+    /**
+     * Maps the animation expression selection to its corresponding destination enum
+     * constant.
+     */
     private static Skin.ExpressionType convertExpressionType(AnimationExpressionType type) {
         return switch (type) {
             case LINEAR -> Skin.ExpressionType.LINEAR;

@@ -15,10 +15,21 @@ import java.util.Map;
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 
 /**
+ * {@code DropActionProcessor} handles requested item drops from reachable container
+ * slots and reports the source state afterward. The entity's drop operation owns
+ * cancellation and world insertion, so the processor rereads the source stack rather
+ * than assuming that the requested drop removed items.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
+    /**
+     * Validates source identity, non-air storage, and available quantity before
+     * delegating the drop to the entity. The response reports the reread source even
+     * when the drop event cancels removal; world-insertion failures can propagate after
+     * inventory changes.
+     */
     @Override
     public ActionResponse handle(DropAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
@@ -65,6 +76,9 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
         );
     }
 
+    /**
+     * Returns the stack-request action type dispatched to {@code DropActionProcessor}.
+     */
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.DROP;

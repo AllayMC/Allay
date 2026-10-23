@@ -15,11 +15,23 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 /**
+ * {@code ItemTagRegistryLoader} combines bundled item tag membership with the server's
+ * custom membership resource. The first resource supplies per-item tags, and the custom
+ * resource adds item identities to each named tag without discarding the membership
+ * already collected for that identity.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class ItemTagRegistryLoader implements RegistryLoader<Void, Map<ItemId, Set<ItemTag>>> {
 
+    /**
+     * Loads mutable item-to-tag sets from {@code "items.json"} and
+     * {@code "item_tags_custom.json"}. Unknown names in the first resource's tag lists and
+     * unresolved
+     * identities in custom memberships are warned about and skipped; other malformed data aborts
+     * loading. A custom tag lookup can contribute {@code null} when that tag name is unknown.
+     */
     @SneakyThrows
     @Override
     public Map<ItemId, Set<ItemTag>> load(Void $) {
@@ -28,13 +40,14 @@ public class ItemTagRegistryLoader implements RegistryLoader<Void, Map<ItemId, S
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var id = Objects.requireNonNull(ItemId.fromIdentifier(new Identifier(entry.getKey())));
                 var obj = entry.getValue().getAsJsonObject();
-                // Tags (can be null)
                 if (obj.has("tags")) {
                     var array = obj.get("tags").getAsJsonArray();
                     var tags = new HashSet<ItemTag>();
                     for (int i = 0; i < array.size(); i++) {
                         var tag = ItemTags.getTagByName(array.get(i).getAsString());
                         if (tag == null) {
+                            // This tag name has no runtime definition. Retain the identity's
+                            // remaining recognized tags instead of inserting an invalid tag value.
                             log.warn("Unknown item tag: {}", array.get(i).getAsString());
                             continue;
                         }
@@ -50,6 +63,8 @@ public class ItemTagRegistryLoader implements RegistryLoader<Void, Map<ItemId, S
                 for (var obj : entry.getValue().getAsJsonArray()) {
                     var id = ItemId.fromIdentifier(new Identifier(obj.getAsString()));
                     if (id == null) {
+                        // Custom memberships can refer to identities absent from this build.
+                        // Keep recognized memberships and omit the unresolved identity from the map.
                         log.warn("Unknown item id: {}", obj.getAsString());
                         continue;
                     }

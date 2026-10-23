@@ -25,18 +25,50 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Base component implementation for nether vines (Twisting Vines and Weeping Vines).
+ * {@code BlockNetherVinesBaseComponentImpl} implements directional growth and support for
+ * twisting and weeping vines. Construction supplies a growth face, a support face, and the
+ * appropriate age property so the same behavior works for upward and downward chains.
+ *
+ * <p>
+ * Player placement derives age from a same-type support or samples a fresh age on solid
+ * support. Natural updates stop at the age cutoff and sample a growth chance before finding
+ * the chain tip. Bone meal instead attempts several tip extensions, retaining successful
+ * earlier segments if a later event is cancelled or space becomes blocked. Its capped age does
+ * not itself stop further bone-meal segments, and item consumption depends on whether at least
+ * one growth proposal was accepted.
  *
  * @author daoge_cmd
  */
 public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * {@code MAX_AGE} caps stored ages and prevents natural growth at the cutoff, while
+     * bone-meal extension can continue with that capped value.
+     */
     protected static final int MAX_AGE = 25;
+    /**
+     * {@code GROWTH_CHANCE} controls natural per-callback extension attempts before tip
+     * discovery; bone-meal handling uses a separately sampled segment count instead.
+     */
     protected static final double GROWTH_CHANCE = 0.1;
 
+    /**
+     * {@code growthFace} identifies the vine extension direction, while {@code supportFace}
+     * identifies the supporting neighbor direction. Placement requires the support's opposite
+     * clicked face, and tip traversal follows {@code growthFace}.
+     */
     protected final BlockFace growthFace, supportFace;
+    /**
+     * {@code ageProperty} selects the registered vine family's age encoding. Every state
+     * passed to growth or placement must support this property and its used age values.
+     */
     protected final IntPropertyType ageProperty;
 
+    /**
+     * Creates vine behavior with its extension direction, support direction, and age property.
+     * The constructor retains these values without checking that faces oppose each other or
+     * that the block type exposes the property.
+     */
     public BlockNetherVinesBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockFace growthFace, BlockFace supportFace, IntPropertyType ageProperty) {
         super(blockType);
         this.growthFace = growthFace;
@@ -44,16 +76,33 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
         this.ageProperty = ageProperty;
     }
 
+    /**
+     * Returns whether these vines receive random updates for natural extension.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Returns whether contact with these vines can reset entity fall damage.
+     */
     @Override
     public boolean canResetFallDamage() {
         return true;
     }
 
+    /**
+     * Places the supplied vine directly through inherited handling when placement information
+     * is absent. Player placement requires the configured support face, suitable clicked
+     * support, and an age derived from that support.
+     *
+     * <p>
+     * A same-type vine contributes its age plus one capped at twenty-five; other valid solid
+     * support samples zero through twenty-four. The player path writes the selected state
+     * directly without ordinary property processing or passing placement information to the
+     * final dimension overload.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -81,6 +130,11 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
         return dimension.setBlockState(placeBlockPos, blockState);
     }
 
+    /**
+     * Dispatches the inherited neighbor hook and breaks a vine after invalid support-face
+     * changes. The configured support direction selects the relevant neighbor, which must
+     * remain solid or the same vine type.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -92,6 +146,17 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Attempts one natural extension after age and probability checks. Both the triggering
+     * segment and the discovered tip must be below the maximum age, and the next tip position
+     * must be air.
+     *
+     * <p>
+     * The growth event is associated with the current tip and proposes a new segment one age
+     * older. Acceptance writes that event state at the next position without changing the old
+     * tip's age. The callback therefore keeps the triggering segment's own age gate separate
+     * from the age and location discovered along the chain.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
@@ -127,6 +192,17 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
         tip.getDimension().setBlockState(targetPos.getPosition(), event.getNewBlockState());
     }
 
+    /**
+     * Attempts one through seven bone-meal extensions from the current chain tip. Every
+     * candidate must be air and pass its own cancellable growth event; a blocked position or
+     * cancelled proposal ends the loop while earlier accepted writes remain.
+     *
+     * <p>
+     * New ages are capped at twenty-five without ending the loop at that age. The callback
+     * advances its working tip after each write call without checking the dimension result,
+     * and it consumes bone meal only when at least one proposal reached that call. It then
+     * emits particles at the clicked block.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -141,6 +217,8 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
         var tip = findVineTip(clickedBlock);
         var tipAge = tip.getPropertyValue(ageProperty);
 
+        // One bone-meal action samples its extension budget once, while each segment
+        // still receives a separate growth proposal that can stop only the remaining attempts.
         var growCount = ThreadLocalRandom.current().nextInt(1, 8);
         Vector3ic currentTipPos = tip.getPosition();
         var currentAge = tipAge;
@@ -178,6 +256,11 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns one vine item for shears or a silk-touch tool. Other tools use a one-third base
+     * chance plus twenty-two percentage points per Fortune level, capped by the shared helper
+     * at certainty.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (usedItem != null) {
@@ -190,8 +273,8 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Base chance: 33% (1/3), Fortune adds 22% per level
-        // Fortune 0: 33%, Fortune I: 55%, Fortune II: 77%, Fortune III+: 100%
+        // Fortune adds percentage points to the one-third base chance, with the
+        // shared helper clamping the probability so sufficiently high levels guarantee an item.
         if (FortuneDropHelper.bonusChanceFixed(usedItem, 1.0 / 3.0, 22.0 / 100.0)) {
             return Set.of(blockType.getItemType().createItemStack());
         }
@@ -200,10 +283,7 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if the vine can be supported by the given block state.
-     *
-     * @param blockState the block state to check
-     * @return true if the vine can be supported, false otherwise
+     * Returns whether the state is this vine type or a solid block.
      */
     protected boolean canBeSupportedBy(BlockState blockState) {
         if (blockState.getBlockType() == blockType) {
@@ -213,10 +293,9 @@ public class BlockNetherVinesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Finds the tip (end) of the vine chain in the growth direction.
-     *
-     * @param block any block in the vine chain
-     * @return the tip block of the vine
+     * Returns the last contiguous matching vine in the configured growth direction. The
+     * traversal starts from the supplied snapshot and reads each next block from the dimension
+     * until a different type ends the chain.
      */
     protected Block findVineTip(Block block) {
         var current = block;

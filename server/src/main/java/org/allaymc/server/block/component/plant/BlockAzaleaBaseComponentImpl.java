@@ -22,20 +22,42 @@ import org.joml.Vector3ic;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Block component for azalea and flowering azalea blocks.
- * Handles bone meal interaction to grow azalea trees.
+ * {@code BlockAzaleaBaseComponentImpl} implements azalea support and bone-meal feature growth.
+ * Placement validates dirt-tagged ground or clay and restricts nonnull player placement
+ * information to an upper-face interaction.
+ *
+ * <p>
+ * Feature growth resolves the configured registry entry, removes the original plant, and
+ * invokes feature placement through a chunk-backed context. A {@code false} placement result restores
+ * only the original block state at its starting position; other feature writes are not tracked
+ * for rollback. An exception escapes before that restoration path runs. Bone-meal consumption
+ * belongs to interaction handling and does not depend on the feature's success result.
  *
  * @author daoge_cmd
  */
 public class BlockAzaleaBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * {@code treeFeatureId} selects the registered feature used by growth. A missing registry
+     * entry makes the feature attempt return {@code false} before removing the plant.
+     */
     protected final Identifier treeFeatureId;
 
+    /**
+     * Creates azalea behavior with its configured tree feature identifier. Construction
+     * retains the identifier without checking the registry; feature availability is resolved
+     * only when a growth attempt begins.
+     */
     public BlockAzaleaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Identifier treeFeatureId) {
         super(blockType);
         this.treeFeatureId = treeFeatureId;
     }
 
+    /**
+     * Places the azalea when its ground satisfies the survival predicate. A nonnull {@code
+     * placementInfo} must identify the upper face, while programmatic placement still applies
+     * the same survival checks.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null && placementInfo.blockFace() != BlockFace.UP) {
@@ -47,6 +69,11 @@ public class BlockAzaleaBaseComponentImpl extends BlockBaseComponentImpl {
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
+    /**
+     * Dispatches the inherited neighbor hook and breaks an unsupported azalea after a
+     * lower-face change. Other neighboring changes do not trigger this callback's local
+     * ground-survival removal branch.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -55,6 +82,11 @@ public class BlockAzaleaBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Handles bone meal after inherited interaction handling. The callback consumes the item
+     * and emits particles before a forty-five-percent no-growth roll; the remaining path
+     * attempts feature growth but still returns {@code true} if that attempt fails.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -65,10 +97,10 @@ public class BlockAzaleaBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // 45% failure rate
         interactInfo.player().tryConsumeItemInHand();
         dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
 
+        // Bone-meal consumption survives this unsuccessful tree-growth roll.
         if (ThreadLocalRandom.current().nextFloat() < 0.45f) {
             return true;
         }
@@ -77,6 +109,17 @@ public class BlockAzaleaBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Attempts the registered tree feature after temporarily removing the plant. A missing
+     * feature returns {@code false} before any removal; a resolved feature receives a
+     * chunk-backed context at the plant's coordinates.
+     *
+     * <p>
+     * A {@code false} placement result restores the original state only at that coordinate, without
+     * undoing other feature writes. Successful placement retains the feature changes. A thrown
+     * exception propagates without entering the restoration branch, so this helper does not
+     * promise transactional feature generation.
+     */
     protected boolean growTree(Block block) {
         var feature = Registries.WORLD_FEATURES.get(treeFeatureId);
         if (feature == null) {
@@ -90,6 +133,8 @@ public class BlockAzaleaBaseComponentImpl extends BlockBaseComponentImpl {
         var context = new WorldFeatureContext(dimension.getChunkManager());
         dimension.setBlockState(pos.x(), pos.y(), pos.z(), BlockTypes.AIR.getDefaultState());
 
+        // Restore only the starting plant on a false result; feature writes elsewhere
+        // are not tracked here, and an exception escapes before this restoration branch.
         boolean success = feature.place(context, pos.x(), pos.y(), pos.z());
         if (!success) {
             dimension.setBlockState(pos.x(), pos.y(), pos.z(), originalState);
@@ -97,6 +142,11 @@ public class BlockAzaleaBaseComponentImpl extends BlockBaseComponentImpl {
         return success;
     }
 
+    /**
+     * Returns whether the block below {@code pos} supports this azalea. The accepted support
+     * set includes dirt-tagged ground or clay; this predicate does not itself place or remove
+     * the plant.
+     */
     protected boolean canSurvive(Dimension dimension, Vector3ic pos) {
         var downBlockType = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();
         return downBlockType.hasBlockTag(BlockTags.DIRT) ||

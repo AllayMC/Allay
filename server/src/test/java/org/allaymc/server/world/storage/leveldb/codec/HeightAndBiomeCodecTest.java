@@ -10,14 +10,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * {@code HeightAndBiomeCodecTest} checks
+ * height offsets and biome identities across vertically separated chunk
+ * sections.
+ */
 @ExtendWith(AllayTestExtension.class)
 class HeightAndBiomeCodecTest {
 
+    /**
+     * Encodes custom heights and biomes located in different overworld
+     * sections. Decoding into prepared sections must restore absolute heights
+     * and associate each sampled biome with its original vertical section.
+     */
     @Test
     void testSerializeAndDeserialize() {
         var chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionTypes.OVERWORLD);
 
-        // Set custom heights and biomes
         chunk.setHeight(0, 0, (short) 100);
         chunk.setHeight(5, 5, (short) 200);
         chunk.setHeight(15, 15, (short) 319);
@@ -27,13 +36,13 @@ class HeightAndBiomeCodecTest {
 
         byte[] data = HeightAndBiomeCodec.serialize(chunk);
 
-        // Deserialize into a new builder
         var builder = new AllayChunkBuilder()
                 .chunkX(0)
                 .chunkZ(0)
                 .dimensionType(DimensionTypes.OVERWORLD);
 
-        // Builder needs sections to populate biomes into
+        // The decoder writes into preexisting section palettes; allocate every section
+        // first so vertical palette records are consumed in their expected order.
         var sections = new org.allaymc.server.world.chunk.AllayChunkSection[DimensionTypes.OVERWORLD.chunkSectionCount()];
         for (int i = 0; i < sections.length; i++) {
             sections[i] = new org.allaymc.server.world.chunk.AllayChunkSection((byte) (i + DimensionTypes.OVERWORLD.minSectionY()));
@@ -42,16 +51,15 @@ class HeightAndBiomeCodecTest {
 
         HeightAndBiomeCodec.deserialize(data, builder);
 
-        // Verify heights
         assertEquals(100, builder.getHeightMap().get(0, 0));
         assertEquals(200, builder.getHeightMap().get(5, 5));
         assertEquals(319, builder.getHeightMap().get(15, 15));
 
-        // Verify biomes - section index for y=0 is (0 - (-64)) / 16 = 4
+        // Absolute block Y zero belongs to section zero, offset to array index four.
         var sectionForY0 = sections[0 - DimensionTypes.OVERWORLD.minSectionY()];
         assertEquals(BiomeTypes.FOREST, sectionForY0.getBiomeType(0, 0, 0));
 
-        // section index for y=64 is (64 - (-64)) / 16 = 8
+        // Absolute block Y sixty-four belongs to section four, offset to array index eight.
         var sectionForY64 = sections[64 / 16 - DimensionTypes.OVERWORLD.minSectionY()];
         assertEquals(BiomeTypes.DESERT, sectionForY64.getBiomeType(5, 0, 5));
     }

@@ -49,11 +49,23 @@ import static org.allaymc.server.entity.ai.evaluator.LogicHelper.all;
 import static org.allaymc.server.entity.ai.evaluator.LogicHelper.any;
 
 /**
+ * {@code EntityTypeInitializer} defines the built-in entity types and their
+ * component configurations. Each initialization method registers its assembled
+ * type and assigns the corresponding {@code EntityTypes} reference; component
+ * suppliers create per-entity state, while AI configurations delegate behavior
+ * selection and route coordination to their behavior groups.
+ *
  * @author daoge_cmd
  */
 @SuppressWarnings("unused")
 @UtilityClass
 public final class EntityTypeInitializer {
+    /**
+     * Registers falling blocks with airborne initial physics and reduced
+     * gravity and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initFallingBlock() {
         EntityTypes.FALLING_BLOCK = AllayEntityType
                 .builder(EntityFallingBlockImpl.class)
@@ -61,26 +73,43 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityFallingBlockBaseComponentImpl::new, EntityFallingBlockBaseComponentImpl.class)
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
                     {
-                        // The initial onGround state for falling block is false
-                        // And it will be either turned into block or item based
-                        // on the block which the falling block fell on
+                        // Start airborne so the first physics update does not treat
+                        // a newly created falling block as already resting on support.
                         this.onGround = false;
                     }
 
+                    /**
+                     * Returns falling-block gravity of {@code 0.04} blocks per
+                     * tick squared.
+                     */
                     @Override
                     public double getGravity() {
                         return 0.04;
                     }
 
+                    /**
+                     * Returns {@code false} to keep falling blocks on their
+                     * ordinary gravity path in liquids. The engine's separate
+                     * liquid-flow phase remains available because this
+                     * override disables buoyancy and drag rather than all
+                     * liquid motion.
+                     */
                     @Override
                     public boolean computeLiquidPhysics() {
-                        // Falling blocks have no special water physics in vanilla
+                        // Keep falling blocks on their ordinary gravity path rather
+                        // than applying item-like buoyancy when they enter a liquid.
                         return false;
                     }
                 }, EntityPhysicsComponentImpl.class)
                 .build();
     }
 
+    /**
+     * Registers dropped items with item-specific damage immunity and liquid
+     * motion and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initItem() {
         EntityTypes.ITEM = AllayEntityType
                 .builder(EntityItemImpl.class)
@@ -88,6 +117,13 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
                 .addComponent(() -> {
                     var component = new EntityLivingComponentImpl() {
+                        /**
+                         * Returns whether ordinary living damage eligibility
+                         * permits this item and its category is neither
+                         * falling-block nor stalactite damage. The parent
+                         * filter still checks other supported damage
+                         * capabilities before these item-specific exclusions.
+                         */
                         @Override
                         public boolean canBeAttacked(DamageContainer damage) {
                             if (!super.canBeAttacked(damage)) {
@@ -103,16 +139,31 @@ public final class EntityTypeInitializer {
                             return true;
                         }
 
+                        /**
+                         * Returns {@code false} to exclude dropped items from
+                         * fall damage handling.
+                         */
                         @Override
                         public boolean hasFallDamage() {
                             return false;
                         }
 
+                        /**
+                         * Returns {@code false} to exclude dropped items from
+                         * drowning damage handling.
+                         */
                         @Override
                         public boolean hasDrowningDamage() {
                             return false;
                         }
 
+                        /**
+                         * Returns whether base fireproof handling or the
+                         * currently carried item's fireproof tag applies. A
+                         * missing item stack yields {@code false}, and
+                         * replacing the retained stack changes the next tag
+                         * lookup.
+                         */
                         @Override
                         public boolean isFireproof() {
                             if (super.isFireproof()) {
@@ -128,6 +179,10 @@ public final class EntityTypeInitializer {
                             return itemType.hasItemTag(ItemTags.FIREPROOF);
                         }
 
+                        /**
+                         * Returns {@code false} so dead dropped items request
+                         * removal without corpse timing.
+                         */
                         @Override
                         protected boolean hasDeadTimer() {
                             return false;
@@ -137,26 +192,46 @@ public final class EntityTypeInitializer {
                     return component;
                 }, EntityLivingComponentImpl.class)
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
+                    /**
+                     * Returns dropped-item gravity of {@code 0.04} blocks per
+                     * tick squared.
+                     */
                     @Override
                     public double getGravity() {
                         return 0.04;
                     }
 
+                    /**
+                     * Returns dropped-item water acceleration of
+                     * {@code 0.0405} blocks per tick squared.
+                     */
                     @Override
                     public double getWaterBuoyancy() {
                         return 0.0405;
                     }
 
+                    /**
+                     * Returns the dropped-item water velocity loss fraction of
+                     * {@code 0.02}.
+                     */
                     @Override
                     public double getWaterDragFactor() {
                         return 0.02;
                     }
 
+                    /**
+                     * Returns dropped-item lava acceleration of {@code 0.0405}
+                     * blocks per tick squared.
+                     */
                     @Override
                     public double getLavaBuoyancy() {
                         return 0.0405;
                     }
 
+                    /**
+                     * Returns the dropped-item lava velocity loss fraction of
+                     * {@code 0.05}.
+                     */
                     @Override
                     public double getLavaDragFactor() {
                         return 0.05;
@@ -166,6 +241,13 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers players with specialized base, inventory, living, physics, and
+     * sleep components and publishes their built-in type reference. Each
+     * builder registers its type before assigning that type's global
+     * reference; a later failure leaves preceding registrations and
+     * assignments in place.
+     */
     public static void initPlayer() {
         EntityTypes.PLAYER = AllayEntityType
                 .builder(EntityPlayerImpl.class)
@@ -178,6 +260,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers villagers with living state and human-sized entity physics and
+     * publishes their built-in type reference. Each builder registers its type
+     * before assigning that type's global reference; a later failure leaves
+     * preceding registrations and assignments in place.
+     */
     public static void initVillagerV2() {
         EntityTypes.VILLAGER_V2 = AllayEntityType
                 .builder(EntityVillagerV2Impl.class)
@@ -187,6 +275,13 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers zombies with undead combustion, retaliation, and
+     * priority-based melee AI and publishes their built-in type reference.
+     * Each builder registers its type before assigning that type's global
+     * reference; a later failure leaves preceding registrations and
+     * assignments in place.
+     */
     public static void initZombie() {
         EntityTypes.ZOMBIE = AllayEntityType
                 .builder(EntityZombieImpl.class)
@@ -234,6 +329,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers experience orbs with liquid motion and no fall damage and
+     * publishes their built-in type reference. Each builder registers its type
+     * before assigning that type's global reference; a later failure leaves
+     * preceding registrations and assignments in place.
+     */
     public static void initXBOrb() {
         EntityTypes.XP_ORB = AllayEntityType
                 .builder(EntityXpOrbImpl.class)
@@ -241,6 +342,10 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
                 .addComponent(() -> {
                     var component = new EntityLivingComponentImpl() {
+                        /**
+                         * Returns {@code false} to exclude experience orbs
+                         * from fall damage handling.
+                         */
                         @Override
                         public boolean hasFallDamage() {
                             return false;
@@ -250,26 +355,46 @@ public final class EntityTypeInitializer {
                     return component;
                 }, EntityLivingComponentImpl.class)
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
+                    /**
+                     * Returns experience-orb gravity of {@code 0.03} blocks
+                     * per tick squared.
+                     */
                     @Override
                     public double getGravity() {
                         return 0.03;
                     }
 
+                    /**
+                     * Returns experience-orb water acceleration of
+                     * {@code 0.0405} blocks per tick squared.
+                     */
                     @Override
                     public double getWaterBuoyancy() {
                         return 0.0405;
                     }
 
+                    /**
+                     * Returns the experience-orb water velocity loss fraction
+                     * of {@code 0.02}.
+                     */
                     @Override
                     public double getWaterDragFactor() {
                         return 0.02;
                     }
 
+                    /**
+                     * Returns experience-orb lava acceleration of
+                     * {@code 0.0405} blocks per tick squared.
+                     */
                     @Override
                     public double getLavaBuoyancy() {
                         return 0.0405;
                     }
 
+                    /**
+                     * Returns the experience-orb lava velocity loss fraction
+                     * of {@code 0.05}.
+                     */
                     @Override
                     public double getLavaDragFactor() {
                         return 0.05;
@@ -279,6 +404,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers primed TNT with its fuse behavior and specialized physics and
+     * publishes their built-in type reference. Each builder registers its type
+     * before assigning that type's global reference; a later failure leaves
+     * preceding registrations and assignments in place.
+     */
     public static void initTnt() {
         EntityTypes.TNT = AllayEntityType
                 .builder(EntityTntImpl.class)
@@ -288,6 +419,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers lightning bolts with transient strike effects and visual
+     * lifetime and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initLightningBolt() {
         EntityTypes.LIGHTNING_BOLT = AllayEntityType
                 .builder(EntityLightningBoltImpl.class)
@@ -296,6 +433,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers ender crystals with crystal behavior and restricted damage
+     * handling and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initEnderCrystal() {
         EntityTypes.ENDER_CRYSTAL = AllayEntityType
                 .builder(EntityEnderCrystalImpl.class)
@@ -303,6 +446,13 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityEnderCrystalBaseComponentImpl::new, EntityEnderCrystalBaseComponentImpl.class)
                 .addComponent(() -> {
                     var component = new EntityLivingComponentImpl() {
+                        /**
+                         * Returns {@code false} for an ender dragon attacker
+                         * before checking ordinary living damage eligibility.
+                         * Other attackers use the parent category filter,
+                         * while the outer attack pipeline still checks
+                         * lifecycle and cooldown.
+                         */
                         @Override
                         public boolean canBeAttacked(DamageContainer damage) {
                             if (damage.getAttacker() instanceof EntityEnderDragon) {
@@ -312,21 +462,37 @@ public final class EntityTypeInitializer {
                             return super.canBeAttacked(damage);
                         }
 
+                        /**
+                         * Returns {@code false} to exclude ender crystals from
+                         * ordinary fire damage categories.
+                         */
                         @Override
                         public boolean hasFireDamage() {
                             return false;
                         }
 
+                        /**
+                         * Returns {@code false} to exclude ender crystals from
+                         * drowning damage handling.
+                         */
                         @Override
                         public boolean hasDrowningDamage() {
                             return false;
                         }
 
+                        /**
+                         * Returns {@code true} so ender crystals reject
+                         * fire-duration assignment requests.
+                         */
                         @Override
                         public boolean isFireproof() {
                             return true;
                         }
 
+                        /**
+                         * Returns {@code false} so dead ender crystals request
+                         * removal without corpse timing.
+                         */
                         @Override
                         protected boolean hasDeadTimer() {
                             return false;
@@ -338,6 +504,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers snowballs, potion projectiles, pearls, experience bottles, and
+     * arrows and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initProjectile() {
         EntityTypes.SNOWBALL = AllayEntityType
                 .builder(EntitySnowballImpl.class)
@@ -391,26 +563,49 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .addComponent(() -> {
                     var component = new EntityLivingComponentImpl() {
+                        /**
+                         * Returns whether the supplied category is exactly
+                         * {@code DamageType.API}, without invoking the parent
+                         * category filter. The outer living attack pipeline
+                         * still checks alive state, cooldown, and the
+                         * cancellable damage event.
+                         */
                         @Override
                         public boolean canBeAttacked(DamageContainer damage) {
                             return damage.getDamageType() == DamageType.API;
                         }
 
+                        /**
+                         * Returns {@code false} to exclude arrows from
+                         * ordinary fall damage handling.
+                         */
                         @Override
                         public boolean hasFallDamage() {
                             return false;
                         }
 
+                        /**
+                         * Returns {@code false} to exclude arrows from
+                         * ordinary fire damage categories.
+                         */
                         @Override
                         public boolean hasFireDamage() {
                             return false;
                         }
 
+                        /**
+                         * Returns {@code false} to exclude arrows from
+                         * ordinary drowning damage handling.
+                         */
                         @Override
                         public boolean hasDrowningDamage() {
                             return false;
                         }
 
+                        /**
+                         * Returns {@code false} so dead arrows request removal
+                         * without corpse timing.
+                         */
                         @Override
                         protected boolean hasDeadTimer() {
                             return false;
@@ -422,6 +617,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers paintings with motif-aware base behavior and living damage
+     * handling and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initPainting() {
         EntityTypes.PAINTING = AllayEntityType
                 .builder(EntityPaintingImpl.class)
@@ -431,6 +632,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers firework rockets with rocket behavior and specialized motion
+     * and publishes their built-in type reference. Each builder registers its
+     * type before assigning that type's global reference; a later failure
+     * leaves preceding registrations and assignments in place.
+     */
     public static void initFireworkRocket() {
         EntityTypes.FIREWORKS_ROCKET = AllayEntityType
                 .builder(EntityFireworksRocketImpl.class)
@@ -440,6 +647,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers area effect clouds with radius behavior and potion contents
+     * and publishes their built-in type reference. Each builder registers its
+     * type before assigning that type's global reference; a later failure
+     * leaves preceding registrations and assignments in place.
+     */
     public static void initAreaEffectCloud() {
         EntityTypes.AREA_EFFECT_CLOUD = AllayEntityType
                 .builder(EntityAreaEffectCloudImpl.class)
@@ -449,6 +662,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers player and breeze wind charges with their distinct collision
+     * handlers and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initWindCharge() {
         EntityTypes.WIND_CHARGE_PROJECTILE = AllayEntityType
                 .builder(EntityWindChargeProjectileImpl.class)
@@ -469,6 +688,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers small and full fireballs with their specialized impact
+     * behavior and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initFireball() {
         EntityTypes.SMALL_FIREBALL = AllayEntityType
                 .builder(EntitySmallFireballImpl.class)
@@ -488,6 +713,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers thrown tridents with an effectively extended age limit and
+     * publishes their built-in type reference. Each builder registers its type
+     * before assigning that type's global reference; a later failure leaves
+     * preceding registrations and assignments in place.
+     */
     public static void initThrownTrident() {
         EntityTypes.THROWN_TRIDENT = AllayEntityType
                 .builder(EntityThrownTridentImpl.class)
@@ -495,11 +726,18 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityThrownTridentBaseComponentImpl::new, EntityThrownTridentBaseComponentImpl.class)
                 .addComponent(EntityThrownTridentPhysicsComponentImpl::new, EntityThrownTridentPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
-                // Bedrock Edition tridents never despawn - use max integer age
+                // Extend the age limit to the largest integer tick count; this
+                // avoids the ordinary short projectile lifetime without disabling age tracking.
                 .addComponent(() -> new EntityAgeComponentImpl(Integer.MAX_VALUE), EntityAgeComponentImpl.class)
                 .build();
     }
 
+    /**
+     * Registers thrown eggs with the shared climate-variant property and
+     * publishes their built-in type reference. Each builder registers its type
+     * before assigning that type's global reference; a later failure leaves
+     * preceding registrations and assignments in place.
+     */
     public static void initEgg() {
         EntityTypes.EGG = AllayEntityType
                 .builder(EntityEggImpl.class)
@@ -512,6 +750,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers pigs with climate appearance, breeding foods, and animal AI
+     * and publishes their built-in type reference. Each builder registers its
+     * type before assigning that type's global reference; a later failure
+     * leaves preceding registrations and assignments in place.
+     */
     public static void initPig() {
         EntityTypes.PIG = AllayEntityType
                 .builder(EntityPigImpl.class)
@@ -542,6 +786,8 @@ public final class EntityTypeInitializer {
                                             entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
+                                                // An unobserved love timestamp allows the first breeding cycle;
+                                                // later cycles require a five-minute cooldown measured in ticks.
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
                                             },
                                             new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400)
@@ -588,6 +834,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers cows with climate appearance, wheat breeding, and animal AI
+     * and publishes their built-in type reference. Each builder registers its
+     * type before assigning that type's global reference; a later failure
+     * leaves preceding registrations and assignments in place.
+     */
     public static void initCow() {
         EntityTypes.COW = AllayEntityType
                 .builder(EntityCowImpl.class)
@@ -614,6 +866,8 @@ public final class EntityTypeInitializer {
                                             entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
+                                                // An unobserved love timestamp allows the first breeding cycle;
+                                                // later cycles require a five-minute cooldown measured in ticks.
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
                                             },
                                             new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400)
@@ -660,6 +914,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers chickens with climate appearance, seed breeding, and
+     * egg-laying AI and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initChicken() {
         EntityTypes.CHICKEN = AllayEntityType
                 .builder(EntityChickenImpl.class)
@@ -668,9 +928,12 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityChickenBaseComponentImpl::new, EntityChickenBaseComponentImpl.class)
                 .addComponent(() -> {
                     var component = new EntityLivingComponentImpl() {
+                        /**
+                         * Returns {@code false} to exclude chickens from
+                         * ordinary fall damage handling.
+                         */
                         @Override
                         public boolean hasFallDamage() {
-                            // Chicken do not have fall damage
                             return false;
                         }
                     };
@@ -699,6 +962,8 @@ public final class EntityTypeInitializer {
                                             entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
+                                                // An unobserved love timestamp allows the first breeding cycle;
+                                                // later cycles require a five-minute cooldown measured in ticks.
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
                                             },
                                             new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400)
@@ -706,6 +971,8 @@ public final class EntityTypeInitializer {
                                     .priority(1)
                                     .build())
                             .behavior(BehaviorImpl.builder()
+                                    // From five through ten elapsed minutes, a probability gate may
+                                    // permit laying; at ten minutes the upper-window test needs no roll.
                                     .executor(entity -> {
                                         entity.getMemoryStorage().put(MemoryTypes.LAST_EGG_SPAWN_TIME, entity.getTick());
                                         entity.getDimension().dropItem(ItemTypes.EGG.createItemStack(1), entity.getLocation());
@@ -765,6 +1032,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers fishing hooks with owner-aware projectile behavior and an age
+     * limit and publishes their built-in type reference. Each builder
+     * registers its type before assigning that type's global reference; a
+     * later failure leaves preceding registrations and assignments in place.
+     */
     public static void initFishingHook() {
         EntityTypes.FISHING_HOOK = AllayEntityType
                 .builder(EntityFishingHookImpl.class)
@@ -772,11 +1045,17 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityFishingHookBaseComponentImpl::new, EntityFishingHookBaseComponentImpl.class)
                 .addComponent(EntityFishingHookPhysicsComponentImpl::new, EntityFishingHookPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
-                // Fishing hook despawns after 60 seconds if not used
+                // Limit an unused hook to sixty seconds at twenty ticks per second.
                 .addComponent(() -> new EntityAgeComponentImpl(1200), EntityAgeComponentImpl.class)
                 .build();
     }
 
+    /**
+     * Registers armor stands with humanlike equipment and landing sounds and
+     * publishes their built-in type reference. Each builder registers its type
+     * before assigning that type's global reference; a later failure leaves
+     * preceding registrations and assignments in place.
+     */
     public static void initArmorStand() {
         EntityTypes.ARMOR_STAND = AllayEntityType
                 .builder(EntityArmorStandImpl.class)
@@ -785,9 +1064,17 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityHumanLikeContainerHolderComponentImpl::new, EntityHumanLikeContainerHolderComponentImpl.class)
                 .addComponent(EntityArmorStandLivingComponentImpl::new, EntityArmorStandLivingComponentImpl.class)
                 .addComponent(() -> new EntityHumanPhysicsComponentImpl() {
+                    /**
+                     * Runs common landing handling before playing the
+                     * armor-stand landing sound for falls of at least three
+                     * blocks. A normally returned cancelled fall event still
+                     * allows this sound because the wrapper does not inspect a
+                     * cancellation result.
+                     */
                     @Override
                     public void onFall(double fallDistance) {
                         super.onFall(fallDistance);
+                        // Play the landing sound only for falls of at least three blocks.
                         if (fallDistance >= 3) {
                             thisEntity.getDimension().addSound(thisEntity.getLocation(), SimpleSound.ARMOR_STAND_LAND);
                         }
@@ -796,6 +1083,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers sheep with dye colors, grazing, breeding, and animal AI and
+     * publishes their built-in type reference. Each builder registers its type
+     * before assigning that type's global reference; a later failure leaves
+     * preceding registrations and assignments in place.
+     */
     public static void initSheep() {
         EntityTypes.SHEEP = AllayEntityType
                 .builder(EntitySheepImpl.class)
@@ -814,6 +1107,8 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityDyeableComponentImpl(() -> {
                     var rand = ThreadLocalRandom.current();
                     int roll = rand.nextInt(100);
+                    // Partition one hundred equiprobable rolls into the configured
+                    // wool-color frequencies; pink receives the final remaining roll.
                     if (roll < 82) return DyeColor.WHITE;
                     if (roll < 87) return DyeColor.BLACK;
                     if (roll < 92) return DyeColor.GRAY;
@@ -823,41 +1118,37 @@ public final class EntityTypeInitializer {
                 }), EntityDyeableComponentImpl.class)
                 .addComponent(() -> {
                     var behaviorGroup = BehaviorGroupImpl.builder()
-                            // Sensors
                             .sensor(new NearestFeedingPlayerSensor(8))
                             .sensor(new NearestPlayerSensor(8, 0, 20))
-                            // Core behavior: enter love mode when fed
                             .coreBehavior(BehaviorImpl.builder()
                                     .executor(new InLoveExecutor(400))
                                     .evaluator(all(
                                             entity -> !entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE),
                                             entity -> {
                                                 var lastLoveTime = entity.getMemoryStorage().get(MemoryTypes.LAST_IN_LOVE_TIME);
+                                                // An unobserved love timestamp allows the first breeding cycle;
+                                                // later cycles require a five-minute cooldown measured in ticks.
                                                 return lastLoveTime == null || lastLoveTime <= 0 || entity.getTick() - lastLoveTime >= 6000;
                                             },
                                             new PassByTimeEvaluator(MemoryTypes.LAST_BE_FEED_TIME, 0, 400)
                                     ))
                                     .priority(1)
                                     .build())
-                            // Priority 6 (highest): flee when attacked
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FlatRandomRoamExecutor(0.2875f, 12, 40, true, 100, true, 10))
                                     .evaluator(new PassByTimeEvaluator(EntityIntelligent::getLastDamageTime, 0, 100))
                                     .priority(6)
                                     .build())
-                            // Priority 5: breed when in love
                             .behavior(BehaviorImpl.builder()
                                     .executor(new EntityBreedingExecutor(100, 0.23f))
                                     .evaluator(entity -> entity.getMemoryStorage().get(MemoryTypes.IS_IN_LOVE))
                                     .priority(5)
                                     .build())
-                            // Priority 4: follow player holding wheat
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FollowEntityExecutor(MemoryTypes.NEAREST_FEEDING_PLAYER, 0.253f, 64, 2.25))
                                     .evaluator(new MemoryCheckNotEmptyEvaluator(MemoryTypes.NEAREST_FEEDING_PLAYER))
                                     .priority(4)
                                     .build())
-                            // Priority 3: eat grass
                             .behavior(BehaviorImpl.builder()
                                     .executor(new SheepEatGrassExecutor())
                                     .evaluator(all(
@@ -879,7 +1170,6 @@ public final class EntityTypeInitializer {
                                     .priority(3)
                                     .period(100)
                                     .build())
-                            // Priority 2: look at nearest player
                             .behavior(BehaviorImpl.builder()
                                     .executor(new LookAtEntityExecutor(MemoryTypes.NEAREST_PLAYER, 100))
                                     .evaluator(all(
@@ -889,17 +1179,14 @@ public final class EntityTypeInitializer {
                                     .priority(2)
                                     .period(100)
                                     .build())
-                            // Priority 1 (lowest): random wandering
                             .behavior(BehaviorImpl.builder()
                                     .executor(new FlatRandomRoamExecutor(0.1f, 12, 100, false, -1, true, 10))
                                     .evaluator(entity -> true)
                                     .priority(1)
                                     .build())
-                            // Controllers
                             .controller(new WalkController())
                             .controller(new LookController(true, true))
                             .controller(new FluctuateController())
-                            // Route finder
                             .routeFinder(new FlatAStarRouteFinder(new WalkingPosEvaluator()))
                             .build();
 
@@ -908,6 +1195,12 @@ public final class EntityTypeInitializer {
                 .build();
     }
 
+    /**
+     * Returns whether a runtime identifier resolves to an alive, distinct
+     * living target in the zombie's dimension. Player targets additionally
+     * require survival or adventure mode; creative and spectator players are
+     * excluded from zombie target selection.
+     */
     private static boolean isValidZombieTarget(EntityIntelligent entity, long targetId) {
         var target = entity.getDimension().getEntityManager().getEntity(targetId);
         if (!(target instanceof EntityLivingComponent) || target == entity || !target.isAlive()) {

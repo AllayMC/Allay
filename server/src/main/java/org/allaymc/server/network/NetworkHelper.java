@@ -48,29 +48,53 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Helper class to convert types between allay and the protocol library.
+ * {@code NetworkHelper} converts server domain values into Bedrock protocol data
+ * and converts protocol vectors back into server vectors. Item conversions use
+ * the target protocol's definition registries rather than assume that a server
+ * runtime ID is valid for every negotiated version. Missing required definitions
+ * fail before the resulting item can be submitted to a client.
+ *
+ * <p>
+ * Entity properties use separate integer and floating-point index spaces while
+ * traversing the entity type's property order. Enum ordinals and boolean numeric
+ * values share the integer sequence, so that sequence must agree with the
+ * corresponding advertised property definitions. Position conversions also
+ * account for entity-specific vertical offsets when attaching primitive shapes,
+ * allowing the client to place the shape relative to its displayed entity.
  *
  * @author daoge_cmd
  */
 @UtilityClass
 public final class NetworkHelper {
 
-    // Constants used in UpdateSubChunkBlocksPacket
+    // The block-update flags encode independent update effects for subchunk
+    // update packets and can be combined in their protocol bitmask.
+    /** Neighbor-update bit flag. */
     public static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
+    /** Client-network update bit. */
     public static final int BLOCK_UPDATE_NETWORK = 0b0010;
+    /** Graphics-suppression update bit. */
     public static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
+    /** Priority-update bit flag. */
     public static final int BLOCK_UPDATE_PRIORITY = 0b1000;
 
-    // Constants used in BlockEventPacket
+    // The chest-event constants identify the block-event category and its open
+    // or closed payload values used by container animations.
+    /** Chest-state event category. */
     public static final int BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE = 1;
+    /** Open-chest event payload. */
     public static final int BLOCK_EVENT_DATA_OPEN_CHEST = 1;
+    /** Closed-chest event payload. */
     public static final int BLOCK_EVENT_DATA_CLOSE_CHEST = 0;
 
     /**
-     * A map which contains the network offset of some entities. The network offset is the additional offset in
-     * y coordinate when sent over network. This is mostly the case for older entities such as player and TNT.
+     * {@code NETWORK_OFFSETS} maps entity identifiers to vertical network offsets
+     * in blocks. Position encoders add these offsets, while attached-shape
+     * conversion subtracts them; callers changing this shared mutable map affect
+     * subsequent conversions and must coordinate concurrent access.
      */
     public static final Map<Identifier, Float> NETWORK_OFFSETS = new HashMap<>() {{
+        // Initialize the built-in entity offsets used by position encoders.
         put(EntityId.PLAYER.getIdentifier(), 1.62f);
         put(EntityId.FALLING_BLOCK.getIdentifier(), 0.49f);
         put(EntityId.ITEM.getIdentifier(), 0.125f);
@@ -78,18 +102,35 @@ public final class NetworkHelper {
         put(EntityId.FIREWORKS_ROCKET.getIdentifier(), 0.49f);
     }};
 
+    /**
+     * Returns protocol game-rule entries using each supplied rule's serialized name.
+     */
     public static List<GameRuleData<?>> toNetwork(Map<GameRule, Object> gameRules) {
         return gameRules.entrySet().stream()
                 .map(entry -> new GameRuleData<>(entry.getKey().getName(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Encodes an entity's current property values into protocol index sequences.
+     * Missing values use each property's declared default, and the entity type's
+     * iteration order determines the indexes within each numeric family.
+     *
+     * <p>
+     * Enum ordinals, integers, and booleans advance one shared integer index;
+     * floating-point properties advance a separate index. The advertised
+     * definitions must use that same ordering so a client associates each value
+     * with the intended property. Boolean values become {@code 1} or {@code 0}
+     * without consuming a floating-point index.
+     */
     public static EntityProperties toNetworkProperties(Entity entity) {
         var result = new EntityProperties();
         var propertyValues = entity.getPropertyValues();
 
         int intIndex = 0;
         int floatIndex = 0;
+        // Match definition traversal while keeping integer and float indexes
+        // separate, so mixed property kinds retain their client-visible identities.
         for (var propType : entity.getEntityType().getProperties().values()) {
             switch (propType) {
                 case EnumPropertyType<?> enumProp -> {
@@ -115,7 +156,10 @@ public final class NetworkHelper {
     }
 
     /**
-     * Encodes an ingredient using item definitions from the target protocol.
+     * Encodes an ingredient using definitions from the target protocol.
+     * Item ingredients retain their metadata, tag ingredients retain their tag
+     * name, and unsupported descriptor kinds throw {@code IllegalArgumentException}
+     * instead of selecting an approximate ingredient.
      *
      * @param descriptor the server-side ingredient
      * @param itemDefinitions the target protocol's item definitions
@@ -137,7 +181,10 @@ public final class NetworkHelper {
     }
 
     /**
-     * Encodes a single-count ingredient using item definitions from the target protocol.
+     * Encodes a single-count ingredient using the target protocol's item definitions.
+     * Descriptor rejection and missing item definitions propagate from
+     * {@code toNetwork}; the encoded count is always {@code 1}, independently
+     * of any inventory stack quantity.
      *
      * @param descriptor the server-side ingredient
      * @param itemDefinitions the target protocol's item definitions
@@ -153,19 +200,23 @@ public final class NetworkHelper {
         );
     }
 
+    /**
+     * Encodes biome climate values and tags for the client definition table.
+     * Built-in biome IDs are omitted from the optional numeric-ID field; custom
+     * biomes retain their allocated IDs so clients can associate those definitions.
+     */
     public static BiomeDefinitionData toNetwork(BiomeType biome) {
         var data = biome.getBiomeData();
         var tags = data.tags().stream().map(BiomeTag::name).toList();
         if (biome.getId() < CustomBiomeIdAllocator.CUSTOM_BIOME_ID_START) {
-            // Vanilla biome
-            // NOTICE: id field is only set for custom biome
+            // The optional numeric ID identifies custom definitions. Built-in
+            // biomes keep that field absent instead of entering the custom-ID path.
             return new BiomeDefinitionData(
                     null, data.temperature(), data.downfall(), data.redSporeDensity(),
                     data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
                     data.depth(), data.scale(), data.mapWaterColor(), data.rain(), tags, null
             );
         } else {
-            // Custom biome
             return new BiomeDefinitionData(
                     biome.getId(), data.temperature(), data.downfall(), data.redSporeDensity(),
                     data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
@@ -174,13 +225,24 @@ public final class NetworkHelper {
         }
     }
 
+    /**
+     * Returns protocol enchantment data containing the instance's numeric ID and level.
+     */
     public static EnchantData toNetwork(EnchantmentInstance instance) {
         return new EnchantData(instance.getType().getId(), instance.getLevel());
     }
 
+    /**
+     * Encodes an enchanting option using the pair's assigned network identity.
+     * The option's enchantments occupy the primary list, while the protocol's
+     * additional enchantment lists remain empty and {@code primarySlot} is
+     * {@code 0}.
+     */
     public static EnchantOptionData toNetwork(Pair<Integer, EnchantOption> pair) {
         var networkId = pair.left();
         var option = pair.right();
+        // Populate the first enchantment group and select primary slot zero,
+        // matching the single group supplied by the server's option representation.
         return new EnchantOptionData(
                 option.requiredXpLevel(), 0,
                 option.enchantments().stream().map(NetworkHelper::toNetwork).toList(),
@@ -190,6 +252,10 @@ public final class NetworkHelper {
 
     /**
      * Encodes an item stack using definitions from the target protocol.
+     * Air uses the protocol air payload with the target item definition.
+     * Other stacks retain count, metadata, extra data, and network identity;
+     * missing required item or block definitions fail instead of selecting a
+     * different registered value.
      *
      * @param itemStack the server-side item stack
      * @param itemDefinitions the target protocol's item definitions
@@ -221,8 +287,9 @@ public final class NetworkHelper {
                 .blockDefinition(blockDefinition)
                 .count(itemStack.getCount())
                 .damage(itemStack.getMeta())
-                // Like BDS, an item without extra data is sent without NBT: with an empty compound 1.26.50 clients draw no
-                // held model for flat block items such as ladders, iron bars and string.
+                // Like BDS, an item without extra data is sent without NBT.
+                // With an empty compound, 1.26.50 clients draw no held model
+                // for flat block items such as ladders, iron bars, and string.
                 .tag(extraTag.isEmpty() ? null : extraTag)
                 .usingNetId(itemStack.hasUniqueId())
                 .netId(itemStack.getUniqueId())
@@ -231,7 +298,9 @@ public final class NetworkHelper {
     }
 
     /**
-     * Encodes item stacks using definitions from the target protocol.
+     * Encodes item stacks in input order using the target protocol's definitions.
+     * The returned list is unmodifiable, and an encoding failure terminates the
+     * conversion rather than returning a partially populated result.
      *
      * @param items the server-side item stacks
      * @param itemDefinitions the target protocol's item definitions
@@ -246,6 +315,11 @@ public final class NetworkHelper {
         return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions)).toList();
     }
 
+    /**
+     * Resolves an item type in the target protocol's definition registry.
+     * A missing definition throws {@code IllegalStateException} with the item
+     * identifier so callers cannot silently encode an unrelated or absent item.
+     */
     private static ItemDefinition getItemDefinition(
             ItemType<?> itemType,
             DefinitionRegistry<ItemDefinition> itemDefinitions
@@ -257,6 +331,11 @@ public final class NetworkHelper {
         return definition;
     }
 
+    /**
+     * Copies protocol integer coordinates into a new server vector.
+     * A {@code null} input returns {@code null}, preserving absent optional
+     * positions rather than creating a vector with zero-valued coordinates.
+     */
     public static Vector3ic fromNetwork(org.cloudburstmc.math.vector.Vector3i vec) {
         if (vec == null) {
             return null;
@@ -265,6 +344,11 @@ public final class NetworkHelper {
         return new Vector3i(vec.getX(), vec.getY(), vec.getZ());
     }
 
+    /**
+     * Copies protocol double-precision coordinates into a new server vector.
+     * A {@code null} input returns {@code null}, preserving absent optional
+     * positions rather than creating a vector with zero-valued coordinates.
+     */
     public static Vector3dc fromNetwork(org.cloudburstmc.math.vector.Vector3d vec) {
         if (vec == null) {
             return null;
@@ -273,6 +357,11 @@ public final class NetworkHelper {
         return new Vector3d(vec.getX(), vec.getY(), vec.getZ());
     }
 
+    /**
+     * Copies protocol floating-point coordinates into a new server vector.
+     * A {@code null} input returns {@code null}, preserving absent optional
+     * positions rather than creating a vector with zero-valued coordinates.
+     */
     public static Vector3fc fromNetwork(org.cloudburstmc.math.vector.Vector3f vec) {
         if (vec == null) {
             return null;
@@ -281,6 +370,11 @@ public final class NetworkHelper {
         return new Vector3f(vec.getX(), vec.getY(), vec.getZ());
     }
 
+    /**
+     * Copies server integer coordinates into a protocol vector value.
+     * A {@code null} input returns {@code null}, preserving absent optional
+     * positions rather than encoding a vector with zero-valued coordinates.
+     */
     public static org.cloudburstmc.math.vector.Vector3i toNetwork(Vector3ic vec) {
         if (vec == null) {
             return null;
@@ -289,6 +383,11 @@ public final class NetworkHelper {
         return org.cloudburstmc.math.vector.Vector3i.from(vec.x(), vec.y(), vec.z());
     }
 
+    /**
+     * Copies server double-precision coordinates into a protocol vector value.
+     * A {@code null} input returns {@code null}, preserving absent optional
+     * positions rather than encoding a vector with zero-valued coordinates.
+     */
     public static org.cloudburstmc.math.vector.Vector3d toNetwork(Vector3dc vec) {
         if (vec == null) {
             return null;
@@ -297,6 +396,11 @@ public final class NetworkHelper {
         return org.cloudburstmc.math.vector.Vector3d.from(vec.x(), vec.y(), vec.z());
     }
 
+    /**
+     * Copies server floating-point coordinates into a protocol vector value.
+     * A {@code null} input returns {@code null}, preserving absent optional
+     * positions rather than encoding a vector with zero-valued coordinates.
+     */
     public static org.cloudburstmc.math.vector.Vector3f toNetwork(Vector3fc vec) {
         if (vec == null) {
             return null;
@@ -305,6 +409,9 @@ public final class NetworkHelper {
         return org.cloudburstmc.math.vector.Vector3f.from(vec.x(), vec.y(), vec.z());
     }
 
+    /**
+     * Returns the protocol game type corresponding to the supplied server mode.
+     */
     public static GameType toNetwork(GameMode gameMode) {
         return switch (gameMode) {
             case SURVIVAL -> GameType.SURVIVAL;
@@ -314,6 +421,11 @@ public final class NetworkHelper {
         };
     }
 
+    /**
+     * Returns the server mode represented by an ordinary protocol game type.
+     * Protocol-only values outside the four supported player modes return
+     * {@code null}, so callers must handle them before requiring a concrete mode.
+     */
     public static GameMode fromNetwork(GameType gameType) {
         return switch (gameType) {
             case SURVIVAL -> GameMode.SURVIVAL;
@@ -324,10 +436,19 @@ public final class NetworkHelper {
         };
     }
 
+    /**
+     * Encodes a supported primitive shape for its dimension and optional attachment.
+     * A non-{@code null} {@code attachedEntity} supplies the runtime ID and
+     * subtracts its network vertical offset from the position; unsupported shape
+     * implementations throw {@code IllegalStateException}.
+     * Identifiers absent from {@code NETWORK_OFFSETS} use zero vertical adjustment.
+     */
     public static org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape toNetwork(PrimitiveShape shape, int dimension, Entity attachedEntity) {
         var entityId = attachedEntity != null ? attachedEntity.getRuntimeId() : null;
         var networkPos = toNetwork(shape.getPosition());
         if (attachedEntity != null) {
+            // Entities absent from NETWORK_OFFSETS need no adjustment; compensate
+            // for known network heights so attached shapes keep their intended origin.
             networkPos = networkPos.add(0, -NETWORK_OFFSETS.getOrDefault(attachedEntity.getEntityType().getIdentifier(), 0.0f), 0);
         }
         return switch (shape) {
@@ -361,17 +482,33 @@ public final class NetworkHelper {
         };
     }
 
+    /**
+     * Returns a protocol removal notice containing only the shape's identity.
+     */
     public static org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape toNetworkRemovalNotice(PrimitiveShape shape) {
         return new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape(shape.getId());
     }
 
+    /**
+     * {@code PortraitOffsets} carries the coordinate arrays serialized for dialog portraits.
+     * The generated constructor and accessors retain these arrays without copying,
+     * so callers share any subsequent changes to their components.
+     *
+     * @param translate three translation components
+     * @param rotate three rotation components
+     * @param scale three scale components
+     */
     public record PortraitOffsets(double[] translate, double[] rotate, double[] scale) {
     }
 
+    /**
+     * Converts dialog model settings into arrays used by portrait serialization.
+     * Translation is multiplied by {@code -32} for the portrait coordinate scale,
+     * while rotation and scale components are copied into fresh arrays unchanged.
+     */
     public static PortraitOffsets toNetwork(ModelSettings settings) {
-        // Translate needs to be multiplied by -32 to get a rough block equivalent
+        // Portrait translation uses an inverted scale of thirty-two units per block.
         var translate = settings.offset().mul(-32, new Vector3d());
-        // Entity is rotated by 32 degrees by default
         var rotate = settings.rotation();
         var scale = settings.scale();
         return new PortraitOffsets(
@@ -381,28 +518,51 @@ public final class NetworkHelper {
         );
     }
 
+    /**
+     * Returns a new array containing the vector's three double-precision coordinates.
+     */
     private static double[] toDoubleArray(Vector3dc vec) {
         return new double[]{vec.x(), vec.y(), vec.z()};
     }
 
+    /**
+     * {@code NetworkDialogButton} carries the client-visible dialog button JSON fields.
+     *
+     * @param buttonName displayed button label
+     * @param text command payload text
+     * @param mode activation mode value
+     * @param type button action category
+     */
     public record NetworkDialogButton(
             @SerializedName("button_name")
             String buttonName,
             String text,
-            // "Click" activation
             int mode,
-            // "Command" type
             int type
     ) {
+        /**
+         * Creates the client representation of a server-handled dialog button.
+         * The label comes from {@code button}; empty command text, click activation
+         * {@code 0}, and command type {@code 1} let the client expose the button
+         * without embedding a command payload.
+         */
         public NetworkDialogButton(Button button) {
             this(button.getText(), "", 0, 1);
         }
     }
 
+    /**
+     * Returns client dialog-button records in the supplied buttons' iteration order.
+     * The returned list is unmodifiable, and each record captures its button's
+     * current text when this conversion runs.
+     */
     public static List<NetworkDialogButton> toNetworkDialogButtons(List<Button> buttons) {
         return buttons.stream().map(NetworkDialogButton::new).toList();
     }
 
+    /**
+     * Returns the protocol HUD element corresponding to the server's element name.
+     */
     public org.cloudburstmc.protocol.bedrock.data.HudElement toNetwork(HudElement element) {
         return switch (element) {
             case PAPER_DOLL -> org.cloudburstmc.protocol.bedrock.data.HudElement.PAPER_DOLL;

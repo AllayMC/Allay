@@ -5,21 +5,28 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 
 /**
- * The base class for all chunk events.
+ * {@code ChunkEvent} associates a chunk notification with its dimension and
+ * owning world. The constructor derives the world from the supplied dimension
+ * and retains both handles, allowing listeners to inspect the same chunk
+ * involved in the runtime operation.
  *
  * @author daoge_cmd
  */
 @Getter
 public abstract class ChunkEvent extends WorldEvent {
     /**
-     * The dimension involved in the event.
+     * Dimension owning the affected chunk.
      */
     protected Dimension dimension;
     /**
-     * The chunk involved in the event.
+     * Chunk involved in the notification.
      */
     protected Chunk chunk;
 
+    /**
+     * Creates a chunk notification retaining the supplied dimension and chunk
+     * handles.
+     */
     public ChunkEvent(Dimension dimension, Chunk chunk) {
         super(dimension.getWorld());
         this.dimension = dimension;

@@ -21,15 +21,37 @@ import org.allaymc.api.world.sound.SimpleSound;
 import java.util.Set;
 
 /**
+ * {@code BlockRespawnAnchorBaseComponentImpl} handles respawn-anchor charging,
+ * spawn selection, and prohibited dimension explosions. Glowstone increases the
+ * stored charge up to the block property maximum; a charged anchor can then become
+ * the player's respawn source in a compatible dimension. Comparator output maps
+ * the four charge levels onto redstone strengths.
+ *
  * @author IWareQ
  */
 public class BlockRespawnAnchorBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * {@code MAX_CHARGES} is the charge property's supported maximum. Glowstone
+     * interactions compare against this limit before raising the stored charge and
+     * notifying comparators.
+     */
     private static final int MAX_CHARGES = BlockPropertyTypes.RESPAWN_ANCHOR_CHARGE.getMax();
 
+    /**
+     * Creates the respawnanchor block component for the supplied registered block
+     * type.
+     */
     public BlockRespawnAnchorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Charges the anchor or handles a charged anchor's spawn interaction. Missing
+     * interaction data and an empty uncharged anchor return {@code false}. A
+     * prohibited dimension obeys the explosion game rule and event, while an
+     * already selected valid anchor returns {@code false} after no new spawn
+     * selection.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) {
@@ -58,6 +80,8 @@ public class BlockRespawnAnchorBaseComponentImpl extends BlockBaseComponentImpl 
                 return true;
             }
 
+            // Use the anchor explosion radius of five blocks in prohibited
+            // dimensions.
             var explosion = new Explosion(5, true);
             explosion.setSourceBlockType(this.blockType);
             explosion.setDestroyBlocks(true);
@@ -66,7 +90,8 @@ public class BlockRespawnAnchorBaseComponentImpl extends BlockBaseComponentImpl 
                 return true;
             }
 
-            // i love mojang, explode cannot break this block
+            // Remove the source anchor before exploding so its disappearance
+            // does not depend on which blocks the explosion's destruction pass selects.
             dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             explosion.explode(dimension, interactInfo.clickedBlockPos());
             return true;
@@ -85,11 +110,19 @@ public class BlockRespawnAnchorBaseComponentImpl extends BlockBaseComponentImpl 
         return false;
     }
 
+    /**
+     * Returns whether this anchor supplies its own comparator signal.
+     */
     @Override
     public boolean hasComparatorInputOverride() {
         return true;
     }
 
+    /**
+     * Returns the configured redstone strength for the stored anchor charge.
+     * Charges one through four map to three, seven, eleven, and fifteen; other
+     * values return zero.
+     */
     @Override
     public int getComparatorInputOverride(Block block) {
         var charge = block.getPropertyValue(BlockPropertyTypes.RESPAWN_ANCHOR_CHARGE);
@@ -102,6 +135,9 @@ public class BlockRespawnAnchorBaseComponentImpl extends BlockBaseComponentImpl 
         };
     }
 
+    /**
+     * Returns one respawn-anchor item without retaining the block's stored charge.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(block.toItemStack());

@@ -6,27 +6,26 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Shared component for shulker box items that persist stored inventory contents.
+ * {@code ItemShulkerBoxBaseComponent} exposes the slot-indexed contents carried by
+ * a shulker-box item. Extra-tag persistence carries those contents between item
+ * and placed-container forms. Map containers protect their own structure, but the
+ * stored item stack values remain shared references.
  *
  * @author daoge_cmd
  */
 public interface ItemShulkerBoxBaseComponent extends ItemBaseComponent {
     /**
-     * Get the stored items.
-     * <p>
-     * The key is the slot index, and the value is the item stack in that slot.
-     *
-     * @return The stored items
+     * Returns an unmodifiable view of slot indices and stored item stacks.
+     * The view prevents structural edits through the map, but its item values are
+     * shared with the component and remain mutable.
      */
     @UnmodifiableView
     Map<Integer, ItemStack> getStoredItems();
 
     /**
-     * Set the stored items.
-     * <p>
-     * The key is the slot index, and the value is the item stack to place in that slot.
-     *
-     * @param items The stored items
+     * Replaces the slot-indexed contents using the nonempty, non-air entries.
+     * The component copies the map structure and retains the item values, so callers
+     * can edit their map without replacing the stored mapping.
      */
     void setStoredItems(Map<Integer, ItemStack> items);
 }

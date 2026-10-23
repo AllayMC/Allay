@@ -8,24 +8,18 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
 /**
+ * {@code PersistentDataTypeRegistry} associates primitive classes with adapters that encode,
+ * recognize, and decode NBT values. Custom persistent types select adapters through their
+ * primitive class, so several complex types can share storage while applying different
+ * application-level conversion rules.
+ *
  * @author IWareQ | Bukkit
  */
 public interface PersistentDataTypeRegistry {
     /**
-     * Creates a tag adapter that maps a primitive type to a tag representation with additional type matching validation.
-     *
-     * @param <T>           the type of the primitive value
-     * @param <Z>           the type of the tag representation
-     * @param primitiveType the class type of the primitive value
-     * @param nbtBaseType   the class type of the tag representation
-     * @param builder       a function that converts a primitive value to its tag representation
-     * @param extractor     a function that converts a tag representation back to the primitive value
-     * @param matcher       a function that validates whether a tag value matches the expected type
-     *
-     * @return a tag adapter that can perform conversions between the primitive type and tag representation
-     * with additional validation through the matcher function
-     *
-     * @throws IllegalArgumentException if no suitable tag type adapter is found for the specified types or if the matcher fails
+     * Creates and registers an adapter for {@code primitiveType}, replacing any previous mapping.
+     * The supplied callbacks are retained for later conversions; {@code matcher} decides whether
+     * a stored representation is compatible before extraction is attempted.
      */
     <T, Z> TagAdapter<T, Z> createAdapter(
             Class<T> primitiveType, Class<Z> nbtBaseType,
@@ -35,83 +29,84 @@ public interface PersistentDataTypeRegistry {
     );
 
     /**
-     * Wraps the given primitive value into a tag instance.
+     * Builds the stored representation using the adapter selected by {@code type}. The adapter
+     * checks the primitive value's class before invoking its builder, and callback-specific
+     * validation or aliasing rules still apply.
      *
-     * @param type  the persistent data type of the value
-     * @param value the value to be stored
-     * @param <T>   the generic type of the value
-     *
-     * @return the wrapped tag instance
-     *
-     * @throws IllegalArgumentException if no suitable tag type adapter is found for this type
+     * @throws IllegalArgumentException if the primitive class is unregistered or the value has an incompatible class
      */
     <T> Object wrap(PersistentDataType<T, ?> type, final T value);
 
     /**
-     * Checks if the given tag value instance matches the specified primitive type.
+     * Returns whether the selected adapter recognizes {@code value}. This operation invokes the
+     * adapter's matcher without decoding the complex application value, so a successful match
+     * alone
+     * does not prove custom converter validity.
      *
-     * @param type  the persistent data type of the value
-     * @param value the value instance to check
-     * @param <T>   the generic type of the persistent data type
-     *
-     * @return {@code true} if the tag value is an instance of the primitive type; {@code false} otherwise
-     *
-     * @throws IllegalArgumentException if no suitable tag type adapter is found for this type
+     * @throws IllegalArgumentException if the primitive class has no registered adapter
      */
     <T> boolean isInstanceOf(PersistentDataType<T, ?> type, Object value);
 
     /**
-     * Retrieves the adapter associated with the specified persistent data type.
+     * Returns the adapter registered for {@code type.getPrimitiveType()}. Selection uses the
+     * primitive class rather than the complex class, and callers must not assume that unrelated
+     * complex types receive distinct adapter instances.
      *
-     * @param type the persistent data type
-     * @param <T>  the generic type of the primitive value
-     * @param <Z>  the generic type of the tag representation
-     *
-     * @return the corresponding tag adapter instance
-     *
-     * @throws IllegalArgumentException if no adapter is found for the specified persistent data type
+     * @throws IllegalArgumentException if the primitive class has no registered adapter
      */
     <T, Z> TagAdapter<T, Z> getAdapter(PersistentDataType<T, ?> type);
 
     /**
-     * Extracts the stored primitive value from the given tag representation.
+     * Decodes a stored representation through the adapter selected by {@code type}. The registry
+     * validates the stored representation and extracted primitive class before the caller applies
+     * its complex conversion. {@code null} representations or extractor results can fail during diagnostic
+     * message construction instead of producing the validation exception.
      *
-     * @param type  the persistent data type
-     * @param value the tag representation containing the stored value
-     * @param <T>   the generic type of the extracted value
-     * @param <Z>   the generic type of the tag representation
-     *
-     * @return the extracted primitive value
-     *
-     * @throws IllegalArgumentException if the tag representation doesn't match the expected type or if no suitable adapter is found
+     * @throws IllegalArgumentException if the primitive adapter is absent or a non-{@code null} stored or extracted value has an incompatible type
      */
     <T, Z> T extract(PersistentDataType<T, ?> type, Z value);
 
 
     /**
-     * A tag adapter maps a primitive type to a specific tag representation used for persistence.
+     * {@code TagAdapter} binds one primitive class to its stored representation and conversion
+     * callbacks. The constructor retains those callbacks, and the generated getters expose the
+     * same class tokens and functions used during conversion.
      *
-     * @param <P> the primitive type expected by the persistent data type
-     * @param <T> the tag representation type
+     * @param <P> primitive application representation
+     * @param <T> stored NBT representation
      */
     @Getter
     @RequiredArgsConstructor
     class TagAdapter<P, T> {
+        /**
+         * Accepted primitive value class.
+         */
         private final Class<P> primitiveType;
+        /**
+         * Expected stored representation class.
+         */
         private final Class<T> nbtBaseType;
+        /**
+         * Primitive-to-storage conversion callback.
+         */
         private final BiFunction<PersistentDataType<P, ?>, P, T> builder;
+        /**
+         * Storage-to-primitive conversion callback.
+         */
         private final BiFunction<PersistentDataType<P, ?>, T, P> extractor;
+        /**
+         * Stored representation compatibility predicate.
+         */
         private final BiPredicate<PersistentDataType<P, ?>, Object> matcher;
 
         /**
-         * Extracts the primitive value from the provided tag representation.
+         * Checks the representation with {@code matcher} and extracts its primitive value. A
+         * successful
+         * matcher must also permit casting to {@code nbtBaseType}; the extractor's result is
+         * returned
+         * without a further primitive-class check here.
          *
-         * @param dataType the persistent data type
-         * @param value    the tag representation
-         *
-         * @return the extracted primitive value
-         *
-         * @throws IllegalArgumentException if the provided tag representation is invalid
+         * @throws IllegalArgumentException if the matcher rejects a non-{@code null} representation
          */
         public P extract(PersistentDataType<P, ?> dataType, T value) {
             Preconditions.checkArgument(this.isInstance(dataType, value), "Invalid type: " + value.getClass().getSimpleName());
@@ -119,14 +114,12 @@ public interface PersistentDataTypeRegistry {
         }
 
         /**
-         * Builds a tag representation from the provided primitive value.
+         * Builds the stored representation after checking {@code primitiveType}. A {@code null}
+         * value
+         * fails while the error message is constructed, and the builder controls the result's
+         * representation and whether mutable data remains shared.
          *
-         * @param dataType the persistent data type
-         * @param value    the primitive value to be wrapped
-         *
-         * @return the constructed tag representation
-         *
-         * @throws IllegalArgumentException if the provided value is of an invalid type
+         * @throws IllegalArgumentException if a non-{@code null} value has an incompatible primitive class
          */
         public Object build(PersistentDataType<P, ?> dataType, final P value) {
             Preconditions.checkArgument(this.primitiveType.isInstance(value), "Invalid value type: " + value.getClass().getSimpleName());
@@ -134,12 +127,7 @@ public interface PersistentDataTypeRegistry {
         }
 
         /**
-         * Determines whether the provided tag representation is an instance of the expected type.
-         *
-         * @param dataType the persistent data type
-         * @param value    the tag representation to check
-         *
-         * @return {@code true} if the tag representation matches the expected type; {@code false} otherwise
+         * Returns the compatibility decision supplied by this adapter's retained matcher.
          */
         public boolean isInstance(PersistentDataType<P, ?> dataType, Object value) {
             return this.matcher.test(dataType, value);

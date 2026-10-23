@@ -6,80 +6,72 @@ import org.allaymc.api.ddui.type.DDUIScreen;
 import org.allaymc.api.player.Player;
 
 /**
- * Runtime session for one opened DDUI screen and one viewer.
- * <p>
- * A session is created from a screen template after it is sent to a viewer. For custom forms, it exposes the
- * current server-side view of element values as well as runtime updates such as visibility and disabled state.
+ * {@code DDUIScreenSession} represents one viewer's runtime instance of a DDUI screen template.
+ * Custom-form values and element state belong to the session, so callers use handles from its own
+ * screen to read values or send runtime updates.
  *
  * @author daoge_cmd | SerenityJS
  */
 public interface DDUIScreenSession {
     /**
-     * Gets the viewer that owns this session.
-     *
-     * @return the viewer
+     * Returns the player whose client displays this screen session.
      */
     Player viewer();
 
     /**
-     * Gets the protocol form id assigned to this session.
-     *
-     * @return the form id
+     * Returns the protocol form identifier assigned to this session.
      */
     int formId();
 
     /**
-     * Gets the screen template that created this session.
-     *
-     * @return the screen template
+     * Returns the screen template used to create this session.
      */
     DDUIScreen screen();
 
     /**
-     * Checks whether this session has already been closed.
-     *
-     * @return {@code true} if this session is closed
+     * Returns whether this runtime session has already been closed.
      */
     boolean closed();
 
     /**
-     * Gets the current runtime value of a value element in this session.
+     * Returns the current runtime value for an element belonging to this session. A closed session
+     * rejects access, and an element from another screen or an unregistered handle is rejected.
      *
-     * @param element the element handle from the screen bound to this session
-     * @param <T>     the value type
-     * @return the current value
+     * @throws IllegalStateException if the session is closed
+     * @throws IllegalArgumentException if {@code element} has no value binding in this session
      */
     <T> T get(ValueElement<T> element);
 
     /**
-     * Updates the current runtime value of a value element in this session.
+     * Updates this session's runtime value and sends the normalized value to the viewer. This
+     * operation does not invoke the element's client-change callback or write the bound observable.
      *
-     * @param element the element handle from the screen bound to this session
-     * @param value   the new value
-     * @param <T>     the value type
+     * @throws IllegalStateException if the session is closed
+     * @throws IllegalArgumentException if {@code element} has no value binding in this session
      */
     <T> void set(ValueElement<T> element, T value);
 
     /**
-     * Updates the visibility of an element in this session.
+     * Updates an attached element's runtime visibility and sends the change to the viewer. The
+     * element must belong to this session, and this operation does not reconfigure its template
+     * property.
      *
-     * @param element the element handle
-     * @param visible the new visibility
+     * @throws IllegalStateException if the session is closed
+     * @throws IllegalArgumentException if {@code element} does not belong to this session
      */
     void setVisible(DDUIElement element, boolean visible);
 
     /**
-     * Updates the disabled state of an element in this session.
-     * <p>
-     * Implementations may ignore this call for elements that do not expose a disabled property.
-     *
-     * @param element  the element handle
-     * @param disabled the new disabled state
+     * Updates an attached element's runtime disabled state when that element exposes a disabled
+     * binding. Other attached elements ignore the change; closed sessions and elements belonging to
+     * another session are rejected.
      */
     void setDisabled(DDUIElement element, boolean disabled);
 
     /**
-     * Closes this DDUI session.
+     * Requests closure for this session and submits a close packet for its viewer. Repeated closure
+     * has no further effect; a normal submission return permits subscription cleanup before the
+     * programmatic-close callback, without confirming client receipt.
      */
     void close();
 }

@@ -8,7 +8,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a bell is rung.
+ * {@code BellRingEvent} represents a bell ringing request with its trigger,
+ * optional source entity, and animation direction. The bell component dispatches
+ * this event after validating the hit direction, and cancellation prevents the
+ * block entity from receiving the ring request.
  *
  * @author daoge_cmd
  */
@@ -16,18 +19,26 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class BellRingEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The cause of the bell ringing.
+     * Trigger reported for this ringing request.
      */
     protected RingCause cause;
     /**
-     * The entity that caused the bell to ring, if applicable. Can be {@code null}.
+     * {@code entity} identifies the player or projectile that triggered the ring.
+     * Redstone requests use {@code null} because no source entity participates.
      */
     protected Entity entity;
     /**
-     * The direction from which the bell was struck (0-3).
+     * Animation direction: {@code 0} north, {@code 1} east, {@code 2} south, or
+     * {@code 3} west.
      */
     protected int direction;
 
+    /**
+     * Creates a bell ringing request retaining its block, trigger, and optional
+     * source entity. {@code direction} uses the bell animation encoding;
+     * construction stores the supplied value without validating the attachment or
+     * direction.
+     */
     public BellRingEvent(Block block, RingCause cause, Entity entity, int direction) {
         super(block);
         this.cause = cause;
@@ -36,7 +47,9 @@ public class BellRingEvent extends BlockEvent implements CancellableEvent {
     }
 
     /**
-     * The cause of a bell ringing.
+     * {@code RingCause} identifies the trigger reported for a bell ringing
+     * request. Event producers select the applicable value so listeners can
+     * distinguish player, projectile, redstone, item, and unclassified requests.
      */
     public enum RingCause {
         /**
@@ -56,7 +69,7 @@ public class BellRingEvent extends BlockEvent implements CancellableEvent {
          */
         DROPPED_ITEM,
         /**
-         * Unknown cause.
+         * Unclassified bell ringing trigger.
          */
         UNKNOWN
     }

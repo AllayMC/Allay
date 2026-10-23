@@ -17,14 +17,25 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * {@code LoginPacketProcessorV2168CodecTest} checks base-release codec selection
+ * without replacing later protocol versions or the matching hotfix codec.
+ */
 @ExtendWith({AllayTestExtension.class, MockitoExtension.class})
 class LoginPacketProcessorV2168CodecTest {
 
+    /** Mock connection receiving codec-switch requests. */
     @Mock
     private AllayPlayer player;
+    /** Mock negotiated protocol describing the branch. */
     @Mock
     private Protocol protocol;
 
+    /**
+     * Reports a base-release game version while a later wire protocol is selected.
+     * Codec selection must succeed without requesting the older {@code v2168}
+     * base codec.
+     */
     @ParameterizedTest
     @ValueSource(ints = {2169, 2193})
     void keepsTheNegotiatedCodecForLaterProtocols(int version) {
@@ -37,6 +48,11 @@ class LoginPacketProcessorV2168CodecTest {
         verify(player, never()).switchProtocolCodec(Bedrock_v2168.CODEC);
     }
 
+    /**
+     * Reports an international {@code v2168} connection running the base game
+     * release. Codec selection must forward the base-codec switch and preserve
+     * its successful result.
+     */
     @Test
     void switchesToTheBaseCodecForA12640Client() {
         when(player.getProtocol()).thenReturn(protocol);
@@ -49,6 +65,11 @@ class LoginPacketProcessorV2168CodecTest {
         verify(player).switchProtocolCodec(Bedrock_v2168.CODEC);
     }
 
+    /**
+     * Reports the hotfix game-version stem on an international {@code v2168}
+     * connection. Selection must retain its negotiated codec and avoid requesting
+     * the base-release serializer.
+     */
     @Test
     void keepsTheHotfixCodecForA12644Client() {
         when(player.getProtocol()).thenReturn(protocol);

@@ -10,20 +10,35 @@ import org.allaymc.api.registry.Registries;
 import java.util.Comparator;
 
 /**
- * Matches furnace recipes stored under concrete item or item tag identifiers.
+ * {@code FurnaceRecipeMatcher} selects registered furnace recipes using
+ * concrete item keys and item-tag keys. A search first considers the requested
+ * furnace category, then optionally considers ordinary furnace recipes only if
+ * that search has no match. Within each category, a matching concrete-item
+ * recipe wins before any tag recipe, regardless of priority.
+ *
+ * <p>
+ * Multiple matching tag recipes are ordered by ascending priority and then
+ * identifier text, giving a stable choice when an ingredient has several tags.
+ * Every candidate is checked against the original {@code FurnaceRecipeInput};
+ * the fallback therefore relies on {@code FurnaceRecipe.Type.FURNACE} accepting
+ * other furnace categories during recipe matching. No lookup consumes or
+ * modifies the ingredient stack.
  */
 @UtilityClass
 public final class FurnaceRecipeMatcher {
 
     /**
-     * Finds a furnace recipe for the supplied ingredient and furnace type. Recipes using a
-     * concrete item descriptor are preferred over recipes using an item tag descriptor.
+     * Returns a matching recipe for the requested processing category, or
+     * {@code null} when no permitted search succeeds. A matching exact-category
+     * recipe wins before any ordinary-furnace fallback, including
+     * exact-category tag recipes competing with a fallback concrete recipe.
      *
-     * @param ingredient                the item being processed
-     * @param type                      the furnace type processing the item
-     * @param allowNormalFurnaceFallback whether a normal furnace recipe may be used when no
-     *                                   recipe exists for {@code type}
-     * @return the matching recipe, or {@code null} when no recipe matches
+     * <p>
+     * When {@code allowNormalFurnaceFallback} is {@code true} and the requested
+     * category has no match, a non-{@code FURNACE} category also searches
+     * ordinary furnace recipes. Each category prefers a matching concrete-item
+     * recipe, then chooses matching tag recipes by ascending priority and
+     * identifier text. The ingredient remains unchanged.
      */
     public static FurnaceRecipe match(ItemStack ingredient, FurnaceRecipe.Type type, boolean allowNormalFurnaceFallback) {
         var input = new FurnaceRecipeInput(ingredient, type);
@@ -32,6 +47,8 @@ public final class FurnaceRecipeMatcher {
             return recipe;
         }
 
+        // The requested category has no usable candidate. Reuse the original input
+        // because ordinary furnace recipes explicitly accept inputs from other furnace categories.
         if (allowNormalFurnaceFallback && type != FurnaceRecipe.Type.FURNACE) {
             return matchType(ingredient, input, FurnaceRecipe.Type.FURNACE);
         }
@@ -40,14 +57,16 @@ public final class FurnaceRecipeMatcher {
     }
 
     /**
-     * Finds a recipe registered for one exact recipe type, first by concrete item and then by
-     * the tags attached to the item. When multiple tag recipes match, recipe priority and
-     * identifier are used to select a deterministic result.
+     * Returns a matching recipe registered under one category's generated keys.
+     * A usable concrete-item entry wins immediately, so tag recipe priorities
+     * never override that entry; candidates must also pass matching against the
+     * complete supplied input.
      *
-     * @param ingredient the item being processed
-     * @param input      the complete furnace input used to validate candidate recipes
-     * @param recipeType the exact recipe type to search
-     * @return the matching recipe, or {@code null} when no recipe matches
+     * <p>
+     * If the concrete lookup fails or does not match, the search checks keys
+     * for every tag on the ingredient type. Matching tag recipes are ordered by
+     * ascending priority and then identifier text, preventing tag iteration
+     * order from deciding ties. No matching entry yields {@code null}.
      */
     private static FurnaceRecipe matchType(
             ItemStack ingredient,
@@ -59,6 +78,8 @@ public final class FurnaceRecipeMatcher {
             return furnaceRecipe;
         }
 
+        // A missing or rejected concrete entry leaves tag recipes eligible. Compare
+        // every matching tag candidate so item-tag iteration order cannot decide the winner.
         return ingredient.getItemType().getItemTags().stream()
                 .map(ItemTagDescriptor::new)
                 .map(descriptor -> Registries.RECIPES.get(FurnaceRecipe.buildIdentifier(descriptor, recipeType)))

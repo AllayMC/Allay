@@ -8,13 +8,29 @@ import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**
+ * {@code ItemMelonSeedsBaseComponentImpl} places the default melon stem block
+ * state when its item is planted. The inherited placement path owns block
+ * eligibility, collision checks, and placement side effects, while this
+ * specialization selects {@code BlockTypes.MELON_STEM} instead of the item's
+ * mapped block type.
+ *
  * @author daoge_cmd
  */
 public class ItemMelonSeedsBaseComponentImpl extends ItemBaseComponentImpl {
+    /**
+     * Creates crop-placement behavior from the supplied item initialization
+     * data.
+     */
     public ItemMelonSeedsBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Attempts to place the default {@code BlockTypes.MELON_STEM} state at
+     * {@code placeBlockPos}. The inherited helper applies placement or
+     * combination rules and returns their result; player context enables
+     * collision checks and successful-placement consumption.
+     */
     @Override
     public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         return tryPlaceBlockState(dimension, BlockTypes.MELON_STEM.getDefaultState(), placeBlockPos, placementInfo);

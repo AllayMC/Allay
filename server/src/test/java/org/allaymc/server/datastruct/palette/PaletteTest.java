@@ -14,10 +14,17 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code PaletteTest} checks palette-width growth, zero-index shortcuts, and little-endian
+ * NBT storage round trips.
  * @author daoge_cmd
  */
 class PaletteTest {
 
+    /**
+     * Adds distinct fixture entries to an initially singleton palette. Each newly required
+     * index must select a sufficiently wide bit-array version and remain readable at its
+     * assigned section position.
+     */
     @Test
     void testGeneric() {
         var e0 = new Entry(0);
@@ -35,6 +42,11 @@ class PaletteTest {
         assertEquals(e2, palette.get(2));
     }
 
+    /**
+     * Changes one section position away from and back to the default entry. The palette
+     * must retain its widened layout while still recognizing that every stored index
+     * selects the first value.
+     */
     @Test
     void testOneEntryOnly() {
         var e0 = new Entry(0);
@@ -42,12 +54,15 @@ class PaletteTest {
         var palette = new Palette<>(e0, BitArrayVersion.V0);
         palette.set(1, e1);
         palette.set(1, e0);
-        // Bit array version won't downgrade
         assertEquals(BitArrayVersion.V1, palette.getVersion());
-        // But the palette should be one entry only
         assertTrue(palette.oneEntryOnly());
     }
 
+    /**
+     * Serializes a two-entry palette as little-endian NBT and reads it into another
+     * palette. Both the default entry and changed position must retain their fixture
+     * values.
+     */
     @Test
     void testStorage() {
         var e0 = new Entry(0);
@@ -64,6 +79,11 @@ class PaletteTest {
         assertEquals(e1, p1.get(1));
     }
 
+    /**
+     * Builds equal three-entry sections through different initial bit-array versions and
+     * serializes both. The resulting bytes must match once both palettes reach the same
+     * packed representation.
+     */
     @Test
     void testStorageV2() {
         var e0 = new Entry(0);
@@ -87,21 +107,50 @@ class PaletteTest {
         assertArrayEquals(bytes0, bytes1);
     }
 
+    /**
+     * {@code Entry} represents an immutable integer identifier used by the palette
+     * serialization fixtures.
+     * @param id serialized fixture value identifier
+     */
     record Entry(int id) {
     }
 
+    /**
+     * {@code PDSerializerImpl} encodes fixture entries as NBT compounds with an integer
+     * identifier.
+     */
     static class PDSerializerImpl implements NBTSerializer<Entry> {
+        /**
+         * {@code INSTANCE} provides the shared stateless {@code PDSerializerImpl} used by
+         * palette storage tests, avoiding per-call adapter allocation.
+         */
         static PDSerializerImpl INSTANCE = new PDSerializerImpl();
 
+        /**
+         * Returns an NBT compound containing the fixture's integer identifier.
+         */
         @Override
         public NbtMap serialize(Entry value) {
             return NbtMap.builder().putInt("id", value.id).build();
         }
     }
 
+    /**
+     * {@code PDDeserializerImpl} decodes NBT fixture compounds into immutable palette
+     * entries.
+     */
     static class PDDeserializerImpl implements NBTDeserializer<Entry> {
+        /**
+         * {@code INSTANCE} provides the shared stateless {@code PDDeserializerImpl} used
+         * by palette storage tests, avoiding per-call adapter allocation.
+         */
         static PDDeserializerImpl INSTANCE = new PDDeserializerImpl();
 
+        /**
+         * Reads one little-endian NBT compound and returns an entry containing its fixture
+         * identifier. I/O errors become {@code PaletteException}; successful decoding
+         * advances the supplied buffer past that entry.
+         */
         @Override
         public Entry deserialize(ByteBuf buffer) {
             try (var reader = NbtUtils.createReaderLE(new ByteBufInputStream(buffer))) {

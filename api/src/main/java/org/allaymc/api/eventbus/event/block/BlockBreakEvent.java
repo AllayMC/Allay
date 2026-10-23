@@ -9,7 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a block is broken.
+ * {@code BlockBreakEvent} represents a proposed block break together with its tool
+ * and responsible entity. The dimension checks cancellation before producing break
+ * effects and invoking block drop handling; either context value may be absent for
+ * breaks without a tool or entity.
  *
  * @author daoge_cmd
  */
@@ -18,14 +21,21 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.DIMENSION)
 public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The item used to break the block. Can be {@code null}.
+     * {@code usedItem} identifies the tool used for the break and may be {@code null}
+     * when no tool is supplied.
      */
     protected ItemStack usedItem;
     /**
-     * The entity breaks the block. Can be {@code null}.
+     * {@code entity} identifies the entity responsible for the break and may be
+     * {@code null} for unattributed changes.
      */
     protected Entity entity;
 
+    /**
+     * Creates a break event with the supplied block, tool, and entity.
+     * {@code usedItem} and {@code entity} may be {@code null}, and construction only
+     * records the context for later dispatch.
+     */
     public BlockBreakEvent(Block block, ItemStack usedItem, Entity entity) {
         super(block);
         this.usedItem = usedItem;

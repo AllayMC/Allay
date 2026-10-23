@@ -3,11 +3,13 @@ package org.allaymc.api.world.particle;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * BlockBreakParticle is a particle sent when a block is broken. It represents particles
- * textured like the block that the particle holds.
+ * {@code BlockBreakParticle} represents block-textured debris for a broken
+ * block. The runtime encodes the supplied state hash as the destruction effect
+ * payload, so the descriptor selects appearance while its caller separately
+ * supplies the effect position.
  *
- * @param blockState the block state of which particles should be shown. The particles will change
- *                   depending on what block state is held.
+ * @param blockState block state supplying the debris texture
+ *
  * @author daoge_cmd
  */
 public record BlockBreakParticle(BlockState blockState) implements Particle {

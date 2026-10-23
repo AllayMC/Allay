@@ -3,34 +3,36 @@ package org.allaymc.api.container.interfaces;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * EnchantTableContainer represents a container for an enchantment table block.
+ * {@code EnchantTableContainer} exposes named slots for an enchanting table container.
+ * Its accessors use the shared container storage and notification rules, so callers can
+ * address each slot by its gameplay role without repeating numeric indices.
  *
  * @author daoge_cmd
  */
 public interface EnchantTableContainer extends BlockContainer {
     /**
-     * The constant representing the input slot index in the enchantment table container.
+     * The slot constants identify enchanting table storage positions used by the named
+     * accessors and container action processing. Enchantment input slot index.
      */
     int INPUT_SLOT = 0;
 
     /**
-     * The constant representing the material slot index in the enchantment table container.
+     * Enchantment material slot index.
      */
     int MATERIAL_SLOT = 1;
 
     /**
-     * Gets the item in the input slot of the enchantment table.
-     *
-     * @return the ItemStack in the input slot
+     * Returns the stored stack in the enchantment input slot. The result is shared with
+     * this container; callers that change its contents must notify the slot afterward.
      */
     default ItemStack getInput() {
         return getItemStack(INPUT_SLOT);
     }
 
     /**
-     * Gets the item in the material slot of the enchantment table.
-     *
-     * @return the ItemStack in the material slot
+     * Returns the stored stack in the enchantment material slot. The result is shared
+     * with this container; callers that change its contents must notify the slot
+     * afterward.
      */
     default ItemStack getMaterial() {
         return getItemStack(MATERIAL_SLOT);

@@ -38,18 +38,42 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * {@code ProtocolSessionTest} checks event replacement, transport validation,
+ * and codec lifecycle behavior for one protocol session.
+ */
 @ExtendWith({AllayTestExtension.class, MockitoExtension.class})
 class ProtocolSessionTest {
 
+    /**
+     * Mock negotiated protocol identity.
+     */
     @Mock
     private Protocol protocol;
+    /**
+     * Mock packet transport connection.
+     */
     @Mock
     private BedrockServerSession bedrockSession;
+    /**
+     * Mock player sending or receiving.
+     */
     @Mock
     private AllayPlayer player;
 
+    /**
+     * {@code protocolSession} holds the session created for each case. Tests
+     * may replace it with a holder containing explicit processors before
+     * exercising inbound dispatch.
+     */
     private ProtocolSession protocolSession;
 
+    /**
+     * Creates a fresh connected session backed by an empty frozen processor
+     * registry. {@code Protocol} identity and readiness are stubbed before
+     * construction, while codec stubs remain lenient for tests that only
+     * exercise dispatch.
+     */
     @BeforeEach
     void setUp() {
         var registry = new PacketProcessorRegistry();
@@ -63,6 +87,11 @@ class ProtocolSessionTest {
         protocolSession = new ProtocolSession(protocol, bedrockSession);
     }
 
+    /**
+     * Sends one registered text packet through queued and immediate paths. Both
+     * transport calls must receive the original object, and immediate
+     * submission returns that same packet.
+     */
     @Test
     void registeredOriginalPacketIsAcceptedForBothSendModes() {
         var packet = new TextPacket();
@@ -76,6 +105,11 @@ class ProtocolSessionTest {
         order.verify(bedrockSession).sendPacketImmediately(packet);
     }
 
+    /**
+     * Cancels every send event while exercising both send modes and the
+     * returning overload. No packet may reach either transport method, and the
+     * returning overload must report rejection with {@code null}.
+     */
     @Test
     void cancellationBlocksQueuedAndImmediateSends() {
         var packet = new TextPacket();
@@ -91,6 +125,12 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).sendPacketImmediately(any());
     }
 
+    /**
+     * Replaces two outbound packets with different registered packet types
+     * through an event listener. Queued and immediate transport calls must
+     * receive their respective replacements, and the immediate result must
+     * preserve replacement identity.
+     */
     @Test
     void replacementIsSentAndReturnedForBothSendModes() {
         var original = new TextPacket();
@@ -114,6 +154,11 @@ class ProtocolSessionTest {
         order.verify(bedrockSession).sendPacketImmediately(immediateReplacement);
     }
 
+    /**
+     * Replaces a valid text packet with a packet absent from the selected
+     * codec. Both send modes must reject that replacement before transport
+     * submission, including the immediate-returning overload.
+     */
     @Test
     void eventReplacementUnregisteredInTargetCodecIsRejected() {
         var original = new TextPacket();
@@ -130,6 +175,11 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).sendPacketImmediately(any());
     }
 
+    /**
+     * Submits an unsupported packet without event replacement to an otherwise
+     * connected transport. Queued and immediate sending must both omit it, and
+     * immediate submission must return {@code null}.
+     */
     @Test
     void unregisteredOriginalPacketIsRejected() {
         var unsupported = new VoxelShapesPacket();
@@ -142,6 +192,11 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).sendPacketImmediately(any());
     }
 
+    /**
+     * Uses a login packet registered exclusively for server receipt in the
+     * codec. Outbound validation must reject it in both send modes even though
+     * the packet class is registered.
+     */
     @Test
     void serverboundPacketIsRejectedByBothSendModes() {
         var serverbound = new LoginPacket();
@@ -158,6 +213,11 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).sendPacketImmediately(any());
     }
 
+    /**
+     * Sends collections containing cancelled, replaced, unsupported, and
+     * unchanged packets in both modes. Accepted entries must retain their
+     * iteration order while each rejected entry is omitted independently.
+     */
     @Test
     void collectionsApplyCancellationAndReplacementToEachPacketIndependently() {
         var cancelled = new LoginPacket();
@@ -190,6 +250,11 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).sendPacketImmediately(unsupported);
     }
 
+    /**
+     * Disconnects the protocol session inside the send event callback.
+     * Immediate sending must recheck the state after listeners return and avoid
+     * submitting the packet to the transport.
+     */
     @Test
     void disconnectDuringSendEventPreventsPacketFromReachingTransport() {
         var packet = new TextPacket();
@@ -201,10 +266,17 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).sendPacketImmediately(any(BedrockPacket.class));
     }
 
+    /**
+     * Replaces an inbound login packet with {@code null} through a temporary
+     * receive listener. Receiving must consume the event result without
+     * dispatch failure, and the listener is removed afterward.
+     */
     @Test
     void nullReceiveEventReplacementIsIgnored() {
         Consumer<PacketReceiveEvent> listener = event -> event.setPacket(null);
 
+        // Bound this registration to the action so failures cannot leave a
+        // listener altering later tests on the shared server bus.
         var eventBus = Server.getInstance().getEventBus();
         eventBus.registerListenerFor(PacketReceiveEvent.class, listener);
         try {
@@ -214,6 +286,11 @@ class ProtocolSessionTest {
         }
     }
 
+    /**
+     * Cancels an inbound packet that has a registered processor. Receiving must
+     * return {@code HANDLED} without invoking either the asynchronous or
+     * synchronous phase of that processor.
+     */
     @Test
     void receiveCancellationSkipsProcessor() {
         var processor = processor(PacketSignal.HANDLED);
@@ -228,6 +305,11 @@ class ProtocolSessionTest {
         verify(processor, never()).handleSync(any(), any(), anyLong());
     }
 
+    /**
+     * Replaces a login packet with a text packet while both types have
+     * processors. Dispatch must select the text processor and pass it the
+     * replacement object, leaving the original processor unused.
+     */
     @Test
     void receiveReplacementUsesReplacementProcessor() {
         var originalProcessor = processor(PacketSignal.HANDLED);
@@ -247,6 +329,11 @@ class ProtocolSessionTest {
         verify(replacementProcessor).handleAsync(eq(player), same(replacement), anyLong());
     }
 
+    /**
+     * Registers a processor whose asynchronous phase consumes a login packet.
+     * Receiving must invoke that phase once and avoid the synchronous phase
+     * after the {@code HANDLED} result.
+     */
     @Test
     void asyncHandledPacketDoesNotEnterSyncPath() {
         var processor = processor(PacketSignal.HANDLED);
@@ -258,6 +345,11 @@ class ProtocolSessionTest {
         verify(processor, never()).handleSync(any(), any(), anyLong());
     }
 
+    /**
+     * Replaces a login packet with text whose asynchronous processor requests
+     * synchronous work. The world queue must receive the replacement packet,
+     * its selected processor, and the entity receive tick together.
+     */
     @Test
     void unhandledReplacementQueuesReplacementWithItsProcessor() {
         var originalProcessor = processor(PacketSignal.HANDLED);
@@ -284,6 +376,11 @@ class ProtocolSessionTest {
         verify(replacementProcessor, never()).handleSync(any(), any(), anyLong());
     }
 
+    /**
+     * Installs a negotiated codec with prevalidated item and block registries
+     * on a replacement helper. Repeating installation must fail, and the first
+     * installation must set the codec before either registry.
+     */
     @Test
     @SuppressWarnings("unchecked")
     void installsPrevalidatedDefinitionsExactlyOnce() {
@@ -313,6 +410,12 @@ class ProtocolSessionTest {
         verify(bedrockSession).setCodec(Bedrock_v818.CODEC);
     }
 
+    /**
+     * Switches a connected session between codecs sharing the negotiated wire
+     * version. {@code Protocol} identity, processor holder, and client state
+     * must remain unchanged while the replacement helper receives the selected
+     * definitions.
+     */
     @Test
     @SuppressWarnings("unchecked")
     void switchesTransportCodecWithoutReplacingProtocolStateBeforeLoginCompletes() {
@@ -335,6 +438,9 @@ class ProtocolSessionTest {
                 Bedrock_v2168_hotfix4.CODEC
         );
         when(bedrockSession.getPeer()).thenReturn(peer);
+        // The helper sequence models installation, the pre-switch snapshot, and
+        // replacement so assertions distinguish retained protocol data from
+        // transport helpers.
         when(peer.getCodecHelper()).thenReturn(bootstrapHelper, hotfixHelper, hotfixHelper, baseHelper);
         when(bootstrapHelper.getItemDefinitions()).thenReturn(bootstrapItems);
         when(bootstrapHelper.getBlockDefinitions()).thenReturn(bootstrapBlocks);
@@ -358,6 +464,11 @@ class ProtocolSessionTest {
         order.verify(baseHelper).setBlockDefinitions(selectedBlocks);
     }
 
+    /**
+     * Advances a successfully installed session into the logged-in state before
+     * requesting another codec. The switch must fail without installing the
+     * replacement or changing the negotiated protocol.
+     */
     @Test
     @SuppressWarnings("unchecked")
     void refusesTransportCodecSwitchAfterLoginStateHasAdvanced() {
@@ -385,6 +496,11 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).setCodec(Bedrock_v2168.CODEC);
     }
 
+    /**
+     * Attempts installation when the transport has no bootstrap codec. The
+     * session must reject the request before changing the codec or obtaining
+     * the transport peer.
+     */
     @Test
     void refusesInstallationWithoutBootstrapCodecBeforeChangingSession() {
         assertThrows(IllegalStateException.class, protocolSession::installCodec);
@@ -393,6 +509,11 @@ class ProtocolSessionTest {
         verify(bedrockSession, never()).getPeer();
     }
 
+    /**
+     * Makes block-definition installation throw after the new codec and item
+     * definitions were applied. The session must restore the previous codec and
+     * definitions in order before propagating the installation failure.
+     */
     @Test
     @SuppressWarnings("unchecked")
     void definitionFailureRestoresPreviousCodecAndDefinitions() {
@@ -407,6 +528,8 @@ class ProtocolSessionTest {
 
         when(bedrockSession.getCodec()).thenReturn(Bedrock_v819.CODEC);
         when(bedrockSession.getPeer()).thenReturn(peer);
+        // Return a distinct helper for each codec replacement so rollback must
+        // restore definitions on the replacement helper, not a stale reference.
         when(peer.getCodecHelper()).thenReturn(previousHelper, installedHelper, restoredHelper);
         when(previousHelper.getItemDefinitions()).thenReturn(previousItems);
         when(previousHelper.getBlockDefinitions()).thenReturn(previousBlocks);
@@ -426,7 +549,14 @@ class ProtocolSessionTest {
         order.verify(restoredHelper).setBlockDefinitions(previousBlocks);
     }
 
+    /**
+     * Runs an action with a temporary listener on the shared send-event bus.
+     * The listener is removed in a {@code finally} block, including when the
+     * action throws, so later tests do not inherit its behavior.
+     */
     private static void withPacketSendListener(Consumer<PacketSendEvent> listener, Runnable action) {
+        // Bound this registration to the action so failures cannot leave a
+        // listener altering later tests on the shared server bus.
         var eventBus = Server.getInstance().getEventBus();
         eventBus.registerListenerFor(PacketSendEvent.class, listener);
         try {
@@ -436,7 +566,15 @@ class ProtocolSessionTest {
         }
     }
 
+    /**
+     * Runs an action with a temporary listener on the shared receive-event bus.
+     * A {@code finally} block removes the listener even after assertion or
+     * dispatch failure, keeping the registration lifetime bounded to this
+     * action.
+     */
     private static void withPacketReceiveListener(Consumer<PacketReceiveEvent> listener, Runnable action) {
+        // Bound this registration to the action so failures cannot leave a
+        // listener altering later tests on the shared server bus.
         var eventBus = Server.getInstance().getEventBus();
         eventBus.registerListenerFor(PacketReceiveEvent.class, listener);
         try {
@@ -446,6 +584,11 @@ class ProtocolSessionTest {
         }
     }
 
+    /**
+     * Creates a mock processor returning the supplied asynchronous signal for
+     * any packet. The stub is lenient because cancellation cases deliberately
+     * exercise paths where the processor must never be invoked.
+     */
     @SuppressWarnings("unchecked")
     private PacketProcessor<BedrockPacket> processor(PacketSignal asyncResult) {
         var processor = (PacketProcessor<BedrockPacket>) mock(PacketProcessor.class);
@@ -453,6 +596,11 @@ class ProtocolSessionTest {
         return processor;
     }
 
+    /**
+     * Creates a connected session whose holder uses the supplied packet-type
+     * processors. Each mock reports its registered type, and freezing occurs
+     * before holder construction so dispatch uses a validated registration set.
+     */
     private ProtocolSession sessionWithProcessors(
             Map<BedrockPacketType, PacketProcessor<BedrockPacket>> processors
     ) {

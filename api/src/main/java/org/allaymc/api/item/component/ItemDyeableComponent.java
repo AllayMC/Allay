@@ -3,37 +3,38 @@ package org.allaymc.api.item.component;
 import java.awt.*;
 
 /**
- * Component for items that support a custom dye-applied color.
+ * {@code ItemDyeableComponent} exposes an optional custom color on an item.
+ * {@code null} represents the absence of an applied color, and the shared query
+ * and clearing operations use that representation so callers need no separate
+ * presence flag.
  *
  * @author daoge_cmd
  */
 public interface ItemDyeableComponent extends ItemComponent {
 
     /**
-     * Gets the custom color of this item.
-     *
-     * @return the custom color, or {@code null} if no custom color is set
+     * Returns the currently applied custom color for this item.
+     * The result is {@code null} when the item has no custom color, which
+     * {@code hasCustomColor} exposes as an absence check.
      */
     Color getCustomColor();
 
     /**
-     * Sets the custom color of this item.
-     *
-     * @param color the color to set, or {@code null} to clear
+     * Sets the currently applied custom color for this item.
+     * Supplying {@code null} clears the applied color and makes {@code hasCustomColor}
+     * return {@code false} until another color is set.
      */
     void setCustomColor(Color color);
 
     /**
-     * Checks if this item has a custom color.
-     *
-     * @return {@code true} if has custom color
+     * Returns whether this item currently has a non-{@code null} custom color.
      */
     default boolean hasCustomColor() {
         return getCustomColor() != null;
     }
 
     /**
-     * Clears the custom color from this item.
+     * Clears this item's custom color by assigning {@code null}.
      */
     default void clearCustomColor() {
         setCustomColor(null);

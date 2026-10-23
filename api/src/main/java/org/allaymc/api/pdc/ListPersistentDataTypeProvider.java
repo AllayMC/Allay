@@ -9,25 +9,70 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 /**
- * Provides shared instances of {@link ListPersistentDataType} for the known primitive types supported by {@link PersistentDataType}.
+ * {@code ListPersistentDataTypeProvider} supplies reusable list adapters for built-in persistent
+ * types and creates adapters for custom element types. Each adapter delegates element conversion
+ * to its retained type; conversions return lazy views of the supplied lists, so later source-list
+ * changes remain visible and mutable elements can remain shared.
  *
  * @author IWareQ | Bukkit
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public final class ListPersistentDataTypeProvider {
+    // The scalar adapters reuse built-in element types for each list conversion. BYTE, SHORT,
+    // INTEGER, LONG, FLOAT, DOUBLE, BOOLEAN, and STRING remain shared across provider instances.
+    /**
+     * byte element list adapter.
+     */
     private static final ListPersistentDataType<Byte, Byte> BYTE = new ListPersistentDataTypeImpl<>(PersistentDataType.BYTE);
+    /**
+     * short element list adapter.
+     */
     private static final ListPersistentDataType<Short, Short> SHORT = new ListPersistentDataTypeImpl<>(PersistentDataType.SHORT);
+    /**
+     * integer element list adapter.
+     */
     private static final ListPersistentDataType<Integer, Integer> INTEGER = new ListPersistentDataTypeImpl<>(PersistentDataType.INTEGER);
+    /**
+     * long element list adapter.
+     */
     private static final ListPersistentDataType<Long, Long> LONG = new ListPersistentDataTypeImpl<>(PersistentDataType.LONG);
+    /**
+     * float element list adapter.
+     */
     private static final ListPersistentDataType<Float, Float> FLOAT = new ListPersistentDataTypeImpl<>(PersistentDataType.FLOAT);
+    /**
+     * double element list adapter.
+     */
     private static final ListPersistentDataType<Double, Double> DOUBLE = new ListPersistentDataTypeImpl<>(PersistentDataType.DOUBLE);
+    /**
+     * boolean element list adapter.
+     */
     private static final ListPersistentDataType<Byte, Boolean> BOOLEAN = new ListPersistentDataTypeImpl<>(PersistentDataType.BOOLEAN);
+    /**
+     * string element list adapter.
+     */
     private static final ListPersistentDataType<String, String> STRING = new ListPersistentDataTypeImpl<>(PersistentDataType.STRING);
 
+    // BYTE_ARRAY, INTEGER_ARRAY, and LONG_ARRAY retain their primitive array adapters. Those
+    // element adapters pass array references through conversion, so callers manage mutable data.
+    /**
+     * byte-array element list adapter.
+     */
     private static final ListPersistentDataType<byte[], byte[]> BYTE_ARRAY = new ListPersistentDataTypeImpl<>(PersistentDataType.BYTE_ARRAY);
+    /**
+     * integer-array element list adapter.
+     */
     private static final ListPersistentDataType<int[], int[]> INTEGER_ARRAY = new ListPersistentDataTypeImpl<>(PersistentDataType.INTEGER_ARRAY);
+    /**
+     * long-array element list adapter.
+     */
     private static final ListPersistentDataType<long[], long[]> LONG_ARRAY = new ListPersistentDataTypeImpl<>(PersistentDataType.LONG_ARRAY);
 
+    // DATA_CONTAINER uses the container adapter when a list becomes NBT, allowing each
+    // element to supply its own compound representation through the same registry.
+    /**
+     * nested-container element list adapter.
+     */
     private static final ListPersistentDataType<PersistentDataContainer, PersistentDataContainer> DATA_CONTAINER =
             new ListPersistentDataTypeImpl<>(PersistentDataType.TAG_CONTAINER);
 
@@ -140,50 +185,76 @@ public final class ListPersistentDataTypeProvider {
     }
 
     /**
-     * Creates a new {@link ListPersistentDataType} for a given element type.
-     *
-     * @param elementType the persistent data type for list elements
-     * @param <P>         the primitive type of the list elements
-     * @param <C>         the complex type of the list elements
-     *
-     * @return a new list persistent data type for the given element type
+     * Creates a list adapter retaining the supplied element converter. The converter is used
+     * lazily
+     * when values are accessed in converted lists, and the registry requires a supported primitive
+     * element type when the list is stored.
      */
     public <P, C> ListPersistentDataType<P, C> listTypeFrom(PersistentDataType<P, C> elementType) {
         return new ListPersistentDataTypeImpl<>(elementType);
     }
 
     /**
-     * Private implementation of {@link ListPersistentDataType} that
-     * converts between primitive and complex list types using {@link Collections2}.
+     * {@code ListPersistentDataTypeImpl} converts list elements through one retained persistent
+     * data
+     * type. {@link Lists#transform(List, com.google.common.base.Function)} supplies lazy views
+     * rather
+     * than independent copies of the source lists.
      *
-     * @param <P> the primitive type of the list elements
-     * @param <C> the complex type of the list elements
+     * @param <P> primitive element representation
+     * @param <C> converted element representation
      */
     @SuppressWarnings("unchecked")
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     private static final class ListPersistentDataTypeImpl<P, C> implements ListPersistentDataType<P, C> {
+        /**
+         * Retained element conversion adapter.
+         */
         private final PersistentDataType<P, C> innerType;
 
+        /**
+         * Returns the erased list class used for registry adapter lookup.
+         */
         @Override
         public Class<List<P>> getPrimitiveType() {
             return (Class<List<P>>) (Object) List.class;
         }
 
+        /**
+         * Returns the erased list class exposed for converted values.
+         */
         @Override
         public Class<List<C>> getComplexType() {
             return (Class<List<C>>) (Object) List.class;
         }
 
+        /**
+         * Returns a lazy primitive view backed by {@code complex}. Source-list changes remain
+         * visible,
+         * and each access invokes {@code innerType.toPrimitive}; callers cannot assume an
+         * independent
+         * snapshot or independent mutable elements.
+         */
         @Override
         public List<P> toPrimitive(List<C> complex, PersistentDataAdapterContext context) {
             return Lists.transform(complex, s -> innerType.toPrimitive(s, context));
         }
 
+        /**
+         * Returns a lazy converted view backed by {@code primitive}. Source-list changes remain
+         * visible,
+         * and each access invokes {@code innerType.fromPrimitive}; callers cannot assume an
+         * independent
+         * snapshot or independent mutable elements.
+         */
         @Override
         public List<C> fromPrimitive(List<P> primitive, PersistentDataAdapterContext context) {
             return Lists.transform(primitive, s -> innerType.fromPrimitive(s, context));
         }
 
+        /**
+         * Returns the retained element adapter used by both conversion directions.
+         */
         @Override
         public PersistentDataType<P, C> getElementType() {
             return this.innerType;

@@ -43,23 +43,64 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.CAULDRON_LI
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FILL_LEVEL;
 
 /**
- * Implementation of cauldron block behavior.
+ * {@code BlockCauldronBaseComponentImpl} handles cauldron liquid transfers, item
+ * coloring and cleaning, potion storage, weather filling, and entity contact
+ * effects. The block state stores liquid kind and fill level, while the block
+ * entity stores potion kind, potion identity, and custom color. A bottle accounts
+ * for two of the six fill levels. {@code MAX_FILL_LEVEL} bounds capacity, while
+ * {@code FILL_LEVEL_PER_BOTTLE} defines the amount added and removed by bottle
+ * transfers; both constants use the same fill-level scale.
+ *
+ * <p>
+ * Interaction handlers combine those two representations with the held item to
+ * choose a transfer or transformation. Conflicting liquids or potion identities
+ * can clear the contents with fizz, and emptying selected paths also clears stored
+ * potion metadata. World, inventory, and metadata updates occur in order without
+ * rollback; the handlers ignore item-insertion failures and block-write return
+ * values.
  *
  * @author daoge_cmd
  */
 @Slf4j
 public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * Maximum cauldron fill level, representing one full bucket.
+     * {@code FILL_LEVEL_PER_BOTTLE} accounts for bottle transfers within this
+     * six-level capacity.
+     */
     public static final int MAX_FILL_LEVEL = 6;
+    /**
+     * Fill levels transferred by one bottle. Bottle extraction and potion
+     * insertion subtract or add this amount while respecting
+     * {@code MAX_FILL_LEVEL}.
+     */
     public static final int FILL_LEVEL_PER_BOTTLE = 2;
 
+    /**
+     * {@code blockEntityHolderComponent} creates or resolves cauldron metadata for
+     * successful potion and dye operations. Component initialization injects this
+     * dependency before interaction handlers run.
+     */
     @Dependency
     protected BlockBlockEntityHolderComponent<BlockEntityCauldron> blockEntityHolderComponent;
 
+    /**
+     * Creates a cauldron interaction component for the supplied block type.
+     */
     public BlockCauldronBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Dispatches a player's cauldron interaction to the first applicable handler.
+     * Missing interaction information or a missing player leaves the component
+     * event unchanged. The handler order gives buckets precedence over bottles and
+     * potions, followed by dyeing, item cleaning, and arrow tipping. Each
+     * successful handler marks the event successful and stops further dispatch, so
+     * overlapping item capabilities cannot perform multiple cauldron operations
+     * for the same interaction.
+     */
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var interactInfo = event.getInteractInfo();
@@ -78,54 +119,58 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         boolean isEmpty = fillLevel == 0;
         boolean isFull = fillLevel == MAX_FILL_LEVEL;
 
-        // Handle bucket interactions
+        // Choose one transfer from the captured state, then stop after its first
+        // success so later handlers cannot consume or transform the same held item
+        // again.
         if (handleBucketInteraction(player, dimension, pos, clickedBlock, itemStack, liquid, isEmpty, isFull)) {
             event.setSuccess(true);
             return;
         }
 
-        // Handle glass bottle interactions
         if (handleBottleInteraction(player, dimension, pos, clickedBlock, itemStack, liquid, fillLevel, isEmpty)) {
             event.setSuccess(true);
             return;
         }
 
-        // Handle potion interactions
         if (handlePotionInteraction(player, dimension, pos, clickedBlock, itemStack, liquid, fillLevel, isFull)) {
             event.setSuccess(true);
             return;
         }
 
-        // Handle dye interactions (water only)
         if (handleDyeInteraction(player, dimension, pos, clickedBlock, itemStack, liquid, isEmpty)) {
             event.setSuccess(true);
             return;
         }
 
-        // Handle leather armor interactions (water only)
         if (handleLeatherArmorInteraction(dimension, pos, clickedBlock, itemStack, liquid, fillLevel, isEmpty)) {
             event.setSuccess(true);
             return;
         }
 
-        // Handle banner cleaning (water only)
         if (handleBannerInteraction(dimension, pos, clickedBlock, itemStack, liquid, fillLevel, isEmpty)) {
             event.setSuccess(true);
             return;
         }
 
-        // Handle shulker box cleaning (water only)
         if (handleShulkerBoxInteraction(player, dimension, pos, clickedBlock, itemStack, liquid, fillLevel, isEmpty)) {
             event.setSuccess(true);
             return;
         }
 
-        // Handle arrow tipping (potion cauldron only)
         if (handleArrowInteraction(player, dimension, pos, clickedBlock, itemStack, liquid, fillLevel, isEmpty)) {
             event.setSuccess(true);
         }
     }
 
+    /**
+     * Transfers a full bucket into or out of the cauldron when the item and
+     * captured liquid state permit it. Empty buckets require a full water, lava,
+     * or powder-snow cauldron. Filled buckets replace compatible contents, while
+     * conflicting lava mixtures clear the cauldron with fizz. Metadata clearing,
+     * world writes, item consumption, and inventory insertion are separate
+     * effects; a later failure does not restore earlier changes, and successful
+     * handling returns {@code true}.
+     */
     protected boolean handleBucketInteraction(
             EntityPlayer player, Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack,
@@ -133,7 +178,6 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
     ) {
         var itemType = itemStack.getItemType();
 
-        // Empty bucket - pick up liquid
         if (itemType == ItemTypes.BUCKET && isFull) {
             ItemStack filledBucket;
             switch (liquid) {
@@ -145,7 +189,6 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
                 }
             }
 
-            // Clear potion data if present
             clearPotionData(dimension, pos);
 
             player.tryConsumeItemInHand();
@@ -162,10 +205,8 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        // Water bucket - fill cauldron
         if (itemType == ItemTypes.WATER_BUCKET) {
             if (liquid == CauldronLiquid.LAVA && !isEmpty) {
-                // Water into lava causes fizz and empties
                 clearWithFizz(dimension, pos, clickedBlock);
             } else {
                 clearPotionData(dimension, pos);
@@ -176,10 +217,8 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        // Lava bucket - fill cauldron (only if empty or already lava)
         if (itemType == ItemTypes.LAVA_BUCKET) {
             if (!isEmpty && liquid != CauldronLiquid.LAVA) {
-                // Lava into non-lava causes fizz and empties
                 clearWithFizz(dimension, pos, clickedBlock);
             } else {
                 clearPotionData(dimension, pos);
@@ -190,7 +229,6 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        // Powder snow bucket - fill cauldron
         if (itemType == ItemTypes.POWDER_SNOW_BUCKET) {
             if (liquid == CauldronLiquid.LAVA && !isEmpty) {
                 clearWithFizz(dimension, pos, clickedBlock);
@@ -206,6 +244,17 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Extracts one bottle from a water cauldron containing at least two fill
+     * levels. Stored potion identity and delivery kind select a normal, splash, or
+     * lingering potion item, while absent potion data selects a water bottle.
+     *
+     * <p>
+     * The level decreases before the glass bottle is consumed and its replacement
+     * is inserted. Reaching zero also clears potion data. Inventory insertion
+     * failure leaves the preceding level and consumption changes intact because
+     * this transfer has no rollback.
+     */
     protected boolean handleBottleInteraction(
             EntityPlayer player, Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack,
@@ -219,7 +268,6 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         var blockEntity = getBlockEntityIfExists(dimension, pos);
 
         if (blockEntity != null && blockEntity.hasPotion()) {
-            // Get potion from cauldron
             var cauldronPotionType = blockEntity.getCauldronPotionType();
             var storedPotionType = blockEntity.getPotionType();
 
@@ -235,7 +283,6 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
 
             dimension.addSound(MathUtils.center(pos), SimpleSound.CAULDRON_TAKE_POTION);
         } else {
-            // Get water bottle
             resultItem = ItemTypes.POTION.createItemStack(1);
             if (resultItem instanceof ItemPotionComponent potionItem) {
                 potionItem.setPotionType(PotionType.WATER);
@@ -243,6 +290,9 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.addSound(MathUtils.center(pos), SimpleSound.CAULDRON_TAKE_WATER);
         }
 
+        // One extracted bottle spends two fill levels; reaching zero clears the
+        // stored potion identity so the next fill does not inherit the emptied
+        // potion.
         int newLevel = fillLevel - FILL_LEVEL_PER_BOTTLE;
         setFillLevel(dimension, pos, clickedBlock, newLevel, liquid);
 
@@ -256,6 +306,18 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Adds a potion bottle to an empty or nonfull water cauldron. The input's
+     * potion identity and delivery kind must match existing stored potion data
+     * when the cauldron already contains a potion; a mismatch clears the cauldron
+     * with fizz and returns a glass bottle.
+     *
+     * <p>
+     * An accepted addition raises the level by two up to capacity, then writes
+     * potion identity, delivery kind, and display color into the resolved block
+     * entity. Those metadata writes follow the block-state write and remain
+     * separate from the final inventory replacement.
+     */
     protected boolean handlePotionInteraction(
             EntityPlayer player, Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack,
@@ -264,12 +326,10 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         if (!(itemStack instanceof ItemPotionComponent potionItem)) return false;
         if (isFull) return false;
 
-        // Can only add potion to water cauldron or empty cauldron
         if (fillLevel > 0 && liquid != CauldronLiquid.WATER) return false;
 
         var potionType = potionItem.getPotionType();
 
-        // Determine cauldron potion type
         CauldronPotionType cauldronPotionType;
         if (itemStack instanceof ItemLingeringPotionStack) {
             cauldronPotionType = CauldronPotionType.LINGERING;
@@ -281,16 +341,17 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
 
         var blockEntity = getBlockEntityIfExists(dimension, pos);
         if (fillLevel > 0 && blockEntity != null && blockEntity.hasPotion()) {
-            // Check if potion type matches
+            // Both potion identity and delivery kind must agree before combining
+            // contents; mixing either attribute discards the incompatible potion
+            // instead of merging its metadata.
             if (blockEntity.getPotionType() != potionType || blockEntity.getCauldronPotionType() != cauldronPotionType) {
-                // Different potion, causes explosion (clear cauldron)
                 clearWithFizz(dimension, pos, clickedBlock);
                 giveBottle(player);
                 return true;
             }
         }
 
-        // Add potion to cauldron
+        // Cap a two-level bottle addition at the six-level capacity.
         int newLevel = Math.min(fillLevel + FILL_LEVEL_PER_BOTTLE, MAX_FILL_LEVEL);
 
         if (fillLevel == 0) {
@@ -299,12 +360,13 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
             setFillLevel(dimension, pos, clickedBlock, newLevel, liquid);
         }
 
-        // Set potion data in block entity
         var cauldronBlockEntity = blockEntityHolderComponent.getBlockEntity(pos.x(), pos.y(), pos.z(), dimension);
+        // The liquid-level write precedes potion metadata updates. Resolve the
+        // holder after that write so metadata is assigned to the cauldron entity
+        // at the updated position.
         cauldronBlockEntity.setPotionType(potionType);
         cauldronBlockEntity.setCauldronPotionType(cauldronPotionType);
 
-        // Set custom color from potion
         cauldronBlockEntity.setCustomColor(potionType.getColor());
 
         giveBottle(player);
@@ -313,6 +375,11 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Mixes the held dye into a nonempty water cauldron without stored potion
+     * data. The operation consumes the held dye through the player helper,
+     * preserves the fill level, and plays the dye sound.
+     */
     protected boolean handleDyeInteraction(
             EntityPlayer player, Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack, CauldronLiquid liquid, boolean isEmpty
@@ -320,11 +387,9 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         if (!(itemStack instanceof ItemDyeComponent dyeItem)) return false;
         if (isEmpty || liquid != CauldronLiquid.WATER) return false;
 
-        // Check if there's a potion - can't dye potion water
         var blockEntity = getBlockEntityIfExists(dimension, pos);
         if (blockEntity != null && blockEntity.hasPotion()) return false;
 
-        // Get or create block entity and mix color
         var cauldronBlockEntity = blockEntityHolderComponent.getBlockEntity(pos.x(), pos.y(), pos.z(), dimension);
         cauldronBlockEntity.mixColor(dyeItem.getDyeColor().getColor());
 
@@ -334,6 +399,12 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Dyes or cleans a mutable dyeable item using a nonempty water cauldron. A
+     * stored custom color replaces the item's color; otherwise an already colored
+     * item is cleared. Success consumes one fill level and clears potion data when
+     * the cauldron becomes empty.
+     */
     protected boolean handleLeatherArmorInteraction(
             Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack,
@@ -342,7 +413,6 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         if (isEmpty || liquid != CauldronLiquid.WATER) return false;
         if (fillLevel < 1) return false;
 
-        // Check if item has dyeable component
         if (!(itemStack instanceof ItemDyeableComponent dyeableComponent)) {
             return false;
         }
@@ -350,11 +420,9 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         var blockEntity = getBlockEntityIfExists(dimension, pos);
 
         if (blockEntity != null && blockEntity.hasCustomColor()) {
-            // Dye the armor with colored water
             dyeableComponent.setCustomColor(blockEntity.getCustomColor());
             dimension.addSound(MathUtils.center(pos), SimpleSound.CAULDRON_DYE_ARMOR);
         } else {
-            // Clean the armor - only if armor has color to clean
             if (!dyeableComponent.hasCustomColor()) {
                 return false;
             }
@@ -362,7 +430,6 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.addSound(MathUtils.center(pos), SimpleSound.CAULDRON_CLEAN_ARMOR);
         }
 
-        // Armor dyeing/cleaning consumes 1 level
         int newLevel = fillLevel - 1;
         setFillLevel(dimension, pos, clickedBlock, newLevel, liquid);
 
@@ -373,6 +440,11 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Removes the last banner pattern using one fill level of plain water. Empty
+     * banners, potion contents, and custom-colored water are rejected before the
+     * supplied banner item is modified in place.
+     */
     protected boolean handleBannerInteraction(
             Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack,
@@ -382,19 +454,15 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         if (isEmpty || liquid != CauldronLiquid.WATER) return false;
         if (fillLevel < 1) return false;
 
-        // Check if banner has patterns to clean
         if (bannerItem.getPatternCount() == 0) return false;
 
-        // Check that water is not dyed or has potion
         var blockEntity = getBlockEntityIfExists(dimension, pos);
         if (blockEntity != null && (blockEntity.hasPotion() || blockEntity.hasCustomColor())) {
             return false;
         }
 
-        // Remove the last pattern
         bannerItem.removePattern(bannerItem.getPatternCount() - 1);
 
-        // Banner cleaning consumes 1 level
         int newLevel = fillLevel - 1;
         setFillLevel(dimension, pos, clickedBlock, newLevel, liquid);
 
@@ -403,6 +471,14 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Replaces a colored held shulker box with an undyed box using plain water.
+     * The cauldron must contain at least one level and have neither potion data
+     * nor a custom color. The replacement receives the stored items from the
+     * original box; other original item metadata is not copied by this method. The
+     * player's hand is replaced before the fill level decreases, and later
+     * failures have no compensating hand update.
+     */
     protected boolean handleShulkerBoxInteraction(
             EntityPlayer player, Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack,
@@ -412,32 +488,44 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         if (isEmpty || liquid != CauldronLiquid.WATER) return false;
         if (fillLevel < 1) return false;
 
-        // Check that water is not dyed or has potion
         var blockEntity = getBlockEntityIfExists(dimension, pos);
         if (blockEntity != null && (blockEntity.hasPotion() || blockEntity.hasCustomColor())) {
             return false;
         }
 
-        // Check if it's a dyed shulker box (not undyed)
         var itemType = itemStack.getItemType();
         if (itemType == ItemTypes.UNDYED_SHULKER_BOX) return false;
 
-        // Convert to undyed shulker box
+        // Changing the item type requires a new undyed stack. Transfer its stored
+        // contents explicitly because creating the replacement alone would leave
+        // those slots empty.
         var undyedBox = ItemTypes.UNDYED_SHULKER_BOX.createItemStack(1);
         undyedBox.setStoredItems(shulkerBox.getStoredItems());
 
         player.setItemInHand(undyedBox);
 
-        // Shulker box cleaning consumes 1 level
         int newLevel = fillLevel - 1;
         setFillLevel(dimension, pos, clickedBlock, newLevel, liquid);
 
-        // No specific sound for shulker box cleaning
         dimension.addSound(MathUtils.center(pos), SimpleSound.CAULDRON_CLEAN_ARMOR);
 
         return true;
     }
 
+    /**
+     * Creates potion-tipped arrows from an untipped held stack and stored cauldron
+     * potion data. Fill levels two or three permit sixteen arrows, four or five
+     * permit thirty-two, and six permits sixty-four. The selected count is capped
+     * by the held stack.
+     *
+     * <p>
+     * Liquid cost rounds that count up in groups of sixteen, costs two levels per
+     * group, and is capped by the available level. The partial-stack path
+     * subtracts the selected count directly; the whole-selected-stack path calls
+     * {@code tryConsumeItemInHand}, which consumes one item outside creative mode.
+     * The created output count still equals the full selected count, and inventory
+     * insertion failure is ignored.
+     */
     protected boolean handleArrowInteraction(
             EntityPlayer player, Dimension dimension, Vector3ic pos,
             BlockState clickedBlock, ItemStack itemStack,
@@ -446,16 +534,14 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         if (!(itemStack instanceof ItemArrowStack arrowStack)) return false;
         if (isEmpty || liquid != CauldronLiquid.WATER) return false;
 
-        // Check if cauldron contains a potion
         var blockEntity = getBlockEntityIfExists(dimension, pos);
         if (blockEntity == null || !blockEntity.hasPotion()) return false;
 
-        // Arrow must not already be tipped
         if (arrowStack.getPotionType() != null) return false;
 
         int arrowCount = itemStack.getCount();
-        // Calculate how many arrows can be tipped based on fill level
-        // 2 levels = 16 arrows, 4 levels = 32 arrows, 6 levels = 64 arrows (full stack)
+        // The fill bands select output batch limits rather than a linear per-level
+        // ratio, allowing a full cauldron to tip one sixty-four-arrow stack.
         int maxArrowsToTip = switch (fillLevel) {
             case 6 -> 64;
             case 4, 5 -> 32;
@@ -466,30 +552,25 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
 
         if (arrowsToTip <= 0) return false;
 
-        // Calculate levels to consume (2 levels per 16 arrows, rounded up)
+        // Round any partial sixteen-arrow batch up to two fill levels.
         int levelsToConsume = ((arrowsToTip + 15) / 16) * 2;
         levelsToConsume = Math.min(levelsToConsume, fillLevel);
 
-        // Get potion type from block entity
         var potionType = blockEntity.getPotionType();
 
-        // Create tipped arrows
         var tippedArrows = ItemTypes.ARROW.createItemStack(arrowsToTip);
         if (tippedArrows instanceof ItemArrowStack tippedArrowStack) {
             tippedArrowStack.setPotionType(potionType);
         }
 
-        // Consume arrows from player's hand
         if (arrowsToTip >= arrowCount) {
             player.tryConsumeItemInHand();
         } else {
             itemStack.setCount(arrowCount - arrowsToTip);
         }
 
-        // Give tipped arrows to player
         player.getContainer(ContainerTypes.INVENTORY).tryAddItem(tippedArrows);
 
-        // Reduce fill level
         int newLevel = fillLevel - levelsToConsume;
         setFillLevel(dimension, pos, clickedBlock, newLevel, liquid);
 
@@ -502,6 +583,12 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Attempts rain filling after shared random-update handling. Rain or thunder,
+     * visible sky, compatible liquid, absent potion data, available capacity, and
+     * the one-in-fifty roll must all permit the update. An empty cauldron becomes
+     * water with one fill level.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
@@ -511,30 +598,25 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         var world = dimension.getWorld();
         var weather = world.getWeather();
 
-        // Only collect rain in rain or thunder weather
         if (weather != Weather.RAIN && weather != Weather.THUNDER) return;
 
-        // Check if block is exposed to sky
         if (!dimension.canPosSeeSky(pos.x(), pos.y() + 1, pos.z())) return;
 
         var blockState = block.getBlockState();
         var liquid = blockState.getPropertyValue(CAULDRON_LIQUID);
         var fillLevel = blockState.getPropertyValue(FILL_LEVEL);
 
-        // Can only collect water into empty or water cauldrons
         if (fillLevel > 0 && liquid != CauldronLiquid.WATER) return;
 
-        // Check for potion - rain can't mix with potions
         var blockEntity = getBlockEntityIfExists(dimension, pos);
         if (blockEntity != null && blockEntity.hasPotion()) return;
 
-        // Random chance to collect rain (approximately 1/50 per random tick)
+        // Sample rain collection once per fifty eligible random updates on
+        // average.
         if (ThreadLocalRandom.current().nextInt(50) != 0) return;
 
-        // Already full
         if (fillLevel >= MAX_FILL_LEVEL) return;
 
-        // Increase water level
         if (fillLevel == 0) {
             setFillLevelAndLiquid(dimension, pos, blockState, 1, CauldronLiquid.WATER);
         } else {
@@ -542,11 +624,20 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns whether this cauldron participates in random block updates.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Applies the nonempty cauldron's contact effect to living entities. Lava
+     * ignites for fifteen seconds and attacks entities without fire resistance;
+     * water and powder snow extinguish burning entities while consuming one level.
+     * Water depletion also clears potion data.
+     */
     @Override
     public void onEntityInside(Block block, Entity entity) {
         var dimension = block.getDimension();
@@ -557,19 +648,20 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
 
         if (fillLevel == 0) return;
 
-        // Only living entities can be affected by cauldron effects
         if (!(entity instanceof EntityLiving livingEntity)) return;
 
         switch (liquid) {
             case LAVA -> {
-                // Lava cauldron sets entities on fire and damages them (doesn't consume lava)
+                // Convert the fifteen-second ignition duration into twenty-tick
+                // seconds.
                 livingEntity.setOnFireTicks(15 * 20); // 15 seconds in ticks
                 if (!livingEntity.hasEffect(EffectTypes.FIRE_RESISTANCE)) {
+                    // Cauldron lava applies four damage points per accepted
+                    // contact attack.
                     livingEntity.attack(DamageContainer.lava(4));
                 }
             }
             case WATER -> {
-                // Water cauldron extinguishes fire and consumes 1 level
                 if (livingEntity.isOnFire()) {
                     livingEntity.extinguish();
                     int newLevel = fillLevel - 1;
@@ -579,9 +671,10 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
                     }
                 }
             }
+            // Powder snow currently extinguishes fire and spends one fill level.
+            // Add freezing damage here when a supported freezing-damage mechanism
+            // is available.
             case POWDER_SNOW -> {
-                // Powder snow cauldron extinguishes fire and consumes 1 level
-                // TODO: Implement freezing damage when supported
                 if (livingEntity.isOnFire()) {
                     livingEntity.extinguish();
                     int newLevel = fillLevel - 1;
@@ -591,17 +684,28 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns whether this cauldron supplies its own comparator signal.
+     */
     @Override
     public boolean hasComparatorInputOverride() {
         return true;
     }
 
+    /**
+     * Returns the fill level divided by two for comparator output.
+     */
     @Override
     public int getComparatorInputOverride(Block block) {
-        // Vanilla outputs 0-3 (empty to full), fillLevel is 0-6
+        // Two fill levels form one comparator step; odd levels truncate downward.
         return block.getPropertyValue(FILL_LEVEL) / 2;
     }
 
+    /**
+     * Writes the supplied fill level and then refreshes comparator output. The
+     * write retains every other property from {@code currentState}; {@code liquid}
+     * is accepted but unused, and write failure is ignored.
+     */
     protected void setFillLevel(Dimension dimension, Vector3ic pos,
                                 BlockState currentState,
                                 int newLevel, CauldronLiquid liquid) {
@@ -610,6 +714,11 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.updateComparatorOutputLevel(pos);
     }
 
+    /**
+     * Writes the supplied level and liquid kind before refreshing comparator
+     * output. The state derives from {@code currentState}, and this method ignores
+     * the dimension write's success result.
+     */
     protected void setFillLevelAndLiquid(Dimension dimension, Vector3ic pos,
                                          BlockState currentState,
                                          int newLevel, CauldronLiquid newLiquid) {
@@ -620,20 +729,30 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.updateComparatorOutputLevel(pos);
     }
 
+    /**
+     * Resets the cauldron to empty water and clears its stored potion data. The
+     * block-state write and comparator refresh precede metadata clearing, followed
+     * by a centered fizz sound and smoke particles.
+     */
     protected void clearWithFizz(Dimension dimension, Vector3ic pos,
                                  BlockState currentState) {
         setFillLevelAndLiquid(dimension, pos, currentState, 0, CauldronLiquid.WATER);
         clearPotionData(dimension, pos);
         dimension.addSound(pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5, SimpleSound.FIZZ);
-        // Add smoke particles
         double cx = pos.x() + 0.5;
         double cy = pos.y() + 0.5;
         double cz = pos.z() + 0.5;
+        // Emit eight smoke particles for the incompatible-liquid fizz effect.
         for (int i = 0; i < 8; i++) {
             dimension.addParticle(cx, cy, cz, SimpleParticle.WHITE_SMOKE);
         }
     }
 
+    /**
+     * Clears stored potion data only when an existing cauldron entity is present.
+     * The lookup does not create a block entity, so missing or differently typed
+     * metadata remains untouched.
+     */
     protected void clearPotionData(Dimension dimension, Vector3ic pos) {
         var blockEntity = getBlockEntityIfExists(dimension, pos);
         if (blockEntity != null) {
@@ -641,6 +760,11 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns the existing cauldron block entity at the supplied position. A
+     * missing or differently typed block entity produces {@code null}; this helper
+     * performs no holder-driven entity creation.
+     */
     protected BlockEntityCauldron getBlockEntityIfExists(Dimension dimension, Vector3ic pos) {
         var blockEntity = dimension.getBlockEntity(pos);
         if (blockEntity instanceof BlockEntityCauldron cauldron) {
@@ -649,6 +773,11 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         return null;
     }
 
+    /**
+     * Consumes one held item through the player helper and offers an empty bucket
+     * outside creative mode. The inventory insertion result is ignored, so a
+     * rejected bucket is not dropped or restored.
+     */
     protected void consumeBucket(EntityPlayer player) {
         player.tryConsumeItemInHand();
         if (player.getGameMode() != GameMode.CREATIVE) {
@@ -656,6 +785,11 @@ public class BlockCauldronBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Consumes one held item through the player helper and offers an empty bottle
+     * outside creative mode. The inventory insertion result is ignored, so a
+     * rejected bottle is not dropped or restored.
+     */
     protected void giveBottle(EntityPlayer player) {
         player.tryConsumeItemInHand();
         if (player.getGameMode() != GameMode.CREATIVE) {

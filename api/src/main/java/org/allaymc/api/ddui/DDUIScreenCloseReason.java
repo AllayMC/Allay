@@ -1,8 +1,9 @@
 package org.allaymc.api.ddui;
 
 /**
- * Reasons delivered to {@link org.allaymc.api.ddui.type.DDUIScreen#onClose} when a DDUI screen ends without
- * producing a normal response.
+ * {@code DDUIScreenCloseReason} identifies why a DDUI session ended without a normal response.
+ * Screen close callbacks receive these values for explicit server closure or mapped client close
+ * reasons, allowing callers to distinguish cancellation from a message-box button result.
  *
  * @author daoge_cmd | SerenityJS
  */

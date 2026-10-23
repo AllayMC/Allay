@@ -8,7 +8,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when an entity's health changes.
+ * {@code EntityHealthChangeEvent} carries the current health and a proposed
+ * replacement for a living entity. The living component prepares its initial
+ * clamped proposal before dispatch, then stores {@code newHealth} without
+ * reapplying that clamp; cancellation leaves the existing health unchanged.
  *
  * @author daoge_cmd
  */
@@ -16,15 +19,21 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class EntityHealthChangeEvent extends EntityEvent implements CancellableEvent {
     /**
-     * The old health value.
+     * Health value observed before the proposed health assignment.
      */
     protected float oldHealth;
     /**
-     * The new health value.
+     * {@code newHealth} holds the proposed replacement health. The living
+     * component stores this listener-adjustable value after dispatch without
+     * clamping it again to its normal range.
      */
     @Setter
     protected float newHealth;
 
+    /**
+     * Creates a health proposal with the existing and replacement health
+     * values.
+     */
     public EntityHealthChangeEvent(Entity entity, float oldHealth, float newHealth) {
         super(entity);
         this.oldHealth = oldHealth;

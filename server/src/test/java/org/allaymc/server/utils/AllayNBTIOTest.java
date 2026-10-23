@@ -22,10 +22,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * {@code AllayNBTIOTest} verifies game-object NBT round trips and compatibility updates using
+ * initialized runtime registries.
+ *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 class AllayNBTIOTest {
+    /**
+     * Saves the default bamboo state and reconstructs it through the installed NBT decoder. The
+     * resulting state must equal the original registered block state.
+     */
     @Test
     void testFromBlockStateNBT() {
         var block1 = BlockTypes.BAMBOO.getDefaultState();
@@ -34,6 +41,10 @@ class AllayNBTIOTest {
         assertEquals(block1, block2);
     }
 
+    /**
+     * Updates old sulfur NBT whose state compound lacks the current property. The updater must
+     * supply the dry value, and full decoding must select the default sulfur state.
+     */
     @Test
     void upgradesPotentSulfurWithoutAStateProperty() {
         var oldState = NbtMap.builder()
@@ -47,6 +58,10 @@ class AllayNBTIOTest {
         assertEquals(BlockTypes.POTENT_SULFUR.getDefaultState(), NBTIO.getAPI().fromBlockStateNBT(oldState));
     }
 
+    /**
+     * Marks every sulfur state as old-version NBT and applies the updater. Existing serialized
+     * properties must remain equal, and decoding must recover the original state for each case.
+     */
     @Test
     void preservesExistingPotentSulfurStatesDuringUpgrade() {
         for (var state : BlockTypes.POTENT_SULFUR.getAllStates()) {
@@ -58,6 +73,10 @@ class AllayNBTIOTest {
         }
     }
 
+    /**
+     * Saves a diamond item with metadata, enchantment, lore, and custom name. The decoded stack
+     * must remain merge-compatible with the original item after its NBT round trip.
+     */
     @Test
     void testFromItemStackNBT() {
         var item1 = ItemTypes.DIAMOND.createItemStack(1, 1);
@@ -69,6 +88,10 @@ class AllayNBTIOTest {
         assertTrue(item1.canMerge(item2));
     }
 
+    /**
+     * Saves a villager and reconstructs it in the spawn dimension. Saving the reconstructed entity
+     * must produce NBT equal to the original entity's persisted representation.
+     */
     @Test
     void testFromEntityNBT() {
         var entity1 = EntityTypes.VILLAGER_V2.createEntity(
@@ -83,6 +106,10 @@ class AllayNBTIOTest {
         assertEquals(nbt1, nbt2);
     }
 
+    /**
+     * Saves a chest block entity and reconstructs it in the same dimension. The reconstructed
+     * entity must save the same NBT data as the original chest.
+     */
     @Test
     void testFromBlockEntityNBT() {
         var blockEntity1 = BlockEntityTypes.CHEST.createBlockEntity(

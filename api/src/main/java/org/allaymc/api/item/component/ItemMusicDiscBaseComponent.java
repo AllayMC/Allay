@@ -3,22 +3,21 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.data.DiscType;
 
 /**
- * Shared component for music disc items that expose their disc type and jukebox signal strength.
+ * {@code ItemMusicDiscBaseComponent} exposes the music-disc kind represented by an
+ * item and its jukebox comparator signal. The default signal query delegates to
+ * the disc kind's configured value, allowing multiple discs to share a signal
+ * without deriving it from enum order.
  *
  * @author IWareQ
  */
 public interface ItemMusicDiscBaseComponent extends ItemBaseComponent {
     /**
-     * Get the type of the music disc.
-     *
-     * @return the type of the music disc
+     * Returns the music-disc kind represented by this item stack.
      */
     DiscType getDiscType();
 
     /**
-     * Get the comparator signal output for this music disc when placed in a jukebox.
-     *
-     * @return the comparator signal (1-15)
+     * Returns this disc kind's configured jukebox comparator signal strength.
      */
     default int getComparatorSignal() {
         return getDiscType().getComparatorSignal();

@@ -10,20 +10,58 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Double-trunk (2x2) tree with dark-oak-style foliage and bending branches.
- * Used for dark oak and pale oak trees.
+ * {@code DoubleTrunkTreeFeature} places dark-oak or pale-oak trees with a
+ * two-by-two bending trunk and dark-oak foliage. The constructor selects the
+ * identifier and materials, while placement validates all four ground
+ * positions and a shared clearance profile.
+ *
+ * <p>
+ * The main canopy uses a large attachment at the bent trunk top, and optional
+ * surrounding downward branches receive smaller attachments at their own
+ * positions. Foliage geometry therefore follows trunk width rather than merely
+ * sharing a species name. The admission scan and later replacement checks
+ * serve different purposes: admission can reject the whole attempt, while
+ * blocked individual logs or leaves after that point are skipped without
+ * rollback.
  *
  * @author daoge_cmd
  */
 public class DoubleTrunkTreeFeature extends TreeWorldFeature {
 
+    /**
+     * Built-in dark oak tree registry key. Runtime feature construction uses
+     * this identifier to register the corresponding placement implementation.
+     */
     public static final Identifier DARK_OAK_IDENTIFIER = new Identifier("minecraft:dark_oak_tree");
+    /**
+     * Built-in pale oak tree registry key. Runtime feature construction uses
+     * this identifier to register the corresponding placement implementation.
+     */
     public static final Identifier PALE_OAK_IDENTIFIER = new Identifier("minecraft:pale_oak_tree");
 
+    /**
+     * Creates and registers a two-by-two tree feature using the supplied
+     * identifier, log type, and leaf type. The tree base retains those
+     * materials, while this implementation fixes the bending and canopy rules.
+     */
     public DoubleTrunkTreeFeature(Identifier identifier, BlockType<?> logType, BlockType<?> leavesType) {
         super(identifier, logType, leavesType);
     }
 
+    /**
+     * Attempts a two-by-two tree after checking all four substrate cells and
+     * the clearance profile. Rejection returns {@code false} before soil
+     * conversion; acceptance writes a sampled bending trunk and optional
+     * surrounding branches.
+     *
+     * <p>
+     * The main top attachment follows the bent trunk position and uses
+     * two-by-two foliage distances. Smaller branch attachments use their own
+     * coordinates with single-column foliage rules, keeping both canopy scales
+     * in one tree. Logs and leaves still pass individual replacement checks
+     * after admission, so a {@code true} result does not prove that the full
+     * idealized shape was stored in every context chunk.
+     */
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
         var random = ThreadLocalRandom.current();
@@ -65,6 +103,8 @@ public class DoubleTrunkTreeFeature extends TreeWorldFeature {
         var attachments = new ArrayList<FoliageAttachment>();
         var horizontalFaces = BlockFace.getHorizontalBlockFaces();
         BlockFace bendDirection = horizontalFaces[random.nextInt(horizontalFaces.length)];
+        // The bend is limited to upper trunk levels, keeping the four base
+        // positions aligned with their checked substrates.
         int bendStart = maxFreeTreeHeight - random.nextInt(4);
         int bendLength = 2 - random.nextInt(3);
         int currentX = x;
@@ -90,6 +130,8 @@ public class DoubleTrunkTreeFeature extends TreeWorldFeature {
         attachments.add(new FoliageAttachment(currentX, topY, currentZ, 0, true));
         for (int dx = -1; dx <= 2; dx++) {
             for (int dz = -1; dz <= 2; dz++) {
+                // Only positions outside the central two-by-two trunk can seed the
+                // surrounding downward branches.
                 if ((dx < 0 || dx > 1 || dz < 0 || dz > 1) && random.nextInt(3) <= 0) {
                     int branchLength = random.nextInt(3) + 2;
                     for (int i = 0; i < branchLength; i++) {

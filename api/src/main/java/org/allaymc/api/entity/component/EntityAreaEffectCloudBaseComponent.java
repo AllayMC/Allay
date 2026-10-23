@@ -1,79 +1,67 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Shared component for area effect cloud entities with configurable radius and lifetime behavior.
+ * {@code EntityAreaEffectCloudBaseComponent} exposes the radius, lifetime, and
+ * per-target reuse delay of an area effect cloud. The server uses entity ticks
+ * for timing and blocks for radius, applying potion effects periodically while
+ * radius and duration determine when the cloud disappears.
  *
  * @author daoge_cmd
  */
 public interface EntityAreaEffectCloudBaseComponent extends EntityBaseComponent {
 
     /**
-     * Gets the current radius of the cloud.
-     *
-     * @return the radius in blocks
+     * Returns the configured cloud radius in blocks for this cloud.
      */
     float getRadius();
 
     /**
-     * Sets the radius of the cloud.
-     *
-     * @param radius the radius in blocks
+     * Sets the cloud radius in blocks used by this cloud.
      */
     void setRadius(float radius);
 
     /**
-     * Gets the remaining duration of the cloud in ticks.
-     *
-     * @return the duration in ticks
+     * Returns the configured remaining active lifetime in ticks for this
+     * cloud.
      */
     int getDuration();
 
     /**
-     * Sets the duration of the cloud in ticks.
-     *
-     * @param duration the duration in ticks
+     * Sets the remaining active lifetime in ticks used by this cloud.
      */
     void setDuration(int duration);
 
     /**
-     * Gets the radius change per tick.
-     *
-     * @return the radius change per tick (usually negative)
+     * Returns the configured radius change in blocks per active tick for this
+     * cloud.
      */
     float getRadiusPerTick();
 
     /**
-     * Sets the radius change per tick.
-     *
-     * @param radiusPerTick the radius change per tick
+     * Sets the radius change in blocks per active tick used by this cloud.
      */
     void setRadiusPerTick(float radiusPerTick);
 
     /**
-     * Gets the radius change when the cloud is used (applies effect to an entity).
-     *
-     * @return the radius change on use (usually negative)
+     * Returns the configured radius change in blocks after affecting an
+     * eligible entity for this cloud.
      */
     float getRadiusOnUse();
 
     /**
-     * Sets the radius change when the cloud is used.
-     *
-     * @param radiusOnUse the radius change on use
+     * Sets the radius change in blocks after affecting an eligible entity used
+     * by this cloud.
      */
     void setRadiusOnUse(float radiusOnUse);
 
     /**
-     * Gets the delay in ticks before effects can be reapplied to an entity.
-     *
-     * @return the reapplication delay in ticks
+     * Returns the configured per-entity effect reuse delay in ticks for this
+     * cloud.
      */
     int getReapplicationDelay();
 
     /**
-     * Sets the reapplication delay.
-     *
-     * @param reapplicationDelay the delay in ticks
+     * Sets the per-entity effect reuse delay in ticks used by this cloud.
      */
     void setReapplicationDelay(int reapplicationDelay);
 }

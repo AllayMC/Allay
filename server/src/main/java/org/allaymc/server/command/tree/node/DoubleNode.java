@@ -6,13 +6,32 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 /**
+ * {@code DoubleNode} parses one command argument as a double-precision
+ * floating-point value and appends the boxed result. Parsing failure leaves
+ * argument and result cursors unchanged so sibling nodes can still inspect the
+ * token. Java's parser also accepts its supported nonfinite values; the node
+ * adds no finite-value restriction. Client metadata uses
+ * {@code CommandParam.FLOAT} syntax for this parameter.
+ *
  * @author daoge_cmd
  */
 public class DoubleNode extends BaseNode {
+    /**
+     * Creates an unattached numeric node with the supplied name, parent, and
+     * {@code double} omission default. The default is stored for later optional
+     * selection; callers must attach the node and enable optionality
+     * separately.
+     */
     public DoubleNode(String name, CommandNode parent, double defaultValue) {
         super(name, parent, defaultValue);
     }
 
+    /**
+     * Parses the current token as a {@code double} and appends a {@code Double}
+     * result before consuming that token. A {@code NumberFormatException}
+     * returns {@code false} without modifying either cursor or adding
+     * numeric-error feedback.
+     */
     @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
@@ -20,6 +39,8 @@ public class DoubleNode extends BaseNode {
         try {
             number = Double.parseDouble(arg);
         } catch (NumberFormatException e) {
+            // A numeric mismatch must leave this token available to later sibling
+            // matchers, so parsing finishes before any context result or cursor changes.
             return false;
         }
         context.putResult(number);
@@ -27,6 +48,10 @@ public class DoubleNode extends BaseNode {
         return true;
     }
 
+    /**
+     * Creates client parameter metadata using {@code CommandParam.FLOAT} syntax
+     * with this node's name and optionality.
+     */
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();

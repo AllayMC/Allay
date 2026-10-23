@@ -3,60 +3,58 @@ package org.allaymc.api.blockentity.component;
 import org.allaymc.api.entity.effect.EffectType;
 
 /**
+ * {@code BlockEntityBeaconBaseComponent} exposes a beacon's pyramid level and
+ * selected effects. The server recalculates the level from mineral layers and
+ * uses the selected effects when applying beacon powers; changing a selection
+ * does not itself recalculate the pyramid.
+ *
  * @author daoge_cmd
  */
 public interface BlockEntityBeaconBaseComponent extends BlockEntityBaseComponent {
     /**
-     * Get the level of the beacon.
-     * <p>
-     * level is the amount of the pyramid's levels, it is defined by the mineral blocks which build up the
-     * pyramid, and can be 0-4.
-     *
-     * @return the level of the beacon
+     * Returns the last calculated number of complete pyramid layers below the
+     * beacon. Ordinary recalculation yields zero through four, although the
+     * server also loads stored levels directly before the next recalculation.
      */
     int getLevel();
 
     /**
-     * Get the primary effect of the beacon.
-     *
-     * @return the primary effect of the beacon, or {@code null} if no primary effect
+     * Returns the selected primary effect, or {@code null} when none is
+     * selected. Selection presence alone does not establish eligibility for the
+     * current pyramid level or an unobstructed beacon.
      */
     EffectType getPrimaryEffect();
 
     /**
-     * Set the primary effect of the beacon.
-     *
-     * @param effectType the primary effect of the beacon
+     * Stores the selected primary effect for later beacon effect processing.
+     * {@code null} clears the selection, and the server's setter does not
+     * immediately broadcast state or apply effects to players.
      */
     void setPrimaryEffect(EffectType effectType);
 
     /**
-     * Check if the beacon has a primary effect.
-     *
-     * @return {@code true} if the beacon has a primary effect, otherwise {@code false}.
+     * Returns whether a primary effect selection is currently present.
      */
     default boolean hasPrimaryEffect() {
         return getPrimaryEffect() != null;
     }
 
     /**
-     * Get the secondary effect of the beacon.
-     *
-     * @return the secondary effect of the beacon, or {@code null} if no secondary effect
+     * Returns the selected secondary effect, or {@code null} when none is
+     * selected. The server processes that selection only when a usable primary
+     * selection produces an effect instance.
      */
     EffectType getSecondaryEffect();
 
     /**
-     * Set the secondary effect of the beacon.
-     *
-     * @param effectType the secondary effect of the beacon
+     * Stores the selected secondary effect for later beacon effect processing.
+     * {@code null} clears the selection, and the server's setter does not
+     * immediately broadcast state or apply effects to players.
      */
     void setSecondaryEffect(EffectType effectType);
 
     /**
-     * Check if the beacon has a secondary effect.
-     *
-     * @return {@code true} if the beacon has a secondary effect, otherwise {@code false}.
+     * Returns whether a secondary effect selection is currently present.
      */
     default boolean hasSecondaryEffect() {
         return getSecondaryEffect() != null;

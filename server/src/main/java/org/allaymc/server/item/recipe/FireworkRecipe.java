@@ -18,23 +18,73 @@ import java.util.*;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * FireworkRecipe is the recipe for firework rocket and firework star.
+ * {@code FireworkRecipe} derives firework rockets, new stars, or star fade
+ * colors from occupied crafting slots. Recipe selection follows ingredient
+ * precedence: any paper selects the rocket branch, otherwise exactly one
+ * gunpowder selects star creation, and otherwise one existing star can receive
+ * fade colors. Counts refer to occupied slots rather than the counts stored
+ * inside their stacks.
+ *
+ * <p>
+ * Rocket and new-star branches allocate output stacks, but fade-color crafting
+ * updates and returns the input star itself. Consequently {@code match}, which
+ * calls {@code getOutputs}, can also update that star. New-star shape modifiers
+ * follow flattened grid order, with the last recognized modifier winning. The
+ * fade branch requires dye but does not apply the ingredient allowlists used by
+ * the other two branches.
  *
  * @author daoge_cmd
  */
 public final class FireworkRecipe extends ComplexRecipe {
 
+    /**
+     * {@code INSTANCE} supplies the shared firework recipe under the
+     * client-defined special recipe UUID.
+     */
     public static final FireworkRecipe INSTANCE = new FireworkRecipe();
 
+    /**
+     * Creates the singleton firework recipe with its protocol-defined special
+     * UUID.
+     */
     private FireworkRecipe() {
         super(ComplexRecipeIds.BANNER_FIREWORKS);
     }
 
+    /**
+     * Returns whether input-dependent output generation accepts the supplied
+     * grid. This check calls {@code getOutputs} directly, so it allocates
+     * discarded outputs for rocket or star creation and mutates the supplied
+     * star in the fade-color branch.
+     */
     @Override
     public boolean match(RecipeInput input) {
         return getOutputs(input) != null;
     }
 
+    /**
+     * Produces rockets, a new star, or an existing star with replaced fade
+     * colors according to ingredient precedence. Noncrafting input and inputs
+     * rejected by the selected branch return {@code null}; occupied-slot counts
+     * drive selection without consuming stack counts.
+     *
+     * <p>
+     * Paper requires exactly one paper slot, one to three gunpowder slots, and
+     * only rocket ingredients. This branch creates three rockets, uses the
+     * gunpowder-slot count as their duration value, and collects distinct
+     * explosions from star components. Without paper, exactly one gunpowder
+     * requires dye and accepted star ingredients; dye components supply colors,
+     * and the last shape modifier in flattened order determines the new star's
+     * shape.
+     *
+     * <p>
+     * Otherwise, one star slot plus at least one dye-tagged slot selects fade
+     * replacement. This branch accepts unrelated ingredients, replaces the
+     * supplied star's explosion, and returns that same stack with its existing
+     * count. The old type, primary colors, flicker, and trail are retained;
+     * callers must account for the input mutation even when this method is
+     * invoked through {@code match}.
+     */
     @Override
     public ItemStack[] getOutputs(RecipeInput input) {
         if (!(input instanceof CraftingRecipeInput craftingRecipeInput)) {
@@ -43,23 +93,22 @@ public final class FireworkRecipe extends ComplexRecipe {
 
         var inputItems = collectNonAirItems(craftingRecipeInput.flattenedItems());
         if (inputItems.size() < 2) {
-            // Fast check for the minimum input size
+            // Every supported branch needs a base ingredient and another occupied
+            // slot, so fewer slots cannot produce a valid firework result.
             return null;
         }
 
-        // Check if the input tends to craft firework rocket by checking if there is paper in the input
         var paperCount = getItemTypeCount(ItemTypes.PAPER, inputItems);
         var gunpowerCount = getItemTypeCount(ItemTypes.GUNPOWDER, inputItems);
         var dyeCount = getItemTagCount(ItemTags.DYE, inputItems);
         if (paperCount > 0) {
-            // Craft firework rocket
             if (paperCount != 1) {
-                // Only one paper is allowed in the input
                 return null;
             }
 
+            // The gunpowder-slot count becomes rocket duration, and this recipe
+            // accepts only the three supported duration values.
             if (gunpowerCount == 0 || gunpowerCount > 3) {
-                // At least one gunpowder and no more than three gunpowder are allowed in the input
                 return null;
             }
 
@@ -80,9 +129,7 @@ public final class FireworkRecipe extends ComplexRecipe {
 
             return new ItemStack[]{rocket};
         } else if (gunpowerCount == 1) {
-            // Craft firework star, only one gunpowder is allowed in the input
             if (dyeCount == 0) {
-                // At least one dye is required in the input
                 return null;
             }
 
@@ -122,9 +169,7 @@ public final class FireworkRecipe extends ComplexRecipe {
 
             return new ItemStack[]{star};
         } else if (getItemTypeCount(ItemTypes.FIREWORK_STAR, inputItems) == 1) {
-            // Add fade color to the firework star
             if (dyeCount < 1) {
-                // At least one dye is required in the input
                 return null;
             }
 
@@ -150,18 +195,33 @@ public final class FireworkRecipe extends ComplexRecipe {
         return null;
     }
 
+    /**
+     * Returns an unmodifiable list of nonair stack references in flattened
+     * order. The returned list keeps the original stacks, which allows
+     * fade-color crafting to update the supplied star.
+     */
     private List<ItemStack> collectNonAirItems(ItemStack[] items) {
         return Arrays.stream(items).filter(item -> item.getItemType() != AIR).toList();
     }
 
+    /**
+     * Counts occupied entries whose item-type identity equals the requested
+     * type.
+     */
     private int getItemTypeCount(ItemType<?> itemType, List<ItemStack> items) {
         return (int) items.stream().filter(item -> item.getItemType() == itemType).count();
     }
 
+    /**
+     * Counts occupied entries whose item types contain the requested item tag.
+     */
     private int getItemTagCount(ItemTag itemTag, List<ItemStack> items) {
         return (int) items.stream().filter(item -> item.getItemType().hasItemTag(itemTag)).count();
     }
 
+    /**
+     * Returns whether any entry is outside the rocket ingredient allowlist.
+     */
     private boolean containInvalidRocketIngredient(List<ItemStack> items) {
         return items.stream().anyMatch(item ->
                 item.getItemType() != ItemTypes.PAPER &&
@@ -170,17 +230,17 @@ public final class FireworkRecipe extends ComplexRecipe {
         );
     }
 
+    /**
+     * Returns whether any entry is outside the new-star ingredient allowlist.
+     */
     private boolean containInvalidStarIngredient(List<ItemStack> items) {
         return items.stream().anyMatch(item ->
-                // Base material
                 item.getItemType() != ItemTypes.GUNPOWDER &&
                 !item.getItemType().hasItemTag(ItemTags.DYE) &&
-                // Shape effect material
                 !item.getItemType().hasItemTag(ItemTags.HEAD) &&
                 item.getItemType() != ItemTypes.GOLD_NUGGET &&
                 item.getItemType() != ItemTypes.FEATHER &&
                 item.getItemType() != ItemTypes.FIRE_CHARGE &&
-                // Additional effect material
                 item.getItemType() != ItemTypes.GLOWSTONE_DUST &&
                 item.getItemType() != ItemTypes.DIAMOND
         );

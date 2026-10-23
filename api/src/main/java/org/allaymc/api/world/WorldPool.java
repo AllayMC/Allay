@@ -15,52 +15,47 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * WorldPool contains all worlds in the server.
+ * {@code WorldPool} exposes loaded worlds and the operations that admit or
+ * remove them. Worlds are keyed by their stable names, and a designated
+ * default world supplies the initial global spawn. Load and unload events can
+ * cancel pool membership changes before their corresponding start or shutdown
+ * request.
  *
  * @author daoge_cmd
  */
 public interface WorldPool {
     /**
-     * Retrieves the path to the folder where worlds are stored.
-     *
-     * @return the path to the world folder
+     * Returns the base folder used by configured world storage backends.
      */
     Path getWorldFolder();
 
     /**
-     * Get the world by the name.
-     *
-     * @param name the name of the world
-     * @return the world, or {@code null} if the world is not found
+     * Returns the loaded world registered under the supplied stable name. A
+     * {@code null} result means the pool currently has no such entry; this
+     * lookup does not load storage.
      */
     World getWorld(String name);
 
     /**
-     * Get all worlds in the server.
-     *
-     * @return all worlds in the server
+     * Returns an unmodifiable view of the loaded-world mapping keyed by name.
+     * The view retains existing world references and reflects later pool
+     * membership changes instead of copying world instances.
      */
     @UnmodifiableView
     Map<String, World> getWorlds();
 
     /**
-     * Get the default world.
-     *
-     * @return the default world
+     * Returns the designated default world, resolving configured membership
+     * when needed. A missing configured entry can produce {@code null}, so
+     * startup must establish a loaded default before callers use its spawn.
      */
     World getDefaultWorld();
 
     /**
-     * Create a world with the provided name, storage and generators for different dimensions.
-     *
-     * @param name               the name of the world to be loaded
-     * @param storage            the storage used for reading and writing chunks and world data
-     * @param overworldGenerator the generator used to initialize or generate the overworld dimension
-     * @param netherGenerator    the generator used to initialize or generate the nether dimension, or
-     *                           {@code null} to disable nether dimension
-     * @param theEndGenerator    the generator used to initialize or generate the end dimension, or
-     *                           {@code null} to disable the end dimension
-     * @throws IllegalArgumentException if the world with the specific name already exists
+     * Loads a world with the overworld and optional built-in dimensions.
+     * {@code null} nether or end generators omit those dimensions; the
+     * convenience settings enable lighting and select platform threads before
+     * delegating to the full loader.
      */
     default void loadWorld(
             String name, WorldStorage storage,
@@ -83,29 +78,26 @@ public interface WorldPool {
     }
 
     /**
-     * Create a world with the provided name, storage, and dimension settings.
-     *
-     * @param worldSetting       the setting of the world
-     * @param dimensionSettings  the settings of the dimensions keyed by their identifiers. Each key must match
-     *                           {@link DimensionSetting#dimensionType()}{@code .getIdentifier()}.
-     * @throws IllegalArgumentException if the world with the specific name already exists
+     * Prepares and admits a world using identifier-keyed dimension settings.
+     * Each key must match its dimension type identifier, the overworld is
+     * required, and accepted load-event dispatch precedes registration and
+     * tick startup. An existing world name or invalid dimension metadata is
+     * rejected.
      */
     void loadWorld(WorldSetting worldSetting, Map<Identifier, DimensionSetting> dimensionSettings);
 
     /**
-     * Unload the world with the specific name.
-     *
-     * @param name the name of the world
-     * @throws IllegalArgumentException if the world with the specific name is not exists, or the world is the default world
+     * Requests shutdown and removes a named world after accepted unload-event
+     * dispatch. The default world and missing names are rejected with {@code
+     * IllegalArgumentException}; removal returns without waiting for the world
+     * to finish cleanup.
      */
     void unloadWorld(String name);
 
     /**
-     * Get the global spawn point of the server.
-     * <p>
-     * Global spawn point is the location of the player who joins the server for the first time.
-     *
-     * @return the global spawn point of the server
+     * Returns a new initial-player spawn location from the default world. The
+     * configured default must already be loaded; the location uses its
+     * metadata coordinates and overworld dimension.
      */
     default Location3ic getGlobalSpawnPoint() {
         var vec = getDefaultWorld().getWorldData().getSpawnPoint();
@@ -113,22 +105,25 @@ public interface WorldPool {
     }
 
     /**
-     * WorldSetting contains the setting of a world when creating a new world.
+     * {@code WorldSetting} groups the name, storage, and thread selection used
+     * to create a world.
      *
-     * @param name             the name of the world
-     * @param storage          the storage used for this world
-     * @param useVirtualThread whether to use the virtual thread as the ticking thread of the world and the dimensions in the world
+     * @param name stable world pool key
+     * @param storage retained backend for world persistence
+     * @param useVirtualThread virtual thread selection for simulation loops
      */
     @Builder
     record WorldSetting(String name, WorldStorage storage, boolean useVirtualThread) {
     }
 
     /**
-     * DimensionSetting contains the setting of a dimension when creating a new world.
+     * {@code DimensionSetting} groups a dimension type, generator, and
+     * lighting choice for world loading.
      *
-     * @param dimensionType          the dimension type
-     * @param worldGenerator         the world generator used for this dimension
-     * @param enableLightCalculation whether light calculation is enabled in this dimension
+     * @param dimensionType registered dimension identity and bounds
+     * @param worldGenerator retained generator attached during loading
+     * @param enableLightCalculation whether the dimension computes stored
+     *     light
      */
     @Builder
     record DimensionSetting(DimensionType dimensionType, WorldGenerator worldGenerator, boolean enableLightCalculation) {

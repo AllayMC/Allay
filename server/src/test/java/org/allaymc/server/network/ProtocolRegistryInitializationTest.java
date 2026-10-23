@@ -12,9 +12,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+/**
+ * {@code ProtocolRegistryInitializationTest} checks frozen startup registries
+ * and protocol cache contents.
+ */
 @ExtendWith(AllayTestExtension.class)
 class ProtocolRegistryInitializationTest {
 
+    /**
+     * Uses the default protocol initialization installed by the test extension.
+     * Its source registries must be frozen, and a later block-state registration
+     * must fail instead of mutating cached protocol inputs.
+     */
     @Test
     void defaultProtocolInitializationFreezesSourceRegistries() {
         assertTrue(Registries.ITEMS.isFrozen());
@@ -33,6 +42,11 @@ class ProtocolRegistryInitializationTest {
         );
     }
 
+    /**
+     * Reads the initialized international protocol's cached domain data. Definition
+     * and creative-content counts must match their registries, and recipe entries
+     * must retain the registered recipe objects rather than detached replacements.
+     */
     @Test
     void protocolCachesAreBuiltFromRegisteredDomainObjects() {
         var protocol = ProtocolRegistry.getDefault().resolve(ClientVariant.INTERNATIONAL, 975);

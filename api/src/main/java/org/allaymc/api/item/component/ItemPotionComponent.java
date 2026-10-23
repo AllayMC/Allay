@@ -3,22 +3,25 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.data.PotionType;
 
 /**
- * Component for items whose behavior is determined by a potion type.
+ * {@code ItemPotionComponent} exposes the potion type selected for an item
+ * stack. The server implementation encodes that selection in stack metadata,
+ * and consumption or projectile behavior reads the selected type to obtain its
+ * effects and color.
  *
  * @author daoge_cmd
  */
 public interface ItemPotionComponent extends ItemComponent {
     /**
-     * Gets the potion type of this potion item.
-     *
-     * @return the potion type of this potion item
+     * Returns the potion type selected by this item's metadata. The server
+     * uses the metadata as an ordinal lookup, so metadata outside the
+     * available potion range causes an index failure.
      */
     PotionType getPotionType();
 
     /**
-     * Sets the potion type of this potion item.
-     *
-     * @param potionType the potion type to set
+     * Selects the potion type used by this item's behavior. {@code potionType}
+     * must be non-{@code null}; the server stores its ordinal in metadata for
+     * subsequent lookups and serialization.
      */
     void setPotionType(PotionType potionType);
 }

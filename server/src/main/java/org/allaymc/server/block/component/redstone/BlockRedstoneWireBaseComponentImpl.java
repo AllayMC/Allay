@@ -23,22 +23,41 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_C
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.REDSTONE_SIGNAL;
 
 /**
- * Implementation of redstone wire (dust).
- * Signal propagates horizontally and diagonally with decay.
- * Uses a coordinated update algorithm to ensure all connected wires
- * update simultaneously when power source is removed.
+ * {@code BlockRedstoneWireBaseComponentImpl} computes connected dust signals from
+ * external power and propagates them across horizontal and permitted diagonal wire
+ * links. Direct support checks require a full upper surface. The connection rules
+ * distinguish collision support from opaque obstruction so transparent supporting
+ * blocks can still participate in slopes.
+ *
+ * <p>
+ * A network refresh first gathers reachable wires and their non-wire power sources,
+ * then starts every candidate signal at zero. Highest-strength entries propagate with
+ * one signal unit lost per link, preventing old stored wire levels from sustaining a
+ * disconnected network. Changed values are written individually before neighbor
+ * notifications are queued; this is a coordinated calculation, not an atomic or
+ * simultaneous world update. Output direction is calculated separately from connection
+ * faces, including dot and single-endpoint line behavior, and solid neighbors receive
+ * second-order notifications when signals change.
  *
  * @author daoge_cmd
  */
 public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * Creates the redstone wire component for the supplied registered block type.
+     */
     public BlockRedstoneWireBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places dust only above a full upper support surface and refreshes its wire
+     * network after accepted placement. Direct and conducted-neighbor notifications
+     * follow network evaluation; refused placement returns {@code false} before those
+     * extra operations.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        // Redstone wire requires a block with full top face below
         BlockState below = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
         if (!below.getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
             return false;
@@ -48,39 +67,47 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Update the wire network starting from this position
         updateWireNetwork(dimension, placeBlockPos);
 
-        // Update neighbors and second-order neighbors (for weak power through solid blocks)
         updateNeighborsOnWireChange(dimension, placeBlockPos);
         return true;
     }
 
+    /**
+     * Applies inherited handling, breaks dust when lower support disappears, and
+     * otherwise recalculates its connected network. A support-loss branch returns after
+     * requesting the break rather than evaluating the old wire snapshot.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
-        // Break if block below no longer has full top face
         if (face == BlockFace.DOWN && !neighbor.getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
             block.breakBlock();
             return;
         }
 
-        // Update the entire connected wire network
         updateWireNetwork(block.getDimension(), block.getPosition());
     }
 
     /**
-     * Updates the entire connected redstone wire network.
-     * This uses a two-phase approach:
-     * 1. Collect all connected wires and find power from external sources
-     * 2. Propagate power through the network using BFS from highest power positions
+     * Recalculates the wire component reachable from {@code startPos} using only
+     * non-wire sources as initial power. Discovery records old strengths for comparison
+     * while collecting external input and geometric links. New strengths begin at zero,
+     * so a removed source cannot leave a cycle powered only by its previous stored
+     * values.
      *
-     * @param dimension the dimension
-     * @param startPos  the position where update started
+     * <p>
+     * A highest-strength priority queue propagates candidates with one unit lost at
+     * each link. Stale weaker entries are skipped, and a link updates only when it
+     * improves the destination candidate. World properties are then changed one
+     * position at a time, followed by queued direct and second-order notifications for
+     * every changed position. The calculation provides no rollback or atomic world
+     * snapshot across those reads and writes.
      */
     protected void updateWireNetwork(Dimension dimension, Vector3ic startPos) {
-        // Phase 1: Collect all connected wires and their external power sources
+        // Discover the complete reachable component before changing signals so
+        // old strengths serve only as comparison values, rather than becoming new external power.
         Map<Vector3i, Integer> wirePositions = new HashMap<>();
         Map<Vector3i, Integer> externalPower = new HashMap<>();
         Set<Vector3i> visited = new HashSet<>();
@@ -101,13 +128,11 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             int currentPower = state.getPropertyValue(REDSTONE_SIGNAL);
             wirePositions.put(pos, currentPower);
 
-            // Calculate power from external (non-wire) sources
             int extPower = calculateExternalPower(dimension, pos);
             if (extPower > 0) {
                 externalPower.put(pos, extPower);
             }
 
-            // Add connected wires to visit
             for (Vector3i connectedPos : getConnectedWirePositions(dimension, pos)) {
                 if (!visited.contains(connectedPos) && isRedstoneWire(dimension.getBlockState(connectedPos))) {
                     visited.add(connectedPos);
@@ -116,37 +141,35 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Phase 2: Calculate new power levels using BFS from power sources
+        // Rebuild from zero instead of retaining old dust levels. Without this
+        // reset, a wire cycle could keep forwarding stale strength after its external source disappears.
         Map<Vector3i, Integer> newPowerLevels = new HashMap<>();
 
-        // Initialize all wires to 0
         for (Vector3i pos : wirePositions.keySet()) {
             newPowerLevels.put(pos, 0);
         }
 
-        // Use a priority queue to process from highest power first
         PriorityQueue<Map.Entry<Vector3i, Integer>> powerQueue = new PriorityQueue<>(
                 (a, b) -> Integer.compare(b.getValue(), a.getValue())
         );
 
-        // Add all positions with external power sources
         for (Map.Entry<Vector3i, Integer> entry : externalPower.entrySet()) {
             powerQueue.add(entry);
             newPowerLevels.put(entry.getKey(), entry.getValue());
         }
 
-        // Propagate power through the network
         while (!powerQueue.isEmpty()) {
             Map.Entry<Vector3i, Integer> entry = powerQueue.poll();
             Vector3i pos = entry.getKey();
             int power = entry.getValue();
 
-            // Skip if this position already has higher power
+            // A stronger route may improve this position while an older entry
+            // remains queued. Skip the weaker entry so it cannot propagate an obsolete candidate.
             if (newPowerLevels.get(pos) > power) {
                 continue;
             }
 
-            // Propagate to connected wires with decay
+            // Each wire link consumes one signal unit before reaching its neighbor.
             int propagatedPower = power - 1;
             if (propagatedPower <= 0) {
                 continue;
@@ -163,7 +186,8 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Phase 3: Apply changes and trigger updates
+        // Apply all calculated values before queuing neighbor callbacks. Those
+        // callbacks then read the refreshed component rather than intermediate propagation candidates.
         Set<Vector3i> changedPositions = new HashSet<>();
         for (Map.Entry<Vector3i, Integer> entry : newPowerLevels.entrySet()) {
             Vector3i pos = entry.getKey();
@@ -176,47 +200,40 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Trigger neighbor updates for all changed positions
-        // Also update second-order neighbors through solid blocks
         for (Vector3i changedPos : changedPositions) {
             updateNeighborsOnWireChange(dimension, changedPos);
         }
     }
 
     /**
-     * Gets all positions that could be connected wires (horizontal and diagonal).
+     * Returns newly allocated candidate wire positions around the supplied coordinate.
+     * Every horizontal neighbor is included regardless of its present type. An upward
+     * diagonal also requires free space above this wire and a full upper support
+     * surface on the adjacent block.
+     *
      * <p>
-     * For redstone wire on stairs/slopes:
-     * - Upward diagonal: A wire can see a wire diagonally above only if the block above us doesn't block the view
-     * (transparent blocks like glass don't block) AND the neighbor block can support wire (has full top face)
-     * - Downward diagonal: A wire can see a wire diagonally below only if the neighbor block doesn't block
-     * line of sight (transparent blocks like glass don't block)
+     * A downward diagonal is included when the adjacent block does not block the view.
+     * Obstruction requires both solidity and opacity, so transparent solid blocks do
+     * not count as view blockers. Callers still test the candidates for actual dust and
+     * use the resulting links for network traversal.
      */
     protected List<Vector3i> getConnectedWirePositions(Dimension dimension, Vector3ic pos) {
         List<Vector3i> positions = new ArrayList<>();
         var aboveData = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData();
-        // Block above only blocks if it's solid AND not transparent (e.g., glass doesn't block)
         boolean aboveBlocks = aboveData.isSolid() && !aboveData.isTransparent();
 
         for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
             Vector3i horizontalPos = new Vector3i(face.offsetPos(pos));
             var neighborData = dimension.getBlockState(horizontalPos).getBlockStateData();
-            // Neighbor can support wire if it has a full top face (e.g., glass can support wire)
             boolean neighborCanSupport = neighborData.collisionShape().isFull(BlockFace.UP);
-            // Neighbor blocks line of sight if it's solid AND not transparent
             boolean neighborBlocksView = neighborData.isSolid() && !neighborData.isTransparent();
 
-            // Always check horizontal neighbor (same Y level)
             positions.add(horizontalPos);
 
-            // Upward diagonal: wire at Y+1 of horizontal neighbor
-            // Can only connect if block above us doesn't block AND neighbor can support wire
             if (!aboveBlocks && neighborCanSupport) {
                 positions.add(new Vector3i(horizontalPos.x, pos.y() + 1, horizontalPos.z));
             }
 
-            // Downward diagonal: wire at Y-1 of horizontal neighbor
-            // Can only connect if neighbor block doesn't block line of sight
             if (!neighborBlocksView) {
                 positions.add(new Vector3i(horizontalPos.x, pos.y() - 1, horizontalPos.z));
             }
@@ -226,32 +243,35 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Calculates power from external (non-wire) sources only.
+     * Combines non-wire sources adjacent to a dust position without using stored dust
+     * signals as fresh input. Each non-wire neighbor can contribute direct weak power.
+     * A solid neighbor can additionally conduct strong power from its other sides,
+     * using a helper that also skips wire sources.
      *
-     * @param dimension the dimension
-     * @param pos       the position of the wire
-     * @return the power level from external sources
+     * <p>
+     * The maximum accepted observation becomes the initial strength for network
+     * propagation. Excluding wire in both paths prevents a dust cycle, including one
+     * coupled through a solid block, from keeping itself powered after the real
+     * external source disappears.
      */
     protected int calculateExternalPower(Dimension dimension, Vector3ic pos) {
         int maxPower = 0;
 
-        // Check all 6 faces for power sources
         for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = dimension.getBlockState(neighborPos);
 
-            // Skip redstone wire - we only want external sources
+            // A dust neighbor belongs to network propagation, not external input;
+            // counting its stored value here would let removed-source networks feed themselves.
             if (isRedstoneWire(neighborState)) {
                 continue;
             }
 
             Block neighborBlock = new Block(neighborState, new Position3i(neighborPos, dimension));
 
-            // Check direct weak power
             int signal = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
             maxPower = Math.max(maxPower, signal);
 
-            // Check power through solid blocks (only strong power can conduct through)
             if (neighborState.getBlockStateData().isSolid()) {
                 int powerThroughBlock = getStrongPowerIntoBlock(dimension, neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, powerThroughBlock);
@@ -262,8 +282,15 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Gets strong power flowing into a solid block from any direction.
-     * Only strong power can be conducted through solid blocks.
+     * Returns the maximum accepted strong power entering a solid neighbor of the wire
+     * being evaluated. {@code excludeFace} removes the side facing back toward that
+     * wire, and wire sources on every other face are skipped as well.
+     *
+     * <p>
+     * The result therefore represents external conducted power for network seeding
+     * rather than another dust signal waiting to be propagated. Other block behaviors
+     * are queried toward the solid block, and their highest returned strength wins
+     * without modifying any source state.
      */
     protected int getStrongPowerIntoBlock(Dimension dimension, Vector3ic solidPos, BlockFace excludeFace) {
         int maxPower = 0;
@@ -274,14 +301,14 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             Vector3ic checkPos = face.offsetPos(solidPos);
             BlockState state = dimension.getBlockState(checkPos);
 
-            // Skip redstone wire for power calculation
+            // Conducted input must also exclude dust, otherwise a solid block
+            // could route the network's previous stored signal back into its own source set.
             if (isRedstoneWire(state)) {
                 continue;
             }
 
             Block checkBlock = new Block(state, new Position3i(checkPos, dimension));
 
-            // Only strong power can be conducted through solid blocks
             int strongPower = state.getBehavior().getStrongPower(checkBlock, face.opposite());
             maxPower = Math.max(maxPower, strongPower);
         }
@@ -289,10 +316,18 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         return maxPower;
     }
 
+    /**
+     * Returns whether the supplied state is the registered redstone wire type.
+     */
     protected boolean isRedstoneWire(BlockState state) {
         return state.getBlockType() == BlockTypes.REDSTONE_WIRE;
     }
 
+    /**
+     * Returns stored dust strength toward its support and accepted horizontal output
+     * faces. Upward queries return {@code 0}, while horizontal output depends on the
+     * network shape calculated by {@code isPointingTo}.
+     */
     @Override
     public int getWeakPower(Block block, BlockFace face) {
         int power = block.getPropertyValue(REDSTONE_SIGNAL);
@@ -300,18 +335,14 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return 0;
         }
 
-        // In Allay, face represents the direction power flows TO (via face.opposite() call)
-        // Wire powers the block it's placed on (block below), so face=DOWN means power to block below
         if (face == BlockFace.DOWN) {
             return power;
         }
 
-        // Wire doesn't power block above it
         if (face == BlockFace.UP) {
             return 0;
         }
 
-        // Check if wire is pointing towards this direction (horizontal)
         if (!isPointingTo(block, face)) {
             return 0;
         }
@@ -320,17 +351,21 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if the redstone wire is pointing towards a specific direction.
-     * Based on MC Wiki:
-     * - No connections: forms a dot, points all 4 directions
-     * - 1 connection: forms a line, points toward AND away from that neighbor
-     * - 2+ connections (line, L, T, or +): points to all connected directions
+     * Returns whether the wire shape points toward the queried horizontal face.
+     * Connection discovery samples all four horizontal directions, including permitted
+     * slopes and recognized components. With no connections, the dot supplies output in
+     * every queried direction reaching this helper.
+     *
+     * <p>
+     * One connection forms a line that points both toward and opposite that endpoint.
+     * Two or more connections restrict output to the connected faces.
+     * {@code getWeakPower} handles vertical directions before calling this helper, so
+     * its dot result is used only for horizontal output in the power path.
      */
     protected boolean isPointingTo(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
 
-        // Collect all horizontal connections
         Set<BlockFace> connectedFaces = new HashSet<>();
         for (BlockFace horizontalFace : BlockFace.getHorizontalBlockFaces()) {
             if (isConnectedTo(dimension, pos, horizontalFace)) {
@@ -338,49 +373,47 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // If no connections, wire forms a dot and points to all 4 directions
         if (connectedFaces.isEmpty()) {
             return true;
         }
 
-        // Single connection: wire forms a line pointing toward AND away from the connection
         if (connectedFaces.size() == 1) {
             BlockFace singleConnection = connectedFaces.iterator().next();
             return face == singleConnection || face == singleConnection.opposite();
         }
 
-        // 2+ connections (line, L-shape, T-shape, or cross):
-        // Wire points to all connected directions
         return connectedFaces.contains(face);
     }
 
     /**
-     * Checks if the redstone wire connects to a specific horizontal direction.
-     * This determines the visual shape and power output direction of the wire.
+     * Returns whether a horizontal face connects dust to a neighboring wire or accepted
+     * component. Same-level dust connects immediately. A neighboring repeater connects
+     * only along its input-output axis, while the component connection tag handles
+     * other explicitly accepted types.
+     *
+     * <p>
+     * If no same-level source matches, slope checks inspect dust above or below the
+     * adjacent block. Upward links require that block's full upper surface and an
+     * unblocked space above this wire. Downward links require a non-obstructing
+     * neighbor; both obstruction tests require solidity and opacity together.
      */
     protected boolean isConnectedTo(Dimension dimension, Vector3ic pos, BlockFace face) {
         Vector3ic neighborPos = face.offsetPos(pos);
         BlockState neighborState = dimension.getBlockState(neighborPos);
 
-        // Connect to other redstone wire at same level
         if (isRedstoneWire(neighborState)) {
             return true;
         }
 
-        // Special handling for repeater - only connect to front/back, not sides
-        // (Comparator connects on all sides because it accepts side inputs)
         if (isRepeater(neighborState)) {
             BlockFace repeaterFacing = getRepeaterFacing(neighborState);
-            // Connect only if wire is at the input (back) or output (front) of the repeater
             return face == repeaterFacing || face == repeaterFacing.opposite();
         }
 
-        // Connect to other redstone components that wire actively connects to
         if (shouldWireConnectTo(neighborState)) {
             return true;
         }
 
-        // Check for diagonal connections (wire going up/down slopes)
         var neighborData = neighborState.getBlockStateData();
         boolean neighborCanSupport = neighborData.collisionShape().isFull(BlockFace.UP);
         boolean neighborBlocksView = neighborData.isSolid() && !neighborData.isTransparent();
@@ -388,13 +421,11 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         var aboveData = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData();
         boolean aboveBlocks = aboveData.isSolid() && !aboveData.isTransparent();
 
-        // Wire above the neighbor block (upward slope)
         if (!aboveBlocks && neighborCanSupport &&
             isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() + 1, neighborPos.z()))) {
             return true;
         }
 
-        // Wire below the neighbor block (downward slope)
         if (!neighborBlocksView &&
             isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() - 1, neighborPos.z()))) {
             return true;
@@ -404,16 +435,14 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if a block is a redstone component that wire should actively connect to.
-     * This includes power sources and redstone mechanisms, but not passive receivers
-     * like redstone lamps, dispensers, or note blocks.
+     * Returns whether the state's type carries the explicit wire-connection block tag.
      */
     protected boolean shouldWireConnectTo(BlockState state) {
         return state.getBlockType().hasBlockTag(BlockTags.REDSTONE_WIRE_CONNECT_TO);
     }
 
     /**
-     * Checks if a block is a repeater.
+     * Returns whether the state is a powered or unpowered repeater variant.
      */
     protected boolean isRepeater(BlockState state) {
         var type = state.getBlockType();
@@ -422,19 +451,37 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Gets the facing direction (output direction) of a repeater.
-     * Note: MINECRAFT_CARDINAL_DIRECTION stores the input direction, so we return its opposite.
+     * Returns the repeater output face opposite its stored cardinal input direction.
+     * Wire uses this decoded axis to accept front and back connections while rejecting
+     * repeater side connections.
      */
     protected BlockFace getRepeaterFacing(BlockState state) {
         var direction = state.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
         return BlockFace.from(direction).opposite();
     }
 
+    /**
+     * Returns the same stored strength and directional restrictions as
+     * {@code getWeakPower}. Conducted-input scans in this component explicitly skip
+     * dust so this strong output cannot become a self-sustaining external source.
+     */
     @Override
     public int getStrongPower(Block block, BlockFace face) {
         return getWeakPower(block, face);
     }
 
+    /**
+     * Notifies circuits affected by a removed wire and refreshes diagonal wire
+     * components after inherited replacement handling. Direct and solid-neighbor
+     * notifications cover ordinary adjacent circuits, but a slope endpoint can lie
+     * outside that immediate neighborhood.
+     *
+     * <p>
+     * The callback therefore inspects every adjacent horizontal column one block above
+     * and below, refreshing each actual wire found there. It does not require the old
+     * wire's slope-visibility rule for this removal scan, allowing components separated
+     * by the removed segment to recalculate their remaining external sources.
+     */
     @Override
     public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterReplaced(oldBlock, newBlockState, placementInfo);
@@ -442,22 +489,19 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         Dimension dimension = oldBlock.getDimension();
         Vector3ic pos = oldBlock.getPosition();
 
-        // Update neighbors and second-order neighbors when wire is removed
         updateNeighborsOnWireChange(dimension, pos);
 
-        // Also update diagonal wire neighbors at Y+1 and Y-1
-        // because updateAround only updates the 6 directly adjacent blocks
+        // Direct neighbor notifications cannot reach diagonal slope endpoints.
+        // Refresh both neighboring heights explicitly so removing this segment also updates separated components.
         for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
             Vector3ic horizontalPos = face.offsetPos(pos);
 
-            // Check wire at Y+1 (diagonally above)
             Vector3i upPos = new Vector3i(horizontalPos.x(), pos.y() + 1, horizontalPos.z());
             BlockState upState = dimension.getBlockState(upPos);
             if (isRedstoneWire(upState)) {
                 updateWireNetwork(dimension, upPos);
             }
 
-            // Check wire at Y-1 (diagonally below)
             Vector3i downPos = new Vector3i(horizontalPos.x(), pos.y() - 1, horizontalPos.z());
             BlockState downState = dimension.getBlockState(downPos);
             if (isRedstoneWire(downState)) {
@@ -467,31 +511,26 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Updates neighbors and second-order neighbors when wire is placed or removed.
-     * This is necessary for weak power propagation through solid blocks.
-     * <p>
-     * When wire changes at position P:
-     * 1. Update all 6 direct neighbors
-     * 2. For each solid neighbor S, update blocks around S - this handles weak power
+     * Notifies direct neighbors and the surroundings of each adjacent solid block.
+     * Circuits beyond a solid neighbor can observe changed conducted power even though
+     * they are not directly adjacent to the changed dust position.
      */
     protected void updateNeighborsOnWireChange(Dimension dimension, Vector3ic pos) {
-        // Update direct neighbors
         dimension.updateAround(pos);
 
-        // Update second-order neighbors through solid blocks (for weak power)
-        // When a solid block's power state changes, blocks on the other side need to know
         for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = dimension.getBlockState(neighborPos);
 
-            // If neighbor is a solid block, update blocks around it
-            // This notifies components (like lamps) that receive weak power through this block
             if (neighborState.getBlockStateData().isSolid()) {
                 dimension.updateAround(neighborPos);
             }
         }
     }
 
+    /**
+     * Returns a single redstone dust item for the wire block.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.REDSTONE.createItemStack());

@@ -13,19 +13,25 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3d;
 
 /**
- * Dispense behavior for fire charges. Fire charges are launched as small fireballs
- * with no random spread (perfect accuracy) and a blaze shoot sound.
+ * {@code FireChargeDispenseBehavior} launches small fireballs from a dispenser with a
+ * deterministic unit direction. The spawn position is one block beyond the dispenser center,
+ * and successful entity creation is followed by entity-manager insertion, fire-charge sound,
+ * and a directional shoot particle.
  *
  * @author daoge_cmd
  */
 public class FireChargeDispenseBehavior implements DispenseBehavior {
 
+    /**
+     * Creates a small fireball with unit motion in the dispenser's facing direction. A {@code
+     * null} creation result reports failure before insertion or effects; otherwise the entity
+     * is added and success tells the dispenser caller to consume its selected item.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
         var dimension = block.getDimension();
         var spawnPos = getSpawnPosition(block, face);
 
-        // Fire charges have no random spread - they fly in a straight line
         var motion = calculateMotion(face);
 
         var entity = EntityTypes.SMALL_FIREBALL.createEntity(
@@ -46,14 +52,19 @@ public class FireChargeDispenseBehavior implements DispenseBehavior {
         return DispenseResult.success();
     }
 
+    /**
+     * Emits the fire-charge sound and shoot particle at the dispenser center.
+     */
     protected void spawnDispenseEffects(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var center = MathUtils.center(block.getPosition());
-        // Fire charge uses fire charge sound
         dimension.addSound(center, SimpleSound.FIRE_CHARGE);
         dimension.addParticle(center, new ShootParticle(face));
     }
 
+    /**
+     * Returns a new mutable position one block beyond the dispenser center.
+     */
     protected Vector3d getSpawnPosition(Block block, BlockFace face) {
         var pos = MathUtils.center(block.getPosition());
         pos.x += face.getOffset().x();
@@ -62,14 +73,16 @@ public class FireChargeDispenseBehavior implements DispenseBehavior {
         return pos;
     }
 
+    /**
+     * Returns a new unit vector in the dispenser face's axis direction. No random spread is
+     * added by this helper; later fireball movement remains the responsibility of its entity
+     * components.
+     */
     protected Vector3d calculateMotion(BlockFace face) {
-        // Fire charges have zero accuracy (no random spread)
-        // They fly in a straight line in the direction the dispenser is facing
         var motion = new Vector3d();
         motion.x = face.getOffset().x();
         motion.y = face.getOffset().y();
         motion.z = face.getOffset().z();
-        // Normalize to get unit direction vector
         motion.normalize();
         return motion;
     }

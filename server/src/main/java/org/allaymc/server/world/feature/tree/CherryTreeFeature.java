@@ -12,14 +12,35 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Cherry tree feature implementation.
+ * {@code CherryTreeFeature} places cherry trees with a sampled trunk height,
+ * one or two branches, and layered hanging foliage. Placement checks ground
+ * and clearance before selecting branch starts and deciding whether the main
+ * trunk also gets a top attachment.
+ *
+ * <p>
+ * Branch count controls trunk height so branch attachments and trunk
+ * termination remain related. Each branch moves toward a sampled target using
+ * vertical probability derived from its remaining Manhattan distance, and
+ * horizontal logs receive the corresponding pillar axis. Foliage combines
+ * clipped rows, random holes, and downward extensions limited by distance from
+ * the row origin. Individual replacement checks can leave gaps without rolling
+ * back already placed logs or leaves.
  *
  * @author daoge_cmd
  */
 public class CherryTreeFeature extends TreeWorldFeature {
 
+    /**
+     * Built-in cherry tree registry key. Runtime feature construction uses
+     * this identifier to register the corresponding placement implementation.
+     */
     public static final Identifier IDENTIFIER = new Identifier("minecraft:cherry_tree");
 
+    /**
+     * Creates and immediately registers the built-in cherry tree feature. The
+     * constructor fixes its log and leaf materials while shared clearance and
+     * replacement behavior remains in the tree base.
+     */
     public CherryTreeFeature() {
         super(
                 IDENTIFIER,
@@ -28,6 +49,21 @@ public class CherryTreeFeature extends TreeWorldFeature {
         );
     }
 
+    /**
+     * Attempts a cherry tree after ground and clearance checks, returning
+     * {@code false} before mutation when either fails. A sampled branch count
+     * then controls trunk termination, secondary-branch presence, and an
+     * optional top canopy attachment.
+     *
+     * <p>
+     * Branch starts are kept distinct before the trunk height is chosen,
+     * preventing those choices from being made independently of their
+     * attachment levels. The trunk is written before branches, and each
+     * completed branch supplies the foliage origin used by later canopy
+     * passes. Replacement failures can leave gaps in branches or leaves
+     * without rejecting the completed attempt, and exceptions do not restore
+     * earlier terrain.
+     */
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
         var random = ThreadLocalRandom.current();
@@ -45,6 +81,8 @@ public class CherryTreeFeature extends TreeWorldFeature {
 
         int firstBranchStart = Math.max(0, maxFreeTreeHeight - 1 + sampleUniform(random, -4, -3));
         int secondBranchStart = Math.max(0, maxFreeTreeHeight - 1 - 4);
+        // Keep the two start heights distinct before branch count chooses trunk
+        // termination, so both branch attachments do not collapse onto one level.
         if (secondBranchStart >= firstBranchStart) {
             secondBranchStart++;
         }
@@ -84,6 +122,19 @@ public class CherryTreeFeature extends TreeWorldFeature {
         return true;
     }
 
+    /**
+     * Places clipped cherry canopy rows and lower rows with possible hanging
+     * extensions. The supplied hole and extension probabilities are used
+     * directly, and accepted leaf positions accumulate in the caller's list.
+     *
+     * <p>
+     * Upper rows use reduced radii, middle rows use the full radius, and the
+     * two lowest rows delegate hanging-leaf placement. A shared skipper
+     * combines layer height, edge distance, and random corner selection, so
+     * holes and shape clipping interact at each candidate. The attachment's
+     * trunk width is preserved through the shared row helper rather than
+     * recomputed by each layer.
+     */
     private void placeCherryFoliage(
             WorldFeatureContext context,
             FoliageAttachment attachment,
@@ -108,6 +159,8 @@ public class CherryTreeFeature extends TreeWorldFeature {
                 return true;
             }
             boolean isCorner = coord.localX() == rowRange && coord.localZ() == rowRange;
+            // Wider rows always omit the extreme corner and sample additional near-
+            // corner holes.
             if (rowRange > 2) {
                 return isCorner ||
                        (coord.localX() + coord.localZ() > rowRange * 2 - 2 && random.nextFloat() < cornerHoleChance);
@@ -148,6 +201,19 @@ public class CherryTreeFeature extends TreeWorldFeature {
         );
     }
 
+    /**
+     * Places a cherry foliage row, then tests its perimeter for downward leaf
+     * extensions. Only current leaves can start an extension, and a second
+     * lower block is attempted only after the first one succeeds.
+     *
+     * <p>
+     * Perimeter traversal accounts for the extra positive column around a
+     * large trunk, keeping edges aligned with the shared row geometry. Both
+     * extension attempts use the same origin below the row base for their
+     * distance bound, but they use separate probabilities. Accepted positions
+     * are appended through the shared leaf helper; an obstructed or rejected
+     * first extension prevents its second attempt.
+     */
     private void placeLeavesRowWithHangingLeavesBelow(
             WorldFeatureContext context,
             int x,
@@ -183,6 +249,12 @@ public class CherryTreeFeature extends TreeWorldFeature {
         }
     }
 
+    /**
+     * Attempts a leaf extension only within Manhattan distance six of the
+     * supplied origin. The random threshold is then checked before ordinary
+     * replacement; rejection returns {@code false} without appending to the
+     * accepted-leaf list.
+     */
     private boolean tryPlaceLeafExtension(
             WorldFeatureContext context,
             ThreadLocalRandom random,
@@ -195,6 +267,8 @@ public class CherryTreeFeature extends TreeWorldFeature {
             float chance,
             List<Vector3i> placedLeaves
     ) {
+        // The Manhattan bound keeps hanging extensions near their originating
+        // canopy.
         if (Math.abs(x - originX) + Math.abs(y - originY) + Math.abs(z - originZ) >= 7) {
             return false;
         }
@@ -204,6 +278,20 @@ public class CherryTreeFeature extends TreeWorldFeature {
         return tryPlaceLeaves(context, x, y, z, placedLeaves);
     }
 
+    /**
+     * Writes a branch toward a sampled horizontal and vertical target and
+     * returns its canopy attachment. Horizontal log placement is conditional
+     * on replaceability, while vertical branch steps use the direct log
+     * writer.
+     *
+     * <p>
+     * An extended branch begins with an extra horizontal segment. Later steps
+     * choose vertical movement with probability equal to the remaining
+     * vertical distance divided by total Manhattan distance, making each move
+     * reduce the distance to the target. Horizontal segments use the axis
+     * matching their direction, and completion returns the position one block
+     * above the target for subsequent foliage placement.
+     */
     private FoliageAttachment generateBranch(
             WorldFeatureContext context,
             int x,
@@ -218,6 +306,8 @@ public class CherryTreeFeature extends TreeWorldFeature {
         int currentX = x;
         int currentY = y + branchStart;
         int currentZ = z;
+        // Branch height and horizontal length are sampled together before the
+        // remaining-distance movement rule chooses individual steps.
         int branchEndY = treeHeight - 1 + sampleUniform(random, -1, 0);
         boolean extended = doubleBranch || branchEndY < branchStart;
         int horizontalLength = sampleUniform(random, 2, 4) + (extended ? 1 : 0);
@@ -240,6 +330,9 @@ public class CherryTreeFeature extends TreeWorldFeature {
                 return new FoliageAttachment(targetX, targetY + 1, targetZ, 0, false);
             }
 
+            // Weight vertical movement by the remaining vertical share so each sampled
+            // move reduces the same target distance without overshooting an already
+            // completed axis.
             float verticalChance = (float) Math.abs(targetY - currentY) / distance;
             boolean moveVertical = random.nextFloat() < verticalChance;
             if (moveVertical) {
@@ -253,7 +346,14 @@ public class CherryTreeFeature extends TreeWorldFeature {
         }
     }
 
+    /**
+     * Returns an integer sampled uniformly from the inclusive supplied bounds.
+     * The caller must provide an ordered range whose inclusive width fits a
+     * positive integer bound; this helper delegates invalid bounds to the
+     * random generator.
+     */
     private int sampleUniform(ThreadLocalRandom random, int min, int max) {
+        // Adding one includes the configured upper endpoint in the sampled range.
         return random.nextInt(max - min + 1) + min;
     }
 }

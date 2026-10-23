@@ -6,124 +6,66 @@ import org.cloudburstmc.nbt.NbtMap;
 import java.util.Set;
 
 /**
- * Represents a read-only view of a {@link PersistentDataContainer}.
- * No methods in this interface modify the container.
+ * {@code PersistentDataContainerView} exposes typed reads of custom persistent metadata stored
+ * under namespaced identifiers. The interface offers no mutation operation, but its implementation
+ * may share storage with a mutable container; a view alone does not imply a snapshot or deeply
+ * immutable returned values.
  *
  * @author IWareQ | Bukkit
- * @see PersistentDataContainer
  */
 public interface PersistentDataContainerView {
     /**
-     * Checks if the container has a value stored under the given key
-     * and if it matches the specified primitive data type.
+     * Returns whether a present tag matches the supplied primitive adapter. The check does not
+     * decode the complex value, and list adapters can accept the list container without checking
+     * its element representation.
      *
-     * <p>
-     * This method returns {@code true} only if the stored value has the same
-     * primitive type as the provided {@link PersistentDataType}.
-     * </p>
-     *
-     * <p>
-     * Since custom {@link PersistentDataType} implementations store only primitive
-     * representations, complex types aren't checked.
-     * For example, storing a UUID as a byte array will match {@link PersistentDataType#BYTE_ARRAY},
-     * and vice versa, even if the byte array doesn't contain a valid UUID.
-     * </p>
-     *
-     * <p>
-     * This method applies only to custom object keys.
-     * Overwriting standard tags, such as display names, will not work as those are stored using a namespace.
-     * </p>
-     *
-     * @param key  the key under which the value is stored
-     * @param type the expected primitive data type
-     * @param <P>  the primitive type stored in the container
-     * @param <C>  the complex type returned by the {@link PersistentDataType}
-     *
-     * @return {@code true} if a value with the given key and type exists; otherwise, {@code false}
-     *
-     * @throws IllegalArgumentException if {@code key} or {@code type} is {@code null}
+     * @throws IllegalArgumentException if a present value requires an unregistered primitive adapter
      */
     <P, C> boolean has(Identifier key, PersistentDataType<P, C> type);
 
     /**
-     * Checks if the container has a value stored under the given key,
-     * regardless of its type.
-     *
-     * <p>
-     * This method applies only to custom object keys.
-     * Overwriting standard tags, such as display names, will not work as those are stored using a namespace.
-     * </p>
-     *
-     * @param key the key under which the value is stored
-     *
-     * @return {@code true} if a value with the given key exists; otherwise, {@code false}
-     *
-     * @throws IllegalArgumentException if {@code key} is {@code null}
+     * Returns whether a non-{@code null} raw value exists under the supplied identifier.
      */
     boolean has(Identifier key);
 
     /**
-     * Retrieves the value stored under the given key.
+     * Decodes the value under {@code key}, returning {@code null} when the entry is absent. A
+     * present incompatible tag raises a conversion error rather than being treated as absent, and
+     * returned arrays or other mutable values can share storage.
      *
-     * @param key  the key under which the value is stored
-     * @param type the expected data type
-     * @param <P>  the primitive type stored in the container
-     * @param <C>  the complex type returned by the {@link PersistentDataType}
-     *
-     * @return the stored value or {@code null} if no matching value exists
-     *
-     * @throws IllegalArgumentException if {@code key} or {@code type} is {@code null}
-     * @throws IllegalArgumentException if a value exists but can't be accessed with the given type
-     * @throws IllegalArgumentException if no suitable adapter is found for {@link PersistentDataType#getPrimitiveType()}
+     * @throws IllegalArgumentException if the primitive adapter is missing or the stored representation is incompatible
      */
     <P, C> C get(Identifier key, PersistentDataType<P, C> type);
 
     /**
-     * Retrieves the value stored under the given key, or returns a default value
-     * if no such value exists.
-     *
-     * @param key          the key under which the value is stored
-     * @param type         the expected data type
-     * @param defaultValue the value to return if no stored value exists
-     * @param <P>          the primitive type stored in the container
-     * @param <C>          the complex type returned by the {@link PersistentDataType}
-     *
-     * @return the stored value or {@code defaultValue} if no matching value exists
-     *
-     * @throws IllegalArgumentException if {@code key} or {@code type} is {@code null}
-     * @throws IllegalArgumentException if a value exists but can't be accessed with the given type
-     * @throws IllegalArgumentException if no suitable adapter is found for {@link PersistentDataType#getPrimitiveType()}
+     * Returns the decoded value or {@code defaultValue} when decoding returns {@code null}. The
+     * fallback does not suppress an incompatible present tag or another conversion failure, and
+     * the
+     * supplied default is returned without copying.
      */
     <P, C> C getOrDefault(Identifier key, PersistentDataType<P, C> type, C defaultValue);
 
     /**
-     * Returns the set of all keys present in this container.
-     * <p>
-     * Modifications to the returned set don't affect the underlying container.
-     * </p>
-     *
-     * @return a set of keys stored in this container
+     * Returns an unmodifiable snapshot of the stored identifiers. Changes to the backing container
+     * after this call do not update this set; malformed raw key strings can fail while identifiers
+     * are constructed.
      */
     Set<Identifier> getKeys();
 
     /**
-     * Checks whether the container is empty.
-     *
-     * @return {@code true} if the container has no stored entries; otherwise, {@code false}
+     * Returns whether this view currently contains no stored metadata entries.
      */
     boolean isEmpty();
 
     /**
-     * Returns the adapter context associated with this container.
-     *
-     * @return the {@link PersistentDataAdapterContext} used by this container
+     * Returns the associated context for constructing compatible nested data containers.
      */
     PersistentDataAdapterContext getAdapterContext();
 
     /**
-     * Converts the data container to a {@link NbtMap}.
-     *
-     * @return a nbt representing the container
+     * Returns the raw NBT representation of the custom entries. Implementations may return a map
+     * backed by mutable container storage, so callers must not assume that retaining this result
+     * captures a stable snapshot.
      */
     NbtMap toNbt();
 }

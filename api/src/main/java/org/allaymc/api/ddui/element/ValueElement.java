@@ -1,12 +1,9 @@
 package org.allaymc.api.ddui.element;
 
 /**
- * A DDUI element that exposes a runtime value.
- * <p>
- * Value elements are the controls that can be read and written through a
- * {@link org.allaymc.api.ddui.DDUIScreenSession}.
- *
- * @param <T> the runtime value type
+ * {@code ValueElement} identifies a DDUI control with a runtime value readable through a screen
+ * session. The type parameter describes that value, and the original element handle associates
+ * reads and writes with the correct compiled control in one session.
  *
  * @author daoge_cmd | SerenityJS
  */

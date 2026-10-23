@@ -15,13 +15,21 @@ import java.util.function.Supplier;
 import static java.lang.reflect.Modifier.isStatic;
 
 /**
+ * {@code ComponentProvider} supplies component instances and the class metadata
+ * used to identify their registration. Providers can create a fresh component or return a shared
+ * instance, as block behavior construction does; this interface neither copies
+ * instances nor verifies that results match the declared class. Identifier
+ * lookup searches declared fields on that class and then its superclasses.
+ *
  * @author daoge_cmd
  */
 public interface ComponentProvider<T extends Component> {
     /**
-     * Creates a {@link ComponentProvider} using the given {@link Supplier} and component class.
+     * Creates a provider that ignores initialization data and invokes the
+     * supplied factory on every request. The supplier controls whether results
+     * are fresh or shared, while the declared class supplies identifier metadata.
      *
-     * @param provider       the supplier that creates new component instances
+     * @param provider       the supplier returning a component for each request
      * @param componentClass the class of the component
      * @param <T>            the type of the component
      *
@@ -32,9 +40,12 @@ public interface ComponentProvider<T extends Component> {
     }
 
     /**
-     * Creates a {@link ComponentProvider} using the given {@link Function} and component class.
+     * Creates a provider that forwards initialization data to the supplied
+     * function. The function and declared class are retained directly; their
+     * compatibility and the lifetime of returned component instances remain the
+     * provider author's responsibility.
      *
-     * @param provider       a function that accepts initialization info and returns a new component
+     * @param provider       a function that accepts initialization info and returns a component
      * @param componentClass the class of the component
      * @param <T>            the type of the component
      *
@@ -45,7 +56,10 @@ public interface ComponentProvider<T extends Component> {
     }
 
     /**
-     * Converts a list of component providers into a map indexed by their {@link Identifier}s.
+     * Copies provider references into a mutable map indexed by their discovered
+     * identifiers. Duplicate keys are rejected rather than replaced, including
+     * a second provider whose identifier is missing; one missing identifier can
+     * therefore occupy the map's {@code null} key.
      *
      * @param componentProviders the list of component providers
      * @param <P>                the base type of components
@@ -67,8 +81,10 @@ public interface ComponentProvider<T extends Component> {
     }
 
     /**
-     * Searches the class hierarchy to find a static field annotated with {@link Identifier.Component}
-     * and returns its {@link Identifier} value.
+     * Returns the first nonnull identifier discovered while walking from the
+     * supplied class toward its superclasses. Implemented interfaces are not
+     * traversed; a {@code null} class or an exhausted hierarchy produces {@code null}
+     * rather than an identifier derived from the class name.
      *
      * @param clazz the class to inspect
      *
@@ -82,6 +98,8 @@ public interface ComponentProvider<T extends Component> {
                 return id;
             }
 
+            // A missing or null identifier lets a superclass supply the shared
+            // component identity used by subclasses that do not declare their own.
             current = current.getSuperclass();
         }
 
@@ -89,7 +107,10 @@ public interface ComponentProvider<T extends Component> {
     }
 
     /**
-     * Finds the first static field annotated with {@link Identifier.Component} within the given class.
+     * Reads the first declared static field with the component annotation and
+     * exact {@link Identifier} type. Private fields are made accessible; a {@code null}
+     * field value is returned without searching later fields in that class.
+     * Multiple matching declarations have no explicit ordering guarantee.
      *
      * @param clazz the class to inspect
      *
@@ -111,7 +132,10 @@ public interface ComponentProvider<T extends Component> {
     }
 
     /**
-     * Provides a component instance using the given initialization info.
+     * Supplies a component using initialization data from the composed object's
+     * constructor. Implementations define the accepted data type and whether
+     * instances are fresh or shared; the component initializer retains and
+     * injects the returned instance directly.
      *
      * @param info the component initialization information
      *
@@ -120,14 +144,16 @@ public interface ComponentProvider<T extends Component> {
     T provide(ComponentInitInfo info);
 
     /**
-     * Retrieves the class of the component provided by this provider.
+     * Returns the class metadata used to discover this provider's identifier.
      *
      * @return the component class
      */
     Class<?> getComponentClass();
 
     /**
-     * Finds the identifier for the component based on its class.
+     * Discovers the identifier through this provider's declared component class.
+     * The result can be {@code null} when no suitable field supplies an
+     * identifier; this lookup does not instantiate a component to inspect it.
      *
      * @return the component identifier, or {@code null} if not found
      */
@@ -136,7 +162,11 @@ public interface ComponentProvider<T extends Component> {
     }
 
     /**
-     * A simple implementation of {@link ComponentProvider} backed by a {@link Function}.
+     * {@code Simple} implements a component provider by retaining its factory and
+     * class metadata.
+     * The generated constructor stores both references without validation; the
+     * factory determines the accepted initialization subtype and whether returned
+     * instances are shared with other composed objects.
      *
      * @param <T> the type of the component
      * @param <I> the type of the component initialization info
@@ -144,9 +174,25 @@ public interface ComponentProvider<T extends Component> {
     @Getter
     @AllArgsConstructor
     class Simple<T extends Component, I extends ComponentInitInfo> implements ComponentProvider<T> {
+        /**
+         * {@code provider} retains the factory invoked for each request. The
+         * generated getter exposes the same function without adapting its
+         * initialization-type requirements.
+         */
         private Function<I, T> provider;
+        /**
+         * {@code componentClass} supplies identifier lookup metadata independently
+         * of factory results. Callers must keep the declared class consistent with
+         * the supplied components.
+         */
         private Class<?> componentClass;
 
+        /**
+         * Passes initialization data directly to the retained factory and
+         * returns its result. The factory's accepted subtype is not checked
+         * during provider creation, so incompatible data can fail when the
+         * function is invoked.
+         */
         @Override
         public T provide(ComponentInitInfo info) {
             return provider.apply((I) info);

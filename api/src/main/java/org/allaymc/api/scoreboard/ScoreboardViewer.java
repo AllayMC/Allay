@@ -3,55 +3,41 @@ package org.allaymc.api.scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 
 /**
- * Describes a scoreboard viewer.
- * <p>
- * This interface is used to abstract the server-to-client protocol methods.
- * The term "Scoreboard" is deliberately used in the method names to prevent
- * confusion with other EntityPlayer interfaces
+ * {@code ScoreboardViewer} receives scoreboard display and line-update operations for one
+ * presentation target. The interface separates objective display slots from scorer-line changes,
+ * allowing scoreboard logic to maintain subscriptions while the viewer translates each notification
+ * into its client protocol.
  *
  * @author daoge_cmd
  */
 public interface ScoreboardViewer {
     /**
-     * Display a scoreboard in a specified slot
-     *
-     * @param scoreboard The target scoreboard
-     * @param slot       The target slot
+     * Displays the supplied objective and its lines in the requested client slot.
      */
     void displayScoreboard(Scoreboard scoreboard, DisplaySlot slot);
 
     /**
-     * Clear the display content of the specified slot
-     *
-     * @param slot The target slot
+     * Clears the objective currently displayed in the requested client slot.
      */
     void hideScoreboardSlot(DisplaySlot slot);
 
     /**
-     * Notify the viewer that the scoreboard has been deleted (if the scoreboard is in any display slot, the slot will be cleared as well)
-     *
-     * @param scoreboard The target scoreboard
+     * Removes the supplied objective from the viewer's client state, including slots displaying it.
      */
     void removeScoreboard(Scoreboard scoreboard);
 
     /**
-     * Notify the viewer that the specified line on the specified scoreboard has been deleted
-     *
-     * @param line The target line
+     * Removes the supplied line from the viewer's displayed scoreboard data.
      */
     void removeScoreboardLine(ScoreboardLine line);
 
     /**
-     * Send the new score of the specified line to the viewer
-     *
-     * @param line The target line
+     * Sends the supplied line's current score to this viewer's presentation target.
      */
     void updateScore(ScoreboardLine line);
 
     /**
-     * Check if the viewer is still valid.
-     *
-     * @return true if the viewer is still valid
+     * Returns whether this viewer remains eligible for scoreboard subscription and notifications.
      */
     boolean isScoreboardViewerValid();
 }

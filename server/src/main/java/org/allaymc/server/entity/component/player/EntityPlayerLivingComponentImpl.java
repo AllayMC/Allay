@@ -25,12 +25,35 @@ import org.allaymc.server.entity.component.EntityLivingComponentImpl;
 import org.joml.Vector3d;
 
 /**
+ * {@code EntityPlayerLivingComponentImpl} applies player-specific damage rules,
+ * shield blocking, totem use, and controller updates around the shared living
+ * component. Phantom and creative players accept only API damage, while other
+ * modes use the inherited category checks. Client health and effect messages
+ * are sent only when the player has a controller.
+ *
+ * <p>
+ * Damage application tests totem use before shield blocking. A qualifying totem
+ * path attempts health and effect changes and consumes its hand slot; otherwise
+ * an accepted shield block zeroes final damage and suppresses victim knockback
+ * before returning without inherited hit processing. Block cancellation resumes
+ * that inherited path. Death handling first invokes shared cleanup, then wakes
+ * a sleeping player and builds death wording from the retained last damage.
+ *
  * @author daoge_cmd
  */
 public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
+    /**
+     * Player receiving damage rules and controller updates.
+     */
     @ComponentObject
     protected EntityPlayer thisPlayer;
 
+    /**
+     * Returns whether the damage category is allowed for the player's mode.
+     * Phantom or creative players accept only {@code DamageType.API}; other
+     * players use the inherited checks for fall, fire, drowning, and void
+     * damage.
+     */
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
         if (thisPlayer.isPhantom()) {
@@ -45,30 +68,50 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         return super.canBeAttacked(damage);
     }
 
+    /**
+     * Returns whether this player uses survival or adventure fall-damage rules.
+     * This override decides from game mode alone; the separate attack pipeline
+     * still handles health state, damage cooldown, and cancellable damage
+     * events.
+     */
     @Override
     public boolean hasFallDamage() {
         var gameMode = thisPlayer.getGameMode();
         return gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE;
     }
 
+    /**
+     * Returns whether fire damage is enabled by living rules and player mode.
+     * The inherited resistance, fireproof, and world-rule checks must pass, and
+     * the player must be in {@code SURVIVAL} or {@code ADVENTURE}.
+     */
     @Override
     public boolean hasFireDamage() {
-        // Player in creative/spectator game mode can't be damaged by fire
         return super.hasFireDamage() && (thisPlayer.getGameMode() == GameMode.SURVIVAL || thisPlayer.getGameMode() == GameMode.ADVENTURE);
     }
 
+    /**
+     * Returns whether the player's mode permits damage from the void. Creative
+     * and spectator modes are excluded here; other modes remain subject to the
+     * surrounding attack pipeline's health, cooldown, and event checks.
+     */
     @Override
     public boolean hasVoidDamage() {
         return thisPlayer.getGameMode() != GameMode.CREATIVE &&
                thisPlayer.getGameMode() != GameMode.SPECTATOR;
     }
 
+    /**
+     * Applies player damage after first attempting totem use and shield
+     * blocking. A successful special path returns before the inherited health,
+     * hit-action, and knockback processing; ordinary damage reaches the
+     * inherited implementation only when both special paths decline.
+     */
     @Override
     protected void applyDamage(DamageContainer damage) {
         if (tryConsumeTotem(damage)) {
             return;
         }
-        // Process shield blocking before applying damage
         if (processShieldBlocking(damage)) {
             return;
         }
@@ -76,20 +119,15 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     }
 
     /**
-     * Finds the active shield in the player's hands.
-     * <p>
-     * Shield can only be active when player is sneaking and holding a shield
-     * in either main hand or off hand. Shield cooldown is also checked.
-     *
-     * @return the active shield stack, or {@code null} if not blocking
+     * Returns a held shield when sneaking and shield cooldown permit blocking.
+     * The main hand takes priority over the offhand. A player who is not
+     * sneaking, is still on cooldown, or holds no shield produces {@code null}.
      */
     private ItemShieldStack findActiveShield() {
-        // Player must be sneaking to block with shield
         if (!thisPlayer.isSneaking()) {
             return null;
         }
 
-        // Check if shield is on cooldown
         if (!thisPlayer.isCooldownEnd(ItemShieldBaseComponent.SHIELD_COOLDOWN_CATEGORY)) {
             return null;
         }
@@ -100,7 +138,6 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         var handItem = inventory.getItemInHand();
         var offhandItem = offhand.getOffhand();
 
-        // Check main hand first, then off hand
         if (handItem instanceof ItemShieldStack shield) {
             return shield;
         }
@@ -112,20 +149,18 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     }
 
     /**
-     * Processes shield blocking for the incoming damage.
-     * <p>
-     * If the player successfully blocks, this method will:
-     * <ul>
-     *   <li>Reduce damage to 0 (full block)</li>
-     *   <li>Apply shield durability damage</li>
-     *   <li>Check for axe attack and apply shield cooldown if needed</li>
-     *   <li>Knockback the attacker</li>
-     *   <li>Play shield block sound</li>
-     *   <li>Fire EntityDamageBlockedEvent</li>
-     * </ul>
+     * Attempts a shield block and returns whether ordinary damage application
+     * should stop. The selected shield must accept the incoming direction, and
+     * {@code EntityDamageBlockedEvent} must remain uncancelled. Cancellation
+     * leaves the mutable damage container available to the inherited damage
+     * path.
      *
-     * @param damage the incoming damage container
-     * @return {@code true} if the damage was blocked and normal damage handling should stop
+     * <p>
+     * An accepted block zeroes final damage and disables victim knockback
+     * before updating shield durability and possible disable cooldown.
+     * Durability uses {@code sourceDamage}, and event flags independently
+     * control attacker knockback and sound. The handler notifies the hand slot
+     * that still holds the same shield reference after durability changes.
      */
     private boolean processShieldBlocking(DamageContainer damage) {
         var shield = findActiveShield();
@@ -133,31 +168,26 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
             return false;
         }
 
-        // Check if blocking is possible (directional check)
         if (!shield.tryBlockDamage(thisPlayer, damage)) {
             return false;
         }
 
-        // Fire event - allows plugins to modify or cancel blocking
+        // Dispatch before reducing damage or wearing the shield so cancellation
+        // can resume ordinary damage handling without those block side effects.
         var event = new EntityDamageBlockedEvent(thisPlayer, damage, shield);
         if (!event.call()) {
             return false;
         }
 
-        // Store original damage for durability calculation
         float originalDamage = damage.getSourceDamage();
 
-        // Block the damage completely
         damage.setFinalDamage(0);
         damage.setHasKnockback(false);
 
-        // Apply shield durability damage
         shield.applyBlockDurability(originalDamage);
 
-        // Notify inventory change (durability update)
         notifyShieldDurabilityChange(shield);
 
-        // Check if attacker is using axe - disable shield if so
         if (shield.shouldDisableShield(damage.getAttacker())) {
             thisPlayer.setCooldown(
                     ItemShieldBaseComponent.SHIELD_COOLDOWN_CATEGORY,
@@ -166,12 +196,10 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
             );
         }
 
-        // Knockback attacker (if enabled in event)
         if (event.isKnockbackAttacker()) {
             applyShieldKnockback(damage);
         }
 
-        // Play sound and animation (if enabled in event)
         if (event.isPlayAnimation()) {
             var location = thisPlayer.getLocation();
             var dimension = location.dimension();
@@ -184,15 +212,14 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     }
 
     /**
-     * Notifies the inventory system that a shield's durability has changed.
-     *
-     * @param shield the shield item that was damaged
+     * Notifies the hand slot that still holds the supplied shield instance.
+     * Identity checks give the main hand priority over the offhand; no slot is
+     * notified if neither container currently retains that same reference.
      */
     private void notifyShieldDurabilityChange(ItemShieldStack shield) {
         InventoryContainer inventory = thisPlayer.getContainer(ContainerTypes.INVENTORY);
         OffhandContainer offhand = thisPlayer.getContainer(ContainerTypes.OFFHAND);
 
-        // Check which slot the shield is in and notify
         if (inventory.getItemInHand() == shield) {
             inventory.notifySlotChange(inventory.getHandSlot());
         } else if (offhand.getOffhand() == shield) {
@@ -201,24 +228,40 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     }
 
     /**
-     * Applies knockback to the attacker when shield blocking is successful.
-     *
-     * @param damage the damage container containing attacker information
+     * Applies shield-response knockback to an attacker with a physics
+     * component. Other source objects and entities without physics are ignored.
+     * The player location supplies the source, with horizontal strength
+     * {@code 0.5} and vertical strength {@code 0.4}.
      */
     private void applyShieldKnockback(DamageContainer damage) {
         if (!(damage.getAttacker() instanceof Entity attacker)) {
             return;
         }
 
-        // Only knockback entities with physics component
         if (!(attacker instanceof EntityPhysicsComponent physics)) {
             return;
         }
 
         var playerLoc = thisPlayer.getLocation();
+        // Shield feedback uses its own push strengths rather than reusing the
+        // incoming attack's victim-directed knockback values or additional motion.
         physics.knockback(playerLoc, 0.5, 0.4, new Vector3d());
     }
 
+    /**
+     * Attempts to consume a held totem when this damage would leave health
+     * below one. {@code VOID}, {@code COMMAND}, and {@code API} damage bypass
+     * totem use. The offhand takes priority over the main hand, and an accepted
+     * path clears the whole selected slot after triggering totem feedback.
+     *
+     * <p>
+     * The handler attempts extinguishing, effect removal, one health, and
+     * regeneration, fire-resistance, and absorption effects before consumption.
+     * Those delegated health and effect operations retain their own cancellable
+     * events, so this method's {@code true} result describes a consumed totem
+     * path rather than guaranteed successful replacement of every health or
+     * effect value.
+     */
     private boolean tryConsumeTotem(DamageContainer damage) {
         if (damage.getDamageType() == DamageType.VOID ||
             damage.getDamageType() == DamageType.COMMAND ||
@@ -246,6 +289,8 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         thisPlayer.removeAllEffects();
         thisPlayer.setHealth(1f);
 
+        // Totem effect durations are entity ticks: regeneration lasts forty-five
+        // seconds, fire resistance forty seconds, and absorption five seconds.
         thisPlayer.addEffect(new EffectInstance(EffectTypes.REGENERATION, 1, 900, false, true));
         thisPlayer.addEffect(new EffectInstance(EffectTypes.FIRE_RESISTANCE, 0, 800, false, true));
         thisPlayer.addEffect(new EffectInstance(EffectTypes.ABSORPTION, 1, 100, false, true));
@@ -266,20 +311,34 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         return true;
     }
 
+    /**
+     * Returns whether the non-{@code null} stack has the totem-of-undying item type.
+     */
     private boolean isTotem(ItemStack itemStack) {
         var type = itemStack.getItemType();
         return type == ItemTypes.TOTEM_OF_UNDYING;
     }
 
+    /**
+     * Updates breathing only for modes other than creative and spectator. Those
+     * two modes leave the inherited air-supply state unchanged through this
+     * method; other modes delegate to the living component's breathing and
+     * drowning rules.
+     */
     @Override
     protected void tickBreathe() {
-        // Creative and spectator mode players don't need breath updates
         if (thisPlayer.getGameMode() == GameMode.CREATIVE || thisPlayer.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
         super.tickBreathe();
     }
 
+    /**
+     * Sends an effect change to entity viewers and the player's controller. A
+     * {@code null} new effect represents removal, and a {@code null} old effect
+     * represents addition; fake players receive only the inherited viewer
+     * notifications.
+     */
     @Override
     protected void sendEffects(EffectInstance newEffect, EffectInstance oldEffect) {
         super.sendEffects(newEffect, oldEffect);
@@ -288,6 +347,12 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         }
     }
 
+    /**
+     * Stores absorption through the living component and informs an attached
+     * controller. Fake players still update stored absorption, while actual
+     * players also receive the supplied value through the controller's
+     * absorption message.
+     */
     @Override
     public void setAbsorption(float absorption) {
         super.setAbsorption(absorption);
@@ -296,6 +361,12 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         }
     }
 
+    /**
+     * Applies the inherited health update and sends the resulting stored
+     * health. Actual players receive the current health and maximum even when
+     * the inherited health-change event cancels the requested value; fake
+     * players receive no controller message.
+     */
     @Override
     public void setHealth(float health) {
         super.setHealth(health);
@@ -304,6 +375,12 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         }
     }
 
+    /**
+     * Updates maximum health through the living component and reports the
+     * resulting values. The inherited update also caps current health to the
+     * new maximum, and only an actual player receives the controller's health
+     * message afterward.
+     */
     @Override
     public void setMaxHealth(float maxHealth) {
         super.setMaxHealth(maxHealth);
@@ -312,11 +389,17 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         }
     }
 
+    /**
+     * Performs shared death handling, wakes a sleeping player, and reports
+     * death wording. The last damage supplies its category and source when
+     * available; otherwise {@code DamageType.API} supplies generic wording. The
+     * world rule controls channel broadcast, while an attached controller
+     * receives death information independently.
+     */
     @Override
     protected void onDie() {
         super.onDie();
 
-        // Wake up the player if they are sleeping (clears bed occupied state)
         if (thisPlayer.isSleeping()) {
             thisPlayer.wake();
         }

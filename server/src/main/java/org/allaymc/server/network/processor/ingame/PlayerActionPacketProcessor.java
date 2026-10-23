@@ -9,10 +9,23 @@ import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 
 /**
+ * {@code PlayerActionPacketProcessor} handles item-on-block use state
+ * asynchronously and sleep termination
+ * synchronously. Start requests require block interaction permission and an
+ * inactive use state; stop requests clear an active state without requiring
+ * that permission again. Other actions are deferred, with only {@code STOP_SLEEP}
+ * handled by the synchronous hook.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
+    /**
+     * Consumes start and stop item-on-block actions after checking the current
+     * use state. Start also requires block interaction permission, duplicate
+     * transitions are logged and ignored, and all other action types return
+     * {@code UNHANDLED} for synchronous dispatch.
+     */
     @Override
     public PacketSignal handleAsync(Player player, PlayerActionPacket packet, long receiveTime) {
         var entity = player.getControlledEntity();
@@ -42,6 +55,11 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
         };
     }
 
+    /**
+     * Wakes the controlled entity when a deferred action requests {@code STOP_SLEEP}.
+     * Other action types have no effect in this synchronous hook, including
+     * unsupported actions that were forwarded by the asynchronous phase.
+     */
     @Override
     public void handleSync(Player player, PlayerActionPacket packet, long receiveTime) {
         if (packet.getAction() == PlayerActionType.STOP_SLEEP) {
@@ -49,6 +67,9 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
         }
     }
 
+    /**
+     * Returns the player action packet type handled by this processor.
+     */
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.PLAYER_ACTION;

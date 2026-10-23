@@ -13,10 +13,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * {@code TrimPatternRegistryLoader} reads armor trim patterns from bundled trim data and
+ * indexes them by their string identifiers. The current item registry resolves each associated
+ * item, while the resource supplies the pattern identity retained in the resulting trim values.
+ *
  * @author IWareQ
  */
 @Slf4j
 public class TrimPatternRegistryLoader implements RegistryLoader<Void, Map<String, TrimPattern>> {
+    /**
+     * Loads {@code "patterns"} from {@code "trim_data.json"} into a mutable string-keyed
+     * map. Item registration must precede this load; unresolved item lookups are retained as
+     * {@code null}, and resource or conversion failures become {@code AssertionError}.
+     */
     @Override
     public Map<String, TrimPattern> load(Void unused) {
         try (var stream = Utils.getResource("trim_data.json")) {

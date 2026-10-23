@@ -17,41 +17,75 @@ import org.joml.Vector3dc;
 import java.time.Duration;
 
 /**
- * Implementation of the target block behavior.
- * The target block outputs redstone power when hit by projectiles,
- * with power strength based on distance from center.
+ * {@code BlockTargetBaseComponentImpl} turns projectile hits into temporary weak
+ * redstone output stored in a target block entity. Projectile kind selects the
+ * duration, while the hit position determines strength. Arrows, thrown tridents, and
+ * small fireballs use the longer interval; other projectiles use the default interval.
+ *
+ * <p>
+ * The calculation chooses the nearest block face, projects the hit onto that face, and
+ * averages two center-weighted coordinates. A center hit reaches maximum power, while a
+ * face corner yields zero and does not activate the target. Activation replaces the
+ * position's scheduled release and stores the new strength; neighbors are notified only
+ * when that strength changes. Scheduled callbacks clear the block entity's signal
+ * rather than changing the target's visible block state.
  *
  * @author daoge_cmd
  */
 public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
 
+    // onProjectileHit begins with DEFAULT_SIGNAL_DURATION_TICKS, then selects
+    // ARROW_SIGNAL_DURATION_TICKS for arrows, thrown tridents, and small fireballs.
+    // activatePower converts either game-tick count into the scheduled release duration.
+    /**
+     * Default projectile pulse duration, measured in game ticks.
+     */
     private static final int DEFAULT_SIGNAL_DURATION_TICKS = 8;
+    /**
+     * Extended projectile pulse duration, measured in game ticks.
+     */
     private static final int ARROW_SIGNAL_DURATION_TICKS = 20;
 
+    /**
+     * {@code blockEntityHolderComponent} is injected before callbacks run and resolves
+     * the target entity whose retained {@code activePower} supplies weak output and
+     * scheduled release state.
+     */
     @Dependency
     private BlockBlockEntityHolderComponent<BlockEntityTarget> blockEntityHolderComponent;
 
+    /**
+     * Creates the target component for the supplied registered block type.
+     */
     public BlockTargetBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Returns the target block entity's active power for every queried face. Entity
+     * lookup uses the injected holder, which creates a missing entity according to its
+     * loaded-chunk contract.
+     */
     @Override
     public int getWeakPower(Block block, BlockFace face) {
         return blockEntityHolderComponent.getBlockEntity(block.getPosition()).getActivePower();
     }
 
+    /**
+     * Activates the target from a projectile's world-space hit position. Arrows, thrown
+     * tridents, and small fireballs select the longer duration; other kinds use the
+     * default. A calculated zero strength leaves existing output unchanged.
+     */
     @Override
     public void onProjectileHit(Block block, EntityProjectile projectile, Vector3dc hitPos) {
         int durationTicks = DEFAULT_SIGNAL_DURATION_TICKS;
 
-        // Arrows, tridents, and fireballs have longer signal duration
         if (projectile instanceof EntityArrow ||
             projectile instanceof EntityThrownTrident ||
             projectile instanceof EntitySmallFireball) {
             durationTicks = ARROW_SIGNAL_DURATION_TICKS;
         }
 
-        // Calculate power based on distance from center
         int power = calculatePowerFromHitPosition(block, hitPos);
 
         if (power > 0) {
@@ -60,33 +94,39 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Calculates the redstone power based on how close the hit was to the center of the block.
-     * A hit at the exact center gives power 15, while hits at edges give less power.
+     * Calculates target power by projecting a world-space hit onto the nearest block
+     * face. Relative coordinates identify that face, and its two in-plane coordinates
+     * are normalized so the center contributes one and either edge contributes zero.
+     *
+     * <p>
+     * The average of those contributions scales {@code MAX_REDSTONE_POWER} and rounds
+     * upward. A face-center hit yields maximum power, while both edge coordinates at a
+     * corner yield zero. This calculation uses coordinate-wise weighting rather than
+     * Euclidean distance and does not use the projectile's travel direction.
      */
     protected int calculatePowerFromHitPosition(Block block, Vector3dc hitPos) {
-        // Get relative position within the block (0.0 to 1.0)
         double relX = hitPos.x() - block.getPosition().x();
         double relY = hitPos.y() - block.getPosition().y();
         double relZ = hitPos.z() - block.getPosition().z();
 
-        // Determine which face was hit and calculate 2D distance from center
         BlockFace hitFace = determineHitFace(relX, relY, relZ);
         double[] coords = get2DCoordinates(hitFace, relX, relY, relZ);
 
-        // Calculate distance from center (0.5, 0.5) for each coordinate
         double coord0 = normalizeCoordinate(coords[0]);
         double coord1 = normalizeCoordinate(coords[1]);
 
-        // Average the two normalized coordinates to get a scale factor (0 to 1)
+        // Averaging the in-plane weights makes both axes contribute equally:
+        // a corner contributes zero on both, while a face center contributes one.
         double scale = (coord0 + coord1) / 2.0;
 
-        // Convert to power (1-15), with center hits giving max power
+        // Round nonzero fractional strength upward so near-edge hits can still activate.
         return (int) Math.ceil(MAX_REDSTONE_POWER * scale);
     }
 
     /**
-     * Normalizes a coordinate from [0,1] to a distance-from-center scale.
-     * 0.5 (center) returns 1.0, edges (0 or 1) return 0.0
+     * Returns a center-weighted scale for one face coordinate. The center {@code 0.5}
+     * maps to {@code 1.0}, coordinates at or beyond either edge map to {@code 0.0}, and
+     * interior values vary linearly.
      */
     private double normalizeCoordinate(double coord) {
         if (coord == 0.5) {
@@ -101,10 +141,17 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Determines which face of the block was hit based on the relative position.
+     * Selects the nearest boundary plane from coordinates relative to the block origin.
+     * Each coordinate and its distance from one contribute a candidate distance.
+     * Callers normally supply a hit on the block's unit cube surface.
+     *
+     * <p>
+     * Equal distances resolve in the fixed order up, down, south, north, east, then
+     * west. That precedence matters at edges and corners because the chosen face
+     * determines which two coordinates contribute to signal strength; no
+     * projectile-direction data participates in this selection.
      */
     private BlockFace determineHitFace(double relX, double relY, double relZ) {
-        // Find which coordinate is closest to an edge (0 or 1)
         double distToXMin = relX;
         double distToXMax = 1 - relX;
         double distToYMin = relY;
@@ -125,7 +172,9 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Gets the 2D coordinates on the hit face.
+     * Returns a new pair containing the hit coordinates lying in the selected face's
+     * plane. Opposite faces share their axis pair, and {@code face} must be non-{@code null}
+     * for the exhaustive switch.
      */
     private double[] get2DCoordinates(BlockFace face, double relX, double relY, double relZ) {
         return switch (face) {
@@ -136,7 +185,16 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Activates the target block's power output.
+     * Stores target power and requests a release after the supplied number of game
+     * ticks. Nonpositive {@code power} or {@code durationTicks} delegates to immediate
+     * deactivation. Positive power is passed to the block entity without an upper-range
+     * clamp in this helper.
+     *
+     * <p>
+     * The new schedule replaces any existing entry for the position, so a later hit can
+     * reset the release deadline even when strength is unchanged. The previous power
+     * determines whether neighbors need notification after storage. The delay uses
+     * fifty milliseconds per game tick, matching the manager's duration conversion.
      */
     protected void activatePower(Block block, int power, int durationTicks) {
         if (power <= 0 || durationTicks <= 0) {
@@ -149,21 +207,22 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
         var blockEntity = blockEntityHolderComponent.getBlockEntity(pos);
         int previousPower = blockEntity.getActivePower();
 
-        // Schedule update to deactivate power after the duration
         var updateManager = dimension.getBlockUpdateManager();
+        // The chunk scheduler keeps one entry per position, so this request
+        // replaces an earlier target release and lets the latest positive hit reset its lifetime.
         updateManager.scheduleBlockUpdateInDelay(pos, Duration.ofMillis(durationTicks * 50L));
 
-        // Update power
         blockEntity.setActivePower(power);
 
-        // Update neighbors if power changed
         if (previousPower != power) {
             dimension.updateAround(pos);
         }
     }
 
     /**
-     * Deactivates the target block's power output.
+     * Clears the target block entity's active power and notifies neighbors only when
+     * the old value was nonzero. The helper does not remove any separately pending
+     * scheduled entry at the position.
      */
     protected void deactivatePower(Block block) {
         var blockEntity = blockEntityHolderComponent.getBlockEntity(block.getPosition());
@@ -175,6 +234,11 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Clears the target signal when its position's scheduled update arrives. The
+     * callback uses the entity currently resolved by the holder and does not compare
+     * the event with a particular earlier projectile hit.
+     */
     @Override
     public void onScheduledUpdate(Block block) {
         deactivatePower(block);

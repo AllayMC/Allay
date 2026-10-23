@@ -9,7 +9,10 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * BlockPlaceEvent is called when a block is placed in the dimension.
+ * {@code BlockPlaceEvent} represents a proposed block state write in a dimension,
+ * including replacements initiated without a player. The inherited block describes
+ * the incoming state and position, while {@code blockStateReplaced} records the
+ * outgoing state; cancellation prevents that write.
  *
  * @author daoge_cmd
  */
@@ -19,14 +22,20 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class BlockPlaceEvent extends BlockEvent implements CancellableEvent {
 
     /**
-     * The block state being replaced by the new block.
+     * Outgoing state before placement.
      */
     protected BlockState blockStateReplaced;
     /**
-     * The interact info of this placement. Can be {@code null} if the block is not placed by an entity.
+     * {@code interactInfo} supplies player placement context and may be {@code null}
+     * for changes initiated without player interaction.
      */
     protected PlayerInteractInfo interactInfo;
 
+    /**
+     * Creates a placement event with the incoming block and outgoing state.
+     * {@code interactInfo} may be {@code null} when the dimension write has no
+     * associated player interaction context.
+     */
     public BlockPlaceEvent(Block blockPlaced, BlockState blockStateReplaced, PlayerInteractInfo interactInfo) {
         super(blockPlaced);
         this.blockStateReplaced = blockStateReplaced;

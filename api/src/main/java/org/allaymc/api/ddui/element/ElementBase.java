@@ -5,21 +5,31 @@ import org.allaymc.api.ddui.Property;
 import org.allaymc.api.ddui.type.CustomFormScreen;
 
 /**
- * Shared base implementation for custom-form elements.
- *
- * @param <E> the concrete element type
+ * {@code ElementBase} stores screen attachment and visibility configuration shared by custom-form
+ * elements. Attachment assigns an owning screen and index once; fluent configuration uses the
+ * concrete element type, while operations returning a screen require prior attachment.
  *
  * @author daoge_cmd | SerenityJS
  */
 non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIElement {
+    /**
+     * {@code screen} holds the owning template after attachment; {@code null} marks an element
+     * whose attachment has not been established.
+     */
     private CustomFormScreen screen;
+    /**
+     * Zero-based layout slot, or {@code -1} before attachment or for a dedicated close button.
+     */
     private int index = -1;
+    /**
+     * Element visibility template property.
+     */
     private final Property<Boolean> visible = new Property<>(true);
 
     /**
-     * Gets the visibility property of this element.
-     *
-     * @return the visibility property
+     * Returns this element's mutable {@code visible} template property. Reconfiguring that property
+     * affects subsequent session compilation; existing sessions retain their current compiled
+     * binding and do not receive literal template changes.
      */
     @Override
     public Property<Boolean> getVisible() {
@@ -27,10 +37,9 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     }
 
     /**
-     * Sets the visibility of this element.
-     *
-     * @param visible the visibility value
-     * @return this element
+     * Stores the supplied visible template value and returns this element for further
+     * configuration. This operation clears that property's observable binding and does not send
+     * updates to existing sessions.
      */
     public E visible(boolean visible) {
         this.visible.set(visible);
@@ -38,10 +47,9 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     }
 
     /**
-     * Binds this element's visibility to an observable.
-     *
-     * @param visible the visibility observable
-     * @return this element
+     * Binds the visible template property to the supplied observable and returns this element. New
+     * sessions subscribe to that source; this reconfiguration does not replace bindings already
+     * compiled by existing sessions.
      */
     public E visible(Observable<Boolean> visible) {
         this.visible.bind(visible);
@@ -49,9 +57,8 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     }
 
     /**
-     * Gets the owning screen of this element.
-     *
-     * @return the owning screen, or {@code null} if this element has not been attached yet
+     * Returns the screen template to which this element is attached. The result is {@code null}
+     * before attachment, and callers receive the owning template rather than a runtime session.
      */
     @Override
     public CustomFormScreen getScreen() {
@@ -59,9 +66,8 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     }
 
     /**
-     * Gets the layout index assigned to this element.
-     *
-     * @return the assigned index, or {@code -1} if this element has not been attached yet or does not occupy a layout slot
+     * Returns the zero-based layout index assigned when this element was attached. The value is
+     * {@code -1} before attachment and for a dedicated close button that occupies no layout slot.
      */
     @Override
     public int getIndex() {
@@ -69,10 +75,9 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     }
 
     /**
-     * Attaches this element to a custom-form screen.
-     *
-     * @param screen the owning screen
-     * @param index  the zero-based layout index
+     * Attaches this element to the supplied screen and records its layout index. An element with an
+     * existing non-{@code null} owner rejects reattachment, preserving its original owner and
+     * index.
      */
     @Override
     public void bind(CustomFormScreen screen, int index) {
@@ -84,9 +89,9 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     }
 
     /**
-     * Gets the owning screen and fails if this element is not attached yet.
-     *
-     * @return the owning screen
+     * Returns this element's owning screen for fluent screen configuration. The element must
+     * already be attached; an unattached element raises {@code IllegalStateException} rather than
+     * returning a missing owner.
      */
     protected final CustomFormScreen requireScreen() {
         if (screen == null) {
@@ -96,9 +101,7 @@ non-sealed abstract class ElementBase<E extends ElementBase<E>> implements DDUIE
     }
 
     /**
-     * Returns this element as its concrete type.
-     *
-     * @return this element
+     * Returns this element using its concrete fluent configuration type.
      */
     protected abstract E self();
 }

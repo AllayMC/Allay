@@ -1,13 +1,10 @@
 package org.allaymc.api.component;
 
 /**
- * Represents an initialization data holder for a component.
- * <p>
- * This is a semantic interface with no defined methods. Implementing classes serve as
- * markers to indicate that they contain data required for initializing a component.
- * The specific structure and requirements of the initialization data are determined
- * by the implementing class and must be known by the user before instantiation.
- * </p>
+ * {@code ComponentInitInfo} marks data passed to component providers during
+ * composed-object construction. Each provider defines its accepted implementation
+ * and interprets that data directly; the marker adds no shared fields or
+ * validation, so callers must supply the subtype their configured providers expect.
  *
  * @author daoge_cmd
  */

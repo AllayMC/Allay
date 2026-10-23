@@ -8,7 +8,11 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.player.Player;
 
 /**
- * Called when a player is kicked from the server by using command /kick
+ * {@code PlayerKickEvent} represents a kick-command request to disconnect a
+ * selected player.
+ * Listeners may change the reason before the command formats its disconnect
+ * message. Cancellation stops the command's remaining target processing, while
+ * players already processed by that command remain disconnected.
  *
  * @author daoge_cmd
  */
@@ -16,11 +20,16 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.WORLD)
 public class PlayerKickEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
-     * The kick reason.
+     * {@code reason} supplies the text appended to the standard kick message.
+     * Blank text selects the standard message alone; the command requires a
+     * non-null value.
      */
     @Setter
     protected String reason;
 
+    /**
+     * Creates a command kick request with the supplied initial reason.
+     */
     public PlayerKickEvent(Player player, String reason) {
         super(player);
         this.reason = reason;

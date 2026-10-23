@@ -11,13 +11,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
- * Allay Project 2026/7/12
+ * {@code EntityArrowInGroundStateTest} verifies arrow embedding survives a complete
+ * entity persistence round trip.
  *
  * @author Miroshka000
  */
 @ExtendWith(AllayTestExtension.class)
 class EntityArrowInGroundStateTest {
 
+    /**
+     * Saves an arrow marked as embedded and recreates it from that entity
+     * data. The restored arrow must preserve the embedded flag before another
+     * physics update changes it.
+     */
     @Test
     void shouldPreserveInGroundStateAcrossSaveAndLoad() {
         var dimension = mock(Dimension.class);

@@ -10,14 +10,36 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Mega jungle tree feature implementation.
+ * {@code MegaJungleTreeFeature} places tall two-by-two jungle trunks with
+ * lateral branches, broad foliage clusters, and vines. Placement requires four
+ * supported ground positions and vine-sensitive clearance before the trunk and
+ * branch passes begin.
+ *
+ * <p>
+ * Only the topmost trunk level uses a single log column, while branch
+ * attachments retain sampled endpoints for their foliage clusters. The large
+ * top attachment uses the supplied foliage depth, and single branch
+ * attachments sample one or two levels of depth; both share radial and
+ * diagonal clipping rules. Accepted log and leaf positions feed the vine
+ * passes, so decorations follow recorded placement rather than an assumed
+ * complete shape. Individual block rejection does not undo earlier writes or
+ * make the final result fail.
  *
  * @author daoge_cmd
  */
 public class MegaJungleTreeFeature extends TreeWorldFeature {
 
+    /**
+     * Built-in megajungle tree registry key. Runtime feature construction uses
+     * this identifier to register the corresponding placement implementation.
+     */
     public static final Identifier IDENTIFIER = new Identifier("minecraft:mega_jungle_tree");
 
+    /**
+     * Creates and immediately registers the built-in megajungle tree feature.
+     * The constructor fixes its log and leaf materials while shared clearance
+     * and replacement behavior remains in the tree base.
+     */
     public MegaJungleTreeFeature() {
         super(
                 IDENTIFIER,
@@ -26,6 +48,20 @@ public class MegaJungleTreeFeature extends TreeWorldFeature {
         );
     }
 
+    /**
+     * Attempts a mega jungle tree after four-cell ground and vine-sensitive
+     * clearance checks. Failed admission returns {@code false} before
+     * mutation; acceptance writes the trunk, elevated branches, and their
+     * canopy attachments.
+     *
+     * <p>
+     * The main canopy is attached above the two-by-two trunk, while sampled
+     * branch endpoints use smaller single-column attachments. Recorded log and
+     * leaf positions are then reused for vines, ensuring those decorations
+     * inspect accepted placements rather than an assumed complete trunk or
+     * canopy. Individual skipped writes do not reject the final attempt, and
+     * later failures leave earlier changes in place.
+     */
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
         var random = ThreadLocalRandom.current();
@@ -77,6 +113,8 @@ public class MegaJungleTreeFeature extends TreeWorldFeature {
             float angle = random.nextFloat() * ((float) Math.PI * 2.0f);
             int branchX = 0;
             int branchZ = 0;
+            // Five rounded samples form each short branch; integer half-steps rise
+            // more slowly than horizontal displacement.
             for (int i = 0; i < 5; i++) {
                 branchX = (int) (1.5f + Math.cos(angle) * i);
                 branchZ = (int) (1.5f + Math.sin(angle) * i);
@@ -94,6 +132,20 @@ public class MegaJungleTreeFeature extends TreeWorldFeature {
         return true;
     }
 
+    /**
+     * Places a broad layered canopy around a trunk or branch attachment. Large
+     * attachments use the supplied foliage depth, while single attachments
+     * sample a depth of one or two before descending through expanding row
+     * radii.
+     *
+     * <p>
+     * Each row applies both radial clipping and a diagonal distance limit
+     * using folded trunk coordinates. That combination keeps the two-by-two
+     * top canopy aligned with its trunk while permitting the same helper to
+     * shape single branch clusters. Accepted leaves accumulate in the caller's
+     * list for later vine placement; blocked positions do not stop remaining
+     * rows.
+     */
     private void placeMegaJungleFoliage(
             WorldFeatureContext context,
             FoliageAttachment attachment,

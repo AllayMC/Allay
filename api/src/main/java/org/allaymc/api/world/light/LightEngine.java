@@ -3,104 +3,100 @@ package org.allaymc.api.world.light;
 import org.joml.Vector3ic;
 
 /**
- * LightEngine is responsible for storing and calculating the light of a dimension.
+ * {@code LightEngine} exposes propagated sky and block illumination together
+ * with the effective light used by gameplay. Raw skylight describes access to
+ * sky sources and remains independent of time and weather. Block light
+ * describes local emission, so daylight attenuation must affect only the sky
+ * contribution before the two sources are compared. Queue size reports pending
+ * recalculation work rather than proving that all light values are current.
+ *
+ * <p>
+ * An engine that calculates light reduces raw skylight using the current time
+ * and weather, clamps that contribution at zero, and selects the greater of
+ * effective skylight and block light. Dimensions without skylight use block
+ * light alone. An implementation used when light calculation is disabled may
+ * instead report full illumination for every light query.
  *
  * @author daoge_cmd
- * @see <a href="https://minecraft.wiki/w/Light">Light</a>
  */
 public interface LightEngine {
 
     /**
-     * Get the raw skylight level at the specified position.
-     * <p>
-     * This value only represents sky light propagation in the dimension. It is not reduced by
-     * the current time of day or weather, so a position that is directly exposed to the sky
-     * can still return {@code 15} at night.
-     *
-     * @param x the x coordinate of the pos
-     * @param y the y coordinate of the pos
-     * @param z the z coordinate of the pos
-     * @return the raw skylight level at the specified position
+     * Returns raw propagated skylight at dimension block coordinates. Time and
+     * weather do not attenuate this value, so a position exposed to the sky
+     * can retain level {@code 15} at night.
      */
     int getSkyLight(int x, int y, int z);
 
     /**
-     * @see #getSkyLight(int, int, int)
+     * Returns raw skylight at the supplied dimension block coordinates.
      */
     default int getSkyLight(Vector3ic pos) {
         return getSkyLight(pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Get the effective light level at the specified position for internal game logic.
-     * <p>
-     * This is the combined light level used by most light-dependent behavior. In dimensions with
-     * skylight, it is the greater of {@linkplain #getInternalSkyLight(int, int, int) internal sky
-     * light} and {@linkplain #getBlockLight(int, int, int) block light}. In dimensions without
-     * skylight, this is equal to block light.
+     * Returns the effective illumination used by light-dependent gameplay. A
+     * calculating engine compares block light with sky light after time and
+     * weather attenuation, rather than attenuating the maximum of both raw
+     * sources. This distinction keeps local emitters bright at night.
      *
-     * @param x the x coordinate of the pos
-     * @param y the y coordinate of the pos
-     * @param z the z coordinate of the pos
-     * @return the effective internal light level at the specified position
+     * <p>
+     * Dimensions without skylight use only the block contribution. The result
+     * reflects currently available propagation data; callers that need
+     * completed recalculation must separately coordinate with the
+     * implementation's update processing.
      */
     int getInternalLight(int x, int y, int z);
 
     /**
-     * @see #getInternalLight(int, int, int)
+     * Returns effective gameplay illumination at the supplied dimension block
+     * coordinates.
      */
     default int getInternalLight(Vector3ic pos) {
         return getInternalLight(pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Get the effective skylight level at the specified position for internal game logic.
-     * <p>
-     * Unlike {@link #getSkyLight(int, int, int)}, this value includes the reduction caused by the
-     * current time of day and weather. It represents how much sky light is actually available to
-     * gameplay systems after day-night and weather attenuation is applied.
+     * Returns the effective skylight contribution used by gameplay after
+     * environmental attenuation. A calculating engine subtracts the reduction
+     * derived from time and weather from raw skylight and prevents a negative
+     * result. This keeps the stored propagation values independent of changes
+     * to the day cycle.
      *
-     * @param x the x coordinate of the pos
-     * @param y the y coordinate of the pos
-     * @param z the z coordinate of the pos
-     * @return the effective internal skylight level at the specified position
+     * <p>
+     * Dimensions without skylight have no sky contribution. Implementations
+     * that disable calculation can provide a constant full-light policy
+     * instead, as described by their own contracts.
      */
     int getInternalSkyLight(int x, int y, int z);
 
     /**
-     * @see #getInternalSkyLight(int, int, int)
+     * Returns attenuated gameplay skylight at the supplied dimension block
+     * coordinates.
      */
     default int getInternalSkyLight(Vector3ic pos) {
         return getInternalSkyLight(pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Get the block light level at the specified position.
-     * <p>
-     * Block light is emitted by blocks or other local light sources and is independent of sky
-     * access, time of day, and weather.
-     *
-     * @param x the x coordinate of the pos
-     * @param y the y coordinate of the pos
-     * @param z the z coordinate of the pos
-     * @return the block light level at the specified position
+     * Returns propagated block-emitted illumination at the supplied dimension
+     * block coordinates.
      */
     int getBlockLight(int x, int y, int z);
 
     /**
-     * @see #getBlockLight(int, int, int)
+     * Returns block-emitted illumination at the supplied dimension block
+     * coordinates.
      */
     default int getBlockLight(Vector3ic pos) {
         return getBlockLight(pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Get the number of light update tasks that are currently waiting to be processed.
-     * <p>
-     * This includes queued recalculation work such as chunk light initialization or block-triggered
-     * light propagation updates. It can be used to estimate the current backlog of the light engine.
-     *
-     * @return the number of queued light update tasks
+     * Returns the current count of queued light recalculation tasks. Running
+     * tasks are excluded, and concurrent producers and consumers can change
+     * the count immediately, so zero does not establish completed propagation.
      */
     int getQueuedUpdateCount();
 }

@@ -3,17 +3,16 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.item.type.ItemType;
 
 /**
- * Component for items that define which materials can be used to repair them.
+ * {@code ItemRepairableComponent} identifies item types accepted as repair
+ * materials for an item. Repairing callers query this capability with a candidate
+ * material type; the component answers material compatibility without performing
+ * the repair or consuming either item stack.
  *
  * @author IWareQ
  */
 public interface ItemRepairableComponent extends ItemComponent {
     /**
-     * Checks if this item can be repaired with a given item type.
-     *
-     * @param itemType the {@link ItemType} to check
-     *
-     * @return {@code true} if repairable, {@code false} otherwise
+     * Returns whether the candidate item type is an accepted repair material.
      */
     boolean canBeRepairedBy(ItemType<?> itemType);
 }

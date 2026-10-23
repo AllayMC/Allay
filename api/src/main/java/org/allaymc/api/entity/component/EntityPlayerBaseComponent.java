@@ -16,374 +16,402 @@ import org.joml.Vector3ic;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Shared component for player entities, covering movement states, respawn data, cooldowns, food, experience, and fishing.
+ * {@code EntityPlayerBaseComponent} exposes the player entity's controller,
+ * posture, spawn preference, cooldowns, food resources, experience, and
+ * fishing state. Actual players have an attached controller, while fake
+ * players share the entity-facing contract without necessarily supporting
+ * every operation that sends controller updates.
+ *
+ * <p> Experience is split between a whole level and a fractional progress
+ * value whose point cost changes at level boundaries. {@code addExperience}
+ * converts through those costs, then proposes progress before level through
+ * separate setters, so cancellation or failure can apply only part of the
+ * requested change. Other helpers likewise preserve the concrete setters'
+ * event and validation rules; callers must not assume that a convenience
+ * operation bypasses those decisions or makes several updates atomic.
  */
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
+    /**
+     * {@code MAX_FOOD_LEVEL} defines the twenty-point hunger cap used by food
+     * setters, eating checks, and the helper that restores player food data.
+     */
     int MAX_FOOD_LEVEL = 20;
+    /**
+     * {@code MAX_FOOD_SATURATION_LEVEL} defines the twenty-point saturation
+     * cap used by saturation updates and the helper that restores player food
+     * data.
+     */
     float MAX_FOOD_SATURATION_LEVEL = 20;
+    /**
+     * {@code MAX_FOOD_EXHAUSTION_LEVEL} defines the four-unit exhaustion
+     * threshold at which the server consumes one saturation point or,
+     * afterward, one hunger point.
+     */
     float MAX_FOOD_EXHAUSTION_LEVEL = 4;
 
     /**
-     * Gets the controller of this entity player.
-     *
-     * @return the controller of this entity player. Can be {@code null} if this entity player
-     * is not controlled by a player. In other words, this entity player is a simulated (fake)
-     * player.
+     * Returns the player controller attached to this entity, or {@code null}
+     * for a fake player. The reference represents the controlling connection
+     * and abilities rather than the entity object itself.
      */
     Player getController();
 
     /**
-     * Checks if this player entity is an actual player. This is simply done by checking if
-     * it is controlled by a player (client).
-     *
-     * @return {@code true} if this player entity is an actual player, {@code false} otherwise
+     * Returns whether this entity currently has a nonnull player controller.
      */
     default boolean isActualPlayer() {
         return getController() != null;
     }
 
     /**
-     * Check if the player is sprinting.
-     *
-     * @return {@code true} if the player is sprinting, {@code false} otherwise.
+     * Returns whether this player entity currently has the sprinting flag set.
      */
     boolean isSprinting();
 
     /**
-     * Set the player's sprinting state.
-     *
-     * @param sprinting Whether the player should be sprinting
+     * Updates the player's sprinting state when its value changes. Starting a
+     * sprint clears sneaking and updates an actual controller's speed
+     * multiplier. Toggle listeners observe the applied transition; their event
+     * result does not roll back the server's updated flag.
      */
     void setSprinting(boolean sprinting);
 
     /**
-     * Check if the player is sneaking.
-     *
-     * @return {@code true} if the player is sneaking, {@code false} otherwise.
+     * Returns whether this player entity currently has the sneaking flag set.
      */
     boolean isSneaking();
 
     /**
-     * Set the player's sneaking state.
-     *
-     * @param sneaking Whether the player should be sneaking
+     * Updates the player's sneaking state when its value changes. Starting
+     * sneaking stops sprinting unless the player is flying and refreshes
+     * shield presentation. Toggle listeners observe the applied transition;
+     * their event result does not roll back the server's updated flag.
      */
     void setSneaking(boolean sneaking);
 
     /**
-     * Check if the player is blocking with a shield.
-     * <p>
-     * Blocking state is managed automatically based on sneaking state,
-     * whether the player is holding a shield, and shield cooldown.
-     *
-     * @return {@code true} if the player is blocking, {@code false} otherwise.
+     * Returns the derived shield-presentation flag for this player. The server
+     * combines sneaking, held shield, expired shield cooldown, and absence of
+     * both item-use states; actual damage blocking additionally follows the
+     * living component's attack checks.
      */
     boolean isBlocking();
 
     /**
-     * Check if the player is swimming.
-     *
-     * @return {@code true} if the player is swimming, {@code false} otherwise.
+     * Returns whether this player entity currently has the swimming flag set.
      */
     boolean isSwimming();
 
     /**
-     * Set the player's swimming state.
-     *
-     * @param swimming Whether the player should be swimming
+     * Updates the player's swimming state when its value changes. Starting
+     * swimming clears sneaking before the swim state is broadcast. Toggle
+     * listeners observe the applied transition; their event result does not
+     * roll back the server's updated flag.
      */
     void setSwimming(boolean swimming);
 
     /**
-     * Check if the player is gliding.
-     *
-     * @return {@code true} if the player is gliding, {@code false} otherwise.
+     * Returns whether this player entity currently has the gliding flag set.
      */
     boolean isGliding();
 
     /**
-     * Set the player's gliding state.
-     *
-     * @param gliding Whether the player should be gliding
+     * Updates the player's gliding state when its value changes. A changed
+     * glide flag is broadcast without changing the other posture flags. Toggle
+     * listeners observe the applied transition; their event result does not
+     * roll back the server's updated flag.
      */
     void setGliding(boolean gliding);
 
     /**
-     * Check if the player is crawling.
-     *
-     * @return {@code true} if the player is crawling, {@code false} otherwise.
+     * Returns whether this player entity currently has the crawling flag set.
      */
     boolean isCrawling();
 
     /**
-     * Set the player's crawling state.
-     *
-     * @param crawling Whether the player should be crawling
+     * Updates the player's crawling state when its value changes. Starting
+     * crawling clears sneaking before the crawl state is broadcast. Toggle
+     * listeners observe the applied transition; their event result does not
+     * roll back the server's updated flag.
      */
     void setCrawling(boolean crawling);
 
     /**
-     * Check if the player is in a spin attack (riptide).
-     *
-     * @return {@code true} if the player is in a spin attack, {@code false} otherwise.
+     * Returns whether this player entity currently has the spin-attack flag
+     * set.
      */
     boolean isSpinAttacking();
 
     /**
-     * Set the player's spin attack state.
-     *
-     * @param spinAttacking Whether the player should be spin attacking
+     * Updates the player's spinattacking state when its value changes. A
+     * changed spin-attack flag is broadcast before the corresponding toggle
+     * event. Toggle listeners observe the applied transition; their event
+     * result does not roll back the server's updated flag.
      */
     void setSpinAttacking(boolean spinAttacking);
 
     /**
-     * Check if the player can use riptide (must be in water or rain).
-     *
-     * @return {@code true} if the player can use riptide, {@code false} otherwise.
+     * Returns whether location contact with water or exposed non-clear weather
+     * permits riptide use. The server's weather branch checks sky visibility
+     * at integer-cast coordinates and does not require a separate
+     * biome-specific rain classification.
      */
     boolean canUseRiptide();
 
     /**
-     * Check if the player is using an item on a block.
-     *
-     * @return {@code true} if the player is using an item on a block, {@code false} otherwise.
+     * Returns whether this player entity currently has the block-targeted
+     * item-use flag set.
      */
     boolean isUsingItemOnBlock();
 
     /**
-     * Set whether the player is using an item on a block.
-     *
-     * @param usingItemOnBlock Whether the player should be using an item on a block
+     * Stores block-targeted item use and refreshes the derived
+     * shield-presentation flag. This can broadcast a changed blocking state
+     * even though the item-use setter has no separate unconditional state
+     * broadcast of its own.
      */
     void setUsingItemOnBlock(boolean usingItemOnBlock);
 
     /**
-     * Eating food or using a crossbow is considered using an item.
-     * <p>
-     * Note the distinction from {@code usingItemOnBlock}! Using an item is unrelated to blocks!
-     *
-     * @return {@code true} if the player is using an item, {@code false} otherwise.
+     * Returns whether this player entity currently has the untargeted
+     * held-item-use flag set.
      */
     boolean isUsingItemInAir();
 
     /**
-     * Set whether the player is using an item in the air.
-     *
-     * @param value Whether the player should be using an item in the air
+     * Stores untargeted held-item use, refreshes shield presentation, and
+     * broadcasts entity state. Every {@code true} assignment resets the start
+     * tick; stopping use preserves the previous start tick for later duration
+     * queries.
      */
     void setUsingItemInAir(boolean value);
 
     /**
-     * Get the time when the player most recently started using an item.
-     *
-     * @return The time when the player most recently started using an item, in entity ticks
+     * Returns the entity tick retained from the latest air-use start,
+     * initially {@code -1}. Callers should query while use is active; the
+     * current server warning path for inactive use dereferences the controller
+     * and is unsuitable for a fake player.
      */
     long getStartUsingItemInAirTime();
 
     /**
-     * Get how long the player has been using the item, in entity ticks.
-     *
-     * @return How long the player has been using the item in entity ticks
+     * Returns entity ticks elapsed since the retained air-use start. The
+     * server does not require the use flag to remain active, so callers must
+     * check {@code isUsingItemInAir} when they need an active-use duration.
      */
     long getItemUsingInAirTime();
 
     /**
-     * Get the skin of the player.
-     *
-     * @return the skin of the player, or {@code null} if the player has no custom skin (the skin will be Steve in that case)
+     * Returns the retained skin reference, or {@code null} when no custom skin
+     * is assigned. The skin object is shared rather than copied by this
+     * component's generated getter.
      */
     Skin getSkin();
 
     /**
-     * Sets the skin of the player.
-     *
-     * @param skin the skin to set
+     * Stores the supplied skin reference and broadcasts player skin
+     * presentation to connected players. The server does not copy the skin or
+     * limit this notification to the entity's current viewer set.
      */
     void setSkin(Skin skin);
 
     /**
-     * Get the game mode of the player.
-     *
-     * @return The game mode of the player
+     * Returns the game mode currently stored for this player entity.
      */
     GameMode getGameMode();
 
     /**
-     * Sets the game mode of the player.
-     *
-     * @param gameMode The game mode to set
+     * Proposes a game-mode change through its cancellable event. Accepted
+     * changes update sibling components, relevant resources, abilities, and
+     * viewer state in sequence; cancellation or an unchanged accepted mode
+     * leaves the current mode unchanged.
      */
     void setGameMode(GameMode gameMode);
 
     /**
-     * Determines whether the player is currently flying.
-     *
-     * @return {@code true} if the player is flying, {@code false} otherwise
+     * Returns whether this player entity currently has the ability-based
+     * flight flag set.
      */
     boolean isFlying();
 
     /**
-     * Sets whether the player is flying.
-     *
-     * @param flying Whether the player is flying
+     * Sets the flight flag and updates the attached controller's flying
+     * ability when the value changes. Fake players retain the local flag
+     * without a controller update, and this setter does not broadcast ordinary
+     * entity metadata.
      */
     void setFlying(boolean flying);
 
     /**
-     * Checks if the player is allowed to fly based on the current game mode and abilities.
-     *
-     * @return {@code true} if the player can fly, {@code false} otherwise
+     * Returns whether the attached controller currently permits flight. Fake
+     * players return {@code false} because no controller supplies abilities,
+     * even when the entity's separate flying flag has been set.
      */
     default boolean canFly() {
         return isActualPlayer() ? getController().canFly() : false;
     }
 
     /**
-     * Sets whether this player should be treated as phantom.
-     * <p>
-     * Players in phantom mode are completely removed from all viewers and cannot be interacted
-     * with by the world, while still being able to interact with the world itself.
-     *
-     * @param phantom whether to enable phantom mode
+     * Changes the explicit phantom flag used to hide this player and suppress
+     * ordinary entity interactions. The server refreshes viewer membership for
+     * an alive actual player; clearing the flag still leaves spectator-mode
+     * phantom behavior active.
      */
     void setPhantom(boolean phantom);
 
     /**
-     * Checks whether this player is currently phantom.
-     * <p>
-     * Spectator players always return {@code true}.
-     *
-     * @return {@code true} if the player is phantom
+     * Returns whether spectator mode or the explicit phantom flag enables
+     * phantom behavior. Spectators can still be visible to spectator
+     * controllers under the server's visibility rules, while the explicit flag
+     * hides the player from all viewers.
      */
     boolean isPhantom();
 
     /**
-     * Gets the score tag of the player.
-     *
-     * @return the score tag of the player
+     * Returns the optional additional score tag used in player metadata. A
+     * {@code null} value means that no score tag is assigned, while an empty
+     * string remains present for the default presence query.
      */
     String getScoreTag();
 
     /**
-     * Sets the score tag of the player.
-     *
-     * @param scoreTag the score tag to set, or {@code null} to remove the score tag
+     * Stores an additional score tag and broadcasts entity metadata even for
+     * an unchanged value. The server retains {@code null} to remove the tag,
+     * and it performs no text normalization here.
      */
     void setScoreTag(String scoreTag);
 
     /**
-     * Checks if the score tag is present.
-     *
-     * @return {@code true} if the score tag exists and is not null, {@code false} otherwise
+     * Returns whether the current score-tag reference is nonnull, including
+     * empty strings.
      */
     default boolean hasScoreTag() {
         return getScoreTag() != null;
     }
 
     /**
-     * Validate and get the spawn point of the player.
-     * <p>
-     * This method will check if the world of the spawn point is loaded,
-     * and if it is not loaded, the spawn point of the player will be set
-     * to the global spawn point.
-     * <p>
-     * Please note that this method won't do extra checks like checking if the
-     * bed is still exists, etc.
-     *
-     * @return The spawn point of the player
+     * Returns the retained personal spawn after checking that its dimension
+     * belongs to a running world. Invalid world state selects the global spawn
+     * and marks it forced; this query does not validate a bed or
+     * respawn-anchor block.
      */
     Location3ic validateAndGetSpawnPoint();
 
     /**
-     * Set the spawn point of the player.
-     * <p>
-     * This sets a forced spawn point (e.g., from the {@code /spawnpoint} command) that does not
-     * require a bed or respawn anchor to be present at the location on respawn.
-     *
-     * @param spawnPoint The spawn point to set
+     * Copies a dimension-qualified spawn location and marks it as forced. The
+     * server leaves existing spawn data unchanged when the location's world is
+     * not running, and callers must supply usable dimension and world
+     * references.
      */
     void setSpawnPoint(Location3ic spawnPoint);
 
     /**
-     * Set the spawn point of the player as anchored to a block (e.g., a bed or respawn anchor).
-     * <p>
-     * The spawn point is validated on respawn: if the block no longer exists at the stored location,
-     * the spawn point is reset to the world spawn and the player is notified.
-     *
-     * @param spawnPoint The spawn point to set
-     * @param type       The type of block that anchors this spawn point
+     * Copies a dimension-qualified spawn location and records its supplied
+     * origin type. The server rejects non-running worlds by leaving existing
+     * data unchanged; later respawn handling uses the type's invalid-block
+     * message rule when no respawn-capable block remains.
      */
     void setBlockSpawnPoint(Location3ic spawnPoint, SpawnPointType type);
 
     /**
-     * Returns the type of the player's current spawn point.
-     *
-     * @return the {@link SpawnPointType} of the current spawn point
+     * Returns the origin category retained with the player's personal spawn
+     * location.
      */
     SpawnPointType getSpawnPointType();
 
     /**
-     * Describes how a player's personal spawn point was established.
+     * {@code SpawnPointType} identifies how a personal spawn location was
+     * established. Its ordinal is persisted, and its invalid-spawn message key
+     * distinguishes block-based fallback from an ordinary forced location.
      */
     enum SpawnPointType {
-        /** Set by command (e.g., {@code /spawnpoint}). No block validation needed on respawn. */
+        /**
+         * Forced location with no missing-block message during respawn
+         * fallback.
+         */
         FORCED(null),
-        /** Set by sleeping in a bed. Validated against bed existence on respawn. */
+        /**
+         * Bed-derived location whose missing block triggers the bed validation
+         * message.
+         */
         BED(TrKeys.MC_TILE_BED_NOTVALID),
-        /** Set by interacting with a respawn anchor. Validated against anchor existence on respawn. */
+        /**
+         * Anchor-derived location whose missing block triggers the anchor
+         * validation message.
+         */
         RESPAWN_ANCHOR(TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
 
         /**
-         * The translation key sent to the player when they die and this spawn point block is missing.
-         * {@code null} for {@link #FORCED}, which never triggers the missing-block fallback.
+         * {@code invalidSpawnKey} names the message used when respawn finds no
+         * supporting respawn behavior. {@code null} marks {@code FORCED},
+         * which keeps its validated location without that missing-block
+         * fallback.
          */
         public final String invalidSpawnKey;
 
+        /**
+         * {@code VALUES} caches the ordinal lookup array used by
+         * {@code fromId}. This public array is mutable, so replacing an entry
+         * changes subsequent persisted-origin decoding.
+         */
         public static final SpawnPointType[] VALUES = values();
 
+        /**
+         * Creates a spawn-origin category with its invalid-block translation
+         * key. A {@code null} key identifies a forced origin that does not
+         * trigger the missing-respawn-block notification and reset path.
+         */
         SpawnPointType(String invalidSpawnKey) {
             this.invalidSpawnKey = invalidSpawnKey;
         }
 
+        /**
+         * Returns the origin stored at the supplied ordinal-array index
+         * without validating it. Invalid indices throw, and replacements in
+         * the public {@code VALUES} array directly affect the category
+         * returned by this helper.
+         *
+         * @throws ArrayIndexOutOfBoundsException if {@code id} is outside the cached array
+         */
         public static SpawnPointType fromId(int id) {
             return VALUES[id];
         }
     }
 
     /**
-     * Check if the player can reach a block at the specified position.
-     *
-     * @param pos The position of the block
-     * @return Whether the player can reach the block
+     * Checks reach against the center point of the supplied block. Each
+     * coordinate receives a half-block offset before the normal reach helper
+     * examines distances from the player's world-space box corners.
      */
     default boolean canReachBlock(Vector3ic pos) {
         return canReach(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f);
     }
 
     /**
-     * Check if the player can reach a point at the specified coordinates.
-     *
-     * @param pos The position of the point
-     * @return Whether the player can reach the point
+     * Checks reach for the supplied point using the coordinate-based reach
+     * calculation.
      */
     default boolean canReach(Vector3dc pos) {
         return canReach(pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Check if the player can reach a point at the specified coordinates.
+     * Returns whether any corner of the player's world-space box lies within
+     * the allowed distance of the point. Dead entities fail immediately. The
+     * helper samples all eight corners rather than finding the closest point
+     * on the box, and it does not test view direction or intervening blocks.
      *
-     * @param x The x coordinate of the point
-     * @param y The y coordinate of the point
-     * @param z The z coordinate of the point
-     * @return Whether the player can reach the point
+     * <p> The selected limit depends on game mode and is compared as a squared
+     * distance for each corner. This approximation can reject a point near a
+     * box face when none of its corners qualifies, so callers must not treat
+     * the result as a complete geometric or line-of-sight interaction test.
      */
     default boolean canReach(double x, double y, double z) {
         if (isDead()) return false;
         var maxDistance = getMaxInteractDistance();
-        // Check whether there is a point that inside of the player's AABB
-        // And can reach the provided pos
+        // Sample corners instead of solving the closest point on the box; this
+        // keeps the query approximate and omits view direction and line-of-sight checks.
         var aabb = getOffsetAABB();
         double[] aabbXs = new double[]{aabb.minX(), aabb.maxX()};
         double[] aabbYs = new double[]{aabb.minY(), aabb.maxY()};
@@ -397,102 +425,99 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
                 }
             }
         }
-        // TODO: check yaw and pitch
+        // TODO: Include yaw, pitch, and obstruction checks if this helper becomes
+        // the authoritative interaction validator rather than a distance approximation.
         return false;
     }
 
     /**
-     * Get the maximum distance that the player can interact with blocks.
-     *
-     * @return The maximum distance that the player can interact with blocks
+     * Returns the reach limit used by the default distance approximation,
+     * measured in blocks. Creative mode selects thirteen blocks, while every
+     * other mode selects seven, before the box-corner calculation is applied.
      */
     default double getMaxInteractDistance() {
         return getGameMode() == GameMode.CREATIVE ? 13d : 7d;
     }
 
     /**
-     * Get the enchantment seed of the player. Enchantment seed is used to generate random enchant options
-     * when the player is using an enchant table to enchant an item. The seed will only be regenerated when
-     * the player enchanted an item to make sure that the enchantment options are always the same for the same
-     * item.
-     *
-     * @return The enchantment seed of the player
+     * Returns the retained seed used to generate enchanting-table option
+     * choices.
      */
     int getEnchantmentSeed();
 
     /**
-     * Set the enchantment seed of the player.
-     *
-     * @param seed The enchantment seed to set
+     * Stores the seed used for subsequent enchanting-table option generation.
      */
     void setEnchantmentSeed(int seed);
 
     /**
-     * Regenerate the enchantment seed of the player.
+     * Replaces the enchanting seed with a random nonnegative integer below the
+     * integer maximum.
      */
     default void regenerateEnchantmentSeed() {
         setEnchantmentSeed(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE));
     }
 
     /**
-     * Sets cool down for a specific category.
-     *
-     * @param category the identifier for the cooldown category
-     * @param duration the length of the cooldown in ticks
-     * @param send     whether send packet to the client if the player is an actual player
+     * Stores a category expiry relative to the current entity tick and
+     * optionally notifies an actual controller. Expiry remains active through
+     * its exact deadline tick; the current server stores supplied durations
+     * without normalizing them despite the range annotation.
      */
     void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send);
 
     /**
-     * @see #setCooldown(String, int, boolean)
+     * Sets a category cooldown and requests notification of an attached
+     * controller. The duration uses entity ticks, and fake players retain the
+     * server expiry without a client packet destination.
      */
     default void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
         setCooldown(category, duration, true);
     }
 
     /**
-     * Sets cool down for a specific item type.
-     *
-     * @param itemType the item type to set
-     * @param duration the cool down tick
-     * @param send     whether send packet to the client
+     * Sets a cooldown category using the item type's full namespaced
+     * identifier. The explicit {@code send} flag controls attached-controller
+     * notification, while the stored duration and deadline follow the
+     * category-based operation.
      */
     default void setCooldown(ItemType<?> itemType, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send) {
         setCooldown(itemType.getIdentifier().toString(), duration, send);
     }
 
     /**
-     * @see #setCooldown(ItemType, int, boolean)
+     * Sets an item-identifier cooldown without requesting a controller
+     * notification. This overload deliberately passes {@code false} to the
+     * full item helper, whereas the category-only convenience overload
+     * requests notification by default.
      */
     default void setCooldown(ItemType<?> itemType, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
         setCooldown(itemType, duration, false);
     }
 
     /**
-     * Checks if the cooldown for specific category has ended.
-     *
-     * @param category the category to check
-     * @return {@code true} if the cooldown has ended, {@code false} otherwise.
+     * Returns whether the category is absent or its stored deadline precedes
+     * the current entity tick. Equality still counts as active, and the
+     * current server query leaves expired entries in the map.
      */
     boolean isCooldownEnd(String category);
 
     /**
-     * Checks if the cooldown for specific item type has ended.
-     *
-     * @param itemType the item type to check
-     * @return {@code true} if the cooldown has ended, {@code false} otherwise.
+     * Checks cooldown expiry under the item type's full namespaced identifier.
      */
     default boolean isCooldownEnd(ItemType<?> itemType) {
         return isCooldownEnd(itemType.getIdentifier().toString());
     }
 
     /**
-     * Calculates the required experience for a given level.
-     *
-     * @param level the level
-     * @return the required experience
+     * Returns the point cost of advancing from the supplied experience level.
+     * The piecewise formulas change at levels fifteen and thirty; the helper
+     * does not validate level range or protect arithmetic from overflow for
+     * arbitrary integer inputs.
      */
     static int calculateRequiredExperience(int level) {
+        // Higher levels use steeper incremental costs; choose the level band
+        // before converting progress fractions into the points needed for advancement.
         if (level >= 30) {
             return 112 + (level - 30) * 9;
         } else if (level >= 15) {
@@ -503,43 +528,56 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
-     * Get the current experience level.
-     *
-     * @return the experience level
+     * Returns the currently stored whole experience level for this player.
      */
     int getExperienceLevel();
 
     /**
-     * Set the experience level.
+     * Proposes an experience level through the cancellable level-change event.
+     * The server accepts initial levels from {@code 0} through {@code 24791},
+     * stores the listener-adjusted result, then requires an attached
+     * controller to send it.
      *
-     * @param value the new experience level
+     * @throws IllegalArgumentException if the initial value is outside the supported range
      */
     void setExperienceLevel(int value);
 
     /**
-     * Get the current experience progress.
-     *
-     * @return the experience progress
+     * Returns the stored fractional progress within the current experience
+     * level.
      */
     float getExperienceProgress();
 
     /**
-     * Set the experience progress.
+     * Proposes progress through a cancellable event with a fraction from
+     * {@code 0} through {@code 1}. The current server stores the original
+     * argument after acceptance, ignores listener replacement, and then
+     * requires an attached controller for its send.
      *
-     * @param value the new experience progress
+     * @throws IllegalArgumentException if the initial fraction is outside the supported range
      */
     void setExperienceProgress(float value);
 
     /**
-     * Adds experience to the player.
+     * Adds points by converting current fractional progress into the point
+     * cost of the current level. Each crossed level consumes its own required
+     * cost before the next level is evaluated. Negative additions do not
+     * borrow levels and can produce a progress value rejected by the setter.
      *
-     * @param addition the amount of experience to add
+     * <p> The helper proposes the resulting fraction before the whole level,
+     * using separate setter calls. Those calls retain independent
+     * cancellation, range checks, and controller requirements; a later refusal
+     * or exception does not restore an already applied fraction. Callers
+     * needing an accepted combined update cannot infer one solely from this
+     * helper returning normally.
      */
     default void addExperience(int addition) {
         var currentLevel = getExperienceLevel();
         var requiredExpCurrentLevel = calculateRequiredExperience(currentLevel);
         var total = getExperienceProgress() * requiredExpCurrentLevel + addition;
 
+        // Recompute the cost after every crossed level because a fraction of
+        // progress represents different point totals in different experience level bands.
         while (total >= requiredExpCurrentLevel) {
             total -= requiredExpCurrentLevel;
             currentLevel++;
@@ -551,25 +589,27 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
-     * Get the required experience for the current level.
-     *
-     * @return the required experience
+     * Returns the advancement point cost calculated for the stored experience
+     * level.
      */
     default int getRequiredExperienceForCurrentLevel() {
         return calculateRequiredExperience(getExperienceLevel());
     }
 
     /**
-     * Get the experience in the current level.
-     *
-     * @return the experience in the current level
+     * Returns whole experience points represented by the stored fraction at
+     * the current level. The floating-point product is truncated to an
+     * integer, so this helper omits any fractional point remainder.
      */
     default int getExperienceInCurrentLevel() {
+        // Expose whole points only; the integer cast discards any fractional remainder.
         return (int) (getExperienceProgress() * getRequiredExperienceForCurrentLevel());
     }
 
     /**
-     * Resets the food data.
+     * Requests maximum hunger and saturation, then zero exhaustion through
+     * their normal setters. A cancellable food-level update can refuse its
+     * part while the later saturation and exhaustion updates still proceed.
      */
     default void resetFoodData() {
         setFoodLevel(MAX_FOOD_LEVEL);
@@ -578,87 +618,85 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
-     * Get the current food level.
-     *
-     * @return the food level
+     * Returns the current hunger level measured in food points.
      */
     int getFoodLevel();
 
     /**
-     * Set the food level.
-     *
-     * @param value the new food level
+     * Proposes a hunger level after clamping it to
+     * {@code [0, MAX_FOOD_LEVEL]}. Cancellation leaves the stored value
+     * unchanged; an accepted listener replacement is retained and sent to an
+     * attached controller.
      */
     void setFoodLevel(int value);
 
     /**
-     * Get the current food saturation level.
-     *
-     * @return the food saturation level
+     * Returns the current saturation reserve consumed before hunger points.
      */
     float getFoodSaturationLevel();
 
     /**
-     * Set the food saturation level.
-     *
-     * @param value the new food saturation level
+     * Stores saturation after clamping it to
+     * {@code [0, MAX_FOOD_SATURATION_LEVEL]}. The current server sends the
+     * result to an actual controller, and this setter alone does not cap
+     * saturation against current hunger.
      */
     void setFoodSaturationLevel(float value);
 
     /**
-     * Get the current food exhaustion level.
-     *
-     * @return the food exhaustion level
+     * Returns the stored exhaustion units waiting to consume food resources.
      */
     float getFoodExhaustionLevel();
 
     /**
-     * Set the food exhaustion level.
-     *
-     * @param value the new food exhaustion level
+     * Stores exhaustion after clamping it to
+     * {@code [0, MAX_FOOD_EXHAUSTION_LEVEL]}. This direct setter does not
+     * consume saturation or hunger; callers use {@code exhaust} to apply
+     * accumulated resource costs.
      */
     void setFoodExhaustionLevel(float value);
 
     /**
-     * Reduces the player's exhaustion level.
-     *
-     * @param level the amount of exhaustion to reduce by
+     * Adds exhaustion and converts complete thresholds into saturation loss,
+     * then hunger loss. Creative, spectator, and peaceful cases are unchanged;
+     * normal updates use the food setters, so cancellation can refuse computed
+     * hunger loss after other resource changes.
      */
     void exhaust(float level);
 
     /**
-     * Increases the player's saturation level.
-     *
-     * @param food       the amount of food to add
-     * @param saturation the amount of saturation to add
+     * Adds hunger through its event-mediated setter before increasing
+     * saturation. Saturation is limited using the resulting stored hunger, so
+     * listener cancellation or replacement affects the cap applied to this
+     * food-consumption operation.
      */
     void saturate(int food, float saturation);
 
     /**
-     * Check if the player can eat.
-     *
-     * @return {@code true} if the player can eat, {@code false} otherwise.
+     * Returns whether hunger, creative mode, or peaceful difficulty permits
+     * eating. The current server accepts any player below twenty food points
+     * and accepts creative or peaceful cases regardless of the stored hunger
+     * level.
      */
     boolean canEat();
 
     /**
-     * Gets the fishing hook entity that the player has cast.
-     *
-     * @return the fishing hook, or {@code null} if the player is not fishing or the fishing hook is not alive
+     * Returns the retained fishing hook, clearing it when that entity is no
+     * longer alive. A missing or cleared hook returns {@code null}, so this
+     * query can also update the stored fishing reference.
      */
     EntityFishingHook getFishingHook();
 
     /**
-     * Sets the fishing hook entity for this player.
-     *
-     * @param fishingHook the fishing hook, or {@code null} to clear
+     * Stores the fishing hook reference directly without spawning or removing
+     * either entity. {@code null} clears the association, and the getter later
+     * clears a retained hook that is no longer alive.
      */
     void setFishingHook(EntityFishingHook fishingHook);
 
     /**
-     * Checks if the player is currently fishing.
-     *
-     * @return {@code true} if the player has a fishing hook out
+     * Returns whether the fishing-hook query currently yields a live
+     * associated hook.
      */
     default boolean isFishing() {
         return getFishingHook() != null;

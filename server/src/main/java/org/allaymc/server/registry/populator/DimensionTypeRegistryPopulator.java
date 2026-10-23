@@ -6,9 +6,19 @@ import org.allaymc.server.world.dimension.BuiltinDimensionSettings;
 import org.allaymc.server.world.dimension.DimensionId;
 
 /**
+ * {@code DimensionTypeRegistryPopulator} supplies built-in dimension definitions for the
+ * overworld, Nether, and End. Loaded settings determine inclusive height bounds, while each
+ * definition fixes its skylight, sleeping, respawn-anchor, and evaporation behavior; constructors
+ * register the dimensions before the public constants receive their references.
+ *
  * @author daoge_cmd
  */
 public class DimensionTypeRegistryPopulator implements Runnable {
+    /**
+     * Constructs and assigns the three built-in dimension types using loaded height settings.
+     * Dimension settings and the registry must already be initialized, and construction failures
+     * leave any previously registered dimensions and assigned constants intact.
+     */
     @Override
     public void run() {
         var builtinDimensionSettings = BuiltinDimensionSettings.get();

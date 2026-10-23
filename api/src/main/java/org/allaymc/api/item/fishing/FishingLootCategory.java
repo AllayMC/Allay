@@ -1,26 +1,26 @@
 package org.allaymc.api.item.fishing;
 
 /**
- * Represents the category of fishing loot.
+ * {@code FishingLootCategory} groups fishing entries before weighted item
+ * selection. {@link FishingLootTable} starts with fish, treasure, and junk
+ * probabilities, adjusts them using enchantment levels, and redirects a
+ * treasure-category roll to junk when open water is absent.
  *
  * @author daoge_cmd
  */
 public enum FishingLootCategory {
     /**
-     * Fish category (85% base chance).
-     * Includes: Cod, Salmon, Tropical Fish, Pufferfish.
+     * Fish catch category.
      */
     FISH,
 
     /**
-     * Treasure category (5% base chance).
-     * Includes: Bow, Enchanted Book, Fishing Rod, Name Tag, Nautilus Shell, Saddle.
+     * Open-water treasure category.
      */
     TREASURE,
 
     /**
-     * Junk category (10% base chance).
-     * Includes: Bowl, Fishing Rod, Leather, Leather Boots, Rotten Flesh, Stick, String, Water Bottle, Bone, Ink Sac, Tripwire Hook.
+     * Junk catch category.
      */
     JUNK
 }

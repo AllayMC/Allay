@@ -8,7 +8,10 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when crops grow.
+ * {@code BlockGrowEvent} represents a proposed growth transition for a crop or other
+ * growing block. Its block identifies the current snapshot, and {@code newBlockState}
+ * describes the proposed growth result; cancellation lets callers stop that growth
+ * attempt.
  *
  * @author daoge_cmd
  */
@@ -16,10 +19,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class BlockGrowEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The new block state after the growth.
+     * Proposed block growth state.
      */
     protected BlockState newBlockState;
 
+    /**
+     * Creates a growth event containing the current block and proposed state.
+     */
     public BlockGrowEvent(Block block, BlockState newBlockState) {
         super(block);
         this.newBlockState = newBlockState;

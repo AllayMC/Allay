@@ -11,24 +11,53 @@ import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.cloudburstmc.nbt.NbtType;
 
 /**
- * Container holder component for human like entities such as zombie and armor stand
+ * {@code EntityHumanLikeContainerHolderComponentImpl} supplies armor,
+ * main-hand, and offhand containers for humanlike entities. Its load and save
+ * handlers persist each equipment group under a separate compound-list tag.
+ * Container callbacks resolve the inherited static {@code thisEntity} through
+ * suppliers, so later owner injection can change the entity observed by those
+ * callbacks.
  *
  * @author daoge_cmd
  */
 public class EntityHumanLikeContainerHolderComponentImpl extends EntityContainerHolderComponentImpl {
 
+    // TAG_ARMOR, TAG_MAINHAND, and TAG_OFFHAND keep the three equipment groups
+    // separate so loading one list targets its matching container type.
+    /**
+     * NBT compound-list key for armor equipment.
+     */
     protected static final String TAG_ARMOR = "Armor";
+    /**
+     * NBT compound-list key for main-hand equipment.
+     */
     protected static final String TAG_MAINHAND = "Mainhand";
+    /**
+     * NBT compound-list key for offhand equipment.
+     */
     protected static final String TAG_OFFHAND = "Offhand";
 
+    /**
+     * Creates the three equipment containers with deferred entity lookups. The
+     * suppliers read the inherited static {@code thisEntity} when callbacks
+     * run, so construction does not capture an owner before component injection
+     * assigns it.
+     */
     public EntityHumanLikeContainerHolderComponentImpl() {
         super();
-        // Use suppliers so thisArmorStand will be resolved when actually needed
+        // Component injection follows construction. Defer owner lookup until a
+        // container callback runs rather than retaining the pre-injection value.
         addContainer(new EntityArmorContainerImpl(() -> thisEntity));
         addContainer(new EntityHandContainerImpl(() -> thisEntity));
         addContainer(new EntityOffhandContainerImpl(() -> thisEntity));
     }
 
+    /**
+     * Loads equipment groups whose NBT entries are compound lists. Absent
+     * entries or entries of another type leave the corresponding containers
+     * unchanged; each accepted list is delegated to that container's own
+     * item-loading behavior.
+     */
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
@@ -40,6 +69,10 @@ public class EntityHumanLikeContainerHolderComponentImpl extends EntityContainer
                 getContainer(ContainerTypes.OFFHAND).loadNBT(offhandNbt));
     }
 
+    /**
+     * Writes armor, main-hand, and offhand equipment lists into the NBT
+     * builder.
+     */
     @EventHandler
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
         event.getNbt()

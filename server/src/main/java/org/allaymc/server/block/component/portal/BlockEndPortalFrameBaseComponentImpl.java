@@ -19,39 +19,58 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.END_PORTAL_
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
 
 /**
+ * {@code BlockEndPortalFrameBaseComponentImpl} inserts eyes into End portal frames
+ * and discovers complete inward-facing frame rings. A frame interaction consumes
+ * one eye and updates comparator output before testing formation. Each possible
+ * center follows from the clicked frame's facing and its possible position along a
+ * three-frame side.
+ *
+ * <p>
+ * {@code FRAME_OFFSETS} describes the twelve ring positions and their required
+ * direction indices. {@code DIRECTIONS} interprets those indices using
+ * {@code MinecraftCardinalDirection} declaration order, so both representations
+ * must remain aligned. The first candidate whose frames all contain eyes and face
+ * inward receives a three-by-three portal interior; existing interior blocks are
+ * overwritten without a separate creation event.
+ *
  * @author IWareQ | daoge_cmd
  */
 public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl {
 
     /**
-     * End portal frame layout (top-down view, Y is constant):
-     * <pre>
-     *      .  F  F  F  .       row z-2  (facing SOUTH)
-     *      F  .  .  .  F       row z-1  (W→EAST, E→WEST)
-     *      F  .  .  .  F       row z    (center row)
-     *      F  .  .  .  F       row z+1
-     *      .  F  F  F  .       row z+2  (facing NORTH)
-     * </pre>
-     * Each offset is {dx, dz, required direction facing inward}.
+     * {@code FRAME_OFFSETS} lists the twelve ring positions as
+     * {@code {dx, dz, directionIndex}} relative to the center.
+     * {@code directionIndex} addresses {@code DIRECTIONS} in south, west, north,
+     * east declaration order, and corner blocks are excluded.
      */
     private static final int[][] FRAME_OFFSETS = {
-            // North side (z - 2): facing SOUTH
             {-1, -2, 0}, {0, -2, 0}, {1, -2, 0},
-            // South side (z + 2): facing NORTH
             {-1, 2, 2}, {0, 2, 2}, {1, 2, 2},
-            // West side (x - 2): facing EAST
             {-2, -1, 3}, {-2, 0, 3}, {-2, 1, 3},
-            // East side (x + 2): facing WEST
             {2, -1, 1}, {2, 0, 1}, {2, 1, 1}
     };
 
-    // Direction index to MinecraftCardinalDirection
+    /**
+     * {@code DIRECTIONS} decodes direction indices stored in
+     * {@code FRAME_OFFSETS}. Its enum declaration order must remain aligned with
+     * those indices for inward-facing validation.
+     */
     private static final MinecraftCardinalDirection[] DIRECTIONS = MinecraftCardinalDirection.values();
 
+    /**
+     * Creates this block behavior component for the supplied registered block
+     * type.
+     */
     public BlockEndPortalFrameBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Runs shared handlers before filling an empty frame with an ender eye.
+     * {@code interactInfo} must identify the player and clicked frame; eye
+     * insertion precedes sound, consumption, comparator refresh, and the portal
+     * formation attempt.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -67,30 +86,29 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         clickedBlockState.addSound(SimpleSound.END_PORTAL_FRAME_FILLED);
         interactInfo.player().tryConsumeItemInHand();
 
-        // Update comparators that may be reading this end portal frame
         dimension.updateComparatorOutputLevel(interactInfo.clickedBlockPos());
 
-        // Try to form the end portal
         tryFormEndPortal(dimension, interactInfo.clickedBlockPos());
 
         return true;
     }
 
     /**
-     * Try to form a complete end portal centered around the placed frame block.
-     * The placed frame block could be on any of the 4 sides, so we determine
-     * which side it's on from its direction and compute the possible center.
+     * Forms a portal at the first complete center implied by the updated frame.
+     * The supplied position must still contain an End portal frame before
+     * candidates are generated. Its orientation identifies the inward side, while
+     * its unknown position along that side yields three candidate centers.
+     * Validation combines all twelve frames' identities, eye bits, and
+     * orientations; the first valid candidate is filled and ends the search.
      */
     private void tryFormEndPortal(Dimension dimension, Vector3ic placedPos) {
         var placedState = dimension.getBlockState(placedPos);
         if (placedState.getBlockType() != BlockTypes.END_PORTAL_FRAME) return;
 
         var direction = placedState.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
-        // From the direction of the placed frame, determine the center of the portal
-        // Frame facing SOUTH → it's on the north side → center is at z + 2
-        // Frame facing NORTH → it's on the south side → center is at z - 2
-        // Frame facing EAST  → it's on the west side → center is at x + 2
-        // Frame facing WEST  → it's on the east side → center is at x - 2
+        // The same facing can describe any of three positions along one ring side,
+        // so test all implied centers instead of assuming the clicked frame is
+        // centered.
         var centers = computePossibleCenters(placedPos, direction);
 
         for (var center : centers) {
@@ -101,6 +119,11 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         }
     }
 
+    /**
+     * Returns three newly allocated candidate centers for the frame position and
+     * facing. Each candidate lies two blocks inward and covers one possible offset
+     * along the three-frame side.
+     */
     private Vector3ic[] computePossibleCenters(Vector3ic pos, MinecraftCardinalDirection direction) {
         int x = pos.x(), y = pos.y(), z = pos.z();
         return switch (direction) {
@@ -127,6 +150,11 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         };
     }
 
+    /**
+     * Returns whether all twelve required frames contain eyes and face inward.
+     * {@code FRAME_OFFSETS} supplies the positions and direction indices; the
+     * three-by-three interior and four corners impose no constraints here.
+     */
     private boolean validatePortalFormation(Dimension dimension, Vector3ic center) {
         int cx = center.x(), cy = center.y(), cz = center.z();
 
@@ -144,11 +172,16 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         return true;
     }
 
+    /**
+     * Replaces the candidate's three-by-three interior with End portal blocks and
+     * plays the formation sound. The caller validates the frame first; write
+     * failures are ignored and successful earlier writes are retained.
+     */
     private void placeEndPortal(Dimension dimension, Vector3ic center) {
         int cx = center.x(), cy = center.y(), cz = center.z();
         var endPortalState = BlockTypes.END_PORTAL.getDefaultState();
 
-        // Place 3×3 end portal blocks
+        // The inclusive offsets cover all nine cells of the portal interior.
         for (int dx = -1; dx <= 1; dx++) {
             for (int dz = -1; dz <= 1; dz++) {
                 dimension.setBlockState(cx + dx, cy, cz + dz, endPortalState);
@@ -158,14 +191,19 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         dimension.addSound(MathUtils.center(center), SimpleSound.END_PORTAL_SPAWN);
     }
 
+    /**
+     * Returns whether this frame supplies its own comparator signal.
+     */
     @Override
     public boolean hasComparatorInputOverride() {
         return true;
     }
 
+    /**
+     * Returns full comparator strength when the frame contains an eye.
+     */
     @Override
     public int getComparatorInputOverride(Block block) {
-        // Output 15 if eye is placed, 0 otherwise
         return block.getPropertyValue(END_PORTAL_EYE_BIT) ? 15 : 0;
     }
 }

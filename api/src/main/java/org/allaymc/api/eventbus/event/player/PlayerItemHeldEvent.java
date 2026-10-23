@@ -8,7 +8,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player changes the item they are holding in their hand.
+ * {@code PlayerItemHeldEvent} describes a proposed change between hotbar selections
+ * and their item stacks. {@code EntityPlayer.setHandSlot} dispatches this event
+ * before committing the selected slot; cancellation retains the old selection and
+ * corrects the controlling client when the request originated there.
  *
  * @author daoge_cmd
  */
@@ -17,22 +20,29 @@ import org.allaymc.api.item.ItemStack;
 public class PlayerItemHeldEvent extends PlayerEvent implements CancellableEvent {
 
     /**
-     * The item that the player was holding in their hand.
+     * {@code oldItemStack} retains the item in the previous hotbar selection. The
+     * event exposes the container's mutable stack rather than copying its contents.
      */
     protected ItemStack oldItemStack;
     /**
-     * The index of the hand slot that the player previously had selected.
+     * Previous hotbar slot index.
      */
     protected int oldHandSlot;
     /**
-     * The item that the player is holding in their hand.
+     * {@code newItemStack} retains the item in the proposed hotbar selection. The
+     * event exposes the container's mutable stack rather than copying its contents.
      */
     protected ItemStack newItemStack;
     /**
-     * The index of the hand slot that the player now has selected.
+     * Proposed hotbar slot index.
      */
     protected int newHandSlot;
 
+    /**
+     * Creates a {@code PlayerItemHeldEvent} for the supplied player and event data.
+     * The constructor retains reference-valued arguments without copying them and
+     * does not dispatch or apply the represented action.
+     */
     public PlayerItemHeldEvent(EntityPlayer player, ItemStack oldItemStack, int oldHandSlot, ItemStack newItemStack, int newHandSlot) {
         super(player);
         this.oldItemStack = oldItemStack;

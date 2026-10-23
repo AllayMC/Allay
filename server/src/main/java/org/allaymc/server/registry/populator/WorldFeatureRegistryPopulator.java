@@ -9,12 +9,20 @@ import org.allaymc.server.world.feature.mushroom.HugeRedMushroomFeature;
 import org.allaymc.server.world.feature.tree.*;
 
 /**
- * Populates the WorldFeatures class with tree feature instances.
+ * {@code WorldFeatureRegistryPopulator} supplies the built-in tree, huge mushroom, and fungus
+ * features exposed through {@code WorldFeatures}. Feature constructors register their
+ * identifiers, and block types must already be populated because feature definitions retain
+ * the log, foliage, stem, or wart types used during placement.
  *
  * @author daoge_cmd
  */
 @Slf4j
 public class WorldFeatureRegistryPopulator implements Runnable {
+    /**
+     * Constructs and assigns built-in vegetation features after block types and the feature
+     * registry are available. Registration occurs during each construction, so a later failure
+     * does not remove earlier feature registrations or constant assignments.
+     */
     @Override
     public void run() {
         // Basic tree types

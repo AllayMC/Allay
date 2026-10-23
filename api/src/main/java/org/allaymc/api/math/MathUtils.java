@@ -12,102 +12,104 @@ import java.lang.Math;
 import static java.lang.StrictMath.*;
 
 /**
- * Math utilities.
- *
+ * {@code MathUtils} converts vectors, derives orientation angles, and supplies numerical
+ * approximations used by geometry callers. Vector conversion methods allocate results,
+ * while normalization and bounding-box growth modify supplied objects. Direction angles
+ * use degrees; lookup-table trigonometric arguments use radians.
  * @author Cool_Loong | daoge_cmd
  */
 @UtilityClass
 public final class MathUtils {
 
+    /**
+     * {@code SIN_LOOK_UP_TABLE} holds one sampled sine value per unsigned sixteen-bit turn
+     * index. The fast trigonometric methods wrap their converted angle into this table.
+     */
     private static final double[] SIN_LOOK_UP_TABLE = new double[65536];
 
+    // Precompute one complete turn so fastSin and fastCos can reuse the same periodic samples.
     static {
         for (int i = 0; i < 65536; i++) {
+            // Convert the table index to radians over one complete turn.
             SIN_LOOK_UP_TABLE[i] = Math.sin(i * Math.PI * 2.0D / 65536.0d);
         }
     }
 
     /**
-     * Converts the double vector passed to float vector
-     *
-     * @param vec the double vector to convert
-     * @return the float vector
+     * Returns a new single-precision copy of the supplied double-precision vector. Each
+     * coordinate is narrowed to {@code float}, so the result may lose precision and shares
+     * no coordinate storage with {@code vec}.
      */
     public static Vector3fc toVec3f(Vector3dc vec) {
+        // Narrow coordinates only after allocating storage independent of the source vector.
         return vec.get(new Vector3f());
     }
 
     /**
-     * Floor a vector.
-     *
-     * @param vector3d the vector to floor
-     * @return the floored vector
+     * Returns a new integer vector by rounding each coordinate downward. The input vector
+     * remains unchanged; conversion to {@code int} follows Java narrowing for nonfinite or
+     * out-of-range coordinates.
      */
     public static Vector3i floor(Vector3dc vector3d) {
         return new Vector3i((int) Math.floor(vector3d.x()), (int) Math.floor(vector3d.y()), (int) Math.floor(vector3d.z()));
     }
 
     /**
-     * Floor a vector.
-     *
-     * @param vector3f the vector to floor
-     * @return the floored vector
+     * Returns a new integer vector by rounding each coordinate downward. The input vector
+     * remains unchanged; conversion to {@code int} follows Java narrowing for nonfinite or
+     * out-of-range coordinates.
      */
     public static Vector3i floor(Vector3fc vector3f) {
         return new Vector3i((int) Math.floor(vector3f.x()), (int) Math.floor(vector3f.y()), (int) Math.floor(vector3f.z()));
     }
 
     /**
-     * Ceil a vector.
-     *
-     * @param vector3d the vector to ceil
-     * @return the ceiled vector
+     * Returns a new integer vector by rounding each coordinate upward. The input vector
+     * remains unchanged; conversion to {@code int} follows Java narrowing for nonfinite or
+     * out-of-range coordinates.
      */
     public static Vector3i ceil(Vector3dc vector3d) {
         return new Vector3i((int) Math.ceil(vector3d.x()), (int) Math.ceil(vector3d.y()), (int) Math.ceil(vector3d.z()));
     }
 
     /**
-     * Ceil a vector.
-     *
-     * @param vector3f the vector to ceil
-     * @return the ceiled vector
+     * Returns a new integer vector by rounding each coordinate upward. The input vector
+     * remains unchanged; conversion to {@code int} follows Java narrowing for nonfinite or
+     * out-of-range coordinates.
      */
     public static Vector3i ceil(Vector3fc vector3f) {
         return new Vector3i((int) Math.ceil(vector3f.x()), (int) Math.ceil(vector3f.y()), (int) Math.ceil(vector3f.z()));
     }
 
     /**
-     * Center a vector (Adding 0.5 to the coordinates of the vector).
-     *
-     * @param vector3i the vector to center
-     * @return the centered vector
+     * Returns a new vector at the center of the supplied block coordinates. The half-block
+     * offset is applied to all three axes, and {@code vector3i} remains unchanged.
      */
     public static Vector3d center(Vector3ic vector3i) {
+        // Half a block moves integer corner coordinates to block centers.
         return new Vector3d(vector3i.x() + 0.5, vector3i.y() + 0.5, vector3i.z() + 0.5);
     }
 
     /**
-     * Round a double to a certain precision.
-     *
-     * @param d         the double to round
-     * @param precision the precision
-     * @return the rounded double
+     * Returns {@code d} rounded to the requested decimal-place count using
+     * {@link Math#round(double)}. A negative {@code precision} rounds to powers of ten
+     * above the decimal point; this method does not validate extreme scales.
      */
     public static double round(double d, int precision) {
+        // Decimal scaling makes Math.round select the requested decimal place.
         double pow = Math.pow(10, precision);
         return ((double) Math.round(d * pow)) / pow;
     }
 
     /**
-     * Fast inverse square root (float).
-     *
-     * @param x the value
-     * @return the result
+     * Returns a bit-seeded approximation of the reciprocal square root. The approximation
+     * applies one Newton refinement and is intended for positive finite inputs; this
+     * implementation does not check that input domain.
      */
     public static float fastFloatInverseSqrt(float x) {
         float xHalf = 0.5f * x;
         int reEncode = Float.floatToIntBits(x);
+        // Seed reciprocal square root from the float exponent before Newton refinement.
         reEncode = 0x5f3759df - (reEncode >> 1);
         x = Float.intBitsToFloat(reEncode);
         x *= (1.5f - xHalf * x * x);
@@ -115,14 +117,14 @@ public final class MathUtils {
     }
 
     /**
-     * Fast inverse square root (double).
-     *
-     * @param x the value
-     * @return the result
+     * Returns a bit-seeded approximation of the reciprocal square root. The approximation
+     * applies one Newton refinement and is intended for positive finite inputs; this
+     * implementation does not check that input domain.
      */
     public static double fastDoubleInverseSqrt(double x) {
         double xHalf = 0.5d * x;
         long reEncode = Double.doubleToLongBits(x);
+        // Seed reciprocal square root from the double exponent before Newton refinement.
         reEncode = 0x5fe6ec85e7de30daL - (reEncode >> 1);
         x = Double.longBitsToDouble(reEncode);
         x *= (1.5d - xHalf * x * x);
@@ -130,32 +132,30 @@ public final class MathUtils {
     }
 
     /**
-     * Check if the value is in the range.
-     *
-     * @param l     the left
-     * @param value the value to check
-     * @param r     the right
-     * @return {@code true} if the value is in the range, otherwise {@code false}.
+     * Returns whether {@code value} lies between the inclusive supplied bounds. A reversed
+     * bound order or any {@code NaN} operand produces {@code false}; this method does not
+     * reorder the endpoints.
      */
     public static boolean isInRange(double l, double value, double r) {
         return l <= value && value <= r;
     }
 
     /**
-     * @see #getDirectionVector(double, double)
+     * Returns a newly allocated direction vector for the location's orientation. The
+     * {@code yaw()} and {@code pitch()} values are interpreted in degrees; coordinate and
+     * dimension values do not participate.
      */
     public static Vector3d getDirectionVector(Location3dc location) {
         return getDirectionVector(location.yaw(), location.pitch());
     }
 
     /**
-     * Calculate equivalent normalized direction vector by yaw and pitch.
-     *
-     * @param yaw   the yaw
-     * @param pitch the pitch
-     * @return the direction vector
+     * Returns a normalized direction vector for {@code yaw} and {@code pitch} in degrees.
+     * Zero angles point along positive {@code z}, and positive {@code pitch} turns the
+     * vector downward toward negative {@code y}.
      */
     public static Vector3d getDirectionVector(double yaw, double pitch) {
+        // Convert degree angles and align the spherical origin with positive Z.
         var pitch0 = toRadians(pitch + 90);
         var yaw0 = toRadians(yaw + 90);
         var x = sin(pitch0) * cos(yaw0);
@@ -165,105 +165,98 @@ public final class MathUtils {
     }
 
     /**
-     * Calculate yaw from the direction vector.
-     *
-     * @param vector the direction vector
-     * @return the yaw
+     * Returns the horizontal direction angle in degrees for {@code vector}. A vector
+     * without a horizontal component returns {@code 0}; the result also snaps angles with
+     * absolute magnitude below {@code 1E-10} degrees to zero.
      */
     public static double getYawFromVector(Vector3dc vector) {
         double length = vector.x() * vector.x() + vector.z() * vector.z();
-        // Prevent NAN
+        // A direction without the required length has no defined angle; use zero before
+        // division would produce NaN.
         if (length == 0) {
             return 0;
         }
         double yaw = toDegrees(asin(-vector.x() / sqrt(length)));
+        // Snap numerical residue near zero while preserving the opposite horizontal hemisphere.
         return -vector.z() > 0.0D ? 180.0D - yaw : StrictMath.abs(yaw) < 1E-10 ? 0 : yaw;
     }
 
     /**
-     * Calculate the pitch by the direction vector.
-     *
-     * @param vector the direction vector
-     * @return the pitch
+     * Returns the vertical direction angle in degrees for {@code vector}. A zero-length
+     * vector returns {@code 0}; positive results point downward, and magnitudes below
+     * {@code 1E-10} degrees are snapped to zero.
      */
     public static double getPitchFromVector(Vector3dc vector) {
         double length =
                 vector.x() * vector.x() +
                 vector.z() * vector.z() +
                 vector.y() * vector.y();
-        // Prevent NAN
+        // A direction without the required length has no defined angle; use zero before
+        // division would produce NaN.
         if (length == 0) {
             return 0;
         }
         var pitch = toDegrees(asin(-vector.y() / sqrt(length)));
+        // Snap numerical residue so axis-aligned directions expose an exact zero angle.
         return StrictMath.abs(pitch) < 1E-10 ? 0 : pitch;
     }
 
     /**
-     * Calculate sin value quickly by looking up a pre-calculated table.
-     *
-     * @param radian the radian
-     * @return the sin value
+     * Returns a table-sampled approximation of the sine of {@code radian}. Angle
+     * conversion truncates to an integer sample index and wraps to sixteen bits, so this
+     * result trades continuous angular precision for table lookup.
      */
     public static double fastSin(float radian) {
+        // Convert radians to a periodic sample index; cosine adds a quarter turn.
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
     }
 
     /**
-     * Calculate sin value quickly by looking up a pre-calculated table.
-     *
-     * @param radian the radian
-     * @return the sin value
+     * Returns a table-sampled approximation of the sine of {@code radian}. Angle
+     * conversion truncates to an integer sample index and wraps to sixteen bits, so this
+     * result trades continuous angular precision for table lookup.
      */
     public static double fastSin(double radian) {
+        // Convert radians to a periodic sample index; cosine adds a quarter turn.
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
     }
 
     /**
-     * Calculate cos value quickly by looking up a pre-calculated table.
-     *
-     * @param radian the radian
-     * @return the cos value
+     * Returns a table-sampled approximation of the cosine of {@code radian}. Angle
+     * conversion truncates to an integer sample index and wraps to sixteen bits, so this
+     * result trades continuous angular precision for table lookup.
      */
     public static double fastCos(float radian) {
+        // Convert radians to a periodic sample index; cosine adds a quarter turn.
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
     }
 
     /**
-     * Calculate cos value quickly by looking up a pre-calculated table.
-     *
-     * @param radian the radian
-     * @return the cos value
+     * Returns a table-sampled approximation of the cosine of {@code radian}. Angle
+     * conversion truncates to an integer sample index and wraps to sixteen bits, so this
+     * result trades continuous angular precision for table lookup.
      */
     public static double fastCos(double radian) {
+        // Convert radians to a periodic sample index; cosine adds a quarter turn.
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
     }
 
     /**
-     * Check if the vector contains NaN.
-     *
-     * @param v the vector to check
-     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     * Returns whether any coordinate of the supplied vector is {@code NaN}.
      */
     public static boolean hasNaN(Vector3fc v) {
         return Float.isNaN(v.x()) || Float.isNaN(v.y()) || Float.isNaN(v.z());
     }
 
     /**
-     * Check if the vector contains NaN.
-     *
-     * @param v the vector to check
-     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     * Returns whether any coordinate of the supplied vector is {@code NaN}.
      */
     public static boolean hasNaN(Vector3dc v) {
         return Double.isNaN(v.x()) || Double.isNaN(v.y()) || Double.isNaN(v.z());
     }
 
     /**
-     * Check if the location contains NaN.
-     *
-     * @param l the location to check
-     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     * Returns whether any coordinate or orientation angle of the location is {@code NaN}.
      */
     public static boolean hasNaN(Location3fc l) {
         return Float.isNaN(l.x()) || Float.isNaN(l.y()) || Float.isNaN(l.z()) ||
@@ -271,10 +264,7 @@ public final class MathUtils {
     }
 
     /**
-     * Check if the location contains NaN.
-     *
-     * @param l the location to check
-     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     * Returns whether any coordinate or orientation angle of the location is {@code NaN}.
      */
     public static boolean hasNaN(Location3dc l) {
         return Double.isNaN(l.x()) || Double.isNaN(l.y()) || Double.isNaN(l.z()) ||
@@ -282,35 +272,31 @@ public final class MathUtils {
     }
 
     /**
-     * Normalize the vector if it is not zero. If the vector is zero, it can't be normalized, otherwise
-     * a vector with three NaN values will be produced.
-     *
-     * @param v the vector
-     * @return the normalized vector
+     * Normalizes {@code v} in place when its squared length is positive and returns the
+     * same vector. Zero-length vectors remain unchanged, avoiding the undefined division
+     * that ordinary normalization would perform.
      */
     public static Vector3f normalizeIfNotZero(Vector3f v) {
+        // Preserve zero vectors because normalizing them divides by zero and would replace
+        // their coordinates with NaN values.
         return v.lengthSquared() > 0 ? v.normalize(v) : v;
     }
 
     /**
-     * Normalize the vector if it is not zero. If the vector is zero, it can't be normalized, otherwise
-     * a vector with three NaN values will be produced.
-     *
-     * @param v the vector
-     * @return the normalized vector
+     * Normalizes {@code v} in place when its squared length is positive and returns the
+     * same vector. Zero-length vectors remain unchanged, avoiding the undefined division
+     * that ordinary normalization would perform.
      */
     public static Vector3d normalizeIfNotZero(Vector3d v) {
+        // Preserve zero vectors because normalizing them divides by zero and would replace
+        // their coordinates with NaN values.
         return v.lengthSquared() > 0 ? v.normalize(v) : v;
     }
 
     /**
-     * Grows the AABB on all axes as represented by the vector passed. The
-     * vec values are subtracted from the minimum values of the AABB and added
-     * to maximum values of the AABB.
-     *
-     * @param aabb   the AABB to grow
-     * @param growth the vector
-     * @return the grown AABB
+     * Expands the supplied bounding box in place and returns that same box. Each
+     * {@code growth} component is subtracted from its minimum and added to its maximum;
+     * negative values shrink that axis.
      */
     public static AABBd grow(AABBd aabb, Vector3dc growth) {
         aabb.minX -= growth.x();
@@ -323,13 +309,9 @@ public final class MathUtils {
     }
 
     /**
-     * Grows the given axis-aligned bounding box (AABB) in the direction of the specified block face by a given growth value.
-     *
-     * @param aabb      the axis-aligned bounding box (AABB) to grow
-     * @param blockFace the block face direction to grow towards (e.g., DOWN, UP, NORTH, SOUTH, WEST, EAST)
-     * @param growth    the value by which to grow the AABB along the specified block face direction
-     * @return the grown AABB
-     * @throws IllegalArgumentException if the specified block face is invalid
+     * Expands the supplied bounding box in place and returns that same box. The selected
+     * {@code blockFace} chooses one boundary to move by {@code growth}; negative growth
+     * moves that boundary inward instead.
      */
     public static AABBd grow(AABBd aabb, BlockFace blockFace, double growth) {
         switch (blockFace) {

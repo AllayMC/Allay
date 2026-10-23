@@ -9,9 +9,10 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.EnumSet;
 
 /**
- * GameMode represents a game mode that may be assigned to a player. Upon joining the world, players will be
- * given the default game mode that the world holds. Game modes specify the way that a player interacts with
- * and plays in the world.
+ * {@code GameMode} identifies how a player interacts with the world and supplies its
+ * default tracked abilities. The enum stores a translation key and ability set for
+ * each mode; numeric lookup uses declaration order, matching the four standard
+ * protocol game-mode values.
  *
  * @author daoge_cmd
  */
@@ -19,44 +20,53 @@ import java.util.EnumSet;
 @AllArgsConstructor
 public enum GameMode {
     /**
-     * SURVIVAL is the survival game mode: Players with this game mode have limited supplies and can break
-     * blocks after taking some time.
+     * {@code SURVIVAL} selects ordinary resource consumption and timed block
+     * breaking, with no additional abilities supplied by this enum.
      */
     SURVIVAL(TrKeys.MC_GAMEMODE_SURVIVAL, EnumSet.noneOf(PlayerAbility.class)),
     /**
-     * CREATIVE represents the creative game mode: Players with this game mode have infinite blocks and
-     * items and can break blocks instantly. Players with creative mode can also fly.
+     * {@code CREATIVE} supplies {@code MAY_FLY} and {@code INFINITE_BLOCK}. The
+     * player component also applies creative interaction and resource-consumption
+     * rules.
      */
     CREATIVE(TrKeys.MC_GAMEMODE_CREATIVE, EnumSet.of(PlayerAbility.MAY_FLY, PlayerAbility.INFINITE_BLOCK)),
     /**
-     * ADVENTURE represents the adventure game mode: Players with this game mode cannot edit the world
-     * (placing or breaking blocks).
+     * {@code ADVENTURE} selects restricted world editing and supplies no additional
+     * abilities from this enum; interaction checks enforce its restrictions.
      */
     ADVENTURE(TrKeys.MC_GAMEMODE_ADVENTURE, EnumSet.noneOf(PlayerAbility.class)),
     /**
-     * SPECTATOR represents the spectator game mode: Players with this game mode cannot interact with the
-     * world and cannot be seen by other players. spectator players can fly, like creative mode, and can
-     * move through blocks.
+     * {@code SPECTATOR} supplies {@code MAY_FLY}, {@code FLYING}, and
+     * {@code NO_CLIP}. The player component applies the corresponding spectator
+     * interaction and visibility rules.
      */
     SPECTATOR(TrKeys.MC_GAMEMODE_SPECTATOR, EnumSet.of(PlayerAbility.MAY_FLY, PlayerAbility.FLYING, PlayerAbility.NO_CLIP));
 
+    /**
+     * {@code VALUES} caches declaration-order game modes for numeric lookup.
+     * {@code from} indexes this array directly and does not validate its argument.
+     */
     private static final GameMode[] VALUES = values();
 
     /**
-     * The translation key for the game mode.
+     * Translation key naming this game mode.
      */
     private final @MayContainTrKey String translationKey;
 
     /**
-     * The default abilities associated with this game mode that should be tracked server-side.
+     * {@code abilities} holds this mode's default tracked capabilities. The
+     * generated getter exposes the stored mutable {@code EnumSet}; callers must
+     * leave it unchanged.
      */
     private final @UnmodifiableView EnumSet<PlayerAbility> abilities;
 
     /**
-     * Looks up a game mode by the id passed.
+     * Returns the game mode at the supplied declaration-order index. Supported
+     * indexes are {@code 0} through {@code 3}; invalid indexes throw instead of
+     * returning {@code null}.
      *
-     * @param id the id to look up
-     * @return the game mode, or {@code null} if failed to find a game mode
+     * @throws ArrayIndexOutOfBoundsException if {@code id} is outside the four game
+     * modes
      */
     public static GameMode from(int id) {
         return VALUES[id];

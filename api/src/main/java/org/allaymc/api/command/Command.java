@@ -9,45 +9,54 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * {@code Command} represents a named command with descriptive metadata,
+ * permissions, aliases, and a parsing tree. The constructor creates the tree
+ * and invokes {@code prepareCommandTree} immediately; subclasses configure
+ * argument paths and executors there before registration makes the command
+ * available.
+ *
  * @author daoge_cmd
  */
 public abstract class Command {
 
     /**
-     * The name of the command.
+     * Registered command name used for lookup and syntax feedback.
      */
     @Getter
     protected final String name;
     /**
-     * The description of the command.
+     * Command description, which may contain a translation key.
      */
     @Getter
     @MayContainTrKey
     protected final String description;
     /**
-     * The permissions required to execute this command.
+     * {@code permissions} contains command-wide requirements checked by the
+     * registry. {@code getPermissions()} exposes the mutable list, and new
+     * execution contexts copy its current entries for feedback filtering.
      */
     @Getter
     protected final List<String> permissions;
     /**
-     * The aliases of this command.
+     * {@code aliases} contains alternate lookup names. {@code getAliases()}
+     * exposes this mutable list, which {@code CommandRegistry.findCommand}
+     * searches after direct name lookup fails.
      */
     @Getter
     protected final List<String> aliases;
     /**
-     * The command tree of this command.
+     * Argument tree configured during construction and reused for executions.
      */
     @Getter
     protected final CommandTree commandTree;
 
     /**
-     * Constructs a new {@code Command} instance with the specified name, description, and permission.
-     * This allows the creation of a command with a specific permission required for execution.
-     *
-     * @param name        The name of the command.
-     * @param description The description of the command, which may contain a translation key.
-     * @param permission  The string representing the required permission to execute the command. Can be {@code null}
-     *                    if the command does not require any permission to execute.
+     * Creates a command, initializes its mutable metadata lists, and prepares
+     * its argument tree. {@code name} and {@code description} must be non-null;
+     * {@code permission == null} creates no initial permission requirement. The
+     * constructor invokes the overridable {@code prepareCommandTree} before
+     * subclass construction finishes, so that callback must not depend on
+     * subclass field initialization.
      */
     public Command(String name, @MayContainTrKey String description, String permission) {
         this.name = Objects.requireNonNull(name);
@@ -62,42 +71,37 @@ public abstract class Command {
     }
 
     /**
-     * Executes this command with the given sender and arguments.
-     *
-     * @param sender The sender of the command
-     * @param args   The arguments provided to the command
-     * @return The result of the command execution
+     * Parses the supplied argument array and executes the selected tree path.
+     * {@code args} excludes the command name; the tree owns argument
+     * validation, and this entry point does not perform the registry's
+     * command-wide permission check or feedback broadcast.
      */
     public CommandResult execute(CommandSender sender, String[] args) {
         return commandTree.parse(sender, args);
     }
 
     /**
-     * Prepare the command tree for this command.
-     *
-     * @param tree The command tree to prepare
+     * Configures argument paths and executors on this command's newly created
+     * tree. The base constructor calls this callback before subclass
+     * initialization completes, so implementations must build their tree
+     * without reading fields initialized later by the subclass.
      */
     public abstract void prepareCommandTree(CommandTree tree);
 
     /**
-     * Whether this command is only available on the server side. If a command is server side
-     * only, this command won't be sent to the client.
-     * <p>
-     * Some commands like `/help` are server-side only because in client-side these commands are
-     * handled by the client itself and will not request the server to handle them. Sending these
-     * commands to the client will cause unknown behavior (e.g., crashing the client).
-     *
-     * @return {@code true} if this command is server side only, otherwise {@code false}
+     * Returns whether this command is omitted from client command
+     * advertisements. The default is {@code false}; implementations returning
+     * {@code true} still remain available through server command lookup and
+     * execution.
      */
     public boolean isServerSideOnly() {
         return false;
     }
 
     /**
-     * Checks if this command is a debug command. If return {@code true}, the command name
-     * will become blue client-side.
-     *
-     * @return {@code true} if this command is a debug command, otherwise {@code false}
+     * Returns whether client command metadata marks this as a debug command.
+     * The default is {@code false}; an override changes the advertised debug
+     * flag without changing the command's parsing tree or permissions.
      */
     public boolean isDebugCommand() {
         return false;

@@ -5,24 +5,19 @@ import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
 
 /**
- * Represents a processor for a specific block property.
- * <p>
- * Block property processor is used when placing a block, to indicate the correct value for block property
- * base on the placement information.
- * <br>
- * This prevents writing a lot of complicated code for the blocks which are using the same block property type.
+ * {@code BlockPropertyProcessor} derives block-state property values from placement
+ * coordinates and player interaction information. Shared processors allow placement
+ * behavior to apply the same orientation or placement rule to several block types
+ * while returning the selected state for the caller to place.
  *
  * @author daoge_cmd
  */
 @FunctionalInterface
 public interface BlockPropertyProcessor {
     /**
-     * Process the block state based on the placement information.
-     *
-     * @param blockState    the block state to process
-     * @param placeBlockPos the position where the block is placed
-     * @param placementInfo the placement information
-     * @return the processed block state
+     * Returns the state selected from the supplied placement context. The caller
+     * remains responsible for placing that state in the dimension, and each
+     * processor defines which properties and interaction information it requires.
      */
     BlockState process(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 }

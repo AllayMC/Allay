@@ -1,124 +1,108 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Shared component for arrow entities, including damage, pickup, and enchantment-derived flags.
+ * {@code EntityArrowBaseComponent} exposes arrow impact properties,
+ * enchantment levels, and pickup flags. Arrow physics consumes these values
+ * when calculating hits, while player pickup handling combines {@code
+ * inGround}, {@code infinite}, and {@code pickUpDisabled} to decide whether an
+ * overlapping arrow becomes an inventory item.
  *
  * @author daoge_cmd
  */
 public interface EntityArrowBaseComponent extends EntityBaseComponent {
 
     /**
-     * Checks if the arrow is critical. A critical arrow deals extra damage and has a different particle effect.
-     *
-     * @return {@code true} if the arrow is critical, {@code false} otherwise.
+     * Returns whether the arrow carries the critical-impact and particle flag.
      */
     boolean isCritical();
 
     /**
-     * Sets whether the arrow is critical. A critical arrow deals extra damage and has a different particle effect.
-     *
-     * @param critical {@code true} to make the arrow critical, {@code false} otherwise
+     * Changes the critical-impact flag and publishes the updated entity state.
+     * Critical damage handling reads this flag on entity impact, and block
+     * impact clears it when the arrow becomes embedded.
      */
     void setCritical(boolean critical);
 
     /**
-     * Checks whether the arrow is embedded in a block.
-     *
-     * @return {@code true} if the arrow is embedded in a block, {@code false} otherwise
+     * Returns whether the arrow is currently marked as embedded in a block.
      */
     boolean isInGround();
 
     /**
-     * Sets whether the arrow is embedded in a block.
-     *
-     * @param inGround {@code true} if the arrow is embedded in a block, {@code false} otherwise
+     * Changes the stored flag that marks the arrow as embedded. Arrow physics
+     * uses this flag to suppress motion while block collision remains, and
+     * player pickup requires it.
      */
     void setInGround(boolean inGround);
 
     /**
-     * Gets the base damage of the arrow.
-     *
-     * @return the base damage of the arrow
+     * Returns the arrow base damage before impact-specific damage adjustments.
      */
     float getBaseDamage();
 
     /**
-     * Sets the base damage of the arrow.
-     *
-     * @param damage the base damage to set
+     * Stores the arrow base damage used by later impact calculations.
      */
     void setBaseDamage(float damage);
 
     /**
-     * Gets the power level of the arrow. Power level increases the damage dealt by the arrow.
-     *
-     * @return the power level of the arrow
+     * Returns the stored Power enchantment level used by arrow damage.
      */
     int getPowerLevel();
 
     /**
-     * Sets the power level of the arrow. Power level increases the damage dealt by the arrow.
-     *
-     * @param level the power level to set
+     * Stores the Power enchantment level used by later entity impacts.
      */
     void setPowerLevel(int level);
 
     /**
-     * Gets the punch level of the arrow. Punch level increases the knockback effect of the arrow.
-     *
-     * @return the punch level of the arrow
+     * Returns the stored Punch enchantment level used by impact knockback.
      */
     int getPunchLevel();
 
     /**
-     * Sets the punch level of the arrow. Punch level increases the knockback effect of the arrow.
-     *
-     * @param level the punch level to set
+     * Stores the Punch enchantment level used by later impact knockback.
      */
     void setPunchLevel(int level);
 
     /**
-     * Checks if this arrow cannot be picked up because it was created by a creative player or because
-     * the infinity enchantment prevented a normal arrow from being consumed. Tipped arrows are not
-     * affected by infinity and remain pickable.
-     *
-     * @return {@code true} if the arrow is infinite, {@code false} otherwise.
+     * Returns whether pickup removes this arrow without granting an item.
+     * Creative shots and applicable Infinity shots set this flag; {@code
+     * isPickUpDisabled()} takes precedence and prevents that pickup handling
+     * entirely.
      */
     boolean isInfinite();
 
     /**
-     * Sets whether this arrow cannot be picked up after being shot by a creative player or without
-     * consuming a normal arrow through the infinity enchantment.
-     *
-     * @param infinite {@code true} to make the arrow infinite, {@code false} otherwise
+     * Changes whether pickup discards this arrow instead of granting an item.
+     * This flag applies only after pickup handling accepts the embedded arrow
+     * and its pickup-disabled flag is clear.
      */
     void setInfinite(boolean infinite);
 
     /**
-     * Checks if the arrow can be picked up by players.
-     *
-     * @return {@code true} if the arrow cannot be picked up, {@code false} otherwise.
+     * Returns whether player pickup handling skips this arrow entirely. A
+     * disabled arrow remains in the world during that handling, including when
+     * the separate infinite flag is set.
      */
     boolean isPickUpDisabled();
 
     /**
-     * Sets whether the arrow can be picked up by players.
-     *
-     * @param disablePickUp {@code true} to disable picking up the arrow, {@code false} to enable it
+     * Changes whether players may process this arrow during pickup. Passing
+     * {@code true} leaves an overlapping embedded arrow untouched by pickup,
+     * while {@code false} allows the remaining pickup rules to run.
      */
     void setPickUpDisabled(boolean disablePickUp);
 
     /**
-     * Gets the piercing level of the arrow. Piercing allows the arrow to pass through entities.
-     *
-     * @return the piercing level of the arrow
+     * Returns the stored Piercing level that controls continued entity
+     * penetration.
      */
     int getPiercingLevel();
 
     /**
-     * Sets the piercing level of the arrow. Piercing allows the arrow to pass through entities.
-     *
-     * @param level the piercing level to set
+     * Stores the Piercing level used when deciding whether impacts remove the
+     * arrow.
      */
     void setPiercingLevel(int level);
 }

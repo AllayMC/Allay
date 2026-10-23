@@ -3,12 +3,12 @@ package org.allaymc.api.world.sound;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * Sound played when a player uses an item on a block (for example, using a shovel to make a path).
+ * {@code ItemUseOnBlockSound} describes the material sound for an item
+ * interaction with a block. Callers such as terrain-changing tools pass the
+ * resulting state; the runtime sends the supplied state hash unchanged and
+ * does not recover the block's previous state.
  *
- * <p>Note: in many cases the provided {@code blockState} is the *resulting* block state (the new block),
- * not the block that was present before the action.</p>
- *
- * @param blockState the resulting block state after the item use; the played sound often depends on this value
+ * @param blockState state supplying the interaction sound material
  */
 public record ItemUseOnBlockSound(BlockState blockState) implements Sound {
 }

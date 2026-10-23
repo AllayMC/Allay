@@ -16,20 +16,56 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
- * Similar to {@link CachedSimpleSelectorArgument}, but designed for filter mode. No further explanation is provided here.<p/>
+ * {@code CachedFilterSelectorArgument} reuses parsed list filter functions
+ * keyed by the set of argument strings. The key ignores value order and
+ * repeated identical values, and it excludes selector type, sender, and base
+ * position. Subclasses must account for those omissions when deciding whether
+ * their function is safe to reuse.
  *
- * @see CachedSimpleSelectorArgument
+ * <p>
+ * A cache hit returns the function currently stored for its key. A miss invokes
+ * {@code cache} with the current context, then installs its result;
+ * simultaneous misses can compute separately and replace one another's stored
+ * functions because lookup and insertion are separate operations. The default
+ * policy permits up to {@code 65535} entries and expires entries one minute
+ * after access.
  */
 public abstract class CachedFilterSelectorArgument implements SelectorArgument {
+    /**
+     * {@code cache} retains parsed list filter functions by argument-value set.
+     * Context-dependent captured values remain those of the invocation that
+     * created each cached function.
+     */
     private final Cache<Set<String>, Function<List<Entity>, List<Entity>>> cache;
 
+    /**
+     * Creates the handler's cache through the overridable
+     * {@code provideCacheService} hook. The hook runs before subclass
+     * initialization completes, so implementations cannot depend on subclass
+     * fields initialized after this constructor.
+     */
     public CachedFilterSelectorArgument() {
         this.cache = provideCacheService();
     }
 
+    /**
+     * Returns the currently cached list filter for the argument-value set,
+     * computing and installing one on a miss. Argument ordering and duplicates
+     * do not distinguish keys. Selector type, sender, and base position are
+     * passed only to a miss and cannot refresh captured state on a hit.
+     *
+     * <p>
+     * Lookup and insertion are separate, so concurrent misses can compute
+     * different functions and replace the stored entry without eviction. Each
+     * hit returns whichever function its lookup observes. The subclass must
+     * return a non-null cacheable function, and parse failures propagate
+     * without installing a value from that invocation.
+     */
     @Override
     public Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
         var value = cache.getIfPresent(Sets.newHashSet(arguments));
+        // Only argument values identify this entry. A miss supplies the current
+        // context to the subclass; a hit necessarily reuses any earlier captured state.
         if (value == null) {
             value = cache(selectorType, sender, basePos, arguments);
             cache.put(Sets.newHashSet(arguments), value);
@@ -37,34 +73,27 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
         return value;
     }
 
+    /**
+     * Returns {@code true} so selector processing invokes this handler as a
+     * list filter.
+     */
     @Override
     public boolean isFilter() {
         return true;
     }
 
     /**
-     * Computes and returns a filter function if it is not found in the cache.
-     * <p>
-     * This method must be implemented by subclasses to define how the filter function is
-     * generated based on the provided arguments.
-     *
-     * @param selectorType the type of selector being used
-     * @param sender       the command sender invoking the selector
-     * @param basePos      the base position for relative coordinates (if required)
-     * @param arguments    the arguments used to compute the filter
-     * @return a function that filters a list of entities
-     * @throws SelectorSyntaxException if there is an error parsing the arguments
+     * Computes a non-null list filter for an argument-value set not currently
+     * cached. Implementations must make any captured context safe for later
+     * reuse because future hits with different senders or origins bypass this
+     * hook.
      */
     protected abstract Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException;
 
     /**
-     * Provides the cache service used to store filter functions.
-     * <p>
-     * By default, this method creates a cache with a maximum size of 65,535 entries and an
-     * expiration time of 1 minute after the last access. Subclasses may override this method
-     * to provide their own cache configurations if necessary.
-     *
-     * @return a {@code Cache<Set<String>, Function<List<Entity>, List<Entity>>>} to store filter functions
+     * Creates the default cache with at most {@code 65535} entries and
+     * one-minute access expiration. Subclasses may replace the policy, but the
+     * constructor calls this hook before their own initialization finishes.
      */
     protected Cache<Set<String>, Function<List<Entity>, List<Entity>>> provideCacheService() {
         return Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();

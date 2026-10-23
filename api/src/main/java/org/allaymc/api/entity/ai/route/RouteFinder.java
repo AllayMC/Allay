@@ -6,19 +6,19 @@ import org.joml.Vector3dc;
 import java.util.List;
 
 /**
- * Finds a route from the entity's current position to a target position.
+ * {@code RouteFinder} searches for waypoints connecting an intelligent entity
+ * to a target position. Implementations determine which positions are
+ * traversable and may return a partial route when their search limit is
+ * reached, so consumers follow the returned nodes rather than assuming arrival.
  *
  * @author daoge_cmd
  */
 public interface RouteFinder {
 
     /**
-     * Search for a route from the entity's position to the target.
-     *
-     * @param entity the entity
-     * @param target the target position
-     *
-     * @return the list of route nodes (empty if no path found)
+     * Searches from the entity's current position toward the supplied target.
+     * The result can be empty when no route is available, and bounded
+     * implementations may return waypoints ending before the target.
      */
     List<Node> search(EntityIntelligent entity, Vector3dc target);
 }

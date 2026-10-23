@@ -14,22 +14,45 @@ import org.allaymc.api.world.particle.ShootParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 
 /**
- * Dispense behavior for water bottle (potion) items.
- * Converts dirt and coarse dirt to mud when dispensed onto them.
+ * {@code WaterBottleDispenseBehavior} converts dirt or coarse dirt immediately in front of a
+ * dispenser into mud when the selected item is a water potion. Other items, other potion
+ * types, and other target blocks retain default dispensing behavior instead of entering the
+ * mud conversion path.
+ *
+ * <p>
+ * An eligible conversion requests the block write before emitting effects and returning a
+ * successful result with a glass bottle. The dispenser caller then consumes its original
+ * potion and handles the bottle, so this behavior does not directly update inventory. The
+ * dimension's write result is ignored; consequently the returned success describes reaching
+ * the conversion calls rather than a coordinated guarantee that the target and inventory
+ * changed together.
  *
  * @author daoge_cmd
  */
 public class WaterBottleDispenseBehavior implements DispenseBehavior {
 
+    /**
+     * Converts the facing dirt or coarse dirt target to mud for a water potion, then returns a
+     * glass bottle. Other inputs and targets use default dispensing, which drops a single item
+     * for these potion cases.
+     *
+     * <p>
+     * The mud path emits effects and reports success after the dimension write call without
+     * checking its boolean result. The dispenser caller owns consumption of the original
+     * potion and handling of the returned bottle; this behavior does not directly mutate the
+     * dispenser inventory.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
-        // Only handle water bottles
+        // Preserve ordinary item dispensing when this handler receives an item without
+        // potion behavior, rather than attempting to interpret an unrelated stack as water.
         if (!(item instanceof ItemPotionComponent potionItem)) {
             return DefaultDispenseBehavior.INSTANCE.dispense(block, face, item);
         }
 
         if (potionItem.getPotionType() != PotionType.WATER) {
-            // For non-water potions, fall back to default behavior (drop the item)
+            // Nonwater potions keep their item form through default dispensing, so
+            // this conversion path never consumes them in exchange for an empty bottle.
             return DefaultDispenseBehavior.INSTANCE.dispense(block, face, item);
         }
 
@@ -38,18 +61,20 @@ public class WaterBottleDispenseBehavior implements DispenseBehavior {
         var targetBlock = dimension.getBlockState(targetPos);
         var targetBlockType = targetBlock.getBlockType();
 
-        // Convert dirt or coarse dirt to mud
         if (targetBlockType == BlockTypes.DIRT || targetBlockType == BlockTypes.COARSE_DIRT) {
             dimension.setBlockState(targetPos, BlockTypes.MUD.getDefaultState());
             spawnDispenseEffects(block, face);
-            // Return empty glass bottle
             return DispenseResult.success(ItemTypes.GLASS_BOTTLE.createItemStack(1));
         }
 
-        // Fall back to default behavior for other blocks
+        // An ineligible target keeps the water potion intact as a dropped item
+        // through default dispensing instead of returning a bottle without a mud conversion.
         return DefaultDispenseBehavior.INSTANCE.dispense(block, face, item);
     }
 
+    /**
+     * Emits a block-click sound and directional shoot particle at the dispenser center.
+     */
     protected void spawnDispenseEffects(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var center = MathUtils.center(block.getPosition());

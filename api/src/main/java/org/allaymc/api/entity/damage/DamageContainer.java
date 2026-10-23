@@ -15,94 +15,114 @@ import java.util.function.UnaryOperator;
 import static org.allaymc.api.entity.damage.DamageType.*;
 
 /**
- * DamageContainer is a container that stores the information of the damage, including
- * the attacker, the damage type, the source damage, the final damage, etc.
+ * {@code DamageContainer} carries the source, mutable damage amount, and
+ * knockback settings for one damage attempt. The living-entity damage pipeline
+ * and event listeners update the same instance, so callers must create a
+ * separate container when another attempt needs independent values.
  *
  * @author daoge_cmd
  */
 @Getter
 public class DamageContainer {
+    /**
+     * {@code DEFAULT_DAMAGE_COOL_DOWN} supplies the initial damage cooldown in
+     * entity ticks; the constructor applies it to each new damage attempt.
+     */
     public static final int DEFAULT_DAMAGE_COOL_DOWN = 10;
 
     /**
-     * The attacker of the damage. Attacker not only can be an entity, but also can be a block
-     * or even {@code null}, it depends on the caller.
+     * {@code attacker} identifies the damage source. The value can be an
+     * entity, a block type, another caller-defined object, or {@code null}; the
+     * selected {@code damageType} determines which source representations its
+     * consumers accept.
      */
     protected Object attacker;
     /**
-     * The type of this damage.
+     * Damage category and death-message provider.
      */
     protected DamageType damageType;
     /**
-     * The initial amount of damage.
+     * Original damage amount supplied at construction.
      */
     protected float sourceDamage;
     /**
-     * The final amount of damage.
+     * {@code finalDamage} holds the amount adjusted by listeners and the damage
+     * pipeline. The constructor starts it at {@code sourceDamage}; setters and
+     * {@code updateFinalDamage} replace it without range validation.
      */
     @Setter
     protected float finalDamage;
     /**
-     * Whether the damage has knockback. Set this to {@code false} to apply custom knockback.
+     * {@code hasKnockback} enables the living-entity pipeline's knockback
+     * handling. Listeners can clear this flag when another mechanism supplies
+     * the desired motion.
      */
     @Setter
     protected boolean hasKnockback;
     /**
-     * The cooldown after this damage. When an entity is on cooldown, it cannot be damaged.
+     * {@code coolDown} is the cooldown in entity ticks following this attempt.
+     * The living component retains the container and consults its current value
+     * when rejecting later attacks, including when this attempt is cancelled by
+     * listeners.
      */
     @Setter
     protected int coolDown;
     /**
-     * Whether this damage is critical. If this value is {@code true}, the final damage will be multiplied by {@code 1.5},
-     * and critical particle will be applied to the victim.
+     * {@code critical} requests critical-hit damage scaling and the victim's
+     * hit action. The attacker phase can replace this flag from the attacker's
+     * physics state before applying its {@code 1.5} multiplier.
      */
     @Setter
     protected boolean critical;
     /**
-     * Whether this damage is enchanted. If this value is {@code true}, action {@link EnchantedHit} will
-     * be applied to the victim.
+     * {@code enchanted} enables the enchanted-hit action on the victim. The
+     * attacker phase also sets this flag when it applies supported weapon
+     * enchantments.
      */
     @Setter
     protected boolean enchanted;
 
     /**
-     * Horizontal knockback strength. Defaults to {@link EntityPhysicsComponent#DEFAULT_KNOCKBACK}.
+     * Horizontal knockback strength used by the physics component.
      */
     @Setter
     protected double knockback = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
 
     /**
-     * Vertical knockback strength. Defaults to {@link EntityPhysicsComponent#DEFAULT_KNOCKBACK}.
+     * Vertical knockback strength used by the physics component.
      */
     @Setter
     protected double knockbackVertical = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
 
     /**
-     * Additional knockback motion vector (e.g., for knockback enchantment effect).
+     * {@code knockbackAdditional} holds extra motion passed to the physics
+     * component. The generated setter retains the supplied vector, and the
+     * getter exposes that same reference rather than a copy.
      */
     @Setter
     protected Vector3dc knockbackAdditional = new Vector3d();
 
     /**
-     * Source position for calculating knockback direction.
-     * If {@code null}, uses the attacker's position (default behavior).
-     * Projectiles can set this to hitPos - motion for accurate direction.
+     * {@code knockbackSource} specifies the position used to calculate
+     * knockback direction. When this value is {@code null} and {@code attacker}
+     * is an entity, the living component uses the attacker's location instead.
      */
     @Setter
     protected Vector3dc knockbackSource = null;
 
     /**
-     * Whether to ignore knockback resistance. Defaults to {@code false}.
+     * Whether physics bypasses the victim's knockback resistance.
      */
     @Setter
     protected boolean ignoreKnockbackResistance = false;
 
     /**
-     * Creates a new damage container.
+     * Creates mutable damage data with equal source and final damage amounts.
+     * {@code attacker} is retained as supplied, knockback starts enabled, and
+     * the cooldown starts at {@link #DEFAULT_DAMAGE_COOL_DOWN}; damage amounts
+     * are not range-checked.
      *
-     * @param attacker     the attacker that cause the damage. Can be {@code null}
-     * @param damageType   the type of this damage
-     * @param sourceDamage the source amount of damage
+     * @throws NullPointerException if {@code damageType} is {@code null}
      */
     public DamageContainer(Object attacker, DamageType damageType, float sourceDamage) {
         this.attacker = attacker;
@@ -114,225 +134,212 @@ public class DamageContainer {
     }
 
     /**
-     * Create a simple attack damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code API} damage with no attacker and the supplied amount. The
+     * new container uses the constructor's default knockback and cooldown
+     * settings. This factory has the same construction behavior as {@code api}.
      */
     public static DamageContainer simpleAttack(float sourceDamage) {
         return new DamageContainer(null, API, sourceDamage);
     }
 
     /**
-     * Create an entity attack damage container.
-     *
-     * @param attacker     the attacker
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code ENTITY_ATTACK} damage with the supplied entity as attacker
+     * and the supplied amount. The new container uses the constructor's default
+     * knockback and cooldown settings. Death-message generation expects a
+     * non-{@code null} attacker for this category.
      */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
         return new DamageContainer(attacker, ENTITY_ATTACK, sourceDamage);
     }
 
     /**
-     * Create a starve damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code STARVE} damage with no attacker and the supplied amount.
+     * The new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer starve(float sourceDamage) {
         return new DamageContainer(null, STARVE, sourceDamage);
     }
 
     /**
-     * Create a fall damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code FALL} damage with no attacker and the supplied amount. The
+     * new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer fall(float sourceDamage) {
         return new DamageContainer(null, FALL, sourceDamage);
     }
 
     /**
-     * Create a falling block damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code FALLING_BLOCK} damage with no attacker and the supplied
+     * amount. The new container uses the constructor's default knockback and
+     * cooldown settings. The source amount is retained without range
+     * validation.
      */
     public static DamageContainer fallingBlock(float sourceDamage) {
         return new DamageContainer(null, FALLING_BLOCK, sourceDamage);
     }
 
     /**
-     * Create a lightning damage container.
-     *
-     * @param attacker     the lightning bolt entity
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code LIGHTNING} damage with the supplied lightning entity as
+     * attacker and the supplied amount. The new container uses the
+     * constructor's default knockback and cooldown settings. The attacker
+     * reference is retained without copying or validation.
      */
     public static DamageContainer lightning(Entity attacker, float sourceDamage) {
         return new DamageContainer(attacker, LIGHTNING, sourceDamage);
     }
 
     /**
-     * Create a magic effect damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code MAGIC} damage with no attacker and the supplied amount.
+     * The new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer magicEffect(float sourceDamage) {
         return new DamageContainer(null, MAGIC, sourceDamage);
     }
 
     /**
-     * Create a magma damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code MAGMA} damage with no attacker and the supplied amount.
+     * The new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer magma(float sourceDamage) {
         return new DamageContainer(null, MAGMA, sourceDamage);
     }
 
     /**
-     * Create a campfire damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code CAMPFIRE} damage with no attacker and the supplied amount.
+     * The new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer campfire(float sourceDamage) {
         return new DamageContainer(null, CAMPFIRE, sourceDamage);
     }
 
     /**
-     * Create a drown damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code DROWN} damage with no attacker and the supplied amount.
+     * The new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer drown(float sourceDamage) {
         return new DamageContainer(null, DROWN, sourceDamage);
     }
 
     /**
-     * Create a fire tick damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code FIRE_TICK} damage with no attacker and the supplied
+     * amount. The new container uses the constructor's default knockback and
+     * cooldown settings. The source amount is retained without range
+     * validation.
      */
     public static DamageContainer fireTick(float sourceDamage) {
         return new DamageContainer(null, FIRE_TICK, sourceDamage);
     }
 
     /**
-     * Create a freezing (powder snow) damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code FREEZING} damage with no attacker and the supplied amount.
+     * The new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer freezing(float sourceDamage) {
         return new DamageContainer(null, FREEZING, sourceDamage);
     }
 
     /**
-     * Create a lava damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code LAVA} damage with no attacker and the supplied amount. The
+     * new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer lava(float sourceDamage) {
         return new DamageContainer(null, LAVA, sourceDamage);
     }
 
     /**
-     * Create a block explosion damage container with specific block type.
-     * Used for blocks that need custom death messages (e.g., bed, respawn anchor).
-     *
-     * @param blockType    the block type that caused the explosion
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code BLOCK_EXPLOSION} damage with the supplied block type as
+     * attacker and the supplied amount. The new container uses the
+     * constructor's default knockback and cooldown settings. A non-{@code null} block
+     * type selects block-specific explosion death wording.
      */
     public static DamageContainer blockExplosion(BlockType<?> blockType, float sourceDamage) {
         return new DamageContainer(blockType, BLOCK_EXPLOSION, sourceDamage);
     }
 
     /**
-     * Create an entity explosion damage container.
-     *
-     * @param attacker     the entity that exploded
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code ENTITY_EXPLOSION} damage with the supplied entity as
+     * attacker and the supplied amount. The new container uses the
+     * constructor's default knockback and cooldown settings. Death-message
+     * generation expects a non-{@code null} attacker for this category.
      */
     public static DamageContainer entityExplosion(Entity attacker, float sourceDamage) {
         return new DamageContainer(attacker, ENTITY_EXPLOSION, sourceDamage);
     }
 
     /**
-     * Create a contact damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code CONTACT} damage with no attacker and the supplied amount.
+     * The new container uses the constructor's default knockback and cooldown
+     * settings. Callers needing a block-specific death message must supply that
+     * source separately.
      */
     public static DamageContainer contact(float sourceDamage) {
         return new DamageContainer(null, CONTACT, sourceDamage);
     }
 
     /**
-     * Create a projectile damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code PROJECTILE} damage with the supplied projectile as
+     * attacker and the supplied amount. The new container uses the
+     * constructor's default knockback and cooldown settings. Death-message
+     * generation expects an {@code EntityProjectile} with a non-{@code null} shooter.
      */
     public static DamageContainer projectile(Entity projectile, float sourceDamage) {
         return new DamageContainer(projectile, PROJECTILE, sourceDamage);
     }
 
     /**
-     * Creates a void damage container.
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code VOID} damage with no attacker and the supplied amount. The
+     * new container uses the constructor's default knockback and cooldown
+     * settings. The source amount is retained without range validation.
      */
     public static DamageContainer voidDamage(float sourceDamage) {
         return new DamageContainer(null, VOID, sourceDamage);
     }
 
     /**
-     * Creates an API damage container with the specified source damage.
-     *
-     * @param sourceDamage the initial damage value from the source
-     * @return a new {@code DamageContainer} instance with the API damage type
+     * Creates {@code API} damage with no attacker and the supplied amount. The
+     * new container uses the constructor's default knockback and cooldown
+     * settings. This factory has the same construction behavior as
+     * {@code simpleAttack}.
      */
     public static DamageContainer api(float sourceDamage) {
         return new DamageContainer(null, API, sourceDamage);
     }
 
     /**
-     * Create a stalactite damage container (for falling dripstone hitting entities).
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code STALACTITE} damage with no attacker and the supplied
+     * amount. The new container uses the constructor's default knockback and
+     * cooldown settings. The source amount is retained without range
+     * validation.
      */
     public static DamageContainer stalactite(float sourceDamage) {
         return new DamageContainer(null, STALACTITE, sourceDamage);
     }
 
     /**
-     * Create a stalagmite damage container (for entities falling onto pointed dripstone).
-     *
-     * @param sourceDamage the source damage
-     * @return the damage container
+     * Creates {@code STALAGMITE} damage with no attacker and the supplied
+     * amount. The new container uses the constructor's default knockback and
+     * cooldown settings. The source amount is retained without range
+     * validation.
      */
     public static DamageContainer stalagmite(float sourceDamage) {
         return new DamageContainer(null, STALAGMITE, sourceDamage);
     }
 
     /**
-     * Get the attacker.
+     * Returns the retained attacker reference using the caller's requested
+     * type. The unchecked conversion does not verify the source category;
+     * callers must choose {@code T} consistently with the object supplied when
+     * this damage was created.
      *
-     * @param <T> the type of the attacker
-     * @return the attacker, or {@code null} if the attacker is not present
+     * @return the same attacker object, or {@code null} when no source was supplied
      */
     public <T> T getAttacker() {
         // noinspection unchecked
@@ -340,18 +347,20 @@ public class DamageContainer {
     }
 
     /**
-     * Update the final damage using the given updater.
-     *
-     * @param updater the updater
+     * Replaces final damage with the result of applying {@code updater} to its
+     * current value. The updater runs immediately, and a {@code null} updater
+     * or result fails before a replacement value can be stored.
      */
     public void updateFinalDamage(UnaryOperator<Float> updater) {
         this.finalDamage = updater.apply(this.finalDamage);
     }
 
     /**
-     * Check if the damage can be reduced by armor.
-     *
-     * @return {@code true} if the damage can be reduced by armor, otherwise {@code false}.
+     * Returns whether the current damage category permits armor reduction. The
+     * result consults the current mutable
+     * {@link DamageType#CANNOT_BE_REDUCED_BY_ARMOR_DAMAGE_TYPES} set on each
+     * call, so changes to that set affect existing containers as well as new
+     * ones.
      */
     public boolean canBeReducedByArmor() {
         return !CANNOT_BE_REDUCED_BY_ARMOR_DAMAGE_TYPES.contains(damageType);

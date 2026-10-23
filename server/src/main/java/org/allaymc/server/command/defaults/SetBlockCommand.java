@@ -12,13 +12,27 @@ import org.joml.Vector3d;
 import java.util.List;
 
 /**
+ * {@code SetBlockCommand} requests one block-state change in the executing
+ * entity's dimension. Its handler resolves optional properties before placement
+ * and rejects invalid state combinations; successful feedback describes the
+ * request without inspecting whether the dimension accepted the block change.
+ *
  * @author daoge_cmd
  */
 public class SetBlockCommand extends Command {
+    /**
+     * Creates the {@code /setblock} command with its built-in authorization permission.
+     */
     public SetBlockCommand() {
         super("setblock", TrKeys.MC_COMMANDS_SETBLOCK_DESCRIPTION, Permissions.COMMAND_SETBLOCK);
     }
 
+    /**
+     * Installs entity-only block placement with optional property values.
+     * Omitted properties use the block type's default state. The handler
+     * reports success after requesting placement, including when the dimension
+     * returns {@code false} for that request.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

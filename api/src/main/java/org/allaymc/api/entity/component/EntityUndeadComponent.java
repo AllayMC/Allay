@@ -1,13 +1,15 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Marker component for undead entities, including whether sunlight should ignite them.
+ * {@code EntityUndeadComponent} identifies entities subject to undead-specific
+ * sunlight handling. The default permits sunlight ignition; the server checks
+ * environmental exposure, fire resistance, and helmet protection before
+ * applying fire, so this flag alone does not make every daylight tick ignite
+ * the entity.
  */
 public interface EntityUndeadComponent extends EntityComponent {
     /**
-     * Check if sunlight will ignite the entity.
-     *
-     * @return {@code true} if the entity will be ignited by sunlight, {@code false} otherwise
+     * Returns whether sunlight ignition is enabled, with the default enabled.
      */
     default boolean ignitedBySunlight() {
         return true;

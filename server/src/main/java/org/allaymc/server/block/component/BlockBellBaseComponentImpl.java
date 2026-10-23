@@ -21,19 +21,47 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 /**
- * Implementation of bell block behavior.
+ * {@code BlockBellBaseComponentImpl} places bells on supported surfaces and
+ * translates player, projectile, and redstone triggers into bell block-entity
+ * rings. Placement derives a standing, hanging, single-side, or double-side
+ * attachment from the clicked surface and available supports. Later neighbor
+ * updates recheck those supports before processing redstone power.
+ *
+ * <p>
+ * Ringing derives an animation direction from the source entity's position, with
+ * north as the default for entity-free triggers. {@code isValidHitDirection}
+ * combines that direction with the stored attachment and orientation before an
+ * event is dispatched. Redstone uses {@code TOGGLE_BIT} to detect a rising edge,
+ * and the bit advances even when the resulting ring is vetoed.
  *
  * @author daoge_cmd
  */
 public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * {@code blockEntityHolderComponent} resolves bell block entities for accepted
+     * rings. Component initialization injects the dependency before the composed
+     * behavior handles interaction or neighbor updates.
+     */
     @Dependency
     private BlockBlockEntityHolderComponent<BlockEntityBell> blockEntityHolderComponent;
 
+    /**
+     * Creates the bell block component for the supplied registered block type.
+     */
     public BlockBellBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places a bell with an attachment supported by the clicked surface. A
+     * {@code null} placement context delegates to ordinary placement. Player
+     * placement uses the player's opposite facing for floor and ceiling
+     * attachments, or the clicked horizontal face for a side attachment. A second
+     * support selects the double-side form. {@code checkSupport} validates the
+     * selected form before the new attachment and direction properties reach
+     * shared placement handling.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -57,7 +85,6 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
             }
             default -> {
                 bellDirection = face;
-                // Check if opposite side also has support
                 var oppositeSide = placementInfo.getClickedBlock().offsetPos(face);
                 if (canSupportBell(oppositeSide, face.opposite())) {
                     attachment = Attachment.MULTIPLE;
@@ -67,7 +94,6 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Verify support
         if (!checkSupport(dimension, placeBlockPos, attachment, bellDirection)) {
             return false;
         }
@@ -79,6 +105,11 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
         return super.place(dimension, newState, placeBlockPos, placementInfo);
     }
 
+    /**
+     * Returns whether the blocks required by the selected attachment support the
+     * bell. Standing and hanging forms test one vertical neighbor; the double-side
+     * form requires both horizontal supports.
+     */
     private boolean checkSupport(Dimension dimension, Vector3ic pos, Attachment attachment, BlockFace direction) {
         return switch (attachment) {
             case STANDING -> canSupportBell(new Block(dimension, new Vector3i(pos.x(), pos.y() - 1, pos.z())), BlockFace.UP);
@@ -110,28 +141,25 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Check if a block can support a bell on the specified face.
-     * <p>
-     * According to MC wiki: "Bells can only be placed below a block with a full
-     * center bottom face or on a block with a full top surface and side faces."
-     *
-     * @param block the potential support block
-     * @param face the face of the support block that the bell attaches to
-     * @return true if the block can support a bell on that face
+     * Returns whether the collision shape supports the requested bell attachment.
+     * Ceiling attachment needs a full center bottom face, while floor and side
+     * attachments require a full face.
      */
     private boolean canSupportBell(Block block, BlockFace face) {
         var shape = block.getBlockStateData().collisionShape();
 
         return switch (face) {
-            // Bell hangs from block above - needs full center at bottom
             case DOWN -> shape.isCenterFull(BlockFace.DOWN);
-            // Bell stands on block below - needs full top surface
             case UP -> shape.isFull(BlockFace.UP);
-            // Bell attaches to side - needs full side face
             default -> shape.isFull(face);
         };
     }
 
+    /**
+     * Runs shared handling, breaks unsupported bells, and detects redstone rising
+     * edges. {@code TOGGLE_BIT} records the observed power after the ring attempt,
+     * including when ringing is rejected or cancelled.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -139,18 +167,17 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
         var attachment = block.getPropertyValue(BlockPropertyTypes.ATTACHMENT);
         var direction = BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4));
 
-        // Check if bell lost support
         if (!checkSupport(block.getDimension(), block.getPosition(), attachment, direction)) {
             block.breakBlock();
             return;
         }
 
-        // Check redstone power
         var toggleBit = block.getPropertyValue(BlockPropertyTypes.TOGGLE_BIT);
         var powered = block.isPowered();
 
+        // Remember the powered state after attempting the ring, so a vetoed event
+        // does not cause repeated ring attempts while power remains high.
         if (powered && !toggleBit) {
-            // Rising edge - ring the bell
             ring(block, null, BellRingEvent.RingCause.REDSTONE);
             block.getDimension().updateBlockProperty(BlockPropertyTypes.TOGGLE_BIT, true, block.getPosition());
         } else if (!powered && toggleBit) {
@@ -158,6 +185,11 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Attempts a player-triggered ring using the clicked bell and player. A
+     * missing interaction returns {@code false}; otherwise direction validation
+     * and event cancellation determine the returned ring result.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) {
@@ -170,21 +202,25 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
         return ring(block, player, BellRingEvent.RingCause.PLAYER_INTERACTION);
     }
 
+    /**
+     * Attempts a projectile-triggered ring using the projectile's current
+     * position.
+     */
     @Override
     public void onProjectileHit(Block block, EntityProjectile projectile, Vector3dc hitPos) {
         ring(block, projectile, BellRingEvent.RingCause.PROJECTILE);
     }
 
     /**
-     * Ring the bell.
-     *
-     * @param block  the bell block
-     * @param entity the entity that caused the ring, or null
-     * @param cause  the cause of the ring
-     * @return true if the bell was successfully rung
+     * Validates a ringing direction and dispatches a cancellable bell request. The
+     * larger horizontal displacement from the bell center chooses the source side;
+     * ties use the north-south axis, and {@code null} sources default to north.
+     * Attachment and stored orientation can reject that side before dispatch. An
+     * accepted event forwards the direction to the resolved bell entity. The
+     * method still returns {@code true} if a holder supplies no bell entity after
+     * event acceptance.
      */
     public boolean ring(Block block, Entity entity, BellRingEvent.RingCause cause) {
-        // Calculate direction based on entity position or default
         int direction = 0;
         if (entity != null) {
             var entityPos = entity.getLocation();
@@ -192,6 +228,8 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
             var dx = entityPos.x() - (blockPos.x() + 0.5);
             var dz = entityPos.z() - (blockPos.z() + 0.5);
 
+            // Choose the dominant horizontal axis so diagonal sources still map to
+            // one animation side; equal displacements select the north-south axis.
             if (Math.abs(dx) > Math.abs(dz)) {
                 direction = dx > 0 ? 1 : 3; // East or West
             } else {
@@ -199,7 +237,6 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Validate direction based on attachment
         var attachment = block.getPropertyValue(BlockPropertyTypes.ATTACHMENT);
         var bellDirection = block.getPropertyValue(BlockPropertyTypes.DIRECTION_4);
 
@@ -207,14 +244,12 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Call event
         var event = new BellRingEvent(block, cause, entity, direction);
         event.call();
         if (event.isCancelled()) {
             return false;
         }
 
-        // Get block entity and ring
         var bellEntity = blockEntityHolderComponent.getBlockEntity(block.getPosition());
         if (bellEntity != null) {
             bellEntity.ring(direction);
@@ -223,16 +258,23 @@ public class BlockBellBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Returns whether the animation direction is valid for this attachment.
+     * Standing bells require the orientation axis, double-side bells require the
+     * perpendicular axis, and side or hanging bells accept either axis.
+     */
     private boolean isValidHitDirection(Attachment attachment, int bellDirection, int hitDirection) {
         return switch (attachment) {
             case STANDING -> {
-                // Standing bells can only be hit from the axis they face
+                // Direction parity groups opposite sides onto the same horizontal
+                // axis.
                 var bellAxis = bellDirection % 2; // 0 or 2 = Z axis, 1 or 3 = X axis
                 var hitAxis = hitDirection % 2;
                 yield bellAxis == hitAxis;
             }
             case MULTIPLE -> {
-                // Multiple attachment can be hit from perpendicular directions
+                // The double-side mount accepts the axis perpendicular to its
+                // orientation.
                 var bellAxis = bellDirection % 2;
                 var hitAxis = hitDirection % 2;
                 yield bellAxis != hitAxis;

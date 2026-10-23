@@ -9,7 +9,10 @@ import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a projectile is launched by an entity.
+ * {@code ProjectileLaunchEvent} represents a cancellable request to launch a
+ * projectile for a shooter. Item launch handlers dispatch it before adding the
+ * projectile to a dimension; handlers can change {@code throwForce}, whose use
+ * depends on the emitting launcher.
  *
  * @author daoge_cmd
  */
@@ -18,21 +21,33 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class ProjectileLaunchEvent extends EntityEvent implements CancellableEvent {
 
     /**
-     * The entity that shoot this projectile.
+     * {@code shooter} retains the entity supplied by the launcher. The event
+     * stores this reference independently from the projectile component
+     * shooter assignment.
      */
     protected Entity shooter;
     /**
-     * The throw force of the projectile.
+     * {@code throwForce} carries the launcher-specific force value. Generic
+     * projectile item handling reads the modified value when computing initial
+     * motion after the event succeeds.
      */
     @Setter
     protected double throwForce;
 
+    /**
+     * Creates a launch event retaining the projectile and shooter references
+     * with the supplied force. The event performs no launch itself, and the
+     * emitting item handler interprets cancellation and force changes.
+     */
     public ProjectileLaunchEvent(EntityProjectile entity, Entity shooter, double throwForce) {
         super(entity);
         this.shooter = shooter;
         this.throwForce = throwForce;
     }
 
+    /**
+     * Returns the projectile entity retained as this launch event source.
+     */
     @Override
     public EntityProjectile getEntity() {
         return (EntityProjectile) super.getEntity();

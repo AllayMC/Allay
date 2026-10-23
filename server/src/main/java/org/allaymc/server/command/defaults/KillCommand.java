@@ -18,18 +18,30 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * {@code KillCommand} requests command damage for living targets and removal for
+ * other entities. Creative and spectator players are skipped during processing,
+ * while an all-creative or empty selection fails the initial guard. Feedback
+ * counts processed targets without confirming their resulting death or removal.
+ *
  * @author daoge_cmd
  */
 public class KillCommand extends Command {
 
+    /**
+     * Creates the {@code /kill} command with its built-in authorization permission.
+     */
     public KillCommand() {
         super("kill", TrKeys.MC_COMMANDS_KILL_DESCRIPTION, Permissions.COMMAND_KILL);
     }
 
+    /**
+     * Installs entity-only killing with the sender as the omitted target.
+     * Living targets receive {@link DamageType#COMMAND} damage; other entities
+     * receive removal requests. The summary counts attempted targets even when
+     * downstream events prevent damage or removal.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
-        // Set default value to null to
-        // mark that the sender want to suicide
         tree.getRoot().target("targets", null).optional().exec((context, sender) -> {
             List<Entity> targets = context.getResult(0);
             if (targets == null) {
@@ -48,6 +60,7 @@ public class KillCommand extends Command {
                 }
 
                 if (target instanceof EntityLiving living) {
+                    // The fixed damage amount requests a lethal-sized command hit.
                     living.attack(new DamageContainer(null, DamageType.COMMAND, 1_000_000));
                 } else {
                     target.remove();

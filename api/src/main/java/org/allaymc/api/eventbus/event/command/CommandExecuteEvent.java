@@ -9,7 +9,11 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a command is about to be executed.
+ * {@code CommandExecuteEvent} represents a command execution request before
+ * registry lookup and permission checks. Listeners may replace the sender or
+ * slash-free command text through the generated setters, or cancel the request.
+ * The registry reads the updated values only when event dispatch permits
+ * execution.
  *
  * @author daoge_cmd
  */
@@ -19,11 +23,15 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.ANY)
 public class CommandExecuteEvent extends CommandEvent implements CancellableEvent {
     /**
-     * The command sender.
+     * {@code commandSender} is the sender used after event dispatch. Replacing
+     * it changes subsequent permission checks, execution origin, and feedback
+     * delivery for this request.
      */
     protected CommandSender commandSender;
     /**
-     * The command being executed.
+     * {@code command} holds command text without a leading {@code /}. The
+     * registry tokenizes the listener-updated value only after cancellation
+     * checks pass.
      */
     protected String command;
 }

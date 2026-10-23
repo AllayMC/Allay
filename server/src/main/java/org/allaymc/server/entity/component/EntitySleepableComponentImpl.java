@@ -14,19 +14,54 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 /**
- * Implementation of EntitySleepableComponent for entities that can sleep in a bed.
+ * {@code EntitySleepableComponentImpl} stores an entity's sleeping bed
+ * position and synchronizes sleep presentation with bed occupancy.
+ * {@code sleep} accepts an awake entity only after the cancellable sleep
+ * event, copies the requested position, and resets the world's required sleep
+ * countdown. A location that currently contains no bed still becomes the
+ * entity's sleeping position.
+ *
+ * <p> {@code wake} clears {@code sleepingPos} before notifying listeners, then
+ * releases the previous bed if it still exists and sends the wake animation.
+ * Bed updates and event delivery occur in sequence without rollback, so an
+ * exception can leave earlier state changes applied. Callers must use the
+ * entity's normal ticking context for these world mutations.
  */
 public class EntitySleepableComponentImpl implements EntitySleepableComponent {
 
+    /**
+     * {@code IDENTIFIER} names this component implementation for provider
+     * lookup and replacement when entity types assemble their component sets.
+     */
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_sleepable_component");
 
+    /**
+     * Injected entity whose sleeping state and bed are updated.
+     */
     @ComponentObject
     protected Entity thisEntity;
 
+    /**
+     * {@code sleepingPos} holds a copied bed head position while sleeping and
+     * {@code null} while awake. The generated getter exposes the retained
+     * vector through its read-only interface.
+     */
     @Getter
     protected Vector3ic sleepingPos;
 
+    /**
+     * Attempts to store a bed head position and publish sleeping state for an
+     * awake entity. Already sleeping entities return without another event,
+     * and cancellation leaves the existing state unchanged. Callers must use
+     * the entity's ticking context because accepted sleep updates the world
+     * countdown and may change a bed block.
+     *
+     * <p> The accepted position is copied before storage, so later caller
+     * edits to the input vector do not move the sleeping anchor. Bed occupancy
+     * is changed only when that position currently holds a bed; the sleep
+     * state is retained even for other blocks.
+     */
     @Override
     public void sleep(Vector3ic bedPos) {
         if (isSleeping()) {
@@ -41,7 +76,8 @@ public class EntitySleepableComponentImpl implements EntitySleepableComponent {
         this.sleepingPos = new Vector3i(bedPos);
         thisEntity.getWorld().setRequiredSleepTicks(100);
 
-        // Mark the bed as occupied
+        // Store sleepingPos before changing occupancy and broadcasting metadata so
+        // the entity state sent to viewers describes the accepted sleeping anchor.
         var dimension = thisEntity.getDimension();
         var blockState = dimension.getBlockState(bedPos);
         if (blockState.getBlockType() == BlockTypes.BED) {
@@ -54,6 +90,18 @@ public class EntitySleepableComponentImpl implements EntitySleepableComponent {
         thisEntity.broadcastState();
     }
 
+    /**
+     * Clears a sleeping entity's anchor and publishes its wake transition.
+     * Awake entities return immediately, and callers must use the entity's
+     * ticking context for the bed and viewer updates. The wake event observes
+     * the entity as awake because {@code sleepingPos} is cleared before
+     * notification.
+     *
+     * <p> The previous bed is released only if a bed still occupies that
+     * position. The wake animation and final state broadcast follow the
+     * notification and bed update, and an intervening exception leaves earlier
+     * changes applied rather than restoring the sleeping anchor.
+     */
     @Override
     public void wake() {
         if (!isSleeping()) {
@@ -65,7 +113,8 @@ public class EntitySleepableComponentImpl implements EntitySleepableComponent {
 
         new EntityWakeEvent(thisEntity, prevPos).call();
 
-        // Mark the bed as unoccupied
+        // Recheck the old position after notification because listeners or world
+        // changes may have replaced the bed that originally held this sleeper.
         if (prevPos != null) {
             var dimension = thisEntity.getDimension();
             var blockState = dimension.getBlockState(prevPos);
@@ -77,7 +126,6 @@ public class EntitySleepableComponentImpl implements EntitySleepableComponent {
             }
         }
 
-        // Send wake-up animation to all viewers (and the entity itself if player)
         thisEntity.applyAction(SimpleEntityAction.WAKE_UP);
         thisEntity.broadcastState();
     }

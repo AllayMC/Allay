@@ -1,23 +1,25 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Shared component for sheep entities that track whether the sheep has been sheared.
+ * {@code EntitySheepBaseComponent} exposes whether a sheep's wool has been
+ * removed. The server uses this flag to decide whether shearing can succeed and
+ * whether wool belongs in death drops, while dye color remains a separate
+ * component's state.
  *
  * @author daoge_cmd
  */
 public interface EntitySheepBaseComponent extends EntityBaseComponent {
 
     /**
-     * Check if this sheep has been sheared.
-     *
-     * @return {@code true} if the sheep is sheared
+     * Returns whether the sheep currently has its wool removed.
      */
     boolean isSheared();
 
     /**
-     * Set whether this sheep is sheared.
-     *
-     * @param sheared {@code true} to set the sheep as sheared
+     * Sets the sheep's wool-availability flag and publishes its state. The
+     * server preserves dye color independently, so setting {@code sheared} to
+     * {@code false} restores wool availability without selecting a new wool
+     * color.
      */
     void setSheared(boolean sheared);
 }

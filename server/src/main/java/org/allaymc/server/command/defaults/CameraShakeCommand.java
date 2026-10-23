@@ -11,13 +11,27 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
+ * {@code CameraShakeCommand} sends camera-shake additions or stops to selected
+ * players with client controllers. Its output names every selected player,
+ * including simulated players skipped by the handler, and the command reports
+ * success after dispatching the applicable controller calls.
+ *
  * @author daoge_cmd
  */
 public class CameraShakeCommand extends Command {
+    /**
+     * Creates the {@code /camerashake} command with its built-in authorization permission.
+     */
     public CameraShakeCommand() {
         super("camerashake", TrKeys.MC_COMMANDS_SCREENSHAKE_DESCRIPTION, Permissions.COMMAND_CAMERASHAKE);
     }
 
+    /**
+     * Installs camera-shake addition and stop branches for player targets.
+     * Addition takes intensity, duration in seconds, and a shake type; both
+     * branches skip targets without actual player controllers when sending
+     * requests, while retaining those targets in feedback.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

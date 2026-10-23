@@ -6,23 +6,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
+ * {@code BlockFaceTest} checks centered coordinate rotation for every block-face
+ * orientation.
+ *
  * @author daoge_cmd
  */
 class BlockFaceTest {
     /**
-     * vec:
-     * + -- -- -- -- -- -- -- -- -- --z(SOUTH)
-     * |       p(0.1, 0.2, 0.3)
-     * |
-     * |
-     * |
-     * |
-     * |
-     * |
-     * |
-     * |
-     * |
-     * x(EAST)
+     * Rotates one asymmetric unit-block point from east toward all six faces. The
+     * expected coordinates protect axis swapping and center translation, including
+     * the unchanged east-facing orientation.
      */
     @Test
     void testRotateVector() {

@@ -10,14 +10,28 @@ import org.allaymc.api.player.HudElement;
 import java.util.Collection;
 
 /**
+ * {@code HudCommand} changes one HUD element's visibility for selected players.
+ * The handler requires at least one match and skips players without controllers;
+ * {@code hide} requests invisibility and {@code reset} requests visibility,
+ * with one completion message covering the whole selection.
+ *
  * @author daoge_cmd
  */
 public class HudCommand extends Command {
 
+    /**
+     * Creates the {@code /hud} command with its built-in authorization permission.
+     */
     public HudCommand() {
         super("hud", TrKeys.MC_COMMANDS_HUD_DESCRIPTION, Permissions.COMMAND_HUD);
     }
 
+    /**
+     * Installs required target, visibility-action, and HUD-element arguments.
+     * An empty selection fails before controller updates; otherwise targets
+     * without controllers are skipped and the command succeeds after processing
+     * the remaining players.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

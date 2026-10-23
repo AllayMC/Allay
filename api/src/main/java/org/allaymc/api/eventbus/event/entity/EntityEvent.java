@@ -6,7 +6,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
- * Represents an event related to an entity. This is the base class for all entity events.
+ * {@code EntityEvent} provides the entity reference shared by entity-related
+ * event payloads. Specialized subclasses add the proposed change or
+ * notification data, while this base class retains the supplied entity
+ * directly and exposes it through the generated getter during event dispatch.
  *
  * @author daoge_cmd
  */
@@ -14,7 +17,7 @@ import org.allaymc.api.eventbus.event.Event;
 @AllArgsConstructor
 public abstract class EntityEvent extends Event {
     /**
-     * The entity involved in the event.
+     * Entity reference associated with this event payload.
      */
     protected Entity entity;
 }

@@ -5,33 +5,29 @@ import org.allaymc.api.form.type.ModalForm;
 import org.allaymc.api.form.type.SimpleForm;
 
 /**
- * Form factory.
+ * {@code Forms} creates JSON form builders for the supported client layouts. Simple forms present
+ * selectable buttons, modal forms present two choices, and custom forms collect control values;
+ * callers configure the returned instance before displaying it through a form viewer.
  *
  * @author daoge_cmd
  */
 public interface Forms {
     /**
-     * Create a simple form.
-     *
-     * @return the simple form
+     * Creates a new simple form builder with its default configuration.
      */
     static SimpleForm simple() {
         return new SimpleForm();
     }
 
     /**
-     * Create a modal form.
-     *
-     * @return the modal form
+     * Creates a new modal form builder with its default configuration.
      */
     static ModalForm modal() {
         return new ModalForm();
     }
 
     /**
-     * Create a custom form.
-     *
-     * @return the custom form
+     * Creates a new custom form builder with its default configuration.
      */
     static CustomForm custom() {
         return new CustomForm();

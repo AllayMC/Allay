@@ -3,43 +3,43 @@ package org.allaymc.api.blockentity.component;
 import org.jetbrains.annotations.Range;
 
 /**
+ * {@code BlockEntityNoteblockBaseComponent} exposes the pitch and remembered
+ * redstone state of a note block. Pitch advancement changes the retained note
+ * before sound emission by block behavior, and the server persists both values
+ * through the inherited block-entity NBT contract.
+ *
  * @author daoge_cmd
  */
 public interface BlockEntityNoteblockBaseComponent extends BlockEntityBaseComponent {
     /**
-     * Retrieves the pitch of the noteblock.
-     *
-     * @return the pitch of the noteblock, represented as an integer ranging from {@code 0} to {@code 24}
+     * Returns the pitch currently stored for this note block.
      */
     @Range(from = 0, to = 24)
     int getPitch();
 
     /**
-     * Sets the pitch of the noteblock.
-     *
-     * @param pitch the pitch of the noteblock to be set, represented as an integer in the range {@code 0} to {@code 24}
+     * Replaces the retained pitch used by later note-block sound emission.
+     * Callers supply zero through twenty-four; the server stores the integer
+     * directly without range validation, sound emission, or a viewer update.
      */
     void setPitch(@Range(from = 0, to = 24) int pitch);
 
     /**
-     * Increments the pitch and returns the new value. Wraps around from 24 to 0.
-     *
-     * @return the new pitch value after incrementing
+     * Advances the retained pitch and returns the value to play next. For
+     * ordinary pitches from zero through twenty-four, the server wraps
+     * twenty-four to zero without emitting sound or updating viewers itself.
      */
     @Range(from = 0, to = 24)
     int getNextPitch();
 
     /**
-     * Checks if the noteblock is currently powered by redstone.
-     *
-     * @return {@code true} if powered, {@code false} otherwise
+     * Returns whether this note block remembers an active redstone input.
      */
     boolean isPowered();
 
     /**
-     * Sets the powered state of the noteblock.
-     *
-     * @param powered the powered state to set
+     * Replaces the remembered redstone-input flag for subsequent note-block
+     * behavior.
      */
     void setPowered(boolean powered);
 }

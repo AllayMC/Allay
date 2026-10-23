@@ -27,17 +27,36 @@ import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
+ * {@code AllayLevelDBWorldStorageTest} exercises
+ * world metadata and chunk persistence against a temporary LevelDB
+ * directory.
+ *
  * @author Cool_Loong
  */
 @ExtendWith(AllayTestExtension.class)
 class AllayLevelDBWorldStorageTest {
 
+    /**
+     * JUnit-managed temporary storage directory.
+     */
     @TempDir
     Path tempDir;
 
+    /**
+     * World context for persistence tests.
+     */
     World mockWorld;
+    /**
+     * {@code levelDBWorldStorage} holds storage opened for each test. Teardown
+     * closes it before JUnit removes the temporary world directory.
+     */
     AllayLevelDBWorldStorage levelDBWorldStorage;
 
+    /**
+     * Copies the metadata fixture and opens storage for a mock world before
+     * each test. The mock supplies an empty player list and zero tick so
+     * world-data operations have stable context.
+     */
     @BeforeEach
     @SneakyThrows
     void setUp() {
@@ -49,6 +68,11 @@ class AllayLevelDBWorldStorageTest {
         levelDBWorldStorage.setWorld(mockWorld);
     }
 
+    /**
+     * Closes the storage opened by test setup when a handle exists. Closing
+     * runs after each test so the database releases resources before JUnit
+     * removes the temporary world directory.
+     */
     @AfterEach
     @SneakyThrows
     void tearDown() {
@@ -57,16 +81,30 @@ class AllayLevelDBWorldStorageTest {
         }
     }
 
+    /**
+     * Copies an available classpath fixture beneath the temporary directory
+     * after creating parent directories. A missing resource is silently left
+     * uncopied, while directory creation and file-copy I/O failures propagate
+     * to test setup.
+     */
     private void copyTestResource(String resourcePath) throws IOException {
         Path targetPath = tempDir.resolve(resourcePath);
         Files.createDirectories(targetPath.getParent());
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
+            // A missing fixture stream leaves the destination absent rather
+            // than failing this helper, allowing later setup or assertions to
+            // expose the missing data.
             if (is != null) {
                 Files.copy(is, targetPath);
             }
         }
     }
 
+    /**
+     * Loads the checked-in world metadata fixture through the LevelDB storage
+     * reader. The restored spawn point, time of day, and difficulty must match
+     * the fixture's recorded values.
+     */
     @Test
     @SneakyThrows
     void testReadWorldData() {
@@ -78,6 +116,11 @@ class AllayLevelDBWorldStorageTest {
         assertEquals(Difficulty.EASY, worldData.getDifficulty());
     }
 
+    /**
+     * Changes a fixture world's spawn point and time before writing its
+     * metadata. Reading the current file again must restore those changed
+     * values; this case does not inspect the old-file copy.
+     */
     @Test
     @SneakyThrows
     void testWriteWorldData() {
@@ -88,13 +131,17 @@ class AllayLevelDBWorldStorageTest {
 
         levelDBWorldStorage.writeWorldData(worldData);
 
-        // Re-read to verify persistence
         AllayWorldData reloadedData = (AllayWorldData) levelDBWorldStorage.readWorldData();
         reloadedData.setWorld(mockWorld);
         assertEquals(new Vector3i(1, 1, 1), reloadedData.getSpawnPoint());
         assertEquals(1234, reloadedData.getTimeOfDay());
     }
 
+    /**
+     * Stores an overworld chunk filled with oak wood and forest biomes across
+     * its vertical range. A synchronous reload must preserve sampled blocks,
+     * biome identity, and the recorded height.
+     */
     @Test
     @SneakyThrows
     void testWriteAndReadChunk() {

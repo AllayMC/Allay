@@ -19,14 +19,45 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
+ * {@code ExecuteCommand} composes command execution contexts by changing the
+ * apparent sender, location, or dimension before parsing another execute branch.
+ * The {@code as} branch uses a target's identity with the original location;
+ * {@code at} keeps the original sender and uses a target's location. These
+ * choices determine both permission checks and relative-coordinate resolution.
+ *
+ * <p>
+ * Each nested parse has its own context. The helper methods append nested
+ * outputs to the enclosing context and preserve or sum numeric statuses, so
+ * selected targets contribute independently. Earlier subcommands retain their
+ * side effects when a later subcommand fails; the command performs no rollback.
+ * The {@code run} branch delegates final dispatch to the command registry.
+ *
  * @author daoge_cmd
  */
 public class ExecuteCommand extends Command {
 
+    /**
+     * Creates the {@code /execute} command with its built-in authorization permission.
+     */
     public ExecuteCommand() {
         super("execute", TrKeys.MC_COMMANDS_EXECUTE_DESCRIPTION, Permissions.COMMAND_EXECUTE);
     }
 
+    /**
+     * Installs context-changing branches and final command dispatch.
+     * {@code as} and {@code at} require matching targets and evaluate the
+     * remaining arguments once per target. {@code align}, {@code positioned},
+     * and {@code in} replace selected location properties while retaining the
+     * sender's identity; unknown worlds, dimension types, and disabled dimensions
+     * fail before the remaining branch executes.
+     *
+     * <p>
+     * Nested parsing accumulates output in the outer context. Final
+     * {@code run} dispatch reuses the active sender and copies failure detail
+     * through the registry result's context. Early registry failures with a
+     * {@code null} context currently throw while copying that detail instead
+     * of returning the original failure status.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -55,6 +86,7 @@ public class ExecuteCommand extends Command {
                     String axes = context.getResult(1);
                     List<String> remain = context.getResult(2);
 
+                    // Flooring aligns selected axes to their containing block coordinates.
                     Location3d alignedLoc = new Location3d(context.getSender().getCommandExecuteLocation());
                     Vector3d floored = alignedLoc.floor(new Vector3d());
 
@@ -152,12 +184,31 @@ public class ExecuteCommand extends Command {
                 });
     }
 
+    /**
+     * Parses one remaining execute branch through the supplied proxy sender.
+     * Nested outputs are appended to {@code context}, and the returned result
+     * retains that outer context with the nested parse's numeric status.
+     */
     protected CommandResult runSubcommand(CommandTree tree, CommandContext context, ProxyCommandSender proxy, List<String> remain) {
         var result = tree.parse(proxy, remain.toArray(String[]::new));
         context.addOutputs(result.context().getOutputs());
         return new CommandResult(result.status(), context);
     }
 
+    /**
+     * Parses the same execute arguments separately for each supplied target.
+     * {@code proxyFactory} supplies each parse's sender, outputs accumulate in
+     * target order, and numeric statuses are summed without stopping after a
+     * failed target or undoing earlier side effects.
+     *
+     * <p>
+     * The sum determines overall success through
+     * {@code CommandResult.isSuccess}. A status of {@code 1} combined with a
+     * failed status of {@code 0} still succeeds overall; negative statuses
+     * subtract from successful statuses and can make the total unsuccessful.
+     * Feedback from every completed nested parse remains attached regardless
+     * of that final sum.
+     */
     private CommandResult runForEachTarget(CommandTree tree, CommandContext context, List<Entity> targets, String[] args, Function<Entity, ProxyCommandSender> proxyFactory) {
         int successCount = 0;
         for (var target : targets) {

@@ -5,22 +5,24 @@ import org.allaymc.api.math.position.Position3ic;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * BlockContainer represents a container that is associated with a block in the world.
+ * {@code BlockContainer} associates item storage with a block position in a dimension.
+ * Viewers use that position when opening the block interface, and block entity owners
+ * supply the position when they attach or move the container.
  *
  * @author daoge_cmd
  */
 public interface BlockContainer extends Container {
     /**
-     * Gets the position of the block associated with this container.
-     *
-     * @return the position of the block
+     * Returns the block position used when viewers open this container. The position can
+     * be {@code null} before its owner initializes it, so owners must set it before
+     * opening the block interface.
      */
     Position3ic getBlockPos();
 
     /**
-     * Sets the position of the block associated with this container.
-     *
-     * @param pos the position of the block
+     * Associates this container with the supplied block position. The owner must install
+     * the position before opening the interface; implementations may retain {@code pos}
+     * without copying its coordinates.
      */
     @ApiStatus.OverrideOnly
     void setBlockPos(Position3ic pos);

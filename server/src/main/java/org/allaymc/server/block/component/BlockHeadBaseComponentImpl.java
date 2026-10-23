@@ -13,29 +13,48 @@ import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
+ * {@code BlockHeadBaseComponentImpl} orients placed heads and updates redstone-driven
+ * animation for dragon and piglin heads. Other head types retain placement
+ * orientation without animation changes, while the head block entity stores whether
+ * animation is playing as surrounding power changes.
+ *
  * @author daoge_cmd
  */
 public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the head block behavior for the supplied block type.
+     */
     public BlockHeadBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places the head facing the clicked block face when context is available. A
+     * {@code null} {@code placementInfo} delegates to ordinary property processing
+     * with the supplied state and no player context.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
             return super.place(dimension, blockState, placeBlockPos, null);
         }
 
+        // Head facing accepts all six clicked faces through BlockFace ordinals, so
+        // horizontal-only indices cannot represent the same floor, ceiling, and side
+        // orientations.
         blockState = blockState.setPropertyValue(BlockPropertyTypes.FACING_DIRECTION, placementInfo.blockFace().ordinal());
 
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
+    /**
+     * Forwards placement and enables powered dragon or piglin head animation. Other
+     * head types return without animation work; this check uses the old block
+     * snapshot's power query at the placement position.
+     */
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
-
-        // Check if the head should animate when placed
         var blockType = newBlockState.getBlockType();
         if (blockType != BlockTypes.DRAGON_HEAD && blockType != BlockTypes.PIGLIN_HEAD) {
             return;
@@ -46,11 +65,14 @@ public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Forwards the update and synchronizes dragon or piglin head animation with
+     * current power. Other head types remain unchanged, and the entity setter runs
+     * only when its animation flag differs.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
-
-        // Only dragon head and piglin head respond to redstone
         var blockType = block.getBlockType();
         if (blockType != BlockTypes.DRAGON_HEAD && blockType != BlockTypes.PIGLIN_HEAD) {
             return;

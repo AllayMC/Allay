@@ -21,53 +21,78 @@ import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import java.util.Set;
 
 /**
- * Block component for powder snow.
+ * {@code BlockPowderSnowBaseComponentImpl} implements powder-snow contact marking and
+ * empty-bucket collection. Living entities without leather boots are marked as inside powder
+ * snow; the living-entity tick owns freeze accumulation, thawing, and freezing damage instead
+ * of incrementing the counter on every block intersection.
  *
- * <p>Powder snow freezes living entities that walk into it. Freeze ticks increase by 1 each game
- * tick while an entity is inside the block, up to {@link EntityLivingComponent#MAX_FREEZE_TICKS}
- * (140 ticks / 7 seconds). Once fully frozen, the entity takes 1 HP of freezing damage every
- * 40 ticks. The freeze counter decreases at the same rate once the entity leaves the block.
- *
- * <p>Entities wearing leather boots are immune to the freeze effect.
- *
- * <p>An empty bucket used on this block collects it as a powder snow bucket.
+ * <p>
+ * Bucket interaction runs through a component event listener and honors the bucket-fill event
+ * before removing the block. Acceptance writes air, emits the fill sound, consumes the held
+ * bucket, and offers a powder-snow bucket to inventory. The insertion result is ignored, so
+ * the callback does not undo removal or consumption when inventory insertion fails. Ordinary
+ * drops remain empty, and powder-snow contact can reset fall damage.
  *
  * @author daoge_cmd
  */
 public class BlockPowderSnowBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * Creates the powder snow behavior component for the supplied block type.
+     */
     public BlockPowderSnowBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Marks a living entity as inside powder snow unless it wears leather boots. The living
+     * tick consumes this flag once per tick, preventing multiple intersecting powder-snow
+     * blocks from directly multiplying the freeze increment.
+     */
     @Override
     public void onEntityInside(Block block, Entity entity) {
         if (!(entity instanceof EntityLiving living)) {
             return;
         }
 
-        // Entities wearing leather boots are immune to freezing
         if (wearsLeatherBoots(entity)) {
             return;
         }
 
-        // Only set the flag; tickFreeze() performs the actual increment once per tick,
-        // so freeze rate is always exactly 1 tick regardless of how many powder snow
-        // blocks the entity's AABB intersects.
+        // Record contact rather than adding freeze duration here. tickFreeze increases
+        // the counter at most once per living tick, up to its cap, regardless
+        // of how many powder-snow blocks marked this same contact flag.
         living.setInPowderSnow(true);
     }
 
+    /**
+     * Returns whether powder-snow contact can clear accumulated entity fall damage.
+     */
     @Override
     public boolean canResetFallDamage() {
         return true;
     }
 
+    /**
+     * Returns no ordinary item drops because collection uses a bucket interaction.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        // Powder snow cannot be picked up by hand; only a bucket yields it
         return Set.of();
     }
 
+    /**
+     * Collects powder snow for an empty bucket through the component interaction event.
+     * Missing interaction information, a missing player, or another item leaves the event
+     * untouched. The bucket-fill event can cancel before the block and inventory effects
+     * begin.
+     *
+     * <p>
+     * Acceptance removes the block before emitting sound, consuming the held bucket, and
+     * offering the filled bucket to inventory. The world-write and inventory-add results are
+     * ignored, and no rollback joins these operations. The component event is then marked
+     * successful so the ordinary block interaction reports handling.
+     */
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var interactInfo = event.getInteractInfo();
@@ -85,7 +110,6 @@ public class BlockPowderSnowBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        // Empty bucket picks up powder snow
         if (!new PlayerBucketFillEvent(player, bucketStack, interactInfo).call()) {
             return;
         }
@@ -93,6 +117,8 @@ public class BlockPowderSnowBaseComponentImpl extends BlockBaseComponentImpl {
         var dimension = event.getDimension();
         var pos = interactInfo.clickedBlockPos();
 
+        // Apply block removal before consuming and inserting buckets. The insertion result
+        // is ignored, so this sequence does not restore the snow after inventory rejection.
         dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
         dimension.addSound(pos, new BucketFillSound(BucketFillSound.Type.POWDER_SNOW));
 
@@ -103,11 +129,9 @@ public class BlockPowderSnowBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Check whether the given entity is wearing leather boots.
-     * Entities with leather boots are immune to powder snow freezing.
-     *
-     * @param entity the entity to check
-     * @return {@code true} if the entity is wearing leather boots
+     * Returns whether the entity's armor container currently holds leather boots. Entities
+     * without a container-holder component or armor container return {@code false}; this
+     * helper reads the equipment rather than changing freeze state.
      */
     public static boolean wearsLeatherBoots(Entity entity) {
         if (!(entity instanceof EntityContainerHolderComponent containerHolder)) {

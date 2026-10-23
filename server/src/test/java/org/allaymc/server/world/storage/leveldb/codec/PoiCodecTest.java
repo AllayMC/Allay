@@ -10,15 +10,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code PoiCodecTest} checks
+ * stored point-of-interest positions and registry names for known POI
+ * types.
+ */
 @ExtendWith(AllayTestExtension.class)
 class PoiCodecTest {
 
+    /**
+     * Serializes an empty map of chunk points of interest. The codec must
+     * return {@code null} so the storage caller can delete an obsolete POI record.
+     */
     @Test
     void testSerializeEmptyReturnsNull() {
         var empty = new NonBlockingHashMap<Integer, PoiType>();
         assertNull(PoiCodec.serialize(empty));
     }
 
+    /**
+     * Encodes three portal points of interest at distinct chunk positions and
+     * heights. Decoding must restore every position hash and resolve each
+     * stored type name.
+     */
     @Test
     void testSerializeAndDeserialize() {
         var entries = new NonBlockingHashMap<Integer, PoiType>();
@@ -39,6 +53,11 @@ class PoiCodecTest {
         }
     }
 
+    /**
+     * Encodes one portal point of interest at a nontrivial chunk coordinate.
+     * The decoded mapping must retain the same position hash whose components
+     * identify the original location.
+     */
     @Test
     void testDeserializePreservesCoordinates() {
         var entries = new NonBlockingHashMap<Integer, PoiType>();
@@ -55,17 +74,21 @@ class PoiCodecTest {
         assertEquals(z, HashUtils.getZFromHashChunkXYZ(hash));
     }
 
+    /**
+     * Round-trips a registered portal type and checks its decoded identity.
+     * Despite the method name, this fixture contains no unknown type and
+     * therefore does not exercise unknown-name skipping.
+     */
     @Test
     void testDeserializeUnknownTypeSkipped() {
-        // Manually build entries with a known type, serialize, then
-        // verify that deserialization handles the data correctly
+        // This fixture supplies a registered type only; its assertions cover successful
+        // name resolution and do not establish the unknown-type recovery behavior.
         var entries = new NonBlockingHashMap<Integer, PoiType>();
         entries.put(HashUtils.hashChunkXYZ(0, 0, 0), PoiTypes.NETHER_PORTAL);
 
         byte[] data = PoiCodec.serialize(entries);
         assertNotNull(data);
 
-        // Normal deserialization should work fine
         var deserialized = PoiCodec.deserialize(data);
         assertEquals(1, deserialized.size());
         assertEquals(PoiTypes.NETHER_PORTAL.name(), deserialized.values().iterator().next().name());

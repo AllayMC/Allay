@@ -27,15 +27,35 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code ProtocolDataEncoderTest} checks cached protocol definitions, recipe
+ * indexes, and packet copy boundaries.
+ */
 @ExtendWith(AllayTestExtension.class)
 class ProtocolDataEncoderTest {
+    /**
+     * {@code registry} retains the extension-installed default registry after
+     * setup. Every case reuses its initialized protocols and cached definitions
+     * so repeated encodings compare the same source data.
+     */
     private static ProtocolRegistry registry;
 
+    /**
+     * Captures the default registry after the Allay extension initializes
+     * shared fixtures. This class reuses those protocol instances across tests
+     * without installing another default registry or rebuilding their cached
+     * data.
+     */
     @BeforeAll
     static void setUpRegistry() {
         registry = ProtocolRegistry.getDefault();
     }
 
+    /**
+     * Compares recipe tables before and after modern furnace encoding. Indexed
+     * wire recipes must resolve uniquely, legacy containers reject mutation,
+     * and furnace payload representation follows the selected protocol.
+     */
     @Test
     void recipeTableUsesOneStableReadOnlyNetworkIdIndex() {
         var legacyTable = protocol(944).getData().recipeTable();
@@ -55,6 +75,11 @@ class ProtocolDataEncoderTest {
                 .anyMatch(recipe -> modernTable.recipesByNetworkId().get(recipe.getNetId()) instanceof FurnaceRecipe));
     }
 
+    /**
+     * Encodes pack stacks on both sides of the v844 experiment change. The
+     * v827-only experiment remains present across repeated encodes and
+     * packet-list mutation without appearing in v844.
+     */
     @Test
     void v827ExperimentDoesNotLeakIntoV844() {
         var v827 = assertInstanceOf(PacketEncoder_v827.class, protocol(827).getEncoder());
@@ -73,6 +98,11 @@ class ProtocolDataEncoderTest {
         assertTrue(hasExperiment(v827.encodeResourcePackStack(), "y_2025_drop_3"));
     }
 
+    /**
+     * Reads the same custom block material in legacy and modern definitions.
+     * The tested material changes from a face-dimming field to the expected
+     * packed boolean byte at v844.
+     */
     @Test
     void packedMaterialBooleansStartAtV844() {
         var legacy = customBlockDefinition(protocol(827));
@@ -86,6 +116,11 @@ class ProtocolDataEncoderTest {
         assertFalse(modernMaterial.containsKey("face_dimming"));
     }
 
+    /**
+     * Compares collision data for a fixture containing two boxes. The older
+     * encoding merges them into one full block, while v898 retains the two-box
+     * representation.
+     */
     @Test
     void multipleCollisionBoxesStartAtV898() {
         var legacy = firstPermutationComponents(customBlockDefinition(protocol(860)))
@@ -100,6 +135,12 @@ class ProtocolDataEncoderTest {
         assertEquals(2, modern.getList("boxes", NbtType.COMPOUND).size());
     }
 
+    /**
+     * Inspects registered custom block and item fixtures after protocol
+     * initialization. Callback counts, placement traits, custom properties, and
+     * vanilla-item exclusion must match the structured definitions used to
+     * build the payloads.
+     */
     @Test
     void definitionsAreResolvedOnceAndEncodedFromStructuredModels() {
         var blockType = TestRegistryFixtures.customDefinitionBlockType();
@@ -127,6 +168,11 @@ class ProtocolDataEncoderTest {
         assertNull(vanillaDiamond.getCustomItemDefinition());
     }
 
+    /**
+     * Examines cached creative entries, recipe outputs, air, and a custom block
+     * item. Their item and block definitions must belong to the selected
+     * protocol, with NBT present only for the tested item carrying extra data.
+     */
     @Test
     void cachedItemPayloadsUseDefinitionsFromTheirProtocolRegistry() {
         var protocol = protocol(898);
@@ -164,7 +210,9 @@ class ProtocolDataEncoderTest {
         );
         assertTrue(protocol.getItemDefinitionRegistry().isRegistered(blockItem.getDefinition()));
         assertTrue(protocol.getBlockDefinitionRegistry().isRegistered(blockItem.getBlockDefinition()));
-        // BDS sends items without extra data with no NBT at all, not with an empty compound.
+        // This unnamed block item carries no extra data; the null tag checks
+        // that its encoding does not introduce an empty compound solely because
+        // it is a custom block item.
         assertNull(blockItem.getTag());
 
         var named = TestRegistryFixtures.customDefinitionBlockType().getItemType().createItemStack(1);
@@ -174,6 +222,11 @@ class ProtocolDataEncoderTest {
         assertFalse(namedItem.getTag().isEmpty());
     }
 
+    /**
+     * Mutates item network IDs and recipe lists from one encoding. Repeated
+     * creative and crafting packets must preserve their own values and leave
+     * subsequent encodes unchanged.
+     */
     @Test
     void repeatedEncodingIsolatesPacketsAndMutableItemPayloads() {
         var encoder = protocol(975).getEncoder();
@@ -186,6 +239,9 @@ class ProtocolDataEncoderTest {
         var creativeItemTwo = creativeTwo.getContents().getFirst().item();
         assertNotSame(creativeItemOne, creativeItemTwo);
         int creativeNetId = creativeItemTwo.getNetId();
+        // Change only one encoded item after both packets exist, exposing
+        // aliasing with either the other packet or the cached creative
+        // definition.
         creativeItemOne.setNetId(creativeNetId + 10_000);
         assertEquals(creativeNetId, creativeItemTwo.getNetId());
         assertEquals(creativeNetId, encoder.encodeCreativeContent().getContents().getFirst().item().getNetId());
@@ -198,6 +254,9 @@ class ProtocolDataEncoderTest {
         var outputTwo = firstOutput(craftingTwo.getCraftingData().get(recipeIndex));
         assertNotSame(outputOne, outputTwo);
         int outputNetId = outputTwo.getNetId();
+        // Mutating a result and clearing its packet list probes two copy
+        // boundaries: item fields and the collection surrounding cached recipe
+        // payloads.
         outputOne.setNetId(outputNetId + 10_000);
         craftingOne.getCraftingData().clear();
         assertEquals(outputNetId, outputTwo.getNetId());
@@ -205,6 +264,11 @@ class ProtocolDataEncoderTest {
         assertEquals(outputNetId, firstOutput(encoder.encodeCraftingData().getCraftingData().get(recipeIndex)).getNetId());
     }
 
+    /**
+     * Encodes crafting and pack-stack payloads at four selected version
+     * boundaries. Each target codec must accept its own encoder's cached data
+     * and produce readable bytes.
+     */
     @Test
     void targetCodecsEncodeCachedDataPackets() {
         for (int version : List.of(827, 844, 944, 975)) {
@@ -214,12 +278,23 @@ class ProtocolDataEncoderTest {
         }
     }
 
+    /**
+     * Returns the initialized international protocol for the requested test
+     * version. A missing registry entry fails the test immediately, keeping
+     * later assertions focused on payload behavior rather than {@code null}
+     * handling.
+     */
     private static Protocol protocol(int version) {
         var protocol = registry.resolve(ClientVariant.INTERNATIONAL, version);
         assertNotNull(protocol);
         return protocol;
     }
 
+    /**
+     * Returns the structured custom-block fixture from a protocol's cached
+     * properties. The fixture must already be registered; a missing property
+     * causes the stream lookup to fail instead of returning empty NBT.
+     */
     private static NbtMap customBlockDefinition(Protocol protocol) {
         return protocol.getData().customBlockProperties().stream()
                 .filter(property -> property.name().equals("allay_test:custom_definition_block"))
@@ -228,6 +303,11 @@ class ProtocolDataEncoderTest {
                 .properties();
     }
 
+    /**
+     * Checks that every positive network recipe ID encountered is unique and
+     * resolves in the reverse index. At least one such recipe must exist, while
+     * nonnetwork and nonpositive entries are skipped by this helper.
+     */
     private static void assertRecipeIdsResolve(RecipeTable table) {
         var ids = new HashSet<Integer>();
         for (var recipe : table.encodedRecipes()) {
@@ -240,10 +320,17 @@ class ProtocolDataEncoderTest {
         assertFalse(ids.isEmpty());
     }
 
+    /**
+     * Returns whether the pack stack contains an experiment with the exact
+     * name.
+     */
     private static boolean hasExperiment(org.cloudburstmc.protocol.bedrock.packet.ResourcePackStackPacket packet, String name) {
         return packet.getExperiments().stream().anyMatch(experiment -> experiment.name().equals(name));
     }
 
+    /**
+     * Returns the wildcard material from the first block permutation.
+     */
     private static NbtMap material(NbtMap definition) {
         return firstPermutationComponents(definition)
                 .getCompound("minecraft:material_instances")
@@ -251,12 +338,21 @@ class ProtocolDataEncoderTest {
                 .getCompound("*");
     }
 
+    /**
+     * Returns component data from the definition's first block permutation.
+     */
     private static NbtMap firstPermutationComponents(NbtMap definition) {
         return definition.getList("permutations", NbtType.COMPOUND)
                 .getFirst()
                 .getCompound("components");
     }
 
+    /**
+     * Returns the first index containing a supported recipe with an item
+     * output. Empty crafting-result lists are skipped, smithing and furnace
+     * outputs qualify directly, and absence of any qualifying recipe fails the
+     * test.
+     */
     private static int findRecipeWithOutput(List<RecipeData> recipes) {
         for (int index = 0; index < recipes.size(); index++) {
             if (recipes.get(index) instanceof CraftingRecipeData recipe && !recipe.getResults().isEmpty()) {
@@ -272,6 +368,11 @@ class ProtocolDataEncoderTest {
         return fail("No recipe with an item output was encoded");
     }
 
+    /**
+     * Returns the first output from a supported recipe representation. Crafting
+     * result lists must be nonempty, and unsupported payload types fail the
+     * test rather than returning an absent item.
+     */
     private static ItemData firstOutput(RecipeData recipe) {
         return switch (recipe) {
             case CraftingRecipeData crafting -> crafting.getResults().getFirst();
@@ -281,6 +382,12 @@ class ProtocolDataEncoderTest {
         };
     }
 
+    /**
+     * Checks serialization with the selected protocol's own item and block
+     * definitions. The helper requires readable output bytes, releases its
+     * temporary encoding buffer on failure or success, and leaves the supplied
+     * packet owned by the caller.
+     */
     private static void assertPacketEncodes(Protocol protocol, BedrockPacket packet) {
         var helper = protocol.getCodec().createHelper();
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder()
@@ -295,6 +402,8 @@ class ProtocolDataEncoderTest {
             assertDoesNotThrow(() -> protocol.getCodec().tryEncode(helper, buffer, packet));
             assertTrue(buffer.isReadable());
         } finally {
+            // The helper owns this temporary buffer rather than sending it, so
+            // assertions and codec failures must both leave it released.
             buffer.release();
         }
     }

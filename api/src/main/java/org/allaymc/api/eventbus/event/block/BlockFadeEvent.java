@@ -9,8 +9,10 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a block fades, melts, or disappears naturally. Examples include ice melting, fire
- * extinguishing, and crop dying due to lack of light.
+ * {@code BlockFadeEvent} represents a proposed block transformation such as melting,
+ * extinguishing, or oxidation. Cancellation guards the proposed transition, while
+ * callers that read {@code getNewBlockState} can apply a replacement state selected
+ * by an event listener.
  *
  * @author daoge_cmd
  */
@@ -19,10 +21,15 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class BlockFadeEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The new block state after the fade.
+     * {@code newBlockState} holds the proposed replacement state. Listeners can
+     * replace it for event callers that consult {@code getNewBlockState} after
+     * dispatch.
      */
     protected BlockState newBlockState;
 
+    /**
+     * Creates a block fade event with the proposed replacement state.
+     */
     public BlockFadeEvent(Block block, BlockState newBlockState) {
         super(block);
         this.newBlockState = newBlockState;

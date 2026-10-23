@@ -13,14 +13,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Registry loader for dispenser behaviors.
- * <p>
- * This class loads all built-in dispenser behaviors for different item types.
+ * {@code DispenserBehaviorRegistryLoader} maps built-in items to specialized dispenser
+ * behaviors. The loader shares one behavior across bucket variants and another across all
+ * registered item identifiers ending in {@code "_spawn_egg"}, so item registration must
+ * precede discovery of those egg entries.
  *
  * @author daoge_cmd
  */
 public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map<ItemType<?>, DispenseBehavior>> {
 
+    /**
+     * Creates a mutable mapping of specialized dispenser behaviors. Item and entity types must be
+     * initialized first, and spawn-egg entries are discovered from the current item registry
+     * rather
+     * than a fixed list of constants.
+     */
     @Override
     public Map<ItemType<?>, DispenseBehavior> load(Void $) {
         var map = new HashMap<ItemType<?>, DispenseBehavior>();
@@ -46,7 +53,7 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
         map.put(ItemTypes.FIREWORK_ROCKET, new FireworksDispenseBehavior());
 
         // Flint and steel
-        // TODO: FlintAndSteelDispenseBehavior - Nether portal creation not yet implemented
+        // TODO: Add Nether portal creation to FlintAndSteelDispenseBehavior when dispensing ignition beside a valid frame.
         map.put(ItemTypes.FLINT_AND_STEEL, new FlintAndSteelDispenseBehavior());
 
         // Glass bottle
@@ -56,7 +63,7 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
         map.put(ItemTypes.POTION, new WaterBottleDispenseBehavior());
 
         // Buckets
-        // TODO: BucketDispenseBehavior - Milk bucket behavior (entity milking) not implemented
+        // TODO: Add entity milking to BucketDispenseBehavior before registering milk-bucket dispensing here.
         var bucketBehavior = new BucketDispenseBehavior();
         map.put(ItemTypes.BUCKET, bucketBehavior);
         map.put(ItemTypes.WATER_BUCKET, bucketBehavior);
@@ -78,12 +85,12 @@ public class DispenserBehaviorRegistryLoader implements RegistryLoader<Void, Map
             }
         }
 
-        // TODO: BoatDispenseBehavior - Spawns boat entity on water or above water (all boat variants)
-        // TODO: ChestBoatDispenseBehavior - Spawns chest boat entity on water or above water (all chest boat variants)
-        // TODO: DyeDispenseBehavior - Bone meal/fertilizer functionality on fertilizable blocks
-        // TODO: MinecartDispenseBehavior - Spawns minecart entities on rail blocks (all minecart variants)
-        // TODO: ShearsDispenseBehavior - Shears shearable entities (sheep, snow golem, mooshroom, etc.)
-        // TODO: ShulkerBoxDispenseBehavior - Places shulker boxes in front of dispenser
+        // TODO: Implement BoatDispenseBehavior and register it here. Spawn boat entities on water for each boat variant.
+        // TODO: Implement ChestBoatDispenseBehavior and register it here. Spawn chest boat entities on water for each chest boat variant.
+        // TODO: Implement DyeDispenseBehavior and register it here. Apply bone meal to fertilizable blocks in front of the dispenser.
+        // TODO: Implement MinecartDispenseBehavior and register it here. Spawn minecart variants when the facing block supports rail placement.
+        // TODO: Implement ShearsDispenseBehavior and register it here. Shear eligible entities in front of the dispenser.
+        // TODO: Implement ShulkerBoxDispenseBehavior and register it here. Place shulker boxes in front of the dispenser.
 
         return map;
     }

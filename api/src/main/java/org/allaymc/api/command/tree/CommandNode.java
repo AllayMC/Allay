@@ -26,987 +26,832 @@ import java.util.function.Function;
 import static org.allaymc.api.command.tree.CommandNodeFactory.getFactory;
 
 /**
+ * {@code CommandNode} represents a parameter or structural position in a
+ * command's argument tree. Each child describes accepted input and the result
+ * it appends to the invocation context. Fluent parameter methods create and
+ * attach children, returning the child so callers can extend a path or install
+ * its executor.
+ *
+ * <p> Child selection is ordered and uses argument-cost hints before invoking
+ * {@code match}. A successful match consumes input and appends results; the
+ * server does not backtrack to a sibling after a later path fails. An absent
+ * optional child contributes its configured default instead of consuming a
+ * token. Permissions are checked separately from matching, and redirect
+ * callbacks restart at the root with remaining input after parsed results are
+ * cleared.
+ *
  * @author daoge_cmd
  */
 @ApiStatus.NonExtendable
 public interface CommandNode {
 
     /**
-     * Determines if this node is optional in the command tree.
-     *
-     * @return {@code true} if the node is optional, {@code false} otherwise.
+     * Returns whether this node may supply a default when input is exhausted.
      */
     boolean isOptional();
 
     /**
-     * Retrieves the default value for this node, if specified.
-     *
-     * @return the default value
+     * Returns the value inserted when this optional node is selected without
+     * input. The default may be {@code null} and is retained directly; the
+     * structural root does not support this operation.
      */
     Object getDefaultValue();
 
     /**
-     * Return the minimum number of arguments consumed after selecting this branch.
-     *
-     * @return the minimum number of arguments required
+     * Returns the stored lower argument-count hint used before matching this
+     * branch. The structural root does not support cost queries; parser
+     * implementations own initialization and propagation of non-root hints.
      */
     int getMinArgCostBranch();
 
     /**
-     * Set the minimum number of arguments consumed after selecting this branch.
-     *
-     * @param minArgCostBranch the minimum number of arguments
+     * Stores the lower argument-count hint used when selecting this branch.
      */
     void setMinArgCostBranch(int minArgCostBranch);
 
     /**
-     * Return the maximum number of arguments consumed after selecting this branch.
-     *
-     * @return the maximum number of arguments required
+     * Returns the stored upper argument-count hint used before matching this
+     * branch. The structural root does not support cost queries; parser
+     * implementations update non-root hints as children or redirects are
+     * configured.
      */
     int getMaxArgCostBranch();
 
     /**
-     * Set the maximum number of arguments consumed after selecting this branch.
-     *
-     * @param maxArgCostBranch the maximum number of arguments
+     * Stores the upper argument-count hint used when selecting this branch.
      */
     void setMaxArgCostBranch(int maxArgCostBranch);
 
     /**
-     * Return the maximum number of arguments this node can consume.
-     * A sufficiently large number is returned to indicate an infinite argument count.
-     *
-     * @return the maximum number of arguments
+     * Returns this node's maximum token cost for branch selection. Greedy
+     * message and redirect implementations use a large finite bound; the
+     * structural root does not support a per-node cost query.
      */
     int getMaxArgCost();
 
     /**
-     * Set a default value for this node and marks it as optional.
-     *
-     * @param defaultValue the default value to set
-     * @return the current {@code CommandNode}
+     * Stores the value used when this node is selected without input and
+     * returns this node. This operation does not mark the node optional;
+     * callers invoke {@code optional} separately to permit omission.
      */
     CommandNode defaultValue(Object defaultValue);
 
     /**
-     * Marks this node as optional.
-     *
-     * @return the current {@code CommandNode}
+     * Marks this node optional and returns it for further configuration. The
+     * server permits one optional child per parent and rejects permissions on
+     * optional nodes; children attached afterward inherit optionality.
      */
     CommandNode optional();
 
     /**
-     * Retrieves the optional leaf node for this command.
-     *
-     * @return the optional leaf node
+     * Returns the child selected when this node has no remaining input. A
+     * {@code null} result means no optional child is configured; this child
+     * need not be a terminal node.
      */
     CommandNode getOptionalLeaf();
 
     /**
-     * Set an optional leaf node for this command.
-     *
-     * @param optionalLeaf the optional leaf to set
+     * Replaces the reference to the child selected at end-of-input. This
+     * low-level setter does not configure the child's own optional flag or
+     * attach it to the child list.
      */
     void setOptionalLeaf(CommandNode optionalLeaf);
 
     /**
-     * Retrieves the name of this command node.
-     *
-     * @return the name of the command node
+     * Returns the parameter name used when describing this command node.
      */
     String name();
 
     /**
-     * Retrieves the depth of this node in the command tree.
-     *
-     * @return the depth of the node
+     * Returns this node's structural depth, with zero reserved for the root.
      */
     int depth();
 
     /**
-     * Checks if this node is the root node (depth 0).
-     *
-     * @return {@code true} if this is the root node, {@code false} otherwise.
+     * Returns whether this node has the zero depth reserved for the root.
      */
     default boolean isRoot() {
         return depth() == 0;
     }
 
     /**
-     * Set the depth of this node in the command tree.
-     *
-     * @param depth the depth to set
+     * Stores the structural depth assigned when this node joins its parent.
      */
     void setDepth(int depth);
 
     /**
-     * Retrieves the parent of this node.
-     *
-     * @return the parent {@code CommandNode}
+     * Returns the parent supplied when this parameter node was constructed. The
+     * structural root has no parent and rejects this operation instead of
+     * returning an end-of-chain sentinel.
      */
     CommandNode parent();
 
     /**
-     * Moves up a certain number of levels in the command tree.
-     *
-     * @param count the number of levels to move up
-     * @return the {@code CommandNode} after moving up
+     * Returns the ancestor {@code count} levels above this node. The server
+     * requires a positive count no greater than this node's depth; the
+     * structural root rejects upward traversal.
      */
     CommandNode up(int count);
 
     /**
-     * Moves up one level in the command tree.
-     *
-     * @return the parent {@code CommandNode}
+     * Returns this node's immediate parent through the upward traversal
+     * operation. This convenience requires a non-root node because the
+     * structural root rejects attempts to move above itself.
      */
     default CommandNode up() {
         return up(1);
     }
 
     /**
-     * Return the root node of the command tree by moving up all levels.
-     *
-     * @return the root {@code CommandNode}
+     * Returns the root by moving upward through this node's entire depth.
+     * Callers invoke this on a non-root node; the structural root's upward
+     * traversal implementation rejects even a zero-level request.
      */
     default CommandNode root() {
         return up(depth());
     }
 
     /**
-     * Checks if this node matches the current command context. Notes that permission
-     * will not be checked in this method.
-     *
-     * @param context the command context
-     * @return {@code true} if the node matches, {@code false} otherwise.
+     * Tests the current input and, on success, consumes tokens and appends this
+     * node's result. This operation does not check permissions, and the parser
+     * provides no automatic rollback of a handler's context mutations after
+     * failure.
      */
     boolean match(CommandContext context);
 
     /**
-     * Retrieves the next accessible node in the command tree based on the current context.
-     * Notes that permission will not be checked in this method.
-     *
-     * @param context the command context
-     * @return the next {@code CommandNode}
+     * Selects the first child whose argument-cost hints and matcher accept the
+     * remaining input. With no input, the server inserts the optional child's
+     * default; {@code null} signals no selection, and callers check permissions
+     * afterward.
      */
     CommandNode nextNode(CommandContext context);
 
     /**
-     * Checks if this node is a leaf node (i.e., it has no further branches).
-     *
-     * @return {@code true} if the node is a leaf, {@code false} otherwise.
+     * Returns whether this node has no child list and terminates a path.
      */
     boolean isLeaf();
 
     /**
-     * Retrieves the list of leaf nodes connected to this node.
-     *
-     * @return A list of {@code CommandNode} leaves
+     * Returns the immediate child list, or {@code null} for a terminal node in
+     * the server implementation. The list is shared with tree construction;
+     * callers use {@code CommandTree.getLeaves} to collect terminal
+     * descendants.
      */
     List<CommandNode> getLeaves();
 
     /**
-     * Add a leaf node to this command node.
-     *
-     * @param leaf the leaf node to add
-     * @return the passed {@code CommandNode}
+     * Attaches the supplied child and returns it for further configuration. The
+     * child must already name this node as its parent; the server assigns its
+     * depth and propagates branch-cost hints and inherited optionality.
      */
     CommandNode addLeaf(CommandNode leaf);
 
     /**
-     * Add a leaf node to this command node.
-     *
-     * @param leafProvider the provider that will provide the leaf node. The current command
-     *                     node will be passed to the provider, and the provider should return
-     *                     the leaf node. This is helpful for keeping chain calls when using
-     *                     custom command node.
-     * @return the passed {@code CommandNode}
+     * Creates and attaches a child using this node as the provider's parent
+     * argument. The provider must return a node constructed with that parent so
+     * ancestry and branch-cost propagation follow the attached path.
      */
     default CommandNode addLeaf(Function<CommandNode, CommandNode> leafProvider) {
         return addLeaf(leafProvider.apply(this));
     }
 
     /**
-     * Set the executor for this node, binding it to a specific sender type.
-     *
-     * @param <SENDER_TYPE> the type of the command sender
-     * @param executor      the executor function to apply
-     * @param senderType    the sender type for this executor
-     * @return the current {@code CommandNode}
+     * Installs an executor guarded by the supplied sender capability and
+     * returns this node. Validation precedes conversion; a rejected sender
+     * produces failure feedback, while a node already configured for
+     * redirection rejects executor installation.
      */
     <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType<SENDER_TYPE> senderType);
 
     /**
-     * Set the executor for this node.
-     *
-     * @param executor the executor function to apply
-     * @return the current {@code CommandNode}
+     * Installs an executor that accepts any command sender and returns this
+     * node. The callback receives the current context; a node already
+     * configured for redirection rejects this mutually exclusive executor
+     * configuration.
      */
     default CommandNode exec(Function<CommandContext, CommandResult> executor) {
         return exec((context, sender) -> executor.apply(context), SenderType.ANY);
     }
 
     /**
-     * Redirect to the root node, which is useful for commands like /execute, which has multiple subcommands.
-     *
-     * @param onRedirect Called when redirecting
-     * @return the root node
+     * Installs a callback for restarting parsing at the root and returns that
+     * root. The callback runs at a terminal node before results are cleared;
+     * executor configuration and redirection are mutually exclusive.
      */
     CommandNode redirect(Consumer<CommandContext> onRedirect);
 
     /**
-     * Add a permission requirement for this node. If the command sender does not have the required
-     * permission, it will not be able to access this command node. In other words, the sub commands
-     * under this node will not be executable for the command sender.
-     * <p>
-     * When the command is sent to a player, command nodes that the player does not have access to
-     * are not sent. This is useful for hiding command nodes from players that do not have access to
-     * them.
-     *
-     * @param permission the permissions to check
-     * @return the current {@code CommandNode}
+     * Adds a permission required to traverse this node and returns it for
+     * configuration. Optional nodes reject permission requirements; the
+     * execution parser checks selected-node permissions before descending and
+     * accumulates them for feedback filtering.
      */
     CommandNode permission(String permission);
 
     /**
-     * Get the permissions required to access this node.
-     *
-     * @return the permissions
+     * Returns an unmodifiable view of this node's permission requirements.
+     * Later configuration remains visible through the view; callers cannot add
+     * or remove requirements through the returned list.
      */
     @UnmodifiableView
     List<String> getPermissions();
 
     /**
-     * Check if the command sender has all the required permissions for accessing this node.
-     *
-     * @param sender the command sender
-     * @return {@code true} if the sender has all permissions, {@code false} otherwise.
+     * Returns whether the supplied sender has every permission required by this
+     * node.
      */
     default boolean checkPermissions(CommandSender sender) {
         return sender.hasPermissions(getPermissions());
     }
 
     /**
-     * Get the executor of this node.
-     *
-     * @return the executor function, or {@code null} if not set
+     * Returns the terminal executor configured for this node, or {@code null}
+     * when absent. The server invokes executors only at terminal nodes and
+     * rejects leftover input before calling them.
      */
     Function<CommandContext, CommandResult> getExecutor();
 
     /**
-     * Get the onRedirect function of this node.
-     *
-     * @return the onRedirect function, or {@code null} if not set
+     * Returns the callback configured for terminal redirection, or {@code null}
+     * when absent. The server invokes it before clearing parsed results and
+     * restarting from the root with remaining input.
      */
     Consumer<CommandContext> getOnRedirect();
 
     /**
-     * Add a key parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param key          the key of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a literal-key child producing {@code String} and returns the child
+     * for further configuration. The node retains {@code defaultValue} for
+     * omission after a separate call to {@code optional}. The configured key is
+     * lowercased at construction and matching is case-sensitive.
      */
     default CommandNode key(String key, String defaultValue) {
         return addLeaf(getFactory().key(key, this, defaultValue));
     }
 
     /**
-     * Add a key parameter to this command node with an empty default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param key the key of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a literal-key child producing {@code String} and returns the child
+     * for further configuration. The omission default is {@code ""} and takes
+     * effect only after {@code optional} is called. The configured key is
+     * lowercased at construction and matching is case-sensitive.
      */
     default CommandNode key(String key) {
         return key(key, "");
     }
 
     /**
-     * Add a string parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a single-token string child producing {@code String} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * retains the supplied token without additional quote processing.
      */
     default CommandNode str(String name, String defaultValue) {
         return addLeaf(getFactory().str(name, this, defaultValue));
     }
 
     /**
-     * Add a string parameter to this command node with an empty default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a single-token string child producing {@code String} and returns the
+     * child for further configuration. The omission default is {@code ""} and
+     * takes effect only after {@code optional} is called. The matcher retains
+     * the supplied token without additional quote processing.
      */
     default CommandNode str(String name) {
         return str(name, "");
     }
 
     /**
-     * Add a short integer parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link Short}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a short integer child producing {@code Short} and returns the child
+     * for further configuration. The node retains {@code defaultValue} for
+     * omission after a separate call to {@code optional}. The matcher uses the
+     * signed decimal short parser.
      */
     default CommandNode shortNum(String name, short defaultValue) {
         return addLeaf(getFactory().shortNum(name, this, defaultValue));
     }
 
     /**
-     * Add a short integer parameter to this command node with a default value of zero.
-     * <p>
-     * Result type: {@link Short}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a short integer child producing {@code Short} and returns the child
+     * for further configuration. The omission default is zero and takes effect
+     * only after {@code optional} is called. The matcher uses the signed
+     * decimal short parser.
      */
     default CommandNode shortNum(String name) {
         return shortNum(name, (short) 0);
     }
 
     /**
-     * Add an integer parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link Integer}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an integer child producing {@code Integer} and returns the child for
+     * further configuration. The node retains {@code defaultValue} for omission
+     * after a separate call to {@code optional}. The matcher uses the signed
+     * decimal integer parser.
      */
     default CommandNode intNum(String name, int defaultValue) {
         return addLeaf(getFactory().intNum(name, this, defaultValue));
     }
 
     /**
-     * Add an integer parameter to this command node with a default value of zero.
-     * <p>
-     * Result type: {@link Integer}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an integer child producing {@code Integer} and returns the child for
+     * further configuration. The omission default is zero and takes effect only
+     * after {@code optional} is called. The matcher uses the signed decimal
+     * integer parser.
      */
     default CommandNode intNum(String name) {
         return intNum(name, 0);
     }
 
     /**
-     * Add a long integer parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link Long}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a long integer child producing {@code Long} and returns the child
+     * for further configuration. The node retains {@code defaultValue} for
+     * omission after a separate call to {@code optional}. The matcher uses the
+     * signed decimal long parser.
      */
     default CommandNode longNum(String name, long defaultValue) {
         return addLeaf(getFactory().longNum(name, this, defaultValue));
     }
 
     /**
-     * Add a long integer parameter to this command node with a default value of zero.
-     * <p>
-     * Result type: {@link Long}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a long integer child producing {@code Long} and returns the child
+     * for further configuration. The omission default is zero and takes effect
+     * only after {@code optional} is called. The matcher uses the signed
+     * decimal long parser.
      */
     default CommandNode longNum(String name) {
         return longNum(name, 0);
     }
 
     /**
-     * Add a float parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link Float}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a floating-point child producing {@code Float} and returns the child
+     * for further configuration. The node retains {@code defaultValue} for
+     * omission after a separate call to {@code optional}. The matcher uses the
+     * Java floating-point parser.
      */
     default CommandNode floatNum(String name, float defaultValue) {
         return addLeaf(getFactory().floatNum(name, this, defaultValue));
     }
 
     /**
-     * Add a float parameter to this command node with a default value of zero.
-     * <p>
-     * Result type: {@link Float}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a floating-point child producing {@code Float} and returns the child
+     * for further configuration. The omission default is zero and takes effect
+     * only after {@code optional} is called. The matcher uses the Java
+     * floating-point parser.
      */
     default CommandNode floatNum(String name) {
         return floatNum(name, 0f);
     }
 
     /**
-     * Add a double parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link Double}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a double-precision child producing {@code Double} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher uses
+     * the Java double-precision parser.
      */
     default CommandNode doubleNum(String name, double defaultValue) {
         return addLeaf(getFactory().doubleNum(name, this, defaultValue));
     }
 
     /**
-     * Add a double parameter to this command node with a default value of zero.
-     * <p>
-     * Result type: {@link Double}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a double-precision child producing {@code Double} and returns the
+     * child for further configuration. The omission default is zero and takes
+     * effect only after {@code optional} is called. The matcher uses the Java
+     * double-precision parser.
      */
     default CommandNode doubleNum(String name) {
         return doubleNum(name, 0d);
     }
 
     /**
-     * Add a boolean parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link Boolean}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a boolean child producing {@code Boolean} and returns the child for
+     * further configuration. The node retains {@code defaultValue} for omission
+     * after a separate call to {@code optional}. The matcher accepts only the
+     * exact tokens {@code "true"} and {@code "false"}.
      */
     default CommandNode bool(String name, boolean defaultValue) {
         return addLeaf(getFactory().bool(name, this, defaultValue));
     }
 
     /**
-     * Add a boolean parameter to this command node with a default value of false.
-     * <p>
-     * Result type: {@link Boolean}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a boolean child producing {@code Boolean} and returns the child for
+     * further configuration. The omission default is {@code false} and takes
+     * effect only after {@code optional} is called. The matcher accepts only
+     * the exact tokens {@code "true"} and {@code "false"}.
      */
     default CommandNode bool(String name) {
         return bool(name, false);
     }
 
     /**
-     * Add an enum parameter to this command node with a default value and allowed values.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @param values       the allowed values for the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a case-sensitive enumeration child producing {@code String} and
+     * returns the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The server lowercases the supplied values array in
+     * place during construction.
      */
     default CommandNode enums(String name, String defaultValue, String[] values) {
         return addLeaf(getFactory().enums(name, this, defaultValue, values));
     }
 
     /**
-     * Add an enum parameter to this command node with a default value, allowed values, and an enum name.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @param enumName     the name of the enum
-     * @param values       the allowed values for the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a case-sensitive enumeration child producing {@code String} and
+     * returns the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The server lowercases the supplied values array in
+     * place during construction.
      */
     default CommandNode enums(String name, String defaultValue, String enumName, String[] values) {
         return addLeaf(getFactory().enums(name, this, enumName, defaultValue, values));
     }
 
     /**
-     * Add an enum parameter to this command node with allowed values and an empty default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name   the name of the parameter
-     * @param values the allowed values for the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a case-sensitive enumeration child producing {@code String} and
+     * returns the child for further configuration. The omission default is
+     * {@code ""} and takes effect only after {@code optional} is called. The
+     * server lowercases the supplied values array in place during construction.
      */
     default CommandNode enums(String name, String... values) {
         return enums(name, "", values);
     }
 
     /**
-     * Add an enum parameter to this command node based on the specified enum class, and
-     * the default value is set to {@code null}.
-     * <p>
-     * Unlike {@link #enums}, the string result will then be mapped back to the type of
-     * the provided enum class, which means that you don't need to map string back to
-     * enum manually.
-     * <p>
-     * Result type: {@code T} (the enum constant of the specified type)
-     *
-     * @param name      the name of the command node
-     * @param enumClass the class of the enumeration to be used for this command node
-     * @return a CommandNode instance configured to accept values from the specified enumeration class
+     * Adds an enum-class child producing the matching enum constant and returns
+     * the child for further configuration. The omission default is {@code null}
+     * and takes effect only after {@code optional} is called. The matcher
+     * accepts enum constant names without case sensitivity.
      */
     default <T extends Enum<?>> CommandNode enumClass(String name, Class<T> enumClass) {
         return enumClass(name, null, enumClass);
     }
 
     /**
-     * Add an enum parameter to this command node based on the specified enum class.
-     * <p>
-     * Unlike {@link #enums}, the string result will then be mapped back to the type of
-     * the provided enum class, which means that you don't need to map string back to
-     * enum manually.
-     * <p>
-     * Result type: {@code T} (the enum constant of the specified type)
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @param enumClass    the class of the enum type
-     * @return the {@code CommandNode} that created by this method
+     * Adds an enum-class child producing the matching enum constant and returns
+     * the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The matcher accepts enum constant names without case
+     * sensitivity.
      */
     default <T extends Enum<?>> CommandNode enumClass(String name, T defaultValue, Class<T> enumClass) {
         return addLeaf(getFactory().enumClass(name, this, defaultValue, enumClass));
     }
 
     /**
-     * Add an enum parameter to this command node based on the specified enum class.
-     * <p>
-     * Unlike {@link #enums}, the string result will then be mapped back to the type of
-     * the provided enum class, which means that you don't need to map string back to
-     * enum manually.
-     * <p>
-     * Result type: {@code T} (the enum constant of the specified type)
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @param enumName     the name of the enum
-     * @param enumClass    the class of the enum type
-     * @return the {@code CommandNode} that created by this method
+     * Adds an enum-class child producing the matching enum constant and returns
+     * the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The matcher accepts enum constant names without case
+     * sensitivity.
      */
     default <T extends Enum<?>> CommandNode enumClass(String name, T defaultValue, String enumName, Class<T> enumClass) {
         return addLeaf(getFactory().enumClass(name, this, defaultValue, enumName, enumClass));
     }
 
     /**
-     * Add an enum parameter to this command node with a default value and allowed values, ignoring case.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @param enums        the allowed values for the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a case-insensitive enumeration child producing {@code String} and
+     * returns the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The server lowercases the supplied values array in
+     * place while preserving matched input in the result.
      */
     default CommandNode enumsIgnoreCase(String name, String defaultValue, String[] enums) {
         return addLeaf(getFactory().enumsIgnoreCase(name, this, defaultValue, enums));
     }
 
     /**
-     * Add an enum parameter to this command node with a default value, allowed values, and an enum name, ignoring case.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @param enumName     the name of the enum
-     * @param enums        the allowed values for the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a case-insensitive enumeration child producing {@code String} and
+     * returns the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The server lowercases the supplied values array in
+     * place while preserving matched input in the result.
      */
     default CommandNode enumsIgnoreCase(String name, String defaultValue, String enumName, String[] enums) {
         return addLeaf(getFactory().enumsIgnoreCase(name, this, enumName, defaultValue, enums));
     }
 
     /**
-     * Add a message parameter to this command node with an empty default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a remaining-message child producing {@code String} and returns the
+     * child for further configuration. The omission default is {@code ""} and
+     * takes effect only after {@code optional} is called. The matcher consumes
+     * all remaining tokens and joins them with spaces.
      */
     default CommandNode msg(String name) {
         return msg(name, "");
     }
 
     /**
-     * Add a message parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a remaining-message child producing {@code String} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * consumes all remaining tokens and joins them with spaces.
      */
     default CommandNode msg(String name, String defaultValue) {
         return addLeaf(getFactory().msg(name, this, defaultValue));
     }
 
     /**
-     * Add a remaining parameters node to this command node with an empty default value.
-     * <p>
-     * Result type: {@code List<String>}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a remaining-token child producing {@code List<String>} and returns
+     * the child for further configuration. The omission default is a new empty
+     * list and takes effect only after {@code optional} is called. The matcher
+     * consumes all remaining tokens and keeps their individual values in a new
+     * list.
      */
     default CommandNode remain(String name) {
         return remain(name, Lists.newArrayList());
     }
 
     /**
-     * Add a remaining parameters node to this command node with a default value.
-     * <p>
-     * Result type: {@code List<String>}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a remaining-token child producing {@code List<String>} and returns
+     * the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The matcher consumes all remaining tokens and keeps
+     * their individual values in a new list.
      */
     default CommandNode remain(String name, List<String> defaultValue) {
         return addLeaf(getFactory().remain(name, this, defaultValue));
     }
 
     /**
-     * Add a target parameter to this command node with an empty default value.
-     * <p>
-     * Result type: {@code List<Entity>}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an entity-target child producing {@code List<Entity>} and returns the
+     * child for further configuration. The omission default is a new empty list
+     * and takes effect only after {@code optional} is called. The matcher
+     * accepts a selector or player name and permits an empty selection.
      */
     default CommandNode target(String name) {
         return addLeaf(getFactory().target(name, this, Lists.newArrayList()));
     }
 
     /**
-     * Add a target parameter to this command node with a default value.
-     * <p>
-     * Result type: {@code List<Entity>}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an entity-target child producing {@code List<Entity>} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * accepts a selector or player name and permits an empty selection.
      */
     default CommandNode target(String name, List<Entity> defaultValue) {
         return addLeaf(getFactory().target(name, this, defaultValue));
     }
 
     /**
-     * Add a player target parameter to this command node with an empty default value.
-     * <p>
-     * Result type: {@code List<Entity>} (filtered to only contain {@link EntityPlayer} instances)
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a player-target child producing {@code List<EntityPlayer>} and
+     * returns the child for further configuration. The omission default is a
+     * new empty list and takes effect only after {@code optional} is called.
+     * The matcher accepts a selector or player name and removes non-player
+     * entities.
      */
     default CommandNode playerTarget(String name) {
         return addLeaf(getFactory().playerTarget(name, this, Lists.newArrayList()));
     }
 
     /**
-     * Add a player target parameter to this command node with a default value.
-     * <p>
-     * Result type: {@code List<Entity>} (filtered to only contain {@link EntityPlayer} instances)
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a player-target child producing {@code List<EntityPlayer>} and
+     * returns the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The matcher accepts a selector or player name and
+     * removes non-player entities.
      */
     default CommandNode playerTarget(String name, List<EntityPlayer> defaultValue) {
         return addLeaf(getFactory().playerTarget(name, this, defaultValue));
     }
 
     /**
-     * Add a game mode parameter to this command node with a default name of "gameMode".
-     * <p>
-     * Result type: {@link GameMode}
-     *
-     * @return the {@code CommandNode} that created by this method
+     * Adds a game-mode child producing {@code GameMode} and returns the child
+     * for further configuration. The omission default is {@code null} and takes
+     * effect only after {@code optional} is called. The parameter name is
+     * {@code "gameMode"}. The matcher accepts exact lowercase aliases,
+     * including {@code "3"}, {@code "spectator"}, and {@code "spc"} for
+     * spectator mode.
      */
     default CommandNode gameMode() {
         return gameMode("gameMode");
     }
 
     /**
-     * Add a game mode parameter to this command node with a specified name.
-     * <p>
-     * Result type: {@link GameMode}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a game-mode child producing {@code GameMode} and returns the child
+     * for further configuration. The omission default is {@code null} and takes
+     * effect only after {@code optional} is called. The matcher accepts exact
+     * lowercase aliases, including {@code "3"}, {@code "spectator"}, and
+     * {@code "spc"} for spectator mode.
      */
     default CommandNode gameMode(String name) {
         return addLeaf(getFactory().gameMode(name, this, null));
     }
 
     /**
-     * Add a game mode parameter to this command node with a specified name and default value.
-     * <p>
-     * Result type: {@link GameMode}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a game-mode child producing {@code GameMode} and returns the child
+     * for further configuration. The node retains {@code defaultValue} for
+     * omission after a separate call to {@code optional}. The matcher accepts
+     * exact lowercase aliases, including {@code "3"}, {@code "spectator"}, and
+     * {@code "spc"} for spectator mode.
      */
     default CommandNode gameMode(String name, GameMode defaultValue) {
         return addLeaf(getFactory().gameMode(name, this, defaultValue));
     }
 
     /**
-     * Add a position parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@link org.joml.Vector3d}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a three-coordinate position child producing
+     * {@code org.joml.Vector3d} and returns the child for further
+     * configuration. The omission default is {@code null} and takes effect only
+     * after {@code optional} is called. The matcher supports absolute
+     * coordinates and tilde offsets from the current sender location.
      */
     default CommandNode pos(String name) {
         return pos(name, null);
     }
 
     /**
-     * Add a position parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link org.joml.Vector3d}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a three-coordinate child whose matched result is
+     * {@code org.joml.Vector3d} and returns it for configuration. Omission
+     * after {@code optional} inserts the original {@code Vector3fc} default
+     * directly, without converting it to the matched result's type; executors
+     * must handle that distinction.
      */
     default CommandNode pos(String name, Vector3fc defaultValue) {
         return addLeaf(getFactory().pos(name, this, defaultValue));
     }
 
     /**
-     * Add a wildcard target parameter to this command node with an empty default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a wildcard-target child producing {@code String} and returns the
+     * child for further configuration. The omission default is {@code ""} and
+     * takes effect only after {@code optional} is called. The matcher accepts
+     * one token without resolving it into entities.
      */
     default CommandNode wildcardTarget(String name) {
         return wildcardTarget(name, "");
     }
 
     /**
-     * Add a wildcard target parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a wildcard-target child producing {@code String} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * accepts one token without resolving it into entities.
      */
     default CommandNode wildcardTarget(String name, String defaultValue) {
         return addLeaf(getFactory().wildcardTarget(name, this, defaultValue));
     }
 
     /**
-     * Add an enchantment parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@link EnchantmentType}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an enchantment-type child producing {@code EnchantmentType} and
+     * returns the child for further configuration. The omission default is
+     * {@code null} and takes effect only after {@code optional} is called. The
+     * matcher accepts snapshotted full enchantment identifiers or their bare
+     * paths; bare paths use the default namespace for lookup.
      */
     default CommandNode enchantment(String name) {
         return enchantment(name, null);
     }
 
     /**
-     * Add an enchantment parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link EnchantmentType}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an enchantment-type child producing {@code EnchantmentType} and
+     * returns the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The matcher accepts snapshotted full enchantment
+     * identifiers or their bare paths; bare paths use the default namespace for
+     * lookup.
      */
     default CommandNode enchantment(String name, EnchantmentType defaultValue) {
         return addLeaf(getFactory().enchantment(name, this, defaultValue));
     }
 
     /**
-     * Add an effect parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@link EffectType}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an effect-type child producing {@code EffectType} and returns the
+     * child for further configuration. The omission default is {@code null} and
+     * takes effect only after {@code optional} is called. The matcher accepts
+     * snapshotted bare effect paths and resolves them in the default namespace.
      */
     default CommandNode effect(String name) {
         return effect(name, null);
     }
 
     /**
-     * Add an effect parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link EffectType}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an effect-type child producing {@code EffectType} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * accepts snapshotted bare effect paths and resolves them in the default
+     * namespace.
      */
     default CommandNode effect(String name, EffectType defaultValue) {
         return addLeaf(getFactory().effect(name, this, defaultValue));
     }
 
     /**
-     * Add an item type parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@code ItemType<?>}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an item-type child producing {@code ItemType<?>} and returns the
+     * child for further configuration. The omission default is {@code null} and
+     * takes effect only after {@code optional} is called. The matcher resolves
+     * a registered item identifier through the item registry.
      */
     default CommandNode itemType(String name) {
         return itemType(name, null);
     }
 
     /**
-     * Add an item type parameter to this command node with a default value.
-     * <p>
-     * Result type: {@code ItemType<?>}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an item-type child producing {@code ItemType<?>} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * resolves a registered item identifier through the item registry.
      */
     default CommandNode itemType(String name, ItemType<?> defaultValue) {
         return addLeaf(getFactory().itemType(name, this, defaultValue));
     }
 
     /**
-     * Add a block type parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@code BlockType<?>}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a block-type child producing {@code BlockType<?>} and returns the
+     * child for further configuration. The omission default is {@code null} and
+     * takes effect only after {@code optional} is called. The matcher resolves
+     * a registered block identifier through the block registry.
      */
     default CommandNode blockType(String name) {
         return blockType(name, null);
     }
 
     /**
-     * Add a block type parameter to this command node with a default value.
-     * <p>
-     * Result type: {@code BlockType<?>}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a block-type child producing {@code BlockType<?>} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * resolves a registered block identifier through the block registry.
      */
     default CommandNode blockType(String name, BlockType<?> defaultValue) {
         return addLeaf(getFactory().blockType(name, this, defaultValue));
     }
 
     /**
-     * Add an entity type parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@code EntityType<?>}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an entity-type child producing {@code EntityType<?>} and returns the
+     * child for further configuration. The omission default is {@code null} and
+     * takes effect only after {@code optional} is called. The matcher resolves
+     * a registered entity identifier through the entity registry.
      */
     default CommandNode entityType(String name) {
         return entityType(name, null);
     }
 
     /**
-     * Add an entity type parameter to this command node with a default value.
-     * <p>
-     * Result type: {@code EntityType<?>}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds an entity-type child producing {@code EntityType<?>} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * resolves a registered entity identifier through the entity registry.
      */
     default CommandNode entityType(String name, EntityType<?> defaultValue) {
         return addLeaf(getFactory().entityType(name, this, defaultValue));
     }
 
     /**
-     * Add a difficulty parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@link Difficulty}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a difficulty child producing {@code Difficulty} and returns the
+     * child for further configuration. The omission default is {@code null} and
+     * takes effect only after {@code optional} is called. The matcher
+     * recognizes the difficulty parser's supported numeric and named aliases.
      */
     default CommandNode difficulty(String name) {
         return difficulty(name, null);
     }
 
     /**
-     * Add a difficulty parameter to this command node with a default value.
-     * <p>
-     * Result type: {@link Difficulty}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a difficulty child producing {@code Difficulty} and returns the
+     * child for further configuration. The node retains {@code defaultValue}
+     * for omission after a separate call to {@code optional}. The matcher
+     * recognizes the difficulty parser's supported numeric and named aliases.
      */
     default CommandNode difficulty(String name, Difficulty defaultValue) {
         return addLeaf(getFactory().difficulty(name, this, defaultValue));
     }
 
     /**
-     * Add a block property values parameter to this command node with an empty default value.
-     * <p>
-     * Result type: {@code List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a block-property child producing
+     * {@code List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>} and returns
+     * the child for further configuration. The omission default is a new empty
+     * list and takes effect only after {@code optional} is called. The parent
+     * must be a block-type node because parsing reads the preceding block
+     * result.
      */
     default CommandNode blockPropertyValues(String name) {
         return blockPropertyValues(name, Lists.newArrayList());
     }
 
     /**
-     * Add a block property values parameter to this command node with a default value.
-     * <p>
-     * Result type: {@code List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a block-property child producing
+     * {@code List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>} and returns
+     * the child for further configuration. The node retains
+     * {@code defaultValue} for omission after a separate call to
+     * {@code optional}. The parent must be a block-type node because parsing
+     * reads the preceding block result.
      */
     default CommandNode blockPropertyValues(String name, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue) {
         return addLeaf(getFactory().blockPropertyValues(name, this, defaultValue));
     }
 
     /**
-     * Add a command parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name the name of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a greedy command-text child and returns it for further
+     * configuration. The matcher joins remaining tokens, surrounds
+     * literal-space tokens with double quotes, and trims the assembled text;
+     * embedded quotes are not escaped. Omission after {@code optional} inserts
+     * {@code ""} instead, so redispatch callers must account for the
+     * reconstruction limits.
      */
     default CommandNode cmd(String name) {
         return cmd(name, "");
     }
 
     /**
-     * Add a command parameter to this command node with a default value of {@code null}.
-     * <p>
-     * Result type: {@link String}
-     *
-     * @param name         the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @return the {@code CommandNode} that created by this method
+     * Adds a greedy command-text child and returns it for further
+     * configuration. The matcher joins remaining tokens, surrounds
+     * literal-space tokens with double quotes, and trims the assembled text;
+     * embedded quotes are not escaped. Omission after {@code optional} inserts
+     * {@code defaultValue} instead, so redispatch callers must account for the
+     * reconstruction limits.
      */
     default CommandNode cmd(String name, String defaultValue) {
         return addLeaf(getFactory().cmd(name, this, defaultValue));

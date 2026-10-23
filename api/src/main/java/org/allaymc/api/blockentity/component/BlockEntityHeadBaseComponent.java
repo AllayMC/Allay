@@ -3,53 +3,50 @@ package org.allaymc.api.blockentity.component;
 import org.allaymc.api.block.data.CompassRoseDirection;
 
 /**
+ * {@code BlockEntityHeadBaseComponent} exposes a head's compass orientation,
+ * animation flag, and elapsed animation counter. The server advances that
+ * counter while animation is active and includes the orientation and animation
+ * fields in the inherited block-entity persistence representation.
+ *
  * @author daoge_cmd
  */
 public interface BlockEntityHeadBaseComponent extends BlockEntityBaseComponent {
 
     /**
-     * Retrieves the direction based on the 16-point compass rose.
-     *
-     * @return the current {@link CompassRoseDirection} of the block entity
+     * Returns the retained sixteen-point compass orientation for this head. The
+     * server initially leaves it {@code null} until placement, a supplied
+     * rotation tag, or an explicit setter establishes an orientation.
      */
     CompassRoseDirection getDirection();
 
     /**
-     * Sets the direction of the BlockEntityHead.
-     *
-     * @param direction the {@code CompassRoseDirection} to set. Accepts one of the 16 directions
-     *                  represented by the compass rose. For example, {@code NORTH}, {@code EAST},
-     *                  or any of the intercardinal directions like {@code NORTH_EAST}.
+     * Stores a sixteen-point compass orientation and sends updated state to
+     * viewers. The server retains the supplied reference directly, so callers
+     * provide a usable direction before persistence dereferences it.
      */
     void setDirection(CompassRoseDirection direction);
 
     /**
-     * Checks whether the head is playing animation. For example, when the pig spirit head is fanning
-     * its ears or the mouth of the dragon head is moving.
-     *
-     * @return {@code true} if the head is playing animation, otherwise {@code false}
+     * Returns whether this head currently marks its animation as active.
      */
     boolean isPlayingAnimation();
 
     /**
-     * Sets whether the head block entity is playing an animation.
-     *
-     * @param playingAnimation {@code true} to set the block entity to play an animation,
-     *                         {@code false} to stop the animation
+     * Changes the animation-active flag and sends updated state to viewers. The
+     * server does not reset the elapsed animation counter when this flag
+     * changes, so callers manage that counter separately.
      */
     void setPlayingAnimation(boolean playingAnimation);
 
     /**
-     * Gets the total number of ticks in which the head plays the animation.
-     *
-     * @return the total number of ticks in which the head plays the animation
+     * Returns the retained number of elapsed ticks in the head animation.
      */
     int getAnimationTicks();
 
     /**
-     * Sets the total number of ticks during which the animation for the head block entity will be played.
-     *
-     * @param ticks the number of ticks to set. Must be a positive integer representing the duration of the animation.
+     * Replaces the elapsed animation counter and sends updated state to
+     * viewers. The server stores the supplied integer without a positivity
+     * check; it is a counter rather than an animation-duration limit.
      */
     void setAnimationTicks(int ticks);
 }

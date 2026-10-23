@@ -11,40 +11,92 @@ import org.joml.Vector3ic;
 import java.util.*;
 
 /**
- * Calculator for piston push/pull operations.
+ * {@code PistonPushCalculator} builds a movement plan for one piston extension or
+ * sticky retraction without changing world blocks. The plan separates movable
+ * positions, blocks selected for destruction, and the original states needed by
+ * execution. Extension starts next to the piston, while sticky retraction starts two
+ * positions away and moves toward the base.
+ *
  * <p>
- * This class implements the algorithm to calculate which blocks need to be
- * moved when a piston extends or retracts, following vanilla Minecraft rules.
+ * Line discovery follows movement direction and also gathers blocks behind sticky
+ * origins and perpendicular branches. The shared block limit applies to the accumulated
+ * movement plan, and intersecting lines reorder previously collected positions. Sticky
+ * compatibility is tag-based, with two sticky blocks requiring the same block type. A
+ * failed calculation can leave partial collections, so callers execute a plan only
+ * after {@code calculate} succeeds. Result getters expose unmodifiable live views whose
+ * contents are cleared and rebuilt by the next calculation; position objects remain
+ * shared.
  *
  * @author daoge_cmd
  */
 public class PistonPushCalculator {
 
     /**
-     * Maximum number of blocks a piston can push.
+     * {@code MAX_PUSH_BLOCKS} limits the accumulated movable positions to twelve;
+     * destruction entries are tracked separately and do not consume this movement
+     * allowance.
      */
     public static final int MAX_PUSH_BLOCKS = 12;
 
+    /**
+     * Dimension queried for candidate block states.
+     */
     private final Dimension dimension;
+    /**
+     * {@code pistonPos} retains the supplied base position without copying. Callers
+     * must leave its coordinates unchanged while calculation or result consumption
+     * depends on this calculator.
+     */
     private final Vector3ic pistonPos;
+    // pushDirection keeps the piston's outward face, while moveDirection
+    // follows that face during extension and reverses it during retraction. Line
+    // discovery follows movement without changing the piston axis used for branching.
+    /**
+     * Piston extension face supplied at construction.
+     */
     private final BlockFace pushDirection;
+    /**
+     * Actual movement face for this extension or retraction.
+     */
     private final BlockFace moveDirection;
+    /**
+     * Whether retraction can gather a pull plan.
+     */
     private final boolean sticky;
+    /**
+     * Whether this plan moves outward rather than inward.
+     */
     private final boolean extending;
 
+    // toMove, toDestroy, originalStates, and visited belong to one calculation.
+    // calculate clears all four before discovery, and failure retains any partial
+    // entries rather than rolling the plan back.
+    /**
+     * {@code toMove} holds ordered source positions for movement. Its getter exposes a
+     * live unmodifiable view, and {@code calculate} clears and rebuilds the same list.
+     */
     private final List<Vector3ic> toMove = new ArrayList<>();
+    /**
+     * {@code toDestroy} holds destruction positions separately from the movement limit.
+     * Its getter exposes a live unmodifiable view rebuilt by each calculation.
+     */
     private final List<Vector3ic> toDestroy = new ArrayList<>();
+    /**
+     * {@code originalStates} retains discovered source states for movement and
+     * destruction entries. Its getter exposes a live unmodifiable view, with mutable
+     * position keys still shared.
+     */
     private final Map<Vector3ic, BlockState> originalStates = new LinkedHashMap<>();
+    /**
+     * Positions already admitted to discovery bookkeeping.
+     */
     private final Set<Vector3ic> visited = new HashSet<>();
 
     /**
-     * Create a new piston push calculator.
-     *
-     * @param dimension     The dimension to operate in
-     * @param pistonPos     The position of the piston block
-     * @param pushDirection The direction the piston is pushing (facing direction)
-     * @param sticky        Whether the piston is sticky
-     * @param extending     Whether the piston is extending or retracting
+     * Creates a plan calculator retaining the supplied dimension and piston position.
+     * {@code pushDirection} always identifies the piston front; the derived movement
+     * direction is reversed only for retraction, and callers must not mutate the
+     * retained position during use.
      */
     public PistonPushCalculator(
             Dimension dimension,
@@ -56,18 +108,23 @@ public class PistonPushCalculator {
         this.dimension = dimension;
         this.pistonPos = pistonPos;
         this.pushDirection = pushDirection;
-        // moveDirection: direction blocks are moving
-        // - Extending: blocks move away from piston (pushDirection)
-        // - Retracting: blocks move towards piston (pushDirection.opposite())
         this.moveDirection = extending ? pushDirection : pushDirection.opposite();
         this.sticky = sticky;
         this.extending = extending;
     }
 
     /**
-     * Calculate the blocks to be moved by the piston.
+     * Rebuilds the movement and destruction plan from the current dimension state.
+     * Non-sticky retraction succeeds with an empty plan, and an empty or replaceable
+     * starting position also succeeds without movement. An immovable starting block
+     * fails before line discovery.
      *
-     * @return true if the piston can push/pull, false otherwise
+     * <p>
+     * Successful line discovery expands sticky branches while the movement list can
+     * grow. The result remains a proposal: no world state is reserved or changed. A
+     * {@code false} result leaves any partial discoveries available through the live
+     * getters, so callers must reject that plan rather than execute its surviving
+     * prefix.
      */
     public boolean calculate() {
         toMove.clear();
@@ -75,45 +132,37 @@ public class PistonPushCalculator {
         originalStates.clear();
         visited.clear();
 
-        // For non-sticky pistons retracting, there's nothing to pull
         if (!extending && !sticky) {
             return true;
         }
 
-        // Get the first block to check
         Vector3ic startPos;
         if (extending) {
             startPos = pushDirection.offsetPos(pistonPos);
         } else {
-            // For sticky piston retracting, check the block 2 positions away
             startPos = pushDirection.offsetPos(pistonPos, 2);
         }
 
         BlockState startState = dimension.getBlockState(startPos);
 
-        // If the start position is air or replaceable, nothing to push
         if (isAirOrReplaceable(startState)) {
             return true;
         }
 
-        // Check if the block can be pushed/pulled
         if (!canMoveBlock(startState, extending)) {
             return false;
         }
 
-        // If the block should be destroyed when moved
         if (shouldDestroyBlock(startState)) {
             toDestroy.add(startPos);
             originalStates.put(startPos, startState);
             return true;
         }
 
-        // Start the recursive calculation
         if (!addBlockLine(startPos, true)) {
             return false;
         }
 
-        // For blocks in toMove, check for sticky block connections
         for (int i = 0; i < toMove.size(); i++) {
             Vector3ic pos = toMove.get(i);
             BlockState state = originalStates.get(pos);
@@ -128,31 +177,33 @@ public class PistonPushCalculator {
     }
 
     /**
-     * Add a line of blocks starting from the given position.
+     * Adds an origin, sticky trailing blocks, and the movement path ahead to the shared
+     * plan. Air, replaceable blocks, and visited origins require no additional work. An
+     * immovable main-line origin fails, while an immovable branch origin is ignored; an
+     * immovable block ahead still blocks either kind of line.
      *
-     * @param origin        The starting position
-     * @param isMainLine    Whether this is the main line (in push direction)
-     * @return true if successful, false if push is blocked
+     * <p>
+     * Trailing sticky blocks are gathered in reverse movement direction and appended in
+     * reversed discovery order. Forward discovery can encounter an earlier line,
+     * triggering list reordering instead of duplication at that encounter. The shared
+     * movement limit can fail after partial additions, and this helper does not roll
+     * them back.
      */
     private boolean addBlockLine(Vector3ic origin, boolean isMainLine) {
         BlockState blockState = dimension.getBlockState(origin);
 
-        // Skip air or replaceable blocks
         if (isAirOrReplaceable(blockState)) {
             return true;
         }
 
-        // If we've already processed this position
         if (visited.contains(origin)) {
             return true;
         }
 
-        // Check if the block can be moved
         if (!canMoveBlock(blockState, extending)) {
             return isMainLine ? false : true;
         }
 
-        // Check if the block should be destroyed
         if (shouldDestroyBlock(blockState)) {
             if (!toDestroy.contains(origin)) {
                 toDestroy.add(origin);
@@ -161,12 +212,12 @@ public class PistonPushCalculator {
             return true;
         }
 
-        // Check if we've reached the piston itself
         if (posEquals(origin, pistonPos)) {
             return true;
         }
 
-        // Check block limit
+        // Destruction does not consume movement slots, but another movable
+        // source would exceed the twelve-block plan limit shared by all lines and branches.
         if (toMove.size() >= MAX_PUSH_BLOCKS) {
             return false;
         }
@@ -175,7 +226,6 @@ public class PistonPushCalculator {
         toMove.add(origin);
         originalStates.put(origin, blockState);
 
-        // Check blocks behind this one (opposite to move direction, blocks that might be pulled along by sticky blocks)
         int count = 1;
         List<Vector3ic> behindBlocks = new ArrayList<>();
         BlockFace behindDirection = moveDirection.opposite();
@@ -185,7 +235,6 @@ public class PistonPushCalculator {
 
             BlockState behindState = dimension.getBlockState(behindPos);
 
-            // Check for sticky block incompatibility (slime and honey don't stick to each other)
             if (canStickBlocks(blockState) && canStickBlocks(behindState)) {
                 if (!canStickyBlocksStickTogether(blockState, behindState)) {
                     break;
@@ -202,6 +251,8 @@ public class PistonPushCalculator {
                 break;
             }
 
+            // Trailing entries are not in toMove yet; include them in the
+            // shared movement budget before admitting another block from the sticky chain.
             if (toMove.size() + behindBlocks.size() >= MAX_PUSH_BLOCKS) {
                 return false;
             }
@@ -213,24 +264,24 @@ public class PistonPushCalculator {
             count++;
         }
 
-        // Add behind blocks in reverse order
+        // Sticky trailing blocks were found outward from the origin. Reverse
+        // that segment before appending it so later collision reordering receives its expected trailing order.
         Collections.reverse(behindBlocks);
         toMove.addAll(behindBlocks);
 
-        // Check blocks in front (in move direction)
         int step = 1;
         while (true) {
             Vector3ic frontPos = moveDirection.offsetPos(origin, step);
 
             BlockState frontState = dimension.getBlockState(frontPos);
 
-            // If we've already processed this position (collision with another push line)
             if (toMove.contains(frontPos)) {
+                // This line has reached an existing planned source. Reorder
+                // the trailing segment instead of scanning through the same movement path again.
                 reorderListAtCollision(behindBlocks.size(), toMove.indexOf(frontPos));
                 return true;
             }
 
-            // Check for the piston arm position (when retracting)
             if (!extending) {
                 Vector3ic armPos = pushDirection.offsetPos(pistonPos);
                 if (posEquals(frontPos, armPos)) {
@@ -254,6 +305,8 @@ public class PistonPushCalculator {
                 return true;
             }
 
+            // Destruction does not consume movement slots, but another movable
+            // source would exceed the twelve-block plan limit shared by all lines and branches.
             if (toMove.size() >= MAX_PUSH_BLOCKS) {
                 return false;
             }
@@ -266,13 +319,21 @@ public class PistonPushCalculator {
     }
 
     /**
-     * Add blocks connected to sticky blocks (perpendicular to push direction).
+     * Adds compatible blocks beside a sticky movement entry on axes perpendicular to
+     * piston extension. The source state comes from {@code originalStates}, while
+     * adjacent states are read from the live dimension. Already visited, replaceable,
+     * and incompatible neighbors are skipped before line discovery.
+     *
+     * <p>
+     * Each accepted neighbor uses {@code addBlockLine} in branch mode, allowing an
+     * immovable branch origin to remain behind while obstacles farther along an
+     * accepted line can reject the complete plan. Newly added movement entries are
+     * later examined by the growing-list traversal in {@code calculate}.
      */
     private boolean addBranchingBlocks(Vector3ic pos) {
         BlockState blockState = originalStates.get(pos);
 
         for (BlockFace face : BlockFace.values()) {
-            // Skip the push direction and its opposite
             if (face == pushDirection || face == pushDirection.opposite()) {
                 continue;
             }
@@ -288,7 +349,6 @@ public class PistonPushCalculator {
                 continue;
             }
 
-            // Check if these blocks can stick together
             if (!canStickyBlocksStickTogether(blockState, adjacentState)) {
                 continue;
             }
@@ -302,7 +362,16 @@ public class PistonPushCalculator {
     }
 
     /**
-     * Reorder the toMove list when a collision is detected.
+     * Reorders the accumulated movement list when a new line intersects an existing
+     * entry. The prefix before {@code collisionIndex} remains first, followed by the
+     * trailing {@code behindCount} entries, then the intervening segment. The caller
+     * supplies indices delimiting nonoverlapping segments within {@code toMove}.
+     *
+     * <p>
+     * Each segment is copied before the original list is cleared, preventing backed
+     * sublists from being invalidated during reconstruction. Original state mappings
+     * remain keyed by source position, so reordering changes execution order without
+     * replacing the associated state entries.
      */
     private void reorderListAtCollision(int behindCount, int collisionIndex) {
         List<Vector3ic> before = new ArrayList<>(toMove.subList(0, collisionIndex));
@@ -316,7 +385,7 @@ public class PistonPushCalculator {
     }
 
     /**
-     * Check if a block state is air or replaceable.
+     * Returns whether the state is air or carries the replaceable block tag.
      */
     private boolean isAirOrReplaceable(BlockState state) {
         BlockType<?> type = state.getBlockType();
@@ -324,28 +393,26 @@ public class PistonPushCalculator {
     }
 
     /**
-     * Check if a block can be moved by the piston.
+     * Returns whether tags and explicit arm exclusions permit movement in this
+     * operation. Pulling additionally rejects {@code UNPULLABLE}; piston bases are not
+     * currently rejected for an extended state by this helper.
      */
     private boolean canMoveBlock(BlockState state, boolean pushing) {
         BlockType<?> type = state.getBlockType();
 
-        // Check unpushable tag
         if (type.hasBlockTag(BlockTags.UNPUSHABLE)) {
             return false;
         }
 
-        // When pulling, also check unpullable tag
         if (!pushing && type.hasBlockTag(BlockTags.UNPULLABLE)) {
             return false;
         }
 
-        // Pistons cannot push extended pistons
         if (type == BlockTypes.PISTON || type == BlockTypes.STICKY_PISTON) {
-            // TODO: Check if piston is extended using block property
-            // For now, assume pistons can be pushed when not extended
+            // TODO: Reject extended piston bases after checking their arm entity
+            // or matching collision head; this branch currently adds no movement restriction.
         }
 
-        // Piston arm collision blocks cannot be pushed
         if (type == BlockTypes.PISTON_ARM_COLLISION || type == BlockTypes.STICKY_PISTON_ARM_COLLISION) {
             return false;
         }
@@ -354,67 +421,79 @@ public class PistonPushCalculator {
     }
 
     /**
-     * Check if a block should be destroyed when pushed.
+     * Returns whether the state carries the break-when-pushed block tag.
      */
     private boolean shouldDestroyBlock(BlockState state) {
         return state.getBlockType().hasBlockTag(BlockTags.BREAK_WHEN_PUSHED);
     }
 
     /**
-     * Check if a block can stick to other blocks (slime/honey block).
+     * Returns whether the state's type carries the sticky-block connection tag.
      */
     private boolean canStickBlocks(BlockState state) {
         return state.getBlockType().hasBlockTag(BlockTags.CAN_STICK_BLOCKS);
     }
 
     /**
-     * Check if two positions are equal by comparing coordinates.
-     * This is needed because Vector3i.equals() checks class type,
-     * which fails when comparing Vector3i with Position3i.
+     * Returns whether both positions have identical integer coordinates, ignoring
+     * dimension and runtime class. Coordinate comparison avoids the class-sensitive
+     * object equality of {@code Vector3i} when one position is a dimension-bearing
+     * wrapper.
      */
     private boolean posEquals(Vector3ic a, Vector3ic b) {
         return a.x() == b.x() && a.y() == b.y() && a.z() == b.z();
     }
 
     /**
-     * Check if two sticky blocks can stick together.
-     * Slime and honey blocks don't stick to each other.
+     * Returns whether two states participate in this calculator's sticky connection
+     * rule. Two states without the sticky tag do not attach through this mechanism. One
+     * tagged state can carry an untagged state, while two tagged states attach only
+     * when their block types are identical.
+     *
+     * <p>
+     * This predicate describes adhesion rather than permission to move. Line discovery
+     * separately applies {@code canMoveBlock}, so a compatible sticky relationship does
+     * not bypass unpushable tags, pull restrictions, or collision-arm exclusions.
+     * Different tagged types therefore remain separate even when both can adhere to
+     * ordinary blocks.
      */
     private boolean canStickyBlocksStickTogether(BlockState state1, BlockState state2) {
         boolean state1Sticky = canStickBlocks(state1);
         boolean state2Sticky = canStickBlocks(state2);
 
-        // If neither is sticky, they don't stick together via this mechanism
         if (!state1Sticky && !state2Sticky) {
             return false;
         }
 
-        // If only one is sticky, the other block gets pulled along
         if (!state1Sticky || !state2Sticky) {
             return true;
         }
 
-        // If both are sticky, they only stick if they're the same type
-        // (slime doesn't stick to honey and vice versa)
         return state1.getBlockType() == state2.getBlockType();
     }
 
     /**
-     * Get the list of blocks to be moved.
+     * Returns an unmodifiable live view of movement source positions. The next
+     * {@code calculate} call clears and rebuilds it, failed calculations may leave
+     * partial entries, and callers must not mutate the shared position objects.
      */
     public List<Vector3ic> getBlocksToMove() {
         return Collections.unmodifiableList(toMove);
     }
 
     /**
-     * Get the list of blocks to be destroyed.
+     * Returns an unmodifiable live view of positions selected for destruction. The next
+     * {@code calculate} call rebuilds it, failure may leave a partial plan, and
+     * position objects remain shared with internal bookkeeping.
      */
     public List<Vector3ic> getBlocksToDestroy() {
         return Collections.unmodifiableList(toDestroy);
     }
 
     /**
-     * Get the original block states of all affected blocks.
+     * Returns an unmodifiable live view of discovered source states. The next
+     * calculation rebuilds the map, and callers must not mutate shared position keys
+     * because their hashes determine later state lookups.
      */
     public Map<Vector3ic, BlockState> getOriginalStates() {
         return Collections.unmodifiableMap(originalStates);

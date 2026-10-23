@@ -10,14 +10,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * {@code TagCommand} adds, removes, or lists entity tags for selected targets.
+ * Mutation results count actual changes, while multi-target feedback names the
+ * entire selection. Listing merges tags into a distinct set and fails when
+ * every selected entity has no tags.
+ *
  * @author daoge_cmd
  */
 public class TagCommand extends Command {
 
+    /**
+     * Creates the {@code /tag} command with its built-in authorization permission.
+     */
     public TagCommand() {
         super("tag", TrKeys.MC_COMMANDS_TAG_DESCRIPTION, Permissions.COMMAND_TAG);
     }
 
+    /**
+     * Installs tag mutation and merged listing for nonempty target selections.
+     * Mutations fail only when no target changes and return the number changed
+     * as status; listing fails for an empty union and otherwise prints each
+     * distinct tag once.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

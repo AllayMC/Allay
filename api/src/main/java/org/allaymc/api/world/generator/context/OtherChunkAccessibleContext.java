@@ -8,48 +8,66 @@ import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
 /**
+ * {@code OtherChunkAccessibleContext} routes generation-time block access
+ * between the current unsafe chunk and an externally bounded chunk source.
+ * Callers use dimension coordinates; current-chunk access converts them to
+ * local coordinates, while neighbor access selects a chunk before applying the
+ * same local conversion.
+ *
+ * <p>
+ * The current-chunk fast path also requires an in-range Y coordinate. Other
+ * positions therefore pass through the supplied source, even when their
+ * horizontal coordinates match the current chunk. Missing or inaccessible
+ * neighboring chunks produce air for block reads, {@code null} for block-entity
+ * reads, and ignored writes. These defaults let bounded generation inspect
+ * outside its available region without loading additional chunks, but they
+ * cannot distinguish absent terrain from an access restriction.
+ *
  * @author daoge_cmd
  */
 public abstract class OtherChunkAccessibleContext extends Context {
+    /**
+     * {@code AIR} supplies the block-read fallback when the bounded neighboring
+     * source cannot expose a requested chunk.
+     */
     private static final BlockState AIR = BlockTypes.AIR.getDefaultState();
 
     /**
-     * The chunk source to get chunks from if the requested chunk is not the current chunk.
-     * The implementation of this class will control how many chunks this context can access.
+     * {@code chunkSource} controls neighbor accessibility. Missing chunks use read
+     * defaults or ignored writes instead of triggering additional chunk loads.
      */
     @Getter
     protected ChunkSource chunkSource;
 
+    /**
+     * Creates a context retaining the current unsafe chunk and neighboring
+     * source. The caller must establish the allowed region and synchronized
+     * lifetime; this constructor neither reserves chunks nor verifies source
+     * bounds.
+     */
     public OtherChunkAccessibleContext(UnsafeChunk currentChunk, ChunkSource chunkSource) {
         super(currentChunk);
         this.chunkSource = chunkSource;
     }
 
     /**
-     * Sets the block state at the specified coordinates in the default layer. If the coordinates are in the current
-     * chunk, sets it directly; otherwise, delegates to setBlockStateInOtherChunk.
-     *
-     * @param x          The x-coordinate (world)
-     * @param y          The y-coordinate (world)
-     * @param z          The z-coordinate (world)
-     * @param blockState The block state to set
+     * Replaces the primary block layer at dimension coordinates using the
+     * current or accessible neighboring chunk. This overload selects layer
+     * zero; writes outside the source's available region are ignored.
      */
     public void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
     }
 
     /**
-     * Sets the block state at the specified coordinates and layer. If the coordinates are in the current chunk,
-     * sets it directly; otherwise, delegates to setBlockStateInOtherChunk.
-     *
-     * @param x          The x-coordinate (world)
-     * @param y          The y-coordinate (world)
-     * @param z          The z-coordinate (world)
-     * @param blockState The block state to set
-     * @param layer      The block layer
+     * Replaces the selected block layer at dimension coordinates, using the
+     * unsafe current chunk only when all coordinates belong to it. Other
+     * positions go through the supplied source, and inaccessible chunks
+     * silently discard the write.
      */
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
         if (isInCurrentChunk(x, y, z)) {
+            // Masking removes the validated chunk origin while retaining local X/Z.
             currentChunk.setBlockState(x & 15, y, z & 15, blockState, layer);
             return;
         }
@@ -58,70 +76,99 @@ public abstract class OtherChunkAccessibleContext extends Context {
     }
 
     /**
-     * Gets the block state at the specified coordinates in the default layer.
-     *
-     * @param x The x-coordinate (world)
-     * @param y The y-coordinate (world)
-     * @param z The z-coordinate (world)
-     * @return The block state at the given position
+     * Returns the primary block-layer state at dimension coordinates, using air
+     * when the neighboring source has no accessible chunk. This overload
+     * selects layer zero and inherits the source's access restrictions.
      */
     public BlockState getBlockState(int x, int y, int z) {
         return getBlockState(x, y, z, 0);
     }
 
     /**
-     * Gets the block state at the specified coordinates and layer. If the coordinates are in the current
-     * chunk, gets it directly; otherwise, delegates to getBlockStateInOtherChunk.
-     *
-     * @param x     The x-coordinate (world)
-     * @param y     The y-coordinate (world)
-     * @param z     The z-coordinate (world)
-     * @param layer The block layer
-     * @return The block state at the given position and layer
+     * Returns the selected block-layer state at dimension coordinates through
+     * the current chunk or bounded source. Missing neighboring chunks return
+     * air; valid chunk lookups retain that chunk's own height and layer rules.
      */
     public BlockState getBlockState(int x, int y, int z, int layer) {
+        // The current-chunk branch masks dimension X/Z into local block coordinates.
         return isInCurrentChunk(x, y, z) ?
                 currentChunk.getBlockState(x & 15, y, z & 15, layer) :
                 getBlockStateInOtherChunk(x, y, z, layer);
     }
 
     /**
-     * Retrieves the {@code BlockEntity} at the specified world coordinates.
-     * If the coordinates refer to a block in the current chunk, the {@code BlockEntity}
-     * is fetched directly from the current chunk. Otherwise, it is fetched
-     * from the appropriate chunk using other chunk access.
-     *
-     * @param x The x-coordinate (world).
-     * @param y The y-coordinate (world).
-     * @param z The z-coordinate (world).
-     * @return The {@code BlockEntity} at the specified coordinates, or {@code null} if no
-     * {@code BlockEntity} exists at that position.
+     * Returns a shared block entity at dimension coordinates, or {@code null} when
+     * absent or the neighboring chunk is inaccessible. Available chunk lookups
+     * still validate height, so out-of-range Y can throw rather than returning
+     * {@code null}.
      */
     public BlockEntity getBlockEntity(int x, int y, int z) {
+        // The current-chunk branch masks dimension X/Z into local block coordinates.
         return isInCurrentChunk(x, y, z) ?
                 currentChunk.getBlockEntity(x & 15, y, z & 15) :
                 getBlockEntityInOtherChunk(x, y, z);
     }
 
+    /**
+     * Writes the selected layer through the neighboring source using dimension
+     * coordinates. A missing chunk discards the request; an available chunk
+     * receives local horizontal coordinates and applies its normal mutation
+     * validation.
+     */
     private void setBlockStateInOtherChunk(int x, int y, int z, BlockState blockState, int layer) {
+        // Arithmetic shifts select containing chunks; masking below preserves
+        // their local horizontal positions even when dimension coordinates are negative.
         var chunk = chunkSource.getChunk(x >> 4, z >> 4);
         if (chunk == null) {
+            // No accessible neighboring chunk means this write cannot be
+            // applied within the reserved region; it is dropped without
+            // requesting additional generation work.
             return;
         }
 
         chunk.setBlockState(x & 15, y, z & 15, blockState, layer);
     }
 
+    /**
+     * Reads the selected layer through the neighboring source using dimension
+     * coordinates. A missing chunk returns the retained air state; an available
+     * chunk receives local horizontal coordinates and applies its normal height
+     * fallback.
+     */
     private BlockState getBlockStateInOtherChunk(int x, int y, int z, int layer) {
+        // Arithmetic shifts select containing chunks; masking below preserves
+        // their local horizontal positions even when dimension coordinates are negative.
         var chunk = chunkSource.getChunk(x >> 4, z >> 4);
+        // An unavailable neighboring chunk is represented as air for generation
+        // reads, so callers cannot distinguish actual air from terrain outside
+        // the accessible region.
         return chunk == null ? AIR : chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
+    /**
+     * Reads a shared block entity through the neighboring source using
+     * dimension coordinates. A missing chunk returns {@code null}, while an available
+     * chunk receives local horizontal coordinates and applies its normal
+     * coordinate validation.
+     */
     private BlockEntity getBlockEntityInOtherChunk(int x, int y, int z) {
+        // Arithmetic shifts select containing chunks; masking below preserves
+        // their local horizontal positions even when dimension coordinates are negative.
         var chunk = chunkSource.getChunk(x >> 4, z >> 4);
+        // No accessible chunk supplies an entity map, so this fallback returns
+        // the same null result used for an available chunk with no entity.
         return chunk == null ? null : chunk.getBlockEntity(x & 15, y, z & 15);
     }
 
+    /**
+     * Returns whether dimension coordinates lie inside the current chunk's
+     * horizontal column and vertical dimension range. The test includes Y
+     * because the direct unsafe route must have a valid mutation position; an
+     * out-of-height coordinate falls through to the other-chunk route instead.
+     * Horizontal bounds are half-open sixteen-block intervals, while the
+     * dimension height endpoints are inclusive. This method selects the access
+     * route without loading or reserving another chunk.
+     */
     private boolean isInCurrentChunk(int x, int y, int z) {
         var currentChunkX = currentChunk.getX();
         var currentChunkZ = currentChunk.getZ();

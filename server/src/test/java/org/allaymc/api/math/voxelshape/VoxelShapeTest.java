@@ -10,9 +10,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code VoxelShapeTest} checks composite block geometry, face-support coverage, and
+ * ray-hit spans using solid-box fixtures.
  * @author daoge_cmd
  */
 class VoxelShapeTest {
+    /**
+     * Builds a two-part stair and rotates it toward horizontal faces. Empty upper regions
+     * must remain outside the composite geometry before and after rotation.
+     */
     @Test
     void testStairShape() {
         var vs = VoxelShape
@@ -31,6 +37,10 @@ class VoxelShapeTest {
         assertFalse(vs3.intersectsPoint(0.5, 0.75, 0.25));
     }
 
+    /**
+     * Builds a hollow box-like shape from separate walls and caps. Interior points and
+     * boxes must miss, while points inside a wall must intersect the corresponding solid.
+     */
     @Test
     void testCauldronShape() {
         var vs = VoxelShape
@@ -52,6 +62,11 @@ class VoxelShapeTest {
         assertFalse(vs.intersectsAABB(aabb));
     }
 
+    /**
+     * Translates the same multi-solid shape through scalar and vector overloads. Both
+     * translated unions must move their minimum and maximum coordinates by the supplied
+     * offset.
+     */
     @Test
     void testTranslate() {
         var vs = VoxelShape
@@ -67,6 +82,9 @@ class VoxelShapeTest {
         validateTranslateResult(vs.translate(new Vector3d(1, 1, 1)).unionAABB());
     }
 
+    /**
+     * Checks that translated bounds move both corners by the same offset.
+     */
     void validateTranslateResult(AABBdc solid) {
         assertEquals(1, solid.minX());
         assertEquals(1, solid.minY());
@@ -76,6 +94,11 @@ class VoxelShapeTest {
         assertEquals(2, solid.maxZ());
     }
 
+    /**
+     * Checks solid, perforated, hollow, partial, and empty face-support fixtures. Fullness
+     * must combine aligned rectangle coverage and distinguish interior holes from gaps on
+     * a requested exterior face.
+     */
     @Test
     void testIsFull() {
         var vs1 = VoxelShape
@@ -144,6 +167,11 @@ class VoxelShapeTest {
         }
     }
 
+    /**
+     * Checks central support using full, perforated, hollow, and narrow-column fixtures.
+     * Only the projected central square must be covered, and unsupported side faces must
+     * remain distinguishable.
+     */
     @Test
     void testIsCenterFull() {
         var vs1 = VoxelShape
@@ -194,16 +222,18 @@ class VoxelShapeTest {
         }
     }
 
+    /**
+     * Checks a complete block, a block with a through-gap, and a half-height block.
+     * Whole-block support must require full coverage on every exterior face.
+     */
     @Test
     void testIsFullBlock() {
-        // 完整方块
         var vs1 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
                 .build();
         assertTrue(vs1.isFullBlock());
 
-        // 不完整方块（有空缺）
         var vs2 = VoxelShape.builder()
                 .solid(0.0, 0.0, 0.0, 0.4, 1.0, 1.0)
                 .solid(0.6, 0.0, 0.0, 1.0, 1.0, 1.0)
@@ -213,7 +243,6 @@ class VoxelShapeTest {
 
         assertFalse(vs2.isFullBlock());
 
-        // 部分支撑面不完整
         var vs3 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 0.5, 1)
@@ -221,6 +250,11 @@ class VoxelShapeTest {
         assertFalse(vs3.isFullBlock());
     }
 
+    /**
+     * Checks full blocks and shapes missing or retaining different perimeter strips. Edge
+     * support must require the complete requested perimeter while allowing an uncovered
+     * face center.
+     */
     @Test
     void testIsEdgeFull() {
         var vs1 = VoxelShape
@@ -272,6 +306,10 @@ class VoxelShapeTest {
         assertFalse(vs5.isEdgeFull(BlockFace.UP));
     }
 
+    /**
+     * Checks rays against full, hollow, perforated, and slab-like composite shapes. The
+     * boolean query must report a hit whenever any constituent solid intersects the ray.
+     */
     @Test
     void testIntersectsRay() {
         var vs1 = VoxelShape
@@ -304,6 +342,11 @@ class VoxelShapeTest {
         assertTrue(vs4.intersectsRay(0, 0, 0, 1, 1, 1));
     }
 
+    /**
+     * Checks ray output for full, empty, and separated-solid shapes. Hit spans must
+     * combine the nearest entry and farthest exit, while misses overwrite output with the
+     * infinity sentinel.
+     */
     @Test
     void testIntersectsRayWithResult() {
         var result = new Vector2d();

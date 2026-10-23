@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Scoreboard display slot enum.
+ * {@code DisplaySlot} identifies a client location where an objective can be displayed. Each value
+ * carries the protocol slot name used when sending scoreboard display or hide operations, while
+ * persisted display associations use the enum identifier to record the selected location.
  *
  * @author daoge_cmd
  */
@@ -16,7 +18,7 @@ public enum DisplaySlot {
      */
     SIDEBAR("sidebar"),
     /**
-     * Player list
+     * Player-list scoreboard display slot.
      */
     LIST("list"),
     /**
@@ -24,5 +26,8 @@ public enum DisplaySlot {
      */
     BELOW_NAME("belowname");
 
+    /**
+     * Protocol display slot name.
+     */
     private final String slotName;
 }

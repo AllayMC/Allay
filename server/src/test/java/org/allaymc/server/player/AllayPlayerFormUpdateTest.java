@@ -19,9 +19,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
+/**
+ * {@code AllayPlayerFormUpdateTest} verifies that form updates preserve cached
+ * object identity and its assigned network form ID.
+ */
 @ExtendWith(AllayTestExtension.class)
 class AllayPlayerFormUpdateTest {
 
+    /**
+     * Opens a form, mutates its content, and requests an update. The resent packet
+     * must keep the original form ID and use the new content while the cache retains
+     * the same form object.
+     */
     @Test
     void updateResendsTheOpenFormWithItsOwnId() {
         var player = new TestPlayer();
@@ -38,6 +47,11 @@ class AllayPlayerFormUpdateTest {
         assertSame(form, player.getForms().get(id));
     }
 
+    /**
+     * Removes one previously opened form and creates another that was never opened.
+     * Neither update may emit another packet or report success without a matching
+     * cached form identity.
+     */
     @Test
     void formsThatAreNotOpenAreNotUpdated() {
         var player = new TestPlayer();
@@ -50,10 +64,24 @@ class AllayPlayerFormUpdateTest {
         assertEquals(1, player.sent.size());
     }
 
+    /**
+     * {@code TestPlayer} captures outgoing form packets while using a mocked
+     * protocol encoder. Its encoder preserves the assigned ID and serializes the
+     * supplied form for packet assertions.
+     */
     private static final class TestPlayer extends AllayPlayer {
+        /**
+         * Captured outgoing packets in send order.
+         */
         private final List<BedrockPacket> sent = new ArrayList<>();
+        /**
+         * Mocked protocol providing the form encoder.
+         */
         private final Protocol protocol = mock(Protocol.class);
 
+        /**
+         * Creates a player with mocked transport and a deterministic form encoder.
+         */
         private TestPlayer() {
             super(mock(BedrockServerSession.class), mock(AllayNetworkInterface.class));
             var encoder = mock(PacketEncoder.class);
@@ -66,11 +94,17 @@ class AllayPlayerFormUpdateTest {
             });
         }
 
+        /**
+         * Returns the mocked protocol used to encode captured form requests.
+         */
         @Override
         public Protocol getProtocol() {
             return protocol;
         }
 
+        /**
+         * Records the supplied outgoing packet for later form test assertions.
+         */
         @Override
         public void sendPacket(BedrockPacket packet) {
             sent.add(packet);

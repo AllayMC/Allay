@@ -20,28 +20,49 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Gson Utilities.
+ * {@code JSONUtils} reads, writes, and modifies JSON using a shared serializer with date,
+ * numeric, and version adapters. Stream and reader overloads leave their supplied inputs
+ * open, while file-reading overloads open readers without explicitly closing them. File
+ * writers append rather than replace, so repeated calls can create adjacent JSON roots.
+ *
  * <p>
- * Advantage:
- * <li>When the data volume is less than 10,000, the speed has an absolute advantage</li>
- * <li>API and annotation support is relatively complete, and loose parsing is supported</li>
- * <li>Supports a wide range of data sources (strings, objects, files, streams, readers)</li>
+ * Numeric decoding distinguishes primitive and wrapper targets rather than applying one
+ * uniform malformed-value rule. Some primitive conversions and the float wrapper use
+ * zero-producing parsers, other targets return {@code null} after conversion failure, and
+ * the adapter can leave a failing reader token unconsumed. Property helpers have separate
+ * missing-value results, including the invalid decimal-string construction in the big-integer
+ * fallback. Object insertion also preserves strings and numbers as native properties while
+ * serializing other values into JSON-containing strings, which differs from inserting a
+ * nested JSON object or boolean directly.
  *
  * @author duanxinyuan | CoolLoong
  */
 @UtilityClass
 public class JSONUtils {
 
+    /**
+     * {@code GSON} holds the shared date, numeric, and version configuration built during class
+     * initialization. Ordinary helper overloads reuse it, while {@code format} creates a separate
+     * pretty-printing serializer for its parsed tree.
+     */
     private static final Gson GSON;
 
+    // Builds the shared serializer with custom scalar/version adapters and the configured date pattern.
     static {
         GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss");
-        // Prevent escaping some special characters to Unicode encoding
+        // Keep HTML-sensitive characters literal in encoded JSON text. Callers embedding
+        // the result into HTML must therefore apply the surrounding document's own escaping rules.
         gsonBuilder.disableHtmlEscaping();
         registerTypeAdapter(gsonBuilder);
         GSON = gsonBuilder.create();
     }
 
+    /**
+     * Installs the numeric coercion adapters and both version conversion directions on the
+     * supplied
+     * builder. Numeric targets use the adapter's type-specific failure rules, and version JSON
+     * retains only the major, minor, and patch components.
+     */
     private static void registerTypeAdapter(GsonBuilder gsonBuilder) {
         gsonBuilder.registerTypeAdapter(short.class, new NumberTypeAdapter<>(short.class));
         gsonBuilder.registerTypeAdapter(Short.class, new NumberTypeAdapter<>(Short.class));
@@ -59,11 +80,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (from reader) to an object.
-     *
-     * @param reader the reader
-     * @param type   the type of the object
-     * @return the object
+     * Decodes one value from the supplied reader using the shared adapters. The reader must be
+     * present and remains open after this call, so its owner closes it; parsing failures propagate
+     * instead of selecting an empty object.
      */
     public static <V> V from(Reader reader, Class<V> type) {
         JsonReader jsonReader = new JsonReader(Objects.requireNonNull(reader));
@@ -71,11 +90,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (from reader) to an object.
-     *
-     * @param reader    the reader
-     * @param typeToken the type of the object
-     * @return the object
+     * Decodes one value from the supplied reader using the shared adapters. The reader must be
+     * present and remains open after this call, so its owner closes it; parsing failures propagate
+     * instead of selecting an empty object.
      */
     public static <V> V from(Reader reader, TypeToken<V> typeToken) {
         JsonReader jsonReader = new JsonReader(Objects.requireNonNull(reader));
@@ -83,11 +100,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (from input stream) to an object.
-     *
-     * @param inputStream the input stream
-     * @param type        the type of the object
-     * @return the object
+     * Decodes the requested value from a stream using the platform-default character encoding.
+     * The stream must be present and remains open; its owner closes it, and the shared adapters
+     * control target-specific numeric or version conversions.
      */
     public static <V> V from(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -95,11 +110,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (from input stream) to an object.
-     *
-     * @param inputStream the input stream
-     * @param typeToken   the type of the object
-     * @return the object
+     * Decodes the requested value from a stream using the platform-default character encoding.
+     * The stream must be present and remains open; its owner closes it, and the shared adapters
+     * control target-specific numeric or version conversions.
      */
     public static <V> V from(InputStream inputStream, TypeToken<V> typeToken) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -107,11 +120,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (from input stream) to a list.
-     *
-     * @param inputStream the input stream
-     * @param type        the type of elements in the list
-     * @return the list
+     * Decodes the requested value from a stream using the platform-default character encoding.
+     * The stream must be present and remains open; its owner closes it, and the shared adapters
+     * control target-specific numeric or version conversions.
      */
     public static <V> List<V> fromList(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -120,11 +131,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (in file) to an object.
-     *
-     * @param file the file
-     * @param type the type of the object
-     * @return the object
+     * Decodes the requested file value with platform-default character encoding. This helper
+     * does not explicitly close its internally opened reader; missing-file failures are wrapped
+     * in {@code GsonException}, while parsing failures follow the shared serializer's behavior.
      */
     public static <V> V from(File file, Class<V> type) {
         try {
@@ -136,11 +145,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (in file) to an object.
-     *
-     * @param file      the file
-     * @param typeToken the type of the object
-     * @return the object
+     * Decodes the requested file value with platform-default character encoding. This helper
+     * does not explicitly close its internally opened reader; missing-file failures are wrapped
+     * in {@code GsonException}, while parsing failures follow the shared serializer's behavior.
      */
     public static <V> V from(File file, TypeToken<V> typeToken) {
         try {
@@ -152,11 +159,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (in file) to a list.
-     *
-     * @param file the file
-     * @param type the type of elements in the list
-     * @return the list
+     * Decodes the requested file value with platform-default character encoding. This helper
+     * does not explicitly close its internally opened reader; missing-file failures are wrapped
+     * in {@code GsonException}, while parsing failures follow the shared serializer's behavior.
      */
     public static <V> List<V> fromList(File file, Class<V> type) {
         try {
@@ -169,44 +174,36 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string to an object.
-     *
-     * @param json the JSON string
-     * @param type the type of the object
-     * @return the object
+     * Decodes the requested object, collection, or map from JSON text with the shared adapters.
+     * Absent or empty input can produce {@code null}, and incompatible JSON shapes or malformed
+     * content propagate serializer failures rather than a general empty-container default.
      */
     public static <V> V from(String json, Class<V> type) {
         return GSON.fromJson(json, type);
     }
 
     /**
-     * Parse a JSON string to an object.
-     *
-     * @param json the JSON string
-     * @param type the type of the object
-     * @return the object
+     * Decodes the requested object, collection, or map from JSON text with the shared adapters.
+     * Absent or empty input can produce {@code null}, and incompatible JSON shapes or malformed
+     * content propagate serializer failures rather than a general empty-container default.
      */
     public static <V> V from(String json, Type type) {
         return GSON.fromJson(json, type);
     }
 
     /**
-     * Parse a JSON string to an object.
-     *
-     * @param json      the JSON string
-     * @param typeToken the type of the object
-     * @return the object
+     * Decodes the requested object, collection, or map from JSON text with the shared adapters.
+     * Absent or empty input can produce {@code null}, and incompatible JSON shapes or malformed
+     * content propagate serializer failures rather than a general empty-container default.
      */
     public static <V> V from(String json, TypeToken<V> typeToken) {
         return GSON.fromJson(json, typeToken.getType());
     }
 
     /**
-     * Parse a JSON string to a list.
-     *
-     * @param json the JSON string
-     * @param type the type of elements in the list
-     * @return the list
+     * Decodes the requested object, collection, or map from JSON text with the shared adapters.
+     * Absent or empty input can produce {@code null}, and incompatible JSON shapes or malformed
+     * content propagate serializer failures rather than a general empty-container default.
      */
     public static <V> List<V> fromList(String json, Class<V> type) {
         TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
@@ -214,10 +211,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string to a map.
-     *
-     * @param json the JSON string
-     * @return the map
+     * Decodes the requested object, collection, or map from JSON text with the shared adapters.
+     * Absent or empty input can produce {@code null}, and incompatible JSON shapes or malformed
+     * content propagate serializer failures rather than a general empty-container default.
      */
     public static Map<String, Object> fromMap(String json) {
         return GSON.fromJson(json, new TypeToken<HashMap<String, Object>>() {
@@ -225,11 +221,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (from input stream) to an object leniently.
-     *
-     * @param inputStream the input stream
-     * @param type        the type of the object
-     * @return the object
+     * Decodes stream text with a reader explicitly set to {@code Strictness.LENIENT}. The
+     * platform-default character encoding is used and the stream remains open, while target-type
+     * conversion can still fail despite accepting lenient syntax.
      */
     public static <V> V fromLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -238,11 +232,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string to an object leniently.
-     *
-     * @param inputStream the input stream
-     * @param type        the type of the object
-     * @return the object
+     * Decodes stream text with a reader explicitly set to {@code Strictness.LENIENT}. The
+     * platform-default character encoding is used and the stream remains open, while target-type
+     * conversion can still fail despite accepting lenient syntax.
      */
     public static <V> V fromLenient(InputStream inputStream, TypeToken<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -251,11 +243,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string to a list leniently.
-     *
-     * @param inputStream the input stream
-     * @param type        the type of elements in the list
-     * @return the list
+     * Decodes stream text with a reader explicitly set to {@code Strictness.LENIENT}. The
+     * platform-default character encoding is used and the stream remains open, while target-type
+     * conversion can still fail despite accepting lenient syntax.
      */
     public static <V> List<V> fromListLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -265,11 +255,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (in file) to an object leniently.
-     *
-     * @param file the file
-     * @param type the type of the object
-     * @return the object
+     * Decodes file text with explicit lenient syntax and platform-default character encoding.
+     * The internally opened reader is not explicitly closed; missing-file errors become
+     * {@code GsonException}, and leniency does not suppress incompatible target-type failures.
      */
     public static <V> V fromLenient(File file, Class<V> type) {
         try {
@@ -282,11 +270,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string (in file) to a list leniently.
-     *
-     * @param file the file
-     * @param type the type of elements in the list
-     * @return the list
+     * Decodes file text with explicit lenient syntax and platform-default character encoding.
+     * The internally opened reader is not explicitly closed; missing-file errors become
+     * {@code GsonException}, and leniency does not suppress incompatible target-type failures.
      */
     public static <V> List<V> fromListLenient(File file, Class<V> type) {
         try {
@@ -300,11 +286,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string to an object leniently.
-     *
-     * @param json the JSON string
-     * @param type the type of the object
-     * @return the object
+     * Decodes JSON text using an explicitly lenient reader and the shared target adapters.
+     * {@code null} or empty strings return {@code null} before parsing; other text can still fail if
+     * its values cannot be decoded into the requested target representation.
      */
     public static <V> V fromLenient(String json, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -316,11 +300,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string to an object leniently.
-     *
-     * @param json the JSON string
-     * @param type the type of the object
-     * @return the object
+     * Decodes JSON text using an explicitly lenient reader and the shared target adapters.
+     * {@code null} or empty strings return {@code null} before parsing; other text can still fail if
+     * its values cannot be decoded into the requested target representation.
      */
     public static <V> V fromLenient(String json, Type type) {
         if (StringUtils.isEmpty(json)) {
@@ -332,11 +314,9 @@ public class JSONUtils {
     }
 
     /**
-     * Parse a JSON string to an object leniently.
-     *
-     * @param json      the JSON string
-     * @param typeToken the type of the object
-     * @return the object
+     * Decodes JSON text using an explicitly lenient reader and the shared target adapters.
+     * {@code null} or empty strings return {@code null} before parsing; other text can still fail if
+     * its values cannot be decoded into the requested target representation.
      */
     public static <V> V fromLenient(String json, TypeToken<V> typeToken) {
         if (StringUtils.isEmpty(json)) {
@@ -348,11 +328,9 @@ public class JSONUtils {
     }
 
     /**
-     * Read a list from a JSON string leniently.
-     *
-     * @param json the JSON string
-     * @param type the type of elements in the list
-     * @return the list
+     * Decodes JSON text using an explicitly lenient reader and the shared target adapters.
+     * {@code null} or empty strings return {@code null} before parsing; other text can still fail if
+     * its values cannot be decoded into the requested target representation.
      */
     public static <V> List<V> fromListLenient(String json, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -365,30 +343,23 @@ public class JSONUtils {
     }
 
     /**
-     * Convert a list to a JSON string.
-     *
-     * @param list the list
-     * @return the JSON string
+     * Serializes the supplied list to JSON text with the shared adapters.
      */
     public static <V> String to(List<V> list) {
         return GSON.toJson(list);
     }
 
     /**
-     * Convert an object to a JSON string.
-     *
-     * @param v the object
-     * @return the JSON string
+     * Serializes the supplied value to JSON text with the shared adapters.
      */
     public static <V> String to(V v) {
         return GSON.toJson(v);
     }
 
     /**
-     * Write an object to a file.
-     *
-     * @param path the file path
-     * @param list the list
+     * Appends one serialized list to the path with platform-default character encoding. The writer
+     * is closed before return, but no separator or enclosing document is added between calls;
+     * failures are wrapped in {@code GsonException}.
      */
     public static <V> void toFile(String path, List<V> list) {
         try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
@@ -401,21 +372,18 @@ public class JSONUtils {
     }
 
     /**
-     * Write an object to a file.
-     *
-     * @param path the file path
-     * @param v    the object
+     * Appends one object value through the writer-configurator overload without additional
+     * configuration. Existing file contents remain before the new root, and {@code null} values
+     * fail when the delegated implementation requests their runtime class.
      */
     public static <V> void toFile(String path, V v) {
         toFile(path, v, null);
     }
 
     /**
-     * Write an object to a file.
-     *
-     * @param path                   the file path
-     * @param v                      the object
-     * @param jsonWriterConfigurator the JSON writer configurator
+     * Appends one object using its runtime class and an optional writer configurator. The file
+     * uses platform-default encoding and the writer is closed after flushing; a {@code null} object,
+     * configuration failure, or write failure becomes {@code GsonException}.
      */
     public static <V> void toFile(String path, V v, Consumer<JsonWriter> jsonWriterConfigurator) {
         try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
@@ -428,9 +396,9 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or {@code null} if the field does not exist
+     * Returns a property's string conversion, or {@code null} for empty input or an absent key.
+     * Values rejected by {@code getAsString} fall back to their JSON text, so objects, arrays,
+     * or explicit JSON {@code null} can produce serialized representations instead.
      */
     public static String getAsString(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -444,15 +412,17 @@ public class JSONUtils {
         try {
             propertyValue = jsonByKey.getAsString();
         } catch (Exception e) {
+            // A value without a supported scalar string conversion still has JSON text.
+            // Return that representation so structured properties remain inspectable through this helper.
             propertyValue = jsonByKey.toString();
         }
         return propertyValue;
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or zero if the field does not exist
+     * Returns the property's {@code int} conversion, using zero for empty input or an
+     * absent key. A present incompatible property is wrapped in {@code GsonException}, while
+     * root parsing occurs before that conversion-specific error boundary.
      */
     public static int getAsInt(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -470,9 +440,9 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or zero if the field does not exist
+     * Returns the property's {@code long} conversion, using zero for empty input or an
+     * absent key. A present incompatible property is wrapped in {@code GsonException}, while
+     * root parsing occurs before that conversion-specific error boundary.
      */
     public static long getAsLong(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -490,9 +460,9 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or zero if the field does not exist
+     * Returns the property's {@code double} conversion, using zero for empty input or an
+     * absent key. A present incompatible property is wrapped in {@code GsonException}, while
+     * root parsing occurs before that conversion-specific error boundary.
      */
     public static double getAsDouble(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -510,16 +480,20 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or zero if the field does not exist
+     * Returns a present property's big-integer conversion. Empty input or an absent property
+     * attempts to parse {@code "0.0"} as {@code BigInteger} and therefore throws
+     * {@code NumberFormatException}; that fallback executes outside the conversion wrapper.
      */
     public static BigInteger getAsBigInteger(String json, String key) {
         if (StringUtils.isEmpty(json)) {
+            // This fallback constructs a decimal-spelled zero, which BigInteger rejects.
+            // The failure occurs before the conversion catch and is not wrapped as GsonException.
             return new BigInteger(String.valueOf(0.00));
         }
         JsonElement jsonByKey = getAsJsonObject(json, key);
         if (null == jsonByKey) {
+            // This fallback constructs a decimal-spelled zero, which BigInteger rejects.
+            // The failure occurs before the conversion catch and is not wrapped as GsonException.
             return new BigInteger(String.valueOf(0.00));
         }
         try {
@@ -530,9 +504,9 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or zero if the field does not exist
+     * Returns a property's decimal conversion, using a new decimal zero for empty input or an
+     * absent key. Incompatible present values become {@code GsonException}, while root parsing
+     * still occurs outside that conversion-specific wrapper.
      */
     public static BigDecimal getAsBigDecimal(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -550,9 +524,10 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or {@code false} if the field does not exist
+     * Returns a primitive property's boolean interpretation, using {@code false} for empty input
+     * or an absent key. Boolean primitives retain their value, strings use {@code BooleanUtils}
+     * with a special {@code true} result for {@code "1"}, and numbers use nonzero integer truth.
+     * Nonprimitive properties fail the cast before the conversion wrapper.
      */
     public static boolean getAsBoolean(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -583,9 +558,9 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or zero if the field does not exist
+     * Returns the property's {@code byte} conversion, using zero for empty input or an
+     * absent key. A present incompatible property is wrapped in {@code GsonException}, while
+     * root parsing occurs before that conversion-specific error boundary.
      */
     public static byte getAsByte(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -603,9 +578,9 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or {@code null} if the field does not exist
+     * Decodes JSON text contained in a property's scalar string representation. Empty input or
+     * an absent key returns {@code null}; the property is not directly deserialized as a nested
+     * object, and extraction or decoding failures become {@code GsonException}.
      */
     public static <V> V getAsObject(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -623,9 +598,10 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the value of the field, or {@code null} if the field does not exist
+     * Decodes an array-valued property into a list of the requested element class. Empty input
+     * or an absent key returns {@code null}; an incompatible present property or element
+     * conversion
+     * failure becomes {@code GsonException} after root parsing.
      */
     public static <V> List<V> getAsList(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -645,9 +621,9 @@ public class JSONUtils {
     }
 
     /**
-     * Get the value of a field from a JSON string.
-     *
-     * @return the field
+     * Returns the element under {@code key} from a parsed object root. An absent key returns
+     * {@code null}, syntax errors become {@code GsonException}, and a non-object root can fail
+     * outside that syntax-only wrapper.
      */
     public static JsonElement getAsJsonObject(String json, String key) {
         try {
@@ -660,9 +636,9 @@ public class JSONUtils {
     }
 
     /**
-     * Add a field to a JSON string.
-     *
-     * @return the JSON string with the field added
+     * Adds or replaces a property in parsed object text and returns compact JSON. Strings and
+     * numbers become native properties; every other value is first serialized and stored as a
+     * string containing that JSON representation.
      */
     public static <V> String add(String json, String key, V value) {
         JsonElement element = JsonParser.parseString(json);
@@ -672,7 +648,9 @@ public class JSONUtils {
     }
 
     /**
-     * Add a field to a JSON string.
+     * Assigns a native string or number property, or stores serialized JSON inside a string for
+     * other values. Objects and booleans therefore do not become nested native values through
+     * this path, and {@code null} becomes the string {@code "null"}.
      */
     private static <V> void add(JsonObject jsonObject, String key, V value) {
         if (value instanceof String) {
@@ -685,9 +663,9 @@ public class JSONUtils {
     }
 
     /**
-     * Remove a field from a JSON string.
-     *
-     * @return the JSON string with the field removed
+     * Removes a property from a parsed object and returns compact JSON. An absent property
+     * leaves the object's data unchanged, while invalid JSON or a non-object root propagates
+     * the parser or tree-access failure.
      */
     public static String remove(String json, String key) {
         JsonElement element = JsonParser.parseString(json);
@@ -697,9 +675,9 @@ public class JSONUtils {
     }
 
     /**
-     * Update a field in a JSON string.
-     *
-     * @return the JSON string with the field updated
+     * Removes the old property and re-adds it using the helper's native-string, native-number,
+     * or JSON-containing-string rules. The returned object text is compact, and the replacement
+     * can move the property to the end of object iteration order.
      */
     public static <V> String update(String json, String key, V value) {
         JsonElement element = JsonParser.parseString(json);
@@ -710,9 +688,7 @@ public class JSONUtils {
     }
 
     /**
-     * Format a JSON string.
-     *
-     * @return the formatted JSON string
+     * Pretty-prints the parsed JSON tree with a newly created default serializer.
      */
     public static String format(String json) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -721,29 +697,48 @@ public class JSONUtils {
     }
 
     /**
-     * Check if a string is a JSON string.
-     *
-     * @return {@code true} if the string is a JSON string, otherwise {@code false}.
+     * Returns whether the input parses specifically as a JSON object root. Arrays, primitives,
+     * JSON {@code null}, and any caught parsing failure return {@code false}, so this predicate does not
+     * recognize every syntactically valid JSON document.
      */
     public static boolean isJson(String json) {
         try {
             return JsonParser.parseString(json).isJsonObject();
         } catch (Exception e) {
+            // This predicate treats parse failure as absence of an object root, leaving
+            // callers with the same false result used for valid non-object JSON documents.
             return false;
         }
     }
 
     /**
+     * {@code NumberTypeAdapter} applies target-specific numeric coercion to JSON token text.
+     * Primitive and wrapper classes can select different default or rejection behavior, and
+     * conversion failures are suppressed as {@code null} rather than wrapped here.
+     *
+     * @param <T> requested numeric target class
+     *
      * @author duanxinyuan
      */
     private static class NumberTypeAdapter<T> extends TypeAdapter<Number> {
 
+        /**
+         * Target numeric coercion class.
+         */
         private final Class<T> c;
 
+        /**
+         * Retains the requested class used to select numeric coercion behavior.
+         */
         public NumberTypeAdapter(Class<T> c) {
             this.c = c;
         }
 
+        /**
+         * Writes the supplied number as a JSON numeric value or writes JSON {@code null} for {@code null}.
+         * The writer remains caller-owned, and output failures propagate through its ordinary
+         * {@code IOException} contract.
+         */
         @Override
         public void write(JsonWriter jsonWriter, Number number) throws IOException {
             if (number != null) {
@@ -753,6 +748,20 @@ public class JSONUtils {
             }
         }
 
+        /**
+         * Reads token text and applies the converter selected by {@code c}. Primitive short,
+         * integer,
+         * long, and double targets use zero-producing parsers, while primitive float uses strict
+         * parsing; the float wrapper instead uses a zero-producing parser after its empty-text
+         * check.
+         *
+         * <p>
+         * Other registered wrappers and decimals reject malformed nonempty text, and empty wrapper
+         * text returns {@code null}. Any caught failure also returns {@code null}, including
+         * reader
+         * failures; because a failed token read need not consume that token, callers cannot assume
+         * this fallback leaves the reader ready for the next value.
+         */
         @Override
         public Number read(JsonReader jsonReader) {
             try {
@@ -804,30 +813,53 @@ public class JSONUtils {
                     return Integer.parseInt(json);
                 }
             } catch (Exception e) {
+                // Numeric coercion deliberately exposes failure as a null adapter result.
+                // A failure before nextString consumes its token can leave that token unread.
                 return null;
             }
         }
     }
 
     /**
+     * {@code GsonException} represents JSON helper failures using brace-formatted messages from
+     * {@code FormativeException}. Throwable constructors retain stack-trace text separately from
+     * the inherited exception cause slot.
+     *
      * @author duanxinyuan
      */
     @Setter
     @Getter
     public static class GsonException extends FormativeException {
 
+        /**
+         * Creates a JSON helper exception whose custom message is initially absent.
+         */
         public GsonException() {
             super();
         }
 
+        /**
+         * Creates a JSON helper exception retaining the supplied message without substitution.
+         */
         public GsonException(String message) {
             super(message);
         }
 
+        /**
+         * Creates a JSON helper exception containing the throwable's stack-trace text. The parent
+         * retains that throwable separately, so the inherited {@code getCause} result does not
+         * automatically expose the supplied error.
+         */
         public GsonException(Throwable cause) {
             super(cause);
         }
 
+        /**
+         * Creates a JSON helper exception using the parent's placeholder and trailing-throwable
+         * selection rules. Formatting occurs during construction, and a retained throwable
+         * contributes
+         * trace text without becoming the inherited exception cause.
+         */
         public GsonException(String format, Object... arguments) {
             super(format, arguments);
         }

@@ -5,10 +5,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code IdentifierTest} verifies identifier defaulting, accepted characters, equality, hashing,
+ * and immutable-value cloning.
+ *
  * @author daoge_cmd
  */
 class IdentifierTest {
 
+    /**
+     * Constructs an identifier from explicit namespace and path components. Both record accessors
+     * must retain the supplied component text instead of applying an unnecessary default
+     * namespace.
+     */
     @Test
     void testConstructorWithNamespaceAndPath() {
         Identifier id = new Identifier("minecraft", "stone");
@@ -17,6 +25,10 @@ class IdentifierTest {
         assertEquals("stone", id.path());
     }
 
+    /**
+     * Constructs an identifier from a string with an explicit namespace separator. The resulting
+     * components must split around that separator without changing their retained text.
+     */
     @Test
     void testConstructorWithStringContainingColon() {
         Identifier id = new Identifier("custom:item");
@@ -25,6 +37,10 @@ class IdentifierTest {
         assertEquals("item", id.path());
     }
 
+    /**
+     * Constructs an identifier from an unqualified path string. The namespace must use the public
+     * default while the path remains the supplied resource name.
+     */
     @Test
     void testConstructorWithStringWithoutColon() {
         Identifier id = new Identifier("stone");
@@ -33,6 +49,10 @@ class IdentifierTest {
         assertEquals("stone", id.path());
     }
 
+    /**
+     * Constructs an identifier with an empty explicit namespace. Construction must substitute the
+     * public default namespace while retaining the supplied path as the resource component.
+     */
     @Test
     void testConstructorWithEmptyNamespace() {
         Identifier id = new Identifier("", "path");
@@ -41,6 +61,10 @@ class IdentifierTest {
         assertEquals("path", id.path());
     }
 
+    /**
+     * Constructs an identifier from a two-element component array. Namespace and path accessors
+     * must retain the corresponding array elements in their original component roles.
+     */
     @Test
     void testConstructorWithStringArray() {
         Identifier id = new Identifier(new String[]{"namespace", "path"});
@@ -49,6 +73,10 @@ class IdentifierTest {
         assertEquals("path", id.path());
     }
 
+    /**
+     * Constructs an identifier from a string beginning with the namespace separator. The empty
+     * namespace must default while the suffix becomes the retained resource path.
+     */
     @Test
     void testConstructorWithColonPrefixedString() {
         Identifier id = new Identifier(":path");
@@ -57,6 +85,11 @@ class IdentifierTest {
         assertEquals("path", id.path());
     }
 
+    /**
+     * Attempts construction with spaces and punctuation outside the namespace grammar. Each tested
+     * invalid namespace must raise the identifier-specific exception instead of producing a usable
+     * record.
+     */
     @Test
     void testInvalidNamespaceThrowsException() {
         assertThrows(InvalidIdentifierException.class, () ->
@@ -70,6 +103,11 @@ class IdentifierTest {
         );
     }
 
+    /**
+     * Attempts construction with spaces and punctuation outside the path grammar. Each tested
+     * invalid path must raise the identifier-specific exception instead of producing a usable
+     * record.
+     */
     @Test
     void testInvalidPathThrowsException() {
         assertThrows(InvalidIdentifierException.class, () ->
@@ -83,6 +121,11 @@ class IdentifierTest {
         );
     }
 
+    /**
+     * Constructs identifiers using lowercase, uppercase, digits, underscore, hyphen, and period in
+     * namespaces. Every tested namespace must pass the implementation's current character
+     * validation without rejection.
+     */
     @Test
     void testValidNamespaceCharacters() {
         assertDoesNotThrow(() -> new Identifier("abc", "path"));
@@ -93,6 +136,11 @@ class IdentifierTest {
         assertDoesNotThrow(() -> new Identifier("a.b", "path"));
     }
 
+    /**
+     * Constructs identifiers using lowercase, uppercase, digits, underscore, hyphen, and period in
+     * paths. Every tested path must pass the implementation's current character validation without
+     * rejection.
+     */
     @Test
     void testValidPathCharacters() {
         assertDoesNotThrow(() -> new Identifier("ns", "abc"));
@@ -103,6 +151,10 @@ class IdentifierTest {
         assertDoesNotThrow(() -> new Identifier("ns", "a.b"));
     }
 
+    /**
+     * Renders an identifier with an explicit namespace and path. The output must join both
+     * components with the namespace separator into the expected canonical string.
+     */
     @Test
     void testToString() {
         Identifier id = new Identifier("minecraft", "stone");
@@ -110,6 +162,10 @@ class IdentifierTest {
         assertEquals("minecraft:stone", id.toString());
     }
 
+    /**
+     * Renders an identifier created from an unqualified path. The output must include the resolved
+     * default namespace rather than reproducing only the originally supplied path.
+     */
     @Test
     void testToStringWithDefaultNamespace() {
         Identifier id = new Identifier("cake");
@@ -117,6 +173,11 @@ class IdentifierTest {
         assertEquals("minecraft:cake", id.toString());
     }
 
+    /**
+     * Compares identifiers built through separate constructors and values with different
+     * components. Equality must follow both retained components and reject {@code null} or unrelated
+     * string objects.
+     */
     @Test
     void testEquals() {
         Identifier id1 = new Identifier("minecraft", "stone");
@@ -133,6 +194,10 @@ class IdentifierTest {
         assertNotEquals("minecraft:stone", id1);
     }
 
+    /**
+     * Compares hash codes of equal identifiers and a representative different path. Equal records
+     * must agree, and the tested distinct path must affect the computed hash value.
+     */
     @Test
     void testHashCode() {
         Identifier id1 = new Identifier("minecraft", "stone");
@@ -143,6 +208,10 @@ class IdentifierTest {
         assertNotEquals(id1.hashCode(), id3.hashCode());
     }
 
+    /**
+     * Clones an immutable identifier value through its explicit clone operation. The result must
+     * compare equal to the original while remaining a separately allocated identifier instance.
+     */
     @Test
     void testClone() {
         Identifier original = new Identifier("minecraft", "stone");
@@ -152,16 +221,30 @@ class IdentifierTest {
         assertNotSame(original, cloned);
     }
 
+    /**
+     * Checks the namespace used for unqualified identifiers and empty namespace components. The
+     * public default constant must remain the expected Minecraft namespace used by construction
+     * tests.
+     */
     @Test
     void testDefaultNamespaceConstant() {
         assertEquals("minecraft", Identifier.DEFAULT_NAMESPACE);
     }
 
+    /**
+     * Checks the separator used between namespace and path components. The public constant must
+     * remain a colon so parsing and string rendering share the expected representation.
+     */
     @Test
     void testNamespaceSeparatorConstant() {
         assertEquals(":", Identifier.NAMESPACE_SEPARATOR);
     }
 
+    /**
+     * Constructs an identifier whose path combines a period and underscore. Accessors and string
+     * rendering must retain that complete path without treating its punctuation as component
+     * separators.
+     */
     @Test
     void testComplexPath() {
         Identifier id = new Identifier("minecraft", "blocks.stone_brick");

@@ -16,11 +16,20 @@ import org.joml.primitives.Raydc;
 import java.util.*;
 
 /**
- * VoxelShape represents the shape of a block.
- * <p>
- * Compared to aabb, voxel shape can have multiple solid areas. which means
- * it can represent a more complex shape (stairs, walls).
+ * {@code VoxelShape} represents block geometry as a set of axis-aligned solid boxes. Local
+ * block geometry normally uses coordinates from zero to one, while translation supports
+ * queries in another coordinate space. Box and point queries test individual solids, and
+ * face-support queries project only solids exactly aligned with the requested unit-block
+ * boundary.
  *
+ * <p>
+ * Face coverage combines overlapping projected rectangles by splitting the target region
+ * at every intersecting rectangle boundary. Testing a point inside each resulting cell
+ * detects gaps that a single enclosing box would hide. Ray queries with an output vector
+ * instead combine the nearest entry and farthest exit across all hit solids; the returned
+ * span can include empty space between separate solids. The builder and generated
+ * {@code getSolids()} accessor expose shared storage, so callers must control mutation
+ * themselves.
  * @author daoge_cmd
  */
 @Getter
@@ -28,22 +37,44 @@ import java.util.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VoxelShape {
 
+    /**
+     * {@code EMPTY} represents geometry with no solid boxes. Empty transformations reuse
+     * this instance, and its solid set does not accept additions through the generated
+     * getter.
+     */
     public static final VoxelShape EMPTY = new VoxelShape(Collections.emptySet());
 
-    private static final double EDGE_WIDTH = 0.125d;
+    /**
+     * {@code EDGE_WIDTH}, {@code CENTER_MIN}, and {@code CENTER_MAX} define the unit-block
+     * edge strips and central square tested by the face-support queries.
+     */
+    private static final double EDGE_WIDTH = 0.125d; // edge-strip width in blocks
+    /**
+     * Minimum central-support coordinate in local block units.
+     */
     private static final double CENTER_MIN = 3d / 8d;
+    /**
+     * Maximum central-support coordinate in local block units.
+     */
     private static final double CENTER_MAX = 5d / 8d;
 
+    /**
+     * {@code solids} holds the boxes used by all queries. The constructor retains the set,
+     * and the generated getter returns it directly; mutable boxes remain shared as well.
+     */
     private final Set<AABBdc> solids;
 
+    /**
+     * Returns a new builder with an initially empty solid set.
+     */
     public static VoxelShapeBuilder builder() {
         return new VoxelShapeBuilder();
     }
 
     /**
-     * Calculate the minimum AABB that can contain this voxel shape.
-     *
-     * @return the minimum AABB that can contain this voxel shape
+     * Returns a newly allocated box enclosing every solid in this shape. An empty shape
+     * returns a zero-sized box at the origin; an enclosing box can include gaps between
+     * separate solids.
      */
     public AABBd unionAABB() {
         if (this.solids.isEmpty()) {
@@ -75,10 +106,9 @@ public final class VoxelShape {
     }
 
     /**
-     * Rotate this voxel shape by the specified face.
-     *
-     * @param face the face to rotate the voxel shape
-     * @return the rotated voxel shape
+     * Returns a shape whose solid boxes are rotated for {@code face} using
+     * {@link BlockFace#rotateAABB(AABBdc)}. Empty geometry returns {@code EMPTY}; nonempty
+     * geometry uses a new set of transformed boxes.
      */
     public VoxelShape rotate(BlockFace face) {
         if (this.solids.isEmpty()) {
@@ -93,22 +123,18 @@ public final class VoxelShape {
     }
 
     /**
-     * Add a specified offset to this voxel shape.
-     *
-     * @param vec the offset vector
-     * @return the translated voxel shape
+     * Returns a translated shape without modifying the original solid boxes. Empty
+     * geometry returns {@code EMPTY}; otherwise each source box is translated into a new
+     * box stored in a new set.
      */
     public VoxelShape translate(Vector3dc vec) {
         return this.translate(vec.x(), vec.y(), vec.z());
     }
 
     /**
-     * Add a specified offset to this voxel shape.
-     *
-     * @param x the x offset
-     * @param y the y offset
-     * @param z the z offset
-     * @return the translated voxel shape
+     * Returns a translated shape without modifying the original solid boxes. Empty
+     * geometry returns {@code EMPTY}; otherwise each source box is translated into a new
+     * box stored in a new set.
      */
     public VoxelShape translate(double x, double y, double z) {
         if (this.solids.isEmpty()) {
@@ -123,10 +149,9 @@ public final class VoxelShape {
     }
 
     /**
-     * Check if this voxel shape intersects with the specified AABB.
-     *
-     * @param other the AABB to check
-     * @return true if this voxel shape intersects with the specified AABB, otherwise false
+     * Returns whether any solid overlaps or touches {@code other}. The underlying box
+     * comparison includes matching boundaries, so this result differs from point
+     * containment, which excludes points on a solid boundary.
      */
     public boolean intersectsAABB(AABBdc other) {
         for (var solid : this.solids) {
@@ -138,22 +163,18 @@ public final class VoxelShape {
     }
 
     /**
-     * Check if this voxel shape intersects with the specified point.
-     *
-     * @param vec the point to check
-     * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
+     * Returns whether the point lies strictly inside any solid box. A point on a minimum
+     * or maximum boundary is excluded by the underlying {@code containsPoint} comparison,
+     * even when that boundary touches another solid.
      */
     public boolean intersectsPoint(Vector3dc vec) {
         return this.intersectsPoint(vec.x(), vec.y(), vec.z());
     }
 
     /**
-     * Check if this voxel shape intersects with the specified point.
-     *
-     * @param x the x coordinate of the point
-     * @param y the y coordinate of the point
-     * @param z the z coordinate of the point
-     * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
+     * Returns whether the point lies strictly inside any solid box. A point on a minimum
+     * or maximum boundary is excluded by the underlying {@code containsPoint} comparison,
+     * even when that boundary touches another solid.
      */
     public boolean intersectsPoint(double x, double y, double z) {
         for (var solid : this.solids) {
@@ -165,11 +186,9 @@ public final class VoxelShape {
     }
 
     /**
-     * Checks if the specified face is "full", i.e. whether the [0,1]×[0,1] region of that face
-     * is completely covered.
-     *
-     * @param face the face to check
-     * @return true if the face is completely covered; otherwise, false
+     * Returns whether aligned solids cover the complete unit square of {@code face}. Only
+     * boxes with a boundary exactly at the face's zero or one coordinate contribute;
+     * interior solids do not provide face support.
      */
     public boolean isFull(BlockFace face) {
         var uvRectangles = this.extractAlignedRectangles(face);
@@ -177,11 +196,9 @@ public final class VoxelShape {
     }
 
     /**
-     * Checks if the center of the specified face is full. The center is defined as the region
-     * [3/8, 5/8]×[3/8, 5/8].
-     *
-     * @param face the face to check
-     * @return true if the center region is completely covered; otherwise, false
+     * Returns whether aligned solids cover the central square of {@code face}. Both
+     * projected axes range inclusively from {@code 3/8} to {@code 5/8}; only solids
+     * exactly aligned with the unit-block face contribute.
      */
     public boolean isCenterFull(BlockFace face) {
         var uvRectangles = this.extractAlignedRectangles(face);
@@ -189,15 +206,14 @@ public final class VoxelShape {
     }
 
     /**
-     * Checks if the edges of the specified face are full. The edge region is defined by the given
-     * edgeWidth (here, 0.125).
-     *
-     * @param face the face to check
-     * @return true if all edge regions are completely covered; otherwise, false
+     * Returns whether aligned solids cover every perimeter strip of {@code face}. Each
+     * strip is one eighth of a block wide, and the central area does not need to be
+     * covered.
      */
     public boolean isEdgeFull(BlockFace face) {
         var uvRectangles = this.extractAlignedRectangles(face);
-        // Retrieve the edge regions for the face (each represented as [minU, maxU, minV, maxV])
+        // Edge support requires every strip to be covered; coverage of one strip cannot
+        // compensate for a gap in another.
         for (var edge : this.getEdgeRegions(face, EDGE_WIDTH)) {
             if (!this.isRegionFullyCovered(edge[0], edge[1], edge[2], edge[3], uvRectangles)) {
                 return false;
@@ -206,6 +222,11 @@ public final class VoxelShape {
         return true;
     }
 
+    /**
+     * Returns projected bounds for solids exactly touching the requested unit-block face.
+     * Each new array stores {@code minU}, {@code maxU}, {@code minV}, and {@code maxV},
+     * retaining neither the solid nor its mutable box storage.
+     */
     private List<double[]> extractAlignedRectangles(BlockFace face) {
         List<double[]> rectangles = new ArrayList<>(this.solids.size());
         for (var solid : this.solids) {
@@ -217,16 +238,17 @@ public final class VoxelShape {
     }
 
     /**
-     * Helper method: Checks whether the union of the provided UV rectangles completely covers the specified region.
-     * The method divides the target region into a grid using all boundary lines (from both the target region and
-     * the intersected rectangles) and then verifies that each cell's center is covered by at least one rectangle.
+     * Returns whether the rectangle union covers the requested projected region. The
+     * target bounds and each positive-area intersection supply sorted grid boundaries.
+     * Within one resulting cell, no rectangle boundary crosses its interior, so testing
+     * its center is enough to decide whether that cell is covered.
      *
-     * @param regionMinU   the minimum U coordinate of the target region
-     * @param regionMaxU   the maximum U coordinate of the target region
-     * @param regionMinV   the minimum V coordinate of the target region
-     * @param regionMaxV   the maximum V coordinate of the target region
-     * @param uvRectangles a list of rectangles, each represented as [minU, maxU, minV, maxV]
-     * @return true if the union of the rectangles completely covers the target region; otherwise, false
+     * <p>
+     * The method returns {@code false} when no rectangles exist or when any cell center is
+     * uncovered. Rectangle clipping contributes boundaries only; the final containment
+     * check still uses each original rectangle. This preserves overlapping contributions
+     * without counting overlap twice or mistaking their enclosing bounds for complete
+     * coverage.
      */
     private boolean isRegionFullyCovered(
             double regionMinU, double regionMaxU,
@@ -237,7 +259,8 @@ public final class VoxelShape {
             return false;
         }
 
-        // Collect boundaries from the target region and the intersections with each rectangle.
+        // Split only where coverage can change, so a cell center represents its entire interior
+        // rather than an arbitrary sample.
         Set<Double> uBoundaries = new TreeSet<>();
         Set<Double> vBoundaries = new TreeSet<>();
         uBoundaries.add(regionMinU);
@@ -246,7 +269,8 @@ public final class VoxelShape {
         vBoundaries.add(regionMaxV);
 
         for (var rect : uvRectangles) {
-            // Compute the intersection of the rectangle with the target region.
+            // Ignore zero-area intersections when introducing grid boundaries; they cannot
+            // cover an interior cell in the requested region.
             var u0 = Math.max(regionMinU, rect[0]);
             var u1 = Math.min(regionMaxU, rect[1]);
             var v0 = Math.max(regionMinV, rect[2]);
@@ -261,16 +285,18 @@ public final class VoxelShape {
 
         List<Double> uList = new ArrayList<>(uBoundaries);
         List<Double> vList = new ArrayList<>(vBoundaries);
-        // Iterate over each sub-cell defined by adjacent boundaries.
+        // Adjacent sorted boundaries form cells with constant rectangle membership, allowing
+        // one midpoint test instead of area summation.
         for (int i = 0; i < uList.size() - 1; i++) {
             var u0 = uList.get(i);
             var u1 = uList.get(i + 1);
-            var uc = (u0 + u1) / 2d; // Sample point (cell center)
+            var uc = (u0 + u1) / 2d;
             for (int j = 0; j < vList.size() - 1; j++) {
                 var v0 = vList.get(j);
                 var v1 = vList.get(j + 1);
                 var vc = (v0 + v1) / 2d;
-                // Check if the cell center is covered by any rectangle.
+                // Overlap contributes coverage once: one containing rectangle is sufficient,
+                // while an uncovered center proves a gap in this cell.
                 boolean covered = false;
                 for (var rect : uvRectangles) {
                     if (uc >= rect[0] && uc <= rect[1] &&
@@ -290,11 +316,9 @@ public final class VoxelShape {
     }
 
     /**
-     * Check if this voxel shape is full block.
-     * <p>
-     * Full block means that all faces of this voxel shape are full.
-     *
-     * @return {@code true} if this voxel shape is full block, otherwise {@code false}.
+     * Returns whether all six unit-block faces are fully supported by solids. This tests
+     * exterior face coverage rather than interior volume, so a hollow shape can still
+     * satisfy the result.
      */
     public boolean isFullBlock() {
         for (var face : BlockFace.VALUES) {
@@ -307,24 +331,27 @@ public final class VoxelShape {
     }
 
     /**
-     * @see #intersectsRay(Raydc)
+     * Returns whether the supplied ray hits any solid in this shape. Direction components
+     * need not be normalized; the operation delegates each box test to JOML and does not
+     * change the ray or shape.
      */
     public boolean intersectsRay(double ox, double oy, double oz, double dx, double dy, double dz) {
         return intersectsRay(new Vector3d(ox, oy, oz), new Vector3d(dx, dy, dz));
     }
 
     /**
-     * @see #intersectsRay(Raydc)
+     * Returns whether the supplied ray hits any solid in this shape. Direction components
+     * need not be normalized; the operation delegates each box test to JOML and does not
+     * change the ray or shape.
      */
     public boolean intersectsRay(Vector3dc origin, Vector3dc direction) {
         return intersectsRay(new Rayd(origin, direction));
     }
 
     /**
-     * Determine whether the given ray intersects this voxel shape.
-     *
-     * @param ray the ray to check
-     * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
+     * Returns whether the supplied ray hits any solid in this shape. Direction components
+     * need not be normalized; the operation delegates each box test to JOML and does not
+     * change the ray or shape.
      */
     public boolean intersectsRay(Raydc ray) {
         for (var solid : this.solids) {
@@ -336,28 +363,35 @@ public final class VoxelShape {
     }
 
     /**
-     * @see #intersectsRay(Raydc, Vector2d)
+     * Tests the supplied ray coordinates and stores the combined solid-hit span in
+     * {@code result}. The result follows {@link #intersectsRay(Raydc, Vector2d)},
+     * including its miss sentinel and possible gaps between hit solids.
      */
     public boolean intersectsRay(double ox, double oy, double oz, double dx, double dy, double dz, Vector2d result) {
         return intersectsRay(new Vector3d(ox, oy, oz), new Vector3d(dx, dy, dz), result);
     }
 
     /**
-     * @see #intersectsRay(Raydc, Vector2d)
+     * Tests the supplied ray coordinates and stores the combined solid-hit span in
+     * {@code result}. The result follows {@link #intersectsRay(Raydc, Vector2d)},
+     * including its miss sentinel and possible gaps between hit solids.
      */
     public boolean intersectsRay(Vector3dc origin, Vector3dc direction, Vector2d result) {
         return intersectsRay(new Rayd(origin, direction), result);
     }
 
     /**
-     * Determine whether the given ray intersects this voxel shape. This method is similar to
-     * {@link #intersectsRay(Raydc)} but will save the intersection result.
+     * Returns whether the ray hits any solid and writes the combined hit span to
+     * {@code result}. Successful output contains the smallest entry parameter and largest
+     * exit parameter in {@code origin + t * direction}, rather than separate intervals for
+     * separate solids.
      *
-     * @param ray    the ray to check
-     * @param result a vector which will hold the resulting values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i>
-     *               of the near and far point of intersection if the ray intersects this VoxelShape. Notes that {@code result.y()} will be bigger
-     *               than {@code result.x()}. If the ray does not intersect this VoxelShape, the result will be {@code (Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)}.
-     * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
+     * <p>
+     * The combined span can cross empty space between solids. A miss writes
+     * {@code Double.NEGATIVE_INFINITY} and {@code Double.POSITIVE_INFINITY}, so callers
+     * must inspect the boolean result before treating the output as a hit. The underlying
+     * box intersection can return a negative entry parameter when the ray begins inside a
+     * box.
      */
     public boolean intersectsRay(Raydc ray, Vector2d result) {
         var nearestNear = Double.POSITIVE_INFINITY;
@@ -370,7 +404,8 @@ public final class VoxelShape {
             if (solid.intersectsRay(ray, vec)) {
                 hasIntersection = true;
 
-                // Ensure vec.x <= vec.y
+                // Compare ordered entry and exit parameters before merging solids, so the
+                // combined span retains both extremes regardless of box order.
                 if (vec.x > vec.y) {
                     var temp = vec.x;
                     vec.x = vec.y;
@@ -382,6 +417,8 @@ public final class VoxelShape {
             }
         }
 
+        // A miss still overwrites the output, preventing callers from accidentally reusing an
+        // earlier successful interval after checking the result.
         if (hasIntersection) {
             result.set(nearestNear, farthestFar);
         } else {
@@ -391,31 +428,35 @@ public final class VoxelShape {
         return hasIntersection;
     }
 
+    /**
+     * Returns four projected rectangles describing the requested face's perimeter strips.
+     * {@code edgeWidth} uses block-coordinate units, and the returned arrays are newly
+     * allocated so callers can adjust them independently of later calls.
+     */
     private List<double[]> getEdgeRegions(BlockFace face, double edgeWidth) {
         List<double[]> edgeRegions = new ArrayList<>();
 
-        // Define templates for the four edge regions
+        // The full-height side strips include corners, so the remaining strips cover only the
+        // width between those corners.
         double[][] templateEdges = {
-                {0, edgeWidth, 0, 1},                        // First edge
-                {1 - edgeWidth, 1, 0, 1},                    // Corresponding opposite edge
-                {edgeWidth, 1 - edgeWidth, 0, edgeWidth},    // Third edge
-                {edgeWidth, 1 - edgeWidth, 1 - edgeWidth, 1} // Corresponding opposite edge
+                {0, edgeWidth, 0, 1},
+                {1 - edgeWidth, 1, 0, 1},
+                {edgeWidth, 1 - edgeWidth, 0, edgeWidth},
+                {edgeWidth, 1 - edgeWidth, 1 - edgeWidth, 1}
         };
 
-        // Adjust the edge coordinates based on the plane of the BlockFace
+        // Preserve perimeter coverage after projection; the west/east mapping swaps projected
+        // axes to match that face orientation.
         switch (face) {
-            // X-Z plane
             case UP, DOWN -> {
                 return Arrays.asList(templateEdges);
             }
             case NORTH, SOUTH -> {
-                // X-Y plane, swap V and U
                 for (var edge : templateEdges) {
                     edgeRegions.add(new double[]{edge[0], edge[1], edge[2], edge[3]});
                 }
             }
             case WEST, EAST -> {
-                // Y-Z plane, swap U and V
                 for (var edge : templateEdges) {
                     edgeRegions.add(new double[]{edge[2], edge[3], edge[0], edge[1]});
                 }
@@ -425,6 +466,11 @@ public final class VoxelShape {
         return edgeRegions;
     }
 
+    /**
+     * Returns whether the selected solid boundary exactly equals the unit-block face
+     * coordinate. The comparison uses no tolerance, so translated or nearly aligned solids
+     * do not automatically qualify as face support.
+     */
     private boolean isAlignedWithFace(AABBdc solid, BlockFace face) {
         return switch (face) {
             case UP -> solid.maxY() == 1;
@@ -436,6 +482,11 @@ public final class VoxelShape {
         };
     }
 
+    /**
+     * Returns a new array containing the solid's projected face bounds. The array order is
+     * {@code minU}, {@code maxU}, {@code minV}, {@code maxV}; horizontal faces use the
+     * horizontal coordinate plane.
+     */
     private double[] getUVMinMax(AABBdc solid, BlockFace face) {
         return switch (face) {
             case UP, DOWN -> new double[]{solid.minX(), solid.maxX(), solid.minZ(), solid.maxZ()};
@@ -444,14 +495,23 @@ public final class VoxelShape {
         };
     }
 
+    /**
+     * {@code VoxelShapeBuilder} accumulates solid boxes in a shared mutable set. Built
+     * shapes retain that same set, and box references are not copied before queries use
+     * them.
+     */
     public static class VoxelShapeBuilder {
+        /**
+         * {@code solids} stores this builder's boxes and backs every shape it builds.
+         * Additions remain visible through those shapes because {@code build()} does not
+         * copy the set.
+         */
         private final Set<AABBdc> solids = new HashSet<>();
 
         /**
-         * Add a solid area to the voxel shape.
-         *
-         * @param solid the solid area to add
-         * @return this builder
+         * Adds a solid box to this builder and returns this builder. The box overload
+         * retains the supplied reference without copying, so subsequent box changes affect
+         * every shape built from this set.
          */
         public VoxelShapeBuilder solid(AABBdc solid) {
             this.solids.add(solid);
@@ -459,24 +519,18 @@ public final class VoxelShape {
         }
 
         /**
-         * Add a solid area to the voxel shape.
-         *
-         * @param minX the minimum x coordinate of the solid area
-         * @param minY the minimum y coordinate of the solid area
-         * @param minZ the minimum z coordinate of the solid area
-         * @param maxX the maximum x coordinate of the solid area
-         * @param maxY the maximum y coordinate of the solid area
-         * @param maxZ the maximum z coordinate of the solid area
-         * @return this builder
+         * Adds a newly allocated box with the supplied minimum and maximum coordinates.
+         * This builder returns itself for chaining and retains the box in the same shared
+         * set used by built shapes.
          */
         public VoxelShapeBuilder solid(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
             return this.solid(new AABBd(minX, minY, minZ, maxX, maxY, maxZ));
         }
 
         /**
-         * Build the voxel shape.
-         *
-         * @return the voxel shape
+         * Returns a shape backed by this builder's current solid set. The set is retained
+         * without copying, so later builder additions also change previously built shapes
+         * and their query results.
          */
         public VoxelShape build() {
             return new VoxelShape(this.solids);

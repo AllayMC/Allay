@@ -13,10 +13,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * {@code TrimMaterialRegistryLoader} reads armor trim materials from bundled trim data and
+ * indexes them by their string identifiers. The current item registry resolves each associated
+ * item, while the resource supplies the material identity and color retained in the resulting trim
+ * values.
+ *
  * @author IWareQ
  */
 @Slf4j
 public class TrimMaterialRegistryLoader implements RegistryLoader<Void, Map<String, TrimMaterial>> {
+    /**
+     * Loads {@code "materials"} from {@code "trim_data.json"} into a mutable string-keyed
+     * map. Item registration must precede this load; unresolved item lookups are retained as
+     * {@code null}, and resource or conversion failures become {@code AssertionError}.
+     */
     @Override
     public Map<String, TrimMaterial> load(Void unused) {
         try (var stream = Utils.getResource("trim_data.json")) {

@@ -14,31 +14,35 @@ import org.allaymc.api.world.WorldPool;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * {@code Server} exposes the server's lifecycle, shared services, and console
+ * command identity.
+ * API bootstrap publishes the server instance before normal startup completes;
+ * callers use its lifecycle state to distinguish initialization, ticking, and
+ * shutdown rather than treating instance availability as readiness.
+ *
  * @author daoge_cmd
  */
 public interface Server extends TaskCreator, CommandSender {
 
     /**
-     * A static instance holder for the {@link Server} interface.
+     * {@code INSTANCE} receives the server implementation during API bootstrap and exposes the
+     * shared instance to service consumers through {@link #getInstance()}.
      */
     AllayAPI.APIInstanceHolder<Server> INSTANCE = AllayAPI.APIInstanceHolder.create();
 
     /**
-     * Retrieves the server instance.
-     *
-     * @return the current server instance
+     * Returns the server reference published by API bootstrap, or {@code null} beforehand.
+     * Publication may precede startup completion, so a non-null result does not
+     * imply that networking or world loading has finished.
      */
     static Server getInstance() {
         return INSTANCE.get();
     }
 
     /**
-     * Retrieves the server's start time.
-     *
-     * <p>The returned value corresponds to the system time at which the server started,
-     * obtained using {@link System#currentTimeMillis()}.</p>
-     *
-     * @return the server start time in milliseconds
+     * Returns wall-clock milliseconds recorded after network startup. The value
+     * comes from {@link System#currentTimeMillis()} and remains zero until that
+     * stage; it measures neither elapsed uptime nor object construction time.
      */
     long getStartTime();
 
@@ -57,42 +61,42 @@ public interface Server extends TaskCreator, CommandSender {
     PluginManager getPluginManager();
 
     /**
-     * Retrieves the current server tick.
+     * Returns the current server tick counter advanced by the main loop.
      *
      * @return the current tick count
      */
     long getTick();
 
     /**
-     * Shutdown the server.
+     * Requests shutdown of a running server without waiting for cleanup.
+     * The implementation changes {@code RUNNING} to {@code STOPPING}; its tick loop performs
+     * cleanup afterward. Requests in other lifecycle states have no effect.
      */
     void shutdown();
 
     /**
-     * Retrieves the current state of the server.
+     * Returns the current lifecycle state exposed by the server implementation.
      *
      * @return the server state
      */
     ServerState getState();
 
     /**
-     * Retrieves the world pool.
-     *
-     * @return the world pool instance
+     * Returns the shared world pool responsible for loaded server worlds.
      */
     WorldPool getWorldPool();
 
     /**
-     * Retrieves the compute thread pool.
-     *
-     * @return the compute thread pool
+     * Returns the shared executor for compute-oriented server work.
+     * The server owns its lifetime and shuts it down during server cleanup;
+     * consumers submit work without closing the executor themselves.
      */
     ExecutorService getComputeThreadPool();
 
     /**
-     * Retrieves the virtual thread pool.
-     *
-     * @return the virtual thread pool
+     * Returns the shared executor that creates virtual threads for submitted work.
+     * The server owns shutdown, so consumers must not close this executor or
+     * assume submissions remain accepted after server cleanup begins.
      */
     ExecutorService getVirtualThreadPool();
 
@@ -104,30 +108,24 @@ public interface Server extends TaskCreator, CommandSender {
     PlayerManager getPlayerManager();
 
     /**
-     * Gets the message channel used in this server.
-     *
-     * @return the message channel used in this server
+     * Returns the server's current shared broadcast channel for message receivers.
      */
     MessageChannel getMessageChannel();
 
     /**
-     * Sets the message channel used in this server.
-     *
-     * @param channel the message channel used in this server
+     * Replaces the shared broadcast channel used by subsequent server consumers.
+     * The implementation stores the supplied reference directly and does not
+     * transfer receivers from the previous channel or automatically add the server.
      */
     void setMessageChannel(MessageChannel channel);
 
     /**
-     * Retrieves the event bus.
-     *
-     * @return the event bus instance
+     * Returns the shared event bus used for server event dispatch.
      */
     EventBus getEventBus();
 
     /**
-     * Retrieves the scoreboard manager.
-     *
-     * @return the scoreboard manager instance
+     * Returns the shared scoreboard manager responsible for server scoreboard state.
      */
     ScoreboardManager getScoreboardManager();
 }

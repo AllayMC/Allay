@@ -15,13 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
- * Allay Project 2026/7/12
+ * {@code GoatHornItemTypeTest} verifies goat-horn capability wiring and creative variant coverage.
  *
  * @author Miroshka000
  */
 @ExtendWith(AllayTestExtension.class)
 class GoatHornItemTypeTest {
 
+    /**
+     * Creates a registered goat horn and assigns every supported instrument.
+     * The specialized stack must report each selected instrument and store its
+     * corresponding metadata value through the same item instance.
+     */
     @Test
     void shouldCreateEveryInstrumentVariant() {
         var horn = assertInstanceOf(ItemGoatHornStack.class, ItemTypes.GOAT_HORN.createItemStack(1));
@@ -33,6 +38,11 @@ class GoatHornItemTypeTest {
         }
     }
 
+    /**
+     * Collects metadata from all goat-horn entries in the creative registry.
+     * The distinct values must match every supported instrument ordinal, protecting
+     * complete variant coverage in the initialized creative inventory.
+     */
     @Test
     void creativeInventoryShouldContainAllEightVariants() {
         var actualMetas = Registries.CREATIVE_ITEMS.getEntries().stream()

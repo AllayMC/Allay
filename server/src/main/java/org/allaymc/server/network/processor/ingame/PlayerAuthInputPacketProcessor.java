@@ -42,40 +42,103 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * {@code PlayerAuthInputPacketProcessor} admits player movement and block-breaking
+ * input on the receive path, then leaves ordinary input flags and embedded
+ * inventory requests for synchronous handling. A pending teleport rejects a
+ * reported feet distance above the acknowledgement tolerance before coordinate
+ * validation; a {@code NaN} distance does not trigger that comparison. Accepted
+ * positions are offered to the physics engine rather than
+ * assigned directly, and the location validator rejects {@code NaN} components
+ * without rejecting infinity or substituting server coordinates.
+ *
+ * <p>
+ * The processor retains one block-breaking position, face, captured block state,
+ * and accumulated progress across admitted packets. Vanilla blocks permit a
+ * tolerant predicted completion, while custom blocks require full progress
+ * because their protocol definition advertises a maximum mining duration.
+ * {@code startBreak} seeds one progress increment, and admitted input packets add
+ * further increments using a twenty-tick conversion rather than elapsed receive
+ * time. Rejected predictions resend both block
+ * layers; stopping clears tracking only after its stop action succeeds. These
+ * mutable fields have no independent locking, so this processor does not provide
+ * concurrent admission guarantees.
+ *
  * @author Cool_Loong | daoge_cmd
  */
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
-    // Minimum progress (0-1) required to allow client's BLOCK_PREDICT_DESTROY for vanilla blocks
-    // Similar to Geyser's approach, we're tolerant to account for timing differences
+    /**
+     * {@code BLOCK_BREAKING_PROGRESS_TOLERANCE} permits vanilla predicted
+     * destruction at sixty-five percent progress, before full server completion.
+     */
     protected static final float BLOCK_BREAKING_PROGRESS_TOLERANCE = 0.65f;
+    /**
+     * {@code TELEPORT_ACK_DIFF_TOLERANCE} accepts reported feet positions within
+     * one block of the expected teleport destination before movement resumes.
+     */
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
+    /**
+     * {@code PLAYER_NETWORK_OFFSET} converts the client's elevated position to
+     * feet coordinates by subtracting 1.62 blocks from its vertical component.
+     */
     protected static final float PLAYER_NETWORK_OFFSET = 1.62f;
 
+    // breakingPosX, breakingPosY, and breakingPosZ identify the tracked block.
+    // stopBreak resets all three to Integer.MAX_VALUE after publishing STOP_BREAK;
+    // blockToBreak determines whether tracking is active.
+    /** Tracked block X coordinate. */
     protected int breakingPosX = Integer.MAX_VALUE;
+    /** Tracked block Y coordinate. */
     protected int breakingPosY = Integer.MAX_VALUE;
+    /** Tracked block Z coordinate. */
     protected int breakingPosZ = Integer.MAX_VALUE;
 
+    /**
+     * {@code faceToBreak} holds the validated face used for punch feedback.
+     * {@code stopBreak} clears it when active tracking ends.
+     */
     protected BlockFace faceToBreak;
+    /**
+     * {@code blockToBreak} holds the state captured by {@code startBreak}.
+     * A {@code null} value makes {@code isBreakingBlock} report inactive tracking.
+     */
     protected BlockState blockToBreak;
 
-    // Current breaking progress (0-1), where 1.0 means the block should be broken
+    /**
+     * {@code currentProgress} accumulates break fractions per admitted packet.
+     * Values at least one cause server completion regardless of block kind.
+     */
     protected float currentProgress;
-    // Progress added per tick
+    /**
+     * {@code progressPerTick} stores the latest twenty-tick-derived progress
+     * increment, which also determines the continuation action's displayed duration.
+     */
     protected float progressPerTick;
-    // Whether we must break the block ourselves (for custom blocks)
+    /**
+     * {@code serverSideBlockBreaking} marks custom blocks requiring full progress.
+     * {@code mayBreak} otherwise allows the vanilla predicted-completion tolerance.
+     */
     protected boolean serverSideBlockBreaking;
 
+    /**
+     * Returns whether the current game mode forbids these block-breaking actions.
+     * Adventure and spectator modes are rejected; creative mode remains eligible
+     * for the same action path as survival mode.
+     */
     private static boolean isInvalidGameType(Player player) {
         var entity = player.getControlledEntity();
-        // Creative mode player can break blocks just like they are in
-        // survival mode if "delayed block breaking" option is enabled
-        // TODO: implement canBreak & canPlace feature
+        // TODO: Honor item-specific adventure breaking and placement restrictions
+        // before allowing those operations; this check rejects adventure mode entirely.
         return entity.getGameMode() == GameMode.ADVENTURE ||
                entity.getGameMode() == GameMode.SPECTATOR;
     }
 
+    /**
+     * Offers a feet-coordinate movement to the current dimension's physics engine.
+     * The engine owns later movement processing and can ignore unregistered or
+     * unchanged entities; this helper does not move the entity immediately.
+     */
     protected void handleMovement(Player player, Vector3f newPos, Vector3f newRot) {
         var entity = player.getControlledEntity();
         var world = entity.getLocation().dimension();
@@ -85,10 +148,22 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         ));
     }
 
+    /**
+     * Processes supplied block actions in list order against this connection's
+     * current breaking state. Start and continue actions require block reach,
+     * while game-mode and break permissions also gate predicted completion.
+     *
+     * <p>
+     * Continuing the already tracked position leaves its progress intact;
+     * continuing another position stops the old break before starting the new one.
+     * A forbidden predicted destroy resends layer zero immediately, whereas an
+     * allowed prediction delegates progress checks and two-layer recovery to
+     * {@code completeBreak}. An abort in a forbidden game mode leaves existing
+     * tracking unchanged rather than clearing it.
+     */
     protected void handleBlockAction(Player player, List<PlayerBlockActionData> blockActions) {
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
-            // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
                     if (!player.getControlledEntity().canReachBlock(NetworkHelper.fromNetwork(pos))) {
@@ -107,12 +182,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
-                    // When a player switches to breaking another block halfway through breaking one
                     if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         continue;
                     }
 
-                    // HACK: The client for some reason sends a meaningless BLOCK_CONTINUE_DESTROY before BLOCK_PREDICT_DESTROY, presumably a bug, so ignore it here
+                    // Repeated continuation for the active position must not
+                    // restart progress before a following prediction; only a
+                    // changed position selects a new breaking target.
                     if (this.breakingPosX == pos.getX() && this.breakingPosY == pos.getY() && this.breakingPosZ == pos.getZ()) {
                         continue;
                     }
@@ -122,6 +198,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 }
                 case BLOCK_PREDICT_DESTROY -> {
                     if (isInvalidGameType(player) || !player.canBreakBlocks()) {
+                        // A forbidden prediction may already have hidden the
+                        // block on the client; resend layer zero without
+                        // admitting or completing the requested break.
                         var state = player.getControlledEntity().getLocation().dimension().getBlockState(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
                         player.viewBlockUpdate(new Vector3i(pos.getX(), pos.getY(), pos.getZ()), 0, state);
                         continue;
@@ -130,7 +209,6 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     completeBreak(player, pos.getX(), pos.getY(), pos.getZ());
                 }
                 case ABORT_BREAK -> {
-                    // Digging interrupted
                     if (isInvalidGameType(player)) {
                         continue;
                     }
@@ -141,10 +219,26 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
     }
 
+    /**
+     * Returns whether a captured block state marks active breaking work.
+     */
     protected boolean isBreakingBlock() {
         return this.blockToBreak != null;
     }
 
+    /**
+     * Starts tracking a block after stopping any previously active break.
+     * An invalid face abandons the newly captured state, and callers perform
+     * permission and reach checks before invoking this helper.
+     *
+     * <p>
+     * Adjacent fire gets its own cancellable break event before punch handling.
+     * Cancelling the punch event suppresses the block's punch callback but does
+     * not cancel tracking or progress initialization. Custom-block identity
+     * selects full-progress completion, and nonpositive break durations initialize
+     * an immediate full increment. Start feedback follows those state updates,
+     * with no rollback of earlier fire changes or tracking if a callback fails.
+     */
     protected void startBreak(Player player, int x, int y, int z, int blockFaceId) {
         var entity = player.getControlledEntity();
         var dimension = entity.getDimension();
@@ -166,13 +260,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
-        // If there is fire in the face, try extinguishing it
+        // Fire occupies the clicked face independently of the target block;
+        // offer its removal separately before initializing feedback for the
+        // block being broken.
         var sidePos = this.faceToBreak.offsetPos(x, y, z);
         var sideBlock = dimension.getBlockState(sidePos);
         if (sideBlock.getBlockType() == BlockTypes.FIRE || sideBlock.getBlockType() == BlockTypes.SOUL_FIRE) {
             var event = new BlockBreakEvent(new Block(sideBlock, new Position3i(sidePos, dimension)), entity.getItemInHand(), entity);
             if (!event.call()) {
-                // Resend the block because on client side that was extinguished
+                // The client can already predict extinguishing this adjacent
+                // fire; event rejection resends its server state without
+                // cancelling tracking for the original target block.
                 player.viewBlockUpdate(sidePos, 0, sideBlock);
             } else {
                 dimension.setBlockState(sidePos, BlockTypes.AIR.getDefaultState());
@@ -194,18 +292,19 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (entity.getGameMode() != GameMode.CREATIVE) {
             breakTimeSeconds = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, entity.getItemInHand(), entity);
         } else {
-            // Creative mode players can break blocks instantly
+            // Creative mode bypasses the calculated survival mining duration.
             breakTimeSeconds = 0;
         }
 
-        // Check if this is a custom block - custom blocks require server-side breaking
-        // because their "minecraft:destructible_by_mining" is set to a very large value
+        // Protocol.encodeCustomBlockDefinition advertises Float.MAX_VALUE mining
+        // duration for custom blocks, so server progress must supply completion
+        // instead of depending on a timely client prediction.
         this.serverSideBlockBreaking = ((AllayBlockType<?>) this.blockToBreak.getBlockType()).isCustomBlock();
 
-        // Calculate progress per tick (1.0 = block fully broken)
-        // If breakTimeSeconds is 0, it's instant break
+        // Convert seconds to twenty nominal ticks; nonpositive durations use
+        // full progress immediately instead of dividing by zero or a negative value.
         this.progressPerTick = breakTimeSeconds > 0 ? (float) (1.0 / (breakTimeSeconds * 20.0)) : 1.0f;
-        this.currentProgress = this.progressPerTick; // First tick progress
+        this.currentProgress = this.progressPerTick; // initial admitted-packet progress
 
         dimension.addBlockAction(x, y, z, new StartBreakAction(breakTimeSeconds));
         dimension.addParticle(
@@ -214,12 +313,19 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         );
     }
 
+    /**
+     * Publishes stop feedback and clears the active target and progress fields.
+     * An inactive call only logs; if feedback publication throws, the clearing
+     * assignments are not reached and previous tracking remains.
+     */
     protected void stopBreak(Player player) {
         if (this.blockToBreak == null) {
             log.debug("Player {} tried to stop breaking a block while not breaking any block", player.getOriginName());
             return;
         }
 
+        // Publish the stop while the old coordinates still identify its target;
+        // only a successful publication reaches the tracking reset that follows.
         player.getControlledEntity().getDimension().addBlockAction(this.breakingPosX, this.breakingPosY, this.breakingPosZ, SimpleBlockAction.STOP_BREAK);
         this.breakingPosX = Integer.MAX_VALUE;
         this.breakingPosY = Integer.MAX_VALUE;
@@ -231,48 +337,85 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.serverSideBlockBreaking = false;
     }
 
+    /**
+     * Completes a prediction only for the currently tracked block coordinates.
+     * A different position is ignored, while insufficient progress resends both
+     * server block layers and leaves the active break available for later progress.
+     *
+     * <p>
+     * Permitted completion invokes {@code doBlockBreak} before {@code stopBreak}.
+     * A declined world break therefore restores the client's view and then stops
+     * tracking, whereas a thrown break or item callback skips the later stop.
+     * This helper does not independently recheck permissions or reach.
+     */
     protected void completeBreak(Player player, int x, int y, int z) {
         if (this.breakingPosX != x || this.breakingPosY != y || this.breakingPosZ != z) {
             log.debug("Player {} tried to complete breaking a different block", player.getOriginName());
             return;
         }
 
-        // Validate progress to prevent cheating (e.g., sending BLOCK_PREDICT_DESTROY too early)
-        // Similar to Geyser's approach:
-        // - Custom blocks require server-side breaking (progress >= 1.0), client won't send BLOCK_PREDICT_DESTROY
-        // - Vanilla blocks can trust client prediction with some tolerance (progress >= 0.65)
+        // Use the tracked block kind and progress together; vanilla predictions
+        // have timing tolerance, while custom blocks require the same full
+        // progress used by server completion.
         if (!mayBreak()) {
             log.debug("Player {} tried to break block too early! Progress: {}, serverSide: {}",
                     player.getOriginName(), this.currentProgress, this.serverSideBlockBreaking);
-            // The client has predicted the block destroy, send block update to restore the client's view
+            // Prediction can hide both the block and an extra water layer;
+            // restore both current server layers while retaining this unfinished
+            // break for later progress.
             revertClientBlockPrediction(player, x, y, z);
             return;
         }
 
+        // Finish world and item callbacks before clearing tracking so a thrown
+        // callback leaves the target metadata available rather than hiding
+        // incomplete breaking cleanup.
         doBlockBreak(player);
         stopBreak(player);
     }
 
     /**
-     * Checks if the block may be broken based on current progress.
-     * Similar to Geyser's approach:
-     * - Server-side breaking (custom blocks): requires progress >= 1.0
-     * - Client prediction (vanilla blocks): allows progress >= 0.65 for tolerance
+     * Returns whether progress permits completion for the tracked block kind.
+     * Custom blocks require a full fraction of one; other blocks permit the
+     * sixty-five percent prediction tolerance without changing tracking state.
+     *
+     * <p>
+     * {@code completeBreak} uses this distinction for client predictions, which
+     * must not gain the vanilla early-completion allowance for custom blocks.
+     * {@code handleAsync} separately completes every block at full progress
+     * without invoking this predicate. A permitted result alone does not validate
+     * target coordinates, permissions, or reach.
      */
     protected boolean mayBreak() {
         if (this.serverSideBlockBreaking) {
-            // Custom blocks should be broken by server in handleAsync, not here
-            // But if somehow we reach here, require full progress
+            // A custom-block prediction uses the same full-progress requirement
+            // as server completion, preventing the early vanilla threshold from
+            // admitting a custom block before its server work completes.
             return this.currentProgress >= 1.0f;
         }
-        // Vanilla blocks: be tolerant to account for timing differences
+        // Vanilla predictions can complete before the server's full-progress fallback.
         return this.currentProgress >= BLOCK_BREAKING_PROGRESS_TOLERANCE;
     }
 
+    /**
+     * Attempts the tracked world break and updates the held item after success.
+     * A declined break resends both server block layers; a successful break runs
+     * item wear before clearing or notifying the hand, without compensating the
+     * world change if a later item callback fails.
+     *
+     * <p>
+     * Item wear receives the captured {@code blockToBreak}, whereas recovery reads
+     * the dimension's current states at the tracked coordinates. Those states can
+     * differ after intervening world changes. This helper leaves tracking cleanup
+     * to its caller after the operation returns normally.
+     */
     protected void doBlockBreak(Player player) {
         var entity = player.getControlledEntity();
         var dimension = entity.getDimension();
         var itemInHand = entity.getItemInHand();
+        // Apply tool wear only after the world accepts the break, so a
+        // cancelled world operation does not consume durability through this
+        // successful-break item callback.
         if (dimension.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, entity)) {
             itemInHand.onBreakBlock(this.blockToBreak, entity);
             if (itemInHand.isBroken()) {
@@ -281,15 +424,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 entity.notifyItemInHandChange();
             }
         } else {
-            // Failed to break the block (e.g. BlockBreakEvent cancelled), restore block state
+            // A rejected world break leaves the server block authoritative;
+            // resend both layers because client prediction may already have
+            // removed the visible block and its water layer.
             revertClientBlockPrediction(player, this.breakingPosX, this.breakingPosY, this.breakingPosZ);
         }
     }
 
     /**
-     * Sends block updates to the player to revert the client's predicted block destroy.
-     * Restores both block layers (main block and extra block such as water for waterlogged blocks)
-     * using the current server-side block state.
+     * Resends both current block layers to correct a predicted client destroy.
+     * Layer zero contains the main block and layer one can contain water; the
+     * method sends them separately without modifying server blocks or tracking state.
      */
     protected void revertClientBlockPrediction(Player player, int x, int y, int z) {
         var dimension = player.getControlledEntity().getDimension();
@@ -298,6 +443,11 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         player.viewBlockUpdate(pos, 1, dimension.getBlockState(x, y, z, 1));
     }
 
+    /**
+     * Returns whether the controlled entity can reach the tracked block's center.
+     * An out-of-reach target invokes {@code stopBreak} before returning {@code false},
+     * so the caller must not continue progress work after rejection.
+     */
     protected boolean checkInteractDistance(Player player) {
         if (!player.getControlledEntity().canReach(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f)) {
             log.debug("Player {} tried to interact with a block out of reach", player.getOriginName());
@@ -308,18 +458,36 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return true;
     }
 
+    /**
+     * Adds one increment using the captured block state and current held item.
+     * Each invocation recomputes the twenty-tick-derived increment, so item or
+     * player changes affect future additions while accumulated progress remains.
+     *
+     * <p>
+     * A nonpositive duration supplies a full increment, and a positive duration
+     * divides one by its nominal tick count. The method does not measure elapsed
+     * receive time or cap the total at one. The stored {@code progressPerTick}
+     * also supplies the duration used by subsequent continuation feedback.
+     */
     protected void updateBreakingProgress(Player player) {
         var entity = player.getControlledEntity();
         var newBreakingTime = this.blockToBreak.getBehavior().calculateBreakTime(this.blockToBreak, entity.getItemInHand(), entity);
 
-        // Recalculate progress per tick based on new breaking time
+        // Recompute from current tool and player conditions without discarding
+        // accumulated progress; twenty nominal ticks convert the duration to
+        // one admitted-packet increment.
         float newProgressPerTick = newBreakingTime > 0 ? (float) (1.0 / (newBreakingTime * 20.0)) : 1.0f;
 
-        // Accumulate progress for this tick
         this.currentProgress += newProgressPerTick;
         this.progressPerTick = newProgressPerTick;
     }
 
+    /**
+     * Applies supported input flags to a living controlled entity in set iteration
+     * order. Dead entities are ignored; rejected sprint or flight starts return
+     * from the whole method, leaving later flags in that iteration unprocessed.
+     * Jump events do not gate exhaustion, and required-flight stops resend abilities.
+     */
     protected void handleInputData(Player player, Set<PlayerAuthInputData> inputData) {
         var entity = player.getControlledEntity();
         if (entity.isDead()) {
@@ -329,6 +497,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         for (var input : inputData) {
             switch (input) {
                 case START_SPRINTING -> {
+                    // Sprinting requires more than six food points.
                     if (entity.getFoodLevel() <= 6) {
                         log.warn("Player {} tried to start sprinting without enough food level", player.getOriginName());
                         return;
@@ -349,11 +518,14 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case STOP_SPIN_ATTACK -> entity.setSpinAttacking(false);
                 case START_JUMPING -> {
                     new PlayerJumpEvent(entity).call();
+                    // Sprinting jumps consume four times the ordinary jump exhaustion.
                     entity.exhaust(entity.isSprinting() ? 0.2f : 0.05f);
                 }
                 case START_FLYING -> {
                     if (!player.canFly()) {
-                        // Reset client-side flying state
+                        // A forbidden flight start can already be predicted
+                        // locally; resend the controller's ability state before
+                        // abandoning the remaining input flags in this packet.
                         var controller = entity.getController();
                         controller.viewPlayerAbilities(controller);
 
@@ -364,6 +536,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     entity.setFlying(true);
                 }
                 case STOP_FLYING -> {
+                    // Required flight overrides the client's stop request;
+                    // resend abilities so its local state can retain the same
+                    // restriction as the controlled entity.
                     entity.setFlying(player.isAlwaysFlying());
                     if (player.isAlwaysFlying()) {
                         entity.setFlying(true);
@@ -382,12 +557,34 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
     }
 
+    /**
+     * Applies deferred input flags before forwarding any embedded item-stack
+     * request. A failure in input handling prevents request forwarding, and the
+     * method does not repeat receive-path readiness or teleport checks.
+     */
     @Override
     public void handleSync(Player player, PlayerAuthInputPacket packet, long receiveTime) {
         handleInputData(player, packet.getInputData());
         handleSingleItemStackRequest(player, packet.getItemStackRequest(), receiveTime);
     }
 
+    /**
+     * Admits movement and breaking work for an initialized, spawned player.
+     * Unready input is consumed immediately; ready input updates control-mode
+     * observations before checking a pending teleport or validating coordinates.
+     *
+     * <p>
+     * A position farther than the teleport tolerance consumes the whole packet
+     * and retains the expected destination. A sufficiently close comparison
+     * clears that destination before {@code NaN} validation, so a later validation
+     * failure does not restore it. Accepted changed locations are offered to
+     * physics, then block actions and one progress increment run on this receive
+     * path. A newly started break already has its seeded increment, so this update
+     * adds a second increment in that packet. Full progress invokes the world
+     * break even without a client prediction;
+     * unfinished progress emits feedback. Returning {@code UNHANDLED} permits the
+     * synchronous flags and embedded request phase only after these steps finish.
+     */
     @Override
     public PacketSignal handleAsync(Player player, PlayerAuthInputPacket packet, long receiveTime) {
         if (notReadyForInput(player)) {
@@ -401,45 +598,49 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();
             if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
-                // The player has moved before it received the teleport packet. Ignore this movement entirely and
-                // wait for the client to sync itself back to the server. Once we get a movement that is close
-                // enough to the teleport position, we'll allow the player to move around again.
+                // Keep the expected destination until a reported feet position
+                // is close enough; consuming this packet also defers its block
+                // actions and synchronous input work.
                 return PacketSignal.HANDLED;
             }
+            // Clear acknowledgement before coordinate validation; a NaN
+            // distance does not satisfy the greater-than rejection and can
+            // reach this assignment before validation consumes the packet.
             baseComponent.setExpectedTeleportPos(null);
         }
 
         if (!validateClientLocation(player, packet.getPosition(), packet.getRotation())) {
-            // Ignore this auth packet if the pos provided by the client is not valid
+            // Invalid coordinates consume the entire packet, preventing its
+            // movement, block actions, input flags, and embedded inventory
+            // request from reaching their later phases.
             return PacketSignal.HANDLED;
         }
 
         if (isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
-            // The pos which the client sends to the server is higher than the actual coordinates (one base offset)
+            // The client reports an elevated vertical position; subtract the
+            // network offset so physics receives the entity's feet coordinates
+            // in the current dimension.
             handleMovement(player, packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0), packet.getRotation());
         }
         handleBlockAction(player, packet.getPlayerActions());
         if (isBreakingBlock() && checkInteractDistance(player)) {
-            // Update breaking progress
             updateBreakingProgress(player);
 
-            // Check if progress has reached 100% - server authoritative block breaking.
-            // For custom blocks: their "minecraft:destructible_by_mining" is set to a very large value,
-            //   so the client will never send BLOCK_PREDICT_DESTROY. Server must proactively break.
-            // For vanilla blocks: client may send BLOCK_PREDICT_DESTROY at ~65% progress (handled in
-            //   completeBreak), but if not received, server will break at 100% as fallback.
+            // Full progress supplies custom-block completion despite its
+            // advertised maximum mining duration, and also completes vanilla
+            // breaking when no earlier tolerated prediction arrives.
             if (this.currentProgress >= 1.0f) {
                 doBlockBreak(player);
                 stopBreak(player);
             } else {
-                // Still breaking, update particles and send progress to client
                 var entity = player.getControlledEntity();
                 var dimension = entity.getDimension();
                 dimension.addParticle(
                         this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
                         new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
                 );
-                // Calculate break time in seconds for ContinueBreakAction
+                // ContinueBreakAction expects seconds, so invert the nominal
+                // twenty-tick progress rate used by the client-facing break feedback.
                 double breakTimeSeconds = this.progressPerTick > 0 ? 1.0 / (this.progressPerTick * 20.0) : 0;
                 dimension.addBlockAction(
                         this.breakingPosX, this.breakingPosY, this.breakingPosZ,
@@ -450,23 +651,41 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return PacketSignal.UNHANDLED;
     }
 
+    /**
+     * Returns whether position and rotation contain no {@code NaN} components.
+     * Invalid values are logged and left unchanged; infinity passes this check,
+     * and the caller decides to consume a packet returning {@code false}.
+     */
     protected boolean validateClientLocation(Player player, Vector3f pos, Vector3f rot) {
         var valid = !Float.isNaN(pos.getX()) && !Float.isNaN(pos.getY()) && !Float.isNaN(pos.getZ()) &&
                     !Float.isNaN(rot.getX()) && !Float.isNaN(rot.getY()) && !Float.isNaN(rot.getZ());
         if (!valid) {
-            // Sometimes, the PlayerAuthInput packet is in fact sent with NaN/INF after being teleported (to another
-            // world). For this reason, we don't actually return an error if this happens, because this will result
-            // in the player being kicked. Just log it and replace the NaN value with the one we have tracked server-side.
+            // Log invalid components without throwing or replacing them; the
+            // receive handler consumes the packet and leaves the server's
+            // current position unchanged by this validation path.
             log.debug("Found NaN in PlayerAuthInputPacket sent by player {}", player.getOriginName());
         }
         return valid;
     }
 
+    /**
+     * Returns whether position or pitch and yaw differ from the current entity.
+     * Immobility suppresses positional differences only; rotation can still
+     * trigger movement offering, and comparison accounts for the network height offset.
+     *
+     * <p>
+     * Only pitch and yaw participate in rotation comparison. A rotation change
+     * returns {@code true} even for an immobile entity, and the caller then offers
+     * the complete supplied position to physics rather than replacing it with
+     * the old position. The physics engine's own movement rules therefore govern
+     * how that offered position is eventually applied.
+     */
     protected boolean isLocationChanged(Player player, Vector3f pos, Vector3f rot) {
-        // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
         var entity = player.getControlledEntity();
         var location = entity.getLocation();
-        // If the entity is immobile, ignore the pos changes directly
+        // Compare server feet height with the client's elevated height while
+        // allowing immobile entities to report rotation without treating position
+        // changes alone as a new move.
         var posChanged = !entity.isImmobile() &&
                          (Double.compare(location.x(), pos.getX()) != 0 ||
                           Double.compare(location.y() + PLAYER_NETWORK_OFFSET, pos.getY()) != 0 ||
@@ -475,20 +694,36 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return posChanged || Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0;
     }
 
+    /**
+     * Forwards an embedded request through ordinary synchronous packet dispatch.
+     * A {@code null} request has no effect; a present request is retained in a new
+     * packet and uses the processor selected for the player's current state.
+     */
     protected void handleSingleItemStackRequest(Player player, ItemStackRequest request, long receiveTime) {
-        // We had no idea why the client still uses PlayerAuthInputPacket to hold ItemStackRequest
-        // Instead of using ItemStackRequestPacket
-        // This seems to only happen when player breaks a block (MineBlockAction)
         if (request == null) {
             return;
         }
 
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
-        // Forward it to ItemStackRequestPacketProcessor
+        // Embedded inventory work uses the ordinary packet processor so action
+        // ordering and response rules remain shared with standalone requests,
+        // while retaining this packet's receive tick.
         ((AllayPlayer) player).handlePacketSync(pk, receiveTime);
     }
 
+    /**
+     * Maps the packet's control modes and publishes an event after changed fields
+     * are assigned. Protocol {@code COUNT} sentinels preserve the corresponding
+     * previous input mode or interaction model, and unchanged observations emit
+     * no event. An event failure does not roll back the assigned modes.
+     *
+     * <p>
+     * The previous values are read before conversion so sentinel fields can
+     * retain their observations while other fields still change. Listeners receive
+     * both sets of values after all assignments; edits to the event payload do
+     * not replace the already stored player observations.
+     */
     protected void updatePlayerInputState(AllayPlayer player, PlayerAuthInputPacket packet) {
         var oldInputMode = player.getInputMode();
         var newInputMode = switch (packet.getInputMode()) {
@@ -497,7 +732,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case TOUCH -> InputMode.TOUCH;
             case GAMEPAD -> InputMode.GAMEPAD;
             case MOTION_CONTROLLER -> InputMode.MOTION_CONTROLLER;
-            // COUNT is a protocol enum sentinel, not a client input mode.
+            // COUNT terminates the protocol enum rather than naming a usable
+            // client input mode; preserve the previous observation instead of
+            // publishing that sentinel as a control change.
             case COUNT -> oldInputMode;
         };
 
@@ -519,7 +756,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case TOUCH -> InputInteractionModel.TOUCH;
             case CROSSHAIR -> InputInteractionModel.CROSSHAIR;
             case CLASSIC -> InputInteractionModel.CLASSIC;
-            // COUNT is a protocol enum sentinel, not a client interaction model.
+            // COUNT terminates the protocol enum rather than identifying an
+            // interaction model; retaining the old model prevents a sentinel
+            // from becoming a reported control change.
             case COUNT -> oldInteractionModel;
         };
 
@@ -528,6 +767,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                       newInteractionModel != oldInteractionModel;
 
         if (changed) {
+            // Publish all three observations before notifying listeners so the
+            // event's new values agree with player accessors even when a
+            // listener inspects them or throws.
             player.setInputMode(newInputMode);
             player.setPlayMode(newPlayMode);
             player.setInputInteractionModel(newInteractionModel);
@@ -544,11 +786,19 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
     }
 
+    /**
+     * Returns whether initialization or entity lifecycle prevents input admission.
+     * A missing, unspawned, or pending-despawn controlled entity consumes incoming
+     * input through the caller rather than queuing it for a later lifecycle state.
+     */
     protected boolean notReadyForInput(Player player) {
         var entity = player.getControlledEntity();
         return !player.isInitialized() || entity == null || !entity.isSpawned() || entity.willBeDespawnedLater();
     }
 
+    /**
+     * Returns the player authoritative input packet type handled by this processor.
+     */
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.PLAYER_AUTH_INPUT;

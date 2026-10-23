@@ -6,35 +6,36 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
 
 /**
- * Represents a block component that owns and retrieves a block entity at a block position.
+ * {@code BlockBlockEntityHolderComponent} exposes the block entity type associated
+ * with a block and retrieves its entity by world position. The server implementation
+ * creates missing entities in loaded chunks and replaces entities whose type differs
+ * from the holder's configured type.
  *
- * @param <T> the block entity type managed by this component
+ * @param <T> block entity interface returned by this component
+ *
  * @author daoge_cmd
  */
 public interface BlockBlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {
     /**
-     * Get the block entity type.
-     *
-     * @return the block entity type
+     * Returns the block entity type managed by this holder.
      */
     BlockEntityType<?> getBlockEntityType();
 
     /**
-     * @see #getBlockEntity(int, int, int, Dimension)
+     * Returns the block entity at the position and its dimension, creating it when
+     * absent. The coordinate overload defines loaded-chunk requirements and any
+     * recovery needed for an incompatible stored entity.
      */
     default T getBlockEntity(Position3ic pos) {
         return getBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
     /**
-     * Get the block entity in a specific location. If the block entity is not present, it will be created.
+     * Returns the block entity at these world block coordinates, creating it when
+     * absent. The server implementation requires a loaded chunk and replaces a stored
+     * entity with the wrong type.
      *
-     * @param x         block entity's x coordinate
-     * @param y         block entity's y coordinate
-     * @param z         block entity's z coordinate
-     * @param dimension the dimension which the block entity is in
-     * @return the block entity in the specified location, will never be {@code null}
-     * @throws IllegalStateException if the block entity is not the correct type
+     * @throws IllegalStateException if creation or removal requires an unloaded chunk, or creation finds an existing entity
      */
     T getBlockEntity(int x, int y, int z, Dimension dimension);
 }

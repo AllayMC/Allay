@@ -3,67 +3,63 @@ package org.allaymc.api.plugin;
 import java.util.Map;
 
 /**
- * PluginManager is responsible for managing plugins.
+ * {@code PluginManager} exposes loaded plugins and accepts extensions to plugin
+ * discovery.
+ * Loaded and enabled lookups serve different lifecycle stages; successfully
+ * loading a plugin does not imply successful enablement. Custom discovery
+ * providers can be registered during loading for the subsequent custom pass.
  *
  * @author daoge_cmd
  */
 public interface PluginManager {
     /**
-     * Get all loaded plugins.
-     *
-     * @return the discovered plugins
+     * Returns the loaded-plugin index keyed by exact descriptor names.
+     * The server implementation exposes an unmodifiable live view, so retained
+     * views reflect later publications and containers still reference live plugins.
      */
     Map<String, PluginContainer> getPlugins();
 
     /**
-     * Get a loaded plugin by name.
-     *
-     * @param name the name of the plugin
-     *
-     * @return the plugin container, or {@code null} if not found
+     * Returns the loaded container registered under the exact supplied name.
+     * A {@code null} result means no successful load is currently indexed under that
+     * name, rather than merely that enablement failed.
      */
     PluginContainer getPlugin(String name);
 
     /**
-     * Get an enabled plugin by name.
-     *
-     * @param name the name of the plugin
-     *
-     * @return the plugin container, or {@code null} if not found
+     * Returns the container recorded as successfully enabled under this name.
+     * Missing entries return {@code null}; the current server retains enabled records
+     * after disable callbacks, so this lookup is not a shutdown-state check.
      */
     PluginContainer getEnabledPlugin(String name);
 
     /**
-     * Get all enabled plugins.
-     *
-     * @return the enabled plugins
+     * Returns the index of successfully enabled plugins by descriptor name.
+     * The server exposes an unmodifiable live view and retains these entries
+     * after disable callbacks rather than using this map to track shutdown.
      */
     Map<String, PluginContainer> getEnabledPlugins();
 
     /**
-     * Check if a plugin is enabled.
-     *
-     * @param name the name of the plugin
-     *
-     * @return {@code true} if the plugin is enabled, {@code false} otherwise.
+     * Returns whether the enabled index contains the supplied plugin name.
+     * The current server records successful enable callbacks here but does not
+     * remove entries during disable, which also affects plugin task validity.
      */
     boolean isPluginEnabled(String name);
 
     /**
-     * Register a custom plugin source.
-     * <p>
-     * Plugin can register custom plugin source in {@link Plugin#onLoad()} method.
-     *
-     * @param customPluginSource the custom plugin source to register
+     * Registers a source for the manager's custom discovery pass.
+     * Plugins normally call this from {@link Plugin#onLoad()}; registration after
+     * the manager advances beyond its loaded state throws {@code IllegalStateException},
+     * and registration alone does not initiate another pass.
      */
     void registerCustomSource(PluginSource customPluginSource);
 
     /**
-     * Register a custom plugin loader factory.
-     * <p>
-     * Plugin can register custom plugin loader factory in {@link Plugin#onLoad()} method.
-     *
-     * @param customLoaderFactory the custom plugin loader factory to register
+     * Registers a loader factory for the manager's custom discovery pass.
+     * Plugins normally call this from {@link Plugin#onLoad()}; registration after
+     * the loaded state throws {@code IllegalStateException}. The custom pass matches only
+     * custom factories, including against paths found by default sources.
      */
     void registerCustomLoaderFactory(PluginLoader.Factory customLoaderFactory);
 }

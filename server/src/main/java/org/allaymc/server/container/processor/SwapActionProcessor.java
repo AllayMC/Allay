@@ -14,10 +14,33 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * {@code SwapActionProcessor} exchanges two container stack references while preserving
+ * each stack's network identity. It translates network endpoints to internal slots and
+ * rejects fake-container movement after invoking the selected click listener.
+ *
+ * <p>
+ * Both source and destination identities and equipment-placement rules are checked
+ * before assignment. The source receives the destination stack before the destination
+ * receives the source stack, with ordinary viewer sending suppressed for both writes.
+ * Slot listeners still run between those writes; a failure there or during response
+ * creation can leave an earlier effect applied without rollback.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
+    /**
+     * Swaps the two resolved slot references after validating their identities and
+     * placement in both directions. A fake endpoint dispatches its click callback and
+     * returns an error without performing the exchange.
+     *
+     * <p>
+     * Source assignment precedes destination assignment, and each setter still invokes
+     * slot listeners with {@code send=false}. The two writes preserve the original
+     * network IDs but are not transactional; later failures leave earlier writes
+     * applied. A successful response translates each resulting slot back to its network
+     * category and index.
+     */
     @Override
     public ActionResponse handle(SwapAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
@@ -52,6 +75,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
             return error();
         }
 
+        // Apply the source write before the destination write; slot listeners still
+        // run between them, so failures do not roll back the first replacement.
         sourceContainer.setItemStack(sourceSlot, destinationItem, false);
         destinationContainer.setItemStack(destinationSlot, sourceItem, false);
         return new ActionResponse(
@@ -91,6 +116,9 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
         );
     }
 
+    /**
+     * Returns the stack-request action type dispatched to {@code SwapActionProcessor}.
+     */
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.SWAP;

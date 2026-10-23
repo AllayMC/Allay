@@ -8,7 +8,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a farmland is trampled by an entity.
+ * {@code EntityTrampleFarmlandEvent} carries the farmland block selected for
+ * trampling by an entity's landing. The farmland handler dispatches this event
+ * after its fall and size checks; cancellation prevents that handler from
+ * replacing the selected block with dirt.
  *
  * @author daoge_cmd
  */
@@ -17,10 +20,14 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class EntityTrampleFarmlandEvent extends EntityEvent implements CancellableEvent {
 
     /**
-     * The farmland block being trampled.
+     * Farmland block selected by the landing interaction.
      */
     protected Block block;
 
+    /**
+     * Creates a trampling proposal carrying the entity and selected farmland
+     * block.
+     */
     public EntityTrampleFarmlandEvent(Entity entity, Block block) {
         super(entity);
         this.block = block;

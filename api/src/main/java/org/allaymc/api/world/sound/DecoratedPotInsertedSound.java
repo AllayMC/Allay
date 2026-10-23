@@ -1,10 +1,12 @@
 package org.allaymc.api.world.sound;
 
 /**
- * Sound played when an item is successfully inserted into a decorated pot.
+ * {@code DecoratedPotInsertedSound} describes successful item insertion into a
+ * decorated pot. The runtime uses {@code progress} to raise pitch through
+ * {@code 0.7 + 0.5 * progress}, without clamping the supplied value; inventory
+ * updates occur separately in the caller.
  *
- * @param progress a numeric value representing how much of the decorated pot has been filled;
- *                 higher values indicate a more-filled pot
+ * @param progress insertion fullness used for pitch scaling
  */
 public record DecoratedPotInsertedSound(double progress) implements Sound {
 }

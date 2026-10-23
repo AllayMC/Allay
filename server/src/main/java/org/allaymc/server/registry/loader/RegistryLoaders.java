@@ -31,38 +31,34 @@ import org.allaymc.api.registry.RegistryLoader;
 import java.util.function.Supplier;
 
 /**
- * Holds common {@link RegistryLoader}s or utility methods surrounding them.
+ * {@code RegistryLoaders} supplies a shared resource NBT loader and small registry-loader
+ * adapters for supplier-backed or initially absent values. The supplier adapter ignores its
+ * input on every load, while the uninitialized adapter always yields {@code null} until its
+ * owning registry installs another loader.
  *
  * @author daoge_cmd
  */
 @UtilityClass
 public class RegistryLoaders {
     /**
-     * The {@link RegistryLoader} responsible for loading NBT.
+     * {@code NBT} reads network-encoded compound tags from resource paths. Registries share this
+     * stateless loader while supplying the resource name separately for each load operation.
      */
     public static final NbtRegistryLoader NBT = new NbtRegistryLoader();
 
     /**
-     * Wraps the surrounding {@link Supplier} in a {@link RegistryLoader} which does
-     * not take in any input value.
-     *
-     * @param supplier the supplier
-     * @param <V>      the value
-     *
-     * @return a RegistryLoader wrapping the given Supplier
+     * Returns a loader that invokes {@code supplier} on every load and ignores its input. The
+     * supplier is retained rather than evaluated now, so its later return values and failures
+     * remain visible to the owning registry.
      */
     public static <V> RegistryLoader<Object, V> empty(Supplier<V> supplier) {
         return input -> supplier.get();
     }
 
     /**
-     * Returns a {@link RegistryLoader} which has not taken
-     * in any input value.
-     *
-     * @param <I> the input
-     * @param <V> the value
-     *
-     * @return a RegistryLoader that is yet to contain a value
+     * Returns a loader that always produces {@code null}, regardless of input. Registries use
+     * this placeholder before a real loader is installed; it does not allocate or retain an
+     * empty registry value.
      */
     public static <I, V> RegistryLoader<I, V> uninitialized() {
         return input -> null;

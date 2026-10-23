@@ -1,22 +1,21 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Shared component for lightning bolt entities that control whether strike effects are applied.
+ * {@code EntityLightningBoltBaseComponent} exposes whether a lightning bolt
+ * applies damaging and ignition effects. Disabling the flag leaves the bolt's
+ * visual lifetime and sounds available while the server implementation skips
+ * nearby entity damage and block ignition attempts.
  *
  * @author daoge_cmd
  */
 public interface EntityLightningBoltBaseComponent extends EntityBaseComponent {
     /**
-     * Check if the lightning bolt has effects (damage, fire, etc.).
-     *
-     * @return {@code true} if the lightning bolt has effects, {@code false} otherwise.
+     * Returns whether the bolt can damage entities and ignite blocks.
      */
     boolean isEffect();
 
     /**
-     * Set whether the lightning bolt has effects.
-     *
-     * @param effect Whether the lightning bolt should have effects
+     * Sets whether this bolt applies damage and block ignition effects.
      */
     void setEffect(boolean effect);
 }

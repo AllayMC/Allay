@@ -12,17 +12,37 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import java.util.LinkedHashMap;
 
 /**
+ * {@code ItemTypeNode} resolves one command token to a registered item type,
+ * supplying the default namespace for a bare path. A missing registry entry
+ * adds item-not-found feedback and leaves the token unconsumed. Client metadata
+ * uses fixed item-name and enumeration identifiers with an empty value map
+ * instead of transmitting the entire registry.
+ *
  * @author daoge_cmd
  */
 public class ItemTypeNode extends BaseNode {
 
+    /**
+     * Creates an unattached item-type node retaining the supplied parent and
+     * omission default. Matching uses the live {@code Registries.ITEMS}
+     * registry; callers attach the node and enable optionality separately.
+     */
     public ItemTypeNode(String name, CommandNode parent, ItemType<?> defaultValue) {
         super(name, parent, defaultValue);
     }
 
+    /**
+     * Resolves the current token through {@code Registries.ITEMS}, adding the
+     * default namespace when no colon is present. A found type is appended
+     * before consuming one token; a missing type records feedback and returns
+     * {@code false} without advancing either cursor. Invalid identifier syntax
+     * propagates rather than becoming a mismatch.
+     */
     @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
+        // Bare command identifiers use the default namespace, allowing ordinary
+        // vanilla paths to resolve through the same registry keys as explicit names.
         if (arg.indexOf(':') == -1) {
             arg = Identifier.DEFAULT_NAMESPACE + ":" + arg;
         }
@@ -36,13 +56,19 @@ public class ItemTypeNode extends BaseNode {
         return true;
     }
 
+    /**
+     * Creates metadata named {@code "itemName"} with the fixed {@code "Item"}
+     * enumeration identifier and an empty values map. These names replace the
+     * configured parameter name, while optionality still comes from the base
+     * metadata.
+     */
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        // NOTICE: The name must be "itemName", so that the client will show item list
-        // There is no need to send the full item list to the client
+        // Keep the fixed item-parameter names used by client command metadata.
+        // The empty enumeration avoids repeating the registry's complete value list
+        // for every command parameter that advertises this item syntax.
         data.setName("itemName");
-        // Also, there must be "Item"
         data.setEnumData(new CommandEnumData("Item", new LinkedHashMap<>(), false));
         return data;
     }

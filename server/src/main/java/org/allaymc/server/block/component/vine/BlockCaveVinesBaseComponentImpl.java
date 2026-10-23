@@ -24,21 +24,53 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWING_PLANT_AGE;
 
 /**
+ * {@code BlockCaveVinesBaseComponentImpl} implements cave-vine support, downward extension,
+ * and glow-berry interactions. Construction supplies berry and head flags for the registered
+ * variant, so drops and interactions follow the configured variant rather than inferring those
+ * roles from a mutable property.
+ *
+ * <p>
+ * Only configured heads opt into random updates. A random update can mature the current age
+ * independently of its downward growth proposal, and an air target receives either a berry
+ * head or plain cave vine. Bone meal converts a berry-free variant directly, while picking
+ * berries drops an item before resetting the position to a plain age-zero vine. Those direct
+ * interaction writes do not share the growth event's cancellation boundary.
+ *
  * @author daoge_cmd
  */
 public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * {@code MAX_AGE} caps cave-vine maturation and supplies the age assigned by bone meal
+     * when creating a berry-bearing head variant.
+     */
     protected static final int MAX_AGE = 25;
 
+    /**
+     * Configured berry-bearing variant flag.
+     */
     protected final boolean hasBerries;
+    /**
+     * Configured random-update head flag.
+     */
     protected final boolean isHead;
 
+    /**
+     * Creates cave-vine behavior with fixed berry and head roles for its block type. The flags
+     * control interaction, drops, and random-update eligibility rather than being recalculated
+     * from the supplied block state.
+     */
     public BlockCaveVinesBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, boolean hasBerries, boolean isHead) {
         super(blockType);
         this.hasBerries = hasBerries;
         this.isHead = isHead;
     }
 
+    /**
+     * Places cave vines below solid support or another recognized cave-vine type. A nonnull
+     * {@code placementInfo} must use the downward face, while programmatic placement still
+     * applies the upper-support predicate.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null) {
@@ -47,7 +79,6 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Must hang from solid block or cave vines
         var aboveState = dimension.getBlockState(BlockFace.UP.offsetPos(placeBlockPos));
         if (!canBeSupportedBy(aboveState)) {
             return false;
@@ -56,6 +87,11 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
+    /**
+     * Dispatches the inherited neighbor hook and breaks vines after invalid upper support
+     * changes. Other faces leave the local support rule untouched; recognized cave-vine
+     * variants support one another regardless of solidity.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -67,11 +103,25 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns whether the configured cave-vine variant is a random-update head.
+     */
     @Override
     public boolean canRandomUpdate() {
         return isHead;
     }
 
+    /**
+     * Processes current-vine maturation independently from a downward extension proposal. A
+     * one-quarter maturation roll adds four age units up to twenty-five, but a mature age does
+     * not prevent the later extension branch in this implementation.
+     *
+     * <p>
+     * The position below must be air. A separate one-in-ten choice proposes a berry-bearing
+     * head, otherwise plain cave vine, both at age zero. The growth event can cancel only that
+     * downward write; an earlier accepted maturation write remains. The current block is not
+     * converted to a distinct body variant by this callback.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
@@ -80,20 +130,19 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         var age = block.getPropertyValue(GROWING_PLANT_AGE);
         var dimension = block.getDimension();
 
-        // Maturation: 1/4 chance, age += 4
+        // Maturation is independent of extension below, so an age update survives
+        // a later blocked destination or a cancelled downward growth event.
         if (random.nextInt(4) == 0 && age < MAX_AGE) {
             var newAge = Math.min(age + 4, MAX_AGE);
             var newState = block.getBlockState().setPropertyValue(GROWING_PLANT_AGE, newAge);
             dimension.setBlockState(block.getPosition(), newState);
         }
 
-        // Downward growth: check below is air
         var belowPos = block.getPosition().add(0, -1, 0, new Vector3i());
         if (dimension.getBlockState(belowPos).getBlockType() != BlockTypes.AIR) {
             return;
         }
 
-        // 1/10 chance for berry variant, else plain cave vines
         BlockState newVineState;
         if (random.nextInt(10) == 0) {
             newVineState = BlockTypes.CAVE_VINES_HEAD_WITH_BERRIES.getDefaultState()
@@ -109,6 +158,17 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Handles bone meal or berry picking after inherited interaction handling. Bone meal
+     * converts a configured berry-free variant into a maximum-age berry head, consumes the
+     * item, and emits particles; berry-bearing variants reject that bone-meal branch.
+     *
+     * <p>
+     * Other interactions on a berry-bearing variant drop one glow berry before replacing the
+     * block with plain age-zero cave vine. These interaction writes have no growth-event
+     * cancellation or rollback, and their dimension results are ignored. A berry-free ordinary
+     * interaction returns {@code false}.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -117,7 +177,6 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
 
         var clickedBlock = interactInfo.getClickedBlock();
 
-        // Bone meal on base cave vines: convert to berry variant at max age
         if (itemStack != null && itemStack.getItemType() == ItemTypes.BONE_MEAL) {
             if (!hasBerries) {
                 var newState = BlockTypes.CAVE_VINES_HEAD_WITH_BERRIES.getDefaultState()
@@ -130,12 +189,10 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Berry interact: pick berries
         if (hasBerries) {
             var dropPos = MathUtils.center(interactInfo.clickedBlockPos());
             dimension.dropItem(ItemTypes.GLOW_BERRIES.createItemStack(1), dropPos);
 
-            // Convert to base cave_vines with age 0
             var newState = BlockTypes.CAVE_VINES.getDefaultState()
                     .setPropertyValue(GROWING_PLANT_AGE, 0);
             dimension.setBlockState(interactInfo.clickedBlockPos(), newState);
@@ -145,6 +202,10 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns one glow berry for a configured berry-bearing variant and no items otherwise.
+     * This decision uses the constructor flag rather than the plant age or the supplied tool.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (hasBerries) {
@@ -153,6 +214,9 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         return Set.of();
     }
 
+    /**
+     * Returns whether a recognized cave-vine type or solid state supplies upper support.
+     */
     protected boolean canBeSupportedBy(BlockState blockState) {
         var type = blockState.getBlockType();
         if (isCaveVines(type)) {
@@ -161,6 +225,9 @@ public class BlockCaveVinesBaseComponentImpl extends BlockBaseComponentImpl {
         return blockState.getBlockStateData().isSolid();
     }
 
+    /**
+     * Returns whether the type is plain cave vine or either berry variant.
+     */
     protected boolean isCaveVines(BlockType<?> type) {
         return type == BlockTypes.CAVE_VINES ||
                type == BlockTypes.CAVE_VINES_BODY_WITH_BERRIES ||

@@ -3,41 +3,39 @@ package org.allaymc.api.primitiveshape;
 import java.util.Set;
 
 /**
- * Represents an object that can view {@link PrimitiveShape}.
- *
+ * {@code PrimitiveShapeViewer} receives requests to display, update, and remove primitive
+ * shapes for one viewing destination. Displaying an existing shape updates its rendering
+ * properties. These operations control the destination only;
+ * {@link PrimitiveShape#addViewer(PrimitiveShapeViewer)} and its removal counterpart
+ * manage automatic update registration.
  * @author daoge_cmd
  */
 public interface PrimitiveShapeViewer {
     /**
-     * View a primitive shape, which will make a specific primitive shape being
-     * displayed for this viewer. This method is also used to update a
-     * primitive shape in viewer's side when the primitive shape is changed.
-     *
-     * @param primitiveShape the primitive shape to view
+     * Displays or updates the supplied shape for this viewing destination. This operation
+     * does not register or unregister automatic updates; callers manage that relationship
+     * through the shape's viewer methods when needed.
      */
     void viewPrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * View multiple primitive shapes. This method is similar to {@link #viewPrimitiveShape(PrimitiveShape)}
-     * but can view multiple primitive shapes at once.
-     *
-     * @param primitiveShapes the primitive shapes to view
+     * Displays or updates the supplied set of shapes for this viewing destination. This
+     * operation does not register or unregister automatic updates; callers manage that
+     * relationship through the shape's viewer methods when needed.
      */
     void viewPrimitiveShapes(Set<PrimitiveShape> primitiveShapes);
 
     /**
-     * Remove a primitive shape, which will make a specific primitive shape being
-     * removed from this viewer.
-     *
-     * @param primitiveShape the primitive shape to remove.
+     * Removes the supplied shape from this viewing destination. This operation does not
+     * register or unregister automatic updates; callers manage that relationship through
+     * the shape's viewer methods when needed.
      */
     void removePrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * Remove multiple primitive shapes. This method is similar to {@link #removePrimitiveShape(PrimitiveShape)}
-     * but can remove multiple primitive shapes at once.
-     *
-     * @param primitiveShapes the primitive shapes to remove.
+     * Removes the supplied set of shapes from this viewing destination. This operation
+     * does not register or unregister automatic updates; callers manage that relationship
+     * through the shape's viewer methods when needed.
      */
     void removePrimitiveShapes(Set<PrimitiveShape> primitiveShapes);
 }

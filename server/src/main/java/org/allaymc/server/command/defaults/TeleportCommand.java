@@ -12,14 +12,29 @@ import org.joml.Vector3d;
 import java.util.List;
 
 /**
+ * {@code TeleportCommand} requests teleportation to coordinates or one destination
+ * entity. Coordinate branches use the sender's execution dimension and default
+ * rotation values of zero. Handlers report requested destinations without
+ * inspecting teleport return values, so cancelled or otherwise rejected
+ * teleports can still produce success feedback.
+ *
  * @author daoge_cmd
  */
 public class TeleportCommand extends Command {
+    /**
+     * Creates the authorized {@code /teleport} command and its {@code /tp} alias.
+     */
     public TeleportCommand() {
         super("teleport", TrKeys.MC_COMMANDS_TP_DESCRIPTION, Permissions.COMMAND_TELEPORT);
         aliases.add("tp");
     }
 
+    /**
+     * Installs self and selected-victim teleports to coordinates or entities.
+     * Self branches require entity senders, destination selectors must match
+     * exactly one entity, and coordinate rotations default to zero. Empty victim
+     * selections complete successfully without dispatching teleport requests.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

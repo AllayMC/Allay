@@ -13,28 +13,50 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * CustomForm is a type of form that can have a variety of elements and a submit button.
- * It is suitable when you want the viewer to fill and submit some information.
+ * {@code CustomForm} represents a JSON form containing an ordered list of editable controls and
+ * decorative entries. Its response is a positional list of strings decoded by Gson, with numeric
+ * and boolean primitives converted to their string forms.
+ *
+ * <p>
+ * {@code content} and a successful stored {@code response} must keep matching positions when
+ * server-settings defaults are synchronized. The response callback runs before the new response is
+ * stored and can mutate that same list. {@code syncDefaultValueToResponse} applies entries in order
+ * without a size check or rollback; conversion failures or short responses leave earlier defaults
+ * changed. Cancellation preserves the last stored response rather than recording a new value.
  *
  * @author daoge_cmd
  */
 @Getter
 @Slf4j
 public class CustomForm extends Form {
+    /**
+     * Serialized custom-form layout discriminator.
+     */
     @SuppressWarnings("unused")
     private final String type = "custom_form";
 
+    /**
+     * {@code content} retains controls in response order. The generated getter exposes the mutable
+     * list, so edits can change positional default synchronization.
+     */
     private final List<CustomFormElement> content = new ArrayList<>();
+    /**
+     * Displayed form window title.
+     */
     private String title = "";
+    /**
+     * Optional form icon reference.
+     */
     private ImageData icon;
+    /**
+     * {@code onResponse} receives the parsed mutable list before {@code response} is replaced.
+     * Callback failure preserves the previously stored response.
+     */
     private transient Consumer<List<String>> onResponse = responses -> {
     };
 
     /**
-     * Set the title of the form.
-     *
-     * @param title the title
-     * @return the form
+     * Stores the window title and returns this form for further configuration.
      */
     public CustomForm title(String title) {
         this.title = title;
@@ -42,10 +64,7 @@ public class CustomForm extends Form {
     }
 
     /**
-     * Set the icon of the form.
-     *
-     * @param icon the icon
-     * @return the form
+     * Stores the supplied image reference and returns this form for configuration.
      */
     public CustomForm icon(ImageData icon) {
         this.icon = icon;
@@ -53,41 +72,28 @@ public class CustomForm extends Form {
     }
 
     /**
-     * Set the icon of the form.
-     *
-     * @param imageType the type of the image
-     * @param data      the data of the image
-     * @return the form
+     * Creates an icon reference of the supplied type and returns this form.
      */
     public CustomForm icon(ImageData.ImageType imageType, String data) {
         return icon(new ImageData(imageType, data));
     }
 
     /**
-     * Set the icon of the form.
-     *
-     * @param path the path of the image
-     * @return the form
+     * Sets a resource-pack path icon and returns this form for configuration.
      */
     public CustomForm pathIcon(String path) {
         return icon(new ImageData(ImageData.ImageType.PATH, path));
     }
 
     /**
-     * Set the icon of the form.
-     *
-     * @param url the URL of the image
-     * @return the form
+     * Sets a remote URL icon and returns this form for configuration.
      */
     public CustomForm urlIcon(String url) {
         return icon(new ImageData(ImageData.ImageType.URL, url));
     }
 
     /**
-     * Add an element to the form.
-     *
-     * @param element the element
-     * @return the form
+     * Appends the supplied element to the positional content list and returns this form.
      */
     public CustomForm element(CustomFormElement element) {
         content.add(element);
@@ -95,284 +101,213 @@ public class CustomForm extends Form {
     }
 
     /**
-     * Add a dropdown element to the form.
-     *
-     * @param text the text of the element
-     * @return the form
+     * Appends a dropdown and returns this form. The new control starts with an empty mutable list;
+     * the initial selection uses index zero without checking whether that index exists.
      */
     public CustomForm dropdown(String text) {
         return dropdown(text, new ArrayList<>());
     }
 
     /**
-     * Add a dropdown element to the form.
-     *
-     * @param text    the text of the element
-     * @param options the options of the element
-     * @return the form
+     * Appends a dropdown and returns this form. The supplied {@code options} list remains shared
+     * with the control; the initial selection uses index zero without checking whether that index
+     * exists.
      */
     public CustomForm dropdown(String text, List<String> options) {
         return dropdown(text, options, 0);
     }
 
     /**
-     * Add a dropdown element to the form.
-     *
-     * @param text    the text of the element
-     * @param options the options of the element
-     * @return the form
+     * Appends a dropdown and returns this form. The supplied entries are copied into a new mutable
+     * list; the initial selection uses index zero without checking whether that index exists.
      */
     public CustomForm dropdown(String text, String... options) {
         return dropdown(text, new ArrayList<>(Arrays.asList(options)));
     }
 
     /**
-     * Add a dropdown element to the form.
-     *
-     * @param text               the text of the element
-     * @param options            the options of the element
-     * @param defaultOptionIndex the index of the default option
-     * @return the form
+     * Appends a dropdown and returns this form. The supplied {@code options} list remains shared
+     * with the control; the initial selection uses the supplied default index without checking
+     * whether that index exists.
      */
     public CustomForm dropdown(String text, List<String> options, int defaultOptionIndex) {
         return dropdown(text, options, defaultOptionIndex, null);
     }
 
     /**
-     * Add a dropdown element to the form.
-     *
-     * @param text               the text of the element
-     * @param options            the options of the element
-     * @param defaultOptionIndex the index of the default option
-     * @param tooltip            the tooltip of the element. Can be {@code null}
-     * @return the form
+     * Appends a dropdown and returns this form. The supplied {@code options} list remains shared
+     * with the control; the initial selection uses the supplied default index without checking
+     * whether that index exists.
      */
     public CustomForm dropdown(String text, List<String> options, int defaultOptionIndex, String tooltip) {
         return element(new Dropdown(text, options, defaultOptionIndex, tooltip));
     }
 
     /**
-     * Add an input element to the form.
-     *
-     * @param text the text of the element
-     * @return the form
+     * Appends a text input and returns this form for configuration. Missing placeholder and default
+     * text use empty strings. The tooltip is omitted when {@code null} or when this overload does
+     * not supply one.
      */
     public CustomForm input(String text) {
         return input(text, "");
     }
 
     /**
-     * Add an input element to the form.
-     *
-     * @param text        the text of the element
-     * @param placeholder the placeholder of the element
-     * @return the form
+     * Appends a text input and returns this form for configuration. The default text is empty
+     * unless explicitly supplied. The tooltip is omitted when {@code null} or when this overload
+     * does not supply one.
      */
     public CustomForm input(String text, String placeholder) {
         return input(text, placeholder, "");
     }
 
     /**
-     * Add an input element to the form.
-     *
-     * @param text        the text of the element
-     * @param placeholder the placeholder of the element
-     * @param defaultText the default text of the element
-     * @return the form
+     * Appends a text input and returns this form for configuration. The default text is empty
+     * unless explicitly supplied. The tooltip is omitted when {@code null} or when this overload
+     * does not supply one.
      */
     public CustomForm input(String text, String placeholder, String defaultText) {
         return input(text, placeholder, defaultText, null);
     }
 
     /**
-     * Add an input element to the form.
-     *
-     * @param text        the text of the element
-     * @param placeholder the placeholder of the element
-     * @param defaultText the default text of the element
-     * @param tooltip     the tooltip of the element. Can be {@code null}
-     * @return the form
+     * Appends a text input and returns this form for configuration. The default text is empty
+     * unless explicitly supplied. The tooltip is omitted when {@code null} or when this overload
+     * does not supply one.
      */
     public CustomForm input(String text, String placeholder, String defaultText, String tooltip) {
         return element(new Input(text, placeholder, defaultText, tooltip));
     }
 
     /**
-     * Add a label element to the form.
-     *
-     * @param text the text of the element
-     * @return the form
+     * Appends a decorative label entry and returns this form for configuration.
      */
     public CustomForm label(String text) {
         return element(new Label(text));
     }
 
     /**
-     * Add a slider element to the form.
-     *
-     * @param text the text of the element
-     * @return the form
+     * Appends a numeric slider and returns this form for configuration. The step defaults to one,
+     * and the initial value uses {@code min}. The control normalizes finite bounds but does not
+     * clamp its default.
      */
     public CustomForm slider(String text, float min, float max) {
         return slider(text, min, max, 1);
     }
 
     /**
-     * Add a slider element to the form.
-     *
-     * @param text the text of the element
-     * @param min  the minimum value of the element
-     * @param max  the maximum value of the element
-     * @param step the step of the element
-     * @return the form
+     * Appends a numeric slider and returns this form for configuration. The initial value uses
+     * {@code min} unless {@code defaultValue} is supplied. The control normalizes finite bounds but
+     * does not clamp its default.
      */
     public CustomForm slider(String text, float min, float max, int step) {
         return slider(text, min, max, step, min);
     }
 
     /**
-     * Add a slider element to the form.
-     *
-     * @param text         the text of the element
-     * @param min          the minimum value of the element
-     * @param max          the maximum value of the element
-     * @param step         the step of the element
-     * @param defaultValue the default value of the element
-     * @return the form
+     * Appends a numeric slider and returns this form for configuration. The initial value uses
+     * {@code min} unless {@code defaultValue} is supplied. The control normalizes finite bounds but
+     * does not clamp its default.
      */
     public CustomForm slider(String text, float min, float max, int step, float defaultValue) {
         return slider(text, min, max, step, defaultValue, null);
     }
 
     /**
-     * Add a slider element to the form.
-     *
-     * @param text         the text of the element
-     * @param min          the minimum value of the element
-     * @param max          the maximum value of the element
-     * @param step         the step of the element
-     * @param defaultValue the default value of the element
-     * @param tooltip      the tooltip of the element. Can be {@code null}
-     * @return the form
+     * Appends a numeric slider and returns this form for configuration. The initial value uses
+     * {@code min} unless {@code defaultValue} is supplied. The control normalizes finite bounds but
+     * does not clamp its default.
      */
     public CustomForm slider(String text, float min, float max, int step, float defaultValue, String tooltip) {
         return element(new Slider(text, min, max, step, defaultValue, tooltip));
     }
 
     /**
-     * Add a step slider element to the form.
-     *
-     * @param text the text of the element
-     * @return the form
+     * Appends a step slider and returns this form. The new control starts with an empty mutable
+     * list; the initial selection uses index zero without checking whether that index exists.
      */
     public CustomForm stepSlider(String text) {
         return stepSlider(text, new ArrayList<>());
     }
 
     /**
-     * Add a step slider element to the form.
-     *
-     * @param text  the text of the element
-     * @param steps the steps of the element
-     * @return the form
+     * Appends a step slider and returns this form. The supplied entries are copied into a new
+     * mutable list; the initial selection uses index zero without checking whether that index
+     * exists.
      */
     public CustomForm stepSlider(String text, String... steps) {
         return stepSlider(text, new ArrayList<>(Arrays.asList(steps)));
     }
 
     /**
-     * Add a step slider element to the form.
-     *
-     * @param text  the text of the element
-     * @param steps the steps of the element
-     * @return the form
+     * Appends a step slider and returns this form. The supplied {@code steps} list remains shared
+     * with the control; the initial selection uses index zero without checking whether that index
+     * exists.
      */
     public CustomForm stepSlider(String text, List<String> steps) {
         return stepSlider(text, steps, 0);
     }
 
     /**
-     * Add a step slider element to the form.
-     *
-     * @param text        the text of the element
-     * @param steps       the steps of the element
-     * @param defaultStep the default step of the element
-     * @return the form
+     * Appends a step slider and returns this form. The supplied {@code steps} list remains shared
+     * with the control; the initial selection uses the supplied default index without checking
+     * whether that index exists.
      */
     public CustomForm stepSlider(String text, List<String> steps, int defaultStep) {
         return stepSlider(text, steps, defaultStep, null);
     }
 
     /**
-     * Add a step slider element to the form.
-     *
-     * @param text        the text of the element
-     * @param steps       the steps of the element
-     * @param defaultStep the default step of the element
-     * @param tooltip     the tooltip of the element. Can be {@code null}
-     * @return the form
+     * Appends a step slider and returns this form. The supplied {@code steps} list remains shared
+     * with the control; the initial selection uses the supplied default index without checking
+     * whether that index exists.
      */
     public CustomForm stepSlider(String text, List<String> steps, int defaultStep, String tooltip) {
         return element(new StepSlider(text, steps, defaultStep, tooltip));
     }
 
     /**
-     * Add a toggle element to the form.
-     *
-     * @param text the text of the element
-     * @return the form
+     * Appends a toggle and returns this form for further configuration. Its default state is
+     * {@code false}. A {@code null} or omitted tooltip is absent from serialized output.
      */
     public CustomForm toggle(String text) {
         return toggle(text, false);
     }
 
     /**
-     * Add a toggle element to the form.
-     *
-     * @param text         the text of the element
-     * @param defaultValue the default value of the element
-     * @return the form
+     * Appends a toggle and returns this form for further configuration. Its initial state uses the
+     * supplied default value. A {@code null} or omitted tooltip is absent from serialized output.
      */
     public CustomForm toggle(String text, boolean defaultValue) {
         return toggle(text, defaultValue, null);
     }
 
     /**
-     * Add a toggle element to the form.
-     *
-     * @param text         the text of the element
-     * @param defaultValue the default value of the element
-     * @param tooltip      the tooltip of the element. Can be {@code null}
-     * @return the form
+     * Appends a toggle and returns this form for further configuration. Its initial state uses the
+     * supplied default value. A {@code null} or omitted tooltip is absent from serialized output.
      */
     public CustomForm toggle(String text, boolean defaultValue, String tooltip) {
         return element(new Toggle(text, defaultValue, tooltip));
     }
 
     /**
-     * Add a header element to the form.
-     *
-     * @param text the text of the element
-     * @return the form
+     * Appends a decorative header entry and returns this form for configuration.
      */
     public CustomForm header(String text) {
         return element(new Header(text));
     }
 
     /**
-     * Add a divider element to the form.
-     *
-     * @return the form
+     * Appends a decorative divider entry and returns this form for configuration.
      */
     public CustomForm divider() {
         return element(new Divider());
     }
 
     /**
-     * Set the action to be performed when the form is submitted.
-     *
-     * @param onResponse the action to be performed when the form is submitted
-     * @return the form
+     * Stores the callback receiving the decoded response list and returns this form. The callback
+     * sees the same list later retained as the response, and its failure prevents replacement of
+     * the previous response.
      */
     public CustomForm onResponse(Consumer<List<String>> onResponse) {
         this.onResponse = onResponse;
@@ -380,7 +315,9 @@ public class CustomForm extends Form {
     }
 
     /**
-     * {@inheritDoc}
+     * Stores the inherited cancellation callback and returns this custom form for configuration.
+     * Cancellation leaves the previous response unchanged, and callback failures propagate to the
+     * caller dispatching the cancellation.
      */
     @Override
     public CustomForm onClose(Runnable onClose) {
@@ -388,7 +325,11 @@ public class CustomForm extends Form {
     }
 
     /**
-     * {@inheritDoc}
+     * Decodes JSON response data into a string list and passes it to the configured callback. Gson
+     * converts number and boolean elements to strings and preserves {@code null} elements; strings
+     * are decoded before delivery. The callback receives the same list that becomes
+     * {@code response}, so its mutations are retained after success. Parsing or callback failure
+     * prevents the final response assignment and leaves the previous stored value available.
      */
     @Override
     public void handleResponse(String data) {
@@ -399,7 +340,9 @@ public class CustomForm extends Form {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the configured close callback with the supplied cancellation reason. The previously
+     * stored response remains unchanged, and any callback exception propagates without replacing or
+     * clearing that response.
      */
     @Override
     public void handleClose(FormCancelReason reason) {
@@ -407,11 +350,20 @@ public class CustomForm extends Form {
     }
 
     /**
-     * This method is only used for server settings form.
+     * Updates control defaults from the last successfully stored positional response for server
+     * settings. A missing response logs a warning and leaves every default unchanged.
+     *
+     * <p>
+     * Each content position consumes the matching response entry, including decorative entries that
+     * ignore their value. Callers must preserve matching list sizes and order. A short response or
+     * control conversion failure propagates after earlier defaults have changed; this operation
+     * neither rolls them back nor stores values on disk.
      */
     @ApiStatus.Internal
     public void syncDefaultValueToResponse() {
         var response = getResponse();
+        // A settings form can close before submission. Keep its configured
+        // defaults when no earlier successful response supplies positional values.
         if (response == null) {
             log.warn("syncDefaultValueToResponse() called before receive response is called");
             return;
@@ -422,6 +374,11 @@ public class CustomForm extends Form {
         }
     }
 
+    /**
+     * Returns the same mutable string list stored after a successful response callback. The result
+     * is {@code null} before any response is stored, and cancellation preserves the last stored
+     * list.
+     */
     @Override
     public List<String> getResponse() {
         return response != null ? (List<String>) response : null;

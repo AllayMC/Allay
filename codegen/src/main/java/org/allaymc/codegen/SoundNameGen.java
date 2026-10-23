@@ -14,10 +14,21 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
+ * {@code SoundNameGen} generates sound-name constants from unpacked sound and
+ * music definitions. Event names from both sources are deduplicated before
+ * emission. Each constant retains its original event name as a value, while
+ * dots become underscores in the uppercase Java field name.
+ *
  * @author daoge_cmd
  */
 public class SoundNameGen {
 
+    /**
+     * Reads both definition resources and replaces the generated sound
+     * interface. {@code args} is ignored, and paths are repository-relative.
+     * Field order follows a hash set; different names that normalize to the
+     * same Java field are not disambiguated here.
+     */
     @SneakyThrows
     public static void main(String[] args) {
         var names = new HashSet<String>();
@@ -29,6 +40,8 @@ public class SoundNameGen {
                 .addModifiers(Modifier.PUBLIC);
 
         for (var name : names) {
+            // Preserve the original event string for runtime sound requests;
+            // punctuation replacement applies only to the Java constant used to reference it.
             codeBuilder.addField(
                     FieldSpec.builder(TypeNames.STRING, name.replace(".", "_").toUpperCase(Locale.ROOT), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("$S", name)
@@ -43,6 +56,11 @@ public class SoundNameGen {
         Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/world/sound/SoundNames.java"), javaFile.toString());
     }
 
+    /**
+     * Reads distinct event names from the unpacked music definitions. Each
+     * definition must provide a string event name; malformed entries and input
+     * failures propagate. The returned set is newly allocated and mutable.
+     */
     @SneakyThrows
     private static Set<String> getMusicNames() {
         try (var reader = Files.newBufferedReader(Path.of("data/resources/unpacked/music_definitions.json"))) {
@@ -54,6 +72,11 @@ public class SoundNameGen {
         }
     }
 
+    /**
+     * Reads the event-name keys of the unpacked sound-definitions object. The
+     * returned set is backed by the parsed JSON object rather than copied;
+     * input and schema failures propagate to the generator entry point.
+     */
     @SneakyThrows
     private static Set<String> getSoundNames() {
         try (var reader = Files.newBufferedReader(Path.of("data/resources/unpacked/sound_definitions.json"))) {

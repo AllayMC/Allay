@@ -3,29 +3,37 @@ package org.allaymc.api.form.element;
 import lombok.Getter;
 
 /**
- * Represents a label element in a {@link org.allaymc.api.form.type.CustomForm}.
+ * {@code Label} represents read-only text in a JSON form layout. Its serialized text supplies
+ * content without an editable default, so custom-form default synchronization ignores the label's
+ * response position and leaves the text unchanged.
  *
  * @author daoge_cmd
  */
 public final class Label implements SimpleFormElement, CustomFormElement {
 
+    /**
+     * Serialized form element discriminator.
+     */
     @SuppressWarnings("unused")
     private final String type = "label";
 
+    /**
+     * Displayed form element text.
+     */
     @Getter
     private final String text;
 
     /**
-     * Create a new label.
-     *
-     * @param text the text of the label
+     * Creates a form label containing the supplied read-only display text.
      */
     public Label(String text) {
         this.text = text;
     }
 
+    /**
+     * Leaves this decorative entry unchanged because it has no editable default value.
+     */
     @Override
     public void syncDefaultValueToResponse(String response) {
-        // Do nothing
     }
 }

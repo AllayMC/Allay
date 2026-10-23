@@ -12,8 +12,17 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * {@code ResourcePackEncoderTest} checks pack transfer chunk boundaries and
+ * isolation of mutable packet payloads.
+ */
 class ResourcePackEncoderTest {
 
+    /**
+     * Encodes a five-byte resource pack with three-byte transfer chunks. Hash
+     * and chunk mutations must remain isolated, the final partial chunk reports
+     * its starting offset, and an out-of-range index is rejected.
+     */
     @Test
     void resourcePackPacketsOwnTheirMutablePayloads() {
         var id = UUID.fromString("00000000-0000-0000-0000-000000000020");
@@ -28,6 +37,9 @@ class ResourcePackEncoderTest {
         when(pack.getChunk(anyInt(), anyInt())).thenAnswer(invocation -> {
             int offset = invocation.getArgument(0);
             int length = invocation.getArgument(1);
+            // The mock returns a fresh bounded slice like the pack API,
+            // allowing packet isolation assertions to distinguish source bytes
+            // from transfer buffers.
             return Arrays.copyOfRange(content, offset, Math.min(offset + length, content.length));
         });
 
@@ -55,6 +67,8 @@ class ResourcePackEncoderTest {
                     () -> encoder.encodeResourcePackChunkData(pack, 2, 3)
             );
         } finally {
+            // No transport receives these chunk packets, so release each owned
+            // data buffer even if chunk-boundary or mutation assertions fail.
             firstChunk.getData().release();
             secondChunk.getData().release();
             finalChunk.getData().release();

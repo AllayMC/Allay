@@ -3,22 +3,23 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * Shared component for falling block entities that carry the represented block state.
+ * {@code EntityFallingBlockBaseComponent} exposes the block state represented
+ * by a falling block entity. The state supplies the eventual placed block or
+ * dropped item, and the entity combines this contract with physics while the
+ * block travels through the world.
  *
  * @author IWareQ
  */
 public interface EntityFallingBlockBaseComponent extends EntityBaseComponent {
     /**
-     * Get the block state of this entity falling block.
-     *
-     * @return the block state
+     * Returns the block state represented by this falling block entity.
      */
     BlockState getBlockState();
 
     /**
-     * Set the block state of this entity falling block.
-     *
-     * @param blockState the block state
+     * Stores the block state used when this falling block lands. Callers must
+     * supply a usable state before landing or serialization, because those
+     * paths access its behavior and saved state hash.
      */
     void setBlockState(BlockState blockState);
 }

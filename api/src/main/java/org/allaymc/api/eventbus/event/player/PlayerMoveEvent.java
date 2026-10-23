@@ -9,7 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.math.location.Location3dc;
 
 /**
- * Called when a player moves from one location to another.
+ * {@code PlayerMoveEvent} describes a proposed client movement between two player
+ * locations. The physics engine dispatches it before accepting the movement;
+ * cancellation skips the move and optionally teleports the player to
+ * {@code revertTo}, which initially refers to {@code from}.
  *
  * @author daoge_cmd | Dhaiven
  */
@@ -17,22 +20,27 @@ import org.allaymc.api.math.location.Location3dc;
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The original location.
+     * Location before the proposed movement.
      */
     protected Location3dc from;
     /**
-     * The target location.
+     * Target location from the client movement.
      */
     protected Location3dc to;
 
     /**
-     * If event is cancelled, player get teleported to specified location, which is defaults to original one.
-     * <p>
-     * If set to null, no teleport would be issued; it up to user to handle client-server movement desync.
+     * {@code revertTo} supplies the teleport destination when movement is cancelled
+     * and initially refers to {@code from}. {@code null} suppresses that teleport
+     * and leaves client reconciliation to the listener.
      */
     @Setter
     protected Location3dc revertTo;
 
+    /**
+     * Creates a movement event retaining both supplied location references.
+     * {@code revertTo} initially refers to {@code from}; listeners may replace it or
+     * set it to {@code null} to suppress the cancellation teleport.
+     */
     public PlayerMoveEvent(EntityPlayer player, Location3dc from, Location3dc to) {
         super(player);
         this.from = from;

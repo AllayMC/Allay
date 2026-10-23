@@ -18,15 +18,38 @@ import java.util.function.Function;
 import static org.allaymc.codegen.TypeNames.*;
 
 /**
+ * {@code TagGen} generates API tag constants and name-based lookup tables from
+ * resource data. Item and block inputs contribute object keys with duplicate
+ * detection across files, while biome inputs contribute distinct tags found in
+ * biome entries. Each generated constant keeps its original resource tag name
+ * independently of the Java field name selected for it.
+ *
  * @author IWareQ
  */
 public class TagGen {
+    /**
+     * Generates item, block, and biome tag interfaces in that order.
+     * {@code args} is ignored, and paths are relative to the repository root. A
+     * failure stops later generation without restoring interfaces already
+     * replaced by earlier calls.
+     *
+     * @throws IOException if a generated interface cannot be written
+     */
     public static void main(String[] args) throws IOException {
         generate("api/src/main/java/org/allaymc/api/item/data/ItemTags.java", ITEM_TAG, "unpacked/item_tags.json", "item_tags_custom.json");
         generate("api/src/main/java/org/allaymc/api/block/data/BlockTags.java", BLOCK_TAG, "unpacked/block_tags.json", "block_tags_custom.json");
         generateBiomeTags("api/src/main/java/org/allaymc/api/world/biome/BiomeTags.java", BIOME_TAG, "biome_definitions.json");
     }
 
+    /**
+     * Merges object keys from tag resources and writes their constant
+     * interface. Repeated keys across resources are rejected before output is
+     * written. Constant names use the uppercase second colon-separated segment,
+     * so callers must supply names yielding valid, distinct Java field names.
+     *
+     * @throws IllegalStateException if two input resources contain the same key
+     * @throws IOException if the generated interface cannot be written
+     */
     public static void generate(String writeTo, ClassName tagClass, String... tagFiles) throws IOException {
         var keys = new HashSet<String>();
         for (var tagFile : tagFiles) {
@@ -40,11 +63,24 @@ public class TagGen {
         generate(writeTo, tagClass, keys, key -> key.split(":")[1].toUpperCase(Locale.ROOT));
     }
 
+    /**
+     * Collects biome tag names and writes their generated constant interface.
+     * Repeated tags are deduplicated in discovery order, and complete tag names
+     * are uppercased for Java fields without stripping a namespace prefix.
+     *
+     * @throws IOException if the generated interface cannot be written
+     */
     public static void generateBiomeTags(String writeTo, ClassName tagClass, String biomeDefinitionsFile) throws IOException {
         var keys = parseBiomeTagKeys(Path.of(CodeGenConstants.DATA_PATH + biomeDefinitionsFile));
         generate(writeTo, tagClass, keys, key -> key.toUpperCase(Locale.ROOT));
     }
 
+    /**
+     * Returns a new mutable set of biome tags in first-discovery order. Biomes
+     * with absent or {@code null} tag members contribute nothing. I/O failures
+     * are wrapped in {@link CodeGenException}, while invalid JSON structure
+     * propagates as a parsing failure.
+     */
     private static Set<String> parseBiomeTagKeys(Path path) {
         Set<String> keys = new LinkedHashSet<>();
         try (var reader = new InputStreamReader(Files.newInputStream(path))) {
@@ -62,9 +98,20 @@ public class TagGen {
         }
     }
 
+    /**
+     * Writes a tag interface with constants and a mutable name lookup table.
+     * The output filename determines the interface name, and the tag type
+     * determines its package. {@code fieldNameMapper} must produce valid,
+     * distinct Java field names; original keys remain the tag values used by
+     * generated lookup methods.
+     *
+     * @throws IOException if the output cannot be created or replaced
+     */
     private static void generate(String writeTo, ClassName tagClass, Set<String> keys, Function<String, String> fieldNameMapper) throws IOException {
         Path path = Path.of(writeTo);
         var interfaceName = path.getFileName().toString().replace(".java", "");
+        // Emit the lookup map before tag constants: their generated create
+        // calls publish each new tag into that map during interface initialization.
         var interfaceBuilder = TypeSpec.interfaceBuilder(interfaceName)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(MINECRAFT_VERSION_SENSITIVE)

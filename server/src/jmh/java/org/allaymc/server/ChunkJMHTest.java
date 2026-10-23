@@ -12,6 +12,10 @@ import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 import static org.allaymc.api.block.type.BlockTypes.STONE;
 
 /**
+ * {@code ChunkJMHTest} measures
+ * safe chunk block reads and writes with single-threaded and contended
+ * JMH workloads.
+ *
  * @author Cool_Loong
  */
 @State(Scope.Benchmark)
@@ -21,8 +25,17 @@ import static org.allaymc.api.block.type.BlockTypes.STONE;
 @Fork(1)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class ChunkJMHTest {
+    /**
+     * {@code chunk} is shared by benchmark workers after setup. Every measured
+     * operation accesses its safe wrapper so workers use section locking.
+     */
     private Chunk chunk;
 
+    /**
+     * Initializes registries and fills one empty Overworld chunk with oak wood
+     * before measurement. The resulting safe wrapper is shared by benchmark
+     * threads, and setup cost is excluded from the measured operations.
+     */
     @Setup
     public void init() {
         Allay.initI18n();
@@ -37,22 +50,42 @@ public class ChunkJMHTest {
         }
     }
 
+    /**
+     * Measures repeated safe block writes at one fixed position using the
+     * default single worker. After the first replacement, subsequent
+     * invocations write the same stone state.
+     */
     @Benchmark
     public void test1() {
         chunk.setBlockState(0, 0, 0, STONE.getDefaultState());
     }
 
+    /**
+     * Measures a safe block read at one fixed position using the default single
+     * worker. {@code blackhole} consumes the result so the benchmark retains
+     * observable work.
+     */
     @Benchmark
     public void test2(Blackhole blackhole) {
         blackhole.consume(chunk.getBlockState(0, 0, 0));
     }
 
+    /**
+     * Measures safe block writes with the maximum JMH worker count contending
+     * on one section. Every invocation targets the same position and assigns
+     * the stone state.
+     */
     @Threads(Threads.MAX)
     @Benchmark
     public void test3() {
         chunk.setBlockState(0, 0, 0, STONE.getDefaultState());
     }
 
+    /**
+     * Measures safe block reads with the maximum JMH worker count sharing one
+     * section. {@code blackhole} consumes each retrieved state while readers
+     * contend for shared locking machinery.
+     */
     @Threads(Threads.MAX)
     @Benchmark
     public void test4(Blackhole blackhole) {

@@ -1,10 +1,12 @@
 package org.allaymc.api.world.sound;
 
 /**
- * Sound played when an entity (commonly a player) performs an attack.
+ * {@code AttackSound} describes an attack sound selected by whether damage was
+ * dealt. The runtime chooses the strong-attack event for {@code true} and the
+ * no-damage event for {@code false}; this descriptor does not apply combat
+ * damage itself.
  *
- * @param damage true if the attack actually dealt damage; false otherwise. Implementations may play different
- *               sounds depending on this value.
+ * @param damage whether the attack dealt damage
  */
 public record AttackSound(boolean damage) implements Sound {
 }

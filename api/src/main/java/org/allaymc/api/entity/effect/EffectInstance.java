@@ -10,8 +10,11 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Range;
 
 /**
- * EffectInstance represents an active effect, which contains the level of the effect, its
- * duration, and whether the particle effect emitted can be seen by other players.
+ * {@code EffectInstance} holds mutable amplifier, remaining duration, and
+ * particle flags for one effect type. Living entities retain the instance
+ * supplied during accepted addition, so later mutations affect active behavior;
+ * the generated constructor and setters do not enforce the documented amplifier
+ * range. NBT persistence narrows the numeric ID and amplifier to signed bytes.
  *
  * @author daoge_cmd
  */
@@ -21,31 +24,35 @@ import org.jetbrains.annotations.Range;
 @AllArgsConstructor
 public final class EffectInstance {
     /**
-     * The type of this effect instance.
+     * Registered effect type reference.
      */
     private final EffectType type;
     /**
-     * The amplifier of this effect instance. It is equals to {@code getLevel() - 1}.
+     * {@code amplifier} is the zero-based strength used by {@code getLevel}.
+     * The range annotation documents expected values but does not validate
+     * constructor or setter input.
      */
     @Range(from = 0, to = Short.MAX_VALUE)
     private int amplifier;
     /**
-     * The duration of this effect instance, and the unit is game tick.
+     * {@code duration} counts remaining game ticks. The living component
+     * decrements it before {@code onTick}, then requests removal when the
+     * resulting value is nonpositive.
      */
     private int duration;
     /**
-     * Whether the effect is ambient, leading to reduced particles shown to the client.
+     * Reduced-particle ambient presentation flag.
      */
     private boolean ambient;
     /**
-     * Whether the particle is visible to players.
+     * Effect particle visibility flag.
      */
     private boolean visible;
 
     /**
-     * A constructor that creates a copy of the given effect instance.
-     *
-     * @param effect the effect instance that based on
+     * Creates another instance with copied scalar settings and the same effect
+     * type reference. Later mutations to either instance's amplifier, duration,
+     * or flags do not change the other's copied settings.
      */
     public EffectInstance(EffectInstance effect) {
         this.type = effect.type;
@@ -56,10 +63,10 @@ public final class EffectInstance {
     }
 
     /**
-     * Creates a new effect instance from the given nbt.
-     *
-     * @param nbt the nbt that contains the effect information
-     * @return a new effect instance based on the given nbt
+     * Creates an instance from numeric effect metadata in NBT. {@code "Id"} and
+     * {@code "Amplifier"} are read as signed bytes, and the effect registry
+     * must already contain the decoded ID; an unknown ID throws {@code
+     * NullPointerException}.
      */
     public static EffectInstance fromNBT(NbtMap nbt) {
         var effectType = Registries.EFFECTS.getByK1((int) nbt.getByte("Id"));
@@ -72,9 +79,7 @@ public final class EffectInstance {
     }
 
     /**
-     * Gets the level of this effect instance.
-     *
-     * @return the level of this effect instance
+     * Returns the one-based effect level by adding one to the amplifier.
      */
     @Range(from = 1, to = Short.MAX_VALUE + 1)
     public int getLevel() {
@@ -82,18 +87,22 @@ public final class EffectInstance {
     }
 
     /**
-     * Saves this effect instance to nbt. The nbt can be used in {@link #fromNBT(NbtMap)} later.
-     *
-     * @return the nbt that contains the information of this effect instance
+     * Serializes the effect settings using byte ID and amplifier fields. Values
+     * outside signed-byte range are narrowed and may not round-trip through
+     * {@code fromNBT}; duration remains an integer game-tick count.
      */
     public NbtMap saveNBT() {
         return NbtMap.builder()
+                // NBT stores these fields as bytes, so IDs and amplifiers outside
+                // the signed-byte range lose high bits before a later fromNBT read.
                 .putByte("Id", (byte) type.getId())
                 .putByte("Amplifier", (byte) amplifier)
-                // TODO: DurationEasy, DurationNormal, DurationHard
+                // TODO: Add difficulty-specific DurationEasy, DurationNormal, and
+                // DurationHard NBT fields when effect loading supports them.
                 .putInt("Duration", duration)
                 .putBoolean("Ambient", ambient)
-                // TODO: DisplayOnScreenTextureAnimation
+                // TODO: Persist DisplayOnScreenTextureAnimation when effect
+                // instances expose that presentation flag.
                 .putBoolean("ShowParticles", visible)
                 .build();
     }

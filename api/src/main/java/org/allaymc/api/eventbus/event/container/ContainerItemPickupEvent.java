@@ -8,7 +8,10 @@ import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when an item entity is picked up into a container, such as by a hopper.
+ * {@code ContainerItemPickupEvent} describes a proposed pickup from a dropped item
+ * entity into one container slot. Hopper transfer dispatches it before changing either
+ * source or destination, and cancellation prevents that proposed pickup while leaving
+ * its live entity and container references available to listeners.
  *
  * @author ClexaGod
  */
@@ -16,22 +19,27 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class ContainerItemPickupEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The item entity being picked up.
+     * Dropped entity supplying the proposed items.
      */
     protected EntityItem itemEntity;
     /**
-     * The destination container.
+     * Container receiving the proposed item pickup.
      */
     protected Container destination;
     /**
-     * The slot in the destination container.
+     * Zero-based destination container slot index.
      */
     protected int destinationSlot;
     /**
-     * The count of items picked up.
+     * Proposed number of items to pick up.
      */
     protected int count;
 
+    /**
+     * Creates a pickup event retaining the supplied item entity and destination
+     * container. Construction records the proposed slot and count without validating
+     * space, changing stacks, or removing the item entity.
+     */
     public ContainerItemPickupEvent(EntityItem itemEntity, Container destination, int destinationSlot, int count) {
         this.itemEntity = itemEntity;
         this.destination = destination;

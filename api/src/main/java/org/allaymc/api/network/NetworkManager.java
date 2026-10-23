@@ -5,49 +5,53 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Collection;
 
 /**
- * NetworkManager manages multiple {@link NetworkInterface} instances, allowing plugins
- * to register custom transport protocols (e.g. QUIC, TCP, WebSocket) alongside the
- * built-in RakNet interface.
+ * {@code NetworkManager} manages the network interfaces serving client
+ * connections, including the built-in RakNet transport. Registration and
+ * removal expose cancellable events, and an interface registered after
+ * networking starts is started immediately. The server implementation requires
+ * custom transports to extend its network-interface base class so lifecycle
+ * operations are available.
  *
  * @author daoge_cmd
  */
 public interface NetworkManager {
 
     /**
-     * Register a new network interface.
-     * <p>
-     * Fires a cancellable {@code NetworkInterfaceRegisterEvent}. If the server
-     * is already running, the interface will be started immediately.
+     * Registers a transport after its registration event permits the change.
+     * Already registered interfaces and cancellation return {@code false}, and
+     * the server implementation rejects transports that do not extend its
+     * transport base class.
      *
-     * @param iface the network interface to register
-     *
-     * @return {@code true} if the interface was registered successfully
+     * <p> When networking has started, a caught {@code Exception} from startup
+     * removes the new registration and returns {@code false}. An {@code Error}
+     * from startup or a failure during the following player-count
+     * synchronization propagates after insertion, so a thrown call can leave
+     * the interface registered.
      */
     boolean registerInterface(NetworkInterface iface);
 
     /**
-     * Unregister a network interface.
-     * <p>
-     * Fires a cancellable {@code NetworkInterfaceUnregisterEvent} and calls shutdown on the interface.
-     *
-     * @param iface the network interface to unregister
-     *
-     * @return {@code true} if the interface was unregistered successfully
+     * Removes an existing transport after its removal event permits the change,
+     * then shuts it down. Missing registrations and cancellation return
+     * {@code false}; shutdown exceptions propagate after removal, and the
+     * server implementation rejects unsupported interface implementations.
      */
     boolean unregisterInterface(NetworkInterface iface);
 
     /**
-     * Get all registered network interfaces.
-     *
-     * @return an unmodifiable collection of all registered interfaces
+     * Returns an unmodifiable view of the registered network interfaces.
+     * Membership reflects subsequent registrations and removals rather than a
+     * fixed snapshot; callers cannot mutate membership through the returned
+     * collection.
      */
     @UnmodifiableView
     Collection<NetworkInterface> getInterfaces();
 
     /**
-     * Get the built-in default (RakNet) network interface.
-     *
-     * @return the default network interface
+     * Returns the built-in RakNet interface supplied when networking was
+     * created. This identifies the default transport independently of current
+     * membership, so removing it does not select another interface as the
+     * default.
      */
     NetworkInterface getDefaultInterface();
 }

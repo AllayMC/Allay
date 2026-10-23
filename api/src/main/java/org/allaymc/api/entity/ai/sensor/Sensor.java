@@ -3,23 +3,24 @@ package org.allaymc.api.entity.ai.sensor;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 
 /**
- * A sensor collects data from the environment and stores it in memory.
+ * {@code Sensor} gathers observations for an intelligent entity's behavior
+ * evaluation. Built-in sensors store results in the entity's shared memories,
+ * and the default group schedules sensing before evaluating behaviors so those
+ * behaviors can consume the latest eligible observation.
  *
  * @author daoge_cmd
  */
 public interface Sensor {
 
     /**
-     * Collect sensor data for the given entity.
-     *
-     * @param entity the entity to sense for
+     * Collects current observations for use by the supplied entity's AI.
      */
     void sense(EntityIntelligent entity);
 
     /**
-     * Get the sensing period in ticks.
-     *
-     * @return the period in ticks (default 1)
+     * Returns the interval in group ticks between sensing operations. The
+     * default interval is one tick; the default group also treats nonpositive
+     * intervals as eligible on every tick.
      */
     default int getPeriod() {
         return 1;

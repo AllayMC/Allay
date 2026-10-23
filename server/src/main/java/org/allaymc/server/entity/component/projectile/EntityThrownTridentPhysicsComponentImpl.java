@@ -18,41 +18,83 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 /**
- * Physics component implementation for thrown trident entities.
+ * {@code EntityThrownTridentPhysicsComponentImpl} resolves trident impacts,
+ * enchantment effects, and Loyalty return travel. Outbound movement uses
+ * projectile collision handling, while returning movement bypasses both block
+ * and entity ray checks. Return acceleration depends on the current Loyalty
+ * level and remaining displacement toward the shooter eye position.
+ *
+ * <p>
+ * The return state coordinates shooter eligibility, dimension, pickup range,
+ * and inventory recovery. An invalid shooter causes an item drop and removal;
+ * another dimension pauses motion until the shooter can be reached again. A
+ * nearby player receives the item through preferred-slot or ordinary inventory
+ * handling before projectile removal. Impact damage also combines Impaling
+ * with water or rain, while Channeling separately checks thunder and sky
+ * exposure.
  *
  * @author daoge_cmd
  */
 public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhysicsComponentImpl {
 
     /**
-     * The base damage dealt by the trident.
+     * {@code BASE_DAMAGE} supplies the eight outbound damage points before an
+     * eligible Impaling enchantment adds its target-specific bonus.
      */
     protected static final float BASE_DAMAGE = 8.0f;
 
+    /**
+     * Injected carried item and Loyalty state component.
+     */
     @Dependency
     protected EntityThrownTridentBaseComponent tridentBaseComponent;
 
-    // Indicates whether the trident has already hit a block (like arrow's hitBlock)
+    /**
+     * {@code hitBlock} records that an entity or block impact has completed.
+     * It suppresses repeated block-impact processing and can hold outbound
+     * motion while collision geometry remains.
+     */
     protected boolean hitBlock;
 
+    /**
+     * Returns trident downward acceleration in blocks per tick squared.
+     */
     @Override
     public double getGravity() {
         return 0.05;
     }
 
+    /**
+     * Returns the fraction of trident motion removed by water drag.
+     */
     @Override
     public double getWaterDragFactor() {
         return 0.01;
     }
 
+    /**
+     * Returns the fraction of trident motion removed by lava drag.
+     */
     @Override
     public double getLavaDragFactor() {
         return 0.01;
     }
 
+    /**
+     * Returns the next trident motion using return state before ordinary
+     * projectile physics. Returning delegates immediately to homing, including
+     * its pickup and invalid-owner side effects. Otherwise enabled liquid
+     * physics takes precedence over the embedded-block stop check.
+     *
+     * <p>
+     * An impacted outbound trident remains still when its block collision
+     * persists outside that liquid branch. Removing the support restores
+     * gravity and air drag without clearing {@code hitBlock}. Each branch
+     * returns a vector for the engine motion setter, while actual position
+     * updates remain in the movement phase.
+     */
     @Override
     public Vector3d updateMotion(LiquidState liquidState) {
-        // If returning to shooter, use special motion logic
         if (tridentBaseComponent.isReturning()) {
             return updateReturningMotion();
         }
@@ -61,12 +103,13 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
             return updateMotionInLiquid(liquidState);
         }
 
-        // Same as arrow: if hit block and still colliding with blocks, no motion
+        // Preserve impact embedding outside the liquid branch until support
+        // geometry disappears, so an impacted trident can fall after support
+        // removal.
         if (hitBlock && tridentBaseComponent.checkBlockCollision()) {
             return new Vector3d(0, 0, 0);
         }
 
-        // Normal physics (including when block is removed - trident will fall)
         return new Vector3d(
                 this.motion.x * (1 - this.getDragFactorInAir()),
                 (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
@@ -75,21 +118,31 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
     }
 
     /**
-     * Updates motion when the trident is returning to the shooter.
-     * Uses percentage-based movement:
-     * - Moves a percentage of remaining distance each tick
-     * - Creates natural deceleration as trident approaches player
+     * Returns homing motion or resolves a terminal return outcome. An
+     * ineligible shooter causes a carried-item drop, removal request, and zero
+     * vector. A shooter in another dimension leaves the returning trident
+     * stationary without dropping it.
+     *
+     * <p>
+     * The target is the shooter eye position. A player within one and a half
+     * blocks receives the trident before removal is requested; otherwise
+     * displacement is multiplied by five percent per Loyalty level. This
+     * proportional update slows as distance shrinks and leaves position
+     * application to the no-clip movement path. The helper can mutate
+     * inventory or queue removal during an engine motion update.
      */
     protected Vector3d updateReturningMotion() {
         var shooter = projectileComponent.getShooter();
         if (!canReturnToShooter(shooter)) {
-            // Shooter is gone, drop the trident as item entity
+            // Failed return eligibility preserves the retained item as a world drop
+            // before the projectile removal request is queued.
             dropTridentItem();
             thisEntity.remove();
             return new Vector3d(0, 0, 0);
         }
 
-        // If shooter is in different dimension, wait (don't move)
+        // A live eligible shooter in another dimension pauses homing, preserving
+        // the returning projectile until both occupy the same dimension.
         if (shooter.getDimension() != thisEntity.getDimension()) {
             return new Vector3d(0, 0, 0);
         }
@@ -97,7 +150,6 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         var location = thisEntity.getLocation();
         var shooterPos = shooter.getLocation();
 
-        // Calculate direction to shooter's eye level
         var direction = new Vector3d(
                 shooterPos.x() - location.x(),
                 shooterPos.y() - location.y() + shooter.getEyeHeight(),
@@ -106,19 +158,21 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
 
         var distance = direction.length();
 
-        // Check if close enough to be picked up (distance < 1.5)
+        // A one-and-a-half-block eye-position radius resolves player recovery
+        // before proportional motion would converge indefinitely.
         if (distance < 1.5 && shooter instanceof EntityPlayer player) {
             giveTridentToPlayer(player);
             thisEntity.remove();
             return new Vector3d(0, 0, 0);
         }
 
-        // Percentage-based movement, higher loyalty = faster return
+        // Five percent of remaining displacement per Loyalty level scales return
+        // speed without normalizing away the approach distance.
         var loyaltyLevel = tridentBaseComponent.getLoyaltyLevel();
         var force = 0.05 * loyaltyLevel;
 
-        // Calculate velocity (percentage of remaining distance)
-        // Motion will be applied by applyMotionNoClip(), so don't update position here
+        // Return a velocity only because the engine movement phase owns location
+        // changes; updating position here would apply return travel twice.
         return new Vector3d(
                 direction.x * force,
                 direction.y * force,
@@ -127,8 +181,18 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
     }
 
     /**
-     * Gives the trident item back to the player.
-     * Prefers to return to the favored slot if available and empty.
+     * Attempts to return the retained non-air item to a player without
+     * clearing the trident item reference. A nonnegative favored slot must be
+     * valid for the player inventory. An empty favored slot receives the same
+     * item object, while any existing trident in that slot suppresses another
+     * insertion.
+     *
+     * <p>
+     * An occupied nontrident slot or absent preference falls back to {@code
+     * player.tryAddItem}, whose implementation inserts what fits and drops
+     * remaining contents. The method returns no success status, so the
+     * returning-motion caller requests projectile removal afterward regardless
+     * of whether the preferred-slot branch inserted an item.
      */
     protected void giveTridentToPlayer(EntityPlayer player) {
         var tridentItem = tridentBaseComponent.getTridentItem();
@@ -140,23 +204,26 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         if (favoredSlot >= 0) {
             var inventory = player.getContainer(ContainerTypes.INVENTORY);
             var slotItem = inventory.getItemStack(favoredSlot);
-            // If the favored slot is empty, put the trident there
             if (slotItem.getItemType() == ItemTypes.AIR) {
                 inventory.setItemStack(favoredSlot, tridentItem);
                 return;
             }
-            // If the favored slot already has a trident (creative mode), don't add another one
+            // An existing trident in the favored slot suppresses insertion
+            // regardless of player mode, avoiding another copy on that branch.
             if (slotItem.getItemType() == ItemTypes.TRIDENT) {
                 return;
             }
         }
 
-        // Otherwise, try to add to inventory normally
+        // A missing or occupied nontrident preference delegates insertion and
+        // remainder dropping to the player inventory helper.
         player.tryAddItem(tridentItem);
     }
 
     /**
-     * Drops the trident as an item entity.
+     * Drops the retained non-air trident stack at the current entity location.
+     * A missing or air item produces no drop, and the helper does not clear
+     * the retained reference or remove the projectile.
      */
     protected void dropTridentItem() {
         var tridentItem = tridentBaseComponent.getTridentItem();
@@ -165,13 +232,25 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         }
     }
 
+    /**
+     * Processes an outbound trident entity hit and then resolves post-impact
+     * return state. Queued removal and returning state suppress the callback.
+     * Living targets receive base damage plus an Impaling bonus when water
+     * contact or exposed rain permits it.
+     *
+     * <p>
+     * Accepted damage attempts an additional durability cost, while Channeling
+     * processing runs afterward independently of whether living damage
+     * succeeded. The helper then records impact state and starts return when
+     * the shooter remains eligible. Knockback uses a source obtained by
+     * subtracting current motion from the hit position.
+     */
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
         if (thisEntity.willBeDespawnedLater()) {
             return;
         }
 
-        // If returning, ignore collisions
         if (tridentBaseComponent.isReturning()) {
             return;
         }
@@ -181,7 +260,8 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         if (other instanceof EntityLiving living) {
             float damage = BASE_DAMAGE;
 
-            // Apply impaling damage bonus in water or rain
+            // Impaling contributes two and a half damage points per level only when
+            // water contact or exposed rain makes the target eligible.
             var impalingLevel = tridentBaseComponent.getImpalingLevel();
             if (impalingLevel > 0) {
                 if (other.isTouchingWater() || isEntityInRain(other)) {
@@ -190,29 +270,32 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
             }
 
             var damageContainer = DamageContainer.projectile(thisEntity, damage);
-            // Use the last location as the knockback source
+            // Subtract current motion from the hit point to place the knockback
+            // source behind the trident along its travel direction.
             damageContainer.setKnockbackSource(hitPos.sub(this.motion, new Vector3d()));
 
             if (living.attack(damageContainer)) {
-                // Apply additional durability cost for hitting entity
                 applyHitDurabilityCost();
             }
         }
 
-        // Handle channeling enchantment
         handleChanneling(hitPos);
 
-        // Handle collision result
         handlePostCollision();
     }
 
+    /**
+     * Records the first outbound block impact and optionally begins Loyalty
+     * return. Queued removal, a previous impact flag, or returning state
+     * suppresses this callback, and the hit sound distinguishes block impact
+     * from entity impact.
+     */
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
         if (thisEntity.willBeDespawnedLater() || this.hitBlock) {
             return;
         }
 
-        // If returning, ignore block collisions
         if (tridentBaseComponent.isReturning()) {
             return;
         }
@@ -220,15 +303,15 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         addHitSound(hitPos, true);
         this.hitBlock = true;
 
-        // Check if should return to shooter
         if (canReturnToShooter(projectileComponent.getShooter())) {
             startReturning();
         }
     }
 
     /**
-     * Handles the channeling enchantment effect.
-     * Only summons lightning when hitting an entity during a thunderstorm.
+     * Attempts a Channeling lightning strike during thunder when the trident
+     * location sees the sky. The helper uses the supplied hit point for the
+     * strike and emits thunder sound only when the dimension accepts it.
      */
     protected void handleChanneling(Vector3dc hitPos) {
         if (!tridentBaseComponent.hasChanneling()) {
@@ -238,7 +321,6 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         var dimension = thisEntity.getDimension();
         var world = dimension.getWorld();
 
-        // Only works during thunderstorm and if position can see sky
         if (world.getWeather() != Weather.THUNDER) {
             return;
         }
@@ -248,26 +330,28 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
             return;
         }
 
-        // Spawn lightning bolt using the dimension's strikeLightning method
         if (dimension.strikeLightning(hitPos.x(), hitPos.y(), hitPos.z(), LightningStrikeEvent.Cause.TRIDENT)) {
             dimension.addSound(hitPos, SimpleSound.TRIDENT_THUNDER, false);
         }
     }
 
     /**
-     * Handles post-collision behavior.
+     * Records impact state and begins Loyalty return when the current shooter
+     * is eligible. The impact flag is set even when the shooter cannot receive
+     * a return, leaving ordinary movement to resolve later support.
      */
     protected void handlePostCollision() {
         this.hitBlock = true;
 
-        // Check if should return to shooter
         if (canReturnToShooter(projectileComponent.getShooter())) {
             startReturning();
         }
     }
 
     /**
-     * Starts the returning phase.
+     * Emits the return sound and enables the trident returning flag. The base
+     * setter publishes state, while later movement and motion-update phases
+     * select no-clip travel and homing from that flag.
      */
     protected void startReturning() {
         thisEntity.getDimension().addSound(thisEntity.getLocation(), SimpleSound.TRIDENT_RETURN, false);
@@ -275,7 +359,9 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
     }
 
     /**
-     * Checks if the trident can return to the shooter.
+     * Returns whether positive Loyalty and a live nonspectator shooter allow
+     * return. A live nonplayer shooter is accepted, and dimension equality is
+     * deliberately left to the returning-motion path.
      */
     protected boolean canReturnToShooter(Entity shooter) {
         if (tridentBaseComponent.getLoyaltyLevel() <= 0) {
@@ -294,7 +380,10 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
     }
 
     /**
-     * Checks if an entity is being rained on.
+     * Returns whether nonclear weather and sky exposure make a target eligible
+     * for rain-based Impaling. The sky sample casts location coordinates
+     * directly to integers, and the helper does not query a biome
+     * precipitation type.
      */
     protected boolean isEntityInRain(Entity entity) {
         var dimension = entity.getDimension();
@@ -308,14 +397,18 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         return dimension.canPosSeeSky((int) pos.x(), (int) pos.y(), (int) pos.z());
     }
 
+    /**
+     * Emits the ground or entity trident hit sound at {@code hitPos}.
+     */
     protected void addHitSound(Vector3dc hitPos, boolean hitGround) {
         var sound = hitGround ? SimpleSound.TRIDENT_HIT_GROUND : SimpleSound.TRIDENT_HIT;
         thisEntity.getDimension().addSound(hitPos, sound, false);
     }
 
     /**
-     * Applies additional durability cost when hitting an entity.
-     * The trident costs +1 durability when it hits an entity.
+     * Attempts one additional damage point on the retained non-air trident
+     * after an accepted living hit. The item damage routine decides whether
+     * the increase succeeds, and the projectile does not inspect its result.
      */
     protected void applyHitDurabilityCost() {
         var tridentItem = tridentBaseComponent.getTridentItem();
@@ -324,9 +417,15 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         }
     }
 
+    /**
+     * Attempts no-clip movement while returning or delegates to ordinary
+     * projectile travel otherwise. The return branch skips both block and
+     * entity ray collisions, leaving pickup resolution to the homing update.
+     */
     @Override
     public boolean applyMotion() {
-        // When returning, the trident should pass through blocks (noClip)
+        // Return travel bypasses all ray collisions so the projectile can reach its
+        // owner through intervening blocks or entities.
         if (tridentBaseComponent.isReturning()) {
             return applyMotionNoClip();
         }
@@ -334,8 +433,10 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
     }
 
     /**
-     * Apply motion without block collision detection (for returning tridents).
-     * The trident will only check for entity collisions when returning.
+     * Attempts to move by stored motion without ray collision checks or
+     * hit-event dispatch. Zero motion returns {@code false}; a nonzero
+     * displacement updates rotation before the entity location setter decides
+     * acceptance.
      */
     protected boolean applyMotionNoClip() {
         if (motion.lengthSquared() == 0) {
@@ -353,13 +454,18 @@ public class EntityThrownTridentPhysicsComponentImpl extends EntityProjectilePhy
         return !newPos.equals(location) && thisEntity.trySetLocation(newPos);
     }
 
+    /**
+     * Returns whether parent filtering or returning state excludes an entity
+     * collision. Outbound tridents retain the shared same-shooter projectile
+     * exclusion, while returning movement normally bypasses the ray query
+     * entirely.
+     */
     @Override
     protected boolean shouldSkipEntityCollision(Entity entity) {
         if (super.shouldSkipEntityCollision(entity)) {
             return true;
         }
 
-        // Skip collision when returning
         return tridentBaseComponent.isReturning();
     }
 }

@@ -4,46 +4,43 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.identifier.Identifier;
 
 /**
- * Represents a fishing loot entry that can be obtained when fishing.
+ * {@code FishingLoot} describes a registered fishing catch with an identifier,
+ * category, relative weight, and item factory. Selection groups entries by
+ * category before drawing a weighted entry, while the chosen factory supplies
+ * the stack handed to the fishing outcome event.
  *
  * @author daoge_cmd
  */
 public interface FishingLoot {
     /**
-     * Gets the unique identifier of this fishing loot.
-     *
-     * @return the identifier
+     * Returns the identifier used to register this fishing-loot definition.
      */
     Identifier getIdentifier();
 
     /**
-     * Gets the category of this fishing loot.
-     *
-     * @return the category
+     * Returns the category used to group this weighted loot entry.
      */
     FishingLootCategory getCategory();
 
     /**
-     * Gets the weight of this loot within its category.
-     * Higher weight means higher chance to be selected.
-     *
-     * @return the weight
+     * Returns this entry's relative weight within its fishing category. Larger
+     * positive weights increase selection share; the selector reads registered
+     * values directly and falls back to cod for a nonpositive category total.
      */
     float getWeight();
 
     /**
-     * Creates a new item stack for this loot.
-     * This method is called each time the loot is selected.
-     *
-     * @return the item stack
+     * Creates the item stack supplied when this entry is selected as a catch.
+     * Implementations provide a fresh stack for independent catches, because
+     * fishing events and dropped-item handling can mutate that stack.
      */
     ItemStack createItemStack();
 
     /**
-     * Checks if this loot requires open water to be caught.
-     * Treasure items require open water in vanilla Minecraft.
-     *
-     * @return {@code true} if open water is required
+     * Returns whether this definition declares an open-water requirement,
+     * defaulting to treasure categories. {@code FishingLootTable} currently
+     * checks category selection rather than this property, so overriding the
+     * property does not change that selector's filtering.
      */
     default boolean requiresOpenWater() {
         return getCategory() == FishingLootCategory.TREASURE;

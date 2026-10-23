@@ -9,10 +9,29 @@ import org.allaymc.server.component.ComponentProvider;
 
 import java.util.List;
 
+/**
+ * {@code ItemPufferfishStackImpl} implements the pufferfish item API through
+ * supplied component delegates. {@link ItemStackImpl} supplies ordinary stack
+ * behavior, while {@code edibleComponent} handles consumption timing,
+ * nutrition, drink behavior, and eating eligibility. Callers access both
+ * contracts through this stack instance.
+ */
 public class ItemPufferfishStackImpl extends ItemStackImpl implements ItemPufferfishStack {
+    /**
+     * {@code edibleComponent} holds the injected {@link ItemEdibleComponent}
+     * implementation. Lombok-generated forwarding methods use this instance
+     * after superclass component initialization completes.
+     */
     @Delegate
     private ItemEdibleComponent edibleComponent;
 
+    /**
+     * Creates the pufferfish stack using {@code initInfo} and
+     * {@code componentProviders}. {@code componentProviders} must produce
+     * exactly one assignable implementation for each component-typed field,
+     * including inherited fields; superclass construction injects these
+     * instances before this constructor returns.
+     */
     public ItemPufferfishStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }

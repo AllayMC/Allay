@@ -13,13 +13,27 @@ import org.joml.Vector3i;
 import java.util.Map;
 
 /**
+ * {@code BlockBedRespawnPointComponentImpl} selects bed respawn positions from
+ * orientation-specific candidate offsets. The bed head determines facing and the
+ * foot anchors every candidate coordinate, allowing either part supplied by the
+ * respawn processor to resolve the same search geometry.
+ *
+ * <p>
+ * {@code BED_OFFSETS} preserves the per-facing candidate order. Each candidate
+ * needs nonsolid foot and head space with a solid block below, and the first
+ * candidate satisfying those three checks becomes the destination. The checks use
+ * solidity rather than detailed collision or hazard validation. A search with no
+ * accepted candidate reports an invalid bed and returns {@code null} for the
+ * processor's global-spawn fallback.
+ *
  * @author IWareQ
  */
 public class BlockBedRespawnPointComponentImpl extends BlockRespawnPointComponentImpl {
 
     /**
-     * Offsets (relative to the foot block) used to find a valid respawn position, indexed by bed facing direction.
-     * These match the vanilla Minecraft Bedrock behavior as implemented in Dragonfly (DFMC).
+     * {@code BED_OFFSETS} stores ordered offsets from the foot for each horizontal
+     * bed facing. {@code onPlayerRespawn} tests each array in stored order and
+     * uses the first candidate passing its solidity checks.
      */
     private static final Map<BlockFace, Vector3i[]> BED_OFFSETS = Map.of(
             BlockFace.NORTH, new Vector3i[]{
@@ -50,6 +64,15 @@ public class BlockBedRespawnPointComponentImpl extends BlockRespawnPointComponen
             }
     );
 
+    /**
+     * Returns the first accepted standing position around the bed, or {@code null}
+     * after sending the invalid-bed message. The method resolves the head and
+     * facing from either supplied part, then measures candidate offsets from the
+     * foot. A candidate requires two nonsolid blocks over solid ground. The
+     * returned location uses integer block coordinates without centering, and the
+     * method consumes no block resource. The supplied block must expose the bed
+     * head and direction properties.
+     */
     @Override
     public Location3ic onPlayerRespawn(EntityPlayer player, Block block) {
         var headBlock = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? block : getPairBlock(block);
@@ -57,7 +80,6 @@ public class BlockBedRespawnPointComponentImpl extends BlockRespawnPointComponen
                 BlockFace.fromHorizontalIndex(headBlock.getPropertyValue(BlockPropertyTypes.DIRECTION_4))
         );
 
-        // The foot block is on the opposite side of the facing direction
         var footBlock = getPairBlock(headBlock);
         var footPos = footBlock.getPosition();
 
@@ -69,19 +91,19 @@ public class BlockBedRespawnPointComponentImpl extends BlockRespawnPointComponen
                 var targetY = footPos.y() + offset.y();
                 var targetZ = footPos.z() + offset.z();
 
-                // Check if the target position is not solid (passable - player can stand there)
+                // Evaluate foot space, head space, and ground together for each
+                // ordered candidate; accepting only one empty block could place a
+                // respawn inside an obstruction.
                 var targetState = dimension.getBlockState(targetX, targetY, targetZ);
                 if (targetState.getBlockStateData().isSolid()) {
                     continue;
                 }
 
-                // Check if the block above is also not solid (player needs 2 blocks of space)
                 var aboveState = dimension.getBlockState(targetX, targetY + 1, targetZ);
                 if (aboveState.getBlockStateData().isSolid()) {
                     continue;
                 }
 
-                // Check if the block below is solid (player needs solid ground)
                 var belowState = dimension.getBlockState(targetX, targetY - 1, targetZ);
                 if (!belowState.getBlockStateData().isSolid()) {
                     continue;
@@ -95,6 +117,11 @@ public class BlockBedRespawnPointComponentImpl extends BlockRespawnPointComponen
         return null;
     }
 
+    /**
+     * Returns a wrapper at the expected other bed part. The head bit reverses the
+     * facing offset for head-to-foot lookup; the target block's type is not
+     * validated.
+     */
     protected Block getPairBlock(Block block) {
         var head = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT);
         var face = Preconditions.checkNotNull(BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4)));

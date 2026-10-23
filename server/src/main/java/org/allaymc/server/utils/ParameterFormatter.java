@@ -5,51 +5,82 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * Text formatting tool using log4j.
+ * {@code ParameterFormatter} substitutes brace placeholders and renders diagnostic argument
+ * values for formatted server exceptions. Escaping determines whether a delimiter consumes
+ * an argument, and indexed formatting is available when the caller has prepared valid
+ * placeholder positions for an escape-free pattern. The scanner used by formatted exceptions
+ * also stores an escape marker to select the scanning formatter.
+ *
  * <p>
- * Supports parameter formatting as used in ParameterizedMessage and ReusableParameterizedMessage.
+ * Deep rendering tracks container identities along each recursion path so self-reference can
+ * be shown without recursively expanding the same ancestor forever. Child paths receive
+ * copies of the visited set, allowing a shared object in separate sibling positions to be
+ * rendered at both positions. Identity strings use identity hash codes and can collide;
+ * container iteration or specialized scalar conversion can still throw, while ordinary
+ * object {@code toString} failures receive an explicit diagnostic marker.
  */
 final class ParameterFormatter {
+    // RECURSION_PREFIX and RECURSION_SUFFIX surround the identity of a container already
+    // present on the current rendering path, identifying recursion without expanding that ancestor again.
     /**
-     * Prefix for recursion.
+     * Opening recursion diagnostic marker.
      */
     static final String RECURSION_PREFIX = "[...";
     /**
-     * Suffix for recursion.
+     * Closing recursion diagnostic marker.
      */
     static final String RECURSION_SUFFIX = "...]";
 
+    // ERROR_PREFIX, ERROR_SEPARATOR, ERROR_MSG_SEPARATOR, and ERROR_SUFFIX delimit the
+    // object identity and thrown error text when an ordinary object's toString cannot be rendered.
     /**
-     * Prefix for errors.
+     * Opening rendering-failure marker.
      */
     static final String ERROR_PREFIX = "[!!!";
     /**
-     * Separator for errors.
+     * Object-to-error identity separator.
      */
     static final String ERROR_SEPARATOR = "=>";
     /**
-     * Separator for error messages.
+     * Exception-to-message text separator.
      */
     static final String ERROR_MSG_SEPARATOR = ":";
     /**
-     * Suffix for errors.
+     * Closing rendering-failure marker.
      */
     static final String ERROR_SUFFIX = "!!!]";
 
+    // DELIM_START and DELIM_STOP identify placeholder pairs, while ESCAPE_CHAR controls
+    // whether those pairs remain literal or consume arguments in the scanning formatter.
+    /**
+     * Opening placeholder delimiter character.
+     */
     private static final char DELIM_START = '{';
+    /**
+     * Closing placeholder delimiter character.
+     */
     private static final char DELIM_STOP = '}';
+    /**
+     * Placeholder escape marker character.
+     */
     private static final char ESCAPE_CHAR = '\\';
 
+    /**
+     * {@code dateTimeFormatter} renders date values with millisecond precision and a numeric zone
+     * offset. {@code appendDate} supplies the system-default zone at each formatting call.
+     */
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
+    /**
+     * Prevents construction of the stateless placeholder and diagnostic argument formatter.
+     */
     private ParameterFormatter() {
     }
 
     /**
-     * Counts the number of unescaped placeholders in the given messagePattern.
-     *
-     * @param messagePattern the message pattern to be analyzed
-     * @return the number of unescaped placeholders
+     * Counts unescaped delimiter pairs, returning zero for a {@code null} pattern. Backslash parity
+     * controls whether a pair consumes an argument; this operation neither stores positions nor
+     * rewrites escape characters in the input.
      */
     static int countArgumentPlaceholders(final String messagePattern) {
         if (messagePattern == null) {
@@ -76,10 +107,15 @@ final class ParameterFormatter {
     }
 
     /**
-     * Counts the number of unescaped placeholders in the given messagePattern.
+     * Scans delimiter positions and marks {@code indices[0]} negative after a scanned escape.
+     * A {@code null} pattern returns zero without touching the array, and callers provide storage for
+     * every indexed position the scan can write.
      *
-     * @param messagePattern the message pattern to be analyzed
-     * @return the number of unescaped placeholders
+     * <p>
+     * The reported count increases for each scanned backslash as well as each unescaped pair,
+     * so it is not simply the number of substitutions when escapes occur. Later position writes
+     * use that increased count and can exceed a placeholder-only allocation; formatted exceptions
+     * also use the count to decide whether a final throwable is unused.
      */
     static int countArgumentPlaceholders2(final String messagePattern, final int[] indices) {
         if (messagePattern == null) {
@@ -92,7 +128,9 @@ final class ParameterFormatter {
             final char curChar = messagePattern.charAt(i);
             if (curChar == ESCAPE_CHAR) {
                 isEscaped = !isEscaped;
-                indices[0] = -1; // escaping means fast path is not available...
+                // Escape handling changes both literal text and argument consumption. Mark
+                // cached positions unusable so the caller selects the escape-aware scanning formatter.
+                indices[0] = -1;
                 result++;
             } else if (curChar == DELIM_START) {
                 if (!isEscaped && messagePattern.charAt(i + 1) == DELIM_STOP) {
@@ -109,10 +147,9 @@ final class ParameterFormatter {
     }
 
     /**
-     * Counts the number of unescaped placeholders in the given messagePattern.
-     *
-     * @param messagePattern the message pattern to be analyzed
-     * @return the number of unescaped placeholders
+     * Counts unescaped pairs within the supplied array prefix and stores their positions.
+     * Callers provide a valid prefix length and enough index storage; this variant does not set
+     * an escape marker, so its positions alone do not reproduce escape rewriting.
      */
     static int countArgumentPlaceholders3(final char[] messagePattern, final int length, final int[] indices) {
         int result = 0;
@@ -136,11 +173,9 @@ final class ParameterFormatter {
     }
 
     /**
-     * Replace placeholders in the given messagePattern with arguments.
-     *
-     * @param messagePattern the message pattern containing placeholders
-     * @param arguments      the arguments to be used to replace placeholders
-     * @return the formatted message
+     * Formats a pattern with all supplied arguments through the scanning formatter. Missing
+     * arguments leave delimiter pairs visible, a {@code null} argument array performs no substitution,
+     * and a {@code null} pattern becomes the literal string {@code "null"}.
      */
     static String format(final String messagePattern, final Object[] arguments) {
         final StringBuilder result = new StringBuilder();
@@ -150,11 +185,14 @@ final class ParameterFormatter {
     }
 
     /**
-     * Replace placeholders in the given messagePattern with arguments.
+     * Appends substitutions using precomputed positions for an escape-free string pattern.
+     * Callers ensure {@code argCount} fits both the argument array and valid sorted positions;
+     * this operation does not scan or unescape the copied pattern spans.
      *
-     * @param buffer         the buffer to write the formatted message into
-     * @param messagePattern the message pattern containing placeholders
-     * @param arguments      the arguments to be used to replace placeholders
+     * <p>
+     * A {@code null} pattern, {@code null} argument array, or zero count appends the pattern directly, including
+     * the literal {@code "null"} for a {@code null} pattern. Remaining pattern text follows the last
+     * substituted pair unchanged.
      */
     static void formatMessage2(final StringBuilder buffer, final String messagePattern,
                                final Object[] arguments, final int argCount, final int[] indices) {
@@ -172,11 +210,15 @@ final class ParameterFormatter {
     }
 
     /**
-     * Replace placeholders in the given messagePattern with arguments.
+     * Appends character-array slices using the supplied positions and count arguments. The current
+     * implementation passes absolute placeholder positions and {@code patternLength} to an append
+     * overload whose final argument is a character count, so ordinary substitution can overrun
+     * the array or copy beyond the intended prefix even with otherwise valid positions.
      *
-     * @param buffer         the buffer to write the formatted message into
-     * @param messagePattern the message pattern containing placeholders
-     * @param arguments      the arguments to be used to replace placeholders
+     * <p>
+     * A {@code null} pattern appends nothing. A {@code null} argument array or zero count appends the entire
+     * array rather than just the requested prefix; this method does not provide a reliable
+     * prefix-formatting contract for the substitution path.
      */
     static void formatMessage3(final StringBuilder buffer, final char[] messagePattern, final int patternLength,
                                final Object[] arguments, final int argCount, final int[] indices) {
@@ -197,11 +239,16 @@ final class ParameterFormatter {
     }
 
     /**
-     * Replace placeholders in the given messagePattern with arguments.
+     * Appends the pattern with argument substitutions while preserving its escape semantics.
+     * A {@code null} pattern, {@code null} argument array, or zero argument count appends the pattern unchanged,
+     * and callers ensure the requested argument count fits the array.
      *
-     * @param buffer         the buffer to write the formatted message into
-     * @param messagePattern the message pattern containing placeholders
-     * @param arguments      the arguments to be used to replace placeholders
+     * <p>
+     * Backslashes before a delimiter pair collapse in pairs. An odd leftover slash makes the
+     * delimiter literal without consuming an argument, while an even count permits substitution;
+     * slashes before ordinary characters remain literal. Missing arguments keep the delimiter
+     * pair visible, and the final-character helper retains trailing text or escapes excluded
+     * from the one-character-lookahead scan.
      */
     static void formatMessage(final StringBuilder buffer, final String messagePattern,
                               final Object[] arguments, final int argCount) {
@@ -213,22 +260,23 @@ final class ParameterFormatter {
         int currentArgument = 0;
         int i = 0;
         final int len = messagePattern.length();
-        for (; i < len - 1; i++) { // last char is excluded from the loop
+        // Delimiter recognition reads one character ahead. Leave the last character to
+        // the trailing-text helper so a final literal or backslash is neither lost nor overread.
+        for (; i < len - 1; i++) {
             final char curChar = messagePattern.charAt(i);
             if (curChar == ESCAPE_CHAR) {
                 escapeCounter++;
             } else {
-                if (isDelimPair(curChar, messagePattern, i)) { // looks ahead one char
+                if (isDelimPair(curChar, messagePattern, i)) {
                     i++;
 
-                    // write escaped escape chars
+                    // Paired backslashes become literal backslashes before this delimiter.
+                    // An odd remaining slash protects the pair and must not advance the argument index.
                     writeEscapedEscapeChars(escapeCounter, buffer);
 
                     if (isOdd(escapeCounter)) {
-                        // i.e. escaped: write escaped escape chars
                         writeDelimPair(buffer);
                     } else {
-                        // unescaped
                         writeArgOrDelimPair(arguments, argCount, currentArgument, buffer);
                         currentArgument++;
                     }
@@ -241,22 +289,20 @@ final class ParameterFormatter {
         handleRemainingCharIfAny(messagePattern, len, buffer, escapeCounter, i);
     }
 
+    // LOG4J2-1096
     /**
-     * Returns {@code true} if the specified char and the char at {@code curCharIndex + 1} in the specified message
-     * pattern together form a "{}" delimiter pair, returns {@code false} otherwise.
+     * Returns whether the current and following character form a placeholder pair. The caller
+     * must leave a following character inside the pattern because this helper performs its
+     * lookahead without a separate bounds check.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 22 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static boolean isDelimPair(final char curChar, final String messagePattern, final int curCharIndex) {
         return curChar == DELIM_START && messagePattern.charAt(curCharIndex + 1) == DELIM_STOP;
     }
 
+    // LOG4J2-1096
     /**
-     * Detects whether the message pattern has been fully processed or if an unprocessed character remains and processes
-     * it if necessary, returning the resulting position in the result char array.
+     * Appends the unprocessed final character when the main scan leaves one.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 28 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static void handleRemainingCharIfAny(final String messagePattern, final int len,
                                                  final StringBuilder buffer, final int escapeCounter, final int i) {
         if (i == len - 1) {
@@ -265,11 +311,10 @@ final class ParameterFormatter {
         }
     }
 
+    // LOG4J2-1096
     /**
-     * Processes the last unprocessed character and returns the resulting position in the result char array.
+     * Appends the final literal while retaining its accumulated trailing backslashes.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 28 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static void handleLastChar(final StringBuilder buffer, final int escapeCounter, final char curChar) {
         if (curChar == ESCAPE_CHAR) {
             writeUnescapedEscapeChars(escapeCounter + 1, buffer);
@@ -278,55 +323,46 @@ final class ParameterFormatter {
         }
     }
 
+    // LOG4J2-1096
     /**
-     * Processes a literal char (neither an '\' escape char nor a "{}" delimiter pair) and returns the resulting
-     * position.
+     * Appends accumulated literal backslashes followed by the current ordinary character.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 16 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static void handleLiteralChar(final StringBuilder buffer, final int escapeCounter, final char curChar) {
-        // any other char beside ESCAPE or DELIM_START/STOP-combo
-        // write unescaped escape chars
         writeUnescapedEscapeChars(escapeCounter, buffer);
         buffer.append(curChar);
     }
 
+    // LOG4J2-1096
     /**
-     * Writes "{}" to the specified result array at the specified position and returns the resulting position.
+     * Appends both placeholder delimiter characters without consuming any formatting argument.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 18 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static void writeDelimPair(final StringBuilder buffer) {
         buffer.append(DELIM_START);
         buffer.append(DELIM_STOP);
     }
 
+    // LOG4J2-1096
     /**
-     * Returns {@code true} if the specified parameter is odd.
+     * Returns whether the supplied integer has its least significant bit set.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 11 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static boolean isOdd(final int number) {
         return (number & 1) == 1;
     }
 
+    // LOG4J2-1096
     /**
-     * Writes a '\' char to the specified result array (starting at the specified position) for each <em>pair</em> of
-     * '\' escape chars encountered in the message format and returns the resulting position.
+     * Appends one literal backslash for each pair of accumulated escape characters.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 11 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static void writeEscapedEscapeChars(final int escapeCounter, final StringBuilder buffer) {
-        final int escapedEscapes = escapeCounter >> 1; // divide by two
+        // Two escapes before a placeholder encode one literal backslash in the output.
+        final int escapedEscapes = escapeCounter >> 1;
         writeUnescapedEscapeChars(escapedEscapes, buffer);
     }
 
+    // LOG4J2-1096
     /**
-     * Writes the specified number of '\' chars to the specified result array (starting at the specified position) and
-     * returns the resulting position.
+     * Appends the requested positive number of literal backslashes to the buffer.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 20 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static void writeUnescapedEscapeChars(int escapeCounter, final StringBuilder buffer) {
         while (escapeCounter > 0) {
             buffer.append(ESCAPE_CHAR);
@@ -334,39 +370,27 @@ final class ParameterFormatter {
         }
     }
 
+    // LOG4J2-1096
     /**
-     * Appends the argument at the specified argument index (or, if no such argument exists, the "{}" delimiter pair) to
-     * the specified result char array at the specified position and returns the resulting position.
+     * Renders the selected argument when its index is below {@code argCount}. Missing arguments
+     * leave the placeholder delimiters visible, and callers keep {@code argCount} within the
+     * actual argument array bounds.
      */
-    // Profiling showed this method is important to log4j performance. Modify with care!
-    // 25 bytes (allows immediate JVM inlining: < 35 bytes) LOG4J2-1096
     private static void writeArgOrDelimPair(final Object[] arguments, final int argCount, final int currentArgument,
                                             final StringBuilder buffer) {
         if (currentArgument < argCount) {
             recursiveDeepToString(arguments[currentArgument], buffer, null);
         } else {
+            // A pattern can have more placeholders than supplied arguments. Keep its
+            // unmatched pair visible so the output retains that portion of the original pattern.
             writeDelimPair(buffer);
         }
     }
 
     /**
-     * This method performs a deep toString of the given Object.
-     * Primitive arrays are converted using their respective Arrays.toString methods while
-     * special handling is implemented for "container types", i.e. Object[], Map and Collection because those could
-     * contain themselves.
-     * <p>
-     * It should be noted that neither AbstractMap.toString() nor AbstractCollection.toString() implement such a
-     * behavior. They only check if the container is directly contained in itself, but not if a contained container
-     * contains the original one. Because of that, Arrays.toString(Object[]) isn't safe either.
-     * Confusing? Just read the last paragraph again and check the respective toString() implementation.
-     * </p>
-     * <p>
-     * This means, in effect, that logging would produce a usable output even if an ordinary System.out.println(o)
-     * would produce a relatively hard-to-debug StackOverflowError.
-     * </p>
-     *
-     * @param o The object
-     * @return The String representation
+     * Renders a value with specialized scalar and container handling. {@code null} returns {@code null}
+     * and strings are returned unchanged; other values use recursive rendering, which detects
+     * ancestor containers but does not suppress every iterator or specialized-conversion failure.
      */
     static String deepToString(final Object o) {
         if (o == null) {
@@ -376,34 +400,15 @@ final class ParameterFormatter {
             return (String) o;
         }
         final StringBuilder str = new StringBuilder();
-        final Set<String> dejaVu = new HashSet<>(); // that's actually a neat name ;)
+        final Set<String> dejaVu = new HashSet<>();
         recursiveDeepToString(o, str, dejaVu);
         return str.toString();
     }
 
     /**
-     * This method performs a deep toString of the given Object.
-     * Primitive arrays are converted using their respective Arrays.toString methods while
-     * special handling is implemented for "container types", i.e. Object[], Map and Collection because those could
-     * contain themselves.
-     * <p>
-     * dejaVu is used in case of those container types to prevent an endless recursion.
-     * </p>
-     * <p>
-     * It should be noted that neither AbstractMap.toString() nor AbstractCollection.toString() implement such a
-     * behavior.
-     * They only check if the container is directly contained in itself, but not if a contained container contains the
-     * original one. Because of that, Arrays.toString(Object[]) isn't safe either.
-     * Confusing? Just read the last paragraph again and check the respective toString() implementation.
-     * </p>
-     * <p>
-     * This means, in effect, that logging would produce a usable output even if an ordinary System.out.println(o)
-     * would produce a relatively hard-to-debug StackOverflowError.
-     * </p>
-     *
-     * @param o      the Object to convert into a String
-     * @param str    the StringBuilder that o will be appended to
-     * @param dejaVu a list of container identities that were already used
+     * Appends a value through scalar, container, or ordinary-object rendering as appropriate.
+     * {@code null} becomes the text {@code "null"} here, and the optional visited set tracks ancestor
+     * container identities rather than every value encountered in sibling branches.
      */
     private static void recursiveDeepToString(final Object o, final StringBuilder str, final Set<String> dejaVu) {
         if (appendSpecialTypes(o, str)) {
@@ -416,6 +421,11 @@ final class ParameterFormatter {
         }
     }
 
+    /**
+     * Appends recognized text, boxed primitives, {@code null}, or date values and reports whether handled.
+     * Other values return {@code false} for container or ordinary-object handling; specialized
+     * append and date-conversion failures still propagate from this path.
+     */
     private static boolean appendSpecialTypes(final Object o, final StringBuilder str) {
         if (o == null || o instanceof String) {
             str.append((String) o);
@@ -448,6 +458,11 @@ final class ParameterFormatter {
         return appendDate(o, str);
     }
 
+    /**
+     * Appends a date's instant using the shared timestamp pattern and current system zone.
+     * Non-date values return {@code false}; unsupported date conversions or formatting failures
+     * propagate rather than entering the ordinary-object error marker path.
+     */
     private static boolean appendDate(final Object o, final StringBuilder str) {
         if (!(o instanceof Date date)) {
             return false;
@@ -457,12 +472,15 @@ final class ParameterFormatter {
     }
 
     /**
-     * Returns {@code true} if the specified object is an array, a Map or a Collection.
+     * Returns whether a present value is an array, map, or collection.
      */
     private static boolean isMaybeRecursive(final Object o) {
         return o.getClass().isArray() || o instanceof Map || o instanceof Collection;
     }
 
+    /**
+     * Dispatches a recognized array, map, or collection to its container renderer.
+     */
     private static void appendPotentiallyRecursiveValue(final Object o, final StringBuilder str,
                                                         final Set<String> dejaVu) {
         final Class<?> oClass = o.getClass();
@@ -475,6 +493,18 @@ final class ParameterFormatter {
         }
     }
 
+    /**
+     * Appends primitive arrays with their matching {@code Arrays.toString} overload and
+     * recursively
+     * renders object arrays. Object arrays use an ancestor identity set so an element referring
+     * back to the array produces a recursion marker instead of expanding that ancestor again.
+     *
+     * <p>
+     * Each element receives a copy of the current path set, allowing one shared child array to
+     * appear in multiple sibling positions without being mistaken for an ancestor cycle. Identity
+     * hash collisions can still misclassify objects, and the source array is read directly rather
+     * than copied before rendering.
+     */
     private static void appendArray(final Object o, final StringBuilder str, Set<String> dejaVu,
                                     final Class<?> oClass) {
         if (oClass == byte[].class) {
@@ -497,7 +527,8 @@ final class ParameterFormatter {
             if (dejaVu == null) {
                 dejaVu = new HashSet<>();
             }
-            // special handling of container Object[]
+            // Track this array as an ancestor, then copy that path for each element.
+            // A repeated sibling reference can expand normally while a back-reference receives a marker.
             final String id = identityToString(o);
             if (dejaVu.contains(id)) {
                 str.append(RECURSION_PREFIX).append(id).append(RECURSION_SUFFIX);
@@ -516,12 +547,24 @@ final class ParameterFormatter {
                 }
                 str.append(']');
             }
-            //str.append(Arrays.deepToString((Object[]) o));
         }
     }
 
+    /**
+     * Appends map entries in their iteration order with recursive key and value rendering.
+     * The map's identity joins the ancestor path before iteration, and a map already on that
+     * path is represented by a recursion marker.
+     *
+     * <p>
+     * Keys and values each receive separate path copies, so visiting a key does not incorrectly
+     * make the same object look cyclic when it appears as a value. Repeated siblings can render
+     * again, while ancestor references stop expanding. The map is not snapshotted, and iteration
+     * failures or concurrent mutation errors still propagate outside ordinary-object error
+     * handling.
+     */
     private static void appendMap(final Object o, final StringBuilder str, Set<String> dejaVu) {
-        // special handling of container Map
+        // Map keys and values can refer to the same objects independently. Copy the
+        // ancestor path for each branch so only references back into that path indicate recursion.
         if (dejaVu == null) {
             dejaVu = new HashSet<>();
         }
@@ -550,8 +593,20 @@ final class ParameterFormatter {
         }
     }
 
+    /**
+     * Appends collection elements in iteration order while tracking the collection's ancestor
+     * identity. A collection already on the current path produces a recursion marker instead
+     * of recursively iterating the same ancestor.
+     *
+     * <p>
+     * Each child receives a fresh copy of that path, so a shared element in two sibling positions
+     * is expanded independently rather than automatically treated as a cycle. Identity hash
+     * collisions remain possible, and iteration uses the live collection without synchronization
+     * or a snapshot; iterator failures therefore still propagate to the formatting caller.
+     */
     private static void appendCollection(final Object o, final StringBuilder str, Set<String> dejaVu) {
-        // special handling of container Collection
+        // Keep each element's ancestor path independent. Sharing one visited set across
+        // siblings would mistake repeated collection values for recursion even without an ancestor cycle.
         if (dejaVu == null) {
             dejaVu = new HashSet<>();
         }
@@ -575,15 +630,26 @@ final class ParameterFormatter {
         }
     }
 
+    /**
+     * Appends an ordinary object's {@code toString} result, converting thrown failures into a
+     * diagnostic marker. The guard covers that object conversion only; failures while rendering
+     * the diagnostic error itself can still propagate.
+     */
     private static void tryObjectToString(final Object o, final StringBuilder str) {
-        // it's just some other Object, we can only use toString().
         try {
             str.append(o.toString());
         } catch (final Throwable t) {
+            // A user object's toString can fail during exception formatting. Preserve its
+            // identity and error information without invoking the same broken conversion again.
             handleErrorInObjectToString(o, str, t);
         }
     }
 
+    /**
+     * Appends the failed object's identity and the thrown error's class and message. A message
+     * equal to the error class name is omitted to avoid duplicate text; this helper does not
+     * catch failures retrieving that diagnostic message.
+     */
     private static void handleErrorInObjectToString(final Object o, final StringBuilder str, final Throwable t) {
         str.append(ERROR_PREFIX);
         str.append(identityToString(o));
@@ -599,24 +665,9 @@ final class ParameterFormatter {
     }
 
     /**
-     * This method returns the same as if Object.toString() would not have been
-     * overridden in obj.
-     * <p>
-     * Note that this isn't 100% secure as collisions can always happen with hash codes.
-     * </p>
-     * <p>
-     * Copied from Object.hashCode():
-     * </p>
-     * <blockquote>
-     * As much as is reasonably practical, the hashCode method defined by
-     * class {@code Object} does return distinct integers for distinct
-     * objects. (This is typically implemented by converting the internal
-     * address of the object into an integer, but this implementation
-     * technique is not required by the Java&#8482; programming language.)
-     * </blockquote>
-     *
-     * @param obj the Object that is to be converted into an identity string
-     * @return the identity string as also defined in Object.toString()
+     * Returns a class-name and identity-hash string without invoking the object's override.
+     * {@code null} returns {@code null}; identity hash collisions remain possible, so the result is useful
+     * for diagnostic cycle markers rather than a guaranteed unique object identifier.
      */
     static String identityToString(final Object obj) {
         if (obj == null) {

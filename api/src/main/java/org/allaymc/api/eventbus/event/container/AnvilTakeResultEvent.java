@@ -11,7 +11,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player takes the result item from an anvil.
+ * {@code AnvilTakeResultEvent} represents the proposed anvil result before it enters the
+ * player's created-output slot. Listeners may replace the result or cancel publication;
+ * cancellation does not restore experience or anvil changes already applied by the
+ * processor.
  *
  * @author IWareQ
  */
@@ -20,15 +23,17 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.WORLD)
 public class AnvilTakeResultEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The viewer taking the anvil result.
+     * Viewer requesting the anvil result.
      */
     protected ContainerViewer viewer;
     /**
-     * The anvil container.
+     * Anvil container supplying the operation inputs.
      */
     protected AnvilContainer container;
     /**
-     * The result item being taken.
+     * {@code resultItem} is installed in the created-output slot after successful
+     * dispatch. Listeners may replace this shared reference with a non-{@code null}
+     * stack.
      */
     @Setter
     protected ItemStack resultItem;

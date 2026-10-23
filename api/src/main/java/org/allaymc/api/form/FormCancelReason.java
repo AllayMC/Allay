@@ -1,7 +1,9 @@
 package org.allaymc.api.form;
 
 /**
- * Represents the reason for a form being cancelled.
+ * {@code FormCancelReason} identifies why a viewer returned cancellation rather than form data.
+ * Forms deliver this reason to close callbacks, allowing applications to distinguish deliberate
+ * dismissal from a client that was busy and could not display the form.
  */
 public enum FormCancelReason {
     /**

@@ -5,13 +5,28 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code IdentifierUtilsTest} verifies identifier helper parsing, recoverable failures, component
+ * validation, and character-screening differences.
+ *
  * @author daoge_cmd
  */
 class IdentifierUtilsTest {
 
+    // idStr and idStr2 contain the same components with different separators. Split tests
+    // supply matching delimiters, while canonical validation rejects the semicolon-containing representation.
+    /**
+     * Colon-separated identifier test fixture.
+     */
     static final String idStr = "pnx:love";
+    /**
+     * Semicolon-separated identifier test fixture.
+     */
     static final String idStr2 = "pnx;love";
 
+    /**
+     * Parses equivalent component text with colon and semicolon delimiters. The resulting
+     * identifiers must compare equal after each helper splits on its caller-selected separator.
+     */
     @Test
     void testSplitOn() {
         var id1 = IdentifierUtils.splitOn(idStr, ":");
@@ -19,6 +34,10 @@ class IdentifierUtilsTest {
         assertEquals(id1, id2);
     }
 
+    /**
+     * Parses an unqualified name with a delimiter that is absent. The helper must retain the whole
+     * path and supply the public default namespace.
+     */
     @Test
     void testSplitOnWithoutDelimiter() {
         var id = IdentifierUtils.splitOn("stone", ":");
@@ -26,6 +45,10 @@ class IdentifierUtilsTest {
         assertEquals("stone", id.path());
     }
 
+    /**
+     * Parses a valid namespaced identifier through the recoverable parsing helper. The result must
+     * be present and retain both expected namespace and path components.
+     */
     @Test
     void testTryParse() {
         var id = IdentifierUtils.tryParse(idStr);
@@ -34,6 +57,10 @@ class IdentifierUtilsTest {
         assertEquals("love", id.path());
     }
 
+    /**
+     * Parses an unqualified name through the recoverable parsing helper. The result must be
+     * present, use the default namespace, and retain the supplied path.
+     */
     @Test
     void testTryParseWithDefaultNamespace() {
         var id = IdentifierUtils.tryParse("stone");
@@ -42,6 +69,11 @@ class IdentifierUtilsTest {
         assertEquals("stone", id.path());
     }
 
+    /**
+     * Parses names containing invalid namespace or path characters through the recoverable helper.
+     * Each tested character rejection must return {@code null} rather than escaping as an identifier
+     * exception.
+     */
     @Test
     void testTryParseInvalidReturnsNull() {
         assertNull(IdentifierUtils.tryParse("invalid namespace:path"));
@@ -49,6 +81,11 @@ class IdentifierUtilsTest {
         assertNull(IdentifierUtils.tryParse("invalid@:path"));
     }
 
+    /**
+     * Creates an identifier from separate valid namespace and path values. The recoverable
+     * construction helper must return a present value retaining both supplied components
+     * unchanged.
+     */
     @Test
     void testOf() {
         var id = IdentifierUtils.of("pnx", "love");
@@ -57,6 +94,11 @@ class IdentifierUtilsTest {
         assertEquals("love", id.path());
     }
 
+    /**
+     * Creates identifiers from separate components containing invalid characters. The recoverable
+     * helper must return {@code null} for each tested rejection rather than exposing a partially valid
+     * identifier.
+     */
     @Test
     void testOfInvalidReturnsNull() {
         assertNull(IdentifierUtils.of("invalid namespace", "path"));
@@ -64,18 +106,31 @@ class IdentifierUtilsTest {
         assertNull(IdentifierUtils.of("invalid@", "path"));
     }
 
+    /**
+     * Checks one valid colon-separated identifier and one semicolon-containing input.
+     * Whole-identifier validation must accept the canonical separator and reject punctuation
+     * outside the component grammar.
+     */
     @Test
     void testIsValid() {
         assertTrue(IdentifierUtils.isValid(idStr));
         assertFalse(IdentifierUtils.isValid(idStr2));
     }
 
+    /**
+     * Checks an unqualified path and a colon-prefixed path. Validation must accept both
+     * representations because their missing or empty namespace resolves to the public default.
+     */
     @Test
     void testIsValidWithDefaultNamespace() {
         assertTrue(IdentifierUtils.isValid("stone"));
         assertTrue(IdentifierUtils.isValid(":stone"));
     }
 
+    /**
+     * Checks spaces and invalid punctuation in namespace and path positions. Whole-identifier
+     * validation must return {@code false} for every tested component containing a rejected character.
+     */
     @Test
     void testIsValidWithInvalidCharacters() {
         assertFalse(IdentifierUtils.isValid("ns:path with space"));
@@ -83,18 +138,31 @@ class IdentifierUtilsTest {
         assertFalse(IdentifierUtils.isValid("ns:path@invalid"));
     }
 
+    /**
+     * Asserts one valid identifier and one semicolon-containing identifier. The valid name must
+     * pass while the invalid component punctuation raises the identifier-specific validation
+     * exception.
+     */
     @Test
     void testAssertValid() {
         assertDoesNotThrow(() -> IdentifierUtils.assertValid(idStr));
         assertThrows(InvalidIdentifierException.class, () -> IdentifierUtils.assertValid(idStr2));
     }
 
+    /**
+     * Asserts an unqualified path and a path with a leading separator. Both must pass after
+     * namespace defaulting rather than requiring an explicit namespace in the input.
+     */
     @Test
     void testAssertValidWithDefaultNamespace() {
         assertDoesNotThrow(() -> IdentifierUtils.assertValid("stone"));
         assertDoesNotThrow(() -> IdentifierUtils.assertValid(":stone"));
     }
 
+    /**
+     * Asserts an identifier whose namespace contains a space. The assertion helper must raise the
+     * identifier-specific exception rather than accepting the invalid namespace text.
+     */
     @Test
     void testAssertValidThrowsForInvalidNamespace() {
         assertThrows(InvalidIdentifierException.class, () ->
@@ -102,6 +170,10 @@ class IdentifierUtilsTest {
         );
     }
 
+    /**
+     * Asserts an identifier whose path contains a space. The assertion helper must raise the
+     * identifier-specific exception rather than accepting the invalid resource path text.
+     */
     @Test
     void testAssertValidThrowsForInvalidPath() {
         assertThrows(InvalidIdentifierException.class, () ->
@@ -109,6 +181,11 @@ class IdentifierUtilsTest {
         );
     }
 
+    /**
+     * Checks the standalone lowercase character-screening set against letters, digits, and
+     * separators. It must allow colon and slash while rejecting the tested uppercase letters and
+     * invalid punctuation.
+     */
     @Test
     void testIsCharValid() {
         // Valid characters
@@ -130,6 +207,11 @@ class IdentifierUtilsTest {
         assertFalse(IdentifierUtils.isCharValid('#'));
     }
 
+    /**
+     * Checks complete path strings with accepted punctuation and uppercase letters. Paths
+     * containing spaces or at-sign punctuation must fail while the tested valid component strings
+     * pass.
+     */
     @Test
     void testIsPathValid() {
         assertTrue(IdentifierUtils.isPathValid("valid_path"));
@@ -142,6 +224,11 @@ class IdentifierUtilsTest {
         assertFalse(IdentifierUtils.isPathValid("invalid@path"));
     }
 
+    /**
+     * Checks the canonical path character predicate with letters, digits, and punctuation.
+     * Uppercase letters must pass, while slash and colon remain rejected despite standalone input
+     * screening allowing them.
+     */
     @Test
     void testIsPathCharacterValid() {
         // Valid path characters
@@ -162,6 +249,10 @@ class IdentifierUtilsTest {
         assertFalse(IdentifierUtils.isPathCharacterValid('/'));
     }
 
+    /**
+     * Checks complete namespace strings with accepted letters, digits, and punctuation. The tested
+     * valid namespaces must pass, while spaces and at-sign punctuation cause validation failure.
+     */
     @Test
     void testIsNamespaceValid() {
         assertTrue(IdentifierUtils.isNamespaceValid("valid_namespace"));
@@ -175,6 +266,10 @@ class IdentifierUtilsTest {
         assertFalse(IdentifierUtils.isNamespaceValid("invalid@namespace"));
     }
 
+    /**
+     * Checks the canonical namespace character predicate over accepted ASCII components. Uppercase
+     * letters must pass, while slash, colon, spaces, and at-sign punctuation remain rejected.
+     */
     @Test
     void testIsNamespaceCharacterValid() {
         // Valid namespace characters
@@ -195,11 +290,20 @@ class IdentifierUtilsTest {
         assertFalse(IdentifierUtils.isNamespaceCharacterValid('/'));
     }
 
+    /**
+     * Checks the empty path against the character-only validator. Validation must succeed because
+     * no path character is present to violate the implementation's accepted character set.
+     */
     @Test
     void testEmptyPath() {
         assertTrue(IdentifierUtils.isPathValid(""));
     }
 
+    /**
+     * Checks the empty namespace against the character-only validator. Validation must succeed
+     * independently of the identifier constructor's separate responsibility to substitute its
+     * default namespace.
+     */
     @Test
     void testEmptyNamespace() {
         assertTrue(IdentifierUtils.isNamespaceValid(""));

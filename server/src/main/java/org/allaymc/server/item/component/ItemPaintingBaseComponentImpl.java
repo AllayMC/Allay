@@ -16,13 +16,40 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * {@code ItemPaintingBaseComponentImpl} places a randomly selected painting on a
+ * solid block's horizontal face. The component filters painting kinds through
+ * their support and collision checks before constructing an entity or consuming
+ * the player's item.
+ *
+ * <p>
+ * Candidate selection maximizes width plus height rather than area. When a larger
+ * sum fits, the component discards every previously collected smaller candidate;
+ * equal sums remain eligible together. This keeps horizontal and vertical
+ * paintings with the same summed dimensions equally eligible in irregular
+ * available space. A uniform random choice among the retained kinds determines
+ * the painting, and an empty candidate list leaves the world unchanged.
+ *
  * @author PMMP Team | daoge_cmd
  */
 public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
+    /**
+     * Creates a painting item component from the supplied stack initialization.
+     */
     public ItemPaintingBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Selects a fitting painting and creates it against the clicked horizontal face.
+     * The caller must supply interaction information; adventure and spectator modes,
+     * an unsuitable support face, or no fitting painting return {@code false}.
+     *
+     * <p>
+     * The candidate list retains only kinds with the largest fitting width-plus-height
+     * sum. A larger fitting kind clears smaller candidates, while equal sums remain
+     * for uniform random selection. Success adds the entity, plays placement sound,
+     * and attempts to consume the held item; the inherited event result is ignored.
+     */
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
@@ -53,9 +80,9 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
             if (EntityPaintingImpl.canPlace(type, dimension, placeBlockPos, face, true)) {
                 if (currentTotalDimension > totalDimension) {
                     totalDimension = currentTotalDimension;
-                    // This drops all type possibilities smaller than this. We use the total of height plus width
-                    // to allow equal chance of horizontal/vertical paintings when there is an L-shape of space
-                    // available.
+                    // A larger summed dimension supersedes smaller candidates;
+                    // equal sums retain both orientations for random selection
+                    // when an irregular space admits horizontal and vertical kinds.
                     types.clear();
                 }
 
@@ -64,7 +91,6 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
         }
 
         if (types.isEmpty()) {
-            // No available painting type found
             return false;
         }
 
@@ -76,7 +102,8 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
                         .dimension(dimension)
                         .build()
         );
-        // Pick a random one from all possible types
+        // Every retained kind fits and has the same maximal summed dimensions,
+        // so a uniform draw preserves equal eligibility among those candidates.
         entity.setPaintingType(types.get(ThreadLocalRandom.current().nextInt(types.size())));
         dimension.getEntityManager().addEntity(entity);
         dimension.addSound(MathUtils.center(placeBlockPos), SimpleSound.PAINTING_PLACE);

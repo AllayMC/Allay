@@ -8,7 +8,9 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 
 /**
- * Called when a viewer closes a container.
+ * {@code ContainerCloseEvent} represents a request to remove a viewer from a container.
+ * The base implementation dispatches it before checking membership, so listeners can
+ * receive the event even when the viewer has no registered window to close.
  *
  * @author daoge_cmd
  */
@@ -17,11 +19,11 @@ import org.allaymc.api.container.ContainerViewer;
 @CallerThread(ThreadType.WORLD)
 public class ContainerCloseEvent extends ContainerEvent {
     /**
-     * The viewer closing the container.
+     * Viewer targeted by the removal request.
      */
     protected ContainerViewer viewer;
     /**
-     * The container being closed.
+     * Container receiving the removal request.
      */
     protected Container container;
 }
