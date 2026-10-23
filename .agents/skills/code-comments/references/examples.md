@@ -61,7 +61,7 @@ a nested record; a primary production type also needs its overview minimum.
 
 ```java
 /**
- * Image represents encoded image data sent in an upstream request.
+ * {@code Image} represents encoded image data sent in an upstream request.
  *
  * @param mediaType image MIME type
  * @param data base64
@@ -74,9 +74,9 @@ consumer's ownership rule rather than inferring it from the map type.
 
 ```java
 /**
- * The fields map holds event attributes. After enqueueing the event, callers
- * must leave this map and its mutable values unchanged until the sink finishes
- * reading them.
+ * {@code fields} holds event attributes. After enqueueing the event, callers must
+ * leave this map and its mutable values unchanged until the sink finishes reading
+ * them.
  */
 private Map<String, Object> fields;
 ```
@@ -99,9 +99,9 @@ Independent field rule: the log sink prefers a nonempty string attribute, then
 
 ```java
 /**
- * The component field names the event source. The log sink prefers a nonempty
- * string in {@code fields.get("component")} and uses {@code "app"} when both
- * sources are empty.
+ * {@code component} names the event source. The log sink prefers a nonempty string
+ * in {@code fields.get("component")} and uses {@code "app"} when both sources are
+ * empty.
  */
 private String component;
 ```
@@ -112,9 +112,8 @@ Explicitly handwritten accessors still require method documentation.
 
 ```java
 /**
- * The payload field holds the current packet bytes. The generated getter exposes
- * the same array, so consumers must copy it before retaining or modifying its
- * contents.
+ * {@code payload} holds the current packet bytes. {@code getPayload()} returns the
+ * same array, so consumers must copy it before retaining or modifying its contents.
  */
 @Getter
 private byte[] payload;
@@ -129,8 +128,9 @@ the group purpose and the constant's meaning, meeting the stronger minimum.
 
 ```java
 /**
- * ARRIVAL_SLACK allows for connection setup delaying the first arrival. Counting
- * dispatch times alone can admit another request inside the receiver's window.
+ * {@code ARRIVAL_SLACK} allows for connection setup delaying the first arrival.
+ * Counting dispatch times alone can admit another request inside the receiver's
+ * window.
  */
 private static final Duration ARRIVAL_SLACK = Duration.ofSeconds(1);
 ```
@@ -178,7 +178,7 @@ Ordinary default handling needs no local paraphrase.
  * Nonpositive durations select thirty seconds. Expiration is checked during
  * reads rather than by a background cleanup task.
  *
- * @throws NullPointerException if {@code ttl} is null
+ * @throws NullPointerException if {@code ttl} is {@code null}
  */
 Cache(Duration ttl) {
     this.ttl = ttl.isNegative() || ttl.isZero() ? Duration.ofSeconds(30) : ttl;
@@ -287,8 +287,8 @@ retains the mutable `Date` reference in `finishedAt`:
 ```java
 /**
  * Copies the record's {@code items} list and {@code timings} map so callers can
- * modify those collections independently. The mutable {@code finishedAt}
- * timestamp remains shared; callers must leave it unchanged through either record.
+ * modify those collections independently. {@code finishedAt} remains shared and
+ * mutable; callers must leave it unchanged through either record.
  */
 ```
 

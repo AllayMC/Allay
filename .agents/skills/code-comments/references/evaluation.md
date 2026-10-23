@@ -19,7 +19,7 @@ Preserve original diffs and validation results before any corrections. Agent sel
 - Unrelated facts in design paragraphs, or local comments translating expressions.
 - Ambiguous actors in explanatory prose, or type descriptions reduced to constructor side effects. Method/constructor opening summaries, compact field labels, and clear local imperatives remain valid.
 - Generic descriptions that obscure which fields or methods own a documented rule or shared state.
-- Javadoc attached after annotations, broken inline tags, or inherited text counted as a local explanation.
+- Javadoc attached after annotations, broken inline tags, inconsistent formatting of code references, or inherited text counted as a local explanation.
 - Expanded generated accessors, unsupported generated-file exemptions, or record components left undocumented.
 
 Record representative passages and their evidence; group small presentation issues. Counts can locate padding but do not measure quality. A trial leaving fields untouched cannot validate field rules; add a separate type-focused task when needed.
