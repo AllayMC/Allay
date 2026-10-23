@@ -27,6 +27,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Fixed
 
 - Tipped arrow with infinity now can be picked up.
+- Stairs now form and refresh inner and outer corners when placed or when neighboring blocks change.
 - 1.26.50+ clients get the jigsaw structure data they require before `StartGamePacket`, sent with empty rules like
   Geyser and gophertunnel do, so they no longer disconnect with "missing structure data".
 - Vanilla items of version `NONE`, block items included, are sent with an empty component tag like BDS does; 1.26.50
