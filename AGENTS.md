@@ -75,6 +75,24 @@ errors. Preserve relevant thread-safety and API-status annotations.
 - Keep comments synchronized with behaviour. Remove stale and commented-out code, and make `TODO` and `FIXME` comments
   actionable. Do not expand a focused change into unrelated documentation cleanup.
 
+## Changelog Guidelines
+
+- Write `CHANGELOG.md` for server users and plugin developers. Select notable release outcomes and keep entries
+  concise; avoid turning implementation work, dependency updates, or generated-data refreshes into a checklist.
+- Group entries marked `(API)` at the beginning of their relevant category. Preserve concrete API names and
+  compatibility or migration details that plugin developers need.
+- Put new APIs, vanilla types and properties, and vanilla feature baseline upgrades under `Added`. Use `Changed`
+  for substantive changes to existing behavior, rather than collecting version-upgrade implementation details.
+- Distinguish supported client/protocol versions from the vanilla feature baseline. Summarize the baseline in one
+  short entry, such as "Updated the vanilla feature baseline to MCBE 1.26.50." Omit BedrockData build numbers and
+  exhaustive lists of refreshed inventories, recipes, tags, sounds, translations, and biomes.
+- Avoid separate entries for state-updater dependency versions or incidental migration work that merely supports
+  the same baseline upgrade. Do not automatically restore previously removed updater or chunk-palette migration
+  entries when summarizing commits. Retain explanations for independently meaningful fixes and API compatibility
+  changes; an editorial deletion does not imply that the underlying behavior is absent or incorrect.
+- Before finishing, check category placement, API ordering, and whether each entry describes a distinct notable
+  outcome. Follow the user's corrected wording and level of detail in the existing changelog.
+
 ## Testing Guidelines
 
 Tests use JUnit Jupiter and Mockito. Place them in `server/src/test/java`, mirror the production package, and name test
