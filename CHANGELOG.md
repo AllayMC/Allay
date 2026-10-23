@@ -14,12 +14,15 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Added `FormViewer.updateForm(Form)`, which redraws a form the viewer has open by sending it again with its
+  form id.
+- (API) Added the new vanilla block and item types, biome constants, stair corner and horizontal connection properties.
+  Split `BlockPropertyTypes.GROWTH` into `GROWTH_2` and `GROWTH_8`; existing crop code uses `GROWTH_8`.
 - Added support for MCBE 1.26.40 and its 1.26.44 protocol hotfix.
 - Added support for MCBE 1.26.45 and 1.26.50.
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
+- Updated the vanilla feature baseline to MCBE 1.26.50.
 - Introduced new multi version architecture (mvv2).
-- (API) Added `FormViewer.updateForm(Form)`, which redraws a form the viewer has open by sending it again with its
-  form id.
 
 ### Fixed
 
@@ -30,16 +33,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
   clients reject the item registry when they carry components such as `minecraft:block`.
 - Ladders, iron bars, string and other flat block items are drawn in hand on 1.26.50+ clients: items without extra
   data are sent without NBT.
-- Existing chunk palettes are migrated when new block properties change their hashes without changing the stored
-  block-state version, preserving pre-1.26.50 stairs, fences, panes, bars, and tripwire.
-
-### Changed
-
-- Updated the vanilla feature baseline to MCBE 1.26.50 using BedrockData 1.26.50.5, including block and item data,
-  creative inventory, recipes, tags, sounds, translations, and the sulfur caves and dappled forest biomes.
-- Updated block and item state updaters to 1.26.50-R1, including legacy photo-item migration.
-- (API) Added the new vanilla block and item types, biome constants, stair corner and horizontal connection properties.
-  Split `BlockPropertyTypes.GROWTH` into `GROWTH_2` and `GROWTH_8`; existing crop code uses `GROWTH_8`.
 
 # 0.14.0 (API 0.29.0) - 2026/7/22
 
