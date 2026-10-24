@@ -1,6 +1,7 @@
 package org.allaymc.server.network.protocol.v827;
 
 import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v819.Protocol_v819;
@@ -40,6 +41,11 @@ public class Protocol_v827 extends Protocol_v819 {
      * supplied data instance. The enclosing initialization lifecycle verifies
      * this shared identity before publishing the protocol for connection use.
      */
+    @Override
+    protected NetworkBlockPalette createBlockPalette() {
+        return NetworkBlockPalette.of("827");
+    }
+
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
         return new PacketEncoder_v827(data);
