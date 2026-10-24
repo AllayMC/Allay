@@ -14,8 +14,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
-- (API) Added `FormViewer.updateForm(Form)`, which redraws a form the viewer has open by sending it again with its
-  form id.
 - (API) Added the new vanilla block and item types, biome constants, stair corner and horizontal connection properties.
   Split `BlockPropertyTypes.GROWTH` into `GROWTH_2` and `GROWTH_8`; existing crop code uses `GROWTH_8`.
 - Added support for MCBE 1.26.40 and its 1.26.44 protocol hotfix.
@@ -23,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Updated the vanilla feature baseline to MCBE 1.26.50.
 - Introduced new multi version architecture (mvv2).
+- (API) Added `LoginData.getPlatformOnlineId()` and the `profileHash` component of `Skin`.
 
 ### Fixed
 
@@ -34,6 +33,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
   clients reject the item registry when they carry components such as `minecraft:block`.
 - Ladders, iron bars, string and other flat block items are drawn in hand on 1.26.50+ clients: items without extra
   data are sent without NBT.
+- 1.26.50+ clients can join again: player list entries now carry the platform online ID instead of the device name, the
+  PlayFab ID from the authentication token and the skin profile hash, and persona tint types and skin colours are
+  serialized like BDS.
 
 # 0.14.0 (API 0.29.0) - 2026/7/22
 

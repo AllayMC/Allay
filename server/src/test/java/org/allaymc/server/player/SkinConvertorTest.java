@@ -84,6 +84,21 @@ class SkinConvertorTest {
     }
 
     /**
+     * Carries the profile hash from the API skin to the protocol skin and back. A
+     * {@code null} hash is sent as an empty string, as older clients send none.
+     */
+    @Test
+    void profileHashSurvivesBothDirections() {
+        var skin = createSkin(new byte[]{1}, new byte[]{2}, new byte[]{3}, new ArrayList<>(List.of("#111111")));
+
+        var serialized = SkinConvertor.toSerializedSkin(skin);
+
+        assertEquals("profile-hash", serialized.getProfileHash());
+        assertEquals("profile-hash", SkinConvertor.fromSerializedSkin(serialized).profileHash());
+        assertEquals("", SkinConvertor.toSerializedSkin(skin.toBuilder().profileHash(null).build()).getProfileHash());
+    }
+
+    /**
      * Creates a skin fixture retaining the supplied mutable pixel arrays and tint
      * list. Small image dimensions intentionally avoid validating a real skin,
      * allowing the tests to isolate conversion ownership and copying behavior.
@@ -124,6 +139,7 @@ class SkinConvertorTest {
                         "persona_hair", tintColors
                 ))))
                 .overrideAppearance(true)
+                .profileHash("profile-hash")
                 .build();
     }
 }

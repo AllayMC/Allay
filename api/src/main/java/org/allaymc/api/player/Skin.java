@@ -37,6 +37,8 @@ import java.util.Objects;
  * collections.
  * @param overrideAppearance flag requesting override of the locally equipped
  * appearance
+ * @param profileHash appearance hash the client sends with the skin, used as
+ * the cache key for remote profile images; empty for clients before 1.26.40
  *
  * @author gophertunnel | daoge_cmd
  */
@@ -46,7 +48,7 @@ public record Skin(
         ImageData capeData, String skinGeometry, String animationData, String geometryDataEngineVersion,
         boolean premiumSkin, boolean personaSkin, boolean personaCapeOnClassicSkin, boolean primaryUser, String capeId,
         String fullId, String skinColor, String armSize, List<PersonaPieces> personaPieces,
-        List<PersonaPieceTintColor> pieceTintColors, boolean overrideAppearance
+        List<PersonaPieceTintColor> pieceTintColors, boolean overrideAppearance, String profileHash
 ) {
 
     /**

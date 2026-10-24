@@ -591,6 +591,7 @@ class PacketEncoderCompatibilityTest {
         when(player.getLoginData().getSkin()).thenReturn(networkSkin());
         when(player.getLoginData().getDeviceInfo().deviceName()).thenReturn("test-device");
         when(player.getLoginData().getDeviceInfo().device()).thenReturn(LoginData.Device.ANDROID);
+        when(player.getLoginData().getPlatformOnlineId()).thenReturn("");
         when(player.getControlledEntity().getUniqueId()).thenReturn(uniqueId);
         when(player.getOriginName()).thenReturn("TestPlayer");
 
@@ -598,6 +599,10 @@ class PacketEncoderCompatibilityTest {
             var packet = protocol.getEncoder().encodePlayerList(List.of(player), add, true);
             assertEquals(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE,
                     packet.getEntries().getFirst().getAction());
+            if (add) {
+                // The device name must not leak into the platform online ID field.
+                assertEquals("", packet.getEntries().getFirst().getPlatformChatId());
+            }
             assertPacketEncodes(protocol, packet);
         }
     }
