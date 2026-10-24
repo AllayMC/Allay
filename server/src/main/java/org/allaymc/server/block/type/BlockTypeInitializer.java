@@ -1877,7 +1877,7 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH,
                         BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
-                .setBaseComponentSupplier(BlockGlassBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockGlassPaneBaseComponentImpl::new)
                 .build();
     }
 
@@ -2744,6 +2744,52 @@ public final class BlockTypeInitializer {
     }
 
     /**
+     * Registers the fences family and assigns its {@code BlockTypes} references.
+     * Every variant carries the four {@code minecraft:connection_*} properties and
+     * uses the fence base component, which keeps them joined to neighbors.
+     */
+    public static void initFences() {
+        BlockTypes.ACACIA_FENCE = buildFence(BlockId.ACACIA_FENCE);
+        BlockTypes.BAMBOO_FENCE = buildFence(BlockId.BAMBOO_FENCE);
+        BlockTypes.BIRCH_FENCE = buildFence(BlockId.BIRCH_FENCE);
+        BlockTypes.CHERRY_FENCE = buildFence(BlockId.CHERRY_FENCE);
+        BlockTypes.CRIMSON_FENCE = buildFence(BlockId.CRIMSON_FENCE);
+        BlockTypes.DARK_OAK_FENCE = buildFence(BlockId.DARK_OAK_FENCE);
+        BlockTypes.JUNGLE_FENCE = buildFence(BlockId.JUNGLE_FENCE);
+        BlockTypes.MANGROVE_FENCE = buildFence(BlockId.MANGROVE_FENCE);
+        BlockTypes.NETHER_BRICK_FENCE = buildFence(BlockId.NETHER_BRICK_FENCE);
+        BlockTypes.OAK_FENCE = buildFence(BlockId.OAK_FENCE);
+        BlockTypes.PALE_OAK_FENCE = buildFence(BlockId.PALE_OAK_FENCE);
+        BlockTypes.POPLAR_FENCE = buildFence(BlockId.POPLAR_FENCE);
+        BlockTypes.SPRUCE_FENCE = buildFence(BlockId.SPRUCE_FENCE);
+        BlockTypes.WARPED_FENCE = buildFence(BlockId.WARPED_FENCE);
+    }
+
+    /**
+     * Builds one fence type with its connection properties and the fence base
+     * component; {@code blockId} selects the vanilla block it is registered as.
+     */
+    public static BlockType<BlockFenceBehavior> buildFence(BlockId blockId) {
+        return AllayBlockType.builder(BlockFenceBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
+                .setBaseComponentSupplier(BlockFenceBaseComponentImpl::new)
+                .build();
+    }
+
+    /**
+     * Registers iron bars, whose {@code minecraft:connection_*} properties the thin
+     * block base component keeps joined to bars, panes, walls and solid sides.
+     */
+    public static void initIronBars() {
+        BlockTypes.IRON_BARS = AllayBlockType.builder(BlockIronBarsBehaviorImpl.class)
+                .vanillaBlock(BlockId.IRON_BARS)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
+                .setBaseComponentSupplier(BlockThinBaseComponentImpl::new)
+                .build();
+    }
+
+    /**
      * Registers the fence gates family and assigns its {@code BlockTypes}
      * references. Every wood variant shares in-wall, cardinal-direction, and open
      * properties, using the same fence-gate base component and vanilla metadata.
@@ -3241,6 +3287,7 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(id)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH,
                         BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
+                .setBaseComponentSupplier(BlockThinBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
