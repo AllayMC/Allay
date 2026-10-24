@@ -14,8 +14,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
-- (API) Added `FormViewer.updateForm(Form)`, which redraws a form the viewer has open by sending it again with its
-  form id.
 - (API) Added the new vanilla block and item types, biome constants, stair corner and horizontal connection properties.
   Split `BlockPropertyTypes.GROWTH` into `GROWTH_2` and `GROWTH_8`; existing crop code uses `GROWTH_8`.
 - Added support for MCBE 1.26.40 and its 1.26.44 protocol hotfix.
@@ -23,6 +21,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Updated the vanilla feature baseline to MCBE 1.26.50.
 - Introduced new multi version architecture (mvv2).
+- Clients older than 1.26.50 now get the block states of their own version: each protocol sends block states by the
+  palette its clients know, with states upgraded from that palette, new properties such as stair corners and fence
+  connections dropped, and blocks the version lacks replaced by a block of the same shape (`block_fallbacks.json`).
+- Clients older than 1.26.50 now get the items of their own version: the item registry lists the items the version
+  knows, by the name it knows them by and with its definition data, items it lacks are sent as a similar item
+  (`item_fallbacks.json`, or the item of the fallback block), and creative items and recipes it cannot show are left
+  out.
 
 ### Fixed
 
@@ -34,6 +39,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
   clients reject the item registry when they carry components such as `minecraft:block`.
 - Ladders, iron bars, string and other flat block items are drawn in hand on 1.26.50+ clients: items without extra
   data are sent without NBT.
+- Doors, hanging signs, cauldrons, frames, crops and other items that place a block without being its block item are
+  sent without a block, like BDS, so the client draws them from their item texture.
+- Creative items are sent exactly like BDS 1.26.52: block items keep their meta in their block (e.g. an upward piston)
+  and are sent with meta 0, and banners, writable books and decorated pots carry the same NBT as on BDS.
+- 1.26.50+ clients get the definitions of the 98 data-driven vanilla blocks (wool and concrete stairs and slabs, red
+  shrub, shelf mushroom) and the vanilla voxel shape registry they resolve their shapes from; without them the client
+  rejects the session.
 
 # 0.14.0 (API 0.29.0) - 2026/7/22
 

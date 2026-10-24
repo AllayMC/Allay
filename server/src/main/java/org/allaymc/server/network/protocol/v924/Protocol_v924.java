@@ -1,6 +1,7 @@
 package org.allaymc.server.network.protocol.v924;
 
 import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v898.Protocol_v898;
@@ -40,6 +41,11 @@ public class Protocol_v924 extends Protocol_v898 {
      * supplied data instance. The enclosing initialization lifecycle verifies
      * this shared identity before publishing the protocol for connection use.
      */
+    @Override
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.of("924");
+    }
+
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
         return new PacketEncoder_v924(data);

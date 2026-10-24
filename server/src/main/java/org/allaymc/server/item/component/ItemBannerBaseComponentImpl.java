@@ -211,9 +211,8 @@ public class ItemBannerBaseComponentImpl extends ItemBaseComponentImpl implement
     @Override
     public NbtMap saveExtraTag() {
         var builder = super.saveExtraTag().toBuilder();
-        if (bannerType != BannerType.NORMAL) {
-            builder.putInt(TAG_TYPE, bannerType.ordinal());
-        }
+        // Like BDS, the banner type is always written, also for a normal banner.
+        builder.putInt(TAG_TYPE, bannerType.ordinal());
         if (!patterns.isEmpty()) {
             builder.putList(TAG_PATTERNS, NbtType.COMPOUND, patterns.stream().map(BannerPattern::toNBT).toList());
         }

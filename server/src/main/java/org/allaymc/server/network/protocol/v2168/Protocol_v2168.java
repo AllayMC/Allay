@@ -1,6 +1,8 @@
 package org.allaymc.server.network.protocol.v2168;
 
 import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v1001.Protocol_v1001;
@@ -41,6 +43,16 @@ public class Protocol_v2168 extends Protocol_v1001 {
      * supplied data instance. The enclosing initialization lifecycle verifies
      * this shared identity before publishing the protocol for connection use.
      */
+    @Override
+    protected NetworkBlockPalette createBlockPalette() {
+        return NetworkBlockPalette.of("2168");
+    }
+
+    @Override
+    protected NetworkItemPalette createItemPalette() {
+        return NetworkItemPalette.of("2168");
+    }
+
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
         return new PacketEncoder_v2168(data);

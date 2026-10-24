@@ -26,6 +26,11 @@ import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.data.EntityId;
+import org.allaymc.server.item.data.ItemId;
+import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
+import org.allaymc.server.network.protocol.NetworkItemPalette;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -251,6 +256,24 @@ public final class NetworkHelper {
     }
 
     /**
+     * Returns the vanilla item id of the given item type, or {@code null} for a custom item.
+     *
+     * @param itemType the item type
+     * @return the vanilla item id, or {@code null}
+     */
+    private static ItemId vanillaItemId(ItemType<?> itemType) {
+        if (!(itemType instanceof AllayItemType<?> allayItemType) || allayItemType.isCustomItem()) {
+            return null;
+        }
+        return ItemId.fromIdentifier(itemType.getIdentifier());
+    }
+
+    private static boolean isBlockItem(ItemId vanillaItemId) {
+        var definition = InternalRegistries.VANILLA_ITEM_DEFINITIONS.get(vanillaItemId);
+        return definition != null && definition.isBlockItem();
+    }
+
+    /**
      * Encodes an item stack using definitions from the target protocol.
      * Air uses the protocol air payload with the target item definition.
      * Other stacks retain count, metadata, extra data, and network identity;
@@ -260,25 +283,52 @@ public final class NetworkHelper {
      * @param itemStack the server-side item stack
      * @param itemDefinitions the target protocol's item definitions
      * @param blockDefinitions the target protocol's block definitions
+     * @param blockPalette the target protocol's block palette
+     * @param itemPalette the target protocol's item palette
      * @return the network item data
      * @throws IllegalStateException if a required definition is missing
      */
     public static ItemData toNetwork(
             ItemStack itemStack,
             DefinitionRegistry<ItemDefinition> itemDefinitions,
-            DefinitionRegistry<BlockDefinition> blockDefinitions
+            DefinitionRegistry<BlockDefinition> blockDefinitions,
+            NetworkBlockPalette blockPalette,
+            NetworkItemPalette itemPalette
     ) {
-        var itemType = itemStack.getItemType();
+        var itemType = itemPalette.toNetwork(itemStack.getItemType());
         if (itemType == ItemTypes.AIR) {
             return ItemData.AIR.toBuilder()
                     .definition(getItemDefinition(itemType, itemDefinitions))
                     .build();
         }
 
-        var blockState = itemStack.toBlockState();
-        var blockDefinition = blockState == null ? null : blockDefinitions.getDefinition(blockState.blockStateHash());
-        if (blockState != null && blockDefinition == null) {
-            throw new IllegalStateException("Missing block definition for state " + blockState.blockStateHash());
+        // An item the client lacks is sent as a similar one with its count, extra data and stack ID.
+        boolean substituted = itemType != itemStack.getItemType();
+        int meta = substituted ? 0 : itemStack.getMeta();
+        Integer blockStateHash = null;
+        var blockState = substituted
+                ? (itemType.getBlockType() == null ? null : itemType.getBlockType().getDefaultState())
+                : itemStack.toBlockState();
+        if (blockState != null) {
+            var vanillaItemId = vanillaItemId(itemType);
+            if (vanillaItemId == null) {
+                blockStateHash = blockState.blockStateHash();
+            } else if (isBlockItem(vanillaItemId)) {
+                // Like BDS, a block item keeps its meta in its block, e.g. an upward piston, and is sent with meta 0.
+                var metaStates = InternalRegistries.BLOCK_ITEM_META_STATES.get(vanillaItemId);
+                blockStateHash = metaStates != null && metaStates.containsKey(meta) ? metaStates.get(meta) : blockState.blockStateHash();
+                meta = 0;
+            }
+            // Otherwise, like BDS, no block: doors, hanging signs, cauldrons and the like place a block, but the client
+            // draws them from their item texture.
+        }
+        BlockDefinition blockDefinition = null;
+        if (blockStateHash != null) {
+            blockStateHash = blockPalette.toNetwork(blockStateHash);
+            blockDefinition = blockDefinitions.getDefinition(blockStateHash);
+            if (blockDefinition == null) {
+                throw new IllegalStateException("Missing block definition for state " + blockStateHash);
+            }
         }
         var extraTag = itemStack.saveExtraTag();
         return ItemData
@@ -286,7 +336,7 @@ public final class NetworkHelper {
                 .definition(getItemDefinition(itemType, itemDefinitions))
                 .blockDefinition(blockDefinition)
                 .count(itemStack.getCount())
-                .damage(itemStack.getMeta())
+                .damage(meta)
                 // Like BDS, an item without extra data is sent without NBT.
                 // With an empty compound, 1.26.50 clients draw no held model
                 // for flat block items such as ladders, iron bars, and string.
@@ -305,14 +355,18 @@ public final class NetworkHelper {
      * @param items the server-side item stacks
      * @param itemDefinitions the target protocol's item definitions
      * @param blockDefinitions the target protocol's block definitions
+     * @param blockPalette the target protocol's block palette
+     * @param itemPalette the target protocol's item palette
      * @return the encoded item data in input order
      */
     public static List<ItemData> toNetwork(
             List<ItemStack> items,
             DefinitionRegistry<ItemDefinition> itemDefinitions,
-            DefinitionRegistry<BlockDefinition> blockDefinitions
+            DefinitionRegistry<BlockDefinition> blockDefinitions,
+            NetworkBlockPalette blockPalette,
+            NetworkItemPalette itemPalette
     ) {
-        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions)).toList();
+        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions, blockPalette, itemPalette)).toList();
     }
 
     /**
