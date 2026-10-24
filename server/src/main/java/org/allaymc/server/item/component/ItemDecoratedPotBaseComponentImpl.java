@@ -56,9 +56,11 @@ public class ItemDecoratedPotBaseComponentImpl extends ItemBaseComponentImpl imp
      */
     @Override
     public NbtMap saveExtraTag() {
-        return super.saveExtraTag()
-                .toBuilder()
-                .putList(PotSherds.TAG_SHERDS, NbtType.STRING, this.sherds.toNBTList())
-                .build();
+        var builder = super.saveExtraTag().toBuilder();
+        // Like BDS, a pot without sherds has no sherds tag.
+        if (!this.sherds.equals(PotSherds.DEFAULT)) {
+            builder.putList(PotSherds.TAG_SHERDS, NbtType.STRING, this.sherds.toNBTList());
+        }
+        return builder.build();
     }
 }

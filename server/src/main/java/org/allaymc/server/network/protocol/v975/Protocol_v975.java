@@ -2,6 +2,7 @@ package org.allaymc.server.network.protocol.v975;
 
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v944.Protocol_v944;
@@ -87,6 +88,11 @@ public class Protocol_v975 extends Protocol_v944 {
      * supplied data instance. The enclosing initialization lifecycle verifies
      * this shared identity before publishing the protocol for connection use.
      */
+    @Override
+    protected NetworkBlockPalette createBlockPalette() {
+        return NetworkBlockPalette.of("975");
+    }
+
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
         return new PacketEncoder_v975(data);
