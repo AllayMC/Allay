@@ -1,7 +1,7 @@
 package org.allaymc.server.item.component.book;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.api.item.ItemStackInitInfo;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 
 /**
  * @author daoge_cmd

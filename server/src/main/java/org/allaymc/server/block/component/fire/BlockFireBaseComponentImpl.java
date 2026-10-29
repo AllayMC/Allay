@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.fire;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
@@ -11,17 +10,20 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.BlockBurnEvent;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
+import org.allaymc.api.eventbus.event.block.PortalCreateEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.api.eventbus.event.block.PortalCreateEvent;
 import org.allaymc.server.block.NetherPortalHelper;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 
 import java.util.Set;
@@ -334,5 +336,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         if (event.call()) {
             living.setOnFireTicks(event.getOnFireTicks());
         }
+
+        living.attack(new DamageContainer(block, DamageType.FIRE, 1));
     }
 }

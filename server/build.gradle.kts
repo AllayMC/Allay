@@ -36,7 +36,7 @@ dependencies {
     api(libs.sentry)
     api(libs.jctools)
     api(libs.caffeine)
-    api(libs.bundles.protocol) {
+    api(libs.protocol) {
         exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")
@@ -71,7 +71,20 @@ jacoco {
     reportsDirectory = layout.buildDirectory.dir("${rootProject.projectDir}/.jacoco")
 }
 
+// The generated type-registration initializers compile into single init() methods that exceed
+// JaCoCo's ASM method-size limit, crashing the test JVM ("Method too large"). Exclude them from
+// instrumentation entirely; they contain no logic worth measuring.
+val jacocoExcludes = listOf(
+    "**/ItemTypeDefaultInitializer",
+    "**/BlockTypeDefaultInitializer",
+)
+
 tasks {
+    test {
+        extensions.configure<JacocoTaskExtension>("jacoco") {
+            excludes?.addAll(jacocoExcludes)
+        }
+    }
     processResources {
         dependsOn("generateGitProperties")
         // input directory

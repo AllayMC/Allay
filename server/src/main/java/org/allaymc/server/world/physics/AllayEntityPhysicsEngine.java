@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent.LiquidState;
@@ -19,7 +21,7 @@ import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
 import org.allaymc.server.AllayServer;
@@ -68,6 +70,14 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     private static final double WATER_FLOW_MOTION = 0.014;
     private static final double LAVA_FLOW_MOTION = 0.002333333;
     private static final double LAVA_FLOW_MOTION_IN_NETHER = 0.007;
+    private static final double BUBBLE_COLUMN_UPWARD_ACCELERATION = 0.06;
+    private static final double BUBBLE_COLUMN_UPWARD_EXIT_ACCELERATION = 0.10;
+    private static final double BUBBLE_COLUMN_DOWNWARD_ACCELERATION = 0.30;
+    private static final double BUBBLE_COLUMN_DOWNWARD_EXIT_ACCELERATION = 0.03;
+    private static final double BUBBLE_COLUMN_UPWARD_MAX_SPEED = 0.70;
+    private static final double BUBBLE_COLUMN_UPWARD_EXIT_MAX_SPEED = 1.80;
+    private static final double BUBBLE_COLUMN_DOWNWARD_MAX_SPEED = -0.30;
+    private static final double BUBBLE_COLUMN_DOWNWARD_EXIT_MAX_SPEED = -0.90;
 
     static {
         var settings = AllayServer.getSettings().entitySettings().physicsEngineSettings();
@@ -100,7 +110,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
             if (!physicsComponent.computeMovementServerSide() ||
                 !entity.isCurrentChunkLoaded() ||
                 // Invisible bedrock is present at minHeight - 40
-                entity.getLocation().y() < dimension.getDimensionInfo().minHeight() - 40) {
+                entity.getLocation().y() < dimension.getDimensionType().getMinHeight() - 40) {
 
                 // Living entities handle void via damage ticks; remove non-living entities directly.
                 if (!(entity instanceof EntityLiving)) {
@@ -283,9 +293,26 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         var inLava = new AtomicBoolean(false);
         var waterMotion = new Vector3d();
         var lavaMotion = new Vector3d();
+        var upwardBubbleColumn = new AtomicBoolean(false);
+        var downwardBubbleColumn = new AtomicBoolean(false);
+        var bubbleColumnExit = new AtomicBoolean(false);
         var entityY = entity.getLocation().y();
 
         dimension.forEachBlockStates(entity.getOffsetAABB(), 0, (x, y, z, block) -> {
+            if (block.getBlockType() == BlockTypes.BUBBLE_COLUMN) {
+                inWater.set(true);
+                ((EntityPhysicsComponent) entity).resetFallDistance();
+                if (block.getPropertyValue(BlockPropertyTypes.DRAG_DOWN)) {
+                    downwardBubbleColumn.set(true);
+                } else {
+                    upwardBubbleColumn.set(true);
+                }
+                if (dimension.getBlockState(x, y + 1, z).getBlockType() == AIR) {
+                    bubbleColumnExit.set(true);
+                }
+                return;
+            }
+
             if (!(block.getBehavior() instanceof BlockLiquidBehaviorImpl liquidBehavior)) {
                 return;
             }
@@ -324,14 +351,32 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         }
         if (lavaMotion.lengthSquared() > 0) {
             // Same to above
-            finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
+            finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionType() == DimensionTypes.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
         }
 
         if (finalMotion.lengthSquared() > 0) {
             ((EntityPhysicsComponent) entity).addMotion(finalMotion);
         }
 
+        applyBubbleColumnMotion(entity, upwardBubbleColumn.get(), downwardBubbleColumn.get(), bubbleColumnExit.get());
+
         return new LiquidState(inWater.get(), inLava.get());
+    }
+
+    private void applyBubbleColumnMotion(Entity entity, boolean upward, boolean downward, boolean exitsColumn) {
+        if (upward == downward) {
+            return;
+        }
+
+        var physics = (EntityPhysicsComponent) entity;
+        var currentMotion = physics.getMotion();
+        var currentY = currentMotion.y();
+        var targetY = upward
+                ? Math.min(exitsColumn ? BUBBLE_COLUMN_UPWARD_EXIT_MAX_SPEED : BUBBLE_COLUMN_UPWARD_MAX_SPEED,
+                currentY + (exitsColumn ? BUBBLE_COLUMN_UPWARD_EXIT_ACCELERATION : BUBBLE_COLUMN_UPWARD_ACCELERATION))
+                : Math.max(exitsColumn ? BUBBLE_COLUMN_DOWNWARD_EXIT_MAX_SPEED : BUBBLE_COLUMN_DOWNWARD_MAX_SPEED,
+                currentY - (exitsColumn ? BUBBLE_COLUMN_DOWNWARD_EXIT_ACCELERATION : BUBBLE_COLUMN_DOWNWARD_ACCELERATION));
+        physics.addMotion(0, targetY - currentY, 0);
     }
 
     protected boolean isAboveMotionThreshold(Vector3dc motion) {

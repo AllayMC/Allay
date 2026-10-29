@@ -7,12 +7,10 @@ import org.allaymc.api.entity.component.EntityBabyComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
-import org.allaymc.api.entity.interfaces.EntityAnimal;
-import org.allaymc.api.entity.interfaces.EntityEnderDragon;
-import org.allaymc.api.entity.interfaces.EntityIntelligent;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.property.type.EntityPropertyTypes;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.item.data.ItemTags;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.DyeColor;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -116,6 +114,21 @@ public final class EntityTypeInitializer {
                         }
 
                         @Override
+                        public boolean isFireproof() {
+                            if (super.isFireproof()) {
+                                return true;
+                            }
+
+                            var itemStack = ((EntityItem) thisEntity).getItemStack();
+                            if (itemStack == null) {
+                                return false;
+                            }
+
+                            var itemType = itemStack.getItemType();
+                            return itemType.hasItemTag(ItemTags.FIREPROOF);
+                        }
+
+                        @Override
                         protected boolean hasDeadTimer() {
                             return false;
                         }
@@ -180,6 +193,7 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.ZOMBIE)
                 .addComponent(EntityHumanLikeBaseComponentImpl::new, EntityHumanLikeBaseComponentImpl.class)
                 .addComponent(EntityHumanLikeContainerHolderComponentImpl::new, EntityHumanLikeContainerHolderComponentImpl.class)
+                .addComponent(EntityBabyComponentImpl::new, EntityBabyComponentImpl.class)
                 .addComponent(EntityUndeadComponentImpl::new, EntityUndeadComponentImpl.class)
                 .addComponent(EntityZombieLivingComponentImpl::new, EntityZombieLivingComponentImpl.class)
                 .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
@@ -189,7 +203,7 @@ public final class EntityTypeInitializer {
                     var behaviorGroup = BehaviorGroupImpl.builder()
                             .sensor(new NearestPlayerSensor(40, 0, 20))
                             .behavior(BehaviorImpl.builder()
-                                    .executor(new MeleeAttackExecutor(MemoryTypes.ATTACK_TARGET, 0.1f, 40, true, 30))
+                                    .executor(new MeleeAttackExecutor(MemoryTypes.ATTACK_TARGET, 0.1f, 40, true, 30, Math.sqrt(2.5), true))
                                     .evaluator(all(
                                             new MemoryCheckNotEmptyEvaluator(MemoryTypes.ATTACK_TARGET),
                                             entity -> isValidZombieTarget(entity, entity.getMemoryStorage().get(MemoryTypes.ATTACK_TARGET))
@@ -197,7 +211,7 @@ public final class EntityTypeInitializer {
                                     .priority(3)
                                     .build())
                             .behavior(BehaviorImpl.builder()
-                                    .executor(new MeleeAttackExecutor(MemoryTypes.NEAREST_PLAYER, 0.1f, 40, 30))
+                                    .executor(new MeleeAttackExecutor(MemoryTypes.NEAREST_PLAYER, 0.1f, 40, false,30, Math.sqrt(2.5), true))
                                     .evaluator(all(
                                             new MemoryCheckNotEmptyEvaluator(MemoryTypes.NEAREST_PLAYER),
                                             entity -> isValidZombieTarget(entity, entity.getMemoryStorage().get(MemoryTypes.NEAREST_PLAYER))

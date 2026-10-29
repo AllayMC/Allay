@@ -2,8 +2,8 @@ package org.allaymc.server.block.component;
 
 import lombok.AllArgsConstructor;
 import org.allaymc.api.block.component.BlockStrippableComponent;
-import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.data.BlockId;
 
 import java.util.function.Supplier;

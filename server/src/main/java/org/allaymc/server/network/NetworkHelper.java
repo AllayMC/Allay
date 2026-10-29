@@ -2,7 +2,6 @@ package org.allaymc.server.network;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.debugshape.*;
 import org.allaymc.api.dialog.Button;
 import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
@@ -20,19 +19,19 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.HudElement;
+import org.allaymc.api.primitiveshape.*;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.data.EntityId;
-import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityProperties;
 import org.cloudburstmc.protocol.bedrock.data.entity.FloatEntityProperty;
 import org.cloudburstmc.protocol.bedrock.data.entity.IntEntityProperty;
@@ -40,6 +39,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
+import org.cloudburstmc.protocol.bedrock.definition.DefinitionRegistry;
 import org.joml.*;
 
 import java.util.HashMap;
@@ -94,19 +94,19 @@ public final class NetworkHelper {
             switch (propType) {
                 case EnumPropertyType<?> enumProp -> {
                     var value = (Enum<?>) propertyValues.getOrDefault(enumProp, enumProp.getDefaultValue());
-                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value.ordinal()));
+                    result.intProperties().add(new IntEntityProperty(intIndex++, value.ordinal()));
                 }
                 case IntPropertyType intProp -> {
                     var value = (int) propertyValues.getOrDefault(intProp, intProp.getDefaultValue());
-                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value));
+                    result.intProperties().add(new IntEntityProperty(intIndex++, value));
                 }
                 case BooleanPropertyType boolProp -> {
                     var value = (boolean) propertyValues.getOrDefault(boolProp, boolProp.getDefaultValue());
-                    result.getIntProperties().add(new IntEntityProperty(intIndex++, value ? 1 : 0));
+                    result.intProperties().add(new IntEntityProperty(intIndex++, value ? 1 : 0));
                 }
                 case FloatPropertyType floatProp -> {
                     var value = (float) propertyValues.getOrDefault(floatProp, floatProp.getDefaultValue());
-                    result.getFloatProperties().add(new FloatEntityProperty(floatIndex++, value));
+                    result.floatProperties().add(new FloatEntityProperty(floatIndex++, value));
                 }
             }
         }
@@ -114,16 +114,43 @@ public final class NetworkHelper {
         return result;
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(ItemDescriptor descriptor) {
+    /**
+     * Encodes an ingredient using item definitions from the target protocol.
+     *
+     * @param descriptor the server-side ingredient
+     * @param itemDefinitions the target protocol's item definitions
+     * @return the network ingredient
+     * @throws IllegalStateException if a referenced item has no definition in the target protocol
+     */
+    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(
+            ItemDescriptor descriptor,
+            DefinitionRegistry<ItemDefinition> itemDefinitions
+    ) {
         return switch (descriptor) {
-            case ItemTypeDescriptor type -> new DefaultDescriptor(toNetwork(type.getItemType()), type.getMeta());
+            case ItemTypeDescriptor type -> new DefaultDescriptor(
+                    getItemDefinition(type.getItemType(), itemDefinitions),
+                    type.getMeta()
+            );
             case ItemTagDescriptor tag -> new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemTagDescriptor(tag.getItemTag().name());
             default -> throw new IllegalArgumentException("Unexpected value: " + descriptor);
         };
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount(ItemDescriptor descriptor) {
-        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(toNetwork(descriptor), 1);
+    /**
+     * Encodes a single-count ingredient using item definitions from the target protocol.
+     *
+     * @param descriptor the server-side ingredient
+     * @param itemDefinitions the target protocol's item definitions
+     * @return the counted network ingredient
+     */
+    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount(
+            ItemDescriptor descriptor,
+            DefinitionRegistry<ItemDefinition> itemDefinitions
+    ) {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(
+                toNetwork(descriptor, itemDefinitions),
+                1
+        );
     }
 
     public static BiomeDefinitionData toNetwork(BiomeType biome) {
@@ -131,7 +158,7 @@ public final class NetworkHelper {
         var tags = data.tags().stream().map(BiomeTag::name).toList();
         if (biome.getId() < CustomBiomeIdAllocator.CUSTOM_BIOME_ID_START) {
             // Vanilla biome
-            // NOTICE: is field is only set for custom biome
+            // NOTICE: id field is only set for custom biome
             return new BiomeDefinitionData(
                     null, data.temperature(), data.downfall(), data.redSporeDensity(),
                     data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
@@ -161,25 +188,36 @@ public final class NetworkHelper {
         );
     }
 
-    public ItemDefinition toNetwork(ItemType<?> itemType) {
-        var itemDefinition = ((AllayItemType<?>) itemType).getItemDefinition();
-        return new SimpleItemDefinition(
-                itemType.getIdentifier().toString(), itemType.getRuntimeId(), itemDefinition.version(),
-                itemDefinition.componentBased(), itemDefinition.components()
-        );
-    }
-
-    public static ItemData toNetwork(ItemStack itemStack) {
+    /**
+     * Encodes an item stack using definitions from the target protocol.
+     *
+     * @param itemStack the server-side item stack
+     * @param itemDefinitions the target protocol's item definitions
+     * @param blockDefinitions the target protocol's block definitions
+     * @return the network item data
+     * @throws IllegalStateException if a required definition is missing
+     */
+    public static ItemData toNetwork(
+            ItemStack itemStack,
+            DefinitionRegistry<ItemDefinition> itemDefinitions,
+            DefinitionRegistry<BlockDefinition> blockDefinitions
+    ) {
         var itemType = itemStack.getItemType();
         if (itemType == ItemTypes.AIR) {
-            return ItemData.AIR;
+            return ItemData.AIR.toBuilder()
+                    .definition(getItemDefinition(itemType, itemDefinitions))
+                    .build();
         }
 
         var blockState = itemStack.toBlockState();
+        var blockDefinition = blockState == null ? null : blockDefinitions.getDefinition(blockState.blockStateHash());
+        if (blockState != null && blockDefinition == null) {
+            throw new IllegalStateException("Missing block definition for state " + blockState.blockStateHash());
+        }
         return ItemData
                 .builder()
-                .definition(NetworkHelper.toNetwork(itemType))
-                .blockDefinition(blockState != null ? blockState::blockStateHash : () -> 0)
+                .definition(getItemDefinition(itemType, itemDefinitions))
+                .blockDefinition(blockDefinition)
                 .count(itemStack.getCount())
                 .damage(itemStack.getMeta())
                 .tag(itemStack.saveExtraTag())
@@ -189,8 +227,31 @@ public final class NetworkHelper {
 
     }
 
-    public static List<ItemData> toNetwork(List<ItemStack> items) {
-        return items.stream().map(NetworkHelper::toNetwork).toList();
+    /**
+     * Encodes item stacks using definitions from the target protocol.
+     *
+     * @param items the server-side item stacks
+     * @param itemDefinitions the target protocol's item definitions
+     * @param blockDefinitions the target protocol's block definitions
+     * @return the encoded item data in input order
+     */
+    public static List<ItemData> toNetwork(
+            List<ItemStack> items,
+            DefinitionRegistry<ItemDefinition> itemDefinitions,
+            DefinitionRegistry<BlockDefinition> blockDefinitions
+    ) {
+        return items.stream().map(item -> toNetwork(item, itemDefinitions, blockDefinitions)).toList();
+    }
+
+    private static ItemDefinition getItemDefinition(
+            ItemType<?> itemType,
+            DefinitionRegistry<ItemDefinition> itemDefinitions
+    ) {
+        var definition = itemDefinitions.getDefinition(itemType.getRuntimeId());
+        if (definition == null) {
+            throw new IllegalStateException("Missing item definition for " + itemType.getIdentifier());
+        }
+        return definition;
     }
 
     public static Vector3ic fromNetwork(org.cloudburstmc.math.vector.Vector3i vec) {
@@ -260,44 +321,45 @@ public final class NetworkHelper {
         };
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetwork(DebugShape shape, int dimension, Entity attachedEntity) {
+    public static org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape toNetwork(PrimitiveShape shape, int dimension, Entity attachedEntity) {
         var entityId = attachedEntity != null ? attachedEntity.getRuntimeId() : null;
         var networkPos = toNetwork(shape.getPosition());
         if (attachedEntity != null) {
             networkPos = networkPos.add(0, -NETWORK_OFFSETS.getOrDefault(attachedEntity.getEntityType().getIdentifier(), 0.0f), 0);
         }
         return switch (shape) {
-            case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugArrow(
-                    arrow.getId(), dimension, networkPos, arrow.getArrowHeadScale(), null,
-                    null, arrow.getColor(), toNetwork(arrow.getEndPosition()), arrow.getArrowHeadLength(),
+            case PrimitiveArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveArrow(
+                    arrow.getId(), dimension, networkPos, arrow.getScale(), toNetwork(arrow.getRotation()),
+                    arrow.getTotalTimeLeft(), arrow.getColor(), arrow.getMaximumRenderDistance(), toNetwork(arrow.getEndPosition()), arrow.getArrowHeadLength(),
                     arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments(), entityId
             );
-            case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugBox(
-                    box.getId(), dimension, networkPos, box.getScale(), null,
-                    null, box.getColor(), toNetwork(box.getBoxBounds()), entityId
+            case PrimitiveBox box -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveBox(
+                    box.getId(), dimension, networkPos, box.getScale(), toNetwork(box.getRotation()),
+                    box.getTotalTimeLeft(), box.getColor(), box.getMaximumRenderDistance(), toNetwork(box.getBoxBounds()), entityId
             );
-            case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugCircle(
-                    circle.getId(), dimension, networkPos, circle.getScale(), null,
-                    null, circle.getColor(), circle.getSegments(), entityId
+            case PrimitiveCircle circle -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveCircle(
+                    circle.getId(), dimension, networkPos, circle.getScale(), toNetwork(circle.getRotation()),
+                    circle.getTotalTimeLeft(), circle.getColor(), circle.getMaximumRenderDistance(), circle.getSegments(), entityId
             );
-            case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugLine(
-                    line.getId(), dimension, networkPos, null, null,
-                    null, line.getColor(), toNetwork(line.getEndPosition()), entityId
+            case PrimitiveLine line -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveLine(
+                    line.getId(), dimension, networkPos, line.getScale(), toNetwork(line.getRotation()),
+                    line.getTotalTimeLeft(), line.getColor(), line.getMaximumRenderDistance(), toNetwork(line.getEndPosition()), entityId
             );
-            case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugSphere(
-                    sphere.getId(), dimension, networkPos, sphere.getScale(), null,
-                    null, sphere.getColor(), sphere.getSegments(), entityId
+            case PrimitiveSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveSphere(
+                    sphere.getId(), dimension, networkPos, sphere.getScale(), toNetwork(sphere.getRotation()),
+                    sphere.getTotalTimeLeft(), sphere.getColor(), sphere.getMaximumRenderDistance(), sphere.getSegments(), entityId
             );
-            case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugText(
-                    text.getId(), dimension, networkPos, null, null,
-                    null, text.getColor(), text.getText(), entityId
+            case PrimitiveText text -> new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveText(
+                    text.getId(), dimension, networkPos, text.getScale(), toNetwork(text.getRotation()),
+                    text.getTotalTimeLeft(), text.getColor(), text.getText(), text.isUseRotation(), text.getBackgroundColor(),
+                    text.isDepthTest(), text.isShowBackface(), text.isShowTextBackface(), text.getMaximumRenderDistance(), entityId
             );
             default -> throw new IllegalStateException("Unexpected value: " + shape);
         };
     }
 
-    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetworkRemovalNotice(DebugShape shape) {
-        return new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape(shape.getId());
+    public static org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape toNetworkRemovalNotice(PrimitiveShape shape) {
+        return new org.cloudburstmc.protocol.bedrock.data.primitiveshape.PrimitiveShape(shape.getId());
     }
 
     public record PortraitOffsets(double[] translate, double[] rotate, double[] scale) {

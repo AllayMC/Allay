@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.SemVersion;
 
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.*;
 
 /**
@@ -26,8 +26,8 @@ public class PackManifest {
     static {
         var builder = new GsonBuilder();
         builder.disableHtmlEscaping();
-        builder.registerTypeAdapter(SemVersion.class, new SemVersion.Serializer());
-        builder.registerTypeAdapter(SemVersion.class, new SemVersion.Deserializer());
+        builder.registerTypeAdapter(PackVersion.class, new PackVersion.Deserializer());
+        builder.registerTypeAdapter(PackVersion.class, new PackVersion.Serializer());
         builder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Deserializer());
         builder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Serializer());
         builder.registerTypeAdapter(PackManifest.Capability.class, new PackManifest.Capability.Deserializer());
@@ -56,13 +56,24 @@ public class PackManifest {
             return null;
         }
 
-        try {
-            JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(loader.getFile(FILE_NAME))));
-            return GSON.fromJson(reader, PackManifest.class);
+        try (var reader = new InputStreamReader(Objects.requireNonNull(loader.getFile(FILE_NAME)))) {
+            return fromJson(reader);
         } catch (Throwable t) {
             log.error("Failed to load {}", loader.getLocation(), t);
             return null;
         }
+    }
+
+    /**
+     * Deserialize a pack manifest using the manifest-specific Gson adapters.
+     *
+     * @param reader the reader to read the manifest from
+     * @return the deserialized pack manifest
+     */
+    public static PackManifest fromJson(Reader reader) {
+        Objects.requireNonNull(reader);
+
+        return GSON.fromJson(new JsonReader(reader), PackManifest.class);
     }
 
     /**
@@ -110,7 +121,7 @@ public class PackManifest {
         private String name;
         private String description;
         private UUID uuid;
-        private SemVersion version;
+        private PackVersion version;
     }
 
     @Data
@@ -118,7 +129,7 @@ public class PackManifest {
 
         private UUID uuid;
         private String description;
-        private SemVersion version;
+        private PackVersion version;
         private Pack.Type type;
     }
 }

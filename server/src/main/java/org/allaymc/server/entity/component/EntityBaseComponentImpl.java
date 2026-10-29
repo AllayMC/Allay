@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.EntityState;
@@ -29,6 +28,7 @@ import org.allaymc.api.permission.ConstantPermissionCalculator;
 import org.allaymc.api.permission.PermissionCalculator;
 import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
@@ -100,7 +100,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected EntityType<? extends Entity> entityType;
     protected Set<WorldViewer> viewers;
-    protected Set<DebugShape> debugShapes;
+    protected Set<PrimitiveShape> primitiveShapes;
     @Getter
     protected EntityState state;
     @Getter
@@ -147,7 +147,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.propertyValues = new HashMap<>();
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
-        this.debugShapes = new HashSet<>();
+        this.primitiveShapes = new HashSet<>();
         this.state = EntityState.DESPAWNED;
         this.displayName = AllayStringUtils.snakeCaseToTitleCase(entityType.getIdentifier().path());
         this.scale = 1.0;
@@ -709,25 +709,25 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void attachDebugShape(DebugShape debugShape) {
-        this.debugShapes.add(debugShape);
-        debugShape.setAttachedEntity(thisEntity);
+    public void attachPrimitiveShape(PrimitiveShape primitiveShape) {
+        this.primitiveShapes.add(primitiveShape);
+        primitiveShape.setAttachedEntity(thisEntity);
         for (var viewer : this.viewers) {
-            debugShape.addViewer(viewer);
+            primitiveShape.addViewer(viewer);
         }
     }
 
     @Override
-    public Set<DebugShape> getAttachedDebugShapes() {
-        return Collections.unmodifiableSet(this.debugShapes);
+    public Set<PrimitiveShape> getAttachedPrimitiveShapes() {
+        return Collections.unmodifiableSet(this.primitiveShapes);
     }
 
     @Override
-    public void detachDebugShape(DebugShape debugShape) {
+    public void detachPrimitiveShape(PrimitiveShape primitiveShape) {
         for (var viewer : this.viewers) {
-            debugShape.removeViewer(viewer);
+            primitiveShape.removeViewer(viewer);
         }
-        debugShape.setAttachedEntity(null);
-        this.debugShapes.remove(debugShape);
+        primitiveShape.setAttachedEntity(null);
+        this.primitiveShapes.remove(primitiveShape);
     }
 }

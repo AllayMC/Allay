@@ -5,6 +5,10 @@ plugins {
     alias(libs.plugins.publish) apply false
 }
 
+tasks.jar {
+    enabled = false
+}
+
 subprojects {
     apply(plugin = "java-library")
 

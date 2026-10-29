@@ -1,11 +1,11 @@
 package org.allaymc.server.block.component.container;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
 
 /**

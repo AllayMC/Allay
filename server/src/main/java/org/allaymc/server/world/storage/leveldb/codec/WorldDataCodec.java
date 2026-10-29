@@ -11,6 +11,7 @@ import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.AllayWorldData;
+import org.allaymc.server.world.dimension.VanillaGeneratorType;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.allaymc.server.world.storage.leveldb.data.StorageVersion;
 import org.cloudburstmc.nbt.NbtMap;
@@ -111,11 +112,7 @@ public final class WorldDataCodec {
         // the vanilla client load the world more easily
 
         // Set generator type to "void" so that the vanilla won't generate unexpected chunks
-        // Refer to org.allaymc.api.world.generator.WorldGeneratorType:
-        // 0 -     old, 1 - infinite
-        // 2 -    flat, 3 -   nether
-        // 4 - the_end, 5 -     void
-        builder.putInt(TAG_GENERATOR, 5);
+        builder.putInt(TAG_GENERATOR, VanillaGeneratorType.VOID.ordinal());
         builder.putLong(TAG_RANDOM_SEED, 0);
         // The client will crash if this field is not exist
         builder.putInt(TAG_STORAGE_VERSION, CURRENT_STORAGE_VERSION);

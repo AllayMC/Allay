@@ -44,7 +44,7 @@ public class EntityCowBaseComponentImpl extends EntityAnimalBaseComponentImpl {
 
     @EventHandler
     protected void onGetDrop(CEntityGetDropEvent event) {
-        if (!canDrop()) {
+        if (babyComponent.isBaby()) {
             return;
         }
 

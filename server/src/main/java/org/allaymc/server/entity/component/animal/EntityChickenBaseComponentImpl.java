@@ -25,7 +25,7 @@ public class EntityChickenBaseComponentImpl extends EntityAnimalBaseComponentImp
 
     @EventHandler
     protected void onGetDrop(CEntityGetDropEvent event) {
-        if (!canDrop()) {
+        if (babyComponent.isBaby()) {
             return;
         }
 

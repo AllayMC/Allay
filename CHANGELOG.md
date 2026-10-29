@@ -8,9 +8,90 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.12.0 (API 0.27.0) - Unreleased
+# 0.14.1 (API 0.30.0) - Unreleased
 
-<small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...HEAD)</small>
+<small>[Compare with 0.14.0](https://github.com/AllayMC/Allay/compare/0.14.0...HEAD)</small>
+
+### Added
+
+- Added support for NetEase protocol v860 (Minecraft 1.21.124).
+- Introduced new multi version architecture (mvv2).
+
+### Fixed
+
+- Tipped arrow with infinity now can be picked up.
+
+# 0.14.0 (API 0.29.0) - 2026/7/22
+
+<small>[Compare with 0.13.0](https://github.com/AllayMC/Allay/compare/0.13.0...0.14.0)</small>
+
+### Added
+
+- (API) Added player abilities API, including `PlayerAbility`, ability getters/setters on `Player`, ability state helpers such as `canFly()`, `canPlaceBlocks()`, `isNoClip()`, `isImmutableWorld()`, and `isAlwaysFlying()`, plus `PlayerAbilitiesUpdateEvent` and cancellable `PlayerAbilitiesUpdateRequestEvent`.
+- (API) Added player ability persistence to `PlayerData`.
+- (API) Added player phantom mode through `EntityPlayerBaseComponent.setPhantom()` and `isPhantom()`, allowing players to be hidden from viewers and excluded from world interaction while still interacting with the world themselves.
+- (API) Added `PlayerSwingArmEvent`, `PlayerControlModeUpdateEvent`, and the `EventHandler.ignoreCancelled` option for finer control over player input and event handling.
+- (API) Extended `LoginData` with the joined server address and current/default input modes, and added `InputMode.from(int)` for client input-mode lookup.
+- (API) Added `GoatHornInstrument` and goat horn instrument accessors, alongside full goat horn use behavior.
+- Implemented bubble columns from soul sand and magma blocks, including entity movement and water-state handling.
+- Added support for MCBE 1.26.30 (protocol v1001), including the new cinnabar and sulfur blocks/items and sulfur cube entity.
+- Added dashboard console command completion backed by the command tree, including command names, aliases, enum values, and online player targets.
+- Added clickable `http://` and `https://` links in dashboard console logs.
+
+### Changed
+
+- (API) `GameMode` now exposes its default `PlayerAbility` set, and player flight checks now use player abilities instead of the removed legacy fly permissions.
+- (API) `FurnaceRecipe` ingredients now use `ItemDescriptor` and support item tags and recipe priorities across furnace-like recipes.
+- Changed RakNet send-cookie handling to use a fixed cookie internally.
+- Dashboard console commands may now be entered with a leading `/`, matching terminal console behavior.
+
+### Fixed
+
+* Fixed item-in-hand inventory desync after hand/container updates (#879). 
+* Fixed inventory synchronization after cancelled item drop actions.
+* Fixed swing sound effect playback position so it is relative to the player.
+
+# 0.13.0 (API 0.28.0) - 2026/5/15
+
+<small>[Compare with 0.12.0](https://github.com/AllayMC/Allay/compare/0.12.0...0.13.0)</small>
+
+### Added
+
+- (API) Added DDUI support for Bedrock 1.26.10+ (protocol v944+), including `DDUI`, `DDUIViewer`, `DDUIScreenSession`, `CustomFormScreen`, `MessageBoxScreen`, `Observable`, `Property`, and the custom-form element set (`Label`, `Header`, `Spacer`, `Divider`, `TextField`, `Toggle`, `Slider`, `Dropdown`, `Button`, `CloseButton`).
+- (API) Added custom dimension support via `DimensionType`, `DimensionTypes`, and `Registries.DIMENSIONS`, allowing plugins to register custom dimension types with persistent numeric ids.
+- (API) Added `ItemTags.FIREPROOF` for items that should remain fireproof when dropped as item entities.
+- Added `dimension-ids.yml` in the server working directory to persist custom dimension identifier-to-id mappings for custom dimensions.
+- Added support for changing the height of vanilla dimensions.
+- Implemented bone meal interaction on grass blocks, allowing grass, flowers, and tall grass to generate from grass blocks.
+- Added support for NetEase 1.21.90.
+- Added support for MCBE 1.26.20.
+- Updated feature version to 1.26.10
+
+### Changed
+
+- (API) Merged `org.allaymc.server.bossbar.AllayBossBar` into the concrete `org.allaymc.api.bossbar.BossBar` class, so boss bars no longer use separate API interface and server implementation types.
+- (API) Replaced `DimensionInfo` across world, chunk, storage, generator-context, and player dimension-change APIs with the new `DimensionType` model.
+- (API) Implemented meaningful `toString()` output for `EffectType` and `EffectInstance` to improve logs and debugging output.
+- Changed world and player persistence to store dimension identifiers instead of raw numeric ids, while keeping backward-compatible reads for old numeric dimension data.
+- Changed `world-settings.yml` dimension configuration to use a `dimensions:` map keyed by identifiers. Legacy `overworld`/`nether`/`the-end` entries are still read, identifiers missing a namespace are normalized to the `minecraft` namespace when saved.
+- Added custom dimension definition syncing during login through `DimensionDataPacket`; Bedrock generator type mapping is now handled internally by the network layer.
+- (API) The return type of Pack.getVersion() is changed from `SemVersion` to `Semver` from the `semver4j`. This is because the support of semver in package manifest version fields.
+
+### Fixed
+
+- Fixed soul fire so it now damages and ignites living entities correctly, and fixed dropped fireproof items such as netherite gear being incorrectly destroyed by fire or lava.
+- Fixed redundant food-level change events and repeated food-level packet sends when the effective food level did not change.
+- Fixed small dripleaf breaking recursively triggering `Dimension.breakBlock()` between its upper and lower halves, which could spam `BlockSmallDripleafBaseComponentImpl.onBreak()` stack traces and overflow the stack.
+- Allay now support semver in package manifest version fields.
+
+### Removed
+
+- (API) Removed legacy `DimensionInfo`.
+- Removed support for bedrock (NetEase) 1.21.50 and 1.21.80.
+
+# 0.12.0 (API 0.27.0) - 2026/3/29
+
+<small>[Compare with 0.11.1](https://github.com/AllayMC/Allay/compare/0.11.1...0.12.0)</small>
 
 ### Added
 
@@ -42,6 +123,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Redstone ore
 - Implemented the following entities:
   - Zombie
+- Added support for bedrock 1.26.10.
 
 ### Changed
 

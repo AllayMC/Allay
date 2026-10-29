@@ -18,10 +18,11 @@ dependencies {
         exclude(group = "org.joml", module = "joml")
     }
     api(libs.snakeyaml)
+    api(libs.semver4j)
 }
 
 tasks.withType<Javadoc>().configureEach {
-    enabled = true;
+    enabled = true
     isFailOnError = false
 
     (options as StandardJavadocDocletOptions).apply {

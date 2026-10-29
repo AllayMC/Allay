@@ -4,476 +4,358 @@ comments: true
 
 # Custom Item API
 
-This guide covers the advanced Custom Item API for creating items with custom client-side properties
-such as custom textures, display names, render offsets, and special flags.
-
-**What you will learn:**
-
-- How to create custom items with CustomItemDefinitionGenerator
-- Configuring textures, display names, and render offsets
-- Special item flags (foil, off-hand, cooldown)
-- Auto-detection for armor, tools, and food items
+This guide explains how to register the client-facing parameters of a custom item. `CustomItemDefinition` is an
+immutable parameter object: it contains texture and rendering choices, but no encoded protocol NBT. Allay combines it
+with the finished item type and encodes the appropriate definition for each supported client.
 
 !!! warning "Server Module Required"
-    The Custom Item API requires access to the **server module**. In your `build.gradle.kts`, you must set
-    `apiOnly = false` in the `allay` block:
+    The Custom Item API belongs to the server module. Set `apiOnly = false` in the AllayGradle configuration:
 
     ```kotlin
     allay {
-        apiOnly = false  // Required for Custom Item API
-        // ... other settings
+        apiOnly = false
     }
     ```
 
-    Note that internal APIs may change between versions. See [AllayGradle documentation](https://github.com/AllayMC/AllayGradle)
-    for more details.
+    Server APIs may change between versions. See the
+    [AllayGradle documentation](https://github.com/AllayMC/AllayGradle) for dependency setup.
 
-!!! tip "Prerequisites"
-    Before diving into custom items, make sure you understand the basics of the Item API covered in
-    [Item API Tutorial](../tutorials/item-api.md).
-
-## Overview
-
-The Custom Item API uses a **builder pattern** through `CustomItemDefinitionGenerator`. You configure
-properties like texture, display name, render offsets, and various flags. The system automatically
-detects and configures special item types (armor, tools, food).
+Read the [Item API tutorial](../tutorials/item-api.md) first if you have not created an item type before.
 
 ## Quick Start
 
-### Simple Textured Item
-
-The simplest way to create a custom item with a texture:
+Pass the definition object directly to the item builder:
 
 ```java linenums="1"
 import org.allaymc.server.item.type.AllayItemType;
-import org.allaymc.server.item.type.CustomItemDefinitionGenerator;
+import org.allaymc.server.item.type.CustomItemDefinition;
 
-AllayItemType.builder(MyItemStackImpl.class)
+AllayItemType.builder(MyRubyItemStack.class)
     .identifier("myplugin:ruby")
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("ruby")
-            .build())
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("ruby")
+        .displayName("item.myplugin.ruby.name")
+        .build())
     .build();
 ```
 
-### Item with Display Name
+There is no generator callback. The definition stores only the values supplied here; the completed `ItemType` remains
+the source of gameplay data such as stack size, durability, armor value, tags, and components.
+
+## Definition Fields
+
+| Field | Purpose |
+| --- | --- |
+| `texture` | Required short name from `item_texture.json` |
+| `displayName` | Literal text or translation key; defaults to the item identifier |
+| `renderOffsets` | Main-hand and off-hand transforms for first- and third-person views |
+| `foil` | Always display the enchantment glint |
+| `canDestroyInCreative` | Permit creative-mode block destruction; defaults to `true` |
+| `cooldown` | Cooldown duration in seconds |
+| `rawProperties` | Advanced raw entries merged into `item_properties` |
+| `rawComponents` | Advanced raw entries merged into the component table |
+
+The texture must not be blank and cooldown cannot be negative. Input maps and vectors are copied, so later mutations do
+not alter a registered definition.
 
 ```java linenums="1"
-AllayItemType.builder(MyItemStackImpl.class)
-    .identifier("myplugin:magic_gem")
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("magic_gem")
-            .displayName("Magical Gem")
-            .build())
-    .build();
-```
-
-### Item with Enchantment Glint
-
-```java linenums="1"
-AllayItemType.builder(MyItemStackImpl.class)
-    .identifier("myplugin:enchanted_crystal")
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("enchanted_crystal")
-            .displayName("Enchanted Crystal")
-            .foil(true)  // Always show enchantment glint
-            .build())
-    .build();
-```
-
-## CustomItemDefinitionGenerator
-
-The main builder for custom item definitions.
-
-### Builder Properties
-
-| Property               | Type                  | Description                                         |
-|------------------------|-----------------------|-----------------------------------------------------|
-| `texture`              | `String`              | **Required.** Texture name from resource pack       |
-| `displayName`          | `String`              | Display name in inventory (null uses identifier)    |
-| `renderOffsets`        | `RenderOffsets`       | Item position/rotation when held                    |
-| `foil`                 | `boolean`             | Show enchantment glint even without enchantments    |
-| `canDestroyInCreative` | `boolean`             | Can destroy blocks in creative mode (default: true) |
-| `allowOffHand`         | `boolean`             | Can be placed in off-hand slot                      |
-| `cooldown`             | `Integer`             | Item cooldown in seconds                            |
-| `customProperties`     | `Map<String, NbtMap>` | Additional NBT properties                           |
-| `customComponents`     | `Map<String, NbtMap>` | Custom Bedrock components                           |
-
-### Basic Example
-
-```java linenums="1"
-CustomItemDefinitionGenerator.builder()
-    .texture("my_item")
-    .displayName("My Custom Item")
-    .allowOffHand(true)
-    .build()
-```
-
-### Full Example
-
-```java linenums="1"
-CustomItemDefinitionGenerator.builder()
-    .texture("special_item")
-    .displayName("Special Item")
+CustomItemDefinition definition = CustomItemDefinition.builder()
+    .texture("charged_crystal")
+    .displayName("item.myplugin.charged_crystal.name")
     .foil(true)
     .canDestroyInCreative(false)
-    .allowOffHand(true)
-    .cooldown(1)  // 1 second cooldown
-    .build()
+    .cooldown(2)
+    .build();
 ```
 
 ## Render Offsets
 
-Configure how items appear when held in first-person and third-person views.
+Render offsets control item position, rotation, and scale in each hand and camera view. The two convenience factories
+cover common texture-based models.
 
-### Using Scale Helper
+### Scale Helper
 
-The simplest way to adjust item size:
+```java
+import org.allaymc.server.item.type.CustomItemDefinition.RenderOffsets;
 
-```java linenums="1"
-import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets;
-
-CustomItemDefinitionGenerator.builder()
-    .texture("large_item")
-    .renderOffsets(RenderOffsets.scale(2.0f))  // 2x larger
-    .build()
+var definition = CustomItemDefinition.builder()
+    .texture("large_hammer")
+    .renderOffsets(RenderOffsets.scale(2.0f))
+    .build();
 ```
 
-### Using Texture Size Helper
+### Texture Size Helper
 
-Automatically scale based on texture dimensions:
-
-```java linenums="1"
-// For a 32x32 texture (2x the normal 16x16)
-CustomItemDefinitionGenerator.builder()
-    .texture("big_texture_item")
+```java
+var definition32 = CustomItemDefinition.builder()
+    .texture("ruby_32")
     .renderOffsets(RenderOffsets.textureSize(32))
-    .build()
+    .build();
 
-// For a 48x48 texture
-CustomItemDefinitionGenerator.builder()
-    .texture("huge_texture_item")
-    .renderOffsets(RenderOffsets.textureSize(48))
-    .build()
+var definition64 = CustomItemDefinition.builder()
+    .texture("ruby_64")
+    .renderOffsets(RenderOffsets.textureSize(64))
+    .build();
 ```
 
-!!! tip "Texture Size"
-    The texture size must be a multiple of 16. Common values: 16 (default), 32, 48, 64.
+Texture sizes must be positive multiples of 16. `16`, `32`, `48`, and `64` are common values.
 
 ### Full Customization
 
-For complete control over item positioning:
+An `Offset` accepts three optional JOML vectors:
+
+- `position`: translation in block units;
+- `rotation`: rotation in degrees;
+- `scale`: scale factors for the three axes.
 
 ```java linenums="1"
-import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets;
-import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets.Hand;
-import org.allaymc.server.item.type.CustomItemDefinitionGenerator.RenderOffsets.Offset;
+import org.allaymc.server.item.type.CustomItemDefinition.RenderOffsets;
+import org.allaymc.server.item.type.CustomItemDefinition.RenderOffsets.Hand;
+import org.allaymc.server.item.type.CustomItemDefinition.RenderOffsets.Offset;
 import org.joml.Vector3f;
 
 RenderOffsets offsets = RenderOffsets.builder()
     .mainHand(Hand.builder()
         .firstPerson(Offset.builder()
-            .position(new Vector3f(0, 0, 0))
+            .position(new Vector3f(0.0f, 0.05f, -0.1f))
             .rotation(new Vector3f(0, 45, 0))
-            .scale(new Vector3f(1.5f, 1.5f, 1.5f))
+            .scale(new Vector3f(0.12f, 0.12f, 0.12f))
             .build())
         .thirdPerson(Offset.builder()
-            .scale(new Vector3f(1.2f, 1.2f, 1.2f))
+            .position(new Vector3f(0, 0.15f, 0))
+            .rotation(new Vector3f(0, 90, 0))
+            .scale(new Vector3f(0.08f, 0.08f, 0.08f))
             .build())
         .build())
     .offHand(Hand.builder()
         .firstPerson(Offset.builder()
-            .scale(new Vector3f(1.5f, 1.5f, 1.5f))
+            .scale(new Vector3f(0.1f, 0.1f, 0.1f))
             .build())
         .build())
     .build();
-
-CustomItemDefinitionGenerator.builder()
-    .texture("my_item")
-    .renderOffsets(offsets)
-    .build()
 ```
 
-### Offset Properties
-
-| Property   | Type       | Description                      |
-|------------|------------|----------------------------------|
-| `position` | `Vector3f` | Position offset (x, y, z)        |
-| `rotation` | `Vector3f` | Rotation in degrees (rx, ry, rz) |
-| `scale`    | `Vector3f` | Scale factors (sx, sy, sz)       |
+Omitted hands and views use client defaults.
 
 ## Special Flags
 
-### Foil (Enchantment Glint)
+### Enchantment Glint
 
-Make items always display the enchantment shimmer effect, like enchanted golden apples:
+Set `foil(true)` to show the glint even when the stack has no enchantments:
 
-```java linenums="1"
-CustomItemDefinitionGenerator.builder()
-    .texture("legendary_artifact")
-    .displayName("Legendary Artifact")
+```java
+CustomItemDefinition.builder()
+    .texture("enchanted_crystal")
     .foil(true)
-    .build()
+    .build();
 ```
 
 ### Off-Hand Support
 
-Allow items to be placed in the off-hand slot:
+Off-hand support is a gameplay tag, not a client-definition flag. Add `ItemTags.ALLOW_OFFHAND` to the item type:
 
 ```java linenums="1"
-CustomItemDefinitionGenerator.builder()
-    .texture("shield_charm")
-    .allowOffHand(true)
-    .build()
+AllayItemType.builder(MyCharmItemStack.class)
+    .identifier("myplugin:charm")
+    .setItemTags(Set.of(ItemTags.ALLOW_OFFHAND))
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("charm")
+        .build())
+    .build();
 ```
 
-### Destroy in Creative Mode
+Allay reads the tag while encoding the definition, so the server and client use the same capability source.
 
-For items like swords that shouldn't instantly break blocks in creative:
+### Creative Destruction
 
-```java linenums="1"
-CustomItemDefinitionGenerator.builder()
-    .texture("magic_wand")
-    .canDestroyInCreative(false)
-    .build()
+`canDestroyInCreative` defaults to `true`. Set it to `false` for sword-like or utility items that should not instantly
+break targeted blocks in creative mode.
+
+### Cooldown
+
+`cooldown(seconds)` adds a cooldown component whose category is the item identifier:
+
+```java
+CustomItemDefinition.builder()
+    .texture("teleport_orb")
+    .cooldown(3)
+    .build();
 ```
 
-### Item Cooldown
+Stacks of the same item share that category and therefore the cooldown timer.
 
-Add a cooldown after using the item:
+## Derived Components
 
-```java linenums="1"
-// 2 second cooldown
-CustomItemDefinitionGenerator.builder()
-    .texture("teleport_crystal")
-    .cooldown(2)
-    .build()
-```
-
-## Auto-Detection
-
-The generator automatically detects and configures special item types based on their components:
+Allay examines the finished item type during protocol initialization and derives client metadata from the same gameplay
+configuration used by the server.
 
 ### Armor Items
 
-If your item has `ItemArmorBaseComponent`, the generator automatically:
+If the item stack implements `ItemWearableComponent`, Allay adds armor protection and the correct wearable slot for a
+helmet, chestplate, leggings, or boots. The protection value comes from `ItemData.armorValue()`.
 
-- Sets the wearable slot (helmet, chestplate, leggings, boots)
-- Applies protection value
+### Tools
 
-```java linenums="1"
-AllayItemType.builder(CustomHelmetImpl.class)
-    .identifier("myplugin:ruby_helmet")
-    .addComponent(ItemArmorBaseComponentImpl.class)  // Auto-detected
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("ruby_helmet")
-            .build())
-    .build();
-```
+If the stack implements `ItemToolComponent`, Allay marks it as hand-equipped and uses `ItemData.attackDamage()` for the
+client damage property.
 
-### Tool Items
+### Food and Drinks
 
-If your item has `ItemToolComponent`, the generator automatically:
-
-- Sets `hand_equipped` flag (item held sideways)
-- Configures attack damage
-
-```java linenums="1"
-AllayItemType.builder(CustomPickaxeImpl.class)
-    .identifier("myplugin:ruby_pickaxe")
-    .addComponent(ItemToolComponentImpl.class)  // Auto-detected
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("ruby_pickaxe")
-            .build())
-    .build();
-```
-
-### Food Items
-
-If your item has `ItemEdibleComponent`, the generator automatically:
-
-- Sets `use_duration` (eating time)
-- Sets `use_animation` (eating animation)
-
-```java linenums="1"
-AllayItemType.builder(CustomFoodImpl.class)
-    .identifier("myplugin:magic_apple")
-    .addComponent(ItemEdibleComponentImpl.class)  // Auto-detected
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("magic_apple")
-            .displayName("Magic Apple")
-            .foil(true)  // Like enchanted golden apple
-            .build())
-    .build();
-```
+If the stack implements `ItemEdibleComponent`, Allay derives use duration, eat/drink animation, and whether it may
+always be consumed from the component implementation.
 
 ### Damageable Items
 
-If your item has durability (`ItemData.isDamageable()`), the generator automatically:
+When `ItemData.isDamageable()` is true, the client durability component uses `ItemData.maxDamage()`.
 
-- Applies max durability
+### Stack Size and Tags
 
-## Custom NBT Components
+Maximum stack size comes from `ItemData.maxStackSize()`. All item tags are included in the encoded component data, and
+`ItemTags.ALLOW_OFFHAND` also controls the off-hand property.
 
-For advanced use cases, add custom Bedrock protocol components:
+## Raw Extensions
+
+Structured fields should be preferred because Allay can encode them consistently. Raw maps remain available for new or
+specialized Bedrock components:
 
 ```java linenums="1"
-import org.cloudburstmc.nbt.NbtMap;
-import java.util.Map;
-
-Map<String, NbtMap> customComponents = Map.of(
-    "minecraft:durability", NbtMap.builder()
-        .putInt("max_durability", 500)
-        .build()
-);
-
-CustomItemDefinitionGenerator.builder()
-    .texture("durable_item")
-    .customComponents(customComponents)
-    .build()
+var definition = CustomItemDefinition.builder()
+    .texture("scanner")
+    .rawProperties(Map.of(
+        "myplugin:property", NbtMap.builder().putBoolean("enabled", true).build()))
+    .rawComponents(Map.of(
+        "minecraft:interact_button", NbtMap.builder()
+            .putString("value", "action.interact.scan")
+            .build()))
+    .build();
 ```
+
+Raw properties are applied after derived properties, and raw components are applied after built-in components. They may
+therefore intentionally replace an entry with the same key. Allay does not translate raw payloads between protocol
+versions; the plugin is responsible for compatibility.
 
 ## Complete Examples
 
-### Custom Gem Item
+### Custom Gem
 
 ```java linenums="1"
-AllayItemType.builder(GemItemStackImpl.class)
-    .identifier("myplugin:sapphire")
-    .itemData(ItemData.builder()
-        .maxStackSize(64)
+AllayItemType.builder(MyGemItemStack.class)
+    .identifier("myplugin:moonstone")
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("moonstone")
+        .displayName("item.myplugin.moonstone.name")
+        .foil(true)
+        .renderOffsets(CustomItemDefinition.RenderOffsets.textureSize(32))
         .build())
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("sapphire")
-            .displayName("Sapphire")
-            .build())
     .build();
 ```
 
-### Custom Tool with Large Texture
+### Large Tool
 
 ```java linenums="1"
-AllayItemType.builder(GreatSwordImpl.class)
-    .identifier("myplugin:greatsword")
+AllayItemType.builder(MyHammerItemStack.class)
+    .identifier("myplugin:war_hammer")
     .itemData(ItemData.builder()
         .maxStackSize(1)
-        .maxDamage(2000)
+        .isDamageable(true)
+        .maxDamage(800)
         .attackDamage(12)
         .build())
-    .addComponent(ItemToolComponentImpl.class)
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("greatsword")
-            .displayName("Greatsword")
-            .renderOffsets(RenderOffsets.textureSize(32))  // 32x32 texture
-            .canDestroyInCreative(false)
-            .build())
-    .build();
-```
-
-### Custom Food with Glint
-
-```java linenums="1"
-AllayItemType.builder(EnchantedFruitImpl.class)
-    .identifier("myplugin:enchanted_fruit")
-    .itemData(ItemData.builder()
-        .maxStackSize(64)
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("war_hammer")
+        .displayName("item.myplugin.war_hammer.name")
+        .renderOffsets(CustomItemDefinition.RenderOffsets.textureSize(64))
+        .canDestroyInCreative(false)
         .build())
-    .addComponent(ItemEdibleComponentImpl.class)
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("enchanted_fruit")
-            .displayName("Enchanted Fruit")
-            .foil(true)
-            .build())
     .build();
 ```
 
-### Custom Throwable Item
+### Food with a Cooldown
 
 ```java linenums="1"
-AllayItemType.builder(ThrowableItemImpl.class)
+AllayItemType.builder(MyFruitItemStack.class)
+    .identifier("myplugin:star_fruit")
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("star_fruit")
+        .displayName("item.myplugin.star_fruit.name")
+        .foil(true)
+        .cooldown(1)
+        .build())
+    .build();
+```
+
+The edible behavior still belongs in the item stack's components. The definition only supplies client presentation and
+explicit client options.
+
+### Throwable Item
+
+```java linenums="1"
+AllayItemType.builder(MyOrbItemStack.class)
     .identifier("myplugin:magic_orb")
-    .itemData(ItemData.builder()
-        .maxStackSize(16)
+    .itemData(ItemData.builder().maxStackSize(16).build())
+    .setItemTags(Set.of(ItemTags.ALLOW_OFFHAND))
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("magic_orb")
+        .displayName("item.myplugin.magic_orb.name")
+        .cooldown(1)
         .build())
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("magic_orb")
-            .displayName("Magic Orb")
-            .allowOffHand(true)
-            .cooldown(1)  // 1 second cooldown
-            .build())
     .build();
 ```
 
-### Custom Shield-Like Item
+The projectile-spawning behavior belongs in the item stack implementation; the definition supplies its presentation,
+off-hand declaration, and client cooldown.
+
+### Shield-Like Item
 
 ```java linenums="1"
-AllayItemType.builder(MagicShieldImpl.class)
+var shieldOffsets = CustomItemDefinition.RenderOffsets.builder()
+    .mainHand(CustomItemDefinition.RenderOffsets.Hand.builder()
+        .firstPerson(CustomItemDefinition.RenderOffsets.Offset.builder()
+            .scale(new Vector3f(1.8f, 1.8f, 1.8f))
+            .build())
+        .build())
+    .offHand(CustomItemDefinition.RenderOffsets.Hand.builder()
+        .firstPerson(CustomItemDefinition.RenderOffsets.Offset.builder()
+            .scale(new Vector3f(1.8f, 1.8f, 1.8f))
+            .build())
+        .build())
+    .build();
+
+AllayItemType.builder(MyShieldItemStack.class)
     .identifier("myplugin:magic_shield")
     .itemData(ItemData.builder()
         .maxStackSize(1)
+        .isDamageable(true)
         .maxDamage(336)
         .build())
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("magic_shield")
-            .displayName("Magic Shield")
-            .allowOffHand(true)
-            .renderOffsets(RenderOffsets.builder()
-                .mainHand(Hand.builder()
-                    .firstPerson(Offset.builder()
-                        .scale(new Vector3f(1.8f, 1.8f, 1.8f))
-                        .build())
-                    .build())
-                .build())
-            .build())
+    .setItemTags(Set.of(ItemTags.ALLOW_OFFHAND))
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("magic_shield")
+        .displayName("item.myplugin.magic_shield.name")
+        .renderOffsets(shieldOffsets)
+        .build())
     .build();
 ```
 
 ## Item Tags
 
-Item tags are automatically added from your item type's configured tags:
+Tags remain part of `ItemType` configuration and are copied into the client definition automatically:
 
 ```java linenums="1"
-AllayItemType.builder(CustomSwordImpl.class)
+AllayItemType.builder(MySwordItemStack.class)
     .identifier("myplugin:ruby_sword")
-    .addItemTag(ItemTags.IS_SWORD)
-    .addItemTag(ItemTags.IS_TOOL)
-    .itemDefinitionGenerator(
-        CustomItemDefinitionGenerator.builder()
-            .texture("ruby_sword")
-            .build())
+    .setItemTags(Set.of(ItemTags.IS_SWORD, ItemTags.IS_TOOL))
+    .customItemDefinition(CustomItemDefinition.builder()
+        .texture("ruby_sword")
+        .canDestroyInCreative(false)
+        .build())
     .build();
 ```
 
-## Tips and Best Practices
+## Best Practices
 
-!!! tip "Texture Requirements"
-    Texture names must match entries in your resource pack's `textures/item_texture.json`.
-
-!!! tip "Use textureSize() for Large Items"
-    For items with textures larger than 16x16, use `RenderOffsets.textureSize()` for correct scaling.
-
-!!! tip "Let Auto-Detection Work"
-    Don't manually configure armor slots or tool properties - add the appropriate components
-    and let the generator detect them automatically.
-
-!!! warning "Cooldown Values"
-    Cooldown is in seconds. Very short cooldowns may not be noticeable.
-
-!!! warning "Display Name Localization"
-    For translatable display names, use translation keys that start with the appropriate prefix.
-    The display name supports the `@MayContainTrKey` annotation pattern.
-
-!!! warning "Resource Pack Required"
-    Custom items require a resource pack with the appropriate textures. Without it,
-    items will appear with missing texture placeholders.
+- Match texture short names to `textures/item_texture.json` and ship the corresponding resource pack.
+- Use `RenderOffsets.textureSize(...)` for square textures larger than 16 pixels before tuning individual vectors.
+- Put gameplay behavior in item components and let Allay derive armor, tool, food, durability, stack, and tag metadata.
+- Use translation keys for localized display names.
+- Keep cooldowns user-visible and reserve raw extensions for fields not represented by the structured model.

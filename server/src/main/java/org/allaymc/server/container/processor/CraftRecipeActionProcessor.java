@@ -9,17 +9,13 @@ import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.item.recipe.ShapedRecipe;
-import org.allaymc.api.item.recipe.ShapelessRecipe;
-import org.allaymc.api.item.recipe.SmithingRecipe;
-import org.allaymc.api.item.recipe.SmithingTrimRecipe;
+import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.allaymc.server.item.recipe.ComplexRecipe;
-import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
@@ -40,13 +36,16 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
 
     @Override
     public ActionResponse handle(CraftRecipeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var recipeNetworkId = action.getRecipeNetworkId();
+        var recipeNetworkId = action.recipeNetworkId();
         if (recipeNetworkId >= EnchantmentOptionGenerator.NETWORK_ID_COUNTER_INITIAL_VALUE) {
             return handleEnchantTableRecipe(player, recipeNetworkId);
         }
 
-        // The network id for the recipe start from 1, so we need to subtract 1 to get the index in indexedRecipes
-        var recipe = NetworkData.INDEXED_RECIPES.get(recipeNetworkId - 1);
+        var recipe = ((AllayPlayer) player).getProtocol().getData().recipeTable().recipesByNetworkId().get(recipeNetworkId);
+        if (recipe == null) {
+            log.warn("Unknown craft recipe network id {}", recipeNetworkId);
+            return error();
+        }
         var isCraftingRecipe = recipe instanceof ShapedRecipe ||
                                recipe instanceof ShapelessRecipe ||
                                recipe instanceof ComplexRecipe;
@@ -68,7 +67,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
+        var numberOfRequestedCrafts = action.numberOfRequestedCrafts();
         ActionResponse error = null;
         if (isCraftingRecipe) {
             error = handleCraftingContainer(recipeContainer, numberOfRequestedCrafts, currentActionIndex, actions);

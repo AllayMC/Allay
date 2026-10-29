@@ -3,7 +3,6 @@ package org.allaymc.server.registry.loader;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
@@ -20,7 +19,6 @@ import java.util.*;
 /**
  * @author daoge_cmd
  */
-@Slf4j
 public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier, Recipe>> {
     @SneakyThrows
     @Override
@@ -49,7 +47,9 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
                 continue;
             }
 
-            var recipe = parseShapeless(shapelessRecipe.getAsJsonObject());
+            var recipe = isFurnaceLike(shapelessRecipe.getAsJsonObject()) ?
+                    parseFurnaceLikeShapeless(shapelessRecipe.getAsJsonObject()) :
+                    parseShapeless(shapelessRecipe.getAsJsonObject());
             recipes.put(recipe.getIdentifier(), recipe);
         }
 
@@ -68,14 +68,17 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
         }
 
         // Furnace
-        var furnaceRecipes = obj.getAsJsonArray("furnaceAux");
-        for (var furnaceRecipe : furnaceRecipes) {
-            if (isDeprecated(furnaceRecipe.getAsJsonObject())) {
-                continue;
-            }
+        var furnaceRecipeElement = obj.get("furnaceAux");
+        if (furnaceRecipeElement != null && !furnaceRecipeElement.isJsonNull()) {
+            var furnaceRecipes = furnaceRecipeElement.getAsJsonArray();
+            for (var furnaceRecipe : furnaceRecipes) {
+                if (isDeprecated(furnaceRecipe.getAsJsonObject())) {
+                    continue;
+                }
 
-            var recipe = parseFurnace(furnaceRecipe.getAsJsonObject());
-            recipes.put(recipe.getIdentifier(), recipe);
+                var recipe = parseFurnace(furnaceRecipe.getAsJsonObject());
+                recipes.put(recipe.getIdentifier(), recipe);
+            }
         }
 
         // Potion
@@ -96,6 +99,17 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
 
     protected static boolean isDeprecated(JsonObject obj) {
         return obj.has("tag") && obj.get("tag").getAsString().equals("deprecated");
+    }
+
+    protected static boolean isFurnaceLike(JsonObject obj) {
+        if (!obj.has("tag")) {
+            return false;
+        }
+
+        return switch (obj.get("tag").getAsString()) {
+            case "furnace", "blast_furnace", "smoker", "campfire", "soul_campfire" -> true;
+            default -> false;
+        };
     }
 
     protected static SmithingTrimRecipe parseSmithingTrim(JsonObject obj) {
@@ -141,6 +155,17 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
         );
     }
 
+    protected static FurnaceRecipe parseFurnaceLikeShapeless(JsonObject obj) {
+        var input = obj.getAsJsonArray("input").get(0).getAsJsonObject();
+
+        return new FurnaceRecipe(
+                RecipeJsonUtils.parseItemDescriptor(input),
+                RecipeJsonUtils.parseOutput(obj.getAsJsonArray("output").get(0).getAsJsonObject()),
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
+                FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase(Locale.ROOT))
+        );
+    }
+
     protected static ShapedRecipe parseShaped(JsonObject obj) {
         // Pattern
         List<String> patternList = new ArrayList<>();
@@ -168,8 +193,9 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
 
     protected static FurnaceRecipe parseFurnace(JsonObject obj) {
         return new FurnaceRecipe(
-                RecipeJsonUtils.parseItemStack(obj.getAsJsonObject("input")),
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("input")),
                 RecipeJsonUtils.parseOutput(obj.getAsJsonObject("output")),
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
                 FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase(Locale.ROOT))
         );
     }

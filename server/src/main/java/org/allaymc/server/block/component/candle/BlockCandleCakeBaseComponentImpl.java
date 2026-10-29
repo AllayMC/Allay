@@ -1,12 +1,11 @@
 package org.allaymc.server.block.component.candle;
 
-import org.allaymc.server.block.component.BlockCakeBaseComponentImpl;
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -17,9 +16,10 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.allaymc.server.block.component.BlockCakeBaseComponentImpl;
 import org.allaymc.server.item.data.ItemId;
 
-import org.allaymc.api.block.type.BlockState;
 import java.util.Set;
 import java.util.function.Supplier;
 

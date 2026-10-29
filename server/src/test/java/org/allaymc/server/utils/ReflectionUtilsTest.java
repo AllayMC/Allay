@@ -36,6 +36,12 @@ class ReflectionUtilsTest {
     }
 
     @Test
+    void testGetAllMethodsDoesNotDeduplicatePrivateInterfaceMethodsAcrossInterfaces() {
+        var methods = ReflectionUtils.getAllMethods(F.class);
+        assertEquals(2, methods.stream().filter(m -> m.getName().equals("helper")).count());
+    }
+
+    @Test
     void testMapStaticFields() {
         var map = ReflectionUtils.mapStaticFields(EnumA.class, EnumB.class);
         assertEquals(EnumB.A, map.get(EnumA.A));
@@ -74,7 +80,17 @@ class ReflectionUtilsTest {
         }
     }
 
+    interface PrivateMethodA {
+        private void helper() {}
+    }
+
+    interface PrivateMethodB {
+        private void helper() {}
+    }
+
     static class C implements WithDefaultMethod {}
+
+    static class F implements PrivateMethodA, PrivateMethodB {}
 
     enum EnumA {
         A, B, C

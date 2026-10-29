@@ -37,10 +37,7 @@ import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.dripleaf.BlockBigDripleafBaseComponentImpl;
 import org.allaymc.server.block.component.dripleaf.BlockSmallDripleafBaseComponentImpl;
-import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
-import org.allaymc.server.block.component.fallable.BlockConcretePowderFallableComponentImpl;
-import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
-import org.allaymc.server.block.component.fallable.BlockPointedDripstoneFallableComponentImpl;
+import org.allaymc.server.block.component.fallable.*;
 import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
 import org.allaymc.server.block.component.fire.BlockSoulFireBaseComponentImpl;
 import org.allaymc.server.block.component.flower.BlockBigFlowerBaseComponentImpl;
@@ -358,6 +355,20 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.RED_SAND)
                 .addComponent(new BlockFallableComponentImpl(SoundNames.LAND_SAND))
                 .build();
+        BlockTypes.SUSPICIOUS_SAND = AllayBlockType
+                .builder(BlockSuspiciousSandBehaviorImpl.class)
+                .vanillaBlock(BlockId.SUSPICIOUS_SAND)
+                .setProperties(BlockPropertyTypes.BRUSHED_PROGRESS, BlockPropertyTypes.HANGING)
+                .setBaseComponentSupplier(BlockSuspiciousBaseComponentImpl::new)
+                .addComponent(new BlockSuspiciousFallableComponentImpl(SoundNames.BREAK_SUSPICIOUS_SAND))
+                .build();
+        BlockTypes.SUSPICIOUS_GRAVEL = AllayBlockType
+                .builder(BlockSuspiciousGravelBehaviorImpl.class)
+                .vanillaBlock(BlockId.SUSPICIOUS_GRAVEL)
+                .setProperties(BlockPropertyTypes.BRUSHED_PROGRESS, BlockPropertyTypes.HANGING)
+                .setBaseComponentSupplier(BlockSuspiciousBaseComponentImpl::new)
+                .addComponent(new BlockSuspiciousFallableComponentImpl(SoundNames.BREAK_SUSPICIOUS_GRAVEL))
+                .build();
     }
 
     public static void initShulkerBox() {
@@ -536,6 +547,8 @@ public final class BlockTypeInitializer {
         BlockTypes.BLACKSTONE_STAIRS = buildStairs(BlockId.BLACKSTONE_STAIRS);
         BlockTypes.BRICK_STAIRS = buildStairs(BlockId.BRICK_STAIRS);
         BlockTypes.CHERRY_STAIRS = buildStairs(BlockId.CHERRY_STAIRS);
+        BlockTypes.CINNABAR_BRICK_STAIRS = buildStairs(BlockId.CINNABAR_BRICK_STAIRS);
+        BlockTypes.CINNABAR_STAIRS = buildStairs(BlockId.CINNABAR_STAIRS);
         BlockTypes.COBBLED_DEEPSLATE_STAIRS = buildStairs(BlockId.COBBLED_DEEPSLATE_STAIRS);
         BlockTypes.CRIMSON_STAIRS = buildStairs(BlockId.CRIMSON_STAIRS);
         BlockTypes.DARK_OAK_STAIRS = buildStairs(BlockId.DARK_OAK_STAIRS);
@@ -556,9 +569,11 @@ public final class BlockTypeInitializer {
         BlockTypes.POLISHED_ANDESITE_STAIRS = buildStairs(BlockId.POLISHED_ANDESITE_STAIRS);
         BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = buildStairs(BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS);
         BlockTypes.POLISHED_BLACKSTONE_STAIRS = buildStairs(BlockId.POLISHED_BLACKSTONE_STAIRS);
+        BlockTypes.POLISHED_CINNABAR_STAIRS = buildStairs(BlockId.POLISHED_CINNABAR_STAIRS);
         BlockTypes.POLISHED_DEEPSLATE_STAIRS = buildStairs(BlockId.POLISHED_DEEPSLATE_STAIRS);
         BlockTypes.POLISHED_DIORITE_STAIRS = buildStairs(BlockId.POLISHED_DIORITE_STAIRS);
         BlockTypes.POLISHED_GRANITE_STAIRS = buildStairs(BlockId.POLISHED_GRANITE_STAIRS);
+        BlockTypes.POLISHED_SULFUR_STAIRS = buildStairs(BlockId.POLISHED_SULFUR_STAIRS);
         BlockTypes.POLISHED_TUFF_STAIRS = buildStairs(BlockId.POLISHED_TUFF_STAIRS);
         BlockTypes.PRISMARINE_BRICKS_STAIRS = buildStairs(BlockId.PRISMARINE_BRICKS_STAIRS);
         BlockTypes.PRISMARINE_STAIRS = buildStairs(BlockId.PRISMARINE_STAIRS);
@@ -573,6 +588,8 @@ public final class BlockTypeInitializer {
         BlockTypes.SPRUCE_STAIRS = buildStairs(BlockId.SPRUCE_STAIRS);
         BlockTypes.STONE_BRICK_STAIRS = buildStairs(BlockId.STONE_BRICK_STAIRS);
         BlockTypes.STONE_STAIRS = buildStairs(BlockId.STONE_STAIRS);
+        BlockTypes.SULFUR_BRICK_STAIRS = buildStairs(BlockId.SULFUR_BRICK_STAIRS);
+        BlockTypes.SULFUR_STAIRS = buildStairs(BlockId.SULFUR_STAIRS);
         BlockTypes.TUFF_BRICK_STAIRS = buildStairs(BlockId.TUFF_BRICK_STAIRS);
         BlockTypes.TUFF_STAIRS = buildStairs(BlockId.TUFF_STAIRS);
         BlockTypes.WARPED_STAIRS = buildStairs(BlockId.WARPED_STAIRS);
@@ -626,6 +643,8 @@ public final class BlockTypeInitializer {
         BlockTypes.BLACKSTONE_SLAB = buildSlab(BlockId.BLACKSTONE_SLAB, BlockId.BLACKSTONE_DOUBLE_SLAB);
         BlockTypes.BRICK_SLAB = buildSlab(BlockId.BRICK_SLAB, BlockId.BRICK_DOUBLE_SLAB);
         BlockTypes.CHERRY_SLAB = buildSlab(BlockId.CHERRY_SLAB, BlockId.CHERRY_DOUBLE_SLAB);
+        BlockTypes.CINNABAR_BRICK_SLAB = buildSlab(BlockId.CINNABAR_BRICK_SLAB, BlockId.CINNABAR_BRICK_DOUBLE_SLAB);
+        BlockTypes.CINNABAR_SLAB = buildSlab(BlockId.CINNABAR_SLAB, BlockId.CINNABAR_DOUBLE_SLAB);
         BlockTypes.COBBLED_DEEPSLATE_SLAB = buildSlab(BlockId.COBBLED_DEEPSLATE_SLAB, BlockId.COBBLED_DEEPSLATE_DOUBLE_SLAB);
         BlockTypes.COBBLESTONE_SLAB = buildSlab(BlockId.COBBLESTONE_SLAB, BlockId.COBBLESTONE_DOUBLE_SLAB);
         BlockTypes.CRIMSON_SLAB = buildSlab(BlockId.CRIMSON_SLAB, BlockId.CRIMSON_DOUBLE_SLAB);
@@ -651,9 +670,11 @@ public final class BlockTypeInitializer {
         BlockTypes.POLISHED_ANDESITE_SLAB = buildSlab(BlockId.POLISHED_ANDESITE_SLAB, BlockId.POLISHED_ANDESITE_DOUBLE_SLAB);
         BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB = buildSlab(BlockId.POLISHED_BLACKSTONE_BRICK_SLAB, BlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB);
         BlockTypes.POLISHED_BLACKSTONE_SLAB = buildSlab(BlockId.POLISHED_BLACKSTONE_SLAB, BlockId.POLISHED_BLACKSTONE_DOUBLE_SLAB);
+        BlockTypes.POLISHED_CINNABAR_SLAB = buildSlab(BlockId.POLISHED_CINNABAR_SLAB, BlockId.POLISHED_CINNABAR_DOUBLE_SLAB);
         BlockTypes.POLISHED_DEEPSLATE_SLAB = buildSlab(BlockId.POLISHED_DEEPSLATE_SLAB, BlockId.POLISHED_DEEPSLATE_DOUBLE_SLAB);
         BlockTypes.POLISHED_DIORITE_SLAB = buildSlab(BlockId.POLISHED_DIORITE_SLAB, BlockId.POLISHED_DIORITE_DOUBLE_SLAB);
         BlockTypes.POLISHED_GRANITE_SLAB = buildSlab(BlockId.POLISHED_GRANITE_SLAB, BlockId.POLISHED_GRANITE_DOUBLE_SLAB);
+        BlockTypes.POLISHED_SULFUR_SLAB = buildSlab(BlockId.POLISHED_SULFUR_SLAB, BlockId.POLISHED_SULFUR_DOUBLE_SLAB);
         BlockTypes.POLISHED_TUFF_SLAB = buildSlab(BlockId.POLISHED_TUFF_SLAB, BlockId.POLISHED_TUFF_DOUBLE_SLAB);
         BlockTypes.PRISMARINE_BRICK_SLAB = buildSlab(BlockId.PRISMARINE_BRICK_SLAB, BlockId.PRISMARINE_BRICK_DOUBLE_SLAB);
         BlockTypes.PRISMARINE_SLAB = buildSlab(BlockId.PRISMARINE_SLAB, BlockId.PRISMARINE_DOUBLE_SLAB);
@@ -669,6 +690,8 @@ public final class BlockTypeInitializer {
         BlockTypes.SMOOTH_STONE_SLAB = buildSlab(BlockId.SMOOTH_STONE_SLAB, BlockId.SMOOTH_STONE_DOUBLE_SLAB);
         BlockTypes.SPRUCE_SLAB = buildSlab(BlockId.SPRUCE_SLAB, BlockId.SPRUCE_DOUBLE_SLAB);
         BlockTypes.STONE_BRICK_SLAB = buildSlab(BlockId.STONE_BRICK_SLAB, BlockId.STONE_BRICK_DOUBLE_SLAB);
+        BlockTypes.SULFUR_BRICK_SLAB = buildSlab(BlockId.SULFUR_BRICK_SLAB, BlockId.SULFUR_BRICK_DOUBLE_SLAB);
+        BlockTypes.SULFUR_SLAB = buildSlab(BlockId.SULFUR_SLAB, BlockId.SULFUR_DOUBLE_SLAB);
         BlockTypes.TUFF_BRICK_SLAB = buildSlab(BlockId.TUFF_BRICK_SLAB, BlockId.TUFF_BRICK_DOUBLE_SLAB);
         BlockTypes.TUFF_SLAB = buildSlab(BlockId.TUFF_SLAB, BlockId.TUFF_DOUBLE_SLAB);
         BlockTypes.WARPED_SLAB = buildSlab(BlockId.WARPED_SLAB, BlockId.WARPED_DOUBLE_SLAB);
@@ -698,6 +721,8 @@ public final class BlockTypeInitializer {
         BlockTypes.BLACKSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.BLACKSTONE_DOUBLE_SLAB, BlockId.BLACKSTONE_SLAB);
         BlockTypes.BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.BRICK_DOUBLE_SLAB, BlockId.BRICK_SLAB);
         BlockTypes.CHERRY_DOUBLE_SLAB = buildDoubleSlab(BlockId.CHERRY_DOUBLE_SLAB, BlockId.CHERRY_SLAB);
+        BlockTypes.CINNABAR_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.CINNABAR_BRICK_DOUBLE_SLAB, BlockId.CINNABAR_BRICK_SLAB);
+        BlockTypes.CINNABAR_DOUBLE_SLAB = buildDoubleSlab(BlockId.CINNABAR_DOUBLE_SLAB, BlockId.CINNABAR_SLAB);
         BlockTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB = buildDoubleSlab(BlockId.COBBLED_DEEPSLATE_DOUBLE_SLAB, BlockId.COBBLED_DEEPSLATE_SLAB);
         BlockTypes.COBBLESTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.COBBLESTONE_DOUBLE_SLAB, BlockId.COBBLESTONE_SLAB);
         BlockTypes.CRIMSON_DOUBLE_SLAB = buildDoubleSlab(BlockId.CRIMSON_DOUBLE_SLAB, BlockId.CRIMSON_SLAB);
@@ -723,9 +748,11 @@ public final class BlockTypeInitializer {
         BlockTypes.POLISHED_ANDESITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_ANDESITE_DOUBLE_SLAB, BlockId.POLISHED_ANDESITE_SLAB);
         BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB, BlockId.POLISHED_BLACKSTONE_BRICK_SLAB);
         BlockTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_BLACKSTONE_DOUBLE_SLAB, BlockId.POLISHED_BLACKSTONE_SLAB);
+        BlockTypes.POLISHED_CINNABAR_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_CINNABAR_DOUBLE_SLAB, BlockId.POLISHED_CINNABAR_SLAB);
         BlockTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_DEEPSLATE_DOUBLE_SLAB, BlockId.POLISHED_DEEPSLATE_SLAB);
         BlockTypes.POLISHED_DIORITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_DIORITE_DOUBLE_SLAB, BlockId.POLISHED_DIORITE_SLAB);
         BlockTypes.POLISHED_GRANITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_GRANITE_DOUBLE_SLAB, BlockId.POLISHED_GRANITE_SLAB);
+        BlockTypes.POLISHED_SULFUR_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_SULFUR_DOUBLE_SLAB, BlockId.POLISHED_SULFUR_SLAB);
         BlockTypes.POLISHED_TUFF_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_TUFF_DOUBLE_SLAB, BlockId.POLISHED_TUFF_SLAB);
         BlockTypes.PRISMARINE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.PRISMARINE_BRICK_DOUBLE_SLAB, BlockId.PRISMARINE_BRICK_SLAB);
         BlockTypes.PRISMARINE_DOUBLE_SLAB = buildDoubleSlab(BlockId.PRISMARINE_DOUBLE_SLAB, BlockId.PRISMARINE_SLAB);
@@ -741,6 +768,8 @@ public final class BlockTypeInitializer {
         BlockTypes.SMOOTH_STONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.SMOOTH_STONE_DOUBLE_SLAB, BlockId.SMOOTH_STONE_SLAB);
         BlockTypes.SPRUCE_DOUBLE_SLAB = buildDoubleSlab(BlockId.SPRUCE_DOUBLE_SLAB, BlockId.SPRUCE_SLAB);
         BlockTypes.STONE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.STONE_BRICK_DOUBLE_SLAB, BlockId.STONE_BRICK_SLAB);
+        BlockTypes.SULFUR_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.SULFUR_BRICK_DOUBLE_SLAB, BlockId.SULFUR_BRICK_SLAB);
+        BlockTypes.SULFUR_DOUBLE_SLAB = buildDoubleSlab(BlockId.SULFUR_DOUBLE_SLAB, BlockId.SULFUR_SLAB);
         BlockTypes.TUFF_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.TUFF_BRICK_DOUBLE_SLAB, BlockId.TUFF_BRICK_SLAB);
         BlockTypes.TUFF_DOUBLE_SLAB = buildDoubleSlab(BlockId.TUFF_DOUBLE_SLAB, BlockId.TUFF_SLAB);
         BlockTypes.WARPED_DOUBLE_SLAB = buildDoubleSlab(BlockId.WARPED_DOUBLE_SLAB, BlockId.WARPED_SLAB);
@@ -1136,6 +1165,15 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBaseComponentSupplier(BlockWaterBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(BlockTypeInitializer::buildLiquidShape))
+                .build();
+    }
+
+    public static void initBubbleColumn() {
+        BlockTypes.BUBBLE_COLUMN = AllayBlockType
+                .builder(BlockBubbleColumnBehaviorImpl.class)
+                .vanillaBlock(BlockId.BUBBLE_COLUMN)
+                .setProperties(BlockPropertyTypes.DRAG_DOWN)
+                .setBaseComponentSupplier(BlockBubbleColumnBaseComponentImpl::new)
                 .build();
     }
 
@@ -1697,6 +1735,14 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initSoulSand() {
+        BlockTypes.SOUL_SAND = AllayBlockType
+                .builder(BlockSoulSandBehaviorImpl.class)
+                .vanillaBlock(BlockId.SOUL_SAND)
+                .setBaseComponentSupplier(BlockSoulSandBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initInfestedBlocks() {
         BlockTypes.INFESTED_CHISELED_STONE_BRICKS = buildInfestedBlock(BlockId.INFESTED_CHISELED_STONE_BRICKS, BlockId.CHISELED_STONE_BRICKS);
         BlockTypes.INFESTED_COBBLESTONE = buildInfestedBlock(BlockId.INFESTED_COBBLESTONE, BlockId.COBBLESTONE);
@@ -1837,6 +1883,8 @@ public final class BlockTypeInitializer {
         BlockTypes.ANDESITE_WALL = buildWall(BlockId.ANDESITE_WALL);
         BlockTypes.BLACKSTONE_WALL = buildWall(BlockId.BLACKSTONE_WALL);
         BlockTypes.BRICK_WALL = buildWall(BlockId.BRICK_WALL);
+        BlockTypes.CINNABAR_BRICK_WALL = buildWall(BlockId.CINNABAR_BRICK_WALL);
+        BlockTypes.CINNABAR_WALL = buildWall(BlockId.CINNABAR_WALL);
         BlockTypes.COBBLED_DEEPSLATE_WALL = buildWall(BlockId.COBBLED_DEEPSLATE_WALL);
         BlockTypes.COBBLESTONE_WALL = buildWall(BlockId.COBBLESTONE_WALL);
         BlockTypes.DEEPSLATE_BRICK_WALL = buildWall(BlockId.DEEPSLATE_BRICK_WALL);
@@ -1850,7 +1898,9 @@ public final class BlockTypeInitializer {
         BlockTypes.NETHER_BRICK_WALL = buildWall(BlockId.NETHER_BRICK_WALL);
         BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL = buildWall(BlockId.POLISHED_BLACKSTONE_BRICK_WALL);
         BlockTypes.POLISHED_BLACKSTONE_WALL = buildWall(BlockId.POLISHED_BLACKSTONE_WALL);
+        BlockTypes.POLISHED_CINNABAR_WALL = buildWall(BlockId.POLISHED_CINNABAR_WALL);
         BlockTypes.POLISHED_DEEPSLATE_WALL = buildWall(BlockId.POLISHED_DEEPSLATE_WALL);
+        BlockTypes.POLISHED_SULFUR_WALL = buildWall(BlockId.POLISHED_SULFUR_WALL);
         BlockTypes.POLISHED_TUFF_WALL = buildWall(BlockId.POLISHED_TUFF_WALL);
         BlockTypes.PRISMARINE_WALL = buildWall(BlockId.PRISMARINE_WALL);
         BlockTypes.RED_NETHER_BRICK_WALL = buildWall(BlockId.RED_NETHER_BRICK_WALL);
@@ -1858,6 +1908,8 @@ public final class BlockTypeInitializer {
         BlockTypes.RESIN_BRICK_WALL = buildWall(BlockId.RESIN_BRICK_WALL);
         BlockTypes.SANDSTONE_WALL = buildWall(BlockId.SANDSTONE_WALL);
         BlockTypes.STONE_BRICK_WALL = buildWall(BlockId.STONE_BRICK_WALL);
+        BlockTypes.SULFUR_BRICK_WALL = buildWall(BlockId.SULFUR_BRICK_WALL);
+        BlockTypes.SULFUR_WALL = buildWall(BlockId.SULFUR_WALL);
         BlockTypes.TUFF_BRICK_WALL = buildWall(BlockId.TUFF_BRICK_WALL);
         BlockTypes.TUFF_WALL = buildWall(BlockId.TUFF_WALL);
     }
@@ -2123,6 +2175,7 @@ public final class BlockTypeInitializer {
 
     public static void initSmallFlowers() {
         BlockTypes.DANDELION = buildSmallFlower(BlockId.DANDELION);
+        BlockTypes.GOLDEN_DANDELION = buildSmallFlower(BlockId.GOLDEN_DANDELION);
         BlockTypes.POPPY = buildSmallFlower(BlockId.POPPY);
         BlockTypes.BLUE_ORCHID = buildSmallFlower(BlockId.BLUE_ORCHID);
         BlockTypes.ALLIUM = buildSmallFlower(BlockId.ALLIUM);

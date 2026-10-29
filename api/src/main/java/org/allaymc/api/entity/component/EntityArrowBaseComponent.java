@@ -22,6 +22,20 @@ public interface EntityArrowBaseComponent extends EntityBaseComponent {
     void setCritical(boolean critical);
 
     /**
+     * Checks whether the arrow is embedded in a block.
+     *
+     * @return {@code true} if the arrow is embedded in a block, {@code false} otherwise
+     */
+    boolean isInGround();
+
+    /**
+     * Sets whether the arrow is embedded in a block.
+     *
+     * @param inGround {@code true} if the arrow is embedded in a block, {@code false} otherwise
+     */
+    void setInGround(boolean inGround);
+
+    /**
      * Gets the base damage of the arrow.
      *
      * @return the base damage of the arrow
@@ -64,16 +78,17 @@ public interface EntityArrowBaseComponent extends EntityBaseComponent {
     void setPunchLevel(int level);
 
     /**
-     * Checks if the arrow is shot by a bow with infinity enchantment or the shooter is a creative player.
-     * An infinite arrow cannot be picked up after being shot.
+     * Checks if this arrow cannot be picked up because it was created by a creative player or because
+     * the infinity enchantment prevented a normal arrow from being consumed. Tipped arrows are not
+     * affected by infinity and remain pickable.
      *
      * @return {@code true} if the arrow is infinite, {@code false} otherwise.
      */
     boolean isInfinite();
 
     /**
-     * Sets whether the arrow is shot by a bow with infinity enchantment or the shooter is a creative player.
-     * An infinite arrow cannot be picked up after being shot.
+     * Sets whether this arrow cannot be picked up after being shot by a creative player or without
+     * consuming a normal arrow through the infinity enchantment.
      *
      * @param infinite {@code true} to make the arrow infinite, {@code false} otherwise
      */

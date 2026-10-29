@@ -8,6 +8,7 @@ import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -18,7 +19,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ItemStackResponsePacket;
 
 import java.util.*;
 
@@ -41,10 +41,10 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
             // Indicate that the further destroy action does not return a response
             // For more details, see inventory_stack_packet.md
             var noResponseForDestroyAction = false;
-            var actions = request.getActions();
+            var actions = request.actions();
 
             Map<String, Object> dataPool = new HashMap<>();
-            dataPool.put(FILTER_STRINGS_DATA_KEY, request.getFilterStrings());
+            dataPool.put(FILTER_STRINGS_DATA_KEY, request.filterStrings());
 
             for (int index = 0; index < actions.length; index++) {
                 var action = actions[index];
@@ -64,7 +64,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
                 }
 
                 if (!response.ok()) {
-                    encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.getRequestId(), null));
+                    encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.requestId(), null));
                     continue label;
                 }
 
@@ -75,19 +75,18 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
                 }
             }
 
-            encodedResponses.add(encodeActionResponses(responses, request.getRequestId()));
+            encodedResponses.add(encodeActionResponses(responses, request.requestId()));
         }
 
-        var itemStackResponsePacket = new ItemStackResponsePacket();
-        itemStackResponsePacket.getEntries().addAll(encodedResponses);
-        player.sendPacket(itemStackResponsePacket);
+        var allayPlayer = (AllayPlayer) player;
+        allayPlayer.sendPacket(allayPlayer.getProtocol().getEncoder().encodeItemStackResponse(encodedResponses));
     }
 
     private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {
         Map<ContainerSlotType, Int2ObjectMap<ItemStackResponseSlot>> changedContainers = new HashMap<>();
         responses.forEach(response -> response.containers().forEach(container -> {
-            for (var changedSlot : container.getItems()) {
-                var changedSlots = changedContainers.computeIfAbsent(container.getContainerName().getContainer(), $ -> new Int2ObjectOpenHashMap<>());
+            for (var changedSlot : container.items()) {
+                var changedSlots = changedContainers.computeIfAbsent(container.containerName().container(), $ -> new Int2ObjectOpenHashMap<>());
                 changedSlots.put(changedSlot.getSlot(), changedSlot);
             }
         }));

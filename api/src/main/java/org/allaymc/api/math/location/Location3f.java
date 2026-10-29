@@ -125,7 +125,7 @@ public class Location3f extends Position3f implements Location3fc {
         out.writeDouble(pitch);
         out.writeDouble(yaw);
         out.writeUTF(this.dimension().getWorld().getWorldData().getDisplayName());
-        out.writeInt(this.dimension().getDimensionInfo().dimensionId());
+        out.writeInt(this.dimension().getDimensionType().getId());
     }
 
     @Override
@@ -158,6 +158,6 @@ public class Location3f extends Position3f implements Location3fc {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + this.dimension().getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + ":" + this.dimension().getDimensionType().getIdentifier() + ")";
     }
 }

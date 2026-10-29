@@ -46,7 +46,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             return error();
         }
 
-        if (filterStrings.length < action.getFilteredStringIndex()) {
+        if (filterStrings.length < action.filteredStringIndex()) {
             log.warn("filterStrings length does not match action.getFilteredStringIndex()");
             return error();
         }
@@ -162,7 +162,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         // Case 3: Renaming
         var renamed = filterStrings.length != 0;
         if (renamed) {
-            var customName = filterStrings[action.getFilteredStringIndex()];
+            var customName = filterStrings[action.filteredStringIndex()];
             if (customName == null || customName.isEmpty()) {
                 if (!resultItem.getCustomName().isEmpty()) {
                     customName = ""; // Clear the custom name

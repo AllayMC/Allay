@@ -636,6 +636,12 @@ public final class EntityTypeDefaultInitializer {
                             .vanillaEntity(EntityId.STRIDER)
                             .build();
         }
+        if (EntityTypes.SULFUR_CUBE == null) {
+            EntityTypes.SULFUR_CUBE = AllayEntityType
+                            .builder(EntitySulfurCubeImpl.class)
+                            .vanillaEntity(EntityId.SULFUR_CUBE)
+                            .build();
+        }
         if (EntityTypes.TADPOLE == null) {
             EntityTypes.TADPOLE = AllayEntityType
                             .builder(EntityTadpoleImpl.class)

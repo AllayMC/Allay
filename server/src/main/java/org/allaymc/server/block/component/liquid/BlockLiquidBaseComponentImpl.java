@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.liquid;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
@@ -17,6 +16,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
@@ -84,7 +84,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     protected void tryScheduleLiquidUpdate(Block current) {
         var blockUpdateManager = current.getDimension().getBlockUpdateManager();
         if (!blockUpdateManager.hasScheduledBlockUpdate(current.getPosition())) {
-            blockUpdateManager.scheduleBlockUpdateInDelay(current.getPosition(), getFlowSpeed(current.getDimension().getDimensionInfo()));
+            blockUpdateManager.scheduleBlockUpdateInDelay(current.getPosition(), getFlowSpeed(current.getDimension().getDimensionType()));
         }
     }
 
@@ -181,7 +181,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         if (!isSource(liquid) && !hasSupplyLiquidAround(dimension, pos, liquid)) {
             BlockState newLiquid = null;
             if (getDepth(liquid) - 4 > 0) {
-                newLiquid = getLiquidBlockState(getDepth(liquid) - 2 * getFlowDecay(dimension.getDimensionInfo()), false);
+                newLiquid = getLiquidBlockState(getDepth(liquid) - 2 * getFlowDecay(dimension.getDimensionType()), false);
             }
             var event = new LiquidDecayEvent(new Block(liquid, new Position3i(pos, dimension), layer), newLiquid);
             if (!event.call()) {
@@ -203,7 +203,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         var depth = getDepth(liquid);
-        var decay = getFlowDecay(dimension.getDimensionInfo());
+        var decay = getFlowDecay(dimension.getDimensionType());
         if (depth <= decay) {
             return;
         }
@@ -295,7 +295,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     protected boolean flowInto(Dimension dimension, Vector3ic src, int srcLayer, BlockState liquid, Vector3ic pos, boolean falling) {
         var newDepth = getDepth(liquid);
         if (!falling) {
-            newDepth -= getFlowDecay(dimension.getDimensionInfo());
+            newDepth -= getFlowDecay(dimension.getDimensionType());
         }
         if (newDepth <= 0 && !falling) {
             return false;
@@ -383,7 +383,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     protected List<Vector3ic[]> calculateLiquidPaths(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
         var queue = new LiquidQueue();
         queue.pushBack(new LiquidNode(src.x(), src.z(), (byte) getDepth(liquid), null));
-        var decay = getFlowDecay(dimension.getDimensionInfo());
+        var decay = getFlowDecay(dimension.getDimensionType());
 
         var paths = new ArrayList<Vector3ic[]>();
         var first = true;

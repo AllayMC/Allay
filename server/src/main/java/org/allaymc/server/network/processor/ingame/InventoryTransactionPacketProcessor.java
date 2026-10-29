@@ -7,7 +7,9 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.*;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.server.network.NetworkHelper;
@@ -57,10 +59,14 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     @Override
     public void handleSync(Player player, InventoryTransactionPacket packet, long receiveTime) {
         var entity = player.getControlledEntity();
-        var itemInHand = entity.getItemInHand();
+
         var transactionType = packet.getTransactionType();
+        var itemInHand = entity.getItemInHand();
         switch (transactionType) {
             case ITEM_USE -> {
+                entity.setHandSlot(packet.getHotbarSlot(), false);
+                itemInHand = entity.getItemInHand();
+
                 var blockFace = BlockFace.fromIndex(packet.getBlockFace());
                 var world = entity.getLocation().dimension();
                 switch (packet.getActionType()) {
@@ -85,6 +91,12 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 clickPos, blockFace
                         );
 
+                        if (!player.canInteractWithBlocks()) {
+                            player.viewBlockUpdate(clickBlockPos, 0, dimension.getBlockState(clickBlockPos));
+                            player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
+                            break;
+                        }
+
                         var event = new PlayerInteractBlockEvent(entity, interactInfo, PlayerInteractBlockEvent.Action.RIGHT_CLICK);
                         if (!event.call()) {
                             player.viewBlockUpdate(clickBlockPos, 0, dimension.getBlockState(clickBlockPos));
@@ -92,7 +104,6 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             break;
                         }
 
-                        entity.setUsingItemInAir(false);
                         var sneaking = entity.isSneaking();
                         var useItemOnBlock = !sneaking;
                         var useBlock = !sneaking || itemInHand.getItemType() == AIR;
@@ -116,7 +127,14 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             break;
                         }
 
+                        if (!player.canPlaceBlocks()) {
+                            handleItemUseInAir(entity, itemInHand);
+                            player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
+                            break;
+                        }
+
                         if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
+                            handleItemUseInAir(entity, itemInHand);
                             var blockStateReplaced = dimension.getBlockState(placeBlockPos);
                             player.viewBlockUpdate(placeBlockPos, 0, blockStateReplaced);
                         }
@@ -129,16 +147,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
 
                         if (!entity.isUsingItemInAir()) {
-                            if (itemInHand.canUseItemInAir(entity)) {
-                                if (new PlayerStartUseItemInAirEvent(entity).call()) {
-                                    entity.setUsingItemInAir(true);
-                                }
-                            } else {
-                                if (new PlayerRightClickItemInAirEvent(entity).call()) {
-                                    itemInHand.rightClickItemInAir(entity);
-                                }
-                            }
-                        } else if (entity.isUsingItemInAir()) {
+                            handleItemUseInAir(entity, itemInHand);
+                        } else {
                             entity.setUsingItemInAir(false);
                             var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime());
                             if (event.call()) {
@@ -176,6 +186,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     return;
                 }
 
+                entity.setHandSlot(packet.getHotbarSlot(), false);
+                itemInHand = entity.getItemInHand();
+
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
                         var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
@@ -191,6 +204,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         // Doesn't have damage component, can't attack
                         if (!(target instanceof EntityLivingComponent damageable)) {
+                            return;
+                        }
+                        if (target instanceof EntityPlayer) {
+                            if (!player.canAttackPlayers()) {
+                                return;
+                            }
+                        } else if (!player.canAttackMobs()) {
                             return;
                         }
 
@@ -219,20 +239,29 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     return;
                 }
 
-                var worldInteractionAction = packet.getActions().getFirst();
-                if (!worldInteractionAction.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
-                    log.warn("Expected WORLD_INTERACTION action type, got {}", worldInteractionAction.getSource().getType());
+                // 1.26.30 reordered the action list: WORLD_INTERACTION now comes after CONTAINER.
+                // Instead of assuming a fixed order with getFirst()/getLast(), we search by type.
+                var worldInteractionAction = packet.getActions().stream()
+                        .filter(action -> action.source().type().equals(InventorySource.Type.WORLD_INTERACTION))
+                        .findFirst()
+                        .orElse(null);
+                var containerAction = packet.getActions().stream()
+                        .filter(action -> action.source().type().equals(InventorySource.Type.CONTAINER))
+                        .findFirst()
+                        .orElse(null);
+
+                if (worldInteractionAction == null) {
+                    log.warn("Expected WORLD_INTERACTION action type not found");
                     return;
                 }
 
-                var containerAction = packet.getActions().getLast();
-                if (!containerAction.getSource().getType().equals(InventorySource.Type.CONTAINER)) {
-                    log.warn("Expected CONTAINER action type, got {}", containerAction.getSource().getType());
+                if (containerAction == null) {
+                    log.warn("Expected CONTAINER action type not found");
                     return;
                 }
 
-                var dropSlot = containerAction.getSlot();
-                var dropCount = containerAction.getFromItem().getCount() - containerAction.getToItem().getCount();
+                var dropSlot = containerAction.slot();
+                var dropCount = containerAction.fromItem().getCount() - containerAction.toItem().getCount();
                 if (!entity.tryDropItem(ContainerTypes.INVENTORY, dropSlot, dropCount)) {
                     log.warn("Failed to drop item from slot {} with count {}", dropSlot, dropCount);
                 }
@@ -245,6 +274,27 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             entity.clearItemInHand();
         } else {
             entity.notifyItemInHandChange();
+        }
+    }
+
+    boolean tryStartUsingItemInAir(EntityPlayer player, ItemStack itemStack) {
+        if (!itemStack.canUseItemInAir(player)) {
+            return false;
+        }
+
+        if (new PlayerStartUseItemInAirEvent(player).call()) {
+            player.setUsingItemInAir(true);
+        }
+        return true;
+    }
+
+    void handleItemUseInAir(EntityPlayer player, ItemStack itemStack) {
+        if (tryStartUsingItemInAir(player, itemStack)) {
+            return;
+        }
+
+        if (new PlayerRightClickItemInAirEvent(player).call()) {
+            itemStack.rightClickItemInAir(player);
         }
     }
 

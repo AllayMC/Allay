@@ -56,7 +56,7 @@ public class BlockPointedDripstoneFallableComponentImpl extends BlockFallableCom
 
         // Find the tip of the column (bottom-most dripstone)
         int tipY = pos.y();
-        while (tipY > dimension.getDimensionInfo().minHeight()) {
+        while (tipY > dimension.getDimensionType().getMinHeight()) {
             var below = dimension.getBlockState(pos.x(), tipY - 1, pos.z());
             if (below.getBlockType() != BlockTypes.POINTED_DRIPSTONE ||
                 !below.getPropertyValue(BlockPropertyTypes.HANGING)) {

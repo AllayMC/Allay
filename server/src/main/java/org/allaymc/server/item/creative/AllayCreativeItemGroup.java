@@ -37,6 +37,7 @@ public class AllayCreativeItemGroup implements CreativeItemGroup {
 
     @Override
     public CreativeItemEntry registerItem(ItemStack itemStack) {
+        registry.ensureMutable();
         var entry = registry.assignIndexForEntry(this, itemStack);
         // NOTICE: 0 is not indexed by the client for items
         itemStack.setUniqueId(entry.index() + 1);

@@ -4,6 +4,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.eventbus.event.entity.ProjectileHitEvent;
 import org.allaymc.api.math.MathUtils;
@@ -144,6 +145,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         // Ray cast entities
         dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb).forEach(entity -> {
             if (entity == thisEntity || (ageComponent.getAge() <= 10 && entity == projectileComponent.getShooter())) {
+                return;
+            }
+
+            if (entity instanceof EntityPlayer player && player.isPhantom()) {
                 return;
             }
 

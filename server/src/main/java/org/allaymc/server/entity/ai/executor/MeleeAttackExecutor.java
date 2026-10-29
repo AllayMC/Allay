@@ -28,6 +28,7 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
     protected final boolean clearTargetAfterLose;
     protected final int coolDown;
     protected final double attackRangeSquared;
+    private final boolean canSpreadOnFire;
 
     protected int attackTick;
     protected Vector3d lastTargetPos;
@@ -41,7 +42,7 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
      * @param coolDown the attack cooldown in ticks.
      */
     public MeleeAttackExecutor(MemoryType<Long> targetIdMemory, float speed, double maxSenseRange, int coolDown) {
-        this(targetIdMemory, speed, maxSenseRange, false, coolDown, DEFAULT_ATTACK_RANGE);
+        this(targetIdMemory, speed, maxSenseRange, false, coolDown, DEFAULT_ATTACK_RANGE, false);
     }
 
     /**
@@ -55,7 +56,7 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
      */
     public MeleeAttackExecutor(MemoryType<Long> targetIdMemory, float speed, double maxSenseRange,
                                int coolDown, double attackRange) {
-        this(targetIdMemory, speed, maxSenseRange, false, coolDown, attackRange);
+        this(targetIdMemory, speed, maxSenseRange, false, coolDown, attackRange, false);
     }
 
     /**
@@ -69,7 +70,7 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
      */
     public MeleeAttackExecutor(MemoryType<Long> targetIdMemory, float speed, double maxSenseRange,
                                boolean clearTargetAfterLose, int coolDown) {
-        this(targetIdMemory, speed, maxSenseRange, clearTargetAfterLose, coolDown, DEFAULT_ATTACK_RANGE);
+        this(targetIdMemory, speed, maxSenseRange, clearTargetAfterLose, coolDown, DEFAULT_ATTACK_RANGE, false);
     }
 
     /**
@@ -83,13 +84,14 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
      * @param attackRange the maximum melee attack range in blocks.
      */
     public MeleeAttackExecutor(MemoryType<Long> targetIdMemory, float speed, double maxSenseRange,
-                               boolean clearTargetAfterLose, int coolDown, double attackRange) {
+                               boolean clearTargetAfterLose, int coolDown, double attackRange, boolean canSpreadOnFire) {
         this.targetIdMemory = targetIdMemory;
         this.speed = speed;
         this.maxSenseRangeSquared = maxSenseRange * maxSenseRange;
         this.clearTargetAfterLose = clearTargetAfterLose;
         this.coolDown = coolDown;
         this.attackRangeSquared = attackRange * attackRange;
+        this.canSpreadOnFire = canSpreadOnFire;
     }
 
     @Override
@@ -145,6 +147,9 @@ public class MeleeAttackExecutor implements BehaviorExecutor {
             }
 
             var attackSuccess = targetLiving.attack(DamageContainer.entityAttack(entity, damage));
+            if (attackSuccess && entity.isOnFire() && canSpreadOnFire) {
+                targetLiving.setOnFireTicks(Math.max(targetLiving.getOnFireTicks(), 40));
+            }
             entity.applyAction(SimpleEntityAction.SWING_ARM);
             entity.getDimension().addSound(targetLoc, new AttackSound(attackSuccess));
             if (attackSuccess) {

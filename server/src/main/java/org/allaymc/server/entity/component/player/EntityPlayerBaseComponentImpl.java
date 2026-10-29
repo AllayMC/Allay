@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
@@ -24,15 +23,18 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.player.PlayerAbility;
 import org.allaymc.api.player.Skin;
+import org.allaymc.api.primitiveshape.PrimitiveShape;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.NetherPortalHelper;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -50,8 +52,7 @@ import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.server.network.NetworkHelper.fromNetwork;
@@ -67,7 +68,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_PLAYER_GAME_MODE = "PlayerGameMode";
 
     protected static final String TAG_SPAWN_POINT = "SpawnPoint";
-    protected static final String TAG_SPAWN_SOURCE = "SpawnSource";
+    protected static final String TAG_SPAWN_POINT_TYPE = "SpawnPointType";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
 
@@ -92,6 +93,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Player controller;
     @Getter
     protected GameMode gameMode;
+    protected boolean phantom;
     @Getter
     protected Skin skin;
     protected Location3ic spawnPoint;
@@ -155,6 +157,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.startUsingItemInAirTime = -1;
         this.cooldowns = new NonBlockingHashMap<>();
         this.foodLevel = MAX_FOOD_LEVEL;
+        this.foodSaturationLevel = MAX_FOOD_SATURATION_LEVEL;
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
         this.chunkLoadingRadius = AllayServer.getSettings().worldSettings().viewDistance();
         this.chunkMaxSendCountPerTick = AllayServer.getSettings().worldSettings().chunkMaxSendCountPerTick();
@@ -176,7 +179,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void onPermissionChange() {
         if (isActualPlayer()) {
-            this.controller.viewPlayerPermission(this.controller);
+            this.controller.viewPlayerAbilities(this.controller);
         }
     }
 
@@ -204,6 +207,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         gameMode = event.getNewGameMode();
+        var oldGameMode = this.gameMode;
         this.gameMode = gameMode;
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
@@ -215,12 +219,116 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             thisPlayer.setAirSupplyTicks(thisPlayer.getAirSupplyMaxTicks());
         }
 
+        // Update abilities
+        if (isActualPlayer()) {
+            this.controller.setAbilities(oldGameMode.getAbilities(), false);
+            this.controller.setAbilities(gameMode.getAbilities(), true);
+        }
+
         if (isActualPlayer()) {
             this.controller.viewPlayerGameMode(thisPlayer);
             // Send permission after game mode to make overriding client's state (e.g., mayfly) possible
-            this.controller.viewPlayerPermission(this.controller);
+            this.controller.viewPlayerAbilities(this.controller);
         }
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
+
+        if (isActualPlayer() && (oldGameMode == GameMode.SPECTATOR || this.gameMode == GameMode.SPECTATOR)) {
+            refreshPhantom();
+            refreshObservedPlayers();
+        }
+    }
+
+    @Override
+    public void setPhantom(boolean phantom) {
+        if (this.phantom == phantom) {
+            return;
+        }
+
+        this.phantom = phantom;
+        refreshPhantom();
+    }
+
+    @Override
+    public boolean isPhantom() {
+        return this.gameMode == GameMode.SPECTATOR || this.phantom;
+    }
+
+    protected void refreshPhantom() {
+        if (!isActualPlayer() || !isAlive()) {
+            return;
+        }
+
+        for (var viewer : new ArrayList<>(getViewers())) {
+            if (!shouldBeVisibleTo(viewer)) {
+                despawnFrom(viewer);
+            }
+        }
+
+        var chunk = thisPlayer.getCurrentChunk();
+        if (chunk == null) {
+            return;
+        }
+
+        chunk.getChunkLoaders().stream()
+                .filter(loader -> loader != thisPlayer)
+                .map(loader -> loader.toWorldViewer())
+                .filter(Objects::nonNull)
+                .filter(viewer -> !getViewers().contains(viewer))
+                .forEach(this::spawnTo);
+    }
+
+    protected boolean shouldBeVisibleTo(WorldViewer viewer) {
+        if (this.phantom) {
+            return false;
+        }
+
+        if (this.gameMode != GameMode.SPECTATOR) {
+            return true;
+        }
+
+        if (!(viewer instanceof Player player)) {
+            return false;
+        }
+
+        var viewerEntity = player.getControlledEntity();
+        return viewerEntity != null && viewerEntity.getGameMode() == GameMode.SPECTATOR;
+    }
+
+    protected void refreshObservedPlayers() {
+        if (!isActualPlayer()) {
+            return;
+        }
+
+        var location = thisPlayer.getLocation();
+        var centerChunkX = (int) location.x() >> 4;
+        var centerChunkZ = (int) location.z() >> 4;
+        var radius = thisPlayer.getChunkLoadingRadius();
+        var refreshed = new HashSet<Long>();
+
+        for (int rx = -radius; rx <= radius; rx++) {
+            for (int rz = -radius; rz <= radius; rz++) {
+                if (rx * rx + rz * rz > radius * radius) {
+                    continue;
+                }
+
+                thisPlayer.getDimension().getEntityManager().forEachEntitiesInChunkImmediately(centerChunkX + rx, centerChunkZ + rz, entity -> {
+                    if (!(entity instanceof EntityPlayer player) || player == thisPlayer) {
+                        return;
+                    }
+
+                    if (player.getGameMode() != GameMode.SPECTATOR && !player.isPhantom()) {
+                        return;
+                    }
+
+                    if (!refreshed.add(player.getRuntimeId())) {
+                        return;
+                    }
+
+                    player.despawnFrom(this.controller);
+                    player.spawnTo(this.controller);
+                });
+            }
+        }
     }
 
     @Override
@@ -228,7 +336,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.flying != flying) {
             this.flying = flying;
             if (isActualPlayer()) {
-                this.controller.viewPlayerPermission(this.controller);
+                this.controller.setAbility(PlayerAbility.FLYING, flying);
             }
         }
     }
@@ -279,7 +387,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var currentFoodLevel = getFoodLevel();
         var difficulty = getWorld().getWorldData().getDifficulty();
         if (difficulty == Difficulty.PEACEFUL && foodTickTimer % 10 == 0) {
-            setFoodLevel(currentFoodLevel + 1);
+            if (currentFoodLevel < MAX_FOOD_LEVEL) {
+                setFoodLevel(currentFoodLevel + 1);
+            }
             if (foodTickTimer % 20 == 0) {
                 regenerate(false);
             }
@@ -378,14 +488,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setFoodLevel(int value) {
         value = Math.max(0, Math.min(value, MAX_FOOD_LEVEL));
-        var event = new PlayerFoodLevelChangeEvent(thisPlayer, this.foodLevel, value);
-        if (!event.call()) {
-            return;
-        }
 
-        this.foodLevel = event.getNewFoodLevel();
-        if (isActualPlayer()) {
-            this.controller.sendFoodLevel(this.foodLevel);
+        if (this.foodLevel != value) {
+            var event = new PlayerFoodLevelChangeEvent(thisPlayer, this.foodLevel, value);
+            if (!event.call()) {
+                return;
+            }
+
+            this.foodLevel = event.getNewFoodLevel();
+            if (isActualPlayer()) {
+                this.controller.sendFoodLevel(this.foodLevel);
+            }
         }
     }
 
@@ -457,7 +570,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     protected void tickBlockCollision() {
-        if (this.gameMode == GameMode.SPECTATOR) {
+        if (isPhantom()) {
             return;
         }
 
@@ -491,11 +604,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         // Determine target dimension to show loading screen early
         var world = thisEntity.getWorld();
-        var currentDimInfo = thisEntity.getDimension().getDimensionInfo();
+        var currentDimType = thisEntity.getDimension().getDimensionType();
         Dimension targetDim;
-        if (currentDimInfo == DimensionInfo.OVERWORLD) {
+        if (currentDimType == DimensionTypes.OVERWORLD) {
             targetDim = world.getNether();
-        } else if (currentDimInfo == DimensionInfo.NETHER) {
+        } else if (currentDimType == DimensionTypes.NETHER) {
             targetDim = world.getOverWorld();
         } else {
             return;
@@ -512,9 +625,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Send dimension change screen immediately so the client shows the loading UI
         // while chunks are being loaded asynchronously in the target dimension
         var loc = thisEntity.getLocation();
-        double targetX = NetherPortalHelper.scaleCoordinate(loc.x(), currentDimInfo, targetDim.getDimensionInfo());
-        double targetZ = NetherPortalHelper.scaleCoordinate(loc.z(), currentDimInfo, targetDim.getDimensionInfo());
-        this.controller.beginDimensionChange(targetDim.getDimensionInfo(), targetX, loc.y(), targetZ);
+        var targetDimType = targetDim.getDimensionType();
+        double targetX = NetherPortalHelper.scaleCoordinate(loc.x(), currentDimType, targetDimType);
+        double targetZ = NetherPortalHelper.scaleCoordinate(loc.z(), currentDimType, targetDimType);
+        this.controller.beginDimensionChange(targetDimType, targetX, loc.y(), targetZ);
 
         Server.getInstance().getVirtualThreadPool().submit(() -> {
             NetherPortalHelper.teleport(thisEntity).thenAccept(success -> {
@@ -538,14 +652,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 this.controller.viewGameRules(targetDim.getWorld().getWorldData().getGameRules());
                 this.controller.viewWeather(targetDim.getWorld().getWeather());
             }
-            boolean dimensionChanged = currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId();
+            boolean dimensionChanged = currentDim.getDimensionType() != targetDim.getDimensionType();
             // Clear cache on dimension or world change
             ChunkCache.getInstance().clearPlayer(((AllayPlayer) this.controller).getLoginData().getUuid());
             currentDim.removePlayer(this.controller, () -> {
                 setLocationBeforeSpawn(target);
                 if (dimensionChanged && !this.controller.isChangingDimension()) {
                     // ChangeDimensionPacket was not sent early — send it now
-                    this.controller.beginDimensionChange(targetDim.getDimensionInfo(), target.x(), target.y(), target.z());
+                    this.controller.beginDimensionChange(targetDim.getDimensionType(), target.x(), target.y(), target.z());
                 }
                 targetDim.addPlayer(this.controller, () -> {
                     if (dimensionChanged) {
@@ -562,7 +676,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void spawnTo(WorldViewer viewer) {
-        if (this.controller != viewer) {
+        if (this.controller != viewer && shouldBeVisibleTo(viewer)) {
             super.spawnTo(viewer);
             viewer.viewEntityArmors(thisPlayer);
             viewer.viewEntityHand(thisPlayer);
@@ -644,8 +758,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected NbtMap saveSpawnPoint() {
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
-                .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId())
-                .putByte(TAG_SPAWN_SOURCE, spawnPointType.id);
+                .putString(TAG_DIMENSION, spawnPoint.dimension().getDimensionType().getIdentifier().toString())
+                .putInt(TAG_SPAWN_POINT_TYPE, spawnPointType.ordinal());
         AllayNBTUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
     }
@@ -683,7 +797,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
 
-        var dimension = world.getDimension(nbt.getInt(TAG_DIMENSION));
+        var dimension = switch (nbt.get(TAG_DIMENSION)) {
+            case String dimensionId -> world.getDimension(new Identifier(dimensionId));
+            case Number dimensionId -> world.getDimension(dimensionId.intValue());
+            case null, default -> world.getDimension(DimensionTypes.OVERWORLD);
+        };
         if (dimension == null) {
             this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
             this.spawnPointType = SpawnPointType.FORCED;
@@ -695,8 +813,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 0, 0, dimension
         );
         // Default to FORCED for old player data that predates this tag
-        var sourceId = nbt.getByte(TAG_SPAWN_SOURCE, SpawnPointType.FORCED.id);
-        this.spawnPointType = SpawnPointType.fromId(sourceId);
+        this.spawnPointType = SpawnPointType.fromId(nbt.getInt(TAG_SPAWN_POINT_TYPE, SpawnPointType.FORCED.ordinal()));
     }
 
     @Override
@@ -966,7 +1083,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public boolean hasEntityCollision() {
-        return this.gameMode != GameMode.SPECTATOR;
+        return !isPhantom();
     }
 
     @Override
@@ -993,19 +1110,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void attachDebugShape(DebugShape debugShape) {
-        super.attachDebugShape(debugShape);
+    public void attachPrimitiveShape(PrimitiveShape primitiveShape) {
+        super.attachPrimitiveShape(primitiveShape);
         if (isActualPlayer()) {
-            debugShape.addViewer(this.controller);
+            primitiveShape.addViewer(this.controller);
         }
     }
 
     @Override
-    public void detachDebugShape(DebugShape debugShape) {
+    public void detachPrimitiveShape(PrimitiveShape primitiveShape) {
         if (isActualPlayer()) {
-            debugShape.removeViewer(this.controller);
+            primitiveShape.removeViewer(this.controller);
         }
-        super.detachDebugShape(debugShape);
+        super.detachPrimitiveShape(primitiveShape);
     }
 
     @EventHandler

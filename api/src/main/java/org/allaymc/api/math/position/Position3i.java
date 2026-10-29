@@ -290,7 +290,7 @@ public class Position3i extends Vector3i implements Position3ic {
         out.writeInt(y);
         out.writeInt(z);
         out.writeUTF(this.dimension().getWorld().getWorldData().getDisplayName());
-        out.writeInt(this.dimension().getDimensionInfo().dimensionId());
+        out.writeInt(this.dimension().getDimensionType().getId());
     }
 
     @Override
@@ -366,6 +366,6 @@ public class Position3i extends Vector3i implements Position3ic {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + this.dimension().getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + ":" + this.dimension().getDimensionType().getIdentifier() + ")";
     }
 }

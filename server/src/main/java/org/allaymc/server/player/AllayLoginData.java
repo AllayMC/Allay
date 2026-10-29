@@ -8,14 +8,14 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.LangCode;
+import org.allaymc.api.player.InputMode;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.Skin;
-import org.allaymc.protocol.extension.NetEaseEncryptionUtils;
-import org.allaymc.server.network.multiversion.MultiVersion;
 import org.cloudburstmc.protocol.bedrock.data.auth.CertificateChainPayload;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
+import org.cloudburstmc.protocol.bedrock.util.NetEaseEncryptionUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -36,6 +36,9 @@ public class AllayLoginData implements LoginData {
     private DeviceInfo deviceInfo;
     private LangCode langCode;
     private String gameVersion;
+    private String serverAddress;
+    private InputMode currentInputMode;
+    private InputMode defaultInputMode;
     private Skin skin;
     private String identityPublicKey;
     private NetEaseData netEaseData;
@@ -48,9 +51,9 @@ public class AllayLoginData implements LoginData {
      * @param isNetEaseClient whether the client is a NetEase client
      * @return the decoded login data, or {@code null} if decoding failed
      */
-    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
     public static AllayLoginData decode(LoginPacket loginPacket, boolean isNetEaseClient) {
         var loginData = new AllayLoginData();
+
         try {
             ChainValidationResult result;
             if (isNetEaseClient) {
@@ -72,7 +75,26 @@ public class AllayLoginData implements LoginData {
             return null;
         }
 
+        try {
+            loginData.uuid = resolveUuid(loginData.authed, loginData.uuid, loginData.xname);
+        } catch (Throwable t) {
+            log.warn("Failed to resolve player UUID!", t);
+            return null;
+        }
+
         return loginData;
+    }
+
+    static UUID resolveUuid(boolean authed, UUID identity, String xname) {
+        if (authed) {
+            return Objects.requireNonNull(identity, "Authenticated player identity cannot be null");
+        }
+        if (xname == null || xname.isBlank()) {
+            throw new IllegalArgumentException("Offline player name cannot be blank");
+        }
+
+        // Recent offline clients do not provide a stable identity in their authentication token.
+        return UUID.nameUUIDFromBytes(("xname:" + xname).getBytes(StandardCharsets.UTF_8));
     }
 
     private void decodeChainData(ChainValidationResult result, boolean isNetEaseClient) {
@@ -126,12 +148,29 @@ public class AllayLoginData implements LoginData {
             this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
         }
 
+        // Offline clients on latest versions report xname as empty in chain data, so this field should be used instead
+        if (!this.authed && (this.xname == null || this.xname.isBlank()) && skinMap.has("ThirdPartyName")) {
+            this.xname = skinMap.get("ThirdPartyName").getAsString();
+        }
+
         if (skinMap.has("LanguageCode")) {
             this.langCode = LangCode.valueOf(skinMap.get("LanguageCode").getAsString());
         }
 
         if (skinMap.has("GameVersion")) {
             this.gameVersion = skinMap.get("GameVersion").getAsString();
+        }
+
+        if (skinMap.has("ServerAddress")) {
+            this.serverAddress = skinMap.get("ServerAddress").getAsString();
+        }
+
+        if (skinMap.has("CurrentInputMode")) {
+            this.currentInputMode = InputMode.from(skinMap.get("CurrentInputMode").getAsInt());
+        }
+
+        if (skinMap.has("DefaultInputMode")) {
+            this.defaultInputMode = InputMode.from(skinMap.get("DefaultInputMode").getAsInt());
         }
 
         var skinBuilder = Skin.builder();
@@ -214,7 +253,6 @@ public class AllayLoginData implements LoginData {
         this.skin = skinBuilder.build();
     }
 
-    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use URL-safe Base64 encoding for skin data")
     private JsonObject decodeToken(String token, boolean isNetEaseClient) {
         String[] tokenSplit = token.split("\\.");
         if (tokenSplit.length < 2) {

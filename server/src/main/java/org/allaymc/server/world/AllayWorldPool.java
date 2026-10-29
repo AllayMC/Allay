@@ -3,6 +3,7 @@ package org.allaymc.server.world;
 import com.google.common.base.Preconditions;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.OkaeriConfig;
+import eu.okaeri.configs.OkaeriConfigInitializer;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
 import lombok.AllArgsConstructor;
@@ -16,16 +17,21 @@ import org.allaymc.api.eventbus.event.world.WorldUnloadEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.WorldState;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.utils.Utils;
+import org.allaymc.server.world.dimension.BuiltinDimensionSettings;
+import org.allaymc.server.world.dimension.DimensionId;
 import org.allaymc.server.world.light.NoLightEngine;
 
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,13 +47,21 @@ public final class AllayWorldPool implements WorldPool {
     private final Path worldFolder;
     private final WorldSettings worldConfig;
 
+    @Setter
+    private World defaultWorld;
+
     public AllayWorldPool() {
         this.worlds = new ConcurrentHashMap<>();
         this.worldFolder = Path.of("worlds");
+        var builtinDimensionSettings = BuiltinDimensionSettings.get();
         this.worldConfig = Objects.requireNonNull(ConfigManager.create(
                 WorldSettings.class,
-                Utils.createConfigInitializer(this.worldFolder.resolve("world-settings.yml"))
+                createWorldSettingsInitializer(this.worldFolder.resolve("world-settings.yml"))
         ));
+        this.worldConfig.normalize();
+        applyBuiltinDimensionSettings(builtinDimensionSettings);
+        this.worldConfig.save();
+        BuiltinDimensionSettings.useWorldSettings(this.worldConfig);
     }
 
     public void loadWorlds() {
@@ -75,15 +89,34 @@ public final class AllayWorldPool implements WorldPool {
                 this.worldConfig.worlds().put(name, toWorldSetting(world));
             }
         });
+        applyBuiltinDimensionSettings(BuiltinDimensionSettings.get());
         this.worldConfig.save();
     }
 
     @Override
-    public void loadWorld(WorldSetting worldSetting, DimensionSetting overworldSetting, DimensionSetting netherSetting, DimensionSetting theEndSetting) {
+    public void loadWorld(WorldSetting worldSetting, Map<Identifier, DimensionSetting> dimensionSettings) {
         var name = worldSetting.name();
         log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADING, name));
         if (worlds.containsKey(name)) {
             throw new IllegalArgumentException("World " + name + " is already loaded");
+        }
+
+        var validatedDimensionSettings = new LinkedHashMap<Identifier, DimensionSetting>();
+        for (var entry : dimensionSettings.entrySet()) {
+            var identifier = entry.getKey();
+            var dimensionSetting = Preconditions.checkNotNull(entry.getValue(), "Dimension setting for %s cannot be null", identifier);
+            validateDimensionType(dimensionSetting.dimensionType());
+            Preconditions.checkArgument(
+                    identifier.equals(dimensionSetting.dimensionType().getIdentifier()),
+                    "Dimension setting key %s does not match dimension type identifier %s",
+                    identifier,
+                    dimensionSetting.dimensionType().getIdentifier()
+            );
+            Preconditions.checkArgument(
+                    validatedDimensionSettings.put(identifier, dimensionSetting) == null,
+                    "Duplicate dimension setting for %s",
+                    identifier
+            );
         }
 
         var useVirtualThread = worldSetting.useVirtualThread();
@@ -95,18 +128,16 @@ public final class AllayWorldPool implements WorldPool {
             return;
         }
 
-        // Load overworld dimension
-        new WorldGeneratorInitEvent(world, overworldSetting.worldGenerator(), DimensionInfo.OVERWORLD).call();
-        world.addDimension(new AllayDimension(world, overworldSetting.worldGenerator(), DimensionInfo.OVERWORLD, overworldSetting.enableLightCalculation(), useVirtualThread));
-
-        // Load nether and the end dimension if they are not null
-        if (netherSetting != null) {
-            new WorldGeneratorInitEvent(world, netherSetting.worldGenerator(), DimensionInfo.NETHER).call();
-            world.addDimension(new AllayDimension(world, netherSetting.worldGenerator(), DimensionInfo.NETHER, netherSetting.enableLightCalculation(), useVirtualThread));
-        }
-        if (theEndSetting != null) {
-            new WorldGeneratorInitEvent(world, theEndSetting.worldGenerator(), DimensionInfo.THE_END).call();
-            world.addDimension(new AllayDimension(world, theEndSetting.worldGenerator(), DimensionInfo.THE_END, theEndSetting.enableLightCalculation(), useVirtualThread));
+        var overworldSetting = Preconditions.checkNotNull(
+                validatedDimensionSettings.get(DimensionTypes.OVERWORLD.getIdentifier()),
+                "World must have the overworld dimension"
+        );
+        loadDimension(world, overworldSetting, useVirtualThread);
+        for (var setting : validatedDimensionSettings.values()) {
+            if (setting.dimensionType() == DimensionTypes.OVERWORLD) {
+                continue;
+            }
+            loadDimension(world, setting, useVirtualThread);
         }
 
         var event = new WorldLoadEvent(world);
@@ -150,7 +181,8 @@ public final class AllayWorldPool implements WorldPool {
 
     @Override
     public World getDefaultWorld() {
-        return getWorld(worldConfig.defaultWorld());
+        if (defaultWorld == null) defaultWorld = getWorld(worldConfig.defaultWorld());
+        return defaultWorld;
     }
 
     private void loadWorld(String name, WorldSettings.WorldSetting setting) {
@@ -160,15 +192,23 @@ public final class AllayWorldPool implements WorldPool {
             storage = Registries.WORLD_STORAGE_FACTORIES.get("LEVELDB").apply(this.worldFolder.resolve(name));
         }
 
-        var overworldGenerator = tryCreateWorldGenerator(Preconditions.checkNotNull(setting.overworld(), "World must has overworld dimension"));
-        var netherGenerator = setting.nether() == null ? null : tryCreateWorldGenerator(setting.nether());
-        var theEndGenerator = setting.theEnd() == null ? null : tryCreateWorldGenerator(setting.theEnd());
+        var dimensionSettings = new LinkedHashMap<Identifier, DimensionSetting>();
+        for (var entry : setting.normalizedDimensions().entrySet()) {
+            var dimensionType = Registries.DIMENSIONS.getByK2(entry.getKey());
+            Preconditions.checkArgument(dimensionType != null, "Dimension type %s is not registered", entry.getKey());
+            dimensionSettings.put(
+                    entry.getKey(),
+                    new DimensionSetting(
+                            dimensionType,
+                            tryCreateWorldGenerator(entry.getValue()),
+                            entry.getValue().enableLightCalculation()
+                    )
+            );
+        }
 
         loadWorld(
                 new WorldSetting(name, storage, setting.useVirtualThread),
-                new DimensionSetting(overworldGenerator, setting.overworld().enableLightCalculation()),
-                netherGenerator != null ? new DimensionSetting(netherGenerator, setting.nether().enableLightCalculation()) : null,
-                theEndGenerator != null ? new DimensionSetting(theEndGenerator, setting.theEnd().enableLightCalculation()) : null
+                dimensionSettings
         );
     }
 
@@ -187,53 +227,174 @@ public final class AllayWorldPool implements WorldPool {
         }
     }
 
+    private void loadDimension(AllayWorld world, DimensionSetting dimensionSetting, boolean useVirtualThread) {
+        new WorldGeneratorInitEvent(world, dimensionSetting.worldGenerator(), dimensionSetting.dimensionType()).call();
+        world.addDimension(new AllayDimension(
+                world,
+                dimensionSetting.worldGenerator(),
+                dimensionSetting.dimensionType(),
+                dimensionSetting.enableLightCalculation(),
+                useVirtualThread
+        ));
+    }
+
     private WorldSettings.WorldSetting toWorldSetting(World world) {
-        var owGenerator = world.getOverWorld().getWorldGenerator();
-
-        WorldGenerator netherGenerator = null;
-        if (world.getNether() != null) {
-            netherGenerator = world.getNether().getWorldGenerator();
+        var dimensions = new LinkedHashMap<String, WorldSettings.WorldSetting.DimensionSetting>();
+        var overworld = world.getOverWorld();
+        if (overworld != null) {
+            dimensions.put(
+                    DimensionId.OVERWORLD.getIdentifier().toString(),
+                    toWorldDimensionSetting(overworld)
+            );
         }
-
-        WorldGenerator theEndGenerator = null;
-        if (world.getTheEnd() != null) {
-            theEndGenerator = world.getTheEnd().getWorldGenerator();
+        for (var entry : world.getDimensions().entrySet()) {
+            if (entry.getKey() == DimensionTypes.OVERWORLD) {
+                continue;
+            }
+            dimensions.put(entry.getKey().getIdentifier().toString(), toWorldDimensionSetting(entry.getValue()));
         }
-
-        var overworldLightEnabled = !(((AllayDimension) world.getOverWorld()).getLightEngine() instanceof NoLightEngine);
-        var netherLightEnabled = world.getNether() == null || !(((AllayDimension) world.getNether()).getLightEngine() instanceof NoLightEngine);
-        var theEndLightEnabled = world.getTheEnd() == null || !(((AllayDimension) world.getTheEnd()).getLightEngine() instanceof NoLightEngine);
 
         return new WorldSettings.WorldSetting(
                 world.getWorldStorage().getName(),
                 world.isVirtualTickingThread(),
-                new WorldSettings.WorldSetting.DimensionSetting(owGenerator.getName(), owGenerator.getPreset(), overworldLightEnabled),
-                netherGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(netherGenerator.getName(), netherGenerator.getPreset(), netherLightEnabled) : null,
-                theEndGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(theEndGenerator.getName(), theEndGenerator.getPreset(), theEndLightEnabled) : null
+                dimensions
         );
+    }
+
+    private WorldSettings.WorldSetting.DimensionSetting toWorldDimensionSetting(Dimension dimension) {
+        var generator = dimension.getWorldGenerator();
+        var lightEnabled = !(((AllayDimension) dimension).getLightEngine() instanceof NoLightEngine);
+        return new WorldSettings.WorldSetting.DimensionSetting(generator.getName(), generator.getPreset(), lightEnabled);
+    }
+
+    private static void validateDimensionType(DimensionType dimensionType) {
+        var minHeight = dimensionType.getMinHeight();
+        var maxHeight = dimensionType.getMaxHeight();
+        Preconditions.checkArgument(minHeight >= -512 && minHeight <= 512, "Dimension min height %s is out of range", minHeight);
+        Preconditions.checkArgument(maxHeight >= -512 && maxHeight <= 512, "Dimension max height %s is out of range", maxHeight);
+        Preconditions.checkArgument(maxHeight >= minHeight, "Dimension max height %s is smaller than min height %s", maxHeight, minHeight);
+        Preconditions.checkArgument((minHeight & 15) == 0, "Dimension min height %s must align to section boundaries", minHeight);
+        Preconditions.checkArgument((maxHeight & 15) == 15, "Dimension max height %s must align to section boundaries", maxHeight);
+        Preconditions.checkArgument(
+                dimensionType.chunkSectionCount() == dimensionType.maxSectionY() - dimensionType.minSectionY() + 1,
+                "Dimension %s has inconsistent section metadata",
+                dimensionType.getIdentifier()
+        );
+    }
+
+    private static Identifier normalizeDimensionIdentifier(String rawIdentifier) {
+        return DimensionId.normalizeConfigIdentifier(rawIdentifier);
+    }
+
+    private static OkaeriConfigInitializer createWorldSettingsInitializer(Path path) {
+        return it -> {
+            it.withConfigurer(new eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer());
+            it.withBindFile(path);
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load();
+        };
+    }
+
+    private void applyBuiltinDimensionSettings(BuiltinDimensionSettings builtinDimensionSettings) {
+        var builtinDimensions = new LinkedHashMap<String, WorldSettings.BuiltinDimensionSetting>();
+        for (var dimensionId : DimensionId.values()) {
+            var range = builtinDimensionSettings.getHeightRange(dimensionId);
+            builtinDimensions.put(
+                    dimensionId.getIdentifier().toString(),
+                    new WorldSettings.BuiltinDimensionSetting(range.minHeight(), range.maxHeight())
+            );
+        }
+        this.worldConfig.builtinDimensions(builtinDimensions);
     }
 
     @Getter
     @Accessors(fluent = true)
     public static class WorldSettings extends OkaeriConfig {
 
+        @Comment("Height settings shared by the built-in dimensions in all worlds")
+        @Setter
+        @CustomKey("built-in-dimensions")
+        private Map<String, BuiltinDimensionSetting> builtinDimensions = new LinkedHashMap<>(Map.of(
+                DimensionId.OVERWORLD.getIdentifier().toString(),
+                new BuiltinDimensionSetting(
+                        DimensionId.OVERWORLD.getDefaultMinHeight(),
+                        DimensionId.OVERWORLD.getDefaultMaxHeight()
+                ),
+                DimensionId.NETHER.getIdentifier().toString(),
+                new BuiltinDimensionSetting(
+                        DimensionId.NETHER.getDefaultMinHeight(),
+                        DimensionId.NETHER.getDefaultMaxHeight()
+                ),
+                DimensionId.THE_END.getIdentifier().toString(),
+                new BuiltinDimensionSetting(
+                        DimensionId.THE_END.getDefaultMinHeight(),
+                        DimensionId.THE_END.getDefaultMaxHeight()
+                )
+        ));
+
         @Setter
         @CustomKey("worlds")
         private Map<String, WorldSetting> worlds = Map.of("world", new WorldSetting(
-                "LEVELDB", false,
-                new WorldSetting.DimensionSetting(
-                        "FLAT",
-                        ""
-                ), null, null
+                "LEVELDB",
+                false,
+                new LinkedHashMap<>(Map.of(
+                        DimensionId.OVERWORLD.getIdentifier().toString(),
+                        new WorldSetting.DimensionSetting("FLAT", "")
+                ))
         ));
 
         @Comment("The default world is the world that newly joined players will be in")
         @CustomKey("default-world")
         private String defaultWorld = "world";
 
+        public Map<DimensionId, BuiltinDimensionSetting> normalizedBuiltinDimensions() {
+            var normalized = new LinkedHashMap<DimensionId, BuiltinDimensionSetting>();
+            if (builtinDimensions == null || builtinDimensions.isEmpty()) {
+                return normalized;
+            }
+
+            builtinDimensions.forEach((identifier, setting) -> {
+                Preconditions.checkNotNull(setting, "Built-in dimension setting %s cannot be null", identifier);
+                var dimensionId = DimensionId.fromIdentifier(normalizeDimensionIdentifier(identifier));
+                Preconditions.checkArgument(dimensionId != null, "Built-in dimension setting %s is not a built-in dimension", identifier);
+                Preconditions.checkArgument(
+                        normalized.put(dimensionId, setting) == null,
+                        "Duplicate built-in dimension setting for %s",
+                        dimensionId.getIdentifier()
+                );
+            });
+            return normalized;
+        }
+
+        public void normalize() {
+            var normalizedBuiltinDimensions = new LinkedHashMap<String, BuiltinDimensionSetting>();
+            normalizedBuiltinDimensions().forEach((dimensionId, setting1) -> normalizedBuiltinDimensions.put(dimensionId.getIdentifier().toString(), setting1));
+            this.builtinDimensions = normalizedBuiltinDimensions;
+
+            var normalizedWorlds = new LinkedHashMap<String, WorldSetting>();
+            if (worlds != null && !worlds.isEmpty()) {
+                worlds.forEach((name, setting) -> {
+                    Preconditions.checkNotNull(setting, "World setting %s cannot be null", name);
+                    normalizedWorlds.put(name, setting.normalized());
+                });
+            }
+            this.worlds = normalizedWorlds;
+        }
+
         @Getter
         @Accessors(fluent = true)
         @AllArgsConstructor
+        public static class BuiltinDimensionSetting extends OkaeriConfig {
+            @CustomKey("min-height")
+            private int minHeight;
+
+            @CustomKey("max-height")
+            private int maxHeight;
+        }
+
+        @Getter
+        @Accessors(fluent = true)
         public static class WorldSetting extends OkaeriConfig {
             @CustomKey("storage-type")
             private String storageType;
@@ -241,6 +402,8 @@ public final class AllayWorldPool implements WorldPool {
             @Comment("If set to true, virtual thread will be used as the ticking thread of the world and the dimensions in the world")
             @CustomKey("use-virtual-thread")
             private boolean useVirtualThread;
+
+            private Map<String, DimensionSetting> dimensions;
 
             private DimensionSetting overworld;
 
@@ -250,6 +413,59 @@ public final class AllayWorldPool implements WorldPool {
             // Can be null
             @CustomKey("the-end")
             private DimensionSetting theEnd;
+
+            public WorldSetting(String storageType, boolean useVirtualThread, Map<String, DimensionSetting> dimensions) {
+                this(storageType, useVirtualThread, dimensions, null, null, null);
+            }
+
+            public WorldSetting(
+                    String storageType,
+                    boolean useVirtualThread,
+                    Map<String, DimensionSetting> dimensions,
+                    DimensionSetting overworld,
+                    DimensionSetting nether,
+                    DimensionSetting theEnd
+            ) {
+                this.storageType = storageType;
+                this.useVirtualThread = useVirtualThread;
+                this.dimensions = dimensions;
+                this.overworld = overworld;
+                this.nether = nether;
+                this.theEnd = theEnd;
+            }
+
+            public Map<Identifier, DimensionSetting> normalizedDimensions() {
+                var normalized = new LinkedHashMap<Identifier, DimensionSetting>();
+                if (dimensions != null && !dimensions.isEmpty()) {
+                    dimensions.forEach((identifier, setting) -> {
+                        Preconditions.checkNotNull(setting, "Dimension setting %s cannot be null", identifier);
+                        var normalizedIdentifier = normalizeDimensionIdentifier(identifier);
+                        Preconditions.checkArgument(
+                                normalized.put(normalizedIdentifier, setting) == null,
+                                "Duplicate dimension setting for %s",
+                                normalizedIdentifier
+                        );
+                    });
+                    return normalized;
+                }
+
+                if (overworld != null) {
+                    normalized.put(DimensionId.OVERWORLD.getIdentifier(), overworld);
+                }
+                if (nether != null) {
+                    normalized.put(DimensionId.NETHER.getIdentifier(), nether);
+                }
+                if (theEnd != null) {
+                    normalized.put(DimensionId.THE_END.getIdentifier(), theEnd);
+                }
+                return normalized;
+            }
+
+            public WorldSetting normalized() {
+                var normalizedDimensions = new LinkedHashMap<String, DimensionSetting>();
+                normalizedDimensions().forEach((identifier, setting) -> normalizedDimensions.put(identifier.toString(), setting));
+                return new WorldSetting(storageType, useVirtualThread, normalizedDimensions);
+            }
 
             @Getter
             @Accessors(fluent = true)

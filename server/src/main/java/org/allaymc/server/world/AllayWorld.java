@@ -2,7 +2,6 @@ package org.allaymc.server.world;
 
 import com.google.common.base.Preconditions;
 import io.netty.util.internal.PlatformDependent;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +23,12 @@ import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.FakeChunkLoader;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.player.AllayPlayer;
+import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
 import org.allaymc.server.world.manager.AllayEntityManager;
@@ -35,10 +36,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -63,7 +61,7 @@ public class AllayWorld implements World {
     protected final Queue<PacketQueueEntry> packetQueue;
 
     protected final AtomicReference<WorldState> state;
-    protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
+    protected final Map<DimensionType, Dimension> dimensionMap;
     @Getter
     protected final Scheduler scheduler;
     protected final GameLoop gameLoop;
@@ -96,7 +94,7 @@ public class AllayWorld implements World {
         this.worldData.increaseWorldStartCount();
         this.packetQueue = PlatformDependent.newMpscQueue();
         this.state = new AtomicReference<>(WorldState.STARTING);
-        this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
+        this.dimensionMap = new LinkedHashMap<>(3);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
         this.gameLoop = GameLoop.builder()
                 .currentTick(this.worldData.getTotalTime())
@@ -143,8 +141,24 @@ public class AllayWorld implements World {
         this.gameLoop.wakeUp();
     }
 
-    public void addSyncPacketToQueue(Player player, BedrockPacket packet, long time) {
-        this.packetQueue.offer(new PacketQueueEntry(player, packet, time));
+    /**
+     * Queues a processor's synchronous phase on this world's tick thread.
+     *
+     * <p>The processor selected during receipt is retained so a later client-state transition
+     * cannot redirect the queued packet to a different processor.</p>
+     *
+     * @param player the receiving player
+     * @param packet the received packet
+     * @param time the tick at which the packet was received
+     * @param processor the processor selected during the asynchronous phase
+     */
+    public void addSyncPacketToQueue(
+            Player player,
+            BedrockPacket packet,
+            long time,
+            PacketProcessor<BedrockPacket> processor
+    ) {
+        this.packetQueue.offer(new PacketQueueEntry(player, packet, time, processor));
         this.gameLoop.wakeUp();
     }
 
@@ -153,19 +167,18 @@ public class AllayWorld implements World {
             PacketQueueEntry entry;
             int count = 0;
             while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
-                // The player should still in the same world
+                // A queued packet belongs to the world that owned the player when it was received.
                 if (entry.player.getControlledEntity().getWorld() != this) {
                     log.error("Trying to handle sync packet in world {} which the player {} is not in!", name, entry.player.getOriginName());
                     continue;
                 }
 
-                // The player may have been disconnected,
-                // which is possible because this is a synced packet
+                // The connection may close while the packet waits for the world thread.
                 if (!entry.player.getClientState().canHandlePackets()) {
                     continue;
                 }
 
-                ((AllayPlayer) entry.player).handlePacketSync(entry.packet(), entry.time());
+                entry.processor().handleSync(entry.player(), entry.packet(), entry.time());
                 count++;
             }
         } catch (Throwable throwable) {
@@ -296,7 +309,7 @@ public class AllayWorld implements World {
 
         // Only overworld players can sleep
         var overworldPlayers = players.stream()
-                .filter(p -> p.getControlledEntity().getDimension().getDimensionInfo().dimensionId() == 0)
+                .filter(p -> p.getControlledEntity().getDimension().getDimensionType() == DimensionTypes.OVERWORLD)
                 .toList();
 
         if (overworldPlayers.isEmpty()) {
@@ -396,13 +409,13 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public Dimension getDimension(int dimensionId) {
-        return this.dimensionMap.get(dimensionId);
+    public Dimension getDimension(DimensionType dimensionType) {
+        return this.dimensionMap.get(dimensionType);
     }
 
     @Override
     @UnmodifiableView
-    public Map<Integer, Dimension> getDimensions() {
+    public Map<DimensionType, Dimension> getDimensions() {
         return Collections.unmodifiableMap(this.dimensionMap);
     }
 
@@ -415,8 +428,8 @@ public class AllayWorld implements World {
     }
 
     public void addDimension(Dimension dimension) {
-        Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionInfo().dimensionId()));
-        this.dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
+        Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionType()));
+        this.dimensionMap.put(dimension.getDimensionType(), dimension);
     }
 
     @Override
@@ -462,6 +475,19 @@ public class AllayWorld implements World {
         getPlayers().forEach(player -> player.viewWeather(this.weather));
     }
 
-    protected record PacketQueueEntry(Player player, BedrockPacket packet, long time) {
+    /**
+     * Captures all context needed to finish packet handling without repeating processor selection.
+     *
+     * @param player the receiving player
+     * @param packet the received packet
+     * @param time the receive tick
+     * @param processor the processor selected during receipt
+     */
+    protected record PacketQueueEntry(
+            Player player,
+            BedrockPacket packet,
+            long time,
+            PacketProcessor<BedrockPacket> processor
+    ) {
     }
 }

@@ -2,8 +2,8 @@ package org.allaymc.api.player;
 
 import org.allaymc.api.bossbar.BossBarViewer;
 import org.allaymc.api.container.ContainerViewer;
+import org.allaymc.api.ddui.DDUIViewer;
 import org.allaymc.api.dialog.DialogViewer;
-import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormViewer;
 import org.allaymc.api.message.MayContainTrKey;
@@ -12,8 +12,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldViewer;
-import org.allaymc.api.world.data.DimensionInfo;
-import org.jetbrains.annotations.ApiStatus;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3dc;
 
@@ -21,13 +20,14 @@ import java.awt.image.BufferedImage;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a player in the server. A {@link Player} basically 'control' an {@link EntityPlayer}.
  *
  * @author daoge_cmd
  */
-public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, ScoreboardViewer, DialogViewer {
+public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, DDUIViewer, ScoreboardViewer, DialogViewer {
 
     Speed DEFAULT_SPEED = new Speed(0.1, 1.0);
     Speed DEFAULT_FLY_SPEED = new Speed(0.05, 1.0);
@@ -148,12 +148,213 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     int getPing();
 
     /**
-     * Views the specified player's permission. This will update the permission level shown in the player list and some
+     * Views the specified player's abilities. This will update the permission level shown in the player list and some
      * in-game permissions/properties like whether the player can fly, chat, and the player's (vertical) fly speed etc.
      *
      * @param player the player to view
      */
-    void viewPlayerPermission(Player player);
+    void viewPlayerAbilities(Player player);
+
+    /**
+     * Returns the player's current abilities.
+     *
+     * @return an immutable view of the current abilities
+     */
+    @UnmodifiableView
+    Set<PlayerAbility> getAbilities();
+
+    /**
+     * Checks whether the player has the given ability enabled.
+     *
+     * @param ability the ability to check
+     * @return {@code true} if the ability is enabled, {@code false} otherwise
+     */
+    boolean hasAbility(PlayerAbility ability);
+
+    /**
+     * Sets whether the given ability is enabled.
+     *
+     * @param ability the ability to change
+     * @param value   {@code true} to enable the ability, {@code false} to disable it
+     */
+    void setAbility(PlayerAbility ability, boolean value);
+
+    /**
+     * Sets whether the given abilities are enabled.
+     *
+     * @param abilities the abilities to change
+     * @param value     {@code true} to enable the ability, {@code false} to disable it
+     */
+    void setAbilities(Set<PlayerAbility> abilities, boolean value);
+
+    /**
+     * Replaces the player's abilities with the provided set.
+     *
+     * @param abilities the new abilities
+     */
+    void setAbilities(Set<PlayerAbility> abilities);
+
+    /**
+     * Enables the given ability.
+     *
+     * @param ability the ability to enable
+     */
+    default void addAbility(PlayerAbility ability) {
+        setAbility(ability, true);
+    }
+
+    /**
+     * Enables the given abilities.
+     *
+     * @param abilities the abilities to enable
+     */
+    default void addAbilities(PlayerAbility... abilities) {
+        setAbilities(Set.of(abilities), true);
+    }
+
+    /**
+     * Disables the given ability.
+     *
+     * @param ability the abilities to disable
+     */
+    default void removeAbility(PlayerAbility ability) {
+        setAbility(ability, false);
+    }
+
+    /**
+     * Disables the given abilities.
+     *
+     * @param abilities the abilities to disable
+     */
+    default void removeAbilities(PlayerAbility... abilities) {
+        setAbilities(Set.of(abilities), false);
+    }
+
+    /**
+     * Checks whether the player may currently place blocks.
+     * <p>
+     * Always true for operators, always false for spectator, adventure modes and immutableWorld,
+     * actual ability value otherwise.
+     * <p>
+     * Directly reflects client-side placement behavior.
+     *
+     * @return {@code true} if placing blocks is currently allowed, {@code false} otherwise
+     */
+    boolean canPlaceBlocks();
+
+    /**
+     * Checks whether the player may currently break blocks.
+     * <p>
+     * Always true for operators, always false for spectator, adventure modes and immutableWorld,
+     * actual ability value otherwise.
+     * <p>
+     * Directly reflects client-side mining behavior.
+     *
+     * @return {@code true} if breaking blocks is currently allowed, {@code false} otherwise
+     */
+    boolean canBreakBlocks();
+
+    /**
+     * Checks whether the player may currently interact with blocks.
+     * <p>
+     * Always true for operators, always false for spectator mode and immutable world, actual ability
+     * value otherwise.
+     * <p>
+     * Directly reflects client-side interaction behavior.
+     *
+     * @return {@code true} if block interaction is currently allowed, {@code false} otherwise
+     */
+    boolean canInteractWithBlocks();
+
+    /**
+     * Checks whether the player may currently open containers.
+     * <p>
+     * Always true for operators, always false for spectator mode and immutable world, actual ability
+     * value otherwise.
+     *
+     * @return {@code true} if opening containers is currently allowed, {@code false} otherwise
+     */
+    boolean canOpenContainers();
+
+    /**
+     * Checks whether the player may currently attack other players.
+     * <p>
+     * Always true for operators, always false for spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if attacking players is currently allowed, {@code false} otherwise
+     */
+    boolean canAttackPlayers();
+
+    /**
+     * Checks whether the player may currently attack mobs.
+     * <p>
+     * Always true for operators, always false for spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if attacking mobs is currently allowed, {@code false} otherwise
+     */
+    boolean canAttackMobs();
+
+    /**
+     * Checks whether the player may currently fly.
+     * <p>
+     * Always true if isAlwaysFlying and spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if flying is currently allowed, {@code false} otherwise
+     */
+    boolean canFly();
+
+    /**
+     * Checks whether placed blocks should not be consumed from inventory.
+     * <p>
+     * Usually {@code true} in creative mode, but always reflects the actual ability value.
+     *
+     * @return {@code true} if placed blocks are not consumed, {@code false} otherwise
+     */
+    boolean hasInfiniteBlock();
+
+    /**
+     * Checks whether the player is currently in no clip mode.
+     * <p>
+     * Always true for spectator mode, actual ability value otherwise.
+     *
+     * @return {@code true} if player is in no clip mode, {@code false} otherwise.
+     */
+    boolean isNoClip();
+
+    /**
+     * Checks whether the player is currently treated as having immutable world enabled.
+     * <p>
+     * Always false for operators, always true for adventure and spectator modes, actual value
+     * otherwise.
+     *
+     * @return {@code true} if immutable world is currently active, {@code false} otherwise
+     */
+    boolean isImmutableWorld();
+
+    /**
+     * Sets whether immutable world should be enabled for the player.
+     * <p>
+     * Forces the client to treat the world as non-interactive, similar to adventure mode.
+     *
+     * @param immutableWorld {@code true} to enable immutable world, {@code false} to disable it
+     */
+    void setImmutableWorld(boolean immutableWorld);
+
+    /**
+     * Checks whether the player is currently forced to be always flying.
+     * <p>
+     * Always true for spectator mode and no clip, actual value otherwise.
+     *
+     * @return {@code true} if always flying is currently active, {@code false} otherwise
+     */
+    boolean isAlwaysFlying();
+
+    /**
+     * Sets whether always flying should be active for the player.
+     *
+     * @param alwaysFlying {@code true} to enable always flying, {@code false} to disable it
+     */
+    void setAlwaysFlying(boolean alwaysFlying);
 
     /**
      * Views a player list change. The provided players will be added to the player list.
@@ -495,12 +696,12 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      * player visual feedback while the server prepares the target dimension.
      * The flag is automatically cleared when {@link #completeDimensionChange()} is called.
      *
-     * @param targetDimInfo the target dimension info
+     * @param targetDimensionType the target dimension type
      * @param x             approximate target x coordinate
      * @param y             approximate target y coordinate
      * @param z             approximate target z coordinate
      */
-    void beginDimensionChange(DimensionInfo targetDimInfo, double x, double y, double z);
+    void beginDimensionChange(DimensionType targetDimensionType, double x, double y, double z);
 
     /**
      * Complete a dimension change by sending the dimension ack and resetting the flag.
@@ -509,19 +710,4 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      */
     void completeDimensionChange();
 
-    /**
-     * Sends a packet to the client.
-     *
-     * @param packet the packet object to be sent to the client. The type of the packet depends on the implementation.
-     */
-    @ApiStatus.Internal
-    void sendPacket(Object packet);
-
-    /**
-     * Immediately sends a packet to the client without any delay or buffering.
-     *
-     * @param packet the packet to be sent to the client. The type of the packet depends on the implementation.
-     */
-    @ApiStatus.Internal
-    void sendPacketImmediately(Object packet);
 }

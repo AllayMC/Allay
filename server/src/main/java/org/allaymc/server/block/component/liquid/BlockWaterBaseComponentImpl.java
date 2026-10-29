@@ -11,7 +11,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3ic;
@@ -34,7 +34,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
-        if (block.getDimension().getDimensionInfo() == DimensionInfo.NETHER) {
+        if (block.getDimension().getDimensionType().waterEvaporates()) {
             block.getDimension().setLiquid(block.getPosition(), null);
             return;
         }
@@ -44,7 +44,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        if (oldBlock.getDimension().getDimensionInfo() == DimensionInfo.NETHER) {
+        if (oldBlock.getDimension().getDimensionType().waterEvaporates()) {
             oldBlock.getDimension().setLiquid(oldBlock.getPosition(), null);
             return;
         }
@@ -139,12 +139,12 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public int getFlowDecay(DimensionInfo dimensionInfo) {
+    public int getFlowDecay(DimensionType dimensionType) {
         return 1;
     }
 
     @Override
-    public int getFlowSpeed(DimensionInfo dimensionInfo) {
+    public int getFlowSpeed(DimensionType dimensionType) {
         return 5;
     }
 

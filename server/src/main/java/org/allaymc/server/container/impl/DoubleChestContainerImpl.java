@@ -17,6 +17,7 @@ import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
 import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.*;
@@ -189,9 +190,10 @@ public class DoubleChestContainerImpl implements BlockContainer {
     @Override
     public boolean addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer)) {
-            log.warn("Viewer already exists! Container: {}, Viewer: {}", getContainerType(), viewer);
-            removeViewer(viewer);
-            return addViewer(viewer);
+            return true;
+        }
+        if (viewer instanceof Player player && !player.canOpenContainers()) {
+            return false;
         }
 
         var event = new ContainerOpenEvent(viewer, this);

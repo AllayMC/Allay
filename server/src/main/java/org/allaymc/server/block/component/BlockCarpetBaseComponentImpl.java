@@ -3,8 +3,8 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockType;
 
 /**
  * @author IWareQ

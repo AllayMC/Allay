@@ -1,8 +1,9 @@
 package org.allaymc.api.block.data;
 
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 @MinecraftVersionSensitive
 public interface BlockTags {

@@ -21,12 +21,12 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
     @Override
     public ActionResponse handle(DropAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
-        var count = action.getCount();
-        var slot = ContainerActionProcessor.fromNetworkSlotIndex(container, action.getSource().getSlot());
+        var container = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
+        var count = action.count();
+        var slot = ContainerActionProcessor.fromNetworkSlotIndex(container, action.source().slot());
 
         var item = container.getItemStack(slot);
-        if (failToValidateStackUniqueId(item.getUniqueId(), action.getSource().getStackNetworkId())) {
+        if (failToValidateStackUniqueId(item.getUniqueId(), action.source().stackNetworkId())) {
             log.warn("mismatch stack unique id!");
             return error();
         }

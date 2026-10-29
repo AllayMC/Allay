@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
@@ -27,9 +26,8 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.feature.WorldFeature;
-import org.allaymc.server.bossbar.AllayBossBar;
-import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
@@ -50,6 +48,9 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.AllayNBTIO;
 import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
+import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
+import org.allaymc.server.world.dimension.CustomDimensionIdAllocator;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -68,6 +69,7 @@ public final class Allay {
     public static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
     public static Dashboard DASHBOARD;
+    private static boolean initialized;
 
     public static void main(String[] args) throws InterruptedException {
         long initialTime = System.currentTimeMillis();
@@ -107,6 +109,7 @@ public final class Allay {
             if (DASHBOARD != null) {
                 sleep(5000);
             }
+            LogManager.shutdown();
             System.exit(1);
         }
 
@@ -119,12 +122,14 @@ public final class Allay {
             if (DASHBOARD != null) {
                 sleep(5000);
             }
+            LogManager.shutdown();
             System.exit(1);
         }
 
         log.info(I18n.get().tr(TrKeys.ALLAY_SERVER_STOPPED));
         // Server has been shutdown
         // Call System.exit(0) to stop other non-daemon threads
+        LogManager.shutdown();
         System.exit(0);
     }
 
@@ -139,13 +144,18 @@ public final class Allay {
     }
 
     /**
-     * NOTICE: The i18n implementation must be registered before initializing allay,
-     * which means that you should call initI18n() before call initAllay()!
+     * Initializes API bindings and registries once.
+     *
+     * <p>{@link #initI18n()} must run first because registry initialization may emit translated output.</p>
      */
     @VisibleForTesting
-    public static void initAllay() {
+    public static synchronized void initAllay() {
+        if (initialized) {
+            return;
+        }
         initAllayAPI();
         initRegistries();
+        initialized = true;
     }
 
     private static void initAllayAPI() {
@@ -163,7 +173,6 @@ public final class Allay {
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
         // Misc
-        api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
         api.bind(NBTIO.class, AllayNBTIO::new);
         api.bind(FakeContainerFactory.class, AllayFakeContainerFactory::new);
 
@@ -190,7 +199,7 @@ public final class Allay {
         );
         InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataRegistryLoader());
         InternalRegistries.ITEM_TAGS = SimpleMappedRegistry.create(new ItemTagRegistryLoader());
-        InternalRegistries.ITEM_DEFINITIONS = SimpleMappedRegistry.create(new ItemDefinitionRegistryLoader());
+        InternalRegistries.VANILLA_ITEM_DEFINITIONS = SimpleMappedRegistry.create(new VanillaItemDefinitionRegistryLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
                 r -> Registries.ITEMS = r,
@@ -240,6 +249,12 @@ public final class Allay {
                 new BiomeTypeRegistryPopulator()
         );
         CustomBiomeIdAllocator.init();
+        DoubleKeyMappedRegistry.create(
+                RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, DimensionType>())),
+                r -> Registries.DIMENSIONS = r,
+                new DimensionTypeRegistryPopulator()
+        );
+        CustomDimensionIdAllocator.init();
 
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());

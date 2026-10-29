@@ -46,6 +46,7 @@ public class AllayCreativeItemCategory implements CreativeItemCategory {
 
     @Override
     public CreativeItemGroup registerGroup(String name, ItemStack icon) {
+        registry.ensureMutable();
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(icon);
         var group = new AllayCreativeItemGroup(registry, this, name, icon);
@@ -56,6 +57,7 @@ public class AllayCreativeItemCategory implements CreativeItemCategory {
 
     @Override
     public CreativeItemGroup registerUnnamedGroup() {
+        registry.ensureMutable();
         var group = new AllayCreativeItemGroup(registry, this, "", ItemAirStack.AIR_STACK);
         groups.put(group.getIndex(), group);
         return group;

@@ -8,7 +8,8 @@ import org.allaymc.api.eventbus.event.block.PortalCreateEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.api.world.poi.PoiTypes;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -74,7 +75,7 @@ public class NetherPortalHelper {
         int x = pos.x(), y = pos.y(), z = pos.z();
 
         // Scan down to find the bottom (obsidian floor)
-        while (y > dimension.getDimensionInfo().minHeight()) {
+        while (y > dimension.getDimensionType().getMinHeight()) {
             var below = dimension.getBlockState(x, y - 1, z);
             if (below.getBlockType() == BlockTypes.OBSIDIAN) {
                 break;
@@ -283,15 +284,15 @@ public class NetherPortalHelper {
     public static CompletableFuture<Boolean> teleport(Entity entity) {
         var world = entity.getWorld();
         var currentDim = entity.getDimension();
-        var currentDimInfo = currentDim.getDimensionInfo();
+        var currentDimType = currentDim.getDimensionType();
 
         // Determine target dimension and search radius
         Dimension targetDim;
         int searchChunkRadius;
-        if (currentDimInfo == DimensionInfo.OVERWORLD) {
+        if (currentDimType == DimensionTypes.OVERWORLD) {
             targetDim = world.getNether();
             searchChunkRadius = SEARCH_CHUNK_RADIUS_TO_NETHER;
-        } else if (currentDimInfo == DimensionInfo.NETHER) {
+        } else if (currentDimType == DimensionTypes.NETHER) {
             targetDim = world.getOverWorld();
             searchChunkRadius = SEARCH_CHUNK_RADIUS_TO_OVERWORLD;
         } else {
@@ -302,9 +303,10 @@ public class NetherPortalHelper {
         if (targetDim == null) return failOnDimensionThread(entity);
 
         var loc = entity.getLocation();
-        double targetX = scaleCoordinate(loc.x(), currentDimInfo, targetDim.getDimensionInfo());
-        double targetZ = scaleCoordinate(loc.z(), currentDimInfo, targetDim.getDimensionInfo());
-        int targetY = Math.clamp((int) loc.y(), targetDim.getDimensionInfo().minHeight(), targetDim.getDimensionInfo().maxHeight());
+        var targetDimType = targetDim.getDimensionType();
+        double targetX = scaleCoordinate(loc.x(), currentDimType, targetDimType);
+        double targetZ = scaleCoordinate(loc.z(), currentDimType, targetDimType);
+        int targetY = Math.clamp((int) loc.y(), targetDimType.getMinHeight(), targetDimType.getMaxHeight());
 
         // Use Math.floor to correctly handle negative coordinates (truncation rounds toward zero)
         int flooredX = (int) Math.floor(targetX);
@@ -324,7 +326,7 @@ public class NetherPortalHelper {
         if (poiPos != null) {
             // Find the bottom of the portal column
             int bottomY = poiPos.y();
-            int minY = targetDim.getDimensionInfo().minHeight();
+            int minY = targetDim.getDimensionType().getMinHeight();
             while (bottomY > minY && targetDim.getBlockState(poiPos.x(), bottomY - 1, poiPos.z()).getBlockType() == BlockTypes.PORTAL) {
                 bottomY--;
             }
@@ -376,10 +378,10 @@ public class NetherPortalHelper {
     /**
      * Scale a coordinate between dimensions (overworld ×8 = nether, nether ÷8 = overworld).
      */
-    public static double scaleCoordinate(double coord, DimensionInfo from, DimensionInfo to) {
-        if (from == DimensionInfo.OVERWORLD && to == DimensionInfo.NETHER) {
+    public static double scaleCoordinate(double coord, DimensionType from, DimensionType to) {
+        if (from == DimensionTypes.OVERWORLD && to == DimensionTypes.NETHER) {
             return coord / 8.0;
-        } else if (from == DimensionInfo.NETHER && to == DimensionInfo.OVERWORLD) {
+        } else if (from == DimensionTypes.NETHER && to == DimensionTypes.OVERWORLD) {
             return coord * 8.0;
         }
         return coord;
@@ -389,9 +391,9 @@ public class NetherPortalHelper {
      * Find a safe Y coordinate to build a portal at.
      */
     private static int findSafeY(Dimension dimension, int x, int y, int z) {
-        var dimInfo = dimension.getDimensionInfo();
-        int maxY = dimInfo.maxHeight() - 5;  // Need room for the 5-tall frame
-        int minY = dimInfo.minHeight() + 1;
+        var dimensionType = dimension.getDimensionType();
+        int maxY = dimensionType.getMaxHeight() - 5;  // Need room for the 5-tall frame
+        int minY = dimensionType.getMinHeight() + 1;
 
         // Try the target Y first
         y = Math.clamp(y, minY, maxY);

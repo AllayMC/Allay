@@ -1,10 +1,10 @@
 package org.allaymc.server.item.component.map;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 
 /**
  * @author daoge_cmd

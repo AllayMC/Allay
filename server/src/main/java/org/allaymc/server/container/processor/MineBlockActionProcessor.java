@@ -22,19 +22,19 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
     public ActionResponse handle(MineBlockAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getControlledEntity().getContainer(ContainerTypes.INVENTORY);
         int handSlot = player.getControlledEntity().getHandSlot();
-        if (handSlot != action.getHotbarSlot()) {
+        if (handSlot != action.hotbarSlot()) {
             log.warn("The held Item Index on the server side does not match the client side!");
             return error();
         }
 
         var itemInHand = container.getItemInHand();
-        if (failToValidateStackUniqueId(itemInHand.getUniqueId(), action.getStackNetworkId())) {
+        if (failToValidateStackUniqueId(itemInHand.getUniqueId(), action.stackNetworkId())) {
             log.warn("mismatch source stack unique id!");
             return error();
         }
 
-        if (itemInHand.getDamage() != action.getPredictedDurability()) {
-            log.warn("Durability predicted by the client does not match that of the server! client: {}, server: {}, player: {}", action.getPredictedDurability(), itemInHand.getDamage(), player.getOriginName());
+        if (itemInHand.getDamage() != action.predictedDurability()) {
+            log.warn("Durability predicted by the client does not match that of the server! client: {}, server: {}, player: {}", action.predictedDurability(), itemInHand.getDamage(), player.getOriginName());
         }
         return new ActionResponse(
                 true,

@@ -5,8 +5,8 @@ import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
-import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
  * @author daoge_cmd
@@ -20,6 +20,9 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
             case START_ITEM_USE_ON -> {
                 if (entity.isUsingItemOnBlock()) {
                     log.debug("Player {} tried to start item use on without stopping", player.getOriginName());
+                    yield PacketSignal.HANDLED;
+                }
+                if (!player.canInteractWithBlocks()) {
                     yield PacketSignal.HANDLED;
                 }
 

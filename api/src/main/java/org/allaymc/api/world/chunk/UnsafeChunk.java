@@ -5,7 +5,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.poi.PoiType;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -102,11 +102,11 @@ public interface UnsafeChunk {
     ChunkState getState();
 
     /**
-     * Get the dimension info of the chunk.
+     * Get the dimension type of the chunk.
      *
-     * @return the dimension info of the chunk
+     * @return the dimension type of the chunk
      */
-    DimensionInfo getDimensionInfo();
+    DimensionType getDimensionType();
 
     /**
      * Get the x coordinate of the chunk.

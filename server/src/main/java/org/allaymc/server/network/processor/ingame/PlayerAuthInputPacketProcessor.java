@@ -12,14 +12,11 @@ import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchAirEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
+import org.allaymc.api.eventbus.event.server.PlayerControlModeUpdateEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.player.ClientPlayMode;
-import org.allaymc.api.player.GameMode;
-import org.allaymc.api.player.InputInteractionModel;
-import org.allaymc.api.player.InputMode;
-import org.allaymc.api.player.Player;
+import org.allaymc.api.player.*;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.AttackSound;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -36,8 +33,9 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
-import org.cloudburstmc.protocol.common.PacketSignal;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import java.util.List;
@@ -102,7 +100,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
             switch (action.getAction()) {
                 case START_BREAK -> {
-                    if (isInvalidGameType(player)) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         continue;
                     }
 
@@ -110,7 +108,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
                     // When a player switches to breaking another block halfway through breaking one
-                    if (isInvalidGameType(player)) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
                         continue;
                     }
 
@@ -123,7 +121,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_PREDICT_DESTROY -> {
-                    if (isInvalidGameType(player)) {
+                    if (isInvalidGameType(player) || !player.canBreakBlocks()) {
+                        var state = player.getControlledEntity().getLocation().dimension().getBlockState(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+                        player.viewBlockUpdate(new Vector3i(pos.getX(), pos.getY(), pos.getZ()), 0, state);
                         continue;
                     }
 
@@ -352,10 +352,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     entity.exhaust(entity.isSprinting() ? 0.2f : 0.05f);
                 }
                 case START_FLYING -> {
-                    if (!entity.canFly()) {
+                    if (!player.canFly()) {
                         // Reset client-side flying state
                         var controller = entity.getController();
-                        controller.viewPlayerPermission(controller);
+                        controller.viewPlayerAbilities(controller);
 
                         log.warn("Player {} tried to start flying without permission", player.getOriginName());
                         return;
@@ -363,11 +363,19 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
                     entity.setFlying(true);
                 }
-                case STOP_FLYING -> entity.setFlying(false);
+                case STOP_FLYING -> {
+                    entity.setFlying(player.isAlwaysFlying());
+                    if (player.isAlwaysFlying()) {
+                        entity.setFlying(true);
+                        player.viewPlayerAbilities(player);
+                    } else {
+                        entity.setFlying(false);
+                    }
+                }
                 case MISSED_SWING -> {
                     var event = new PlayerPunchAirEvent(entity);
                     if (event.call()) {
-                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false), false);
+                        entity.getDimension().addSound(entity.getLocation(), new AttackSound(false));
                     }
                 }
             }
@@ -386,7 +394,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
-        updatePlayerInputState(player, packet);
+        updatePlayerInputState((AllayPlayer) player, packet);
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player.getControlledEntity()).getBaseComponent());
         if (baseComponent.getExpectedTeleportPos() != null) {
@@ -481,17 +489,19 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         ((AllayPlayer) player).handlePacketSync(pk, receiveTime);
     }
 
-    protected void updatePlayerInputState(Player player, PlayerAuthInputPacket packet) {
-        var inputMode = switch (packet.getInputMode()) {
+    protected void updatePlayerInputState(AllayPlayer player, PlayerAuthInputPacket packet) {
+        var oldInputMode = player.getInputMode();
+        var newInputMode = switch (packet.getInputMode()) {
             case UNDEFINED -> InputMode.UNDEFINED;
             case MOUSE -> InputMode.MOUSE;
             case TOUCH -> InputMode.TOUCH;
             case GAMEPAD -> InputMode.GAMEPAD;
             case MOTION_CONTROLLER -> InputMode.MOTION_CONTROLLER;
+            // COUNT is a protocol enum sentinel, not a client input mode.
+            case COUNT -> oldInputMode;
         };
-        ((AllayPlayer) player).setInputMode(inputMode);
 
-        var playMode = switch (packet.getPlayMode()) {
+        var newPlayMode = switch (packet.getPlayMode()) {
             case NORMAL -> ClientPlayMode.NORMAL;
             case TEASER -> ClientPlayMode.TEASER;
             case SCREEN -> ClientPlayMode.SCREEN;
@@ -502,14 +512,36 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case EXIT_LEVEL -> ClientPlayMode.EXIT_LEVEL;
             case EXIT_LEVEL_LIVING_ROOM -> ClientPlayMode.EXIT_LEVEL_LIVING_ROOM;
         };
-        ((AllayPlayer) player).setPlayMode(playMode);
+        var oldPlayMode = player.getPlayMode();
 
-        var interactionModel = switch (packet.getInputInteractionModel()) {
+        var oldInteractionModel = player.getInputInteractionModel();
+        var newInteractionModel = switch (packet.getInputInteractionModel()) {
             case TOUCH -> InputInteractionModel.TOUCH;
             case CROSSHAIR -> InputInteractionModel.CROSSHAIR;
             case CLASSIC -> InputInteractionModel.CLASSIC;
+            // COUNT is a protocol enum sentinel, not a client interaction model.
+            case COUNT -> oldInteractionModel;
         };
-        ((AllayPlayer) player).setInputInteractionModel(interactionModel);
+
+        var changed = newInputMode != oldInputMode ||
+                      newPlayMode != oldPlayMode ||
+                      newInteractionModel != oldInteractionModel;
+
+        if (changed) {
+            player.setInputMode(newInputMode);
+            player.setPlayMode(newPlayMode);
+            player.setInputInteractionModel(newInteractionModel);
+
+            new PlayerControlModeUpdateEvent(
+                    player,
+                    oldInputMode,
+                    newInputMode,
+                    oldPlayMode,
+                    newPlayMode,
+                    oldInteractionModel,
+                    newInteractionModel
+            ).call();
+        }
     }
 
     protected boolean notReadyForInput(Player player) {

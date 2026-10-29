@@ -22,6 +22,8 @@ public class EntityZombieImpl extends EntityImpl implements EntityZombie, Entity
     @Delegate
     private EntityParallelTickComponent parallelTickComponent;
     @Delegate
+    private EntityBabyComponent babyComponent;
+    @Delegate
     private EntityHeadYawComponent headYawComponent;
 
     public EntityZombieImpl(EntityInitInfo initInfo,

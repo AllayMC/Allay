@@ -23,11 +23,11 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
     @Override
     public ActionResponse handle(ConsumeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
-        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
-        var sourceStackNetworkId = action.getSource().getStackNetworkId();
-        var slot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.getSource().getSlot());
+        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
+        var sourceStackNetworkId = action.source().stackNetworkId();
+        var slot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.source().slot());
 
-        var count = action.getCount();
+        var count = action.count();
         if (count == 0) {
             log.warn("Cannot consume 0 items!");
             return error();

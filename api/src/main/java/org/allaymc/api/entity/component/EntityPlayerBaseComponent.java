@@ -4,8 +4,6 @@ import org.allaymc.api.entity.interfaces.EntityFishingHook;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.Permissions;
-import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
@@ -233,24 +231,32 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setFlying(boolean flying);
 
     /**
-     * Checks if the player is allowed to fly based on the current game mode and permissions.
-     * <ul>
-     *   <li>Spectator mode: always allowed to fly (hardcoded)</li>
-     *   <li>Creative mode: allowed unless explicitly denied (FALSE)</li>
-     *   <li>Survival/Adventure mode: denied unless explicitly allowed (TRUE)</li>
-     * </ul>
+     * Checks if the player is allowed to fly based on the current game mode and abilities.
      *
      * @return {@code true} if the player can fly, {@code false} otherwise
      */
     default boolean canFly() {
-        var gameMode = getGameMode();
-        return switch (gameMode) {
-            case SPECTATOR -> true;
-            case CREATIVE -> hasPermission(Permissions.ABILITY_FLY_CREATIVE) != Tristate.FALSE;
-            case SURVIVAL -> hasPermission(Permissions.ABILITY_FLY_SURVIVAL) == Tristate.TRUE;
-            case ADVENTURE -> hasPermission(Permissions.ABILITY_FLY_ADVENTURE) == Tristate.TRUE;
-        };
+        return isActualPlayer() ? getController().canFly() : false;
     }
+
+    /**
+     * Sets whether this player should be treated as phantom.
+     * <p>
+     * Players in phantom mode are completely removed from all viewers and cannot be interacted
+     * with by the world, while still being able to interact with the world itself.
+     *
+     * @param phantom whether to enable phantom mode
+     */
+    void setPhantom(boolean phantom);
+
+    /**
+     * Checks whether this player is currently phantom.
+     * <p>
+     * Spectator players always return {@code true}.
+     *
+     * @return {@code true} if the player is phantom
+     */
+    boolean isPhantom();
 
     /**
      * Gets the score tag of the player.
@@ -322,16 +328,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     enum SpawnPointType {
         /** Set by command (e.g., {@code /spawnpoint}). No block validation needed on respawn. */
-        FORCED(0, null),
+        FORCED(null),
         /** Set by sleeping in a bed. Validated against bed existence on respawn. */
-        BED(1, TrKeys.MC_TILE_BED_NOTVALID),
+        BED(TrKeys.MC_TILE_BED_NOTVALID),
         /** Set by interacting with a respawn anchor. Validated against anchor existence on respawn. */
-        RESPAWN_ANCHOR(2, TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
-
-        /**
-         * Stable numeric ID used for NBT persistence. Never reuse or reorder these values.
-         */
-        public final byte id;
+        RESPAWN_ANCHOR(TrKeys.MC_TILE_RESPAWN_ANCHOR_NOTVALID);
 
         /**
          * The translation key sent to the player when they die and this spawn point block is missing.
@@ -339,20 +340,14 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
          */
         public final String invalidSpawnKey;
 
-        SpawnPointType(int id, String invalidSpawnKey) {
-            this.id = (byte) id;
+        public static final SpawnPointType[] VALUES = values();
+
+        SpawnPointType(String invalidSpawnKey) {
             this.invalidSpawnKey = invalidSpawnKey;
         }
 
-        /**
-         * Looks up a {@code SpawnPointType} by its stable {@link #id}.
-         * Returns {@link #FORCED} if the id is unrecognised (e.g., corrupt NBT).
-         */
-        public static SpawnPointType fromId(byte id) {
-            for (var type : values()) {
-                if (type.id == id) return type;
-            }
-            return FORCED;
+        public static SpawnPointType fromId(int id) {
+            return VALUES[id];
         }
     }
 

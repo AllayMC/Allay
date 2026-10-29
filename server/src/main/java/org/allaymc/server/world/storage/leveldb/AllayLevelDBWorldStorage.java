@@ -15,7 +15,7 @@ import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.OperationType;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionType;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.world.AllayWorldData;
@@ -39,11 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -116,29 +112,29 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     @Override
-    public CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+    public CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionType dimensionType) {
         return CompletableFuture
-                .supplyAsync(() -> readChunkSync(chunkX, chunkZ, dimensionInfo), Server.getInstance().getVirtualThreadPool())
+                .supplyAsync(() -> readChunkSync(chunkX, chunkZ, dimensionType), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(t -> {
                     log.error("Failed to read chunk ({}, {})", chunkX, chunkZ, t);
-                    return AllayUnsafeChunk.builder().newChunk(chunkX, chunkZ, dimensionInfo).toSafeChunk();
+                    return AllayUnsafeChunk.builder().newChunk(chunkX, chunkZ, dimensionType).toSafeChunk();
                 });
     }
 
     @Override
-    public Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+    public Chunk readChunkSync(int chunkX, int chunkZ, DimensionType dimensionType) {
         var builder = AllayUnsafeChunk.builder()
                 .chunkX(chunkX)
                 .chunkZ(chunkZ)
-                .dimensionInfo(dimensionInfo)
+                .dimensionType(dimensionType)
                 .state(ChunkState.NEW);
-        if (!containChunk(chunkX, chunkZ, dimensionInfo)) {
+        if (!containChunk(chunkX, chunkZ, dimensionType)) {
             return builder.build().toSafeChunk();
         }
 
-        var versionValue = this.db.get(LevelDBKey.VERSION.createKey(chunkX, chunkZ, dimensionInfo));
+        var versionValue = this.db.get(LevelDBKey.VERSION.createKey(chunkX, chunkZ, dimensionType));
         if (versionValue == null) {
-            versionValue = this.db.get(LevelDBKey.LEGACY_VERSION.createKey(chunkX, chunkZ, dimensionInfo));
+            versionValue = this.db.get(LevelDBKey.LEGACY_VERSION.createKey(chunkX, chunkZ, dimensionType));
         }
         if (versionValue == null) {
             // This might be a slightly-corrupted chunk with a missing version field
@@ -146,13 +142,13 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             log.warn("Chunk at ({}, {}) is missing version field", chunkX, chunkZ);
         }
 
-        var chunkFinalizedState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.createKey(chunkX, chunkZ, dimensionInfo));
+        var chunkFinalizedState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.createKey(chunkX, chunkZ, dimensionType));
         if (chunkFinalizedState != null && Unpooled.wrappedBuffer(chunkFinalizedState).readByte() != VanillaChunkState.DONE.ordinal()) {
             // Older versions didn't have CHUNK_FINALIZED_STATE data, so we still load this chunk
             return builder.build().toSafeChunk();
         }
 
-        var chunkStateBytes = this.db.get(LevelDBKey.ALLAY_CHUNK_STATE.createKey(chunkX, chunkZ, dimensionInfo));
+        var chunkStateBytes = this.db.get(LevelDBKey.ALLAY_CHUNK_STATE.createKey(chunkX, chunkZ, dimensionType));
         if (chunkStateBytes != null) {
             var chunkStateName = new String(chunkStateBytes, StandardCharsets.UTF_8);
             try {
@@ -166,41 +162,41 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
 
         // Sections
-        var sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
-        var minSectionY = dimensionInfo.minSectionY();
-        for (int sectionY = minSectionY; sectionY <= dimensionInfo.maxSectionY(); sectionY++) {
-            var sectionData = this.db.get(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(chunkX, chunkZ, sectionY, dimensionInfo));
+        var sections = new AllayChunkSection[dimensionType.chunkSectionCount()];
+        var minSectionY = dimensionType.minSectionY();
+        for (int sectionY = minSectionY; sectionY <= dimensionType.maxSectionY(); sectionY++) {
+            var sectionData = this.db.get(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(chunkX, chunkZ, sectionY, dimensionType));
             if (sectionData != null) {
                 sections[sectionY - minSectionY] = ChunkSectionCodec.deserialize(sectionData, sectionY, chunkX, chunkZ);
             }
         }
-        builder.sections(ChunkSectionCodec.fillNullSections(sections, dimensionInfo));
+        builder.sections(ChunkSectionCodec.fillNullSections(sections, dimensionType));
 
         // Height and biome
-        var data3d = this.db.get(LevelDBKey.DATA_3D.createKey(chunkX, chunkZ, dimensionInfo));
+        var data3d = this.db.get(LevelDBKey.DATA_3D.createKey(chunkX, chunkZ, dimensionType));
         if (data3d != null) {
             HeightAndBiomeCodec.deserialize(data3d, builder);
         } else {
-            var data2d = this.db.get(LevelDBKey.DATA_2D.createKey(chunkX, chunkZ, dimensionInfo));
+            var data2d = this.db.get(LevelDBKey.DATA_2D.createKey(chunkX, chunkZ, dimensionType));
             if (data2d != null) {
                 HeightAndBiomeCodec.deserializeOld(data2d, builder);
             }
         }
 
         // Block entities
-        var tileBytes = this.db.get(LevelDBKey.BLOCK_ENTITIES.createKey(chunkX, chunkZ, dimensionInfo));
+        var tileBytes = this.db.get(LevelDBKey.BLOCK_ENTITIES.createKey(chunkX, chunkZ, dimensionType));
         if (tileBytes != null) {
-            builder.blockEntities(BlockEntityCodec.deserialize(tileBytes, world, dimensionInfo));
+            builder.blockEntities(BlockEntityCodec.deserialize(tileBytes, world, dimensionType));
         }
 
         // Scheduled updates
-        var scheduledBytes = this.db.get(LevelDBKey.PENDING_TICKS.createKey(chunkX, chunkZ, dimensionInfo));
+        var scheduledBytes = this.db.get(LevelDBKey.PENDING_TICKS.createKey(chunkX, chunkZ, dimensionType));
         if (scheduledBytes != null) {
             builder.scheduledUpdates(ScheduledUpdateCodec.deserialize(scheduledBytes));
         }
 
         // POI data
-        var poiBytes = this.db.get(LevelDBKey.ALLAY_POI_DATA.createKey(chunkX, chunkZ, dimensionInfo));
+        var poiBytes = this.db.get(LevelDBKey.ALLAY_POI_DATA.createKey(chunkX, chunkZ, dimensionType));
         if (poiBytes != null) {
             builder.poiEntries(PoiCodec.deserialize(poiBytes));
         }
@@ -230,7 +226,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                     addChunkToBatch(chunk, writeBatch);
                 }
                 for (var req : batchEntityRequests.values()) {
-                    addEntitiesToBatch(req.chunkX(), req.chunkZ(), req.dimensionInfo(), req.entities(), writeBatch);
+                    addEntitiesToBatch(req.chunkX(), req.chunkZ(), req.dimensionType(), req.entities(), writeBatch);
                 }
                 batchEntityRequests.clear();
                 this.db.write(writeBatch);
@@ -272,39 +268,39 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     private void addChunkToBatch(Chunk chunk, WriteBatch writeBatch) {
-        writeBatch.put(LevelDBKey.VERSION.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{(byte) CURRENT_CHUNK_VERSION});
+        writeBatch.put(LevelDBKey.VERSION.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionType()), new byte[]{(byte) CURRENT_CHUNK_VERSION});
         writeBatch.put(
-                LevelDBKey.CHUNK_FINALIZED_STATE.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
+                LevelDBKey.CHUNK_FINALIZED_STATE.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionType()),
                 LevelDBUtils.withByteBufToArray(buf -> buf.writeByte(VanillaChunkState.DONE.ordinal()))
         );
         writeBatch.put(
-                LevelDBKey.ALLAY_CHUNK_STATE.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
+                LevelDBKey.ALLAY_CHUNK_STATE.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionType()),
                 chunk.getState().name().getBytes()
         );
         chunk.applyOperation(c -> {
             var allayUnsafeChunk = (AllayUnsafeChunk) c;
-            var dimensionInfo = allayUnsafeChunk.getDimensionInfo();
+            var dimensionType = allayUnsafeChunk.getDimensionType();
 
             // Sections
-            for (int ySection = dimensionInfo.minSectionY(); ySection <= dimensionInfo.maxSectionY(); ySection++) {
+            for (int ySection = dimensionType.minSectionY(); ySection <= dimensionType.maxSectionY(); ySection++) {
                 var section = allayUnsafeChunk.getSection(ySection);
                 if (!section.hasDirtyBlockLayer()) {
                     continue;
                 }
                 writeBatch.put(
-                        LevelDBKey.CHUNK_SECTION_PREFIX.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), ySection, dimensionInfo),
+                        LevelDBKey.CHUNK_SECTION_PREFIX.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), ySection, dimensionType),
                         ChunkSectionCodec.serialize(section, ySection)
                 );
             }
 
             // Height and biome
             writeBatch.put(
-                    LevelDBKey.DATA_3D.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionInfo),
+                    LevelDBKey.DATA_3D.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionType),
                     HeightAndBiomeCodec.serialize(allayUnsafeChunk)
             );
 
             // Block entities
-            var blockEntitiesKey = LevelDBKey.BLOCK_ENTITIES.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionInfo);
+            var blockEntitiesKey = LevelDBKey.BLOCK_ENTITIES.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionType);
             var blockEntitiesData = BlockEntityCodec.serialize(allayUnsafeChunk.getBlockEntities().values());
             if (blockEntitiesData == null) {
                 writeBatch.delete(blockEntitiesKey);
@@ -313,7 +309,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             }
 
             // Scheduled updates
-            var scheduledKey = LevelDBKey.PENDING_TICKS.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionInfo);
+            var scheduledKey = LevelDBKey.PENDING_TICKS.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionType);
             var scheduledData = ScheduledUpdateCodec.serialize(allayUnsafeChunk.getScheduledUpdates().values(), world.getTick());
             if (scheduledData == null) {
                 writeBatch.delete(scheduledKey);
@@ -322,7 +318,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             }
 
             // POI data
-            var poiKey = LevelDBKey.ALLAY_POI_DATA.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionInfo);
+            var poiKey = LevelDBKey.ALLAY_POI_DATA.createKey(allayUnsafeChunk.getX(), allayUnsafeChunk.getZ(), dimensionType);
             var poiData = PoiCodec.serialize(allayUnsafeChunk.getPoiEntries());
             if (poiData == null) {
                 writeBatch.delete(poiKey);
@@ -333,26 +329,26 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     @Override
-    public void writeEntitiesSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities) {
+    public void writeEntitiesSync(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities) {
         batchLock.lock();
         try {
             if (batchMode) {
                 batchEntityRequests.put(
-                        new EntityWriteKey(chunkX, chunkZ, dimensionInfo.dimensionId()),
-                        new EntityWriteRequest(chunkX, chunkZ, dimensionInfo, entities)
+                        new EntityWriteKey(chunkX, chunkZ, dimensionType.getId()),
+                        new EntityWriteRequest(chunkX, chunkZ, dimensionType, entities)
                 );
                 return;
             }
         } finally {
             batchLock.unlock();
         }
-        writeEntities0(chunkX, chunkZ, dimensionInfo, entities, false);
+        writeEntities0(chunkX, chunkZ, dimensionType, entities, false);
     }
 
-    private void addEntitiesToBatch(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities, WriteBatch writeBatch) {
+    private void addEntitiesToBatch(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities, WriteBatch writeBatch) {
         var idsBuf = ByteBufAllocator.DEFAULT.buffer();
         try {
-            var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionInfo);
+            var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionType);
 
             // Delete old entity data for this chunk
             var oldIds = this.db.get(idsKey);
@@ -376,9 +372,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     @Override
-    public CompletableFuture<Map<Long, Entity>> readEntities(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+    public CompletableFuture<Map<Long, Entity>> readEntities(int chunkX, int chunkZ, DimensionType dimensionType) {
         return CompletableFuture
-                .supplyAsync(() -> readEntitiesSync(chunkX, chunkZ, dimensionInfo), Server.getInstance().getVirtualThreadPool())
+                .supplyAsync(() -> readEntitiesSync(chunkX, chunkZ, dimensionType), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(t -> {
                     log.error("Failed to read entities in chunk ({}, {})", chunkX, chunkZ, t);
                     return Collections.emptyMap();
@@ -386,11 +382,11 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     @Override
-    public Map<Long, Entity> readEntitiesSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        var ids = this.db.get(LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionInfo));
+    public Map<Long, Entity> readEntitiesSync(int chunkX, int chunkZ, DimensionType dimensionType) {
+        var ids = this.db.get(LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionType));
         if (ids == null) {
             // Try to load entities through the old method
-            return readEntitiesOldSync(chunkX, chunkZ, dimensionInfo);
+            return readEntitiesOldSync(chunkX, chunkZ, dimensionType);
         }
 
         var map = new Long2ObjectOpenHashMap<Entity>();
@@ -403,7 +399,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 continue;
             }
 
-            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNBTUtils.bytesToNbtLE(nbt));
+            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionType), AllayNBTUtils.bytesToNbtLE(nbt));
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
@@ -415,15 +411,15 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return map;
     }
 
-    protected Map<Long, Entity> readEntitiesOldSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        var entityBytes = db.get(LevelDBKey.ENTITIES.createKey(chunkX, chunkZ, dimensionInfo));
+    protected Map<Long, Entity> readEntitiesOldSync(int chunkX, int chunkZ, DimensionType dimensionType) {
+        var entityBytes = db.get(LevelDBKey.ENTITIES.createKey(chunkX, chunkZ, dimensionType));
         if (entityBytes == null) {
             return Collections.emptyMap();
         }
 
         var map = new Long2ObjectOpenHashMap<Entity>();
         for (var nbt : AllayNBTUtils.bytesToNbtListLE(entityBytes)) {
-            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
+            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionType), nbt);
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
@@ -436,14 +432,14 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     @Override
-    public CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities) {
-        return writeEntities0(chunkX, chunkZ, dimensionInfo, entities, true);
+    public CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities) {
+        return writeEntities0(chunkX, chunkZ, dimensionType, entities, true);
     }
 
-    protected CompletableFuture<Void> writeEntities0(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities, boolean asyncWrite) {
+    protected CompletableFuture<Void> writeEntities0(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities, boolean asyncWrite) {
         var idsBuf = ByteBufAllocator.DEFAULT.buffer();
         try (var writeBatch = this.db.createWriteBatch()) {
-            var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionInfo);
+            var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionType);
 
             // Delete the old entities in this chunk
             var oldIds = this.db.get(idsKey);
@@ -485,9 +481,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     @Override
-    public boolean containChunk(int x, int z, DimensionInfo dimensionInfo) {
-        for (int ySection = dimensionInfo.minSectionY(); ySection <= dimensionInfo.maxSectionY(); ySection++) {
-            var bytes = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(x, z, ySection, dimensionInfo));
+    public boolean containChunk(int x, int z, DimensionType dimensionType) {
+        for (int ySection = dimensionType.minSectionY(); ySection <= dimensionType.maxSectionY(); ySection++) {
+            var bytes = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(x, z, ySection, dimensionType));
             if (bytes != null) {
                 return true;
             }
@@ -576,5 +572,5 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private record EntityWriteKey(int chunkX, int chunkZ, int dimensionId) {}
 
-    private record EntityWriteRequest(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities) {}
+    private record EntityWriteRequest(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities) {}
 }

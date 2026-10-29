@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.container;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.dto.Block;
@@ -11,6 +10,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemShulkerBoxBaseComponent;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
 
 import java.util.HashMap;

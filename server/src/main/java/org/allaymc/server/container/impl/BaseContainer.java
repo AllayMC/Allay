@@ -10,10 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerViewer;
+import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
 import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.NBTIO;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
@@ -85,9 +87,10 @@ public class BaseContainer implements Container {
     @Override
     public boolean addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer)) {
-            log.warn("Viewer already exists! Container: {}, Viewer: {}", this.containerType, viewer);
-            removeViewer(viewer);
-            return addViewer(viewer);
+            return true;
+        }
+        if (viewer instanceof Player player && this instanceof BlockContainer && !player.canOpenContainers()) {
+            return false;
         }
 
         var event = new ContainerOpenEvent(viewer, this);

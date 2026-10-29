@@ -106,8 +106,8 @@ public final class ChunkEncoder {
     }
 
     private static void writeBlocks(AllayUnsafeChunk chunk, ByteBuf byteBuf) {
-        var dimensionInfo = chunk.getDimensionInfo();
-        for (int i = dimensionInfo.minSectionY(); i <= dimensionInfo.maxSectionY(); i++) {
+        var dimensionType = chunk.getDimensionType();
+        for (int i = dimensionType.minSectionY(); i <= dimensionType.maxSectionY(); i++) {
             ChunkEncoder.writeToNetwork(chunk.getSection(i), byteBuf);
         }
     }

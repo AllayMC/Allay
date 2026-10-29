@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component.weapon;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -11,6 +10,7 @@ import org.allaymc.api.world.explosion.WindExplosion;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.api.world.sound.Sound;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;

@@ -84,6 +84,7 @@ public final class ItemTypeInitializer {
         ItemTypes.MUSIC_DISC_CREATOR = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR, DiscType.DISC_CREATOR);
         ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR_MUSIC_BOX, DiscType.DISC_CREATOR_MUSIC_BOX);
         ItemTypes.MUSIC_DISC_PRECIPICE = buildMusicDisc(ItemId.MUSIC_DISC_PRECIPICE, DiscType.DISC_PRECIPICE);
+        ItemTypes.MUSIC_DISC_BOUNCE = buildMusicDisc(ItemId.MUSIC_DISC_BOUNCE, DiscType.DISC_BOUNCE);
     }
 
     private static ItemType<ItemMusicDiscStack> buildMusicDisc(ItemId itemId, DiscType discType) {
@@ -453,6 +454,7 @@ public final class ItemTypeInitializer {
         ItemTypes.SLIME_SPAWN_EGG = buildSpawnEgg(ItemId.SLIME_SPAWN_EGG, EntityId.SLIME);
         ItemTypes.SNIFFER_SPAWN_EGG = buildSpawnEgg(ItemId.SNIFFER_SPAWN_EGG, EntityId.SNIFFER);
         ItemTypes.SNOW_GOLEM_SPAWN_EGG = buildSpawnEgg(ItemId.SNOW_GOLEM_SPAWN_EGG, EntityId.SNOW_GOLEM);
+        ItemTypes.SULFUR_CUBE_SPAWN_EGG = buildSpawnEgg(ItemId.SULFUR_CUBE_SPAWN_EGG, EntityId.SULFUR_CUBE);
 //        ItemTypes.SPAWN_EGG = buildSpawnEgg(ItemId.SPAWN_EGG); // ??
         ItemTypes.SPIDER_SPAWN_EGG = buildSpawnEgg(ItemId.SPIDER_SPAWN_EGG, EntityId.SPIDER);
         ItemTypes.SQUID_SPAWN_EGG = buildSpawnEgg(ItemId.SQUID_SPAWN_EGG, EntityId.SQUID);
@@ -741,9 +743,11 @@ public final class ItemTypeInitializer {
         ItemTypes.BUCKET = buildBucket(ItemId.BUCKET, BlockId.AIR, null);
         ItemTypes.COD_BUCKET = buildBucket(ItemId.COD_BUCKET, BlockId.WATER, EntityId.COD);
         ItemTypes.LAVA_BUCKET = buildBucket(ItemId.LAVA_BUCKET, BlockId.LAVA, null);
+        ItemTypes.MILK_BUCKET = buildMilkBucket();
         ItemTypes.POWDER_SNOW_BUCKET = buildBucket(ItemId.POWDER_SNOW_BUCKET, BlockId.POWDER_SNOW, null);
         ItemTypes.PUFFERFISH_BUCKET = buildBucket(ItemId.PUFFERFISH_BUCKET, BlockId.WATER, EntityId.PUFFERFISH);
         ItemTypes.SALMON_BUCKET = buildBucket(ItemId.SALMON_BUCKET, BlockId.WATER, EntityId.SALMON);
+        ItemTypes.SULFUR_CUBE_BUCKET = buildBucket(ItemId.SULFUR_CUBE_BUCKET, BlockId.WATER, EntityId.SULFUR_CUBE);
         ItemTypes.TADPOLE_BUCKET = buildBucket(ItemId.TADPOLE_BUCKET, BlockId.WATER, EntityId.TADPOLE);
         ItemTypes.TROPICAL_FISH_BUCKET = buildBucket(ItemId.TROPICAL_FISH_BUCKET, BlockId.WATER, EntityId.TROPICALFISH);
         ItemTypes.WATER_BUCKET = buildBucket(ItemId.WATER_BUCKET, BlockId.WATER, null);
@@ -754,6 +758,14 @@ public final class ItemTypeInitializer {
                 .builder(ItemBucketStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(() -> new ItemBucketComponentImpl(liquidBlockId, entityId), ItemBucketComponentImpl.class)
+                .build();
+    }
+
+    private static ItemType<ItemMilkBucketStack> buildMilkBucket() {
+        return AllayItemType
+                .builder(ItemMilkBucketStackImpl.class)
+                .vanillaItem(ItemId.MILK_BUCKET)
+                .addComponent(ItemMilkBucketEdibleComponentImpl::new, ItemMilkBucketEdibleComponentImpl.class)
                 .build();
     }
 
@@ -947,6 +959,14 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.BOW)
                 .addComponent(ItemBowBaseComponentImpl::new, ItemBowBaseComponentImpl.class)
                 .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
+                .build();
+    }
+
+    public static void initGoatHorn() {
+        ItemTypes.GOAT_HORN = AllayItemType
+                .builder(ItemGoatHornStackImpl.class)
+                .vanillaItem(ItemId.GOAT_HORN)
+                .addComponent(ItemGoatHornBaseComponentImpl::new, ItemGoatHornBaseComponentImpl.class)
                 .build();
     }
 

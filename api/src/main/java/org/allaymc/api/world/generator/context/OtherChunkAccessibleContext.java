@@ -125,10 +125,10 @@ public abstract class OtherChunkAccessibleContext extends Context {
     private boolean isInCurrentChunk(int x, int y, int z) {
         var currentChunkX = currentChunk.getX();
         var currentChunkZ = currentChunk.getZ();
-        var dimInfo = currentChunk.getDimensionInfo();
+        var dimType = currentChunk.getDimensionType();
         return
                 x >= currentChunkX * 16 && x < currentChunkX * 16 + 16 &&
                 z >= currentChunkZ * 16 && z < currentChunkZ * 16 + 16 &&
-                y >= dimInfo.minHeight() && y <= dimInfo.maxHeight();
+                y >= dimType.getMinHeight() && y <= dimType.getMaxHeight();
     }
 }

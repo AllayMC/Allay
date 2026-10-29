@@ -110,6 +110,11 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
             return;
         }
 
+        // Enable detailed packet logging if debug packets mode is enabled
+        if (AllayServer.getSettings().networkSettings().debugPackets()) {
+            session.setLogging(true);
+        }
+
         var player = new AllayPlayer(session, this);
         session.getPeer().getChannel().attr(NettyPipelineInitEvent.PLAYER_ATTRIBUTE_KEY).set(player);
         var event = new PlayerConnectEvent(player, "disconnect.disconnected");

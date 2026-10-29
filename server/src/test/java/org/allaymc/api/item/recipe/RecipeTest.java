@@ -2,10 +2,12 @@ package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
+import org.allaymc.api.item.data.ItemTags;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
 import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
@@ -242,6 +244,20 @@ class RecipeTest {
         var input3 = new FurnaceRecipeInput(grass(), FurnaceRecipe.Type.BLAST_FURNACE);
 
         assertTrue(grassMagic1.match(input3));
+
+        assertInstanceOf(ItemTypeDescriptor.class, grassMagic1.getIngredient());
+
+        var logRecipe = new FurnaceRecipe(
+                new ItemTagDescriptor(ItemTags.LOGS_THAT_BURN),
+                CHARCOAL.createItemStack(),
+                -1,
+                FurnaceRecipe.Type.FURNACE
+        );
+
+        assertEquals(new Identifier("furnace.tag_minecraft_logs_that_burn_furnace"), logRecipe.getIdentifier());
+        assertEquals(-1, logRecipe.getPriority());
+        assertTrue(logRecipe.match(new FurnaceRecipeInput(OAK_LOG.createItemStack(), FurnaceRecipe.Type.FURNACE)));
+        assertFalse(logRecipe.match(new FurnaceRecipeInput(SAND.createItemStack(), FurnaceRecipe.Type.FURNACE)));
     }
 
     private ItemDiamondStack diamond() {

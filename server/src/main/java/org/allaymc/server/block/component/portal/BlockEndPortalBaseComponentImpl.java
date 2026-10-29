@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component.portal;
 
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
@@ -16,7 +15,8 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 import java.util.Set;
 
@@ -70,9 +70,9 @@ public class BlockEndPortalBaseComponentImpl extends BlockBaseComponentImpl {
         entity.setPortalCooldown(EntityBaseComponent.PORTAL_COOLDOWN_TICKS);
 
         var world = entity.getWorld();
-        var currentDimInfo = entity.getDimension().getDimensionInfo();
+        var currentDimType = entity.getDimension().getDimensionType();
 
-        if (currentDimInfo != DimensionInfo.THE_END) {
+        if (currentDimType != DimensionTypes.THE_END) {
             // Teleport to The End — run in virtual thread to allow chunk loading
             var theEnd = world.getTheEnd();
             if (theEnd == null) {
@@ -82,7 +82,7 @@ public class BlockEndPortalBaseComponentImpl extends BlockBaseComponentImpl {
 
             // Show the dimension switching loading screen immediately for players
             if (entity instanceof EntityPlayer player && player.isActualPlayer()) {
-                player.getController().beginDimensionChange(theEnd.getDimensionInfo(), END_SPAWN_X + 0.5, END_SPAWN_Y + 1, END_SPAWN_Z + 0.5);
+                player.getController().beginDimensionChange(theEnd.getDimensionType(), END_SPAWN_X + 0.5, END_SPAWN_Y + 1, END_SPAWN_Z + 0.5);
             }
 
             Server.getInstance().getVirtualThreadPool().submit(() -> {

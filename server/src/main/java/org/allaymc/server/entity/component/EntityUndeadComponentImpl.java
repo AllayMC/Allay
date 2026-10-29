@@ -9,7 +9,6 @@ import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
@@ -41,7 +40,7 @@ public class EntityUndeadComponentImpl implements EntityUndeadComponent {
         }
 
         var dimension = thisEntity.getDimension();
-        if (dimension.getDimensionInfo() != DimensionInfo.OVERWORLD) {
+        if (!dimension.getDimensionType().hasSkyLight()) {
             return;
         }
 

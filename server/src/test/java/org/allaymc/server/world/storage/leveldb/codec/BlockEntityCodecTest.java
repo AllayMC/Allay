@@ -4,7 +4,7 @@ import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
-import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.dimension.DimensionTypes;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,9 +36,9 @@ class BlockEntityCodecTest {
         // Set up mock world and dimension
         var mockWorld = Mockito.mock(World.class);
         var mockDimension = Mockito.mock(Dimension.class);
-        Mockito.when(mockWorld.getDimension(DimensionInfo.OVERWORLD.dimensionId())).thenReturn(mockDimension);
+        Mockito.when(mockWorld.getDimension(DimensionTypes.OVERWORLD)).thenReturn(mockDimension);
 
-        var deserialized = BlockEntityCodec.deserialize(data, mockWorld, DimensionInfo.OVERWORLD);
+        var deserialized = BlockEntityCodec.deserialize(data, mockWorld, DimensionTypes.OVERWORLD);
         assertFalse(deserialized.isEmpty());
 
         // Find the block entity - there should be exactly one

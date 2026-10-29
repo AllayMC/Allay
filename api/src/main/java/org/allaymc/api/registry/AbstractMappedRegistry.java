@@ -67,7 +67,9 @@ public abstract class AbstractMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY
      *
      * @return a new value into this registry with the given key
      */
-    public VALUE register(KEY key, VALUE value) {
+    public synchronized VALUE register(KEY key, VALUE value) {
+        ensureMutable();
         return content.put(key, value);
     }
+
 }

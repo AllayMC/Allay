@@ -6,7 +6,6 @@ import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.interfaces.ItemFishingRodStack;
 import org.allaymc.server.component.ComponentProvider;
-import org.allaymc.server.item.component.ItemFishingRodBaseComponentImpl;
 
 import java.util.List;
 

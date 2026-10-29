@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component.weapon;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.container.Container;
@@ -25,9 +24,8 @@ import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.world.sound.CrossbowLoadSound;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.container.impl.OffhandContainerImpl;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 

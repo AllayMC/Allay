@@ -24,7 +24,6 @@ import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataContainer;
-import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -384,7 +383,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected void tryConsumeItem(EntityPlayer player) {
-        if (player == null || player.getGameMode() != GameMode.CREATIVE) {
+        if (player == null || !player.getController().hasInfiniteBlock()) {
             thisItemStack.reduceCount(1);
         }
     }

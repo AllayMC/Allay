@@ -37,7 +37,7 @@ public class NearestPlayerSensor implements Sensor {
 
         for (var player : entity.getDimension().getPlayers()) {
             var playerEntity = player.getControlledEntity();
-            if (playerEntity == null || playerEntity.isDead()) continue;
+            if (playerEntity == null || playerEntity.isDead() || playerEntity.isPhantom()) continue;
 
             double distSq = loc.distanceSquared(playerEntity.getLocation());
             if (distSq < minRangeSq || distSq > rangeSq) continue;

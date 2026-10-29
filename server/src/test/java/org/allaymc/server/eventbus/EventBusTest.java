@@ -335,6 +335,53 @@ class EventBusTest {
         }
 
         @Test
+        void testIgnoreCancelledMethodListener() {
+            var listener = new IgnoreCancelledListener();
+
+            eventBus.registerListener(listener);
+            eventBus.callEvent(new TestCancellableEvent());
+
+            assertTrue(listener.cancelled);
+            assertFalse(listener.ignoreCancelledCalled);
+        }
+
+        @Test
+        void testAsyncIgnoreCancelledMethodListenerChecksWhenTaskRuns() throws Exception {
+            var asyncExecutor = Executors.newSingleThreadExecutor();
+            var blockerStarted = new CountDownLatch(1);
+            var releaseBlocker = new CountDownLatch(1);
+
+            asyncExecutor.submit(() -> {
+                blockerStarted.countDown();
+                assertTrue(releaseBlocker.await(5, TimeUnit.SECONDS));
+                return null;
+            });
+            assertTrue(blockerStarted.await(5, TimeUnit.SECONDS));
+
+            var localEventBus = new AllayEventBus(asyncExecutor);
+            var listener = new AsyncIgnoreCancelledListener();
+
+            try {
+                localEventBus.registerListener(listener);
+
+                var event = new TestCancellableEvent();
+                localEventBus.callEvent(event);
+
+                assertTrue(event.isCancelled());
+                releaseBlocker.countDown();
+
+                var queuedTasksCompleted = asyncExecutor.submit(() -> {
+                });
+                queuedTasksCompleted.get(5, TimeUnit.SECONDS);
+
+                assertFalse(listener.ignoreCancelledCalled);
+            } finally {
+                releaseBlocker.countDown();
+                asyncExecutor.shutdownNow();
+            }
+        }
+
+        @Test
         void testAsyncMethodListener() throws InterruptedException {
             var listener = new AsyncListener();
 
@@ -508,6 +555,36 @@ class EventBusTest {
     public static class CancellingListener {
         @EventHandler
         public void onEvent(TestCancellableEvent event) {
+            event.cancel();
+        }
+    }
+
+    public static class IgnoreCancelledListener {
+        public boolean cancelled = false;
+        public boolean ignoreCancelledCalled = false;
+
+        @EventHandler(priority = 100)
+        public void cancel(TestCancellableEvent event) {
+            cancelled = true;
+            event.cancel();
+        }
+
+        @EventHandler(ignoreCancelled = true)
+        public void ignoreCancelled(TestCancellableEvent event) {
+            ignoreCancelledCalled = true;
+        }
+    }
+
+    public static class AsyncIgnoreCancelledListener {
+        public volatile boolean ignoreCancelledCalled = false;
+
+        @EventHandler(async = true, ignoreCancelled = true, priority = 100)
+        public void ignoreCancelled(TestCancellableEvent event) {
+            ignoreCancelledCalled = true;
+        }
+
+        @EventHandler
+        public void cancel(TestCancellableEvent event) {
             event.cancel();
         }
     }

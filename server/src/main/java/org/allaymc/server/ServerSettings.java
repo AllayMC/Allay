@@ -114,6 +114,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("enable-network-encryption")
         private boolean enableNetworkEncryption = true;
 
+        @Comment("Log detailed packet information for each player session")
+        @CustomKey("debug-packets")
+        private boolean debugPackets = false;
+
         @Comment("The compression algorithm used for network data streams. Possible values: ZLIB, SNAPPY")
         @Comment("ZLIB has better compression ratios and SNAPPY has better compression performance")
         @CustomKey("compression-algorithm")
@@ -136,11 +140,6 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Default value is 100000 (raknetPacketLimit * 0.56 * 1500 different connections), and will be Integer.MAX_VALUE if the server is running in dev mode")
         @CustomKey("raknet-global-packet-limit")
         private int raknetGlobalPacketLimit = 100000;
-
-        @Comment("Whether to send a cookie to the client during the connection process for additional security")
-        @Comment("Default value is true")
-        @CustomKey("raknet-send-cookie")
-        private boolean raknetSendCookie = true;
 
         @Comment("Maximum allowed MTU that the RakNet server connection can use")
         @Comment("The internet supports a maximum MTU of 1492 but could cause issues with packet fragmentation.")

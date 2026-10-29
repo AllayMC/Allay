@@ -1,10 +1,10 @@
 package org.allaymc.server.item.component.planting;
 
-import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**

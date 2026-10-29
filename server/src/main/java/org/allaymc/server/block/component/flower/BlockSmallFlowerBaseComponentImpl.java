@@ -4,9 +4,9 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
-import org.allaymc.api.block.type.BlockState;
 
 /**
  * @author daoge_cmd

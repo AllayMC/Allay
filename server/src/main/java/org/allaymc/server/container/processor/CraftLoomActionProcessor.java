@@ -33,7 +33,7 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
             return error();
         }
 
-        var timesCrafted = action.getTimesCrafted();
+        var timesCrafted = action.timesCrafted();
         if (timesCrafted < 1) {
             log.warn("Times crafted must be at least 1");
             return error();
@@ -91,7 +91,7 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
         var dyeColor = dyeComponent.getDyeColor();
 
         // Get pattern type from action
-        var patternId = action.getPatternId();
+        var patternId = action.patternId();
         var patternType = BannerPatternType.fromId(patternId);
         if (patternType == null) {
             log.warn("Invalid pattern type: {}", patternId);

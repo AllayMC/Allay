@@ -23,7 +23,8 @@ import org.joml.Vector3ic;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.BAMBOO_LEAF_SIZE;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.BAMBOO_STALK_THICKNESS;
 
 /**
  * @author daoge_cmd
