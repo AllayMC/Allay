@@ -14,6 +14,7 @@ import org.allaymc.server.network.protocol.v859.Protocol_v859;
 import org.allaymc.server.network.protocol.v860.Protocol_v860;
 import org.allaymc.server.network.protocol.v860.Protocol_v860_NetEase;
 import org.allaymc.server.network.protocol.v898.Protocol_v898;
+import org.allaymc.server.network.protocol.v898.Protocol_v898_NetEase;
 import org.allaymc.server.network.protocol.v924.Protocol_v924;
 import org.allaymc.server.network.protocol.v944.Protocol_v944;
 import org.allaymc.server.network.protocol.v975.Protocol_v975;
@@ -167,6 +168,7 @@ public final class ProtocolRegistry {
         supported.add(new Protocol_v860());
         supported.add(new Protocol_v860_NetEase());
         supported.add(new Protocol_v898());
+        supported.add(new Protocol_v898_NetEase());
         supported.add(new Protocol_v924());
         supported.add(new Protocol_v944());
         supported.add(new Protocol_v975());
