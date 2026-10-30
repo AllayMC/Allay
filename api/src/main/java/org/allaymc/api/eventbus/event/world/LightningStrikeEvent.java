@@ -8,10 +8,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.world.Dimension;
 
 /**
- * Called when a lightning bolt is about to strike.
- * <p>
- * This event is fired for both natural lightning strikes during thunderstorms
- * and lightning summoned through other means (e.g., trident with Channeling enchantment).
+ * {@code LightningStrikeEvent} represents a proposed lightning bolt in a
+ * particular dimension, together with its reported cause. The dimension
+ * dispatches the event after creating the entity and before requesting its
+ * addition; cancellation prevents that addition through the strike operation.
  *
  * @author daoge_cmd
  */
@@ -20,7 +20,8 @@ import org.allaymc.api.world.Dimension;
 public class LightningStrikeEvent extends WorldEvent implements CancellableEvent {
 
     /**
-     * The cause of the lightning strike.
+     * {@code Cause} identifies the source reported for a proposed lightning
+     * strike.
      */
     public enum Cause {
         /**
@@ -42,18 +43,23 @@ public class LightningStrikeEvent extends WorldEvent implements CancellableEvent
     }
 
     /**
-     * The dimension where the lightning strike occurs.
+     * Dimension receiving the proposed bolt.
      */
     protected Dimension dimension;
     /**
-     * The lightning bolt entity.
+     * {@code lightningBolt} references the created entity that listeners can
+     * inspect before the dimension requests its addition.
      */
     protected EntityLightningBolt lightningBolt;
     /**
-     * The cause of the lightning strike.
+     * Reported source of the strike.
      */
     protected Cause cause;
 
+    /**
+     * Creates a lightning proposal retaining its dimension, entity, and
+     * reported cause.
+     */
     public LightningStrikeEvent(Dimension dimension, EntityLightningBolt lightningBolt, Cause cause) {
         super(dimension.getWorld());
         this.dimension = dimension;

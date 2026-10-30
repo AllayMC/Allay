@@ -4,6 +4,10 @@ import org.allaymc.server.network.protocol.v1001.PacketEncoder_v1001;
 import org.allaymc.server.network.protocol.v1001.Protocol_v1001;
 import org.allaymc.server.network.protocol.v2168.PacketEncoder_v2168;
 import org.allaymc.server.network.protocol.v2168.Protocol_v2168;
+import org.allaymc.server.network.protocol.v2169.PacketEncoder_v2169;
+import org.allaymc.server.network.protocol.v2169.Protocol_v2169;
+import org.allaymc.server.network.protocol.v2193.PacketEncoder_v2193;
+import org.allaymc.server.network.protocol.v2193.Protocol_v2193;
 import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.allaymc.server.network.protocol.v766.PacketEncoder_v766_NetEase;
 import org.allaymc.server.network.protocol.v766.Protocol_v766;
@@ -42,12 +46,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * {@code ProtocolInheritanceTest} checks declared protocol inheritance and
+ * construction-time codec identities across supported variants.
+ */
 class ProtocolInheritanceTest {
+    /**
+     * Inspects the oldest international protocol class through reflection. It
+     * must remain abstract so that construction of concrete supported variants
+     * continues through subclasses rather than this baseline type.
+     */
     @Test
     void oldestInternationalProtocolIsAnAbstractUnregisteredBaseline() {
         assertTrue(Modifier.isAbstract(Protocol_v766.class.getModifiers()));
     }
 
+    /**
+     * Lists the international protocol classes in their intended version order.
+     * Each later class must directly extend the preceding entry, preserving the
+     * explicit implementation inheritance chain.
+     */
     @Test
     void internationalProtocolsExtendThePreviousInternationalVersion() {
         assertDirectChain(List.of(
@@ -63,10 +81,17 @@ class ProtocolInheritanceTest {
                 Protocol_v944.class,
                 Protocol_v975.class,
                 Protocol_v1001.class,
-                Protocol_v2168.class
+                Protocol_v2168.class,
+                Protocol_v2169.class,
+                Protocol_v2193.class
         ));
     }
 
+    /**
+     * Lists international packet encoders from the baseline through the newest
+     * implementation. Each later encoder must directly extend its preceding
+     * version, preserving inherited operations across that declared chain.
+     */
     @Test
     void internationalEncodersExtendThePreviousInternationalVersion() {
         assertDirectChain(List.of(
@@ -82,10 +107,17 @@ class ProtocolInheritanceTest {
                 PacketEncoder_v944.class,
                 PacketEncoder_v975.class,
                 PacketEncoder_v1001.class,
-                PacketEncoder_v2168.class
+                PacketEncoder_v2168.class,
+                PacketEncoder_v2169.class,
+                PacketEncoder_v2193.class
         ));
     }
 
+    /**
+     * Inspects the direct parents of supported NetEase protocol and encoder
+     * classes. Every branch must extend its same-version international
+     * implementation rather than another distribution-specific branch.
+     */
     @Test
     void netEaseBranchesDirectlyFromTheSameVersionInternationalClass() {
         assertEquals(Protocol_v766.class, Protocol_v766_NetEase.class.getSuperclass());
@@ -96,6 +128,12 @@ class ProtocolInheritanceTest {
         assertEquals(PacketEncoder_v860.class, PacketEncoder_v860_NetEase.class.getSuperclass());
     }
 
+    /**
+     * Constructs supported protocol classes without initializing their payload
+     * data. International instances must expose their declared variant and
+     * version, and NetEase instances must retain their selected distribution
+     * identities and codec.
+     */
     @Test
     void protocolClassesExposeTheirExactCodecIdentity() {
         var international = List.of(
@@ -110,9 +148,11 @@ class ProtocolInheritanceTest {
                 new Protocol_v944(),
                 new Protocol_v975(),
                 new Protocol_v1001(),
-                new Protocol_v2168()
+                new Protocol_v2168(),
+                new Protocol_v2169(),
+                new Protocol_v2193()
         );
-        var expectedVersions = List.of(818, 819, 827, 844, 859, 860, 898, 924, 944, 975, 1001, 2168);
+        var expectedVersions = List.of(818, 819, 827, 844, 859, 860, 898, 924, 944, 975, 1001, 2168, 2169, 2193);
 
         for (int index = 0; index < international.size(); index++) {
             var protocol = international.get(index);
@@ -132,6 +172,11 @@ class ProtocolInheritanceTest {
         assertSame(Bedrock_v860_NetEase.CODEC, netEaseV860.getCodec());
     }
 
+    /**
+     * Checks that each class directly extends the preceding list entry. The
+     * first entry is the baseline and has no parent assertion; callers must
+     * supply the intended inheritance order.
+     */
     private static void assertDirectChain(List<Class<?>> chain) {
         for (int index = 1; index < chain.size(); index++) {
             assertEquals(chain.get(index - 1), chain.get(index).getSuperclass());

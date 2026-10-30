@@ -14,15 +14,30 @@ import static org.allaymc.server.command.data.CommonEnums.BOOL_GAMERULE_ENUM;
 import static org.allaymc.server.command.data.CommonEnums.INT_GAMERULE_ENUM;
 
 /**
+ * {@code GameRuleCommand} queries or requests changes to rules in the sender's
+ * execution world. Separate boolean and integer branches constrain argument
+ * parsing, while an omitted value selects a query. Mutation feedback reports
+ * the requested value without checking cancellation or modification by a
+ * game-rule event.
+ *
  * @author daoge_cmd
  */
 public class GameRuleCommand extends Command {
 
+    /**
+     * Creates the authorized {@code /gamerule} command and its {@code /gr} alias.
+     */
     public GameRuleCommand() {
         super("gamerule", TrKeys.MC_COMMANDS_GAMERULE_DESCRIPTION, Permissions.COMMAND_GAMERULE);
         aliases.add("gr");
     }
 
+    /**
+     * Installs separately typed boolean and integer rule branches.
+     * Each optional value defaults to {@code null}, allowing the executor to
+     * distinguish queries from changes even when a supplied value is
+     * {@code false} or {@code 0}.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -37,6 +52,12 @@ public class GameRuleCommand extends Command {
                 .exec(executor(false));
     }
 
+    /**
+     * Returns a rule handler for the selected parsed value type.
+     * {@code isBoolGameRule} must agree with the attached branch's argument
+     * type; {@code null} queries the current value, while other values request
+     * a change and produce success feedback.
+     */
     protected Function<CommandContext, CommandResult> executor(boolean isBoolGameRule) {
         return context -> {
             var world = context.getSender().getCommandExecuteLocation().dimension().getWorld();

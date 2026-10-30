@@ -12,14 +12,29 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
+ * {@code GiveCommand} attempts to distribute one item type to each selected
+ * player. The handler creates stacks within the item's maximum size, attempts
+ * inventory insertion, and requests drops for leftovers. Completed inventory
+ * changes remain effective if a later operation fails; drop admission is queued.
+ *
  * @author daoge_cmd
  */
 public class GiveCommand extends Command {
 
+    /**
+     * Creates the {@code /give} command with its built-in authorization permission.
+     */
     public GiveCommand() {
         super("give", TrKeys.MC_COMMANDS_GIVE_DESCRIPTION, Permissions.COMMAND_GIVE);
     }
 
+    /**
+     * Installs item distribution with amount {@code 1} and metadata {@code 0}.
+     * Empty target sets, nonpositive amounts, and negative metadata fail before
+     * distribution. Each target is processed for the full requested amount
+     * through inventory insertion and leftover drop requests. Command
+     * completion does not wait for drop admission or guarantee later pickup.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -58,6 +73,9 @@ public class GiveCommand extends Command {
                             var itemStack = itemType.createItemStack(giveCount, data);
                             player.getContainer(ContainerTypes.INVENTORY).tryAddItem(itemStack);
 
+                            // Inventory insertion leaves unaccepted items in
+                            // this stack. Request a drop so overflow can enter
+                            // the world when entity admission is processed.
                             if (itemStack.getCount() > 0) {
                                 player.dropItemInPlayerPos(itemStack);
                             }

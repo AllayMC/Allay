@@ -8,7 +8,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player used an item in air.
+ * {@code PlayerUseItemInAirEvent} holds the duration supplied when a player finishes
+ * sustained item use. The transaction processor clears the using flag before
+ * dispatch; listeners can cancel the item callback or change {@code usingTime}, but
+ * cancellation does not restore the using flag.
  *
  * @author daoge_cmd
  */
@@ -18,10 +21,17 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class PlayerUseItemInAirEvent extends PlayerEvent implements CancellableEvent {
 
     /**
-     * The time the player has been using the item in air in game ticks.
+     * {@code usingTime} supplies elapsed item-use time in game ticks. The
+     * transaction processor passes the listener-selected value to the item callback
+     * after approval.
      */
     protected long usingTime;
 
+    /**
+     * Creates a {@code PlayerUseItemInAirEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerUseItemInAirEvent(EntityPlayer player, long usingTime) {
         super(player);
         this.usingTime = usingTime;

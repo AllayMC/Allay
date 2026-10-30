@@ -1,41 +1,39 @@
 package org.allaymc.api.network;
 
 /**
- * NetworkInterface is used to open an interface on the network that the client can connect to.
- * It also holds the information that will be shown to the client in the server list.
- * <p>
- * Please note that the changes in network interface won't be saved to server settings. For example,
- * if you set the motd on network interface, it will only put into effect before stop the server.
- * That make it suitable for making dynamic motd.
+ * {@code NetworkInterface} exposes the primary and secondary descriptions
+ * advertised by a server transport in the client server list. Changes affect
+ * the running interface rather than persisted server settings, allowing plugins
+ * to update displayed descriptions without rewriting the configuration used at
+ * the next startup.
  *
  * @author daoge_cmd
  */
 public interface NetworkInterface {
     /**
-     * Get the current motd of the server.
-     *
-     * @return the current motd
+     * Returns the primary server-list description currently advertised by this
+     * interface.
      */
     String getMotd();
 
     /**
-     * Set the current motd of the server.
-     *
-     * @param motd the new motd
+     * Changes the primary description advertised by this running interface. The
+     * change does not update persisted server settings, so plugins needing the
+     * same text after restart must configure or apply it again.
      */
     void setMotd(String motd);
 
     /**
-     * Get the current sub-motd of the server.
-     *
-     * @return the current sub-motd
+     * Returns the secondary server-list description currently advertised by
+     * this interface.
      */
     String getSubMotd();
 
     /**
-     * Set the current sub-motd of the server.
-     *
-     * @param subMotd the new sub-motd
+     * Changes the secondary description advertised by this running interface.
+     * The change affects runtime advertisement rather than persisted server
+     * settings, so restart behavior continues to depend on the configured
+     * description.
      */
     void setSubMotd(String subMotd);
 }

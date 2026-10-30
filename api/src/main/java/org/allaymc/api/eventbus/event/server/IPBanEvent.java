@@ -7,7 +7,11 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when an IP address is banned from the server.
+ * {@code IPBanEvent} represents a request to ban an IP address that is not
+ * already banned.
+ * The player manager dispatches this event before updating its ban set or
+ * disconnecting matching players. Cancellation prevents both effects for this
+ * request and leaves the existing ban set unchanged.
  *
  * @author daoge_cmd
  */

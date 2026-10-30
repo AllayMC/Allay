@@ -4,7 +4,11 @@ import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 
 /**
- * Called when the server is about to stop.
+ * {@code ServerStopEvent} announces entry into the server's shutdown sequence
+ * after its tick loop ends.
+ * Listeners run before player disconnection, network and scheduler shutdown,
+ * plugin disable callbacks, and world closure. The event does not support
+ * cancellation, so it cannot keep the server running.
  *
  * @author daoge_cmd
  */

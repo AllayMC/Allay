@@ -27,14 +27,37 @@ import java.util.stream.Stream;
 import static org.allaymc.api.math.MathUtils.round;
 
 /**
+ * {@code StatusCommand} reports live server, world, JVM, and optional host
+ * diagnostics to a command sender. Individual readings are taken as each
+ * section is printed, so the output is not a coordinated snapshot. Host
+ * discovery uses ordered virtualization heuristics and tolerates selected
+ * retrieval failures by printing unavailable information or omitting detail.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class StatusCommand extends Command {
+    /**
+     * {@code UPTIME_FORMAT} orders the whole-day, hour, minute, and second
+     * components emitted by {@link #formatUptime(long)}.
+     */
     protected static final String UPTIME_FORMAT = "%d days %d hours %d minutes %d seconds";
 
+    // detectVM checks VM_VENDOR before VM_MAC, then VM_MODEL_ARRAY. Each
+    // collection provides a separate exact-match or substring heuristic; the
+    // first recognized environment wins without consulting later evidence.
+    // The shared mutable collections affect later detections when modified.
+    /**
+     * Processor vendor identifier mappings.
+     */
     protected static final Map<String, String> VM_VENDOR = new HashMap<>(10, 0.99f);
+    /**
+     * Uppercase MAC-prefix environment mappings.
+     */
     protected static final Map<String, String> VM_MAC = new HashMap<>(10, 0.99f);
+    /**
+     * Computer-model substrings identifying environments.
+     */
     protected static final String[] VM_MODEL_ARRAY = new String[]{
             "Linux KVM", "Linux lguest", "OpenVZ", "Qemu",
             "Microsoft Virtual PC", "VMWare", "linux-vserver",
@@ -42,13 +65,27 @@ public class StatusCommand extends Command {
             "Linux Containers", "LXC", "Bochs"
     };
 
+    /**
+     * {@code SYSTEM_INFO} supplies the shared host hardware and operating-system
+     * access used by the detailed status sections.
+     */
     protected static final SystemInfo SYSTEM_INFO = new SystemInfo();
 
+    // colorizeUsage compares CRIT_USAGE before WARN_USAGE using strict greater
+    // comparisons. Values equal to a boundary retain the lower severity color;
+    // all callers supply percentages rather than fractions.
+    /**
+     * Warning usage percentage boundary.
+     */
     private static final double WARN_USAGE = 80;
+    /**
+     * Critical usage percentage boundary.
+     */
     private static final double CRIT_USAGE = 90;
 
+    // Populate the exact processor-vendor and MAC-prefix mappings consumed by
+    // detectVM before any status command can request environment detection.
     static {
-        // VM VENDOR
         VM_VENDOR.put("bhyve", "bhyve");
         VM_VENDOR.put("KVM", "KVM");
         VM_VENDOR.put("TCG", "QEMU");
@@ -58,7 +95,6 @@ public class StatusCommand extends Command {
         VM_VENDOR.put("XenVM", "Xen HVM");
         VM_VENDOR.put("ACRN", "Project ACRN");
         VM_VENDOR.put("QNXQVMBSQG", "QNX Hypervisor");
-        // VM MAC
         VM_MAC.put("00:50:56", "VMware ESX 3");
         VM_MAC.put("00:0C:29", "VMware ESX 3");
         VM_MAC.put("00:05:69", "VMware ESX 3");
@@ -70,31 +106,38 @@ public class StatusCommand extends Command {
         VM_MAC.put("02:42:AC", "Docker Container");
     }
 
+    /**
+     * Creates the {@code /status} command with its built-in authorization permission.
+     */
     public StatusCommand() {
         super("status", TrKeys.ALLAY_COMMAND_STATUS_DESCRIPTION, Permissions.COMMAND_STATUS);
     }
 
+    /**
+     * Prints physical, virtual, and installed-memory information for the host.
+     * Nonpositive virtual capacity prints {@code "N/A"} rather than a usage
+     * ratio, and an empty physical-module list omits the hardware subsection.
+     */
     protected static void printOperationSystemMemoryInfo(CommandSender sender) {
         sender.sendMessage("--- Memory Info ---");
         var globalMemory = SYSTEM_INFO.getHardware().getMemory();
         var virtualMemory = globalMemory.getVirtualMemory();
 
-        // Physical Memory
         var totalPhys = globalMemory.getTotal();
         var usedPhys = totalPhys - globalMemory.getAvailable();
         sendMemoryUsage(sender, "Physical memory", usedPhys, totalPhys);
 
-        // Virtual Memory
         var totalVirt = virtualMemory.getVirtualMax();
         var usedVirt = virtualMemory.getVirtualInUse();
-        // Some hosts report 0 virtual max; avoid div/0
+        // A nonpositive virtual capacity cannot supply a meaningful usage
+        // ratio. Keep the physical-memory result and mark this section
+        // unavailable.
         if (totalVirt > 0) {
             sendMemoryUsage(sender, "Virtual memory", usedVirt, totalVirt);
         } else {
             sender.sendMessage("Virtual memory: " + TextFormat.GREEN + "N/A");
         }
 
-        // Hardware
         var physicalMemories = globalMemory.getPhysicalMemory();
         if (!physicalMemories.isEmpty()) {
             sender.sendMessage("Hardware list:");
@@ -107,6 +150,9 @@ public class StatusCommand extends Command {
         sender.sendMessage("\n");
     }
 
+    /**
+     * Prints processor identity, frequency, core counts, and current JVM thread count.
+     */
     protected static void printCPUInfo(CommandSender sender) {
         var cpu = SYSTEM_INFO.getHardware().getProcessor();
         var processorIdentifier = cpu.getProcessorIdentifier();
@@ -126,6 +172,15 @@ public class StatusCommand extends Command {
         sender.sendMessage("\n");
     }
 
+    /**
+     * Prints discovered network interfaces, addresses, and available speed values.
+     * Missing interfaces produce no section. Retrieval exceptions print a
+     * failure message and are logged at debug level, preserving any lines
+     * already sent to {@code sender}.
+     * The handler passes OSHI's bits-per-second speed to {@code toKB}, so its
+     * displayed {@code "KB/s"} rate is numerically kibibits per second rather
+     * than a converted byte rate.
+     */
     protected static void printNetworkInfo(CommandSender sender) {
         try {
             var networkIFs = SYSTEM_INFO.getHardware().getNetworkIFs();
@@ -141,6 +196,9 @@ public class StatusCommand extends Command {
                         Arrays.stream(nic.getIPv6addr())
                 ).toList();
 
+                // OSHI reports bits per second. toKB divides by 1024 without
+                // the factor of eight needed to turn that reading into a byte
+                // rate, leaving the existing suffix inconsistent with its unit.
                 String speedStr = nic.getSpeed() > 0 ? toKB(nic.getSpeed()) + "/s " : "";
                 sender.sendMessage(
                         "- " + TextFormat.GREEN + nic.getDisplayName() + " " + speedStr
@@ -149,11 +207,19 @@ public class StatusCommand extends Command {
             }
             sender.sendMessage("\n");
         } catch (Exception e) {
+            // Network diagnostics are optional. Preserve earlier status output
+            // and let later sections run after reporting this retrieval failure.
             sender.sendMessage(TextFormat.RED + "Failed to get network info.");
             log.debug("Network info retrieval failed", e);
         }
     }
 
+    /**
+     * Prints operating-system, JVM, and detected virtualization information.
+     * A missing virtualization match or detection exception displays
+     * {@code "N/A"}; detection failures are logged without discarding the
+     * operating-system and JVM details already sent.
+     */
     protected static void printOperationSystemAndJVMInfo(CommandSender sender) {
         var os = SYSTEM_INFO.getOperatingSystem();
         var mxBean = ManagementFactory.getRuntimeMXBean();
@@ -171,18 +237,24 @@ public class StatusCommand extends Command {
             String vm = detectVM();
             sender.sendMessage("Virtual environment: " + TextFormat.GREEN + (vm == null ? "N/A" : vm));
         } catch (Exception e) {
+            // Environment detection is optional. Retain the operating-system
+            // and JVM details while replacing only the failed environment result.
             sender.sendMessage("Virtual environment: " + TextFormat.GREEN + "N/A");
             log.debug("VM detection error", e);
         }
         sender.sendMessage("\n");
     }
 
+    /**
+     * Prints tick metrics and dimension-wide object counts for every loaded world.
+     */
     protected static void printWorldInfo(CommandSender sender) {
         sender.sendMessage("--- Worlds Status ---");
         for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
             sender.sendMessage("- " + world.getWorldData().getDisplayName());
             sender.sendMessage("  TPS: " + TextFormat.GREEN + world.getTPS());
             sender.sendMessage("  MSPT: " + TextFormat.GREEN + world.getMSPT());
+            // World tick usage is a fraction; feedback displays a percentage.
             sender.sendMessage("  TickUsage: " + TextFormat.GREEN + (world.getTickUsage() * 100f) + "%");
 
             var dims = world.getDimensions().values();
@@ -197,16 +269,27 @@ public class StatusCommand extends Command {
         }
     }
 
+    /**
+     * Prints elapsed wall-clock time since the server's recorded start timestamp.
+     */
     protected static void printUpTimeInfo(CommandSender sender) {
         var time = System.currentTimeMillis() - Server.getInstance().getStartTime();
         sender.sendMessage("Uptime: " + TextFormat.GREEN + formatUptime(time));
     }
 
+    /**
+     * Prints used, committed, and maximum JVM heap memory in mebibytes.
+     * The usage color compares used memory with the maximum heap; a nonpositive
+     * maximum produces a zero percentage, and displayed values are rounded to
+     * two decimals.
+     */
     protected static void printMemoryUsageInfo(CommandSender sender) {
         var runtime = Runtime.getRuntime();
         var totalMB = bytesToMB(runtime.totalMemory());
         var usedMB = bytesToMB(runtime.totalMemory() - runtime.freeMemory());
         var maxMB = bytesToMB(runtime.maxMemory());
+        // A nonpositive maximum cannot define heap utilization. Use zero for
+        // the percentage while retaining the measured memory totals.
         var usagePct = maxMB > 0 ? (usedMB / maxMB) * 100d : 0d;
 
         sender.sendMessage("Used VM memory: " + colorizeUsage(usagePct) + round(usedMB, 2) + " MB (" + round(usagePct, 2) + "%)");
@@ -214,6 +297,11 @@ public class StatusCommand extends Command {
         sender.sendMessage("Maximum JVM memory: " + TextFormat.GREEN + round(maxMB, 2) + " MB");
     }
 
+    /**
+     * Prints connected-player occupancy against the live capacity limit.
+     * Ratios above ninety percent use gold, including full positive capacity;
+     * a nonpositive capacity produces a zero ratio for this display.
+     */
     protected static void printOnlinePlayerInfo(CommandSender sender) {
         var server = Server.getInstance();
         var ps = server.getPlayerManager();
@@ -223,6 +311,7 @@ public class StatusCommand extends Command {
         var ratio = maxPlayerCount > 0 ? (float) online / (float) maxPlayerCount : 0f;
 
         var color = TextFormat.GREEN;
+        // The ninety-percent branch also selects gold for fully occupied capacity.
         if (ratio > 0.90f) {
             color = TextFormat.GOLD;
         } else if (online == maxPlayerCount && maxPlayerCount > 0) {
@@ -232,19 +321,27 @@ public class StatusCommand extends Command {
         sender.sendMessage("Players: " + color + online + "/" + maxPlayerCount);
     }
 
+    /**
+     * Returns the first environment recognized by the ordered host heuristics.
+     * Processor vendor, MAC prefixes, model, manufacturer, and memory evidence
+     * precede platform-specific checks. No match returns {@code null}; callers
+     * must handle discovery exceptions, including an empty physical-memory list.
+     */
     protected static String detectVM() {
         var hardware = SYSTEM_INFO.getHardware();
 
-        // CPU model detection
         var vmVendor = VM_VENDOR.get(hardware.getProcessor().getProcessorIdentifier().getVendor().trim());
         if (vmVendor != null) {
             return vmVendor;
         }
 
-        // MAC address detection
+        // Unrecognized processor vendors fall through to interface prefixes,
+        // allowing network metadata to identify environments absent from the
+        // vendor table.
         var networkIFs = hardware.getNetworkIFs();
         for (var nif : networkIFs) {
             var mac = nif.getMacaddr().toUpperCase(Locale.ROOT);
+            // Eight characters retain three colon-separated MAC-address octets.
             var oui = mac.length() > 7 ? mac.substring(0, 8) : mac;
             var vmMac = VM_MAC.get(oui);
             if (vmMac != null) {
@@ -252,7 +349,9 @@ public class StatusCommand extends Command {
             }
         }
 
-        // Model detection
+        // An unmatched interface set leaves computer-model evidence available,
+        // so machines without recognized virtual MAC prefixes can still
+        // be identified.
         var model = hardware.getComputerSystem().getModel();
         for (var vm : VM_MODEL_ARRAY) {
             if (model.contains(vm)) {
@@ -265,13 +364,14 @@ public class StatusCommand extends Command {
             return "Microsoft Hyper-V";
         }
 
-        // Memory manufacturer detection
+        // Earlier heuristics may miss an environment. The first memory module
+        // supplies another manufacturer signal before platform-specific probes run.
         if ("QEMU".equals(hardware.getMemory().getPhysicalMemory().getFirst().getManufacturer())) {
             return "QEMU";
         }
 
-        // Check Windows system parameters
-        // WMI virtual machine query only on Windows
+        // Native WMI classes are used only on Windows; other platforms use
+        // filesystem markers after shared hardware heuristics fail.
         var osName = System.getProperties().getProperty("os.name", "").toUpperCase(Locale.ROOT);
         if (osName.contains("WINDOWS")) {
             var wmiQuery = new WbemcliUtil.WmiQuery<>("Win32_ComputerSystem", ComputerSystemEntry.class);
@@ -281,8 +381,6 @@ public class StatusCommand extends Command {
                 return "Hyper-V";
             }
         } else {
-            // Check for Docker container
-            // Docker check only on non-Windows systems
             if (new File("/.dockerenv").exists()) {
                 return "Docker Container";
             }
@@ -295,6 +393,9 @@ public class StatusCommand extends Command {
                         return "Docker Container";
                     }
                 } catch (IOException e) {
+                    // A failed cgroup read provides no container evidence.
+                    // Log that diagnostic and leave the unmatched result
+                    // available to the caller.
                     log.error("Error checking /proc/1/cgroup for containerization", e);
                 }
             }
@@ -303,6 +404,12 @@ public class StatusCommand extends Command {
         return null;
     }
 
+    /**
+     * Sends a labeled memory total and usage percentage from byte counts.
+     * Nonpositive {@code totalBytes} prints {@code "N/A"} without dividing;
+     * positive totals use mebibyte display values and the shared utilization
+     * color thresholds.
+     */
     private static void sendMemoryUsage(CommandSender sender, String label, long usedBytes, long totalBytes) {
         if (totalBytes <= 0) {
             sender.sendMessage(label + ": " + TextFormat.GREEN + "N/A");
@@ -317,25 +424,48 @@ public class StatusCommand extends Command {
         );
     }
 
+    /**
+     * Returns the display color for a supplied usage percentage.
+     * Values strictly above {@link #CRIT_USAGE} are red; values strictly above
+     * {@link #WARN_USAGE} are gold, and all remaining values are green.
+     */
     private static TextFormat colorizeUsage(double usagePercent) {
         if (usagePercent > CRIT_USAGE) return TextFormat.RED;
         if (usagePercent > WARN_USAGE) return TextFormat.GOLD;
         return TextFormat.GREEN;
     }
 
+    /**
+     * Returns bytes formatted as kibibytes with the {@code " KB"} suffix.
+     */
     protected static String toKB(long bytes) {
+        // Binary scaling preserves the display's 1024-byte unit convention.
         return round(bytes / 1024d, 2) + " KB";
     }
 
+    /**
+     * Returns bytes formatted as rounded mebibytes with the {@code " MB"} suffix.
+     */
     protected static String toMB(long bytes) {
         return round(bytesToMB(bytes), 2) + " MB";
     }
 
+    /**
+     * Converts the supplied byte count to an unrounded mebibyte value.
+     */
     private static double bytesToMB(long bytes) {
+        // Each mebibyte contains 1024 squared bytes before display rounding.
         return bytes / (1024d * 1024d);
     }
 
+    /**
+     * Formats a frequency using the largest supported decimal unit.
+     * Positive inputs select gigahertz, megahertz, kilohertz, or hertz, with
+     * scaled values rounded to two decimals; nonpositive inputs return
+     * {@code "N/A"}.
+     */
     protected static String formatFreq(long hz) {
+        // Frequency labels use decimal powers rather than binary memory units.
         if (hz >= 1_000_000_000L) {
             return String.format("%.2fGHz", hz / 1_000_000_000d);
         } else if (hz >= 1_000_000L) {
@@ -349,7 +479,13 @@ public class StatusCommand extends Command {
         }
     }
 
+    /**
+     * Formats an elapsed millisecond duration as whole days, hours, minutes, and
+     * seconds. Each component is removed before extracting the next smaller
+     * unit, and subsecond remainder is omitted from the returned text.
+     */
     protected static String formatUptime(long uptime) {
+        // Successive whole-unit extraction leaves only subsecond precision undisplayed.
         long days = TimeUnit.MILLISECONDS.toDays(uptime);
         uptime -= TimeUnit.DAYS.toMillis(days);
 
@@ -363,6 +499,12 @@ public class StatusCommand extends Command {
         return String.format(UPTIME_FORMAT, days, hours, minutes, seconds);
     }
 
+    /**
+     * Installs status reporting with optional detailed host diagnostics.
+     * {@code full} defaults to {@code false}; uptime, JVM heap, players, and
+     * worlds are always printed. Detailed sections run afterward and preserve
+     * output already sent when a later retrieval fails.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().bool("full", false).optional().exec(context -> {
@@ -386,7 +528,14 @@ public class StatusCommand extends Command {
         });
     }
 
+    /**
+     * {@code ComputerSystemEntry} names the WMI property queried for Windows hypervisor detection.
+     */
     protected enum ComputerSystemEntry {
+        /**
+         * {@code HYPERVISORPRESENT} selects the WMI hypervisor flag consumed by
+         * {@link StatusCommand#detectVM()} when shared hardware heuristics find no match.
+         */
         HYPERVISORPRESENT
     }
 }

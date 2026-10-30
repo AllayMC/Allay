@@ -7,7 +7,11 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when the whitelist is enabled or disabled.
+ * {@code WhitelistChangeEvent} represents a request to set the server's
+ * whitelist enforcement status.
+ * The player manager emits this event even when the requested status matches
+ * the current status. Acceptance stores the requested value and, when enabled,
+ * disconnects players who are not whitelisted; cancellation skips both steps.
  *
  * @author Dhaiven
  */
@@ -16,7 +20,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.SERVER)
 public class WhitelistChangeEvent extends ServerEvent implements CancellableEvent {
     /**
-     * Whether the whitelist is enabled.
+     * {@code enable} describes the requested whitelist enforcement status. This
+     * value represents the pending setting rather than the server's current setting.
      */
     protected boolean enable;
 }

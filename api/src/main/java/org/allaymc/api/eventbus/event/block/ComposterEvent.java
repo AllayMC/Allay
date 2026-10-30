@@ -10,7 +10,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player attempts to add an item to a composter.
+ * {@code ComposterEvent} represents a player's attempt to add a compostable item
+ * to a composter. The interaction handler dispatches it before consuming the item
+ * or rolling the compost chance, and cancellation prevents both actions. The
+ * handler currently uses its original local fill level after dispatch.
  *
  * @author daoge_cmd
  */
@@ -18,19 +21,27 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.WORLD)
 public class ComposterEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The player interacting with the composter.
+     * Player attempting to add compost.
      */
     protected EntityPlayer player;
     /**
-     * The item being added to the composter.
+     * {@code item} references the interaction stack passed by the caller. The
+     * generated getter exposes that same mutable stack to event listeners.
      */
     protected ItemStack item;
     /**
-     * The current composter fill level.
+     * {@code currentFillLevel} records the fill level before composting. The
+     * built-in interaction handler computes its next level from the original local
+     * value, so the generated setter changes only the event value.
      */
     @Setter
     protected int currentFillLevel;
 
+    /**
+     * Creates a composter attempt retaining the block, player, and item
+     * references. {@code currentFillLevel} is the observed level before adding
+     * compost; construction neither consumes the item nor changes the composter.
+     */
     public ComposterEvent(Block block, EntityPlayer player, ItemStack item, int currentFillLevel) {
         super(block);
         this.player = player;

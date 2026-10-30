@@ -6,12 +6,16 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 /**
- * Represents the information about a player interacting with a block.
+ * {@code PlayerInteractInfo} represents the player, target coordinates, and clicked
+ * face associated with a block interaction. The record retains {@code
+ * clickedBlockPos} and {@code clickedPos} without copying either vector, so callers
+ * must preserve their coordinates when they need a stable interaction snapshot.
+ * {@code getClickedBlock} resolves the target in the player's current dimension.
  *
- * @param player          the player who is placing the block
- * @param clickedBlockPos the block that the player clicked on
- * @param clickedPos      the precise pos where the player clicked
- * @param blockFace       the face of the block that the player clicked on
+ * @param player interacting player reference
+ * @param clickedBlockPos clicked block coordinates
+ * @param clickedPos fractional hit coordinates within the clicked block
+ * @param blockFace clicked block face
  *
  * @author daoge_cmd
  */
@@ -23,9 +27,9 @@ public record PlayerInteractInfo(
 ) {
 
     /**
-     * Returns the block that the player clicked on.
-     *
-     * @return the clicked block
+     * Returns a block snapshot at {@code clickedBlockPos} in the player's current
+     * dimension. The lookup uses the main block layer, and later player movement
+     * between dimensions can change which dimension this method reads.
      */
     public Block getClickedBlock() {
         return new Block(player.getDimension(), clickedBlockPos);

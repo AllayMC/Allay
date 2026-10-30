@@ -21,29 +21,69 @@ import java.util.function.Predicate;
 import static org.allaymc.api.command.selector.SelectorType.*;
 
 /**
+ * {@code AllayEntitySelectorAPI} resolves selector text into live entity
+ * references using registered argument handlers and the sender's execution
+ * dimension. It caches structural checks and parsed argument maps, then copies
+ * the sender location for per-selection coordinate changes. Handler
+ * registration maintains ascending priority order so origin coordinates precede
+ * box ranges and later entity filters.
+ *
+ * <p> Each handler receives the surviving list or a predicate applied to it.
+ * Empty candidate lists return immediately, so later argument values may never
+ * be interpreted. Explicit list filters run only for present keys, while
+ * predicate handlers may synthesize defaults from the full argument map. Final
+ * random or nearest-player reduction occurs after those handlers. Cached parsed
+ * maps are shared across instances, and registration does not invalidate them
+ * when an instance's handler set changes.
+ *
  * @author daoge_cmd
  */
 public class AllayEntitySelectorAPI implements EntitySelectorAPI {
 
     /**
-     * Pre-parsing cache for target selector text
+     * {@code ARGS_CACHE} retains parsed key/value lists by complete selector
+     * text for up to one minute after access. All instances share these maps,
+     * and argument registration does not invalidate them.
      */
     private static final Cache<String, Map<String, List<String>>> ARGS_CACHE = Caffeine.newBuilder()
             .maximumSize(65535)
             .expireAfterAccess(1, TimeUnit.MINUTES)
             .build();
+    /**
+     * {@code MATCHES_CACHE} retains structural selector checks by complete
+     * token for up to one minute after access. A cached success does not
+     * validate argument names or values.
+     */
     private static final Cache<String, Boolean> MATCHES_CACHE = Caffeine.newBuilder()
             .maximumSize(65535)
             .expireAfterAccess(1, TimeUnit.MINUTES)
             .build();
 
+    /**
+     * {@code registry} maps each accepted key to one handler and rejects
+     * duplicate registration. {@code orderedArgs} contains those same handlers
+     * sorted for execution; callers must coordinate registration with matching.
+     */
     private final Map<String, SelectorArgument> registry = new HashMap<>();
+    /**
+     * {@code orderedArgs} retains handlers in ascending priority order. Stable
+     * sorting preserves registration order for equal priorities, which affects
+     * handlers that transform an already filtered list.
+     */
     private final List<SelectorArgument> orderedArgs = new ArrayList<>();
 
+    /**
+     * Creates a selector implementation and registers its built-in argument
+     * handlers.
+     */
     public AllayEntitySelectorAPI() {
         registerDefaultArguments();
     }
 
+    /**
+     * Registers built-in origin, range, count, identity, rotation, and score
+     * handlers.
+     */
     private void registerDefaultArguments() {
         registerArgument(new X());
         registerArgument(new Y());
@@ -67,54 +107,67 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         registerArgument(new Scores());
     }
 
-    // TODO: refactor this
+    /**
+     * Returns entities selected from the sender's execution dimension, or the
+     * represented entity for {@code @s}. Structural failures raise
+     * {@code SelectorSyntaxException}; uncached argument parsing also rejects
+     * unknown keys. A static cached map can bypass that check for another
+     * instance's different handler registry. Handler failures are wrapped with
+     * the active key, and coordinate changes use a copy of the sender's
+     * location.
+     *
+     * <p>
+     * Handlers run in priority order against the current survivors. An empty
+     * list stops processing, so successful empty results do not establish that
+     * every argument value was valid. Predicate defaults apply only to absent
+     * keys; list filters require explicit values. {@code @r} finally chooses
+     * one survivor, while {@code @p} chooses the nearest surviving player when
+     * more than one remains. Result entities are shared live objects rather
+     * than entity snapshots.
+     */
     @Override
     public List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException {
         var cachedMatches = MATCHES_CACHE.getIfPresent(token);
-        // First confirm from the cache that it is not an illegal selector
         if (cachedMatches != null && !cachedMatches)
             throw new SelectorSyntaxException("Malformed entity selector token");
 
         var matcher = ENTITY_SELECTOR.matcher(token);
-        // Illegal target selector text
         if (!matcher.matches()) {
-            // Record the illegal selector to the cache
             MATCHES_CACHE.put(token, false);
             throw new SelectorSyntaxException("Malformed entity selector token");
         }
 
-        // Query if there is a pre-parsing result. If not, parse
+        // Parsed maps depend only on selector text after registration checks. Reuse
+        // that structure while each invocation still filters current live entities.
         var arguments = ARGS_CACHE.getIfPresent(token);
         if (arguments == null) {
             arguments = parseArgumentMap(matcher.group(2));
             ARGS_CACHE.put(token, arguments);
         }
 
-        // Get the cloned location information of the executor
+        // Coordinate handlers mutate the selection origin, so copy the sender's
+        // location before exposing it to handlers and leave the sender's location intact.
         var senderLocation = new Location3d(sender.getCommandExecuteLocation());
-        // Get the selector type
         var selectorType = parseSelectorType(matcher.group(1));
-        // Determine the entity detection range according to the selector type first
         List<Entity> entities;
         if (selectorType != SELF) {
             entities = Lists.newArrayList(senderLocation.dimension().getEntities().values());
         } else {
             if (sender.isEntity())
                 entities = Lists.newArrayList(sender.asEntity());
-                // There is no entity that meets the condition.
             else return Lists.newArrayList();
         }
 
-        // For the player type selector that is determined, exclude entities that are not players
+        // These selector modes promise player candidates before custom handlers run.
+        // Random selection remains broader here because its type handler supplies the
+        // player default only when the selector omits an explicit type argument.
         switch (selectorType) {
             case ALL_PLAYERS, NEAREST_PLAYER -> entities.removeIf(e -> !(e instanceof EntityPlayer));
             default -> {
             }
         }
 
-        // There is no entity that meets the condition, return
         if (entities.isEmpty()) return entities;
-        // Refer to the coordinates
         for (var arg : orderedArgs) {
             try {
                 if (!arg.isFilter()) {
@@ -132,13 +185,15 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
                     else continue;
                 }
             } catch (Throwable t) {
+                // Preserve the active argument key when a handler fails so command
+                // feedback can associate its cause with the selector value being parsed.
                 throw new SelectorSyntaxException("Error while parsing selector argument: " + arg.getKeyName(), t);
             }
-            // There is no entity that meets the condition, return
             if (entities.isEmpty()) return entities;
         }
 
-        // Randomly select one
+        // Apply the selector's random reduction after explicit filters, so only
+        // survivors can be chosen and an explicit type can admit non-player entities.
         if (selectorType == RANDOM_PLAYER && !entities.isEmpty()) {
             var index = ThreadLocalRandom.current().nextInt(entities.size()) + 1;
             Entity currentEntity = null;
@@ -153,7 +208,8 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
 
             return Lists.newArrayList(currentEntity);
         }
-        // Select the closest player
+        // Nearest-player reduction uses the adjusted origin after all argument
+        // handlers, so coordinate overrides participate in the final distance choice.
         if (selectorType == NEAREST_PLAYER && entities.size() != 1) {
             Entity nearest = null;
             var min = Double.MAX_VALUE;
@@ -171,11 +227,22 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         return entities;
     }
 
+    /**
+     * Returns the cached structural regex result for the supplied token. This
+     * method does not parse argument keys or values, so a structurally accepted
+     * token can still fail during {@code matchEntities}.
+     */
     @Override
     public boolean checkValid(String token) {
         return MATCHES_CACHE.get(token, k -> ENTITY_SELECTOR.matcher(token).matches());
     }
 
+    /**
+     * Registers a new key and stably sorts handlers by ascending priority.
+     * Duplicate keys return {@code false} without replacement; successful
+     * registration does not invalidate static parsed-map caches or synchronize
+     * with ongoing selections.
+     */
     @Override
     public boolean registerArgument(SelectorArgument argument) {
         if (registry.containsKey(argument.getKeyName())) {
@@ -188,6 +255,19 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         return true;
     }
 
+    /**
+     * Parses an optional selector argument suffix into repeated values grouped
+     * by key. {@code null} or empty input creates an empty map; unknown keys
+     * raise {@code SelectorSyntaxException}, and a key without {@code =}
+     * receives an empty value.
+     *
+     * <p> The first {@code =} separates the key from its remaining value,
+     * preserving later equals signs inside that value.
+     * {@code separateArguments} protects commas between braces before this
+     * split. The returned lists preserve each key's occurrence order, while the
+     * map itself does not preserve key order; handler priority determines
+     * execution order instead.
+     */
     protected Map<String, List<String>> parseArgumentMap(String inputArguments) throws SelectorSyntaxException {
         Map<String, List<String>> args = new HashMap<>();
         if (inputArguments == null || inputArguments.isEmpty()) {
@@ -208,6 +288,18 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         return args;
     }
 
+    /**
+     * Splits comma-separated argument entries while retaining commas inside one
+     * brace-delimited region. The parser tracks only whether it is inside
+     * braces; it does not count nesting, validate balanced braces, or interpret
+     * quoted commas.
+     *
+     * <p> This limited state keeps a score expression's internal commas in one
+     * argument value until its own handler parses them. Empty entries,
+     * including a trailing comma's empty entry, are omitted from the result.
+     * Each retained entry is an unchanged substring, so its key/value split
+     * still sees the original argument text.
+     */
     protected List<String> separateArguments(String input) {
         List<String> result = new ArrayList<>();
         int start = 0;
@@ -217,6 +309,8 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
             var ch = input.charAt(i);
             if (ch == '{') inBraces = true;
             if (ch == '}') inBraces = false;
+            // A comma inside a brace region belongs to that argument's value,
+            // such as a score expression, rather than to the outer selector list.
             if (ch == ',' && !inBraces) {
                 result.add(input.substring(start, i));
                 start = i + 1;

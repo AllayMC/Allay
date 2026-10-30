@@ -22,13 +22,26 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.AGE_4;
 
 /**
+ * {@code BlockNetherWartBaseComponentImpl} implements soul-sand support, random age growth,
+ * and Nether-wart harvest drops. Player placement requires the upper face of soul sand, while
+ * placement without interaction information delegates directly. Growth advances through
+ * cancellable one-stage proposals, and mature harvests use a Fortune-adjusted random stack.
+ *
  * @author daoge_cmd
  */
 public class BlockNetherWartBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the nether wart behavior component for the supplied block type.
+     */
     public BlockNetherWartBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places Nether wart after validating an upper-face soul-sand interaction when placement
+     * information exists. A {@code null} {@code placementInfo} bypasses those local checks and
+     * delegates directly to inherited placement.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null) {
@@ -42,6 +55,11 @@ public class BlockNetherWartBaseComponentImpl extends BlockBaseComponentImpl {
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
+    /**
+     * Dispatches the inherited neighbor hook and breaks Nether wart when lower support changes
+     * away from soul sand. Other faces leave this local support test untouched during the
+     * callback.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -50,11 +68,19 @@ public class BlockNetherWartBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns whether Nether wart receives random updates for age progression.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Gives immature Nether wart a one-in-ten attempt to advance one age after inherited
+     * random-update handling. The growth event can cancel that proposal or replace its state
+     * before the local world write.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
@@ -64,6 +90,7 @@ public class BlockNetherWartBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
+        // Random updates attempt age progression independently of light and bone-meal interaction.
         if (ThreadLocalRandom.current().nextInt(10) != 0) {
             return;
         }
@@ -75,13 +102,17 @@ public class BlockNetherWartBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns one wart from an immature crop and a Fortune-adjusted random stack from a mature
+     * crop. Mature counts range from two through four without Fortune, with the adjusted upper
+     * bound capped at seven.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         var age = block.getPropertyValue(AGE_4);
         if (age < AGE_4.getMax()) {
             return Set.of(ItemTypes.NETHER_WART.createItemStack(1));
         }
-        // Mature: 2-4 with fortune (fortune adds to max, capped at 7)
         var count = FortuneDropHelper.discrete(usedItem, 2, 4, 7);
         return Set.of(ItemTypes.NETHER_WART.createItemStack(count));
     }

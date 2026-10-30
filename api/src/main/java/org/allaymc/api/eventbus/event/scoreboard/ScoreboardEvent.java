@@ -6,7 +6,10 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.scoreboard.Scoreboard;
 
 /**
- * The base class for all scoreboard events.
+ * {@code ScoreboardEvent} represents the scoreboard reference shared by scoreboard events. Concrete
+ * events describe changes to objectives or their lines. The stored scoreboard is the live object
+ * targeted by the operation, allowing listeners to inspect its state before a cancellable mutation
+ * occurs.
  *
  * @author daoge_cmd
  */
@@ -14,7 +17,7 @@ import org.allaymc.api.scoreboard.Scoreboard;
 @AllArgsConstructor
 public abstract class ScoreboardEvent extends Event {
     /**
-     * The scoreboard involved in the event.
+     * Live scoreboard targeted by the event.
      */
     protected Scoreboard scoreboard;
 }

@@ -25,31 +25,102 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 
 /**
+ * {@code BlockEntityBrewingStandBaseComponentImpl} processes brewing recipes
+ * across three bottle slots using a reagent countdown and fuel counters. Recipe
+ * availability is reevaluated each tick, and event callbacks can cancel fuel
+ * consumption, brewing start, or completion. Reagent slot notifications reset
+ * the countdown independently of bottle occupancy changes.
+ *
+ * <p>
+ * Fuel is checked before recipe availability, so replenishment can occur even
+ * when no bottle currently has a recipe. Completion applies nonnull event
+ * results before consuming the reagent and charging one fuel unit. These
+ * changes are incremental rather than transactional; a failing listener can
+ * leave earlier bottle replacements applied. Counter NBT uses signed shorts,
+ * while container persistence is contributed by the holder.
+ *
+ * <p>
+ * {@code fuelAmount} and {@code fuelTotal} start together when blaze powder
+ * replenishes fuel. Brewing completion decreases only {@code fuelAmount};
+ * {@code fuelTotal} remains the display total until replenishment.
+ *
  * @author IWareQ
  */
 @Getter
 @Setter
 public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityBrewingStandBaseComponent {
+    /**
+     * {@code TAG_COOK_TIME}, {@code TAG_FUEL_AMOUNT}, and
+     * {@code TAG_FUEL_TOTAL} identify signed-short brewing counters shared by
+     * the save and load paths. {@code TAG_COOK_TIME} stores the remaining
+     * brewing countdown.
+     */
     protected static final String TAG_COOK_TIME = "CookTime";
+    /**
+     * Persisted remaining brew-operation counter.
+     */
     protected static final String TAG_FUEL_AMOUNT = "FuelAmount";
+    /**
+     * Persisted total fuel-display counter.
+     */
     protected static final String TAG_FUEL_TOTAL = "FuelTotal";
 
+    /**
+     * {@code MAX_BREW_TIME} defines the standard countdown in server ticks and
+     * the sentinel at which a brewing-start event is offered.
+     */
     protected static final int MAX_BREW_TIME = 400;
 
+    /**
+     * {@code containerHolderComponent} supplies the shared brewing container;
+     * initialization and ticking require its container to be a
+     * {@code BrewingStandContainerImpl}.
+     */
     @Dependency
     @Setter(AccessLevel.NONE)
     protected BlockEntityContainerHolderComponent containerHolderComponent;
+    /**
+     * Injected brewing stand used as the source of brewing events.
+     */
     @ComponentObject
     protected BlockEntityBrewingStand thisBlockEntity;
 
+    /**
+     * {@code brewTime} stores the remaining server-tick countdown; reagent
+     * notifications reset it, and the generated setter stores supplied values
+     * directly.
+     */
     protected int brewTime;
+    /**
+     * {@code fuelAmount} stores remaining brew operations; completion charges
+     * one unit, while a nonpositive value requests fuel replenishment on
+     * processing.
+     */
     protected int fuelAmount;
+    /**
+     * {@code fuelTotal} supplies the client fuel-display total independently of
+     * remaining fuel; successful replenishment sets both counters to the same
+     * amount.
+     */
     protected int fuelTotal;
 
+    /**
+     * Creates brewing-stand base state using the supplied initialization
+     * information.
+     */
     public BlockEntityBrewingStandBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Loads base state and installs bottle-occupancy and reagent-reset
+     * callbacks. The injected holder must supply the standard brewing
+     * container; callbacks remain on it if the holder's container reference is
+     * later replaced. Occupancy callbacks choose properties by map iteration
+     * position rather than explicit bottle-property names, so their bottle
+     * association depends on an order the block-type builder does not
+     * guarantee.
+     */
     @OnInitFinish
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
@@ -59,6 +130,10 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             int finalI = i;
             container.addSlotChangeListener(finalI, item -> {
                 var currentBlockState = getDimension().getBlockState(position);
+                // Bottle slots select properties by map iteration position.
+                // AllayBlockType.Builder.setProperties does not preserve the
+                // supplied order, so this code has no explicit mapping to the
+                // A, B, or C property names.
                 var values = currentBlockState.getBlockType().getProperties().values();
                 //noinspection unchecked
                 currentBlockState = currentBlockState.setPropertyValue(values.toArray(new BlockPropertyType[0])[finalI - 1], item != ItemAirStack.AIR_STACK);
@@ -74,6 +149,11 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         });
     }
 
+    /**
+     * Advances brewing once and sends the current fuel counters to container
+     * viewers. The supplied tick number is unused; countdown progress depends
+     * on calls to this method and fuel data is sent after processing completes.
+     */
     @Override
     public void tick(long currentTick) {
         BrewingStandContainerImpl container = containerHolderComponent.getContainer();
@@ -82,6 +162,20 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_FUEL_TOTAL, fuelTotal);
     }
 
+    /**
+     * Advances brewing from the current fuel, reagent, and three bottle
+     * recipes. Fuel replenishment runs first, even when all recipe lookups
+     * subsequently fail. A missing recipe set resets the countdown and clears
+     * the displayed brewing animation; an accepted start event can replace the
+     * countdown.
+     *
+     * <p>
+     * Positive time decreases without completing until a later call observes a
+     * nonpositive value. Completion offers copied recipe outputs to the brewing
+     * event, applies its nonnull results in order, then consumes one reagent
+     * and one fuel unit. Cancellation skips that completion sequence, while
+     * failures during its incremental writes do not roll back earlier results.
+     */
     protected void tickBrewingStand(BrewingStandContainerImpl container) {
         if (!checkFuel(container)) {
             return;
@@ -93,8 +187,10 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         var c = findRecipe(container.getResult(2), reagent);
 
         if (a == null && b == null && c == null) {
+            // Keep the start sentinel ready for a later valid recipe while
+            // sending zero to stop the current client brewing animation.
             brewTime = MAX_BREW_TIME;
-            container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, 0); // We should reset brew animation
+            container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, 0);
             return;
         }
 
@@ -108,6 +204,8 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         }
 
         if (brewTime > 0) {
+            // Send countdown updates every forty ticks while fuel data
+            // continues each tick.
             if (brewTime % 40 == 0) {
                 container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, brewTime);
             }
@@ -130,6 +228,8 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             return;
         }
 
+        // Apply the event's result references before charging reagent or fuel;
+        // a later slot failure leaves earlier bottle changes in place.
         for (int i = 0; i < event.getResult().length; i++) {
             var itemStack = event.getResult()[i];
             if (itemStack != null) {
@@ -148,6 +248,18 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         getDimension().addSound(position, SimpleSound.POTION_BREWED);
     }
 
+    /**
+     * Returns whether stored brewing fuel is available or can be replenished.
+     * Existing positive fuel needs no inventory change; otherwise only blaze
+     * powder can supply fuel after an accepted consumption event.
+     *
+     * <p>
+     * Successful replenishment consumes one powder before assigning twenty brew
+     * operations to both fuel counters. Cancellation leaves normal fuel
+     * consumption pending, and a slot callback failure can interrupt the
+     * sequence after inventory mutation but before either counter is assigned.
+     * Callers run this check before evaluating bottle recipes.
+     */
     protected boolean checkFuel(BrewingStandContainerImpl container) {
         if (fuelAmount > 0) {
             return true;
@@ -170,17 +282,33 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             container.clearSlot(BrewingStandContainerImpl.FUEL_SLOT);
         }
 
+        // One accepted blaze-powder consumption supplies twenty brew
+        // operations; the total counter starts at that same amount for the fuel
+        // display.
         fuelAmount = 20;
         fuelTotal = fuelAmount;
         return true;
     }
 
+    /**
+     * Looks up the potion recipe identifier for the supplied bottle and
+     * reagent. A missing registry entry returns {@code null}; a present entry
+     * must be a {@code PotionRecipe} because this helper casts it directly.
+     */
     protected PotionRecipe findRecipe(ItemStack ingredient, ItemStack reagent) {
         return (PotionRecipe) Registries.RECIPES.get(PotionRecipe.buildIdentifier(ingredient, reagent));
     }
 
+    /**
+     * Adds brewing counters to the completed base and component save data. Each
+     * counter is narrowed to a signed short without range validation, so values
+     * outside that representation do not round-trip unchanged.
+     */
     @Override
     public NbtMap saveNBT() {
+        // Serialize the inherited save first, then narrow local counters to the
+        // signed-short representation consumed by the corresponding NBT load
+        // listeners.
         return super.saveNBT()
                 .toBuilder()
                 .putShort(TAG_COOK_TIME, (short) brewTime)
@@ -189,6 +317,12 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
                 .build();
     }
 
+    /**
+     * Loads base state before applying present signed-short brewing counters.
+     * Missing or differently typed counter tags preserve existing values;
+     * assignments occur incrementally and do not validate countdown or fuel
+     * ranges.
+     */
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);

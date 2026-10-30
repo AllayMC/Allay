@@ -16,20 +16,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * {@code ExtensionManager} discovers extension JARs, makes their resources
+ * available to bootstrap, and invokes their optional entry points.
+ * JARs without an extension descriptor remain available as resources. Entry
+ * instances run once while discovered and again after the walk completes;
+ * discovery failures abort the pass without undoing already added resources.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public final class ExtensionManager {
 
+    /**
+     * {@code PATH_MATCHER} selects JAR paths for extension discovery using the
+     * default filesystem's glob rules before a separate regular-file check.
+     */
     private static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.jar");
 
+    /** Recursive extension search root. */
     private final Path source;
+    /**
+     * {@code extensionInstances} retains entries whose first invocation
+     * succeeded. Each successful discovery walk invokes every retained entry
+     * again, including entries retained from earlier load calls.
+     */
     private final List<Extension> extensionInstances = new ArrayList<>();
 
+    /**
+     * Creates an extension manager retaining the supplied discovery root path.
+     */
     public ExtensionManager(Path source) {
         this.source = source;
     }
 
+    /**
+     * Discovers extension JARs recursively and invokes their entry points.
+     * A missing root is created without creating missing parents. Successful
+     * entries run during discovery and again afterward; any uncaught discovery
+     * or callback failure stops further processing without rollback.
+     */
     @SneakyThrows
     public void loadExtensions(String[] args) {
         if (!Files.exists(source)) {
@@ -41,17 +66,25 @@ public final class ExtensionManager {
                     .forEach(extensionPath -> loadExtension(extensionPath, args));
         }
 
+        // The walk has made all discovered JAR resources visible before this
+        // second invocation, which also includes instances retained from earlier calls.
         this.extensionInstances.forEach(extension -> extension.main(args));
     }
 
+    /**
+     * Adds one JAR to resource lookup and invokes its optional extension entry.
+     * Entry construction requires a public no-argument constructor. Failures do
+     * not remove the JAR; only entries whose initial invocation returns are
+     * retained for the later invocation pass.
+     */
     private void loadExtension(Path extensionPath, String[] args) {
         log.info(I18n.get().tr(TrKeys.ALLAY_EXTENSION_LOADING, extensionPath));
         Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
 
-        // Try to load the main class of the extension if it exists
+        // A descriptor is optional for resource-only extensions; adding the JAR
+        // first also makes its entry class available to the shared resource loader.
         var mainClass = findMainClass(extensionPath);
         if (mainClass == null) {
-            // Main class can be null
             return;
         }
 
@@ -70,6 +103,12 @@ public final class ExtensionManager {
         extensionInstances.add(extensionInstance);
     }
 
+    /**
+     * Resolves the entry named by {@code extension.json}, or returns {@code null}
+     * when the descriptor is absent.
+     * Missing entrance values and unresolvable classes fail loading. The opened
+     * JAR filesystem is not closed here, including when no descriptor exists.
+     */
     @SneakyThrows
     private Class<?> findMainClass(Path extensionPath) {
         var jarFileSystem = FileSystems.newFileSystem(extensionPath);

@@ -5,32 +5,28 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.ProjectileLaunchEvent;
 
 /**
- * Component for items that can launch a projectile entity when used.
+ * {@code ItemProjectileComponent} describes an item's projectile type and launch
+ * force and exposes an attempt to launch it. The launch result lets interaction
+ * handlers distinguish a successful shot from a rejected projectile or a cancelled
+ * launch event.
  *
  * @author daoge_cmd
  */
 public interface ItemProjectileComponent extends ItemComponent {
     /**
-     * Get the projectile entity type of this item.
-     *
-     * @return the projectile entity type of this item
+     * Returns the entity type configured for projectiles from this item.
      */
     EntityType<?> getProjectileEntityType();
 
     /**
-     * Get the initial throw force when an entity shoot this item.
-     *
-     * @return the initial throw force when an entity shoot this item
+     * Returns the initial motion multiplier configured for this projectile item.
      */
     double getThrowForce();
 
     /**
-     * Try to shoot this item by a specific entity.
-     *
-     * @param shooter the entity that shoots this item
-     *
-     * @return {@code true} if the projectile is shot successfully, {@code false} otherwise
-     * (may because event {@link ProjectileLaunchEvent} being cancelled).
+     * Attempts to launch this item's projectile from the supplied entity.
+     * A successful launch returns {@code true}; {@code false} includes rejection of
+     * the projectile or cancellation of {@link ProjectileLaunchEvent} before launch.
      */
     boolean shoot(Entity shooter);
 }

@@ -7,44 +7,57 @@ import org.allaymc.api.ddui.Property;
 import java.util.function.BiConsumer;
 
 /**
- * Shared base implementation for editable value elements.
- *
- * @param <E> the concrete element type
- * @param <T> the value type
+ * {@code ValueElementBase} supplies common label, description, disabled-state, and value properties
+ * for editable DDUI controls. Templates hold initial configuration, while opened sessions retain
+ * their own current values. Client-change callbacks receive the session and normalized value;
+ * server session updates do not invoke them.
  *
  * @author daoge_cmd | SerenityJS
  */
 non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> extends ElementBase<E> implements ValueElement<T> {
+    /**
+     * Control label template property.
+     */
     private final Property<String> label = new Property<>("");
+    /**
+     * Secondary control description property.
+     */
     private final Property<String> description = new Property<>("");
+    /**
+     * Control disabled-state template property.
+     */
     private final Property<Boolean> disabled = new Property<>(false);
+    /**
+     * Initial control value property.
+     */
     private final Property<T> value;
+    /**
+     * {@code onChange} receives client-originated session values. Server session updates bypass it,
+     * and callback failures propagate after the session value changes.
+     */
     private BiConsumer<DDUIScreenSession, T> onChange = (session, value) -> {
     };
 
     /**
-     * Creates a value element with the provided initial value.
-     *
-     * @param value the initial value
+     * Creates an editable template element holding the supplied initial value.
      */
     protected ValueElementBase(T value) {
         this.value = new Property<>(value);
     }
 
     /**
-     * Gets the label property of this element.
-     *
-     * @return the label property
+     * Returns this element's mutable {@code label} template property. Reconfiguring that property
+     * affects subsequent session compilation; existing sessions retain their current compiled
+     * binding and do not receive literal template changes.
      */
     public Property<String> getLabel() {
         return label;
     }
 
     /**
-     * Sets the label shown by this element.
-     *
-     * @param label the label text
-     * @return this element
+     * Stores the supplied label template value and returns this element for further configuration.
+     * This operation clears that property's observable binding and does not send updates to
+     * existing sessions.
      */
     public E label(String label) {
         this.label.set(label);
@@ -52,10 +65,9 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Binds this element's label to an observable.
-     *
-     * @param label the label observable
-     * @return this element
+     * Binds the label template property to the supplied observable and returns this element. New
+     * sessions subscribe to that source; this reconfiguration does not replace bindings already
+     * compiled by existing sessions.
      */
     public E label(Observable<String> label) {
         this.label.bind(label);
@@ -63,19 +75,18 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the description property of this element.
-     *
-     * @return the description property
+     * Returns this element's mutable {@code description} template property. Reconfiguring that
+     * property affects subsequent session compilation; existing sessions retain their current
+     * compiled binding and do not receive literal template changes.
      */
     public Property<String> getDescription() {
         return description;
     }
 
     /**
-     * Sets the description shown by this element.
-     *
-     * @param description the description text
-     * @return this element
+     * Stores the supplied description template value and returns this element for further
+     * configuration. This operation clears that property's observable binding and does not send
+     * updates to existing sessions.
      */
     public E description(String description) {
         this.description.set(description);
@@ -83,10 +94,9 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Binds this element's description to an observable.
-     *
-     * @param description the description observable
-     * @return this element
+     * Binds the description template property to the supplied observable and returns this element.
+     * New sessions subscribe to that source; this reconfiguration does not replace bindings already
+     * compiled by existing sessions.
      */
     public E description(Observable<String> description) {
         this.description.bind(description);
@@ -94,19 +104,18 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the disabled-state property of this element.
-     *
-     * @return the disabled-state property
+     * Returns this element's mutable {@code disabled} template property. Reconfiguring that
+     * property affects subsequent session compilation; existing sessions retain their current
+     * compiled binding and do not receive literal template changes.
      */
     public Property<Boolean> getDisabled() {
         return disabled;
     }
 
     /**
-     * Sets whether this element is disabled.
-     *
-     * @param disabled the disabled state
-     * @return this element
+     * Stores the supplied disabled template value and returns this element for further
+     * configuration. This operation clears that property's observable binding and does not send
+     * updates to existing sessions.
      */
     public E disabled(boolean disabled) {
         this.disabled.set(disabled);
@@ -114,10 +123,9 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Binds this element's disabled state to an observable.
-     *
-     * @param disabled the disabled observable
-     * @return this element
+     * Binds the disabled template property to the supplied observable and returns this element. New
+     * sessions subscribe to that source; this reconfiguration does not replace bindings already
+     * compiled by existing sessions.
      */
     public E disabled(Observable<Boolean> disabled) {
         this.disabled.bind(disabled);
@@ -125,19 +133,18 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the value property of this element.
-     *
-     * @return the value property
+     * Returns this element's mutable {@code value} template property. Reconfiguring that property
+     * affects subsequent session compilation; existing sessions retain their current compiled
+     * binding and do not receive literal template changes.
      */
     public Property<T> getValue() {
         return value;
     }
 
     /**
-     * Sets the current value of this element.
-     *
-     * @param value the element value
-     * @return this element
+     * Stores the supplied value template value and returns this element for further configuration.
+     * This operation clears that property's observable binding and does not send updates to
+     * existing sessions.
      */
     public E value(T value) {
         this.value.set(value);
@@ -145,10 +152,9 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Binds this element's value to an observable.
-     *
-     * @param value the value observable
-     * @return this element
+     * Binds the value template property to the supplied observable and returns this element. New
+     * sessions subscribe to that source; this reconfiguration does not replace bindings already
+     * compiled by existing sessions.
      */
     public E value(Observable<T> value) {
         this.value.bind(value);
@@ -156,22 +162,16 @@ non-sealed abstract class ValueElementBase<E extends ValueElementBase<E, T>, T> 
     }
 
     /**
-     * Gets the callback that runs when the viewer changes this element in an opened session.
-     *
-     * @return the change callback
+     * Returns the callback configured for client changes to this element.
      */
     public BiConsumer<DDUIScreenSession, T> getOnChange() {
         return onChange;
     }
 
     /**
-     * Sets the callback that runs when the viewer changes this element in an opened session.
-     * <p>
-     * Server-side updates performed through {@link org.allaymc.api.ddui.DDUIScreenSession#set(ValueElement, Object)}
-     * do not trigger this callback.
-     *
-     * @param onChange the change callback
-     * @return this element
+     * Stores the callback for client-originated value changes and returns this element. Runtime
+     * session writes do not invoke it; a client callback failure propagates after the current
+     * runtime value has changed.
      */
     public E onChange(BiConsumer<DDUIScreenSession, T> onChange) {
         this.onChange = onChange;

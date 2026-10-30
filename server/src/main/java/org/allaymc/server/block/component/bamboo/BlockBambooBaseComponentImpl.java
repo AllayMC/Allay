@@ -26,13 +26,39 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
+ * {@code BlockBambooBaseComponentImpl} implements bamboo-column placement, growth, and
+ * appearance updates. A new stalk on ordinary valid ground becomes a sapling, while placement
+ * on existing bamboo chooses stalk thickness, leaves, and an age flag from the column beneath
+ * it.
+ *
+ * <p>
+ * Natural growth is gated by age, randomness, and light, whereas bone meal finds the column
+ * top and attempts growth without those gates. Accepted growth writes a new top before
+ * updating lower leaves and propagating thick stalks downward. A sixteen-segment limit bounds
+ * further extension, and the age flag can stop random growth earlier. Breaking a segment
+ * clears the lower bamboo's age flag so the surviving column can grow again.
+ *
  * @author daoge_cmd
  */
 public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the bamboo behavior component for the supplied block type.
+     */
     public BlockBambooBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places bamboo or a sapling according to the supporting column. Player placement requires
+     * the upper face; ordinary valid ground receives a sapling, and an existing sapling gives
+     * the new stalk thin thickness and small leaves.
+     *
+     * <p>
+     * Placement above bamboo derives thickness and leaves from lower segments, updates the
+     * lower leaves, and propagates thick stalks before the final placement call. Height can
+     * also set the new age flag. These earlier appearance writes are separate world changes
+     * and are not rolled back if the final placement fails.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null && placementInfo.blockFace() != BlockFace.UP) {
@@ -42,38 +68,31 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         var downState = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
         var downType = downState.getBlockType();
 
-        // If not on bamboo/sapling, delegate to sapling placement
         if (downType != BlockTypes.BAMBOO && downType != BlockTypes.BAMBOO_SAPLING) {
             if (!BlockBambooSaplingBaseComponentImpl.canSupportBamboo(dimension, placeBlockPos)) {
                 return false;
             }
-            // Place sapling instead
             return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
                     BlockTypes.BAMBOO_SAPLING.getDefaultState(), placementInfo);
         }
 
-        // On sapling: small leaves
         if (downType == BlockTypes.BAMBOO_SAPLING) {
             blockState = blockState
                     .setPropertyValue(BAMBOO_LEAF_SIZE, BambooLeafSize.SMALL_LEAVES)
                     .setPropertyValue(BAMBOO_STALK_THICKNESS, BambooStalkThickness.THIN);
         } else {
-            // On bamboo: determine thickness and leaf size
             var thickness = determineThickness(dimension, placeBlockPos);
             var leafSize = determineLeafSize(dimension, placeBlockPos, thickness);
             blockState = blockState
                     .setPropertyValue(BAMBOO_STALK_THICKNESS, thickness)
                     .setPropertyValue(BAMBOO_LEAF_SIZE, leafSize);
 
-            // Update leaves of bamboo below
             updateLeavesBelow(dimension, BlockFace.DOWN.offsetPos(placeBlockPos));
 
-            // Cascade thickness to all bamboo below
             if (thickness == BambooStalkThickness.THICK) {
                 updateThicknessBelow(dimension, BlockFace.DOWN.offsetPos(placeBlockPos));
             }
 
-            // Check height for age bit
             int height = countBambooHeight(dimension, placeBlockPos);
             if (shouldStopGrowing(height)) {
                 blockState = blockState.setPropertyValue(AGE_BIT, true);
@@ -83,6 +102,11 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
+    /**
+     * Dispatches the base neighbor hook and checks lower support changes. Bamboo or a bamboo
+     * sapling directly below remains valid; otherwise the shared ground-support predicate
+     * decides whether the current bamboo breaks.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -96,11 +120,15 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Performs inherited breaking effects, then clears the age flag on bamboo immediately
+     * below. The lower segment can subsequently pass the natural-growth age gate; a sapling or
+     * other lower block is left unchanged.
+     */
     @Override
     public void onBreak(Block block, ItemStack usedItem, Entity entity) {
         super.onBreak(block, usedItem, entity);
 
-        // Reset age bit of bamboo below
         var belowPos = BlockFace.DOWN.offsetPos(block.getPosition());
         var belowState = block.getDimension().getBlockState(belowPos);
         if (belowState.getBlockType() == BlockTypes.BAMBOO) {
@@ -109,11 +137,20 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns whether bamboo receives random updates for natural column growth.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Attempts natural bamboo growth after dispatching the inherited random-update hook. An
+     * aged segment stops immediately, and the one-third random gate and internal light of at
+     * least nine above the segment must both pass before {@code growFromTop} examines the
+     * column.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
@@ -122,11 +159,13 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
+        // Throttle natural growth independently of successful bone-meal interactions.
         if (ThreadLocalRandom.current().nextInt(3) != 0) {
             return;
         }
 
         var abovePos = block.getPosition().add(0, 1, 0, new Vector3i());
+        // Natural extension measures light above the triggering segment.
         if (block.getDimension().getLightEngine().getInternalLight(abovePos) < 9) {
             return;
         }
@@ -134,6 +173,11 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         growFromTop(block.getDimension(), block.getPosition());
     }
 
+    /**
+     * Attempts bone-meal growth at the highest bamboo segment after inherited interaction
+     * handling. A column of sixteen segments rejects the interaction; successful growth
+     * consumes the held item and emits bone-meal particles at the clicked position.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -144,10 +188,10 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Find topmost bamboo
         var pos = interactInfo.clickedBlockPos();
         var topPos = findTopBamboo(dimension, pos);
         int totalHeight = countTotalHeight(dimension, topPos);
+        // Bone meal observes the same sixteen-segment extension limit as growth.
         if (totalHeight >= 16) {
             return false;
         }
@@ -161,13 +205,27 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns one bamboo item when this stalk segment is broken.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.BAMBOO.createItemStack(1));
     }
 
+    /**
+     * Attempts one new bamboo segment above the column containing {@code pos}. The highest
+     * segment must have air above, and the complete column including a sapling must remain
+     * below sixteen segments. Thickness, leaves, and the age flag are computed before a
+     * cancellable growth event.
+     *
+     * <p>
+     * Acceptance places the event's state above the old top, then updates lower leaves and
+     * optionally propagates thick stalks. The return value reports event acceptance after
+     * those calls; the helper does not inspect dimension write results or undo earlier writes.
+     * Rejection leaves the column unchanged by this helper.
+     */
     protected boolean growFromTop(Dimension dimension, Vector3ic pos) {
-        // Find the topmost bamboo
         var topPos = findTopBamboo(dimension, pos);
 
         var abovePos = topPos.add(0, 1, 0, new Vector3i());
@@ -176,6 +234,7 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         int totalHeight = countTotalHeight(dimension, topPos);
+        // Include a basal sapling in the height limit before selecting the new top.
         if (totalHeight >= 16) {
             return false;
         }
@@ -195,9 +254,10 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
                 newState
         );
         if (event.call()) {
+            // Update existing stalk appearance only after the growth proposal is accepted.
+            // The subsequent independent writes do not restore the old top on failure.
             dimension.setBlockState(abovePos, event.getNewBlockState());
             updateLeavesBelow(dimension, topPos);
-            // Cascade thickness to all bamboo below
             if (thickness == BambooStalkThickness.THICK) {
                 updateThicknessBelow(dimension, topPos);
             }
@@ -206,6 +266,11 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns a new mutable coordinate for the highest contiguous bamboo segment. The scan
+     * starts at {@code pos}, follows bamboo above it, and leaves the caller's coordinate
+     * object unchanged.
+     */
     protected Vector3ic findTopBamboo(Dimension dimension, Vector3ic pos) {
         var current = new Vector3i(pos);
         while (true) {
@@ -217,10 +282,14 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns the column height including {@code fromTop} and contiguous lower bamboo or
+     * saplings. Callers supply the top position; the starting block contributes one even when
+     * its state is not inspected.
+     */
     protected int countTotalHeight(Dimension dimension, Vector3ic fromTop) {
         int count = 1;
         var current = new Vector3i(fromTop);
-        // Count downward
         while (true) {
             current.y--;
             var type = dimension.getBlockState(current).getBlockType();
@@ -233,10 +302,14 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         return count;
     }
 
+    /**
+     * Returns the proposed height at {@code pos} above contiguous bamboo or saplings. The
+     * prospective segment contributes one even before placement, allowing the caller to select
+     * its age flag from the resulting height.
+     */
     protected int countBambooHeight(Dimension dimension, Vector3ic pos) {
         int count = 0;
         var current = new Vector3i(pos);
-        // Count downward from below the given pos
         current.y--;
         while (true) {
             var type = dimension.getBlockState(current).getBlockType();
@@ -250,17 +323,28 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         return count + 1; // include the block at pos
     }
 
+    /**
+     * Returns whether the proposed height receives the natural-growth stop flag. Heights below
+     * eleven continue, heights from eleven through fourteen stop with one-quarter probability,
+     * and heights of fifteen or more always stop.
+     */
     protected boolean shouldStopGrowing(int height) {
+        // The age flag stops random growth before the separate hard extension limit.
         if (height >= 15) return true;
         if (height >= 11) return ThreadLocalRandom.current().nextInt(4) == 0;
         return false;
     }
 
+    /**
+     * Returns thick stalks when at least three contiguous lower segments are bamboo or
+     * saplings. A shorter qualifying column produces thin stalks, and the prospective position
+     * itself is excluded from the count.
+     */
     protected BambooStalkThickness determineThickness(Dimension dimension, Vector3ic pos) {
-        // Thick if 3+ bamboo segments below
         int count = 0;
         var current = new Vector3i(pos);
         current.y--;
+        // Only lower segments determine the prospective stalk thickness.
         while (count < 3) {
             var type = dimension.getBlockState(current).getBlockType();
             if (type == BlockTypes.BAMBOO || type == BlockTypes.BAMBOO_SAPLING) {
@@ -273,14 +357,25 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         return count >= 3 ? BambooStalkThickness.THICK : BambooStalkThickness.THIN;
     }
 
+    /**
+     * Selects the prospective segment's leaves from thickness and the lower column. Thick
+     * stalks immediately receive large leaves. Thin stalks count up to two contiguous lower
+     * bamboo or sapling segments, producing large, small, or absent leaves.
+     *
+     * <p>
+     * The supplied {@code thickness} can therefore override the count that the thin-stalk path
+     * would otherwise use. The method reads lower states only and does not modify existing
+     * leaves; {@code updateLeavesBelow} handles the appearance changes after a placement or
+     * accepted growth call.
+     */
     protected BambooLeafSize determineLeafSize(Dimension dimension, Vector3ic pos, BambooStalkThickness thickness) {
         if (thickness == BambooStalkThickness.THICK) {
             return BambooLeafSize.LARGE_LEAVES;
         }
-        // For thin bamboo, check how many segments below
         int count = 0;
         var current = new Vector3i(pos);
         current.y--;
+        // Thin stalks grade leaf size from the lower column.
         while (count < 2) {
             var type = dimension.getBlockState(current).getBlockType();
             if (type == BlockTypes.BAMBOO || type == BlockTypes.BAMBOO_SAPLING) {
@@ -295,9 +390,15 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         return BambooLeafSize.NO_LEAVES;
     }
 
+    /**
+     * Updates up to three existing bamboo segments starting at {@code pos}. The starting
+     * segment gets large leaves, the next small leaves, and the third no leaves; encountering
+     * a nonbamboo block stops the downward scan.
+     */
     protected void updateLeavesBelow(Dimension dimension, Vector3ic pos) {
         var current = new Vector3i(pos);
         int distance = 1;
+        // Limit leaf reshaping to the three segments immediately beneath the new top.
         while (distance <= 3) {
             var state = dimension.getBlockState(current);
             if (state.getBlockType() != BlockTypes.BAMBOO) break;
@@ -321,6 +422,10 @@ public class BlockBambooBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Changes contiguous bamboo at and below {@code pos} to thick stalks. The scan stops at
+     * the first nonbamboo block, so a basal sapling is not converted or traversed.
+     */
     protected void updateThicknessBelow(Dimension dimension, Vector3ic pos) {
         var current = new Vector3i(pos);
         while (true) {

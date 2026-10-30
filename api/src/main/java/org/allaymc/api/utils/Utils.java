@@ -12,47 +12,46 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 /**
+ * {@code Utils} supplies API helpers for bit widths, object-string conversion, text resources,
+ * and executor-backed collection processing. Text reads own and close their inputs, resource
+ * lookup requires an existing classpath entry, and parallel processing delegates completion
+ * aggregation to {@code CompletableFuture.allOf}.
+ *
  * @author daoge_cmd
  */
 @UtilityClass
 public class Utils {
     /**
-     * Calculates the number of bit that the specified value convert to binary.
-     *
-     * @param value the value
-     * @return the bits
+     * Returns the unsigned binary width of the integer bit pattern. Zero needs zero bits and
+     * negative values need thirty-two bits, so callers must not interpret this result as a
+     * signed magnitude width.
      */
     public byte computeRequiredBits(int value) {
         return (byte) (Integer.SIZE - Integer.numberOfLeadingZeros(value));
     }
 
     /**
-     * Convert a {@code Object[]} array to a {@code String[]} array.
-     *
-     * @param objectArray the object array
-     * @return the string array
+     * Returns a new string array containing each element's {@code toString} result in order.
+     * The input and its elements must be non-{@code null}; a missing element fails conversion rather
+     * than becoming the literal string {@code "null"}.
      */
     public String[] objectArrayToStringArray(Object[] objectArray) {
         return Arrays.stream(objectArray).map(Object::toString).toArray(String[]::new);
     }
 
     /**
-     * Read a string from the input stream.
-     *
-     * @param inputStream the input stream
-     * @return the string
-     * @throws IOException if an I/O error occurs
+     * Reads UTF-8 text using the reader overload and closes the supplied stream. Line boundaries
+     * are normalized by that reader path, which discards leading empty lines and the final line
+     * terminator rather than preserving exact input bytes.
      */
     public static String readString(InputStream inputStream) throws IOException {
         return readString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
     }
 
     /**
-     * Read a string from the reader.
-     *
-     * @param reader the reader
-     * @return the string
-     * @throws IOException if an I/O error occurs
+     * Reads lines into one string and closes the supplied reader. Leading empty lines disappear
+     * because separators are added only after content exists; subsequent line boundaries use
+     * {@code "\n"}, and a final line terminator is not retained.
      */
     public static String readString(Reader reader) throws IOException {
         try (BufferedReader br = new BufferedReader(reader)) {
@@ -71,25 +70,20 @@ public class Utils {
     }
 
     /**
-     * Get a specified resource in the jar file.
-     *
-     * @param resourceName the resource name
-     * @return the input stream
+     * Opens the classpath resource with this API class's loader. The caller owns and closes the
+     * returned stream, and a missing resource throws {@code NullPointerException} rather than
+     * returning an absent-stream sentinel.
      */
     public static InputStream getResource(String resourceName) {
         return Objects.requireNonNull(Utils.class.getClassLoader().getResourceAsStream(resourceName));
     }
 
     /**
-     * Processes each element in the provided collection in parallel using the specified executor
-     * and consumer function.
-     *
-     * @param <T>        the type of elements in the collection
-     * @param collection the collection of elements to be processed
-     * @param executor   the executor to run the asynchronous tasks
-     * @param consumer   the function to process each element in the collection
-     * @return a {@code CompletableFuture<Void>} that completes when all elements in the collection
-     * have been processed
+     * Submits one consumer task per element to {@code executor} and returns their aggregate
+     * future.
+     * The aggregate completes after all submitted tasks finish and becomes exceptional when a
+     * task fails; cancelling it does not cancel those tasks. Submission rejection can throw before
+     * an aggregate is returned while earlier submissions remain active.
      */
     public static <T> CompletableFuture<Void> forEachInParallel(Collection<T> collection, Executor executor, Consumer<T> consumer) {
         CompletableFuture<?>[] futures = collection.stream()

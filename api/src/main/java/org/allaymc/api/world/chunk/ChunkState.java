@@ -1,35 +1,43 @@
 package org.allaymc.api.world.chunk;
 
 /**
- * ChunkState represents the state of a chunk.
+ * {@code ChunkState} represents
+ * the ordered generation stages through which a chunk becomes
+ * usable. Declaration order defines predecessor, successor, and comparison
+ * results; generation code uses these relationships to request neighboring
+ * chunks at the stage required by each generation step.
  *
  * @author daoge_cmd
  */
 public enum ChunkState {
     /**
-     * The chunk is newly created and does not contain any things.
+     * Initial stage before terrain generation begins.
      */
     NEW,
     /**
-     * The chunk has had noise generated for it, including base terrains and biomes.
+     * Base terrain and biome generation stage.
      */
     NOISE,
     /**
-     * The chunk is populated, including trees, ores, and other features that may across multiple chunks.
+     * Population stage for features that can affect neighboring chunks.
      */
     POPULATE,
     /**
-     * The chunk is post-processed, entities will be spawned in this state. The chunk is fully generated
-     * and ready to be used.
+     * {@code FULL} marks completed generation. Runtime load hooks and normal
+     * chunk lookup select this stage before exposing a usable chunk.
      */
     FULL;
 
+    /**
+     * {@code VALUES} caches declaration order for predecessor and successor
+     * lookup without allocating another enum array for each request.
+     */
     private static final ChunkState[] VALUES = values();
 
     /**
-     * Returns the parent state of the state, or {@code null} if this is the first state.
-     *
-     * @return The parent state, or {@code null} if there is no parent state
+     * Returns the immediately preceding generation stage, or {@code null} for
+     * {@link #NEW}. The result follows enum declaration order and does not
+     * describe the state of any particular chunk.
      */
     public ChunkState getParent() {
         var parentIndex = ordinal() - 1;
@@ -37,9 +45,9 @@ public enum ChunkState {
     }
 
     /**
-     * Returns the next state of the state, or {@code null} if this is the last state.
-     *
-     * @return The next state, or {@code null} if there is no next state
+     * Returns the immediately following generation stage, or {@code null} for
+     * {@link #FULL}. The result follows enum declaration order and does not
+     * start generation or change a chunk.
      */
     public ChunkState getNext() {
         var nextIndex = ordinal() + 1;
@@ -47,44 +55,32 @@ public enum ChunkState {
     }
 
     /**
-     * Check if this state is the same or after the given state.
-     *
-     * @param state The state to compare to
-     *
-     * @return {@code true} if this state is the same or after the given state, {@code false} otherwise.
+     * Returns whether this generation stage is at least as advanced as the
+     * supplied stage.
      */
     public boolean isOrAfter(ChunkState state) {
         return ordinal() >= state.ordinal();
     }
 
     /**
-     * Check if this state is after the given state.
-     *
-     * @param state The state to compare to
-     *
-     * @return {@code true} if this state is after the given state, {@code false} otherwise.
+     * Returns whether this generation stage is strictly more advanced than the
+     * supplied stage.
      */
     public boolean isAfter(ChunkState state) {
         return ordinal() > state.ordinal();
     }
 
     /**
-     * Check if this state is the same or before the given state.
-     *
-     * @param state The state to compare to
-     *
-     * @return {@code true} if this state is the same or before the given state, {@code false} otherwise.
+     * Returns whether this generation stage is no more advanced than the
+     * supplied stage.
      */
     public boolean isOrBefore(ChunkState state) {
         return ordinal() <= state.ordinal();
     }
 
     /**
-     * Check if this state is before the given state.
-     *
-     * @param state The state to compare to
-     *
-     * @return {@code true} if this state is before the given state, {@code false} otherwise.
+     * Returns whether this generation stage is strictly earlier than the
+     * supplied stage.
      */
     public boolean isBefore(ChunkState state) {
         return ordinal() < state.ordinal();

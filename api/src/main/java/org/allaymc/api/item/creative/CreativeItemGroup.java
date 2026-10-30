@@ -6,70 +6,55 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Represents a single creative item group, which can contain multiple items. There
- * are two types of group: named and unnamed.
- * <p>
- * Named group's name is not empty. It is folded by default and can be expanded by
- * clicking. When the group is folded, the icon will be shown above the group.
- * <p>
- * Unnamed group's name is empty. The items are flatten and cannot be folded. Multiple
- * unnamed groups is allowed and can between two named groups to separate them. The icon
- * of unnamed group can only be air since it will never be shown.
+ * {@code CreativeItemGroup} groups creative entries under a category and a
+ * registry-wide group index. A nonempty name identifies a collapsible group with
+ * an icon; an empty name identifies an unnamed group whose entries appear without
+ * a named heading.
  *
  * @author daoge_cmd
  */
 public interface CreativeItemGroup {
     /**
-     * Register an item to this group.
-     *
-     * @param itemStack the item to register
-     *
-     * @return the assigned index of this item stack, can then be used to get the registered item stack
-     * by using method {@link CreativeItemRegistry#getEntryByIndex(int)}. Client will send back the
-     * index when the item is selected.
+     * Registers the supplied stack reference and returns its indexed creative entry.
+     * Registration assigns the stack's unique ID to the entry index plus one; callers
+     * must account for this mutation. Registration fails after the registry freezes.
      */
     CreativeItemEntry registerItem(ItemStack itemStack);
 
     /**
-     * Get the items in this group.
-     *
-     * @return the items in this group
+     * Returns an unmodifiable view of this group's registry-indexed creative entries.
+     * The map reflects later additions, and each entry retains its registered item
+     * stack reference rather than a copied stack.
      */
     @UnmodifiableView
     Map<Integer, CreativeItemEntry> getItems();
 
     /**
-     * Get the name of this group.
-     *
-     * @return the name of this group
+     * Returns this group's registered display name or translation key.
+     * An empty string identifies an unnamed group, so {@code isUnnamedGroup} uses
+     * emptiness rather than whitespace or translated display text.
      */
     String getName();
 
     /**
-     * Get the icon of this group. The icon will be shown if the group is collapsed.
-     *
-     * @return the icon of this group
+     * Returns the registered stack reference used as this group's icon.
+     * The icon is not copied by the accessor; unnamed groups created through the
+     * category helper use the shared air stack.
      */
     ItemStack getIcon();
 
     /**
-     * Get the index of this group. The index is used to identify this group.
-     *
-     * @return the index of this group
+     * Returns the registry-wide zero-based index identifying this creative group.
      */
     int getIndex();
 
     /**
-     * Get the category of this group.
-     *
-     * @return the category of this group
+     * Returns the creative category that owns this group instance.
      */
     CreativeItemCategory getCategory();
 
     /**
-     * Check if this group is an unnamed group
-     *
-     * @return {@code true} if this group is an unnamed group, {@code false} otherwise.
+     * Returns whether this group's registered name is the empty string.
      */
     default boolean isUnnamedGroup() {
         return getName().isEmpty();

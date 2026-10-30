@@ -6,39 +6,37 @@ import org.allaymc.api.utils.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * DialogViewer represents an object that can view and interact with a {@link Dialog}.
+ * {@code DialogViewer} displays entity dialogs and tracks the current dialog with its rendered
+ * entity. New presentations can support transitions between menus, while direct removal only
+ * changes server bookkeeping and explicit closure also sends a client close request.
  *
  * @author daoge_cmd
  */
 public interface DialogViewer {
     /**
-     * Views a dialog, using the entity passed as the entity that the dialog is shown for. Dialogs can be viewed
-     * on top of each other without the other closing, making it possible to have non-flashing transitions between
-     * menus compared to {@link Form}. The viewer can either press one of the buttons or close the dialog. It is
-     * impossible for a dialog to have any more than 6 buttons.
-     *
-     * @param dialog the dialog to be viewed
-     * @param entity the entity that the dialog is shown for
+     * Displays the supplied dialog with the supplied entity and replaces the viewer's tracked
+     * dialog pair. The same mutable dialog is retained for button processing; the previous dialog's
+     * close callback is not invoked here.
      */
     void viewDialog(Dialog dialog, Entity entity);
 
     /**
-     * Retrieves the dialog currently being viewed along with the associated entity.
-     *
-     * @return a {@link Pair} containing the current {@link Dialog} being viewed and the {@link Entity} it is shown for,
-     * or {@code null} if no dialog is currently being viewed.
+     * Returns the currently tracked dialog and the entity used for its model. The result is
+     * {@code null} when none is tracked, and the pair retains the original references.
      */
     Pair<Dialog, Entity> getDialog();
 
     /**
-     * Removes the currently active dialog being viewed by the {@link DialogViewer} directly. This method won't send any
-     * packet to the client.
+     * Removes the tracked dialog without sending a close packet or invoking its callback. Runtime
+     * request handling uses this bookkeeping operation before dispatching a final client-close
+     * callback.
      */
     @ApiStatus.Internal
     void removeDialog();
 
     /**
-     * Notifies the client to close the currently active dialog if one is being viewed.
+     * Sends a close request for the tracked dialog and removes the server reference. An absent
+     * dialog does nothing; this operation does not directly invoke the dialog's close callback.
      */
     void closeDialog();
 }

@@ -4,59 +4,49 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
- * Shared component for shield items, including blocking, durability loss, and shield disable logic.
+ * {@code ItemShieldBaseComponent} exposes shield blocking eligibility, durability
+ * loss, and attacker rules for disabling a shield. The player damage handler uses
+ * these operations separately: eligibility does not itself cancel damage, damage
+ * the shield, or start the shared cooldown.
  *
  * @author daoge_cmd
  */
 public interface ItemShieldBaseComponent extends ItemBaseComponent {
 
     /**
-     * The cooldown duration in ticks when a shield is disabled by an axe attack.
-     * 100 ticks = 5 seconds
+     * {@code SHIELD_DISABLE_COOLDOWN} is the five-second disable interval in ticks.
+     * The player damage handler applies this interval after a successful block
+     * against an attacker that disables shields.
      */
     int SHIELD_DISABLE_COOLDOWN = 100;
 
     /**
-     * The cooldown category identifier for shield cooldown.
+     * {@code SHIELD_COOLDOWN_CATEGORY} identifies the shared {@code "shield"}
+     * cooldown. The player damage handler uses this category both to reject blocking
+     * attempts during cooldown and to start a disable interval.
      */
     String SHIELD_COOLDOWN_CATEGORY = "shield";
 
     /**
-     * Attempts to block incoming damage with the shield.
-     * <p>
-     * This method checks if the damage can be blocked based on:
-     * <ul>
-     *   <li>Whether the damage has a valid entity attacker</li>
-     *   <li>Whether the attack is coming from the front (directional blocking)</li>
-     *   <li>Whether the damage type can be reduced by armor</li>
-     * </ul>
-     *
-     * @param player the player holding the shield
-     * @param damage the incoming damage container
-     * @return {@code true} if the damage was successfully blocked, {@code false} otherwise
+     * Returns whether incoming armor-reducible damage has a qualifying entity
+     * attacker under the shield's computed direction check. The server accepts
+     * a strictly positive horizontal dot product; zero or {@code NaN} results
+     * return {@code false}, and the caller applies damage cancellation or shield
+     * effects.
      */
     boolean tryBlockDamage(EntityPlayer player, DamageContainer damage);
 
     /**
-     * Applies durability damage to the shield after blocking.
-     * <p>
-     * Following Minecraft mechanics:
-     * <ul>
-     *   <li>If blocked damage &gt;= 3: durability loss = (int)damage + 1</li>
-     *   <li>If blocked damage &lt; 3: no durability loss</li>
-     * </ul>
-     *
-     * @param blockedDamage the amount of damage that was blocked
+     * Requests shield durability loss for damage of at least three points.
+     * The requested loss is the integer portion of {@code blockedDamage} plus one;
+     * smaller values cause no request, and ordinary item damage rules still apply.
      */
     void applyBlockDurability(float blockedDamage);
 
     /**
-     * Checks if the attacker's weapon should disable the shield.
-     * <p>
-     * In Minecraft, axes can disable shields, causing a 5-second cooldown.
-     *
-     * @param attacker the attacking entity (can be null)
-     * @return {@code true} if the shield should be disabled, {@code false} otherwise
+     * Returns whether the attacker disables a shield after a successful block.
+     * A warden qualifies directly, while an inventory holder qualifies when its
+     * held item is an axe; {@code null} and other attackers return {@code false}.
      */
     boolean shouldDisableShield(Object attacker);
 }

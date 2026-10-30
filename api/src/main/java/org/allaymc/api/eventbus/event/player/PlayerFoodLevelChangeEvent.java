@@ -8,7 +8,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player's food level changes.
+ * {@code PlayerFoodLevelChangeEvent} holds the old and proposed food levels for a
+ * player entity. The player component clamps its initial proposal before dispatch,
+ * then reads the listener-selected {@code newFoodLevel} without another clamp;
+ * cancellation preserves the previously stored food level.
  *
  * @author daoge_cmd | Dhaiven
  */
@@ -17,15 +20,21 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerFoodLevelChangeEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The old food level.
+     * Food level before the update.
      */
     protected int oldFoodLevel;
     /**
-     * The new food level.
+     * {@code newFoodLevel} supplies the accepted food level. The player component
+     * reads this value after listeners run without repeating its initial clamp.
      */
     @Setter
     protected int newFoodLevel;
 
+    /**
+     * Creates a {@code PlayerFoodLevelChangeEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerFoodLevelChangeEvent(EntityPlayer player, int oldFoodLevel, int newFoodLevel) {
         super(player);
         this.oldFoodLevel = oldFoodLevel;

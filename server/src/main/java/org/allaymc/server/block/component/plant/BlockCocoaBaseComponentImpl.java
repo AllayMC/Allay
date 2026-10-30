@@ -24,13 +24,26 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.AGE_3;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.DIRECTION_4;
 
 /**
+ * {@code BlockCocoaBaseComponentImpl} implements jungle-log attachment, age growth, and
+ * cocoa-bean drops. Player placement uses a horizontal log face and stores the direction back
+ * toward the supporting log. Random growth and bone meal each propose a one-stage advance
+ * through a cancellable growth event, while mature pods drop three beans instead of one.
+ *
  * @author daoge_cmd
  */
 public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the cocoa behavior component for the supplied block type.
+     */
     public BlockCocoaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places cocoa against a horizontal face of jungle-tagged log. A {@code null} {@code
+     * placementInfo} delegates directly to inherited placement; player placement encodes the
+     * opposite clicked face as the attachment direction before that delegation.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -46,17 +59,22 @@ public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        // Set direction based on the opposite of the clicked face
+        // Store the direction back toward the clicked log, rather than its outward
+        // face, so neighbor updates later test the actual supporting block.
         blockState = blockState.setPropertyValue(DIRECTION_4, placementInfo.blockFace().opposite().getHorizontalIndex());
 
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
+    /**
+     * Dispatches the inherited neighbor hook and checks a changed supporting face. Cocoa
+     * breaks when the state in its encoded attachment direction no longer has both the jungle
+     * and log tags.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
-        // Determine the face direction this cocoa is attached to
         var direction = block.getPropertyValue(DIRECTION_4);
         var attachedFace = getAttachedFace(direction);
         if (face == attachedFace) {
@@ -66,11 +84,19 @@ public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns whether cocoa receives random updates for natural age growth.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Dispatches the inherited update and gives immature cocoa a one-half chance to advance
+     * one age. A cancellable growth event can suppress the write or replace its state; mature
+     * pods receive no proposal.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
@@ -80,6 +106,7 @@ public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
+        // Random growth is throttled independently of guaranteed bone-meal stage attempts.
         if (ThreadLocalRandom.current().nextInt(2) != 0) {
             return;
         }
@@ -91,6 +118,11 @@ public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Attempts one cocoa age increase for bone meal after inherited interaction handling.
+     * Mature pods and cancelled growth return {@code false}; accepted proposals write the
+     * event state before consuming the held item and emitting particles.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -119,6 +151,11 @@ public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns one cocoa bean from an immature pod or three from a mature pod. The age
+     * threshold alone chooses the count; this implementation does not apply Fortune to the
+     * bean stack.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         var age = block.getPropertyValue(AGE_3);
@@ -126,14 +163,22 @@ public class BlockCocoaBaseComponentImpl extends BlockBaseComponentImpl {
         return Set.of(ItemTypes.COCOA_BEANS.createItemStack(count));
     }
 
+    /**
+     * Returns whether the state has both jungle and log tags.
+     */
     protected boolean isJungleWood(BlockState blockState) {
         var type = blockState.getBlockType();
         return type.hasBlockTag(BlockTags.JUNGLE) && type.hasBlockTag(BlockTags.LOG);
     }
 
+    /**
+     * Returns the supporting-log face encoded by the horizontal direction value. Values zero
+     * through three map to south, west, north, and east; an unrecognized integer falls back to
+     * south.
+     */
     protected BlockFace getAttachedFace(int direction) {
-        // direction stores the opposite of the clicked face
-        // e.g. click SOUTH face → direction = NORTH(2) → log is to NORTH
+        // Preserve the stored support direction when decoding the horizontal index;
+        // unexpected indices use south rather than producing a missing face for neighbor checks.
         return switch (direction) {
             case 0 -> BlockFace.SOUTH;
             case 1 -> BlockFace.WEST;

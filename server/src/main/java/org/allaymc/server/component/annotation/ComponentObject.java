@@ -6,11 +6,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates a field to be injected with the component owner instance during initialization.
+ * {@code ComponentObject} marks a field for injection with the component owner
+ * instance during initialization.
  *
  * <p>
- * Used by the component system to inject a reference to the owning object into a component field.
- * The field must be accessible and compatible with the owner type.
+ * The injector scans declared fields through the component's superclass chain
+ * and makes annotated fields accessible, so private fields can participate.
+ * Their types must accept the owner instance. Owner references are assigned
+ * after managers and event listeners are installed, before completion hooks run.
  * </p>
  *
  * @author daoge_cmd

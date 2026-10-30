@@ -10,15 +10,34 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Spruce tree feature implementation.
- * Generates standard spruce trees with conical shape.
+ * {@code SpruceTreeFeature} places a straight spruce trunk with descending
+ * conical foliage rows. Ground and clearance checks precede writes, and the
+ * foliage height, maximum radius, and vertical offset are sampled after the
+ * trunk is placed.
+ *
+ * <p>
+ * The row radius grows until it reaches a moving cap, then resets before
+ * widening again; the cap itself grows only up to the selected foliage radius.
+ * This state makes lower rows depend on earlier row decisions, rather than
+ * computing each radius independently from height. The shared row helper omits
+ * square corners and records accepted leaf positions. Context availability and
+ * replacement checks still control individual writes without rollback.
  *
  * @author daoge_cmd
  */
 public class SpruceTreeFeature extends TreeWorldFeature {
 
+    /**
+     * Built-in spruce tree registry key. Runtime feature construction uses
+     * this identifier to register the corresponding placement implementation.
+     */
     public static final Identifier IDENTIFIER = new Identifier("minecraft:spruce_tree");
 
+    /**
+     * Creates and immediately registers the built-in spruce tree feature. The
+     * constructor fixes its log and leaf materials while shared clearance and
+     * replacement behavior remains in the tree base.
+     */
     public SpruceTreeFeature() {
         super(
                 IDENTIFIER,
@@ -27,6 +46,20 @@ public class SpruceTreeFeature extends TreeWorldFeature {
         );
     }
 
+    /**
+     * Attempts a spruce tree after ground and clearance checks, returning
+     * {@code false} before writes when admission fails. The straight trunk is
+     * placed before sampling foliage height, radius, and offset for the
+     * descending cone.
+     *
+     * <p>
+     * Foliage height retains a four-block minimum, while row radii are
+     * selected by a stateful growth-and-reset sequence. That sequence is
+     * passed to the shared row helper with square-corner omissions, so canopy
+     * shape follows both sampled limits and earlier rows. Block replacement
+     * and context availability still control individual leaves without making
+     * the accepted tree update atomic.
+     */
     @Override
     public boolean place(WorldFeatureContext context, int x, int y, int z) {
         var random = ThreadLocalRandom.current();
@@ -46,6 +79,8 @@ public class SpruceTreeFeature extends TreeWorldFeature {
             placeLog(context, x, y + dy, z);
         }
 
+        // A four-block minimum keeps a short trunk's foliage sequence from
+        // collapsing.
         int foliageHeight = Math.max(4, maxFreeTreeHeight - (1 + random.nextInt(2)));
         int foliageRadius = 2 + random.nextInt(2);
         int offset = random.nextInt(3);
@@ -60,6 +95,19 @@ public class SpruceTreeFeature extends TreeWorldFeature {
         return true;
     }
 
+    /**
+     * Places descending spruce foliage rows using a growing and resetting
+     * radius. The attachment and offset determine vertical placement, while
+     * the supplied foliage radius caps the progressively increasing maximum.
+     *
+     * <p>
+     * After a row reaches the current maximum, the next radius resets and the
+     * maximum grows toward its cap. The first reset begins at zero and later
+     * resets begin at one, making subsequent row widths depend on earlier
+     * state. Square corners are omitted whenever radius is positive, and
+     * accepted positions are appended through the shared row helper rather
+     * than assumed to form a complete layer.
+     */
     private void placeSpruceFoliage(
             WorldFeatureContext context,
             FoliageAttachment attachment,
@@ -87,6 +135,8 @@ public class SpruceTreeFeature extends TreeWorldFeature {
                     placedLeaves
             );
 
+            // Reset only after the current row reaches its cap, then grow the cap
+            // toward the sampled limit so consecutive row widths stay coordinated.
             if (range >= maxRange) {
                 range = resetRange;
                 resetRange = 1;

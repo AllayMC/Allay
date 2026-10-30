@@ -181,7 +181,13 @@ public enum BlockId {
 
     BLACK_CONCRETE("minecraft:black_concrete"),
 
+    BLACK_CONCRETE_DOUBLE_SLAB("minecraft:black_concrete_double_slab"),
+
     BLACK_CONCRETE_POWDER("minecraft:black_concrete_powder"),
+
+    BLACK_CONCRETE_SLAB("minecraft:black_concrete_slab"),
+
+    BLACK_CONCRETE_STAIRS("minecraft:black_concrete_stairs"),
 
     BLACK_GLAZED_TERRACOTTA("minecraft:black_glazed_terracotta"),
 
@@ -194,6 +200,12 @@ public enum BlockId {
     BLACK_TERRACOTTA("minecraft:black_terracotta"),
 
     BLACK_WOOL("minecraft:black_wool"),
+
+    BLACK_WOOL_DOUBLE_SLAB("minecraft:black_wool_double_slab"),
+
+    BLACK_WOOL_SLAB("minecraft:black_wool_slab"),
+
+    BLACK_WOOL_STAIRS("minecraft:black_wool_stairs"),
 
     BLACKSTONE("minecraft:blackstone"),
 
@@ -215,7 +227,13 @@ public enum BlockId {
 
     BLUE_CONCRETE("minecraft:blue_concrete"),
 
+    BLUE_CONCRETE_DOUBLE_SLAB("minecraft:blue_concrete_double_slab"),
+
     BLUE_CONCRETE_POWDER("minecraft:blue_concrete_powder"),
+
+    BLUE_CONCRETE_SLAB("minecraft:blue_concrete_slab"),
+
+    BLUE_CONCRETE_STAIRS("minecraft:blue_concrete_stairs"),
 
     BLUE_GLAZED_TERRACOTTA("minecraft:blue_glazed_terracotta"),
 
@@ -232,6 +250,12 @@ public enum BlockId {
     BLUE_TERRACOTTA("minecraft:blue_terracotta"),
 
     BLUE_WOOL("minecraft:blue_wool"),
+
+    BLUE_WOOL_DOUBLE_SLAB("minecraft:blue_wool_double_slab"),
+
+    BLUE_WOOL_SLAB("minecraft:blue_wool_slab"),
+
+    BLUE_WOOL_STAIRS("minecraft:blue_wool_stairs"),
 
     BONE_BLOCK("minecraft:bone_block"),
 
@@ -267,7 +291,13 @@ public enum BlockId {
 
     BROWN_CONCRETE("minecraft:brown_concrete"),
 
+    BROWN_CONCRETE_DOUBLE_SLAB("minecraft:brown_concrete_double_slab"),
+
     BROWN_CONCRETE_POWDER("minecraft:brown_concrete_powder"),
+
+    BROWN_CONCRETE_SLAB("minecraft:brown_concrete_slab"),
+
+    BROWN_CONCRETE_STAIRS("minecraft:brown_concrete_stairs"),
 
     BROWN_GLAZED_TERRACOTTA("minecraft:brown_glazed_terracotta"),
 
@@ -284,6 +314,12 @@ public enum BlockId {
     BROWN_TERRACOTTA("minecraft:brown_terracotta"),
 
     BROWN_WOOL("minecraft:brown_wool"),
+
+    BROWN_WOOL_DOUBLE_SLAB("minecraft:brown_wool_double_slab"),
+
+    BROWN_WOOL_SLAB("minecraft:brown_wool_slab"),
+
+    BROWN_WOOL_STAIRS("minecraft:brown_wool_stairs"),
 
     BUBBLE_COLUMN("minecraft:bubble_column"),
 
@@ -587,7 +623,13 @@ public enum BlockId {
 
     CYAN_CONCRETE("minecraft:cyan_concrete"),
 
+    CYAN_CONCRETE_DOUBLE_SLAB("minecraft:cyan_concrete_double_slab"),
+
     CYAN_CONCRETE_POWDER("minecraft:cyan_concrete_powder"),
+
+    CYAN_CONCRETE_SLAB("minecraft:cyan_concrete_slab"),
+
+    CYAN_CONCRETE_STAIRS("minecraft:cyan_concrete_stairs"),
 
     CYAN_GLAZED_TERRACOTTA("minecraft:cyan_glazed_terracotta"),
 
@@ -600,6 +642,12 @@ public enum BlockId {
     CYAN_TERRACOTTA("minecraft:cyan_terracotta"),
 
     CYAN_WOOL("minecraft:cyan_wool"),
+
+    CYAN_WOOL_DOUBLE_SLAB("minecraft:cyan_wool_double_slab"),
+
+    CYAN_WOOL_SLAB("minecraft:cyan_wool_slab"),
+
+    CYAN_WOOL_STAIRS("minecraft:cyan_wool_stairs"),
 
     DAMAGED_ANVIL("minecraft:damaged_anvil"),
 
@@ -1161,7 +1209,13 @@ public enum BlockId {
 
     GRAY_CONCRETE("minecraft:gray_concrete"),
 
+    GRAY_CONCRETE_DOUBLE_SLAB("minecraft:gray_concrete_double_slab"),
+
     GRAY_CONCRETE_POWDER("minecraft:gray_concrete_powder"),
+
+    GRAY_CONCRETE_SLAB("minecraft:gray_concrete_slab"),
+
+    GRAY_CONCRETE_STAIRS("minecraft:gray_concrete_stairs"),
 
     GRAY_GLAZED_TERRACOTTA("minecraft:gray_glazed_terracotta"),
 
@@ -1175,6 +1229,12 @@ public enum BlockId {
 
     GRAY_WOOL("minecraft:gray_wool"),
 
+    GRAY_WOOL_DOUBLE_SLAB("minecraft:gray_wool_double_slab"),
+
+    GRAY_WOOL_SLAB("minecraft:gray_wool_slab"),
+
+    GRAY_WOOL_STAIRS("minecraft:gray_wool_stairs"),
+
     GREEN_CANDLE("minecraft:green_candle"),
 
     GREEN_CANDLE_CAKE("minecraft:green_candle_cake"),
@@ -1183,7 +1243,13 @@ public enum BlockId {
 
     GREEN_CONCRETE("minecraft:green_concrete"),
 
+    GREEN_CONCRETE_DOUBLE_SLAB("minecraft:green_concrete_double_slab"),
+
     GREEN_CONCRETE_POWDER("minecraft:green_concrete_powder"),
+
+    GREEN_CONCRETE_SLAB("minecraft:green_concrete_slab"),
+
+    GREEN_CONCRETE_STAIRS("minecraft:green_concrete_stairs"),
 
     GREEN_GLAZED_TERRACOTTA("minecraft:green_glazed_terracotta"),
 
@@ -1196,6 +1262,12 @@ public enum BlockId {
     GREEN_TERRACOTTA("minecraft:green_terracotta"),
 
     GREEN_WOOL("minecraft:green_wool"),
+
+    GREEN_WOOL_DOUBLE_SLAB("minecraft:green_wool_double_slab"),
+
+    GREEN_WOOL_SLAB("minecraft:green_wool_slab"),
+
+    GREEN_WOOL_STAIRS("minecraft:green_wool_stairs"),
 
     GRINDSTONE("minecraft:grindstone"),
 
@@ -1429,7 +1501,13 @@ public enum BlockId {
 
     LIGHT_BLUE_CONCRETE("minecraft:light_blue_concrete"),
 
+    LIGHT_BLUE_CONCRETE_DOUBLE_SLAB("minecraft:light_blue_concrete_double_slab"),
+
     LIGHT_BLUE_CONCRETE_POWDER("minecraft:light_blue_concrete_powder"),
+
+    LIGHT_BLUE_CONCRETE_SLAB("minecraft:light_blue_concrete_slab"),
+
+    LIGHT_BLUE_CONCRETE_STAIRS("minecraft:light_blue_concrete_stairs"),
 
     LIGHT_BLUE_GLAZED_TERRACOTTA("minecraft:light_blue_glazed_terracotta"),
 
@@ -1443,6 +1521,12 @@ public enum BlockId {
 
     LIGHT_BLUE_WOOL("minecraft:light_blue_wool"),
 
+    LIGHT_BLUE_WOOL_DOUBLE_SLAB("minecraft:light_blue_wool_double_slab"),
+
+    LIGHT_BLUE_WOOL_SLAB("minecraft:light_blue_wool_slab"),
+
+    LIGHT_BLUE_WOOL_STAIRS("minecraft:light_blue_wool_stairs"),
+
     LIGHT_GRAY_CANDLE("minecraft:light_gray_candle"),
 
     LIGHT_GRAY_CANDLE_CAKE("minecraft:light_gray_candle_cake"),
@@ -1451,7 +1535,13 @@ public enum BlockId {
 
     LIGHT_GRAY_CONCRETE("minecraft:light_gray_concrete"),
 
+    LIGHT_GRAY_CONCRETE_DOUBLE_SLAB("minecraft:light_gray_concrete_double_slab"),
+
     LIGHT_GRAY_CONCRETE_POWDER("minecraft:light_gray_concrete_powder"),
+
+    LIGHT_GRAY_CONCRETE_SLAB("minecraft:light_gray_concrete_slab"),
+
+    LIGHT_GRAY_CONCRETE_STAIRS("minecraft:light_gray_concrete_stairs"),
 
     LIGHT_GRAY_SHULKER_BOX("minecraft:light_gray_shulker_box"),
 
@@ -1462,6 +1552,12 @@ public enum BlockId {
     LIGHT_GRAY_TERRACOTTA("minecraft:light_gray_terracotta"),
 
     LIGHT_GRAY_WOOL("minecraft:light_gray_wool"),
+
+    LIGHT_GRAY_WOOL_DOUBLE_SLAB("minecraft:light_gray_wool_double_slab"),
+
+    LIGHT_GRAY_WOOL_SLAB("minecraft:light_gray_wool_slab"),
+
+    LIGHT_GRAY_WOOL_STAIRS("minecraft:light_gray_wool_stairs"),
 
     LIGHT_WEIGHTED_PRESSURE_PLATE("minecraft:light_weighted_pressure_plate"),
 
@@ -1479,7 +1575,13 @@ public enum BlockId {
 
     LIME_CONCRETE("minecraft:lime_concrete"),
 
+    LIME_CONCRETE_DOUBLE_SLAB("minecraft:lime_concrete_double_slab"),
+
     LIME_CONCRETE_POWDER("minecraft:lime_concrete_powder"),
+
+    LIME_CONCRETE_SLAB("minecraft:lime_concrete_slab"),
+
+    LIME_CONCRETE_STAIRS("minecraft:lime_concrete_stairs"),
 
     LIME_GLAZED_TERRACOTTA("minecraft:lime_glazed_terracotta"),
 
@@ -1492,6 +1594,12 @@ public enum BlockId {
     LIME_TERRACOTTA("minecraft:lime_terracotta"),
 
     LIME_WOOL("minecraft:lime_wool"),
+
+    LIME_WOOL_DOUBLE_SLAB("minecraft:lime_wool_double_slab"),
+
+    LIME_WOOL_SLAB("minecraft:lime_wool_slab"),
+
+    LIME_WOOL_STAIRS("minecraft:lime_wool_stairs"),
 
     LIT_BLAST_FURNACE("minecraft:lit_blast_furnace"),
 
@@ -1519,7 +1627,13 @@ public enum BlockId {
 
     MAGENTA_CONCRETE("minecraft:magenta_concrete"),
 
+    MAGENTA_CONCRETE_DOUBLE_SLAB("minecraft:magenta_concrete_double_slab"),
+
     MAGENTA_CONCRETE_POWDER("minecraft:magenta_concrete_powder"),
+
+    MAGENTA_CONCRETE_SLAB("minecraft:magenta_concrete_slab"),
+
+    MAGENTA_CONCRETE_STAIRS("minecraft:magenta_concrete_stairs"),
 
     MAGENTA_GLAZED_TERRACOTTA("minecraft:magenta_glazed_terracotta"),
 
@@ -1532,6 +1646,12 @@ public enum BlockId {
     MAGENTA_TERRACOTTA("minecraft:magenta_terracotta"),
 
     MAGENTA_WOOL("minecraft:magenta_wool"),
+
+    MAGENTA_WOOL_DOUBLE_SLAB("minecraft:magenta_wool_double_slab"),
+
+    MAGENTA_WOOL_SLAB("minecraft:magenta_wool_slab"),
+
+    MAGENTA_WOOL_STAIRS("minecraft:magenta_wool_stairs"),
 
     MAGMA("minecraft:magma"),
 
@@ -1699,9 +1819,17 @@ public enum BlockId {
 
     ORANGE_CONCRETE("minecraft:orange_concrete"),
 
+    ORANGE_CONCRETE_DOUBLE_SLAB("minecraft:orange_concrete_double_slab"),
+
     ORANGE_CONCRETE_POWDER("minecraft:orange_concrete_powder"),
 
+    ORANGE_CONCRETE_SLAB("minecraft:orange_concrete_slab"),
+
+    ORANGE_CONCRETE_STAIRS("minecraft:orange_concrete_stairs"),
+
     ORANGE_GLAZED_TERRACOTTA("minecraft:orange_glazed_terracotta"),
+
+    ORANGE_POPLAR_LEAVES("minecraft:orange_poplar_leaves"),
 
     ORANGE_SHULKER_BOX("minecraft:orange_shulker_box"),
 
@@ -1714,6 +1842,12 @@ public enum BlockId {
     ORANGE_TULIP("minecraft:orange_tulip"),
 
     ORANGE_WOOL("minecraft:orange_wool"),
+
+    ORANGE_WOOL_DOUBLE_SLAB("minecraft:orange_wool_double_slab"),
+
+    ORANGE_WOOL_SLAB("minecraft:orange_wool_slab"),
+
+    ORANGE_WOOL_STAIRS("minecraft:orange_wool_stairs"),
 
     OXEYE_DAISY("minecraft:oxeye_daisy"),
 
@@ -1813,7 +1947,13 @@ public enum BlockId {
 
     PINK_CONCRETE("minecraft:pink_concrete"),
 
+    PINK_CONCRETE_DOUBLE_SLAB("minecraft:pink_concrete_double_slab"),
+
     PINK_CONCRETE_POWDER("minecraft:pink_concrete_powder"),
+
+    PINK_CONCRETE_SLAB("minecraft:pink_concrete_slab"),
+
+    PINK_CONCRETE_STAIRS("minecraft:pink_concrete_stairs"),
 
     PINK_GLAZED_TERRACOTTA("minecraft:pink_glazed_terracotta"),
 
@@ -1830,6 +1970,12 @@ public enum BlockId {
     PINK_TULIP("minecraft:pink_tulip"),
 
     PINK_WOOL("minecraft:pink_wool"),
+
+    PINK_WOOL_DOUBLE_SLAB("minecraft:pink_wool_double_slab"),
+
+    PINK_WOOL_SLAB("minecraft:pink_wool_slab"),
+
+    PINK_WOOL_STAIRS("minecraft:pink_wool_stairs"),
 
     PISTON("minecraft:piston"),
 
@@ -1935,6 +2081,40 @@ public enum BlockId {
 
     POLISHED_TUFF_WALL("minecraft:polished_tuff_wall"),
 
+    POPLAR_BUTTON("minecraft:poplar_button"),
+
+    POPLAR_DOOR("minecraft:poplar_door"),
+
+    POPLAR_DOUBLE_SLAB("minecraft:poplar_double_slab"),
+
+    POPLAR_FENCE("minecraft:poplar_fence"),
+
+    POPLAR_FENCE_GATE("minecraft:poplar_fence_gate"),
+
+    POPLAR_HANGING_SIGN("minecraft:poplar_hanging_sign"),
+
+    POPLAR_LOG("minecraft:poplar_log"),
+
+    POPLAR_PLANKS("minecraft:poplar_planks"),
+
+    POPLAR_PRESSURE_PLATE("minecraft:poplar_pressure_plate"),
+
+    POPLAR_SAPLING("minecraft:poplar_sapling"),
+
+    POPLAR_SHELF("minecraft:poplar_shelf"),
+
+    POPLAR_SLAB("minecraft:poplar_slab"),
+
+    POPLAR_STAIRS("minecraft:poplar_stairs"),
+
+    POPLAR_STANDING_SIGN("minecraft:poplar_standing_sign"),
+
+    POPLAR_TRAPDOOR("minecraft:poplar_trapdoor"),
+
+    POPLAR_WALL_SIGN("minecraft:poplar_wall_sign"),
+
+    POPLAR_WOOD("minecraft:poplar_wood"),
+
     POPPY("minecraft:poppy"),
 
     PORTAL("minecraft:portal"),
@@ -1979,7 +2159,13 @@ public enum BlockId {
 
     PURPLE_CONCRETE("minecraft:purple_concrete"),
 
+    PURPLE_CONCRETE_DOUBLE_SLAB("minecraft:purple_concrete_double_slab"),
+
     PURPLE_CONCRETE_POWDER("minecraft:purple_concrete_powder"),
+
+    PURPLE_CONCRETE_SLAB("minecraft:purple_concrete_slab"),
+
+    PURPLE_CONCRETE_STAIRS("minecraft:purple_concrete_stairs"),
 
     PURPLE_GLAZED_TERRACOTTA("minecraft:purple_glazed_terracotta"),
 
@@ -1992,6 +2178,12 @@ public enum BlockId {
     PURPLE_TERRACOTTA("minecraft:purple_terracotta"),
 
     PURPLE_WOOL("minecraft:purple_wool"),
+
+    PURPLE_WOOL_DOUBLE_SLAB("minecraft:purple_wool_double_slab"),
+
+    PURPLE_WOOL_SLAB("minecraft:purple_wool_slab"),
+
+    PURPLE_WOOL_STAIRS("minecraft:purple_wool_stairs"),
 
     PURPUR_BLOCK("minecraft:purpur_block"),
 
@@ -2033,7 +2225,13 @@ public enum BlockId {
 
     RED_CONCRETE("minecraft:red_concrete"),
 
+    RED_CONCRETE_DOUBLE_SLAB("minecraft:red_concrete_double_slab"),
+
     RED_CONCRETE_POWDER("minecraft:red_concrete_powder"),
+
+    RED_CONCRETE_SLAB("minecraft:red_concrete_slab"),
+
+    RED_CONCRETE_STAIRS("minecraft:red_concrete_stairs"),
 
     RED_GLAZED_TERRACOTTA("minecraft:red_glazed_terracotta"),
 
@@ -2051,6 +2249,8 @@ public enum BlockId {
 
     RED_NETHER_BRICK_WALL("minecraft:red_nether_brick_wall"),
 
+    RED_POPLAR_LEAVES("minecraft:red_poplar_leaves"),
+
     RED_SAND("minecraft:red_sand"),
 
     RED_SANDSTONE("minecraft:red_sandstone"),
@@ -2063,6 +2263,8 @@ public enum BlockId {
 
     RED_SANDSTONE_WALL("minecraft:red_sandstone_wall"),
 
+    RED_SHRUB("minecraft:red_shrub"),
+
     RED_SHULKER_BOX("minecraft:red_shulker_box"),
 
     RED_STAINED_GLASS("minecraft:red_stained_glass"),
@@ -2074,6 +2276,12 @@ public enum BlockId {
     RED_TULIP("minecraft:red_tulip"),
 
     RED_WOOL("minecraft:red_wool"),
+
+    RED_WOOL_DOUBLE_SLAB("minecraft:red_wool_double_slab"),
+
+    RED_WOOL_SLAB("minecraft:red_wool_slab"),
+
+    RED_WOOL_STAIRS("minecraft:red_wool_stairs"),
 
     REDSTONE_BLOCK("minecraft:redstone_block"),
 
@@ -2140,6 +2348,8 @@ public enum BlockId {
     SEA_PICKLE("minecraft:sea_pickle"),
 
     SEAGRASS("minecraft:seagrass"),
+
+    SHELF_MUSHROOM("minecraft:shelf_mushroom"),
 
     SHORT_DRY_GRASS("minecraft:short_dry_grass"),
 
@@ -2281,6 +2491,8 @@ public enum BlockId {
 
     STONECUTTER_BLOCK("minecraft:stonecutter_block"),
 
+    STRAW_BED("minecraft:straw_bed"),
+
     STRIPPED_ACACIA_LOG("minecraft:stripped_acacia_log"),
 
     STRIPPED_ACACIA_WOOD("minecraft:stripped_acacia_wood"),
@@ -2318,6 +2530,10 @@ public enum BlockId {
     STRIPPED_PALE_OAK_LOG("minecraft:stripped_pale_oak_log"),
 
     STRIPPED_PALE_OAK_WOOD("minecraft:stripped_pale_oak_wood"),
+
+    STRIPPED_POPLAR_LOG("minecraft:stripped_poplar_log"),
+
+    STRIPPED_POPLAR_WOOD("minecraft:stripped_poplar_wood"),
 
     STRIPPED_SPRUCE_LOG("minecraft:stripped_spruce_log"),
 
@@ -2663,7 +2879,13 @@ public enum BlockId {
 
     WHITE_CONCRETE("minecraft:white_concrete"),
 
+    WHITE_CONCRETE_DOUBLE_SLAB("minecraft:white_concrete_double_slab"),
+
     WHITE_CONCRETE_POWDER("minecraft:white_concrete_powder"),
+
+    WHITE_CONCRETE_SLAB("minecraft:white_concrete_slab"),
+
+    WHITE_CONCRETE_STAIRS("minecraft:white_concrete_stairs"),
 
     WHITE_GLAZED_TERRACOTTA("minecraft:white_glazed_terracotta"),
 
@@ -2678,6 +2900,12 @@ public enum BlockId {
     WHITE_TULIP("minecraft:white_tulip"),
 
     WHITE_WOOL("minecraft:white_wool"),
+
+    WHITE_WOOL_DOUBLE_SLAB("minecraft:white_wool_double_slab"),
+
+    WHITE_WOOL_SLAB("minecraft:white_wool_slab"),
+
+    WHITE_WOOL_STAIRS("minecraft:white_wool_stairs"),
 
     WILDFLOWERS("minecraft:wildflowers"),
 
@@ -2699,9 +2927,17 @@ public enum BlockId {
 
     YELLOW_CONCRETE("minecraft:yellow_concrete"),
 
+    YELLOW_CONCRETE_DOUBLE_SLAB("minecraft:yellow_concrete_double_slab"),
+
     YELLOW_CONCRETE_POWDER("minecraft:yellow_concrete_powder"),
 
+    YELLOW_CONCRETE_SLAB("minecraft:yellow_concrete_slab"),
+
+    YELLOW_CONCRETE_STAIRS("minecraft:yellow_concrete_stairs"),
+
     YELLOW_GLAZED_TERRACOTTA("minecraft:yellow_glazed_terracotta"),
+
+    YELLOW_POPLAR_LEAVES("minecraft:yellow_poplar_leaves"),
 
     YELLOW_SHULKER_BOX("minecraft:yellow_shulker_box"),
 
@@ -2712,6 +2948,12 @@ public enum BlockId {
     YELLOW_TERRACOTTA("minecraft:yellow_terracotta"),
 
     YELLOW_WOOL("minecraft:yellow_wool"),
+
+    YELLOW_WOOL_DOUBLE_SLAB("minecraft:yellow_wool_double_slab"),
+
+    YELLOW_WOOL_SLAB("minecraft:yellow_wool_slab"),
+
+    YELLOW_WOOL_STAIRS("minecraft:yellow_wool_stairs"),
 
     ZOMBIE_HEAD("minecraft:zombie_head");
 

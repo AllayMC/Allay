@@ -23,13 +23,43 @@ import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
+ * {@code BlockDoorBaseComponentImpl} manages two-block door placement, support,
+ * paired opening, and lower-half drops. The lower and upper states share facing,
+ * hinge, and opening properties while their upper-half flags identify their
+ * positions. Player placement requires an upward click, solid lower support, and
+ * replaceable space above; placement without player context uses a default facing.
+ *
+ * <p>
+ * The two halves are written and updated in sequence without rollback. Support checks
+ * remove invalid halves, and redstone combines power at both positions so either half
+ * can open the pair. Only changes involving tagged power sources reevaluate redstone
+ * opening, preserving manual state after unrelated neighbor updates. Breaking an
+ * upper half delegates a break to the lower position, while ordinary drop selection
+ * returns items only for the lower half.
+ *
  * @author Dhaiven
  */
 public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates door base behavior for the supplied block type.
+     */
     public BlockDoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places the lower and upper door states after support and clearance checks.
+     * Player context requires an upward click; absent context selects south before
+     * the door's orientation transform.
+     *
+     * <p>
+     * Neighboring doors and transparency can select a left hinge by setting
+     * {@code DOOR_HINGE_BIT} to {@code true}. Otherwise placement retains the
+     * incoming hinge bit rather than clearing it. The lower state is written first,
+     * and only acceptance permits the upper write; a rejected upper write leaves the
+     * accepted lower state in place. The returned conjunction reports both writes
+     * without compensating an incomplete pair.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null && placementInfo.blockFace() != BlockFace.UP) {
@@ -57,15 +87,20 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var hingeOnLeft = leftBlockState.getBlockType() == getBlockType() ||
                           (!rightBlockState.getBlockStateData().isTransparent() && leftBlockState.getBlockStateData().isTransparent());
-        if (hingeOnLeft) { // Door hinge
+        if (hingeOnLeft) {
             blockState = blockState.setPropertyValue(DOOR_HINGE_BIT, true);
         }
-
-        // Bottom and top
+        // Write the lower half first and attempt the upper only after acceptance. A
+        // failed upper write leaves the lower half without compensation.
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState.setPropertyValue(UPPER_BLOCK_BIT, false), placementInfo) &&
                dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(), blockState.setPropertyValue(UPPER_BLOCK_BIT, true), placementInfo);
     }
 
+    /**
+     * Forwards the update, breaks unsupported halves, and reevaluates qualifying
+     * power-source changes. {@code oldNeighborState} may be {@code null}; surviving
+     * halves use the new neighbor's power-source tag when old context is unavailable.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -81,11 +116,8 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
             block.breakBlock();
             return;
         }
-
-        // Only check redstone power if:
-        // 1. Neighbor is a power source (new redstone component placed), OR
-        // 2. Old neighbor was a power source (power source removed, neighbor is now air or different block)
-        // This prevents the door from closing when normal blocks are placed/broken next to it
+        // Only new or removed tagged power sources reevaluate opening, so ordinary
+        // neighbor changes do not close doors that players opened manually.
         boolean isNewPowerSource = neighbor.getBlockType().hasBlockTag(POWER_SOURCE);
         boolean wasOldPowerSource = oldNeighborState != null && oldNeighborState.getBlockType().hasBlockTag(POWER_SOURCE);
         
@@ -95,43 +127,62 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if the door should be opened/closed based on redstone power.
+     * Updates both halves when power at either position changes the requested
+     * opening. The other position is derived from {@code UPPER_BLOCK_BIT}, and the
+     * stronger of the two measured signals decides the result.
      *
-     * @param block the door block
+     * <p>
+     * An unchanged opening avoids all writes and sound. A changed opening updates
+     * this half and then the other half before playing one door sound. Those property
+     * writes are separate and their results are not used for rollback, so this method
+     * does not guarantee an atomic pair update.
      */
     protected void checkRedstonePower(Block block) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
         var isUpperBlock = block.getPropertyValue(UPPER_BLOCK_BIT);
-
-        // Get the position of the other door half
         var otherPos = isUpperBlock
                 ? BlockFace.DOWN.offsetPos(pos)
                 : BlockFace.UP.offsetPos(pos);
-
-        // Check power at both halves and use the maximum
         var powerAtThis = block.getPower();
         var otherPosition = new Position3i(otherPos, dimension);
         var powerAtOther = block.getDimension().getPowerAt(otherPosition);
+        // Either door half can receive power independently. Use the stronger
+        // observation so an unpowered half cannot close a pair powered at its
+        // counterpart.
         var maxPower = Math.max(powerAtThis, powerAtOther);
 
         var shouldBeOpen = maxPower > 0;
         var isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
 
         if (shouldBeOpen != isCurrentlyOpen) {
-            // Update both halves
             block.updateBlockProperty(OPEN_BIT, shouldBeOpen);
+            // Mirror the requested opening after updating this half. The separate
+            // writes do not provide rollback if the counterpart update fails.
             dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, otherPos);
-
-            // Play sound
             block.addSound(new DoorSound(block.getBlockState(), shouldBeOpen));
         }
     }
 
+    /**
+     * Returns whether the neighboring block has this exact door type.
+     */
     protected boolean isSameDoor(Block neighbor) {
         return neighbor.getBlockType() == getBlockType();
     }
 
+    /**
+     * Offers the interaction to companion components before toggling both door
+     * halves. Missing context returns {@code false}; the manual path currently
+     * requires {@code clickedBlockPos} to be a {@code Vector3i}.
+     *
+     * <p>
+     * The clicked state determines the counterpart position and the opposite opening
+     * value. The method writes the clicked half and then the other half, plays a
+     * sound at the clicked position, and reports success without checking the
+     * property-write results. It does not validate or repair the counterpart before
+     * applying that update.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
@@ -148,12 +199,15 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         dimension.updateBlockProperty(OPEN_BIT, isOpen, pos);
         dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
-
-        // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
         dimension.addSound(MathUtils.center(pos), new DoorSound(blockState, isOpen));
         return true;
     }
 
+    /**
+     * Breaks the lower half when this callback handles an upper door half, then
+     * invokes inherited drop handling. The delegated lower break uses a {@code null}
+     * tool and retains the responsible entity.
+     */
     @Override
     public void onBreak(Block block, ItemStack usedItem, Entity entity) {
         if (block.getPropertyValue(UPPER_BLOCK_BIT)) {
@@ -162,6 +216,11 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         super.onBreak(block, usedItem, entity);
     }
 
+    /**
+     * Returns no ordinary drops for an upper door half and inherited drops for the
+     * lower half. This keeps paired breaks from producing two ordinary door items
+     * through this selection.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return block.getPropertyValue(UPPER_BLOCK_BIT) ? Set.of() : super.getDrops(block, usedItem, entity);

@@ -8,7 +8,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player eat an edible item, such as food, potion, etc...
+ * {@code PlayerEatEvent} represents a player's attempt to finish consuming an edible
+ * item. The edible component dispatches this event before applying its eating
+ * behavior and consuming the hand item; cancellation prevents those effects through
+ * that component's consumption path.
  *
  * @author daoge_cmd
  */
@@ -16,10 +19,16 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.WORLD)
 public class PlayerEatEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The edible item stack.
+     * {@code edible} retains the mutable edible stack supplied by the consumption
+     * component before its eating behavior and hand consumption occur.
      */
     protected ItemStack edible;
 
+    /**
+     * Creates a {@code PlayerEatEvent} for the supplied player and event data. The
+     * constructor retains reference-valued arguments without copying them and does
+     * not dispatch or apply the represented action.
+     */
     public PlayerEatEvent(EntityPlayer player, ItemStack edible) {
         super(player);
         this.edible = edible;

@@ -5,54 +5,58 @@ import org.allaymc.api.server.Server;
 import java.util.concurrent.ForkJoinPool;
 
 /**
- * Represents different types of threads used in Allay.
+ * {@code ThreadType} identifies execution contexts documented by thread-related
+ * API annotations.
+ * These labels distinguish server, world, dimension, worker, and network work;
+ * they do not select an executor or transfer execution. A context can describe
+ * a logical role even when configuration changes the underlying thread type.
  *
  * @author daoge_cmd
  */
 public enum ThreadType {
     /**
-     * The ticking thread of the server instance, it is usually the `main` thread of the JVM.
-     * Notes that in Allay, the main thread does not tick worlds since each world has its own
-     * ticking thread. The main thread only handles tasks submitted to the server's scheduler
-     * {@link Server#getScheduler()}.
+     * {@code SERVER} identifies the server instance's tick loop, normally on the
+     * JVM main thread.
+     * The loop advances the server scheduler and player manager; world tick
+     * loops execute separately from this server-level work.
      */
     SERVER,
     /**
-     * The ticking thread of a world. Each world has its own ticking thread. World tick does some
-     * simple things like updating the time and the weather of the whole world.
+     * {@code WORLD} identifies a world's ticking thread. Each world owns its
+     * ticking thread, which advances shared world time and weather.
      */
     WORLD,
     /**
-     * The ticking thread of a dimension. Ticks between different dimensions in the same world
-     * are in parallel.
+     * {@code DIMENSION} identifies a dimension's tick, potentially alongside other dimensions when
+     * the world's parallel-dimension setting is enabled.
      * <p>
-     * The world tick always completes before the dimension tick begins, and the world tick waits
-     * for all dimensions in the current world to finish their ticks before proceeding to the next
-     * tick. These two ticks never run concurrently.
+     * The world updates shared time, weather, sleep, and scheduling before
+     * starting dimension ticks, then waits for all dimension ticks before its
+     * storage tick and next iteration. Sequential configuration can run dimension
+     * work directly on the world's ticking thread.
      */
     DIMENSION,
     /**
-     * The light thread which handles sky and block light calculation in a dimension. Each
-     * dimension has a number of light threads.
+     * {@code LIGHT} identifies sky and block light calculation workers in a
+     * dimension. A dimension can use multiple workers for these calculations.
      */
     LIGHT,
     /**
-     * The network thread which handles incoming data packets from the players.
+     * Network packet processing context.
      */
     NETWORK,
     /**
-     * The thread in the compute thread pool {@link Server#getComputeThreadPool()} or
-     * {@link ForkJoinPool#commonPool()}. Compute threads are used in world generation and
-     * entity physics calculation.
+     * {@code COMPUTE} identifies workers from {@link Server#getComputeThreadPool()}
+     * or {@link ForkJoinPool#commonPool()}. World generation and entity physics
+     * use this context for computational work.
      */
     COMPUTE,
     /**
-     * The virtual thread in the JVM. Virtual threads are mostly used in IO tasks such as
-     * saving world data.
+     * JVM virtual-thread context.
      */
     VIRTUAL,
     /**
-     * Represents any thread type.
+     * Unrestricted caller execution context.
      */
     ANY
 }

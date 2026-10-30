@@ -28,410 +28,357 @@ import static org.allaymc.api.item.data.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
 /**
- * Defines the core state and behavior of an item stack, including use, durability, enchantments, and NBT data.
+ * {@code ItemBaseComponent} defines an item stack's mutable state and gameplay
+ * operations. Stack state includes count, metadata, display data, enchantments,
+ * and persistent custom data. The network stack ID serves request processing
+ * separately from item type identity; callers can deliberately retain it during
+ * copying, and item NBT does not persist that ID.
+ *
+ * <p>
+ * Timed air use begins with {@code canUseItemInAir} and completes through
+ * {@code useItemInAir}, while immediate actions use {@code rightClickItemInAir}.
+ * Mining defaults consider both item classification and block properties;
+ * {@code isCorrectToolFor} remains a separate suitability check from the speed
+ * bonus. Mutable state is not synchronized by the base implementation, so
+ * callers coordinate concurrent access and preserve non-{@code null} display
+ * values required by its query and serialization paths.
  *
  * @author daoge_cmd
  */
 public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
     /**
-     * The value returned by method {@link #getUniqueId()} when the item stack does not use the stack id.
+     * {@code EMPTY_UNIQUE_ID} represents a stack without a network request ID.
+     * Automatic allocation starts above this value, and {@code clearUniqueId} restores
+     * the sentinel.
      */
     int EMPTY_UNIQUE_ID = 0;
 
     /**
-     * Gets the item type.
-     *
-     * @return the {@link ItemType}
+     * Returns the registered item type that supplies this stack's shared behavior.
      */
     ItemType<? extends ItemStack> getItemType();
 
     /**
-     * Gets the item count.
-     *
-     * @return the current count
+     * Returns the number of items represented by this stack.
      */
     int getCount();
 
     /**
-     * Sets the item count.
+     * Sets the stack count to a nonnegative value, including {@code 0}.
+     * The base setter rejects negative counts without capping the value at the item
+     * type's maximum stack size.
      *
-     * @param count the new count
+     * @throws IllegalArgumentException if {@code count} is negative
      */
     void setCount(int count);
 
     /**
-     * Reduces the item count.
-     *
-     * @param count the amount to reduce
+     * Subtracts the supplied amount through the stack's count setter.
+     * The amount is not separately validated or clamped, and integer overflow is
+     * unchecked; the base setter rejects an arithmetic result below zero.
      */
     default void reduceCount(int count) {
         setCount(getCount() - count);
     }
 
     /**
-     * Increases the item count.
-     *
-     * @param count the amount to increase
+     * Adds the supplied amount through the stack's count setter.
+     * The amount is not separately validated or capped, and integer overflow is
+     * unchecked; the base setter rejects an arithmetic result below zero.
      */
     default void increaseCount(int count) {
         setCount(getCount() + count);
     }
 
     /**
-     * Checks if the item stack is full.
-     *
-     * @return {@code true} if at max stack size, {@code false} otherwise
+     * Returns whether the count exactly equals the item type's maximum stack size.
+     * The base implementation uses equality, so an oversized count does not report
+     * a full stack through this query.
      */
     boolean isFull();
 
     /**
-     * Gets the item meta value.
-     *
-     * @return the meta value
+     * Returns the item metadata value currently stored on this stack.
      */
     int getMeta();
 
     /**
-     * Sets the item meta value.
+     * Sets the item metadata value to the supplied nonnegative integer.
+     * The base setter rejects negative values without enforcing type-specific
+     * variant ranges; specialized components interpret the stored metadata.
      *
-     * @param meta the new meta value
+     * @throws IllegalArgumentException if {@code meta} is negative
      */
     void setMeta(int meta);
 
     /**
-     * Gets the maximum damage of the item.
-     *
-     * @return the max damage
+     * Returns the durability threshold configured in this item type's gameplay data.
      */
     default int getMaxDamage() {
         return getItemType().getItemData().maxDamage();
     }
 
     /**
-     * Gets the current damage.
-     *
-     * @return the damage value
+     * Returns the accumulated durability damage currently stored on this stack.
      */
     int getDamage();
 
     /**
-     * Sets the damage.
-     * <p>
-     * Higher values indicate more damage.
+     * Sets accumulated durability damage when the item type supports durability.
+     * The base implementation logs and ignores unsupported items; otherwise it rejects
+     * negative values without clamping damage to the configured maximum.
      *
-     * @param damage the new damage value
+     * @throws IllegalArgumentException if {@code damage} is negative for a damageable item
      */
     void setDamage(int damage);
 
     /**
-     * Attempts to increase the damage.
-     * <p>
-     * May be ignored based on unbreaking enchantment.
-     *
-     * @param increase the amount to increase
-     * @return {@code true} if increased, {@code false} if ignored
+     * Attempts a durability change after the unbreaking check and damage event.
+     * The result is {@code false} when either rejects the attempt; {@code true}
+     * means the setter was invoked, even if an unsupported item or zero event amount
+     * leaves stored damage unchanged.
      */
     boolean tryIncreaseDamage(int increase);
 
     /**
-     * Gets the repair cost.
-     *
-     * @return the repair cost
+     * Returns the repair-cost value currently stored on this item stack.
      */
     int getRepairCost();
 
     /**
-     * Sets the repair cost.
+     * Sets the nonnegative repair-cost value stored on this stack.
+     * The base setter rejects negative values; saving includes a repair-cost entry
+     * only when the stored value is positive.
      *
-     * @param repairCost the new repair cost
+     * @throws IllegalArgumentException if {@code repairCost} is negative
      */
     void setRepairCost(int repairCost);
 
     /**
-     * Checks if the item is broken.
-     *
-     * @return {@code true} if broken, {@code false} otherwise
+     * Returns whether a damageable item's stored damage reaches its positive limit.
+     * The base implementation returns {@code false} for nondamageable items and for
+     * invalid nonpositive limits rather than treating those limits as broken.
      */
     boolean isBroken();
 
     /**
-     * Checks if the item can be damaged now.
-     *
-     * @return {@code true} if damageable, {@code false} otherwise
+     * Returns whether the current unbreaking check permits a durability attempt.
+     * The base implementation always permits an absent unbreaking enchantment; this
+     * query does not itself test whether the item type supports durability.
      */
     boolean canBeDamagedThisTime();
 
     /**
-     * Checks if the item has a custom name.
-     *
-     * @return {@code true} if a custom name is set and not empty; {@code false} otherwise.
+     * Returns whether the stored non-{@code null} custom name is nonempty.
      */
     default boolean hasCustomName() {
         return !getCustomName().isEmpty();
     }
 
     /**
-     * Gets the custom name of the item.
-     *
-     * @return the custom name, or empty if none. Never be {@code null}.
+     * Returns the custom display name stored on this item stack.
+     * The base component starts with an empty string; its setter retains supplied
+     * values directly, so callers must preserve the non-{@code null} convention.
      */
     String getCustomName();
 
     /**
-     * Sets the custom name of the item.
-     *
-     * @param customName the new custom name of the item
+     * Replaces the stack's custom display name with the supplied value.
+     * Callers use an empty string to clear the name and must keep it non-{@code null}
+     * for the base query and save paths.
      */
     void setCustomName(String customName);
 
     /**
-     * Gets the lore lines.
-     *
-     * @return the lore list
+     * Returns the stack's currently stored lore list reference.
+     * The base component does not copy the list for reads; changes through a mutable
+     * returned list affect later serialization of this stack.
      */
     List<String> getLore();
 
     /**
-     * Sets the lore lines.
-     *
-     * @param lore the new lore list
+     * Replaces the stack's lore list with the supplied list reference.
+     * The base component retains the list directly, so later caller mutations can
+     * change the item; callers must supply a non-{@code null} list.
      */
     void setLore(List<String> lore);
 
     /**
-     * Converts to a block state.
-     *
-     * @return the {@link BlockState}
+     * Returns the block state represented by this item stack, when available.
+     * The base component returns the mapped block type's default state and returns
+     * {@code null} when the item has no block mapping.
      */
     BlockState toBlockState();
 
     /**
-     * Gets the unique id of this item stack. Stack unique id is an increasing unique int value that associated
-     * with a stack, mainly used in the new item stack request system to reduce network traffic footprint. Different
-     * item stacks will have different unique ids.
-     * <p>
-     * Notes that item stack may don't have unique id, and in that case this method will return {@link #EMPTY_UNIQUE_ID}.
-     *
-     * @return the unique id
+     * Returns the network stack ID used by item request processing.
+     * {@code EMPTY_UNIQUE_ID} means no ID is assigned. Explicit assignment and
+     * {@code copy(false)} can intentionally reuse IDs, so this accessor does not
+     * guarantee a distinct value for every stack instance.
      */
     int getUniqueId();
 
     /**
-     * Sets the unique id of this item stack.
-     *
-     * @param uniqueId the new unique id
+     * Replaces the network stack ID with the supplied integer.
+     * The base setter stores the value directly without reserving it from the
+     * automatic allocator; callers maintain the identity needed by request processing.
      */
     void setUniqueId(int uniqueId);
 
     /**
-     * Checks if the item stack has a unique id.
-     *
-     * @return {@code true} if present, {@code false} otherwise
+     * Returns whether this stack's network ID differs from {@code EMPTY_UNIQUE_ID}.
      */
     default boolean hasUniqueId() {
         return getUniqueId() != EMPTY_UNIQUE_ID;
     }
 
     /**
-     * Clears the unique id of this item stack.
+     * Restores {@code EMPTY_UNIQUE_ID} as this stack's absent network-ID value.
      */
     default void clearUniqueId() {
         setUniqueId(EMPTY_UNIQUE_ID);
     }
 
     /**
-     * Copies the item stack.
-     *
-     * @return the copied {@link ItemStack}
+     * Creates a stack copy while requesting a newly allocated network ID.
+     * The copy follows {@code copy(true)} and restores state through the component
+     * serialization path rather than promising a deep clone of every retained object.
      */
     default ItemStack copy() {
         return copy(true);
     }
 
     /**
-     * Copies the item stack with optional new network ID.
-     *
-     * @param newStackNetworkId whether to generate a new ID
-     * @return the copied {@link ItemStack}
+     * Creates a stack copy using serialized component state and the chosen ID policy.
+     * {@code true} requests a new network ID; {@code false} retains the current ID,
+     * including {@code EMPTY_UNIQUE_ID}. Component-specific persistence determines
+     * which state survives the copy.
      */
     ItemStack copy(boolean newStackNetworkId);
 
     /**
-     * Saves extra tag data.
-     *
-     * @return the {@link NbtMap} of extra tags
+     * Serializes extra item state contributed by the base and sibling components.
+     * Count, metadata, item type, and network stack ID are outside this extra tag;
+     * the base component omits its ordinary empty or default entries.
      */
     NbtMap saveExtraTag();
 
     /**
-     * Loads extra tag data.
-     *
-     * @param extraTag the {@link NbtMap} to load
+     * Loads the supplied extra item state through component and base loading paths.
+     * The base loader resets absent damage and repair cost to zero, merges
+     * enchantments, and retains several other values when their tags are absent;
+     * loading is not a general reset operation.
      */
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * Called when a player right-clicks on a block with this item.
-     * <p>
-     * If this method returns {@code true}, the block interaction ({@code BlockBehavior::onInteract})
-     * will be skipped. This is used for items with special block interactions such as flint and steel,
-     * spawn eggs, firework rockets, axes (for stripping logs), or paintings.
-     *
-     * @param dimension     the {@link Dimension}
-     * @param placeBlockPos the block position ({@link Vector3ic})
-     * @param interactInfo  the {@link PlayerInteractInfo}
-     * @return {@code true} if the item was used and block interaction should be skipped,
-     *         {@code false} otherwise
+     * Handles an item's special use against a clicked block before block interaction.
+     * A {@code true} result consumes that interaction in the player transaction
+     * path, which skips the clicked block's interaction handler and ordinary
+     * placement fallback.
      */
     @ApiStatus.OverrideOnly
     boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
-     * Attempts to place a block with this item.
-     *
-     * @param dimension     the {@link Dimension}
-     * @param placeBlockPos the placement position ({@link Vector3ic})
-     * @param placementInfo the {@link PlayerInteractInfo}, may be {@code null}
-     * @return {@code true} if placed, {@code false} otherwise
+     * Attempts to place the block represented by this item stack.
+     * The default interface implementation returns {@code false} without side effects;
+     * placement implementations define their interaction-context requirements,
+     * including whether they support {@code null} context.
      */
     default boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         return false;
     }
 
     /**
-     * Called when a player right-clicks this item in air. This method is only called when {@link #canUseItemInAir(EntityPlayer)}
-     * return {@code false}.
-     *
-     * @param player the {@link EntityPlayer} that click this item in air
+     * Handles immediate item activation in air for the supplied player.
+     * The player transaction path invokes this operation when timed use is
+     * unsupported and the immediate-use player event allows the action.
      */
     @ApiStatus.OverrideOnly
     void rightClickItemInAir(EntityPlayer player);
 
     /**
-     * Checks if the item can be used in air. If return {@code true}, method {@link #useItemInAir} will be
-     * called later with the time used when the player finishes using the item (usually when they release the
-     * right mouse button or screen).
-     * <p>
-     * This method usually return {@code true} for those items which need time to be used. For the items that
-     * can be used immediately, this method should return {@code false} and method {@link #rightClickItemInAir(EntityPlayer)}
-     * will be called instead.
-     *
-     * @param player the {@link EntityPlayer} that try to use this item in air
-     * @return {@code true} if usable, {@code false} otherwise
+     * Returns whether the item supports timed use in air for this player.
+     * A {@code true} result selects the timed-use path; a separate player start event
+     * can still reject starting it. Immediate actions use {@code rightClickItemInAir}.
      */
     boolean canUseItemInAir(EntityPlayer player);
 
     /**
-     * Called when the player finishes using certain item (e.g. foods).
-     *
-     * @param player    the player
-     * @param usingTime the time the player has been using the item in air in game ticks
-     * @return {@code true} if used, {@code false} otherwise
+     * Completes an item's timed-use attempt for the supplied player.
+     * {@code usingTime} is elapsed game ticks; the returned boolean reports the item
+     * handler's result after the player completion event has allowed the operation.
      */
     @ApiStatus.OverrideOnly
     boolean useItemInAir(EntityPlayer player, long usingTime);
 
     /**
-     * Called every tick while the player is using this item in air.
-     * Override this method to implement tick-based logic during item use, such as
-     * playing charging sounds for crossbows.
-     *
-     * @param player   the player using the item
-     * @param usedTime the time in ticks since the player started using the item
+     * Receives an ongoing timed-use tick for capability-specific behavior.
+     * {@code usedTime} is elapsed game ticks since use began; the default
+     * implementation performs no action, leaving periodic feedback to overrides.
      */
     @ApiStatus.OverrideOnly
     default void onUseInAirTick(EntityPlayer player, long usedTime) {
-        // Default implementation does nothing
     }
 
     /**
-     * Checks if this item can merge with another.
-     *
-     * @param itemStack the {@link ItemStack} to check
-     * @return {@code true} if mergeable, {@code false} otherwise
+     * Checks merge compatibility while enforcing the combined maximum stack count.
+     * This overload delegates to {@code canMerge(itemStack, false)}; the candidate
+     * must be non-{@code null}, and the base comparison invokes component extra-tag
+     * serialization.
      */
     default boolean canMerge(ItemStack itemStack) {
         return canMerge(itemStack, false);
     }
 
     /**
-     * Checks if this item can merge with another.
-     *
-     * @param itemStack   the {@link ItemStack} to check
-     * @param ignoreCount whether to ignore count in comparison. If set to {code false}, this method will check if the merged
-     *                    count exceeds the maximum item count of a single stack for this item type
-     * @return {@code true} if mergeable, {@code false} otherwise
+     * Returns whether two stacks have compatible type, metadata, extra state, and
+     * block state. A {@code true} {@code ignoreCount} skips only the combined-count
+     * limit; the base implementation still serializes extra tags for comparison and
+     * rejects a {@code null} candidate.
      */
     boolean canMerge(ItemStack itemStack, boolean ignoreCount);
 
     /**
-     * Saves item data to NBT.
-     *
-     * @return the {@link NbtMap} of item data
+     * Serializes the stack's item type, count, metadata, and available extra state.
+     * The base format narrows count to a byte and metadata to a short, includes
+     * available block-state NBT, and excludes the network stack ID.
      */
     NbtMap saveNBT();
 
     /**
-     * Calculates the base attack damage of this item.
-     * <p>
-     * This method returns the static attack damage value defined in the item's data,
-     * without considering any context-dependent factors such as the attacker's state
-     * or enchantments that depend on combat conditions.
-     * <p>
-     * For most weapons, this method and {@link #calculateAttackDamage(Entity, Entity)}
-     * return the same value. However, for weapons like the Mace that have context-dependent
-     * damage bonuses (e.g., smash damage based on fall distance, Density enchantment),
-     * use the overloaded version with attacker and victim parameters to get the actual
-     * combat damage.
-     *
-     * @return the base attack damage value
-     * @see #calculateAttackDamage(Entity, Entity)
+     * Returns the item's attack damage without attacker or victim context.
+     * The base component uses the item type's configured value; callers use the
+     * contextual overload for capabilities that add combat-dependent damage.
      */
     float calculateAttackDamage();
 
     /**
-     * Calculates the attack damage with attacker and victim context.
-     * <p>
-     * This method allows weapons to calculate damage based on combat context,
-     * such as the attacker's current state. For example, the Mace uses this to
-     * calculate smash damage based on the attacker's fall distance and apply
-     * the Density enchantment bonus.
-     * <p>
-     * The default implementation simply delegates to {@link #calculateAttackDamage()}.
-     * Weapons with context-dependent damage should override this method.
-     *
-     * @param attacker the entity performing the attack
-     * @param victim   the entity being attacked
-     * @return the attack damage value including any context-dependent bonuses
-     * @see #calculateAttackDamage()
+     * Returns attack damage with attacker and victim context available to overrides.
+     * The default implementation delegates to {@code calculateAttackDamage()} and
+     * does not inspect either entity; specialized weapons can incorporate combat
+     * state.
      */
     default float calculateAttackDamage(Entity attacker, Entity victim) {
         return calculateAttackDamage();
     }
 
     /**
-     * Checks for a specific enchantment.
-     *
-     * @param enchantmentType the {@link EnchantmentType}
-     * @return {@code true} if present, {@code false} otherwise
+     * Returns whether this stack stores an instance of the supplied enchantment type.
      */
     boolean hasEnchantment(EnchantmentType enchantmentType);
 
     /**
-     * Checks for any enchantments.
-     *
-     * @return {@code true} if enchanted, {@code false} otherwise
+     * Returns whether this stack currently stores at least one enchantment instance.
      */
     default boolean hasEnchantments() {
         return !getEnchantments().isEmpty();
     }
 
     /**
-     * Gets the protection factor for a damage type.
-     *
-     * @param damageType the {@link DamageType}
-     * @return the total protection factor
+     * Sums stored enchantment protection factors for the supplied damage type without capping the total.
      */
     default int getEnchantmentProtectionFactor(DamageType damageType) {
         return getEnchantments().stream()
@@ -440,81 +387,70 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Gets the level of an enchantment.
-     *
-     * @param enchantmentType the {@link EnchantmentType}
-     * @return the level, or 0 if absent
+     * Returns the level stored for the supplied enchantment type.
+     * An absent type yields {@code 0}; a stored level of {@code 0} therefore cannot
+     * be distinguished from absence through this accessor alone.
      */
     int getEnchantmentLevel(EnchantmentType enchantmentType);
 
     /**
-     * Gets all enchantments on the item.
-     *
-     * @return the {@link Collection} of {@link EnchantmentInstance}
+     * Returns the stack's stored enchantment instances through its current collection.
+     * The base component exposes a live values view: removing or clearing entries
+     * changes stored enchantments, while adding through that view is unsupported.
      */
     Collection<EnchantmentInstance> getEnchantments();
 
     /**
-     * Adds an enchantment to the item.
-     *
-     * @param enchantmentType the {@link EnchantmentType}
-     * @param level           the enchantment level
+     * Stores an enchantment instance at the supplied level, replacing that type's
+     * previous entry. The base implementation does not validate normal level limits,
+     * item applicability, or conflicts with existing enchantments.
      */
     void addEnchantment(EnchantmentType enchantmentType, int level);
 
     /**
-     * Adds multiple enchantments to the item.
-     *
-     * @param enchantmentInstances the {@link Collection} of {@link EnchantmentInstance}
+     * Stores the supplied enchantment instances by their types in iteration order.
+     * Later entries of the same type replace earlier entries; the base component
+     * retains the instances and performs no compatibility validation.
      */
     void addEnchantments(Collection<EnchantmentInstance> enchantmentInstances);
 
     /**
-     * Removes an enchantment from the item.
-     *
-     * @param enchantmentType the {@link EnchantmentType}
-     * @return the removed {@link EnchantmentInstance}, or {@code null} if absent
+     * Removes and returns the stored instance for the supplied enchantment type.
+     * The result is {@code null} when no entry exists, allowing callers to distinguish
+     * an absent enchantment from a removed instance.
      */
     EnchantmentInstance removeEnchantment(EnchantmentType enchantmentType);
 
     /**
-     * Removes all enchantments from the item.
+     * Removes every enchantment currently stored on this item stack.
      */
     void removeAllEnchantments();
 
     /**
-     * Handles breaking a block with this item.
-     *
-     * @param block   the {@link BlockState} being broken
-     * @param breaker the {@link Entity} breaking it
+     * Notifies item behavior that the supplied entity broke the supplied block.
      */
     @ApiStatus.OverrideOnly
     void onBreakBlock(BlockState block, Entity breaker);
 
     /**
-     * Handles attacking an entity with this item.
-     *
-     * @param attacker the {@link Entity} attacking
-     * @param victim   the {@link Entity} attacked
+     * Notifies item behavior of the supplied attacker's attack against the victim.
      */
     @ApiStatus.OverrideOnly
     void onAttackEntity(Entity attacker, Entity victim);
 
     /**
-     * Interacts an entity with this item.
-     *
-     * @param performer the {@link Entity} performing the interaction
-     * @param victim    the {@link Entity} being interacted with
-     * @return {@code true} if successful, {@code false} otherwise
+     * Attempts item-specific interaction between the performer and target entity.
+     * The returned boolean reports whether item behavior handled the interaction;
+     * the base component obtains the result from its component event.
      */
     @ApiStatus.OverrideOnly
     boolean interactEntity(Entity performer, Entity victim);
 
     /**
-     * Gets the break time bonus for a block.
-     *
-     * @param blockState the {@link BlockState} to break
-     * @return the bonus multiplier
+     * Returns the default mining-speed multiplier for the item and target block.
+     * Sword classification takes precedence, followed by shears and their
+     * block-specific values, then tier tags in the checked order. An unmatched item
+     * uses {@code 1}; this query does not check tool suitability.
      */
     default double getBreakTimeBonus(BlockState blockState) {
         var itemType = getItemType();
@@ -524,7 +460,8 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
         }
 
         if (itemType == SHEARS) {
-            // Shears break wool and leaves faster
+            // Shears use block-specific mining multipliers before the generic
+            // tier fallback, keeping web and leaf handling distinct from wool.
             if (blockType.hasBlockTag(BlockTags.WOOL)) {
                 return 5d;
             } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockTags.LEAVES)) {
@@ -534,38 +471,40 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
             return 2d;
         }
 
+        // Use the first matching tier in this fixed order; overlapping custom
+        // tier tags must not be treated as a maximum across every matching tag.
         if (itemType.hasItemTag(WOODEN_TIER)) return 2d;
         if (itemType.hasItemTag(STONE_TIER)) return 4d;
         if (itemType.hasItemTag(IRON_TIER)) return 6d;
         if (itemType.hasItemTag(DIAMOND_TIER)) return 8d;
         if (itemType.hasItemTag(NETHERITE_TIER)) return 9d;
         if (itemType.hasItemTag(GOLDEN_TIER)) return 12d;
+        // Untagged items contribute the neutral multiplier so the caller's base
+        // mining speed remains unchanged by this item-specific lookup.
         return 1d;
     }
 
     /**
-     * Checks if this is the correct tool for a block.
-     *
-     * @param blockState the {@link BlockState} to break
-     * @return {@code true} if correct, {@code false} otherwise
+     * Returns whether the item's tool classification is suitable for the block.
+     * The base implementation first applies its required-tier comparison, then checks
+     * category-specific block tags and exceptions; this result is separate from
+     * {@code getBreakTimeBonus}.
      */
     boolean isCorrectToolFor(BlockState blockState);
 
     /**
-     * Checks if this item can instantly break a block.
-     *
-     * @param blockState the {@link BlockState} to break
-     * @return {@code true} if instant, {@code false} otherwise
+     * Returns whether the default instant-break rule accepts this item and block.
+     * Zero block hardness is always accepted; otherwise a sword accepts bamboo only.
+     * Other combinations return {@code false} without testing tool suitability.
      */
     default boolean canInstantBreak(BlockState blockState) {
         var blockHardness = blockState.getBlockStateData().hardness();
-        // Blocks with hardness of 0 can be instantly broken
+        // Zero hardness bypasses normal timed mining for every item.
         if (blockHardness == 0) {
             return true;
         }
 
         if (getItemType().hasItemTag(IS_SWORD)) {
-            // Swords can break bamboo instantly
             return blockState.getBlockType() == BlockTypes.BAMBOO;
         }
 
@@ -573,29 +512,25 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Checks if all enchantments are available in an enchant table.
-     *
-     * @return {@code true} if all available, {@code false} otherwise
+     * Returns whether enchanting-table selection may bypass item applicability checks.
+     * The default is {@code false}; a {@code true} override still leaves compatibility
+     * and enchantment availability checks to the enchanting-table generator.
      */
     default boolean isAllEnchantmentsAvailableInEnchantTable() {
         return false;
     }
 
     /**
-     * Checks compatibility with an enchantment type.
-     *
-     * @param type the {@link EnchantmentType} to check
-     * @return {@code true} if compatible, {@code false} otherwise
+     * Returns whether existing enchantments report no conflict with the proposed type.
+     * This query considers stored enchantment conflicts only; it does not validate
+     * item applicability, level limits, or enchanting-table availability.
      */
     default boolean checkEnchantmentCompatibility(EnchantmentType type) {
         return getIncompatibleEnchantmentTypes(type).isEmpty();
     }
 
     /**
-     * Gets incompatible enchantment types.
-     *
-     * @param type the {@link EnchantmentType} to check
-     * @return the {@link Set} of incompatible {@link EnchantmentType}
+     * Returns a new set of stored enchantment types reporting incompatibility with the proposed type.
      */
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {
         return getEnchantments().stream()
@@ -605,57 +540,41 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Gets the block entity NBT data.
-     * <p>
-     * The block entity nbt will be stored in the item if player pick a block with ctrl pressed,
-     * and the nbt will be used when the player place the block. Note that not every block has
-     * block entity, so setting block entity nbt in an item whose block doesn't have block entity
-     * will have no effect.
-     *
-     * @return the {@link NbtMap}, or {@code null} if absent
+     * Returns the optional block-entity data carried for later placement.
+     * The base component returns {@code null} when no data is present and applies
+     * present data only if placement produces a block entity at the destination.
      */
     NbtMap getBlockEntityNBT();
 
     /**
-     * Sets the block entity NBT data.
-     * <p>
-     * <b>Important:</b> When saving NBT from a block entity, always use
-     * {@link org.allaymc.api.blockentity.BlockEntity#saveCleanNBT()} instead of
-     * {@link org.allaymc.api.blockentity.BlockEntity#saveNBT()}. The {@code saveCleanNBT()}
-     * method removes position fields (x, y, z) which would otherwise corrupt the
-     * block entity's position when the item is placed at a different location.
-     *
-     * @param blockEntityNBT the {@link NbtMap}, or {@code null} to clear
+     * Stores block-entity data for application after a later placement.
+     * {@code null} clears the stored value. Callers capture data with
+     * {@link org.allaymc.api.blockentity.BlockEntity#saveCleanNBT()} so old coordinates
+     * and component-specific location data do not move into the new placement.
      */
     void setBlockEntityNBT(NbtMap blockEntityNBT);
 
     /**
-     * Checks for block entity NBT data.
-     *
-     * @return {@code true} if present, {@code false} otherwise
+     * Returns whether this stack holds non-{@code null} block-entity placement data.
      */
     default boolean hasBlockEntityNBT() {
         return getBlockEntityNBT() != null;
     }
 
     /**
-     * Gets the item lock mode.
-     *
-     * @return the {@link ItemLockMode}
+     * Returns the inventory lock policy currently stored on this stack.
      */
     ItemLockMode getLockMode();
 
     /**
-     * Sets the item lock mode.
-     *
-     * @param lockMode the {@link ItemLockMode}
+     * Stores the inventory lock policy used by item extra-tag persistence.
+     * The base setter retains the supplied value; callers use non-{@code null}
+     * {@code ItemLockMode.NONE} to select the omitted default policy.
      */
     void setLockMode(ItemLockMode lockMode);
 
     /**
-     * Checks if the item stack is empty or air.
-     *
-     * @return {@code true} if empty or air, {@code false} otherwise
+     * Returns whether this stack is air or has a count of {@code 0}.
      */
     default boolean isEmptyOrAir() {
         return getItemType() == ItemTypes.AIR || getCount() == 0;

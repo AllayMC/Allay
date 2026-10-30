@@ -18,23 +18,34 @@ import static org.allaymc.api.block.data.BlockTags.POWER_SOURCE;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
+ * {@code BlockFenceGateBaseComponentImpl} handles gate orientation, wall lowering,
+ * manual opening, and redstone response. Wall adjacency controls the lowered shape
+ * independently of opening; neighbor power checks run only when the changed neighbor
+ * is or was a tagged power source, preserving manual gate state after unrelated
+ * changes.
+ *
  * @author IWareQ
  */
 public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the fence gate block behavior for the supplied block type.
+     */
     public BlockFenceGateBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Forwards the update, refreshes wall lowering, and checks qualifying
+     * power-source changes. {@code oldNeighborState} may be {@code null}; the new
+     * neighbor alone then determines whether redstone state is reevaluated.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         block.updateBlockProperty(IN_WALL_BIT, shouldBeLowered(block));
-
-        // Only check redstone power if:
-        // 1. Neighbor is a power source (new redstone component placed), OR
-        // 2. Old neighbor was a power source (power source removed)
-        // This prevents the fence gate from closing when normal blocks are placed/broken next to it
+        // Only newly present or removed tagged power sources reevaluate opening, so
+        // ordinary neighbor changes do not close a manually opened gate.
         boolean isNewPowerSource = neighbor.getBlockType().hasBlockTag(POWER_SOURCE);
         boolean wasOldPowerSource = oldNeighborState != null && oldNeighborState.getBlockType().hasBlockTag(POWER_SOURCE);
         
@@ -43,6 +54,11 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Places a gate with player-derived cardinal facing and wall-dependent lowering.
+     * {@code placementInfo} may be {@code null}, in which case the facing helper
+     * retains the incoming state's existing direction.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         blockState = BlockPlaceHelper.processMinecraftCardinalDirectionProperty(blockState, placeBlockPos, placementInfo);
@@ -51,15 +67,23 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         return dimension.setBlockState(placeBlockPos, blockState);
     }
 
+    /**
+     * Forwards the postplacement event and synchronizes the new gate with nearby
+     * redstone power. The new block snapshot uses the incoming state and the old
+     * block's position for this initial check.
+     */
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
-
-        // Check redstone power immediately after placement
         var newBlock = new Block(newBlockState, oldBlock.getPosition());
         checkRedstonePower(newBlock);
     }
 
+    /**
+     * Offers the interaction to companion components, then toggles the gate with its
+     * sound. Opening can reverse gate facing to match the player;
+     * {@code interactInfo} must be present for this manual path.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -82,6 +106,9 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Returns whether either side perpendicular to the gate facing contains a wall.
+     */
     private boolean shouldBeLowered(Block current) {
         var direction = current.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
         var blockFace = BlockFace.from(direction);
@@ -91,9 +118,9 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if the fence gate should be opened/closed based on redstone power.
-     *
-     * @param block the fence gate block
+     * Synchronizes gate opening with whether its power level is positive. The state
+     * and sound change only when the requested opening differs from the gate's
+     * current {@code OPEN_BIT}.
      */
     protected void checkRedstonePower(Block block) {
         var power = block.getPower();

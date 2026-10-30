@@ -13,89 +13,64 @@ import static org.allaymc.api.utils.identifier.IdentifierUtils.isNamespaceValid;
 import static org.allaymc.api.utils.identifier.IdentifierUtils.isPathValid;
 
 /**
- * Represents an identifier consisting of a namespace and a path.
- * <p>
- * This class is used to uniquely identify resources or components within a specific namespace.
- * It ensures that both the namespace and path conform to specific validation rules.
- * </p>
- * <p>
- * The identifier can be constructed using various constructors, including:
- * <ul>
- *     <li>A namespace and path directly.</li>
- *     <li>A plugin instance and a path, where the namespace is derived from the plugin.</li>
- *     <li>A single string in the format "namespace:path".</li>
- * </ul>
- * </p>
- * <p>
- * Validation rules:
- * <ul>
- *     <li>The namespace must only contain characters matching [A-Za-z0-9_.-].</li>
- *     <li>The path must only contain characters matching [A-Za-z0-9/._-].</li>
- * </ul>
- * </p>
- * <p>
- * This class is immutable and provides methods for equality checks, cloning, and string representation.
- * </p>
- * <p>
- * Example usage:
- * <pre>
- *     Identifier id = new Identifier("minecraft", "cake");
- *     System.out.println(id); // Outputs: minecraft:cake
- * </pre>
- * </p>
+ * {@code Identifier} represents a case-sensitive namespace and path used to identify runtime
+ * resources and components. Constructors replace an empty namespace with {@code "minecraft"}
+ * and validate both components against the current letter, digit, underscore, hyphen, and
+ * period rules; empty paths are accepted and slash characters are rejected.
+ *
+ * @param namespace validated namespace or the default namespace when empty
+ * @param path validated resource path
  *
  * @author daoge_cmd
  */
 public record Identifier(String namespace, String path) implements Cloneable {
 
     /**
-     * The spectator used between namespace and path.
+     * {@code NAMESPACE_SEPARATOR} separates namespace from path in the string representation.
+     * Single-string construction splits at its first occurrence before validating the two
+     * components.
      */
     public static final String NAMESPACE_SEPARATOR = ":";
     /**
-     * The default namespace.
+     * {@code DEFAULT_NAMESPACE} supplies the namespace for unqualified identifiers and empty
+     * namespace components. Constructors apply it before namespace validation and string
+     * representation.
      */
     public static final String DEFAULT_NAMESPACE = "minecraft";
 
     /**
-     * Constructs an Identifier using a plugin instance and a path.
-     * The namespace is derived from the plugin's name.
-     *
-     * @param plugin the plugin instance
-     * @param path   the path of the identifier
+     * Creates an identifier using the plugin descriptor's name as its namespace. The plugin and
+     * its descriptor must be available, and the canonical constructor applies namespace defaults
+     * and component validation without changing case.
      */
     public Identifier(Plugin plugin, String path) {
         this(plugin.getPluginContainer().descriptor().getName(), path);
     }
 
     /**
-     * Constructs an Identifier using an array of strings.
-     * The first element is the namespace, and the second is the path.
-     *
-     * @param id an array containing the namespace and path
+     * Creates an identifier from the first two array elements as namespace and path. The array
+     * must contain at least two elements; additional elements are ignored and canonical validation
+     * still applies to the selected components.
      */
     public Identifier(String[] id) {
         this(id[0], id[1]);
     }
 
     /**
-     * Constructs an Identifier from a single string in the format "namespace:path".
-     * If the namespace is missing, the default namespace is used.
-     *
-     * @param id the identifier string
+     * Creates an identifier by splitting at the first colon. A missing or leading colon selects
+     * {@code DEFAULT_NAMESPACE}; further colons remain in the path and fail canonical component
+     * validation rather than creating additional components.
      */
     public Identifier(String id) {
         this(fastTwoPartSplit(id, NAMESPACE_SEPARATOR, DEFAULT_NAMESPACE));
     }
 
     /**
-     * Constructs an Identifier using a namespace and a path.
-     * Validates the namespace and path against specific rules.
+     * Creates an identifier with a defaulted namespace and validated components. Empty namespaces
+     * select {@code DEFAULT_NAMESPACE}, empty paths remain valid, uppercase ASCII letters are
+     * accepted, and {@code null} components fail before a valid identifier can be constructed.
      *
-     * @param namespace the namespace of the identifier
-     * @param path      the path of the identifier
-     *
-     * @throws InvalidIdentifierException if the namespace or path is invalid
+     * @throws InvalidIdentifierException if either component contains a character rejected by its validator
      */
     public Identifier(String namespace, String path) {
         this.namespace = namespace.isEmpty() ? DEFAULT_NAMESPACE : namespace;
@@ -109,9 +84,7 @@ public record Identifier(String namespace, String path) implements Cloneable {
     }
 
     /**
-     * Returns the string representation of the identifier in the format "namespace:path".
-     *
-     * @return the string representation of the identifier
+     * Returns the namespace and path joined by the namespace separator.
      */
     @Override
     public String toString() {
@@ -119,12 +92,7 @@ public record Identifier(String namespace, String path) implements Cloneable {
     }
 
     /**
-     * Checks if this identifier is equal to another object.
-     * Two identifiers are equal if their namespace and path are equal.
-     *
-     * @param o the object to compare with
-     *
-     * @return true if the objects are equal, false otherwise
+     * Returns whether another identifier has equal case-sensitive namespace and path components.
      */
     @Override
     public boolean equals(Object o) {
@@ -136,9 +104,7 @@ public record Identifier(String namespace, String path) implements Cloneable {
     }
 
     /**
-     * Computes the hash code for this identifier based on its namespace and path.
-     *
-     * @return the hash code of the identifier
+     * Returns the combined hash of this identifier's namespace and path.
      */
     @Override
     public int hashCode() {
@@ -146,9 +112,7 @@ public record Identifier(String namespace, String path) implements Cloneable {
     }
 
     /**
-     * Creates and returns a copy of this identifier.
-     *
-     * @return a clone of this identifier
+     * Creates an equal identifier by revalidating the same immutable string components.
      */
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
@@ -157,7 +121,8 @@ public record Identifier(String namespace, String path) implements Cloneable {
     }
 
     /**
-     * Annotation used to mark the identifier of a component in the component system
+     * {@code Component} marks the runtime-visible identifier field used to identify a component
+     * implementation during component assembly.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)

@@ -15,30 +15,47 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_BLOCK_FACE;
 
 /**
- * Component for budding amethyst block.
- * Handles random tick growth of amethyst buds and prevents silk touch drops.
+ * {@code BlockBuddingAmethystBaseComponentImpl} grows adjacent amethyst buds during
+ * random updates and suppresses all break drops. Growth can create a small bud in air
+ * or advance existing buds toward a cluster, while bounded retries choose another
+ * random face when a neighbor cannot grow.
  *
  * @author daoge_cmd
  */
 public class BlockBuddingAmethystBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * {@code MAX_GROW_ATTEMPTS} bounds recursive random-face retries when surrounding
+     * blocks cannot accept a new bud or growth stage.
+     */
     private static final int MAX_GROW_ATTEMPTS = 7;
 
+    /**
+     * Creates budding amethyst base behavior for the supplied block type.
+     */
     public BlockBuddingAmethystBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Returns whether budding amethyst receives random updates for bud growth.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Forwards the random update and attempts growth on one fifth of ticks. A
+     * selected attempt begins at retry index zero and can inspect additional random
+     * faces when blocked.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
 
         var random = ThreadLocalRandom.current();
-        // 20% chance to attempt growing a bud
+        // One of five equiprobable outcomes admits a growth attempt.
         if (random.nextInt(5) != 0) {
             return;
         }
@@ -46,6 +63,11 @@ public class BlockBuddingAmethystBaseComponentImpl extends BlockBaseComponentImp
         tryGrow(block, 0);
     }
 
+    /**
+     * Attempts a random adjacent growth stage until the retry limit is reached. Air
+     * accepts a small bud, existing buds advance toward clusters, and unrelated
+     * blocks retry without guaranteeing that each face is distinct.
+     */
     private void tryGrow(Block block, int attempt) {
         if (attempt >= MAX_GROW_ATTEMPTS) {
             return;
@@ -57,36 +79,41 @@ public class BlockBuddingAmethystBaseComponentImpl extends BlockBaseComponentImp
         var neighborType = neighbor.getBlockState().getBlockType();
         var dimension = block.getDimension();
         var neighborPos = face.offsetPos(block.getPosition());
+        // The two face enums share down-up-north-south-west-east declaration order.
+        // Preserve that alignment so a randomly selected neighbor receives the
+        // matching bud attachment direction.
         var minecraftFace = MinecraftBlockFace.values()[face.ordinal()];
 
         if (neighbor.isAir()) {
-            // Place a small amethyst bud on the empty face
             var newState = BlockTypes.SMALL_AMETHYST_BUD.getDefaultState()
                     .setPropertyValue(MINECRAFT_BLOCK_FACE, minecraftFace);
             dimension.setBlockState(neighborPos, newState);
         } else if (neighborType == BlockTypes.SMALL_AMETHYST_BUD) {
-            // Upgrade small bud to medium bud
             var newState = BlockTypes.MEDIUM_AMETHYST_BUD.getDefaultState()
                     .setPropertyValue(MINECRAFT_BLOCK_FACE, minecraftFace);
             dimension.setBlockState(neighborPos, newState);
         } else if (neighborType == BlockTypes.MEDIUM_AMETHYST_BUD) {
-            // Upgrade medium bud to large bud
             var newState = BlockTypes.LARGE_AMETHYST_BUD.getDefaultState()
                     .setPropertyValue(MINECRAFT_BLOCK_FACE, minecraftFace);
             dimension.setBlockState(neighborPos, newState);
         } else if (neighborType == BlockTypes.LARGE_AMETHYST_BUD) {
-            // Upgrade large bud to amethyst cluster
             var newState = BlockTypes.AMETHYST_CLUSTER.getDefaultState()
                     .setPropertyValue(MINECRAFT_BLOCK_FACE, minecraftFace);
             dimension.setBlockState(neighborPos, newState);
         } else {
-            // Face is blocked, retry with another random face
+            // The selected neighbor cannot advance along the bud growth sequence.
+            // Retry another random face until the fixed attempt limit stops the
+            // search.
             tryGrow(block, attempt + 1);
         }
     }
 
+    /**
+     * Suppresses every item and experience drop from budding amethyst breaks. This
+     * override bypasses inherited break handling, so silk touch also produces no
+     * block item through this path.
+     */
     @Override
     public void onBreak(Block block, ItemStack usedItem, Entity entity) {
-        // Budding amethyst drops nothing, not even with silk touch
     }
 }

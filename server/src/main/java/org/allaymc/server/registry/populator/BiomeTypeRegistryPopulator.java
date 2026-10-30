@@ -5,9 +5,19 @@ import org.allaymc.server.world.biome.AllayBiomeType;
 import org.allaymc.server.world.biome.BiomeId;
 
 /**
+ * {@code BiomeTypeRegistryPopulator} supplies the startup population step for built-in
+ * biome types exposed through {@code BiomeTypes}. Each built-in biome uses its predefined identity
+ * and the metadata already loaded for that ID. The public constants are assigned
+ * as each construction succeeds, rather than being published as one combined replacement.
+ *
  * @author daoge_cmd
  */
 public class BiomeTypeRegistryPopulator implements Runnable {
+    /**
+     * Constructs and assigns the built-in biome instances in {@code BiomeTypes}. The corresponding
+     * registry must already exist, and a failed construction leaves earlier assignments and
+     * registrations in place rather than rolling them back.
+     */
     @Override
     public void run() {
         BiomeTypes.OCEAN = new AllayBiomeType(BiomeId.OCEAN);
@@ -97,5 +107,7 @@ public class BiomeTypeRegistryPopulator implements Runnable {
         BiomeTypes.MANGROVE_SWAMP = new AllayBiomeType(BiomeId.MANGROVE_SWAMP);
         BiomeTypes.CHERRY_GROVE = new AllayBiomeType(BiomeId.CHERRY_GROVE);
         BiomeTypes.PALE_GARDEN = new AllayBiomeType(BiomeId.PALE_GARDEN);
+        BiomeTypes.SULFUR_CAVES = new AllayBiomeType(BiomeId.SULFUR_CAVES);
+        BiomeTypes.DAPPLED_FOREST = new AllayBiomeType(BiomeId.DAPPLED_FOREST);
     }
 }

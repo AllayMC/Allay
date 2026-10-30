@@ -9,8 +9,10 @@ import org.allaymc.api.utils.identifier.Identifier;
 import java.util.UUID;
 
 /**
- * ComplexRecipe represents a special type of recipe whose output is dynamic based on the input.
- * The matching logic for these recipes needs to be written manually and cannot be data-driven.
+ * {@code ComplexRecipe} represents a recipe whose outputs depend on the
+ * supplied input rather than a fixed output array. A protocol-defined UUID
+ * identifies the special recipe to clients, while server implementations
+ * compute outputs explicitly; output access without an input is unsupported.
  *
  * @author daoge_cmd
  */
@@ -18,32 +20,47 @@ import java.util.UUID;
 public abstract class ComplexRecipe extends Recipe {
 
     /**
-     * The unique identifier ({@link UUID}) associated with this complex recipe.
-     * <p>
-     * The UUID for each complex recipe is hard-coded and cannot be changed or be generated
-     * randomly since the client relies on the UUID to identify the recipe. All available
-     * complex recipe UUIDs can be found in {@link ComplexRecipeIds}.
+     * {@code uuid} identifies the client's special recipe behavior. Callers
+     * supply the protocol-defined value from {@link ComplexRecipeIds} rather
+     * than generating an arbitrary UUID.
      */
     protected final UUID uuid;
 
+    /**
+     * Creates a dynamic recipe using the supplied client recipe UUID. The
+     * inherited identifier embeds that UUID, priority is zero, and fixed
+     * outputs are {@code null}; callers use input-dependent output access.
+     */
     protected ComplexRecipe(UUID uuid) {
         super(new Identifier("complex." + uuid), null, 0);
         this.uuid = uuid;
     }
 
     /**
-     * Retrieves the outputs of the recipe based on the input. If the input does not match, this method should
-     * return {@code null}.
-     *
-     * @return the output {@link ItemStack}s based on the input, or {@code null} if the input does not match
+     * Computes the outputs for a supported input, returning {@code null} when
+     * it does not match. Implementations define output ownership and any input
+     * side effects, so callers consult the concrete recipe before retaining or
+     * reusing stacks.
      */
     public abstract ItemStack[] getOutputs(RecipeInput input);
 
+    /**
+     * Rejects output access that does not supply recipe input. Dynamic recipes
+     * require {@code getOutputs(RecipeInput)} to compute their result, so this
+     * method always throws {@code UnsupportedOperationException} instead of
+     * exposing fixed output storage.
+     */
     @Override
     public ItemStack[] getOutputs() {
         throw new UnsupportedOperationException("Cannot get outputs of a complex recipe without input!");
     }
 
+    /**
+     * Rejects output access that does not supply recipe input. Dynamic recipes
+     * require {@code getOutputs(RecipeInput)} to compute their result, so this
+     * method always throws {@code UnsupportedOperationException} instead of
+     * exposing fixed output storage.
+     */
     @Override
     public ItemStack getOutput() {
         throw new UnsupportedOperationException("Cannot get outputs of a complex recipe without input!");

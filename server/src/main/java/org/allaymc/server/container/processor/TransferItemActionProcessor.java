@@ -18,11 +18,35 @@ import java.util.Map;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
+ * {@code TransferItemActionProcessor} moves stack quantities between reachable container
+ * slots for place and take requests. The processor translates network slot identities,
+ * checks available quantity, destination type and capacity, equipment placement, and
+ * positive client IDs before dispatching the cancellable move event.
+ *
+ * <p>
+ * A full move into empty storage normally carries the source stack identity, while a
+ * split creates a new identity for the destination stack. Merging retains the occupied
+ * destination's identity, and created-output moves receive special identity and response
+ * handling. Source changes precede destination changes with ordinary viewer updates
+ * suppressed; slot listeners still run, and failures do not roll back earlier mutations.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
+    /**
+     * Transfers the requested count after endpoint, stack, placement, and capacity
+     * checks. Fake endpoints dispatch a click and return an error, and cancelling the
+     * move event prevents the following source and destination updates.
+     *
+     * <p>
+     * Full moves to empty destinations retain the source ID except when taking created
+     * output; split stacks receive a new destination ID, and merges retain the occupied
+     * destination ID. Source mutation precedes destination mutation, so listener or
+     * later failures can leave partial effects. Created-output sources omit their own
+     * response entry; successful destination state is always reported.
+     */
     @Override
     public ActionResponse handle(T action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
@@ -88,35 +112,46 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         ItemStack resultSourItem;
         ItemStack resultDestItem;
         if (sourItem.getCount() == count) {
-            // Case 1: Take all
+            // Clear the source before destination assignment. Listener failures
+            // during either notification leave earlier changes applied rather than
+            // rolling the transfer back.
             resultSourItem = ItemAirStack.AIR_STACK;
             sourceContainer.setItemStack(sourceSlot, resultSourItem, false);
             if (destItem.getItemType() != AIR) {
                 resultDestItem = destItem;
-                // Destination item is not empty, just add count, and keep the same stack unique id
+                // An occupied destination keeps its network identity when counts
+                // merge, allowing later request actions to continue addressing the
+                // same destination stack.
                 resultDestItem.setCount(destItem.getCount() + count);
                 destinationContainer.notifySlotChange(destinationSlot, false);
             } else {
-                // Destination item is empty, move the original stack to the new position, and use the source item's stack unique id (like changing positions)
+                // A full move into empty storage normally transfers the existing
+                // stack reference and identity rather than creating a separately
+                // identified split stack.
                 if (sourceContainer.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
-                    // HACK: If taken from CREATED_OUTPUT, the server needs to create a new stack unique id
+                    // Created output receives a fresh identity when moved into
+                    // ordinary storage, separating the resulting inventory stack from
+                    // the staged crafting output.
                     sourItem = sourItem.copy(true);
                 }
                 resultDestItem = sourItem;
                 destinationContainer.setItemStack(destinationSlot, resultDestItem, false);
             }
         } else {
-            // Case 2: Take part of the item
+            // Keep the remaining source under its existing identity before creating
+            // or extending the destination; source notification can run listeners
+            // before that destination changes.
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
             sourceContainer.notifySlotChange(sourceSlot, false);
             if (destItem.getItemType() != AIR) {
-                // Destination item is not empty
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);
                 destinationContainer.notifySlotChange(destinationSlot, false);
             } else {
-                // Destination item is empty, create a new stack unique id for the separated sub-item stack
+                // A split into empty storage creates a distinct destination network
+                // identity while the reduced source continues to use its original
+                // stack identity.
                 resultDestItem = sourItem.copy(true);
                 resultDestItem.setCount(count);
                 destinationContainer.setItemStack(destinationSlot, resultDestItem, false);
@@ -139,7 +174,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 new FullContainerName(ContainerActionProcessor.getSlotType(destinationContainer, destinationSlot), null)
         );
 
-        // Special case: no need to respond to CREATED_OUTPUT
+        // Created output is a staging source; report only its destination so the
+        // response does not expose a separate created-output slot change.
         if (sourceContainer.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
             return new ActionResponse(true, List.of(destItemStackResponseSlot));
         }

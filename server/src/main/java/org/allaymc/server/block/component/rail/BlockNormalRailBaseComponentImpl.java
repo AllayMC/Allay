@@ -12,22 +12,41 @@ import org.joml.Vector3ic;
 import java.util.List;
 
 /**
- * Component for normal rail (RAIL). Supports curves (orientations 6-9) and
- * handles redstone-triggered curve switching at T-intersections.
+ * {@code BlockNormalRailBaseComponentImpl} extends shared rail placement with the
+ * curved shapes available to normal rails. Neighbor updates first apply support checks,
+ * then revisit an already curved rail when its block type remains present. The curve
+ * calculation uses neighboring rail faces and does not sample redstone power.
+ *
+ * <p>
+ * At a junction with the current two endpoints still present, a rail on exactly one
+ * opposite endpoint selects the alternate curve on that axis. Otherwise the calculation
+ * searches a fixed curve order for a pair of present neighbors. Fewer than two
+ * neighbors or no matching pair preserves the supplied current orientation. These
+ * choices make junction behavior depend on both existing geometry and the current
+ * stored curve.
  *
  * @author daoge_cmd
  */
 public class BlockNormalRailBaseComponentImpl extends BlockRailBaseComponentImpl {
 
+    /**
+     * Creates a curve-capable normal rail component with ten direction values.
+     */
     public BlockNormalRailBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType, true, BlockPropertyTypes.RAIL_DIRECTION_10);
     }
 
+    /**
+     * Applies shared support handling and recalculates a surviving curved normal rail.
+     * The live block type is checked after inherited handling because a successful
+     * support break removes the rail before curve processing begins.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
-        // If the rail was broken by super (support check), skip curve logic
+        // Shared support handling can break the rail, so recheck the live type
+        // before writing a curve into the position that may now contain air.
         if (block.getDimension().getBlockState(block.getPosition()).getBlockType() != blockType) {
             return;
         }
@@ -36,7 +55,6 @@ public class BlockNormalRailBaseComponentImpl extends BlockRailBaseComponentImpl
         var pos = block.getPosition();
         RailOrientation currentOrientation = RailOrientation.byMeta(getRailDirection(block.getBlockState()));
 
-        // Handle T-intersection curve switching based on redstone/neighbor changes
         if (currentOrientation.isCurved()) {
             RailOrientation newOrientation = recalculateCurveOrientation(dimension, pos, currentOrientation);
             if (newOrientation != currentOrientation) {
@@ -46,8 +64,16 @@ public class BlockNormalRailBaseComponentImpl extends BlockRailBaseComponentImpl
     }
 
     /**
-     * Recalculates which curve direction to use at a T-intersection or crossroads,
-     * based on which neighbor rails are present and whether opposite sides have rails.
+     * Selects a curve from the current orientation and rails found around the junction.
+     * Fewer than two neighboring faces preserve {@code current}. When both current
+     * endpoints still exist, exactly one populated opposite endpoint selects the
+     * corresponding alternate curve.
+     *
+     * <p>
+     * Other cases search curves in south-east, south-west, north-west, then north-east
+     * order. The first pair whose endpoints both exist wins; no match preserves
+     * {@code current}. The calculation does not read redstone power or require
+     * reciprocal neighbor connections.
      */
     protected RailOrientation recalculateCurveOrientation(Dimension dimension, Vector3ic pos, RailOrientation current) {
         List<RailNeighbor> neighbors = findRailsAround(dimension, pos);
@@ -55,30 +81,24 @@ public class BlockNormalRailBaseComponentImpl extends BlockRailBaseComponentImpl
 
         List<BlockFace> faces = neighbors.stream().map(RailNeighbor::face).toList();
 
-        // For T-intersections (3 neighbors), pick the curve based on power/neighbor changes
-        // Try to preserve current curve if it's still valid
         if (faces.contains(current.connectingDirections()[0]) && faces.contains(current.connectingDirections()[1])) {
-            // Current curve is still valid, but check if we should switch
-            // Switch happens when opposite side of one connection also has a rail (T-intersection)
             BlockFace dir0 = current.connectingDirections()[0];
             BlockFace dir1 = current.connectingDirections()[1];
 
-            // Check if the opposite face of either connecting direction also has a rail
             boolean hasOppDir0 = faces.contains(dir0.opposite());
             boolean hasOppDir1 = faces.contains(dir1.opposite());
 
             if (hasOppDir0 && !hasOppDir1) {
-                // T from dir0 axis: switch to curve using opposite of dir0 + dir1
                 RailOrientation alt = RailOrientation.curved(dir0.opposite(), dir1);
                 if (alt != null) return alt;
             } else if (hasOppDir1 && !hasOppDir0) {
-                // T from dir1 axis: switch to curve using dir0 + opposite of dir1
                 RailOrientation alt = RailOrientation.curved(dir0, dir1.opposite());
                 if (alt != null) return alt;
             }
         }
 
-        // Current curve is no longer valid, find a new one
+        // When no single-opposite junction choice applies, this fixed order
+        // resolves competing valid curves even if the current curve remains geometrically possible.
         RailOrientation[] curves = {
                 RailOrientation.CURVED_SOUTH_EAST,
                 RailOrientation.CURVED_SOUTH_WEST,

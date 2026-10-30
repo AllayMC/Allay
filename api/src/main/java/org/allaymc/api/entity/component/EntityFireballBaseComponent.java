@@ -1,23 +1,22 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Shared component for explosive fireball entities with configurable explosion power.
+ * {@code EntityFireballBaseComponent} exposes the explosion strength carried
+ * by an explosive fireball. Impact handling reads this value when constructing
+ * an explosion, so callers can configure the explosion independently of the
+ * projectile movement and shooter reference.
  *
  * @author daoge_cmd
  */
 public interface EntityFireballBaseComponent extends EntityBaseComponent {
 
     /**
-     * Gets the explosion power of this fireball.
-     *
-     * @return the explosion power
+     * Returns the fireball strength supplied to its impact explosion.
      */
     float getExplosionPower();
 
     /**
-     * Sets the explosion power of this fireball.
-     *
-     * @param power the explosion power
+     * Stores the fireball strength used when impact creates an explosion.
      */
     void setExplosionPower(float power);
 }

@@ -9,10 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player is about to pick up an arrow entity from the ground.
- * <p>
- * This event is called before the arrow is added to the player's inventory.
- * Cancelling this event will prevent the arrow from being picked up.
+ * {@code PlayerPickupArrowEvent} describes an arrow item about to enter a player's
+ * inventory from a ground entity. The pickup component dispatches it before
+ * inserting {@code arrowItem}; cancellation keeps that path from inserting the item
+ * or removing the arrow entity.
  *
  * @author daoge_cmd
  */
@@ -20,14 +20,20 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerPickupArrowEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The arrow entity being picked up.
+     * Ground arrow entity being considered.
      */
     protected EntityArrow arrow;
     /**
-     * The arrow item that will be added to the player's inventory.
+     * {@code arrowItem} retains the candidate item stack. The pickup component
+     * inserts this same mutable object after event approval.
      */
     protected ItemStack arrowItem;
 
+    /**
+     * Creates a {@code PlayerPickupArrowEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerPickupArrowEvent(EntityPlayer player, EntityArrow arrow, ItemStack arrowItem) {
         super(player);
         this.arrow = arrow;

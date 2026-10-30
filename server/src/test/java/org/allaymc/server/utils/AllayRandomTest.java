@@ -6,9 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
+ * {@code AllayRandomTest} verifies reproducibility of the seeded uniform random stream across
+ * instances.
+ *
  * @author daoge_cmd
  */
 class AllayRandomTest {
+    /**
+     * Creates two uniform generators with one seed and another with a different seed. Matching
+     * seeds must yield matching sampled primitive values in the same call sequence.
+     */
     @Test
     void test() {
         var r1 = new AllayRandom(114514);

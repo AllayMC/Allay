@@ -13,25 +13,62 @@ import org.allaymc.server.component.annotation.Dependency;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
 
 /**
+ * {@code BlockCopperDoorBaseComponentImpl} coordinates oxidation and waxing between
+ * copper door halves while retaining ordinary door behavior. Only the lower half
+ * forwards random updates, and the upper half follows higher oxidation observed below
+ * it; this prevents each half from independently advancing through random oxidation.
+ *
+ * <p>
+ * Waxing propagates from either half to its counterpart, but this synchronization
+ * path does not propagate unwaxing or lower oxidation. A neighbor with any copper
+ * door behavior qualifies, allowing the halves to remain related after a variant
+ * change. When both oxidation and wax change together, the code resolves oxidation
+ * first and then applies the wax state to that selected type before copying the
+ * existing properties.
+ *
  * @author IWareQ
  */
 public class BlockCopperDoorBaseComponentImpl extends BlockDoorBaseComponentImpl {
+    /**
+     * Injected copper oxidation capability.
+     */
     @Dependency
     protected BlockOxidationComponent oxidationComponent;
 
+    /**
+     * Creates copper door base behavior for the supplied block type.
+     */
     public BlockCopperDoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Forwards random updates only for the lower copper door half. The upper half
+     * receives oxidation changes through neighbor synchronization instead of making
+     * an independent random advancement attempt.
+     */
     @Override
     public void onRandomUpdate(Block block) {
-        // Only random update the lower part of the door. When the oxidation level of the lower block change,
-        // we will sync the level to the upper block
+        // The lower half owns random oxidation attempts. The upper half follows
+        // variant changes through neighbor updates instead of drawing another
+        // independent oxidation result.
         if (!block.getPropertyValue(UPPER_BLOCK_BIT)) {
             super.onRandomUpdate(block);
         }
     }
 
+    /**
+     * Applies ordinary door support and redstone handling before synchronizing copper
+     * variant changes. The neighbor must expose copper door behavior; upper halves
+     * can advance to a higher oxidation level observed below.
+     *
+     * <p>
+     * Waxing can propagate from either half, while unwaxing and lower oxidation do
+     * not propagate through this path. If both changes apply, oxidation is selected
+     * first and waxing uses the selected counterpart so one lookup does not discard
+     * the other change. The final type copies the current state's properties before a
+     * dimension write.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -45,13 +82,10 @@ public class BlockCopperDoorBaseComponentImpl extends BlockDoorBaseComponentImpl
         var isUpperBlock = block.getPropertyValue(UPPER_BLOCK_BIT);
         OxidationLevel newOxidationLevel = null;
         boolean shouldbeWaxed = false;
-
-        // Only the lower block can do the random update
         if (isUpperBlock && face == BlockFace.DOWN) {
             var oxidationLevel = blockBehavior.getOxidationLevel();
             var neighborOxidationLevel = neighborBlockBehavior.getOxidationLevel();
             if (oxidationLevel.ordinal() < neighborOxidationLevel.ordinal()) {
-                // Sync the oxidation level to the upper block
                 newOxidationLevel = neighborOxidationLevel;
             }
 
@@ -69,6 +103,9 @@ public class BlockCopperDoorBaseComponentImpl extends BlockDoorBaseComponentImpl
             newBlockType = blockBehavior.getBlockWithOxidationLevel(newOxidationLevel);
         }
 
+        // Apply wax after oxidation selection so simultaneous changes retain the
+        // newly selected level instead of reverting to this half's original oxidation
+        // type.
         if (shouldbeWaxed) {
             if (newBlockType != null) {
                 newBlockType = newBlockType.getBlockBehavior().getBlockWithWaxed(true);
@@ -83,6 +120,9 @@ public class BlockCopperDoorBaseComponentImpl extends BlockDoorBaseComponentImpl
         }
     }
 
+    /**
+     * Returns whether the neighbor belongs to any copper door variant.
+     */
     @Override
     protected boolean isSameDoor(Block neighbor) {
         return neighbor.getBlockType().getBlockBehavior() instanceof BlockCopperDoorBehavior;

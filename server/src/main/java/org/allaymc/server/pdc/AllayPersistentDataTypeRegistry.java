@@ -16,15 +16,49 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 /**
+ * {@code AllayPersistentDataTypeRegistry} maps primitive classes to NBT conversion adapters for
+ * custom metadata. Scalar adapters retain values directly, while list and container adapters
+ * translate the structure required by NBT compounds and homogeneous lists. Complex converters
+ * can share a primitive adapter because lookup uses the primitive class rather than the
+ * application value's class.
+ *
+ * <p>
+ * List conversion needs the element adapter even for an empty list, because the NBT list
+ * retains an element tag type. The list matcher checks the container shape alone; extraction
+ * then validates elements individually, so presence does not prove that every list element can
+ * be decoded. Container extraction allocates a new entry map but retains raw values copied
+ * from the compound, which can still share mutable storage.
+ *
  * @author IWareQ
  */
 public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegistry {
+    /**
+     * {@code adapters} maps primitive class tokens to the latest registered adapter.
+     * Re-registering
+     * a class replaces its converter for subsequent lookups, including existing containers using
+     * this registry.
+     */
     private final Map<Class<?>, TagAdapter<?, ?>> adapters = new ConcurrentHashMap<>();
 
+    /**
+     * Creates a registry and installs the built-in primitive and compound adapters.
+     */
     public AllayPersistentDataTypeRegistry() {
         this.registerAdapters();
     }
 
+    /**
+     * Installs built-in adapters, replacing mappings for their primitive classes. Scalar
+     * conversion
+     * retains values, while compound extraction creates new container maps using this registry.
+     *
+     * <p>
+     * List encoding selects an NBT element tag from the declared element adapter, including for
+     * empty lists. The matcher accepts an {@code NbtList} without examining its element type, so
+     * extraction validates each element separately and can fail after a presence check succeeded.
+     * Container and array conversions allocate structural containers without promising independent
+     * mutable element values.
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void registerAdapters() {
         this.registerPrimitiveAdapters(
@@ -41,6 +75,8 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
                     values.add(this.wrap(listDataType.getElementType(), primitiveValue));
                 }
 
+                // Empty lists still need the declared element tag type so NBT can encode the list
+                // consistently even when no value is available to infer that type.
                 return new NbtList(NbtType.byClass(elementAdapter.getNbtBaseType()), values);
             } else {
                 throw new IllegalArgumentException("The passed list cannot be written to the PDC with a "
@@ -89,6 +125,9 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
         );
     }
 
+    /**
+     * Registers identity converters for the supplied supported primitive class tokens.
+     */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void registerPrimitiveAdapters(Class... primitiveTypes) {
         for (Class primitiveType : primitiveTypes) {
@@ -96,6 +135,11 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
         }
     }
 
+    /**
+     * Registers an adapter whose matcher uses {@code nbtBaseType.isInstance}. The builder and
+     * extractor ignore the persistent type argument, and registering an existing primitive class
+     * replaces the adapter used by later lookups.
+     */
     public <T, Z> TagAdapter<T, Z> createAdapter(
             Class<T> primitiveType,
             Class<Z> nbtBaseType,
@@ -110,6 +154,11 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
         );
     }
 
+    /**
+     * Creates and stores an adapter using the supplied conversion callbacks. Registration replaces
+     * the previous adapter for {@code primitiveType}, and existing containers see that replacement
+     * when they next resolve the same primitive class.
+     */
     @Override
     public <T, Z> TagAdapter<T, Z> createAdapter(
             Class<T> primitiveType, Class<Z> nbtBaseType,
@@ -122,16 +171,33 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
         return adapter;
     }
 
+    /**
+     * Builds an encoded tag through the adapter for {@code type}. The adapter validates the
+     * primitive value before invoking its builder; unsupported primitive classes fail instead of
+     * being inserted into a container.
+     */
     @Override
     public <T> Object wrap(PersistentDataType<T, ?> type, final T value) {
         return this.getAdapter(type).build(type, value);
     }
 
+    /**
+     * Returns the selected adapter's compatibility result for {@code value}. The matcher checks
+     * stored representations without applying the complex converter, and list matching alone does
+     * not validate element compatibility or custom converter constraints.
+     */
     @Override
     public <T> boolean isInstanceOf(PersistentDataType<T, ?> type, Object value) {
         return this.getAdapter(type).isInstance(type, value);
     }
 
+    /**
+     * Returns the mapping for {@code type.getPrimitiveType()}, ignoring the complex class. The
+     * adapter map can be updated after construction, so later calls can resolve a replacement
+     * registered for the same primitive class.
+     *
+     * @throws IllegalArgumentException if no primitive adapter is registered
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <T, Z> TagAdapter<T, Z> getAdapter(PersistentDataType<T, ?> type) {
@@ -143,6 +209,13 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
         return (TagAdapter<T, Z>) adapter;
     }
 
+    /**
+     * Extracts a primitive value after validating the stored representation. The adapter matcher
+     * must accept {@code value}, and the extractor result must be an instance of the requested
+     * primitive class before it is returned to a complex converter.
+     *
+     * @throws IllegalArgumentException if the adapter is absent or a representation check rejects a non-{@code null} value
+     */
     @Override
     public <T, Z> T extract(PersistentDataType<T, ?> type, Z value) throws ClassCastException, IllegalArgumentException {
         var primitiveType = type.getPrimitiveType();

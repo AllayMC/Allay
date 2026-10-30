@@ -13,21 +13,33 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3d;
 
 /**
- * Dispense behavior for spawn egg items.
- * Spawns the corresponding entity in front of the dispenser.
+ * {@code SpawnEggDispenseBehavior} creates the entity selected by a spawn egg at
+ * the adjacent output position. An input without spawn-egg capabilities or without
+ * a mapped entity type falls back to ordinary ejection, while a created entity is
+ * submitted before success is returned.
  *
  * @author daoge_cmd
  */
 public class SpawnEggDispenseBehavior implements DispenseBehavior {
 
+    /**
+     * Creates and submits the spawn egg's configured entity at the output
+     * position. Unsupported input or a missing entity mapping uses ordinary
+     * ejection; a {@code null} factory result instead returns failure without
+     * submission or effects.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
-        // Check if item is a spawn egg
+        // An incompatible input has no spawn-egg mapping to apply, so default
+        // ejection preserves an output action instead of consuming the item
+        // silently.
         if (!(item instanceof ItemSpawnEggBaseComponent spawnEggComponent)) {
             return DefaultDispenseBehavior.INSTANCE.dispense(block, face, item);
         }
 
         var entityType = spawnEggComponent.getEntityType();
+        // An unmapped egg cannot choose an entity factory. Eject the egg through
+        // the fallback so the item remains recoverable after source consumption.
         if (entityType == null) {
             return DefaultDispenseBehavior.INSTANCE.dispense(block, face, item);
         }
@@ -51,6 +63,9 @@ public class SpawnEggDispenseBehavior implements DispenseBehavior {
         return DispenseResult.success();
     }
 
+    /**
+     * Returns a new centered position one block along the output face.
+     */
     protected Vector3d getSpawnPosition(Block block, BlockFace face) {
         var pos = MathUtils.center(block.getPosition());
         pos.x += face.getOffset().x();
@@ -59,6 +74,9 @@ public class SpawnEggDispenseBehavior implements DispenseBehavior {
         return pos;
     }
 
+    /**
+     * Emits the dispenser click sound and directional shoot particle.
+     */
     protected void spawnDispenseEffects(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var center = MathUtils.center(block.getPosition());

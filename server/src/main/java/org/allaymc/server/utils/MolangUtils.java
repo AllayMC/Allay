@@ -8,32 +8,41 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Builds Molang condition strings for block state permutations.
+ * {@code MolangUtils} builds client Molang conditions that select block-state permutations.
+ * Single states become conjunctions of property checks, and groups become disjunctions with
+ * shared constant properties factored out. An empty input set or a block type without
+ * properties yields the unconditional expression {@code "1"}.
+ *
  * <p>
- * Generates conditions like {@code q.block_state('property') == value} that
- * the client evaluates to determine which permutation to apply.
- * <p>
- * The builder optimizes conditions by:
- * <ul>
- *   <li>Factoring out constant properties that have the same value across all states in a group</li>
- *   <li>Combining variable properties with OR conditions for states that share the same definition</li>
- * </ul>
- * <p>
- * Example outputs:
- * <ul>
- *   <li>Single state: {@code q.block_state('facing') == 'north' && q.block_state('open')}</li>
- *   <li>Multiple states with constant: {@code q.block_state('facing') == 'north' && (!q.block_state('open') || q.block_state('open'))}</li>
- * </ul>
+ * Factoring must retain the association between variable values in each state. For states
+ * with two varying properties, independently joining each property's accepted values would
+ * also accept combinations absent from the supplied set. The optimizer therefore emits a
+ * conjunction per state inside the variable disjunction, then combines that result with the
+ * conditions common to every state. Boolean values become direct or negated queries, and enum
+ * values become lowercase string comparisons.
  *
  * @author daoge_cmd
  */
 public final class MolangUtils {
 
+    /**
+     * {@code MOLANG_VERSION} identifies the expression version advertised with generated block
+     * definitions. Protocol encoding writes this value alongside client-side block permutation
+     * conditions.
+     */
     public static final int MOLANG_VERSION = 1;
 
+    /**
+     * Prevents construction of the stateless block-state Molang condition helper.
+     */
     private MolangUtils() {
     }
 
+    /**
+     * Builds a condition selecting the supplied states for {@code blockType}. An empty set yields
+     * the unconditional expression {@code "1"}; callers supply states from that type so property
+     * values match the definitions used for formatting.
+     */
     public static String buildCondition(Set<BlockState> states, BlockType<?> blockType) {
         if (states.isEmpty()) {
             return "1";
@@ -46,6 +55,11 @@ public final class MolangUtils {
         return buildMultiStateCondition(states, blockType);
     }
 
+    /**
+     * Builds a conjunction of the supplied state's property checks. A block type with no
+     * properties yields {@code "1"}; callers supply a matching state because this operation does
+     * not verify type ownership or escape property names.
+     */
     public static String buildSingleStateCondition(BlockState state, BlockType<?> blockType) {
         var properties = blockType.getProperties();
         if (properties.isEmpty()) {
@@ -62,6 +76,11 @@ public final class MolangUtils {
         return String.join(" && ", conditions);
     }
 
+    /**
+     * Builds a condition for several states, preferring common-property factoring. Property-free
+     * types yield {@code "1"}, and a declined optimization falls back to a parenthesized
+     * disjunction of the complete state conditions.
+     */
     private static String buildMultiStateCondition(Set<BlockState> states, BlockType<?> blockType) {
         var properties = blockType.getProperties();
         if (properties.isEmpty()) {
@@ -78,11 +97,24 @@ public final class MolangUtils {
             return optimized;
         }
 
+        // A declined optimization still needs the original state associations. Keep each
+        // full conjunction grouped before joining them so the fallback selects only those states.
         return stateConditions.stream()
                 .map(c -> "(" + c + ")")
                 .collect(Collectors.joining(" || "));
     }
 
+    /**
+     * Factors properties with one observed value out of the state disjunction. Property values
+     * are collected across the supplied states, and properties with several values remain inside
+     * per-state conjunctions rather than separate per-property alternatives.
+     *
+     * <p>
+     * Keeping those conjunctions preserves the original pairings: accepting {@code A=1,B=2} and
+     * {@code A=2,B=1} must not also accept {@code A=1,B=1}. The common conditions are combined
+     * with that paired disjunction; a property-free type returns {@code null} to decline this
+     * optimization path.
+     */
     private static String tryOptimizeConditions(Set<BlockState> states, BlockType<?> blockType) {
         var properties = new ArrayList<>(blockType.getProperties().values());
         if (properties.isEmpty()) {
@@ -118,6 +150,8 @@ public final class MolangUtils {
             return String.join(" && ", constantConditions);
         }
 
+        // Variable values must remain paired by state. Factoring each variable independently
+        // would accept cross-combinations that never appeared in the supplied permutation group.
         var orParts = new ArrayList<String>();
         for (var state : states) {
             var stateParts = new ArrayList<String>();
@@ -138,6 +172,11 @@ public final class MolangUtils {
         return String.join(" && ", constantConditions);
     }
 
+    /**
+     * Formats one boolean, integer, or enum property value as a Molang check. Values must match
+     * the declared property kind; enum names use {@code Locale.ROOT} lowercase, and property names
+     * are inserted without string escaping.
+     */
     @SuppressWarnings("rawtypes")
     public static String formatPropertyCondition(BlockPropertyType<?> property, Object value) {
         String propertyName = property.getName();

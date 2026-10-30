@@ -9,8 +9,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
+/**
+ * {@code SkinConvertorTest} verifies that skin conversion copies mutable image and
+ * tint payloads in both directions.
+ */
 class SkinConvertorTest {
 
+    /**
+     * Converts skin, cape, animation pixels, and tint lists between API and protocol
+     * representations. Mutating either source or destination must leave copied
+     * payloads unchanged, including nested lists and later independent conversions.
+     */
     @Test
     void conversionsDeepCopyMutableSkinPayloads() {
         byte[] skinPixels = {1, 2};
@@ -74,6 +83,11 @@ class SkinConvertorTest {
         assertNotSame(serialized.getTintColors().getFirst().colors(), second.getTintColors().getFirst().colors());
     }
 
+    /**
+     * Creates a skin fixture retaining the supplied mutable pixel arrays and tint
+     * list. Small image dimensions intentionally avoid validating a real skin,
+     * allowing the tests to isolate conversion ownership and copying behavior.
+     */
     private static Skin createSkin(
             byte[] skinPixels,
             byte[] capePixels,

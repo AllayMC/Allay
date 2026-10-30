@@ -10,7 +10,13 @@ import org.allaymc.api.player.InputMode;
 import org.allaymc.api.player.Player;
 
 /**
- * Called when one of player control modes update.
+ * {@code PlayerControlModeUpdateEvent} reports client control modes after the
+ * input processor updates the player.
+ * {@code oldInputMode} and {@code newInputMode}, {@code oldPlayMode} and
+ * {@code newPlayMode}, and {@code oldInteractionModel} and
+ * {@code newInteractionModel} describe one observed transition. Generated setters
+ * change only this notification's payload; the processor does not apply those
+ * edits back to the player.
  *
  * @author zernix2077
  */
@@ -48,6 +54,9 @@ public class PlayerControlModeUpdateEvent extends ServerPlayerEvent {
      */
     protected InputInteractionModel newInteractionModel;
 
+    /**
+     * Creates a notification containing the before and after control modes.
+     */
     public PlayerControlModeUpdateEvent(
             Player player,
             InputMode oldInputMode,

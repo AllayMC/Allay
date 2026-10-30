@@ -4,45 +4,47 @@ import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemTridentStack;
 
 /**
- * Shared component for thrown trident entities, including stored trident data and loyalty return state.
+ * {@code EntityThrownTridentBaseComponent} exposes the item carried by a
+ * thrown trident and its loyalty return state. Enchantment helpers read the
+ * current item, while return handling uses the preferred inventory slot and
+ * returning flag to guide recovery by the shooter.
  *
  * @author daoge_cmd
  */
 public interface EntityThrownTridentBaseComponent extends EntityBaseComponent {
 
     /**
-     * Gets the trident item associated with this entity.
-     *
-     * @return the trident item stack
+     * Returns the shared carried trident stack, or {@code null} when it has
+     * been cleared. Enchantment helpers read this same object, and mutations
+     * affect later impact or return handling.
      */
     ItemTridentStack getTridentItem();
 
     /**
-     * Sets the trident item associated with this entity.
-     *
-     * @param tridentItem the trident item stack
+     * Retains the supplied trident stack without copying its data. Passing
+     * {@code null} clears the item and makes the enchantment helpers report no
+     * Loyalty, Impaling, or Channeling enchantment.
      */
     void setTridentItem(ItemTridentStack tridentItem);
 
     /**
-     * Gets the favored slot for loyalty return.
-     * This is the slot the trident will prefer to return to.
-     *
-     * @return the favored slot index, or -1 if no loyalty enchantment
+     * Returns the preferred shooter inventory slot for loyalty return. The
+     * value {@code -1} represents no slot preference, independently of whether
+     * the carried item currently has a Loyalty enchantment.
      */
     int getFavoredSlot();
 
     /**
-     * Sets the favored slot for loyalty return.
-     *
-     * @param slot the slot index, or -1 for no preference
+     * Stores the preferred shooter inventory slot for loyalty return. Passing
+     * {@code -1} clears the preference; a nonnegative slot must be valid for
+     * the shooter inventory before return handling accesses it.
      */
     void setFavoredSlot(int slot);
 
     /**
-     * Gets the loyalty enchantment level from the trident item.
-     *
-     * @return the loyalty level (0 if not enchanted)
+     * Returns the carried item Loyalty level, or {@code 0} when no item is
+     * assigned. The helper reads the current item directly, so replacing it
+     * changes subsequent results.
      */
     default int getLoyaltyLevel() {
         var item = getTridentItem();
@@ -50,9 +52,9 @@ public interface EntityThrownTridentBaseComponent extends EntityBaseComponent {
     }
 
     /**
-     * Gets the impaling enchantment level from the trident item.
-     *
-     * @return the impaling level (0 if not enchanted)
+     * Returns the carried item Impaling level, or {@code 0} when no item is
+     * assigned. The helper reads the current item directly, so replacing it
+     * changes subsequent results.
      */
     default int getImpalingLevel() {
         var item = getTridentItem();
@@ -60,9 +62,9 @@ public interface EntityThrownTridentBaseComponent extends EntityBaseComponent {
     }
 
     /**
-     * Checks if the trident has channeling enchantment.
-     *
-     * @return true if has channeling
+     * Returns whether the current carried item has a Channeling enchantment. A
+     * missing item produces {@code false}, allowing impact handling to query
+     * this helper after the item has been cleared.
      */
     default boolean hasChanneling() {
         var item = getTridentItem();
@@ -70,16 +72,14 @@ public interface EntityThrownTridentBaseComponent extends EntityBaseComponent {
     }
 
     /**
-     * Checks if the trident is returning to the shooter.
-     *
-     * @return true if returning
+     * Returns whether the trident is marked as returning to its shooter.
      */
     boolean isReturning();
 
     /**
-     * Sets whether the trident is returning to the shooter.
-     *
-     * @param returning true if returning
+     * Changes the returning flag and publishes the updated trident state.
+     * Return physics uses this flag to select homing motion, while collision
+     * handling suppresses ordinary outbound impacts during return.
      */
     void setReturning(boolean returning);
 }

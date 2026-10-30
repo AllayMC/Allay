@@ -10,9 +10,21 @@ import org.allaymc.server.command.selector.ParseUtils;
 import java.util.function.Predicate;
 
 /**
+ * {@code DY} implements the selector's {@code dy} axis-range argument. Its
+ * predicate includes entities between the adjusted origin and that origin plus
+ * the supplied extent, accepting either extent direction and both endpoints.
+ * The shared scope default supplies zero when another axis enables box
+ * selection.
+ *
  * @author daoge_cmd
  */
 public class DY extends ScopeArgument {
+    /**
+     * Creates an inclusive {@code y}-coordinate predicate from one nonreversed
+     * numeric extent. The origin coordinate is captured when this predicate is
+     * created; a negative extent reverses endpoint order without changing the
+     * inclusive comparison.
+     */
     @Override
     public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3d basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
@@ -23,6 +35,9 @@ public class DY extends ScopeArgument {
         return entity -> ParseUtils.checkBetween(y, y + dy, entity.getLocation().y());
     }
 
+    /**
+     * Returns {@code "dy"} as the registration key for this axis-range handler.
+     */
     @Override
     public String getKeyName() {
         return "dy";

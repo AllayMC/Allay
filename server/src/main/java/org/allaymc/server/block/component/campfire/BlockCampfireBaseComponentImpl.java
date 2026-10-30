@@ -28,22 +28,48 @@ import org.allaymc.server.component.annotation.Dependency;
 import java.util.Set;
 
 /**
+ * {@code BlockCampfireBaseComponentImpl} implements campfire interaction, contact damage, and
+ * comparator output. The extinguished property selects between relighting and lit behavior;
+ * lit campfires accept food or shovel extinguishing, and water above can also extinguish them.
+ *
+ * <p>
+ * Food storage belongs to the injected campfire block entity, while the block component
+ * consumes accepted held items and emits interaction sounds. Comparator strength depends on
+ * occupied cooking slots rather than stack fullness and uses a ceiling across the
+ * fifteen-level signal range. Contact attacks apply only to living entities without fire
+ * resistance and a lit campfire; normal entity damage handling still determines whether an
+ * attack takes effect.
+ *
  * @author daoge_cmd
  */
 public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * {@code blockEntityHolderComponent} supplies the cooking entity for food insertion and
+     * comparator reads. Component initialization injects it before these block callbacks run.
+     */
     @Dependency
     private BlockBlockEntityHolderComponent<BlockEntityCampfire> blockEntityHolderComponent;
 
+    /**
+     * Creates the campfire behavior component for the supplied block type.
+     */
     public BlockCampfireBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Returns two charcoal items for ordinary campfire breaking without silk touch.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        // Campfire drops 2 charcoal when broken
         return Set.of(ItemTypes.CHARCOAL.createItemStack(2));
     }
 
+    /**
+     * Attempts one point of campfire damage against a colliding living entity. An extinguished
+     * campfire or fire-resistance effect suppresses the attack; this hook does not impose its
+     * own repeated-contact cooldown.
+     */
     @Override
     public void onCollideWithEntity(Block block, Entity entity) {
         if (isExtinguished(block.getBlockState())) {
@@ -54,11 +80,16 @@ public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
             if (living.hasEffect(EffectTypes.FIRE_RESISTANCE)) {
                 return;
             }
-            // Campfire deals 1 damage per tick (0.5 hearts)
             living.attack(DamageContainer.campfire(1f));
         }
     }
 
+    /**
+     * Relights an extinguished campfire or handles shovel and food interactions on a lit
+     * campfire. Ignition and shovel use each attempt one point of item damage. Accepted food
+     * is consumed only after the block entity adds it, and each successful action emits its
+     * corresponding sound.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         var pos = interactInfo.clickedBlockPos();
@@ -66,25 +97,20 @@ public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
         var campfire = blockEntityHolderComponent.getBlockEntity(pos.x(), pos.y(), pos.z(), dimension);
 
         if (isExtinguished(blockState)) {
-            // Try to ignite with flint and steel or fire aspect enchantment
             if (canIgnite(itemStack)) {
                 dimension.updateBlockProperty(BlockPropertyTypes.EXTINGUISHED, false, pos);
                 dimension.addSound(MathUtils.center(pos), SimpleSound.IGNITE);
-                // Damage the item
                 itemStack.tryIncreaseDamage(1);
                 return true;
             }
         } else {
-            // Try to extinguish with shovel
             if (itemStack != null && ItemHelper.isShovel(itemStack.getItemType())) {
                 dimension.updateBlockProperty(BlockPropertyTypes.EXTINGUISHED, true, pos);
                 dimension.addSound(MathUtils.center(pos), SimpleSound.FIRE_EXTINGUISH);
-                // Damage the shovel
                 itemStack.tryIncreaseDamage(1);
                 return true;
             }
 
-            // Try to add food item
             if (itemStack != null && campfire.canAcceptItemStack(itemStack)) {
                 if (campfire.tryAddItemStack(itemStack)) {
                     interactInfo.player().tryConsumeItemInHand();
@@ -96,12 +122,16 @@ public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Dispatches the base neighbor hook and extinguishes a lit campfire when water becomes its
+     * upper neighbor. The local check recognizes stationary and flowing water and emits an
+     * extinguishing sound after updating the property.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
         var blockState = block.getBlockState();
 
-        // Check if water is placed above
         if (!isExtinguished(blockState) && face == BlockFace.UP) {
             var neighborState = neighbor.getBlockState();
             if (neighborState.getBlockType() == BlockTypes.WATER || neighborState.getBlockType() == BlockTypes.FLOWING_WATER) {
@@ -113,34 +143,52 @@ public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns the state's extinguished property used by campfire behavior checks.
+     */
     protected boolean isExtinguished(BlockState blockState) {
         return blockState.getPropertyValue(BlockPropertyTypes.EXTINGUISHED);
     }
 
+    /**
+     * Returns whether an item can relight an extinguished campfire. Flint and steel qualifies
+     * directly, as does any item carrying Fire Aspect; a {@code null} item cannot ignite it.
+     */
     protected boolean canIgnite(ItemStack itemStack) {
         if (itemStack == null) {
             return false;
         }
-        // Check for flint and steel
         if (itemStack.getItemType() == ItemTypes.FLINT_AND_STEEL) {
             return true;
         }
-        // Check for fire aspect enchantment
         return itemStack.hasEnchantment(EnchantmentTypes.FIRE_ASPECT);
     }
 
+    /**
+     * Returns whether campfires supply comparator strength from their cooking slots.
+     */
     @Override
     public boolean hasComparatorInputOverride() {
         return true;
     }
 
+    /**
+     * Returns comparator strength derived from the campfire's occupied cooking slots. A
+     * missing block entity produces {@code 0}, and an empty four-slot entity also produces
+     * {@code 0}.
+     *
+     * <p>
+     * Each slot counts when its item is neither {@code null} nor the canonical air stack;
+     * stack counts do not affect this calculation. Nonempty occupancy maps to the ceiling of
+     * its fraction of four slots times fifteen, giving strengths four, eight, twelve, and
+     * fifteen for one through four occupied slots.
+     */
     @Override
     public int getComparatorInputOverride(Block block) {
         var campfire = blockEntityHolderComponent.getBlockEntity(block.getPosition());
         if (campfire == null) {
             return 0;
         }
-        // Campfire has 4 slots, calculate signal based on filled slots
         int filledSlots = 0;
         for (int i = 0; i < 4; i++) {
             ItemStack item = campfire.getItemStack(i);
@@ -148,8 +196,8 @@ public class BlockCampfireBaseComponentImpl extends BlockBaseComponentImpl {
                 filledSlots++;
             }
         }
-        // Signal = ceil(filledSlots / 4 * 15)
-        // 0 items = 0, 1 item = 4, 2 items = 8, 3 items = 11, 4 items = 15
+        // Round partial occupancy upward so each additional occupied cooking slot
+        // raises comparator output; three occupied slots therefore produce twelve, not eleven.
         if (filledSlots == 0) {
             return 0;
         }

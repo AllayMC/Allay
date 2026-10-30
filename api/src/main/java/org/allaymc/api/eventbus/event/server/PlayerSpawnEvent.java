@@ -9,7 +9,11 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
- * Called when a player is about to be spawned in the dimension during the login sequence.
+ * {@code PlayerSpawnEvent} represents a request to spawn a login session's
+ * newly prepared player entity.
+ * The entity already has its controller and initial location, allowing listeners
+ * to adjust that location before dimension admission. Cancellation disconnects
+ * the player before the spawned state and start-game data are sent.
  *
  * @author daoge_cmd
  */
@@ -17,12 +21,16 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.NETWORK)
 public class PlayerSpawnEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
-     * The reason that will be shown to the player if the event is cancelled.
+     * {@code disconnectReason} supplies the text shown to the player when this
+     * event is cancelled. Listeners may replace it before dispatch returns.
      */
     @MayContainTrKey
     @Setter
     protected String disconnectReason;
 
+    /**
+     * Creates a spawn request with an initial disconnect reason.
+     */
     public PlayerSpawnEvent(Player player, String disconnectReason) {
         super(player);
         this.disconnectReason = disconnectReason;

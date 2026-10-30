@@ -3,9 +3,9 @@ package org.allaymc.api.annotation;
 import java.lang.annotation.*;
 
 /**
- * CallerThread annotation is used to indicate in which threaded environment non-thread-safe classes
- * and methods should be used. It is also used to indicate in what thread environment a method or
- * event will be called.
+ * {@code CallerThread} documents the execution contexts expected by a type or
+ * method. A declaration can identify where non-thread-safe code must be used or
+ * which server thread normally invokes a method or event.
  * <p>
  * This annotation is repeatable, meaning multiple {@code @CallerThread} annotations can be applied
  * to the same element to indicate that it can be called from multiple thread types.
@@ -22,19 +22,23 @@ import java.lang.annotation.*;
 @Repeatable(CallerThread.Container.class)
 public @interface CallerThread {
     /**
-     * Returns the thread type.
+     * Returns the execution context documented for the annotated declaration.
      *
      * @return the {@link ThreadType}
      */
     ThreadType value();
 
     /**
-     * Container annotation for repeatable {@link CallerThread} annotations.
+     * {@code Container} groups repeated thread-context annotations attached to
+     * one type or method.
      */
     @Documented
     @Target({ElementType.TYPE, ElementType.METHOD})
     @Retention(RetentionPolicy.CLASS)
     @interface Container {
+        /**
+         * Returns the thread-context annotations grouped on this annotated declaration.
+         */
         CallerThread[] value();
     }
 }

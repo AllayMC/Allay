@@ -1,15 +1,17 @@
 package org.allaymc.api.utils.identifier;
 
 /**
- * Identified represents an object that has an {@link Identifier}.
+ * {@code Identified} exposes the resource identifier associated with an
+ * implementing object. This common contract lets registry and domain code
+ * obtain the identifier without depending on a concrete type; the
+ * implementation supplies the namespace and path represented by that
+ * identifier.
  *
  * @author daoge_cmd
  */
 public interface Identified {
     /**
-     * Gets the identifier of this object.
-     *
-     * @return the identifier
+     * Returns the resource identifier associated with this implementing object.
      */
     Identifier getIdentifier();
 }

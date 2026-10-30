@@ -28,53 +28,47 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * DirectedAcyclicGraph is an implementation of a <a href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>
- * that conforms to {@link Set}.
- *
- * @param <B> Node type
+ * {@code DirectedAcyclicGraph} models set members with directed precedence relationships
+ * and topological ordering. Members must be added before relationships are established.
+ * Immediate predecessor queries and transitive reachability queries answer different
+ * questions, while sorted output places every predecessor before the members that depend
+ * on it.
+ * @param <B> graph member type
  */
 public interface DirectedAcyclicGraph<B> extends Set<B> {
 
     /**
-     * set the parent node of the "after" node as the "before" node.
-     * <p>
-     * Note that before set, you need to call the {@link Set#add(Object)} method to add nodes.
-     * <p>
-     * If the node specified in the parameter is not in the graph, it will throw an {@link IllegalArgumentException}
-     *
-     * @param before the before node
-     * @param after  the after node
-     *
-     * @throws DAGCycleException if a cycle occurs, this exception will be thrown
+     * Adds a precedence edge from {@code before} to {@code after}. Both endpoints must
+     * already belong to the graph; an edge that closes a cycle throws
+     * {@code DAGCycleException} instead of establishing that relationship.
      */
     void setBefore(B before, B after) throws DAGCycleException;
 
     /**
-     * If the node specified in the parameter is not in the graph, it will throw an {@link IllegalArgumentException}
-     *
-     * @param member a node
-     *
-     * @return all parent nodes of this node. Note that if this node is not in the graph, an {@link NullPointerException} will be thrown
+     * Returns the immediate predecessors recorded for {@code member}. The member must
+     * already belong to the graph; this result does not include every transitively
+     * reachable predecessor unless that predecessor also has a direct edge.
      */
     Set<B> getBefore(B member);
 
     /**
-     * If the node specified in the parameter is not in the graph, it will throw an {@link IllegalArgumentException}
-     *
-     * @param before the before node
-     * @param after  the after node
-     *
-     * @return Whether the "before" node is a parent node of the "after" node
+     * Returns whether {@code after} is reachable from {@code before} through one or more
+     * precedence edges. Both endpoints must already belong to the graph; a member does not
+     * precede itself in an acyclic graph.
      */
     boolean isBefore(B before, B after);
 
     /**
-     * @return The result of topological sorting of this directed acyclic graph (DAG)
+     * Returns a new list of graph members in topological order. Independent members can
+     * appear in any order, while every established precedence edge places its before
+     * endpoint earlier than its after endpoint.
      */
     List<B> getSortedList();
 
     /**
-     * If the node specified in the parameter is null, it will throw an {@link NullPointerException}
+     * Adds a non-null member without establishing any precedence edges. An already present
+     * member returns {@code false}, while {@code null} is rejected with
+     * {@code NullPointerException} instead of joining the graph.
      */
     boolean add(B member);
 }

@@ -10,7 +10,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a campfire finishes cooking an item.
+ * {@code CampfireSmeltEvent} represents a cooked campfire item before it is dropped into
+ * the world. Listeners may replace the output or cancel completion; cancellation leaves
+ * the ingredient in its campfire slot for a later cooking tick.
  *
  * @author daoge_cmd
  */
@@ -19,15 +21,17 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.DIMENSION)
 public class CampfireSmeltEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The campfire performing the smelt.
+     * Campfire completing the cooking slot.
      */
     protected BlockEntityCampfire campfire;
     /**
-     * The ingredient item stack being smelted.
+     * {@code ingredient} references the campfire's stored input stack. The slot retains
+     * this stack when listeners cancel the proposed cooked-item drop.
      */
     protected ItemStack ingredient;
     /**
-     * The output item stack.
+     * {@code output} is the stack passed to cooked-item dropping after dispatch.
+     * Listeners may replace this reference before the campfire clears its input slot.
      */
     @Setter
     protected ItemStack output;

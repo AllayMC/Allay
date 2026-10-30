@@ -9,7 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a furnace consumes fuel to continue smelting.
+ * {@code FurnaceConsumeFuelEvent} represents a furnace fuel refill before an item is
+ * consumed. Cancellation prevents that refill; successful dispatch lets the furnace
+ * consume or replace the stored fuel and initialize the burn duration from its item
+ * metadata.
  *
  * @author daoge_cmd
  */
@@ -18,11 +21,13 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.DIMENSION)
 public class FurnaceConsumeFuelEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The furnace consuming the fuel.
+     * Furnace requesting additional burn time.
      */
     protected BlockEntityFurnace furnace;
     /**
-     * The fuel item stack being consumed.
+     * {@code fuel} references the stored stack selected for consumption. The furnace
+     * continues reading that shared stack after successful dispatch to consume fuel and
+     * select burn duration.
      */
     protected ItemStack fuel;
 }

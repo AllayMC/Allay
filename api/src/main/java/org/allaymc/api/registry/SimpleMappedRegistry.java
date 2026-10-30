@@ -32,46 +32,55 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * A variant of {@link AbstractMappedRegistry} with {@link Map} as the defined type. Unlike
- * {@link MappedRegistry}, this registry does not support specifying your own Map class,
- * and only permits operations the {@link Map} interface does, unless you manually cast.
- *
- * @param <K> the key
- * @param <V> the value
+ * {@code SimpleMappedRegistry} exposes key-based registration through the
+ * general {@link Map} interface. The loader's map is initially shared without
+ * copying; freezing replaces it with an unmodifiable shallow snapshot that
+ * retains the current iteration order. Stored keys and values remain shared
+ * objects after freezing.
  */
 public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map<K, V>> {
+    /**
+     * Loads the backing map immediately from the supplied input. The map is
+     * retained directly until replacement or freezing, so mutations through
+     * loader-held references initially affect registry lookups.
+     */
     protected <I> SimpleMappedRegistry(I input, RegistryLoader<I, Map<K, V>> registryLoader) {
         super(input, registryLoader);
     }
 
     /**
-     * Freezes this registry using an insertion-ordered, unmodifiable snapshot of its mappings.
+     * Replaces current mappings with an unmodifiable shallow snapshot and
+     * freezes registry mutations. Repeated calls retain the existing snapshot;
+     * old map references become detached, but key and value objects remain
+     * shared. Callers must coordinate external map writers while copying
+     * occurs.
      */
     @Override
     public synchronized void freeze() {
         if (frozen) {
             return;
         }
+        // Finish copying before publishing content and freeze state, so a failed
+        // copy leaves the previous mappings and mutation policy in place.
         content = Collections.unmodifiableMap(new LinkedHashMap<>(content));
         super.freeze();
     }
 
     /**
-     * Creates a new mapped registry with the given {@link RegistryLoader}. The
-     * input type is not specified here, meaning the loader return type is either
-     * predefined, or the registry is populated at a later point.
-     *
-     * @param registryLoader the registry loader
-     * @param <I>            the input
-     * @param <K>            the map key
-     * @param <V>            the map value
-     *
-     * @return a new registry with the given RegistryLoader
+     * Creates a registry by invoking the supplied loader with {@code null}
+     * input. The loader must support that convention and return the map to
+     * retain; loading occurs before this factory returns.
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(RegistryLoader<I, Map<K, V>> registryLoader) {
         return new SimpleMappedRegistry<>(null, registryLoader);
     }
 
+    /**
+     * Loads a registry with {@code null} input, passes it to {@code setter},
+     * then invokes {@code afterSet}. A {@code setter} failure skips
+     * {@code afterSet}; an {@code afterSet} failure does not undo publication
+     * by {@code setter}.
+     */
     public static <I, K, V> void create(RegistryLoader<I, Map<K, V>> registryLoader, Consumer<SimpleMappedRegistry<K, V>> setter, Runnable afterSet) {
         var registry = new SimpleMappedRegistry<>(null, registryLoader);
         setter.accept(registry);
@@ -79,45 +88,27 @@ public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map
     }
 
     /**
-     * Creates a new mapped registry with the given {@link RegistryLoader} and input.
-     *
-     * @param input          the input
-     * @param registryLoader the registry loader
-     * @param <I>            the input
-     * @param <K>            the map key
-     * @param <V>            the map value
-     *
-     * @return a new registry with the given RegistryLoader
+     * Creates a registry by loading its map from the supplied input. Loading
+     * occurs immediately, and the returned map is retained directly without
+     * copying until content replacement or freezing.
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(I input, RegistryLoader<I, Map<K, V>> registryLoader) {
         return new SimpleMappedRegistry<>(input, registryLoader);
     }
 
     /**
-     * Creates a new mapped registry with the given {@link RegistryLoader} supplier.
-     * The input type is not specified here, meaning the loader return type is either
-     * predefined, or the registry is populated at a later point.
-     *
-     * @param registryLoader the registry loader supplier
-     * @param <I>            the input
-     * @param <K>            the map key
-     * @param <V>            the map value
-     *
-     * @return a new registry with the given RegistryLoader supplier
+     * Creates a registry using a loader obtained from the supplier once. The
+     * loader receives {@code null} input immediately, so both supplier
+     * invocation and loading finish before the registry is returned.
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(Supplier<RegistryLoader<I, Map<K, V>>> registryLoader) {
         return new SimpleMappedRegistry<>(null, registryLoader.get());
     }
 
     /**
-     * Creates a new mapped registry with the given {@link RegistryLoader} and input.
-     *
-     * @param registryLoader the registry loader
-     * @param <I>            the input
-     * @param <K>            the map key
-     * @param <V>            the map value
-     *
-     * @return a new registry with the given RegistryLoader supplier
+     * Creates a registry using {@code input} and a loader obtained once from
+     * {@code registryLoader}. The loader runs immediately, and its map is
+     * retained directly; later lookups do not invoke either callback again.
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(I input, Supplier<RegistryLoader<I, Map<K, V>>> registryLoader) {
         return new SimpleMappedRegistry<>(input, registryLoader.get());

@@ -4,6 +4,8 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.server.item.creative.AllayCreativeItemRegistry;
 import org.allaymc.server.network.protocol.v1001.Protocol_v1001;
 import org.allaymc.server.network.protocol.v2168.Protocol_v2168;
+import org.allaymc.server.network.protocol.v2169.Protocol_v2169;
+import org.allaymc.server.network.protocol.v2193.Protocol_v2193;
 import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
 import org.allaymc.server.network.protocol.v818.Protocol_v818;
 import org.allaymc.server.network.protocol.v819.Protocol_v819;
@@ -23,23 +25,47 @@ import org.allaymc.server.registry.InternalRegistries;
 import java.util.*;
 
 /**
- * Stores exact protocol matches keyed by client variant and protocol version.
+ * {@code ProtocolRegistry} stores supported protocols by the exact combination
+ * of client distribution and wire version. Startup registration accepts
+ * initialized protocols, while all lookups require a frozen registry. No
+ * nearest-version search or fallback crosses a missing key, even when related
+ * protocol classes share implementation through inheritance.
  *
- * <p>Registrations are mutable during startup. {@link #freeze()} publishes an immutable
- * snapshot that must exist before any lookup is performed.</p>
+ * <p> Freezing builds both the exact lookup map and sorted per-variant lists
+ * before publishing one volatile snapshot. Readers therefore obtain indexes
+ * derived from the same registration set after publication. Synchronized
+ * mutation prevents registration from racing with snapshot construction, and
+ * publication discards the mutable map. A separate volatile reference exposes
+ * the process-wide default only after an already frozen registry has been
+ * installed.
  */
 public final class ProtocolRegistry {
+    /**
+     * {@code defaultRegistry} holds the process-wide frozen registry after
+     * synchronized installation. Volatile publication exposes the installed
+     * reference to readers without requiring the installation monitor.
+     */
     private static volatile ProtocolRegistry defaultRegistry;
 
+    /**
+     * {@code mutableProtocols} contains startup registrations before freezing.
+     * Synchronized {@code register} and {@code freeze} operations own this map;
+     * {@code freeze} replaces it with {@code null} after constructing both
+     * lookup indexes.
+     */
     private Map<Key, Protocol> mutableProtocols = new HashMap<>();
+    /**
+     * {@code frozenSnapshot} publishes both lookup indexes together. A
+     * {@code null} value makes lookups unavailable; a nonnull volatile value
+     * prevents further startup registration through {@code ensureMutable}.
+     */
     private volatile Snapshot frozenSnapshot;
 
     /**
-     * Registers an initialized protocol under its variant and protocol version.
-     *
-     * @param protocol the protocol to register
-     * @throws IllegalArgumentException if the protocol is uninitialized or duplicates an existing key
-     * @throws IllegalStateException if this registry is frozen
+     * Registers a nonnull initialized protocol under its exact variant and
+     * version. Frozen registries reject mutation, and duplicate keys throw
+     * without replacing the earlier protocol; callers must invoke
+     * {@code initialize} each protocol before registration.
      */
     public synchronized void register(Protocol protocol) {
         Objects.requireNonNull(protocol, "protocol");
@@ -55,9 +81,16 @@ public final class ProtocolRegistry {
     }
 
     /**
-     * Publishes an immutable snapshot and prevents further registration.
+     * Publishes lookup indexes for the current nonempty registration set and
+     * rejects subsequent mutation. Empty or already frozen registries throw
+     * {@code IllegalStateException} instead of producing another snapshot.
      *
-     * @throws IllegalStateException if the registry is empty or already frozen
+     * <p> Exact matches and per-variant lists are derived from the same copied
+     * map, with each list sorted by increasing wire version. The synchronized
+     * method constructs all indexes before discarding mutable storage and
+     * writing the volatile snapshot reference. Readers that observe that
+     * reference can therefore use either index without seeing partially
+     * constructed registration data.
      */
     public synchronized void freeze() {
         ensureMutable();
@@ -76,17 +109,16 @@ public final class ProtocolRegistry {
         }
 
         var snapshot = new Snapshot(protocols, Map.copyOf(protocolsByVariant));
+        // Publish only after both indexes are complete; the volatile write
+        // makes the whole snapshot visible to lookup readers.
         mutableProtocols = null;
         frozenSnapshot = snapshot;
     }
 
     /**
-     * Resolves an exact protocol match.
-     *
-     * @param variant the client variant
-     * @param protocolVersion the numeric protocol version
-     * @return the matching protocol, or {@code null} when the exact combination is unsupported
-     * @throws IllegalStateException if this registry has not been frozen
+     * Resolves a nonnull client variant and wire version by exact key. The
+     * registry must be frozen; unsupported combinations return {@code null}
+     * rather than selecting a nearby version or another client distribution.
      */
     public Protocol resolve(ClientVariant variant, int protocolVersion) {
         var snapshot = getFrozenSnapshot();
@@ -94,11 +126,9 @@ public final class ProtocolRegistry {
     }
 
     /**
-     * Returns the oldest supported protocol for a client variant.
-     *
-     * @param variant the client variant
-     * @return the oldest protocol, or {@code null} when the variant has no registered protocols
-     * @throws IllegalStateException if this registry has not been frozen
+     * Returns the lowest registered wire version for a nonnull client variant.
+     * The registry must be frozen; a variant without registrations returns
+     * {@code null}, regardless of versions registered for other distributions.
      */
     public Protocol getLowest(ClientVariant variant) {
         var supported = getSupported(variant);
@@ -106,11 +136,9 @@ public final class ProtocolRegistry {
     }
 
     /**
-     * Returns the newest supported protocol for a client variant.
-     *
-     * @param variant the client variant
-     * @return the newest protocol, or {@code null} when the variant has no registered protocols
-     * @throws IllegalStateException if this registry has not been frozen
+     * Returns the highest registered wire version for a nonnull client variant.
+     * The registry must be frozen; a variant without registrations returns
+     * {@code null} instead of borrowing another distribution's newest protocol.
      */
     public Protocol getLatest(ClientVariant variant) {
         var supported = getSupported(variant);
@@ -118,11 +146,10 @@ public final class ProtocolRegistry {
     }
 
     /**
-     * Returns all supported protocols for a client variant in ascending version order.
-     *
-     * @param variant the client variant
-     * @return an immutable list, which may be empty
-     * @throws IllegalStateException if this registry has not been frozen
+     * Returns the unmodifiable ascending-version list for a nonnull client
+     * variant. The registry must be frozen, and the list is empty when that
+     * distribution has no registrations; protocol instances retain their
+     * identities.
      */
     public List<Protocol> getSupported(ClientVariant variant) {
         var snapshot = getFrozenSnapshot();
@@ -130,30 +157,32 @@ public final class ProtocolRegistry {
     }
 
     /**
-     * Returns every registered protocol without a defined iteration order.
-     *
-     * @return an immutable collection of protocols
-     * @throws IllegalStateException if this registry has not been frozen
+     * Returns an unmodifiable list of every protocol in the frozen registry.
+     * Iteration order is unspecified, and the list retains the registered
+     * protocol objects rather than creating copies of their runtime data.
      */
     public Collection<Protocol> getProtocols() {
         return List.copyOf(getFrozenSnapshot().protocols().values());
     }
 
     /**
-     * Checks whether the immutable lookup snapshot has been published.
-     *
-     * @return {@code true} when lookups are available and mutations are rejected
+     * Returns whether the complete immutable lookup snapshot has been
+     * published.
      */
     public boolean isFrozen() {
         return frozenSnapshot != null;
     }
 
     /**
-     * Initializes the built-in protocols from frozen source registries.
-     *
-     * @return a frozen registry containing every built-in protocol
+     * Creates and freezes a registry containing the explicitly supported
+     * built-in protocol variants. Source registries are frozen first, then each
+     * protocol is initialized; failures propagate without installing a
+     * process-wide default or undoing source freezes.
      */
     public static ProtocolRegistry createDefault() {
+        // Freeze shared inputs before building any version so later
+        // registrations cannot give different protocols inconsistent startup
+        // content.
         freezeSourceRegistries();
 
         var registry = new ProtocolRegistry();
@@ -174,6 +203,8 @@ public final class ProtocolRegistry {
         supported.add(new Protocol_v975());
         supported.add(new Protocol_v1001());
         supported.add(new Protocol_v2168());
+        supported.add(new Protocol_v2169());
+        supported.add(new Protocol_v2193());
 
         for (var protocol : supported) {
             protocol.initialize();
@@ -183,6 +214,12 @@ public final class ProtocolRegistry {
         return registry;
     }
 
+    /**
+     * Freezes the server registries consumed by built-in protocol
+     * initialization. This changes the shared registries in sequence and has no
+     * rollback, so callers must finish content registration before creating the
+     * default protocol set.
+     */
     private static void freezeSourceRegistries() {
         Registries.ITEMS.freeze();
         Registries.BLOCKS.freeze();
@@ -198,11 +235,16 @@ public final class ProtocolRegistry {
     }
 
     /**
-     * Installs the process-wide default registry once.
+     * Installs a nonnull, already frozen registry as the process-wide default.
+     * A mutable registry is rejected before installation, and any later
+     * installation attempt throws instead of replacing the existing default.
      *
-     * @param registry the frozen registry to install
-     * @throws IllegalArgumentException if the registry is mutable
-     * @throws IllegalStateException if a default registry is already installed
+     * <p> The class monitor keeps validation of the empty default and
+     * assignment in one synchronized operation. The volatile reference then
+     * exposes the selected frozen registry to readers without requiring them to
+     * acquire that monitor. Failed validation leaves the existing reference
+     * unchanged, and this method never constructs or freezes a registry on the
+     * caller's behalf.
      */
     public static synchronized void installDefault(ProtocolRegistry registry) {
         Objects.requireNonNull(registry, "registry");
@@ -212,14 +254,16 @@ public final class ProtocolRegistry {
         if (defaultRegistry != null) {
             throw new IllegalStateException("Default protocol registry is already installed");
         }
+        // Publish only the validated frozen registry after the synchronized
+        // duplicate check, preserving a single process-wide negotiation source.
         defaultRegistry = registry;
     }
 
     /**
-     * Returns the process-wide default registry.
-     *
-     * @return the installed default registry
-     * @throws IllegalStateException if no default registry has been installed
+     * Returns the process-wide frozen registry installed for protocol
+     * negotiation. An absent default throws {@code IllegalStateException};
+     * calling this method does not construct protocols or invoke
+     * {@code initialize} missing server registry content.
      */
     public static ProtocolRegistry getDefault() {
         var registry = defaultRegistry;
@@ -230,20 +274,29 @@ public final class ProtocolRegistry {
     }
 
     /**
-     * Checks whether the process-wide default registry is installed.
-     *
-     * @return {@code true} when {@link #getDefault()} is available
+     * Returns whether a process-wide default protocol registry has been
+     * installed.
      */
     public static boolean hasDefault() {
         return defaultRegistry != null;
     }
 
+    /**
+     * Rejects mutation after the frozen lookup snapshot has been published.
+     * Callers performing a mutation must hold this registry's monitor so the
+     * check remains coordinated with registration and snapshot publication.
+     */
     private void ensureMutable() {
         if (frozenSnapshot != null) {
             throw new IllegalStateException("Protocol registry is frozen");
         }
     }
 
+    /**
+     * Returns the currently published lookup snapshot or throws when freezing
+     * has not completed. The single volatile read keeps the returned pair of
+     * indexes tied to the same publication.
+     */
     private Snapshot getFrozenSnapshot() {
         var snapshot = frozenSnapshot;
         if (snapshot == null) {
@@ -252,9 +305,30 @@ public final class ProtocolRegistry {
         return snapshot;
     }
 
+    /**
+     * {@code Key} identifies one exact client distribution and wire-version
+     * registration. {@code variant} and {@code protocolVersion} form the
+     * composite lookup key, so equal wire versions from different distributions
+     * remain distinct registrations.
+     *
+     * @param variant client distribution identity
+     *
+     * @param protocolVersion numeric wire protocol version
+     */
     private record Key(ClientVariant variant, int protocolVersion) {
     }
 
+    /**
+     * {@code Snapshot} represents the two lookup indexes published together for
+     * registry readers. {@code protocols} and {@code protocolsByVariant} come
+     * from the same frozen registration set; {@code freeze} constructs both
+     * unmodifiable indexes before publishing this record through
+     * {@code frozenSnapshot}.
+     *
+     * @param protocols exact registration lookup
+     *
+     * @param protocolsByVariant ascending-version lists by distribution
+     */
     private record Snapshot(
             Map<Key, Protocol> protocols,
             Map<ClientVariant, List<Protocol>> protocolsByVariant

@@ -20,13 +20,34 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * {@code BlockWallBaseComponentImpl} derives wall arm connections, arm heights, and
+ * the center post from neighboring block states. Each horizontal face first decides
+ * whether its neighbor can connect, then combines that connection with the shape
+ * above to select a short or tall arm. The post decision uses those completed arms
+ * rather than the original wall properties.
+ *
+ * <p>
+ * Special neighboring behaviors handle gates, walls, bars, and panes before generic
+ * full-face support. Above-block geometry can force tall arms, and selected
+ * above-block types can force a post. Without that override, the post is omitted only
+ * for two opposite arms of equal height. Placement and neighbor updates share the
+ * same calculation so the resulting shape follows one set of connection rules.
+ *
  * @author IWareQ
  */
 public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates wall base behavior for the supplied block type.
+     */
     public BlockWallBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Forwards the neighbor event and recalculates wall connections and the center
+     * post. The dimension receives a replacement only when those calculated
+     * properties differ from the current block snapshot.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -37,6 +58,11 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Calculates wall connections and the center post before inherited placement
+     * processing. {@code placementInfo} may be {@code null}, and the final result is
+     * the inherited dimension write outcome.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         var block = new Block(blockState, new Position3i(placeBlockPos, dimension));
@@ -44,6 +70,18 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
+    /**
+     * Returns a wall state whose horizontal arms and post reflect neighboring blocks.
+     * Each face first becomes connected or empty, and connected faces use the above
+     * block to select their height.
+     *
+     * <p>
+     * The post calculation receives this evolving state after all four connection
+     * properties have been processed. That ordering matters because equal opposite
+     * arms can suppress a post, while corners, unequal heights, and selected
+     * above-block states keep it. The input snapshot is replaced as properties change
+     * rather than being written to the dimension here.
+     */
     private BlockState updateConnectionsAndPost(Block current) {
         var aboveBlock = current.offsetPos(BlockFace.UP);
 
@@ -58,6 +96,19 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         return current.setPropertyValue(BlockPropertyTypes.WALL_POST_BIT, shouldHavePost(current.getBlockState(), aboveBlock.getBlockState())).getBlockState();
     }
 
+    /**
+     * Returns the wall snapshot with one connected arm set short or tall. An above
+     * wall supplies its corresponding connection property directly, while other above
+     * blocks contribute their lower-face geometry.
+     *
+     * <p>
+     * Collision solids are preferred, with general shape solids used when collision
+     * geometry is empty. A solid must begin at the lower boundary and overlap both
+     * the central strip and a selected edge to make the arm tall. The edge tests use
+     * the side opposite each {@code BlockFace} offset: {@code NORTH} uses high Z,
+     * {@code SOUTH} uses low Z, {@code WEST} uses high X, and {@code EAST} uses low
+     * X. Otherwise the connected arm remains short.
+     */
     private Block connect(Block current, BlockState above, BlockFace face) {
         var property = getWallConnectionProperty(face);
 
@@ -67,6 +118,9 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         } else {
             var shape = above.getBlockStateData().collisionShape();
             if (shape.getSolids().isEmpty()) {
+                // An empty collision shape supplies no arm-height geometry. Use the
+                // general shape so noncolliding solids can still determine whether
+                // the connected wall arm becomes tall.
                 shape = above.getBlockStateData().shape();
             }
 
@@ -74,8 +128,9 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
                 if (solid.minY() != 0) {
                     return false;
                 }
-
-                // From Dragonfly
+                // Combine the central half-width strip with the per-face edge test.
+                // The edge mapping below uses the side opposite each BlockFace
+                // offset rather than the side named by that offset.
                 var xOverlap = solid.minX() < 0.75 && solid.maxX() > 0.25;
                 var zOverlap = solid.minZ() < 0.75 && solid.maxZ() > 0.25;
 
@@ -92,6 +147,11 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         return current.setPropertyValue(property, shouldBeTall ? WallConnectionType.TALL : WallConnectionType.SHORT);
     }
 
+    /**
+     * Returns whether the neighboring block accepts a wall connection on this face.
+     * Gates require a perpendicular axis; walls, iron bars, glass panes, or a full
+     * opposing collision face also qualify.
+     */
     private boolean canConnect(Block current, BlockFace face) {
         var neighbor = current.offsetPos(face);
         if (neighbor.getBehavior() instanceof BlockFenceGateBehavior) {
@@ -107,7 +167,16 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * @see <a href="https://joakimthorsen.github.io/MCPropertyEncyclopedia/?selection=variants,tag_wall_post_override&filter=(tag_wall_post_override:No)#">Minecraft Block Property Encyclopedia</a>
+     * Returns whether above-block support rules or the completed arm pattern require
+     * a center post. Selected banners, tripwire, signs, upright torches, and
+     * above-wall posts can force the result.
+     *
+     * <p>
+     * Without an above-block override, exactly two connections are required before
+     * omission is possible. Those two arms must point in opposite directions and have
+     * matching heights; corners and unequal arms keep the post. The method reads the
+     * calculated wall state, so callers must compute its arm properties before asking
+     * for this result.
      */
     private boolean shouldHavePost(BlockState current, BlockState above) {
         var aboveType = above.getBlockType();
@@ -129,6 +198,9 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
+        // Above-block overrides have already forced required posts. Only the
+        // completed connection pattern can suppress the remaining post for equal,
+        // opposite arms.
         var connections = getWallConnections(current);
         if (connections.size() != 2) {
             return true;
@@ -140,6 +212,11 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         return a.getValue() != b.getValue() || a.getKey().opposite() != b.getKey();
     }
 
+    /**
+     * Returns a new mutable map containing only nonempty horizontal wall connections.
+     * Changes to this map do not alter the block state, and faces with
+     * {@code WallConnectionType.NONE} are omitted.
+     */
     public Map<BlockFace, WallConnectionType> getWallConnections(BlockState blockState) {
         Map<BlockFace, WallConnectionType> connections = new EnumMap<>(BlockFace.class);
         for (var blockFace : BlockFace.getHorizontalBlockFaces()) {
@@ -152,6 +229,11 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         return connections;
     }
 
+    /**
+     * Returns the directional wall property for a horizontal block face. Vertical
+     * faces and other unsupported directions throw {@code IllegalArgumentException},
+     * so callers must choose one of the four horizontal faces.
+     */
     private EnumPropertyType<WallConnectionType> getWallConnectionProperty(BlockFace face) {
         return switch (face) {
             case NORTH -> BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH;

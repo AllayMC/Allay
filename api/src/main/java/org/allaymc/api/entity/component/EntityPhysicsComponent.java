@@ -9,384 +9,376 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 /**
- * Component for entities that participate in physics simulation, including motion, gravity, and knockback.
+ * {@code EntityPhysicsComponent} exposes motion simulation, collision
+ * response, gravity, landing, and knockback for an entity. The physics engine
+ * can compute movement for multiple entities in parallel, then invokes
+ * post-movement callbacks sequentially so implementations can defer operations
+ * that change shared world state.
  *
  * @author daoge_cmd
  */
 public interface EntityPhysicsComponent extends EntityComponent {
 
     /**
-     * Represents the default knockback value.
+     * {@code DEFAULT_KNOCKBACK} supplies the horizontal and vertical strength
+     * used by the simplest knockback overload before resistance and
+     * existing-motion adjustments are applied.
      */
     double DEFAULT_KNOCKBACK = 0.4;
 
     /**
-     * Represents the liquid state of an entity, tracking which liquid types it is submerged in.
+     * {@code LiquidState} records water and lava contact independently for a
+     * physics update. Both flags may be set when the collision sample includes
+     * both liquids, and {@code inLiquid} accepts either flag.
      *
-     * @param inWater whether the entity is in water
-     * @param inLava  whether the entity is in lava
+     * @param inWater whether water contact was detected
+     * @param inLava whether lava contact was detected
      */
     record LiquidState(boolean inWater, boolean inLava) {
+        /**
+         * {@code NONE} represents an update with neither water nor lava
+         * contact, allowing physics callers to reuse a single immutable empty
+         * liquid state.
+         */
         public static final LiquidState NONE = new LiquidState(false, false);
 
+        /**
+         * Returns whether this update records contact with water or lava.
+         */
         public boolean inLiquid() {
             return inWater || inLava;
         }
     }
 
     /**
-     * Apply the entity's motion. Similar to {@link #updateMotion(LiquidState)}, this method
-     * is used by physics engine, and allow entity to customize how its motion being applied.
-     * <p>
-     * This method is also required to be safe called in multithread environment.
-     *
-     * @return {@code true} if the entity's position is updated, {@code false} otherwise.
+     * Applies the entity's current velocity through its movement and collision
+     * rules. The physics engine may call this operation concurrently for
+     * different entities; implementations must defer shared-world callbacks to
+     * the sequential {@code afterApplyMotion} phase and report whether
+     * location changed.
      */
     @ApiStatus.OverrideOnly
     boolean applyMotion();
 
     /**
-     * Called after applyMotion() completes for all entities. This method is called
-     * sequentially (not in parallel) and is safe to modify shared state.
-     * <p>
-     * Use this method for operations that cannot be performed safely in a parallel
-     * context, such as collision callbacks that modify world state.
+     * Runs deferred post-movement work after the engine joins parallel
+     * movement calculations. The default performs no work; implementations can
+     * use this sequential phase for landing callbacks that cannot safely
+     * modify shared world state in parallel.
      */
     @ApiStatus.OverrideOnly
     default void afterApplyMotion() {
-        // Default: no-op
     }
 
     /**
-     * Update the entity's motion. This method is used by physics engine, and allow
-     * entity to customize how its motion being updated.
-     * <p>
-     * This method should be safe to be called in multithread environment since physics
-     * engine may use parallel stream to handle all the entities.
-     *
-     * @param liquidState the liquid state describing which liquids the entity is submerged in
-     * @return the updated motion
+     * Calculates the next velocity from current state and the supplied liquid
+     * sample. The engine may call this operation concurrently for different
+     * entities, and the returned vector is subsequently offered to the normal
+     * motion setter.
      */
     @ApiStatus.OverrideOnly
     Vector3d updateMotion(LiquidState liquidState);
 
     /**
-     * Get the motion of this entity.
-     *
-     * @return the motion of this entity
+     * Returns the entity's currently stored velocity in blocks per tick. The
+     * server exposes its mutable vector through this read-only interface, so
+     * callers must copy it before retaining an independently editable value.
      */
     Vector3dc getMotion();
 
     /**
-     * Set the motion of this entity.
-     *
-     * @param motion the motion to set
-     * @return {@code true} if motion is applied (not cancelled), {@code false} otherwise.
+     * Attempts a velocity replacement through the cancellable motion event.
+     * The server rejects NaN components in the initial argument, then copies
+     * the accepted listener vector without repeating that validation;
+     * cancellation preserves stored motion and last motion.
      */
     boolean setMotion(Vector3dc motion);
 
     /**
-     * Get the last motion of this entity.
-     *
-     * @return the last motion of this entity
+     * Returns the velocity object retained before the last accepted motion
+     * replacement. This is shared storage rather than a fresh copy, and other
+     * paths such as NBT loading can update current motion without creating a
+     * new history entry.
      */
     Vector3dc getLastMotion();
 
     /**
-     * Set the motion of this entity.
-     *
-     * @param mx the motion x to set
-     * @param my the motion y to set
-     * @param mz the motion z to set
+     * Replaces velocity using the supplied components in blocks per tick. The
+     * proposal uses the normal cancellable motion setter, and this convenience
+     * overload discards its boolean acceptance result.
      */
     default void setMotion(double mx, double my, double mz) {
         setMotion(new Vector3d(mx, my, mz));
     }
 
     /**
-     * Add the motion to this entity.
-     *
-     * @param add the motion to add
+     * Adds the supplied vector to current velocity in a fresh proposal. The
+     * proposal uses the normal cancellable motion setter, and this convenience
+     * overload discards its boolean acceptance result.
      */
     default void addMotion(Vector3dc add) {
         setMotion(getMotion().add(add, new Vector3d()));
     }
 
     /**
-     * Add the motion to this entity.
-     *
-     * @param mx the motion x to add
-     * @param my the motion y to add
-     * @param mz the motion z to add
+     * Adds the supplied components to current velocity in a fresh proposal.
+     * The proposal uses the normal cancellable motion setter, and this
+     * convenience overload discards its boolean acceptance result.
      */
     default void addMotion(double mx, double my, double mz) {
         setMotion(getMotion().add(mx, my, mz, new Vector3d()));
     }
 
     /**
-     * Check if the entity has entity collision motion.
-     *
-     * @return {@code true} if the entity has entity collision motion.
+     * Returns whether entity collision forces should be calculated for this
+     * entity.
      */
     boolean computeEntityCollisionMotion();
 
     /**
-     * Check if the entity has block collision motion.
-     * <p>
-     * If return {@code true}, the physics engine will calculate a specific motion for the entity when
-     * it is sticking in blocks to move the entity out of the blocks. When performing the above calculations,
-     * the entity's {@link #applyMotion()} and {@link #updateMotion(LiquidState)} methods will not be called.
-     * <p>
-     * If return {@code false}, the entity's {@link #applyMotion()} and {@link #updateMotion(LiquidState)} methods
-     * will always being called even if the entity is sticking in blocks.
-     *
-     * @return {@code true} if the entity has block collision motion.
+     * Returns whether the engine should use its special escape motion for an
+     * entity stuck in blocks. The default enables that path, which bypasses
+     * ordinary {@code applyMotion} and {@code updateMotion} calculations while
+     * escape handling is selected.
      */
     default boolean computeBlockCollisionMotion() {
         return true;
     }
 
     /**
-     * Check if the entity has liquid motion.
-     *
-     * @return {@code true} if the entity has liquid motion.
+     * Returns whether liquid flow forces are enabled, with the default
+     * enabled.
      */
     default boolean computeLiquidMotion() {
         return true;
     }
 
     /**
-     * Check if liquid buoyancy and drag should be applied to this entity.
-     *
-     * @return {@code true} if liquid buoyancy/drag is enabled for this entity.
+     * Returns whether liquid buoyancy and drag are enabled, with the default
+     * enabled.
      */
     default boolean computeLiquidPhysics() {
         return true;
     }
 
     /**
-     * Get the upward acceleration per tick when submerged in water.
-     *
-     * @return the water buoyancy value
+     * Returns the upward acceleration in water, defaulting to {@code 0.075}
+     * blocks per tick squared. Specialized entity implementations can override
+     * this value to change the physics engine's corresponding motion behavior.
      */
     default double getWaterBuoyancy() {
         return 0.075;
     }
 
     /**
-     * Get the velocity retention reduction when submerged in water.
-     * Velocity is multiplied by {@code (1 - factor)} each tick.
-     *
-     * @return the water drag factor
+     * Returns the fractional velocity loss used for water, defaulting to
+     * {@code 0.2}. The server retains {@code 1 - factor} of the corresponding
+     * velocity before additional surface factors are considered.
      */
     default double getWaterDragFactor() {
         return 0.2;
     }
 
     /**
-     * Get the upward acceleration per tick when submerged in lava.
-     *
-     * @return the lava buoyancy value
+     * Returns the upward acceleration in lava, defaulting to {@code 0.04}
+     * blocks per tick squared. Specialized entity implementations can override
+     * this value to change the physics engine's corresponding motion behavior.
      */
     default double getLavaBuoyancy() {
         return 0.04;
     }
 
     /**
-     * Get the velocity retention reduction when submerged in lava.
-     * Velocity is multiplied by {@code (1 - factor)} each tick.
-     *
-     * @return the lava drag factor
+     * Returns the fractional velocity loss used for lava, defaulting to
+     * {@code 0.5}. The server retains {@code 1 - factor} of the corresponding
+     * velocity before additional surface factors are considered.
      */
     default double getLavaDragFactor() {
         return 0.5;
     }
 
     /**
-     * Check whether the entity's movement should be computed server-side.
-     *
-     * @return {@code true} if the entity's movement should be computed server-side, otherwise {@code false}.
+     * Returns whether server movement computation is enabled, with the default
+     * enabled.
      */
     default boolean computeMovementServerSide() {
         return true;
     }
 
     /**
-     * Get the step height of this entity.
-     *
-     * @return the step height of this entity
+     * Returns the maximum attempted step height, defaulting to {@code 0.0}
+     * blocks, disabling stepping. Specialized entity implementations can
+     * override this value to change the physics engine's corresponding motion
+     * behavior.
      */
     default double getStepHeight() {
         return 0.0;
     }
 
     /**
-     * Get the gravity of this entity.
-     *
-     * @return the gravity of this entity
+     * Returns the downward gravitational acceleration, defaulting to
+     * {@code 0.08} blocks per tick squared. Specialized entity implementations
+     * can override this value to change the physics engine's corresponding
+     * motion behavior.
      */
     default double getGravity() {
         return 0.08;
     }
 
     /**
-     * Get the drag factor when on ground of this entity.
-     * <p>
-     * This value represents the percentage of velocity lost by the entity per tick on the
-     * x and z axis. The bigger this value, the faster the entity stops.
-     *
-     * @return the drag factor when on ground of this entity
+     * Returns the fractional velocity loss used for grounded horizontal
+     * movement, defaulting to {@code 0.09}. The server retains
+     * {@code 1 - factor} of the corresponding velocity before additional
+     * surface factors are considered.
      */
     default double getDragFactorOnGround() {
         return 0.09;
     }
 
     /**
-     * Get the drag factor when in air of this entity.
-     * <p>
-     * This value is similar to {@link #getDragFactorOnGround}, however this value
-     * will be used to reduce motion along x-axis and z-axis when the entity is not on ground.
-     * This value will always be used for motion along y-axis.
-     *
-     * @return the drag factor when in air of this entity
+     * Returns the fractional velocity loss used for air movement and ordinary
+     * vertical movement, defaulting to {@code 0.02}. The server retains
+     * {@code 1 - factor} of the corresponding velocity before additional
+     * surface factors are considered.
      */
     default double getDragFactorInAir() {
         return 0.02;
     }
 
     /**
-     * Get the push speed reduction of this entity.
-     *
-     * @return the push speed reduction of this entity
+     * Returns the multiplier applied to the engine's base entity-collision
+     * push, defaulting to {@code 1}. Despite the historical reduction name,
+     * the current engine multiplies push strength directly by this value.
      */
     default double getPushSpeedReduction() {
         return 1;
     }
 
     /**
-     * Check if the entity has gravity.
-     *
-     * @return {@code true} if the entity has gravity, otherwise {@code false}.
+     * Returns whether gravity contributes to this entity's motion updates.
      */
     boolean hasGravity();
 
     /**
-     * Set if the entity has gravity.
-     *
-     * @param hasGravity {@code true} if the entity has gravity, otherwise {@code false}
+     * Sets whether future motion updates apply gravity and broadcasts the
+     * updated entity state. The setter changes the acceleration flag without
+     * immediately replacing velocity or resetting accumulated fall distance.
      */
     void setHasGravity(boolean hasGravity);
 
     /**
-     * Check if the entity is on the ground.
-     *
-     * @return {@code true} if the entity is on the ground, otherwise {@code false}.
+     * Returns whether the last committed ground state marks the entity as
+     * supported.
      */
     boolean isOnGround();
 
     /**
-     * Get the fall distance of this entity.
-     *
-     * @return the fall distance of this entity
+     * Returns accumulated vertical falling distance measured in blocks.
      */
     double getFallDistance();
 
     /**
-     * Called when the entity falls.
+     * Processes a landing using the accumulated distance in blocks. The server
+     * dispatches a cancellable fall event before internal fall handlers and
+     * the supporting block callback, then resets accumulated distance after
+     * normal completion or cancellation.
      */
     @ApiStatus.OverrideOnly
     void onFall(double fallDistance);
 
     /**
-     * Reset the fall distance of this entity to zero.
+     * Resets the accumulated vertical falling distance to zero blocks.
      */
     void resetFallDistance();
 
     /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
+     * Requests knockback away from the supplied source position. Uses
+     * {@code DEFAULT_KNOCKBACK} for both horizontal and vertical strength. The
+     * request follows the full knockback overload and remains subject to the
+     * normal cancellable motion setter.
      */
     default void knockback(Vector3dc knockbackSource) {
         knockback(knockbackSource, DEFAULT_KNOCKBACK);
     }
 
     /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
+     * Requests knockback away from the supplied source position. Uses the
+     * supplied strength for both horizontal and vertical knockback. The
+     * request follows the full knockback overload and remains subject to the
+     * normal cancellable motion setter.
      */
     default void knockback(Vector3dc knockbackSource, double knockback) {
         knockback(knockbackSource, knockback, knockback);
     }
 
     /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
+     * Requests knockback away from the supplied source position. Uses separate
+     * horizontal and vertical strengths with no additional impulse. The
+     * request follows the full knockback overload and remains subject to the
+     * normal cancellable motion setter.
      */
     default void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical) {
         knockback(knockbackSource, knockback, knockbackVertical, new Vector3d());
     }
 
     /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
+     * Requests knockback away from the supplied source position. Includes the
+     * supplied additional impulse and honors stored knockback resistance. The
+     * request follows the full knockback overload and remains subject to the
+     * normal cancellable motion setter.
      */
     default void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional) {
         knockback(knockbackSource, knockback, knockbackVertical, knockbackAdditional, false);
     }
 
     /**
-     * Knockback the entity with specified knockback value.
-     *
-     * @param knockbackSource           the source position of the knockback
-     * @param knockback                 the horizontal knockback strength to apply
-     * @param knockbackVertical         the vertical knockback strength to apply
-     * @param knockbackAdditional       the additional motion that will be applied to the entity
-     * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored
+     * Calculates a knockback proposal from the source, strengths, additional
+     * impulse, resistance setting, and current velocity. The server adds half
+     * the previous velocity and submits the result through the cancellable
+     * motion setter; this operation does not return its acceptance result.
      */
     void knockback(Vector3dc knockbackSource, double knockback, double knockbackVertical, Vector3dc knockbackAdditional, boolean ignoreKnockbackResistance);
 
     /**
-     * Retrieve the knockback resistance of the entity.
-     *
-     * @return the knockback resistance value of this entity, represented as a float
+     * Returns the resistance factor used when calculating knockback
+     * contributions.
      */
     float getKnockbackResistance();
 
     /**
-     * Sets the knockback resistance of the entity. Knockback resistance determines
-     * how resistant the entity is to being pushed or knocked back due to external forces,
-     * such as attacks or collisions. Higher values provide increased resistance while
-     * lower values allow for easier displacement.
-     *
-     * @param knockbackResistance the knockback resistance value to set. Must be a float
-     *                            value between 0.0 (no resistance) and 1.0 (full resistance).
+     * Sets the knockback resistance after clamping the supplied factor to
+     * {@code [0, 1]}. Resistance scales the horizontal, vertical, and
+     * additional knockback contributions unless the full knockback request
+     * explicitly ignores it.
      */
     void setKnockbackResistance(@Range(from = 0, to = 1) float knockbackResistance);
 
     /**
-     * Get the block which the entity is standing on.
-     *
-     * @return the block which the entity is standing on, or air if the entity is not standing on any block (and the pos will be {@code null})
+     * Returns the block at the feet or directly below the entity according to
+     * ground state. Airborne entities receive an air block with the floored
+     * current position, rather than an air result with a missing position.
      */
     Block getBlockStateStandingOn();
 
     /**
-     * @see #canStandSafely(double, double, double, Dimension)
+     * Checks standing safety at the horizontal center of the supplied block
+     * position. The feet use its exact integer height, and the position's
+     * dimension supplies both the supporting block and collision query.
      */
     default boolean canStandSafely(Position3ic pos) {
         return canStandSafely(pos.x() + 0.5, pos.y(), pos.z() + 0.5, pos.dimension());
     }
 
     /**
-     * Check if the specified position is a safe standing position.
-     *
-     * @param x the exact x coordinate (entity center)
-     * @param y the exact y coordinate (entity feet, can be non-integer for partial-height blocks like slabs)
-     * @param z the exact z coordinate (entity center)
-     * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
+     * Returns whether the candidate feet position has collidable support and
+     * room for this entity's box. The query uses the supplied dimension and a
+     * small vertical margin; it does not move the entity or reserve that
+     * space.
      */
     boolean canStandSafely(double x, double y, double z, Dimension dimension);
 
     /**
-     * Check if the entity can critical attack.
-     *
-     * @return {@code true} if the entity can critical attack, otherwise {@code false}.
+     * Returns whether current motion and effects permit a critical attack.
      */
     boolean canCriticalAttack();
 }

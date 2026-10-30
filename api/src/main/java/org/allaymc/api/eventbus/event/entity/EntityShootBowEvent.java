@@ -9,7 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Event fired when an entity shoots an arrow from a bow.
+ * {@code EntityShootBowEvent} exposes the bow and prepared arrow before a bow
+ * shot is spawned. Cancellation prevents arrow insertion and subsequent shot
+ * processing in the bow handler; listeners can inspect the same mutable item
+ * and arrow objects used by that handler.
  *
  * @author daoge_cmd
  */
@@ -17,14 +20,19 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.WORLD)
 public class EntityShootBowEvent extends EntityEvent implements CancellableEvent {
     /**
-     * The bow item used to shoot the arrow.
+     * Bow item reference used by the pending shot.
      */
     protected final ItemStack bow;
     /**
-     * The arrow that is shot.
+     * Prepared arrow entity awaiting the pending bow shot.
      */
     protected final EntityArrow arrow;
 
+    /**
+     * Creates a bow-shot proposal retaining the supplied bow and arrow
+     * references. The event neither copies the item nor spawns the arrow; the
+     * bow handler performs accepted shot processing after dispatch.
+     */
     public EntityShootBowEvent(Entity entity, ItemStack bow, EntityArrow arrow) {
         super(entity);
         this.bow = bow;

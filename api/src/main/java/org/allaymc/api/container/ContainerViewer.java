@@ -3,80 +3,75 @@ package org.allaymc.api.container;
 import java.util.Set;
 
 /**
- * Represents a container viewer that can open and close containers.
+ * {@code ContainerViewer} maintains the viewing side of container windows and receives
+ * content, slot, and property updates. A container opens the viewer before registering
+ * its assigned window ID, while closing and subsequent update calls use the viewer's
+ * established container association. Implementations may also recognize built-in entity
+ * containers without an explicit window.
  *
  * @author daoge_cmd
  */
 public interface ContainerViewer {
     /**
-     * View the contents of an opened container.
-     *
-     * @param container the container to view
-     * @throws IllegalStateException if this viewer does not open the container
+     * Displays all stacks currently stored in the container. The viewer must already
+     * recognize its window or built-in container identity; an unrecognized container
+     * throws {@code IllegalStateException} instead of receiving a new association.
      */
     void viewContainerContents(Container container);
 
     /**
-     * View a slot in an opened container.
-     *
-     * @param container the container to view
-     * @param slot      the slot to view
-     * @throws IllegalStateException if this viewer does not open the container
+     * Displays the current stack at one container slot. The viewer must recognize the
+     * container's window or built-in identity; an unrecognized container throws {@code
+     * IllegalStateException} before sending the update.
      */
     void viewContainerSlot(Container container, int slot);
 
     /**
-     * Open a container in the viewer's side.
-     *
-     * @param container the container that is opened
-     * @return the assigned id for this container
-     * @throws IllegalStateException if this viewer has opened the container
+     * Opens the viewer's container interface and returns its assigned window ID. Opening
+     * an already associated container throws {@code IllegalStateException}; callers use
+     * the returned ID to record membership on the container side.
      */
     byte viewContainerOpen(Container container);
 
     /**
-     * Close a container in the viewer's side.
-     *
-     * @param container the container that is closed
-     * @throws IllegalStateException if this viewer hasn't opened the container
+     * Closes the viewer's interface for an associated container and removes its window
+     * mapping. A container absent from the viewer's open-window associations throws
+     * {@code IllegalStateException} instead of establishing a new mapping.
      */
     void viewContainerClose(Container container);
 
     /**
-     * View container data.
-     *
-     * @param container the container to view
-     * @param property  the property to view
-     * @param value     the value to view
-     * @throws IllegalStateException if this viewer hasn't opened the container
+     * Displays a numeric property for an explicitly opened container window. Property
+     * meaning depends on the container interface; an absent window association throws
+     * {@code IllegalStateException} before sending the property value.
      */
     void viewContainerData(Container container, int property, int value);
 
     /**
-     * Get the container that is opened with a specific type.
-     *
-     * @param type the type of the container
-     * @return the container
+     * Returns the open container matching the supplied type identity. {@code null}
+     * indicates no matching association; implementations may include auxiliary inventory
+     * containers that are implicitly open with the player inventory.
      */
     <T extends Container> T getOpenedContainer(ContainerType<T> type);
 
     /**
-     * Get the container opened with the assigned id.
-     *
-     * @param id the assigned id of the container
-     * @return the container
+     * Returns the container associated with the assigned window ID. {@code null}
+     * indicates that the ID has no open container association, so callers must handle an
+     * absent result.
      */
     Container getOpenedContainer(byte id);
 
     /**
-     * Get the opened containers.
-     *
-     * @return the opened containers.
+     * Returns the container objects currently recognized as open by this viewer.
+     * Implementations may include auxiliary inventory containers opened implicitly; the
+     * container objects themselves remain shared with their owners.
      */
     Set<Container> getOpenedContainers();
 
     /**
-     * Close all containers that are opened by this viewer.
+     * Attempts to close every container currently recognized as open by this viewer.
+     * Each container performs its ordinary removal path, including close notifications
+     * and any container-specific listener effects.
      */
     void closeAllOpenedContainers();
 }

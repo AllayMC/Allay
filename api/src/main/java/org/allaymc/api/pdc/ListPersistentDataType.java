@@ -3,10 +3,13 @@ package org.allaymc.api.pdc;
 import java.util.List;
 
 /**
- * Represents a persistent data type capable of storing a list of elements within a {@link PersistentDataContainer}.
+ * {@code ListPersistentDataType} represents a persistent list whose elements use another
+ * persistent
+ * data type for conversion. The element adapter supplies the NBT element representation, while
+ * the list adapter exposes {@code List.class} as both its primitive and complex container class.
  *
- * @param <P> the primitive type of the list elements
- * @param <C> the complex type of the list elements
+ * @param <P> primitive element representation
+ * @param <C> converted element representation
  *
  * @author IWareQ | Bukkit
  */

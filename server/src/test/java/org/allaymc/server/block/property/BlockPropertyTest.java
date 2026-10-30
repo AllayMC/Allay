@@ -8,9 +8,17 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
+ * {@code BlockPropertyTest} verifies cached value-wrapper identity across the three
+ * property domains.
+ *
  * @author daoge_cmd
  */
 public class BlockPropertyTest {
+    /**
+     * Requests repeated and distinct values from one boolean property domain. Equal
+     * requests must reuse one wrapper, while different truth values must produce
+     * separate wrapper identities.
+     */
     @Test
     void testBooleanProperty() {
         var p1 = BlockPropertyTypes.AGE_BIT.createValue(true);
@@ -20,6 +28,11 @@ public class BlockPropertyTest {
         assertNotSame(p1, p3);
     }
 
+    /**
+     * Requests repeated and distinct values from one enum property domain. Equal
+     * requests must reuse one wrapper, while different constants must produce
+     * separate wrapper identities.
+     */
     @Test
     void testEnumProperty() {
         var p1 = BlockPropertyTypes.PILLAR_AXIS.createValue(PillarAxis.X);
@@ -32,6 +45,11 @@ public class BlockPropertyTest {
         assertNotSame(p3, p4);
     }
 
+    /**
+     * Requests repeated and distinct values from one integer property domain. Equal
+     * requests must reuse one wrapper, while different numeric values must produce
+     * separate wrapper identities.
+     */
     @Test
     void testIntProperty() {
         var p1 = BlockPropertyTypes.CANDLES.createValue(0);

@@ -3,172 +3,144 @@ package org.allaymc.api.container;
 import org.allaymc.api.container.interfaces.*;
 
 /**
- * ContainerTypes contains all the available container types in the game.
+ * {@code ContainerTypes} defines the shared type identities and fixed slot counts for
+ * built-in containers. Holders and network metadata use these exact instances as keys,
+ * so a separately constructed type with the same size does not identify the same layout.
  *
  * @author daoge_cmd
  */
 public interface ContainerTypes {
     /**
-     * An anvil UI container.
-     * Used when a player opens an anvil block to repair, combine, or rename items.
+     * The built-in type constants supply shared identities for container allocation,
+     * holder lookup, and network layout registration. Identity for the 3-slot anvil
+     * container layout.
      */
     ContainerType<AnvilContainer> ANVIL = new ContainerType<>(3);
     /**
-     * An equipment container that stores worn armor.
-     * Used by players and armor-capable entities such as zombies or armor stands, and queried during combat and equipment synchronization.
+     * Identity for the 4-slot armor container layout.
      */
     ContainerType<ArmorContainer> ARMOR = new ContainerType<>(4);
     /**
-     * A main-hand equipment container for non-player entities.
-     * Used for entity-held item synchronization, currently in places such as armor-stand-style entity hand storage.
+     * Identity for the 1-slot entity hand container layout.
      */
     ContainerType<EntityHandContainer> ENTITY_HAND = new ContainerType<>(1);
     /**
-     * A barrel block storage container.
-     * Used when interacting with barrel blocks in the world.
+     * Identity for the 27-slot barrel container layout.
      */
     ContainerType<BlockContainer> BARREL = new ContainerType<>(27);
     /**
-     * A beacon payment slot container.
-     * Used by the beacon UI for inserting the payment item required to apply effects.
+     * Identity for the 1-slot beacon container layout.
      */
     ContainerType<BeaconContainer> BEACON = new ContainerType<>(1);
     /**
-     * A blast furnace processing container.
-     * Used by blast furnace blocks for input, fuel, and output slots.
+     * Identity for the 3-slot blast furnace container layout.
      */
     ContainerType<FurnaceContainer> BLAST_FURNACE = new ContainerType<>(3);
     /**
-     * A brewing stand processing container.
-     * Used by brewing stand blocks for bottle slots, ingredient slot, and fuel slot.
+     * Identity for the 5-slot brewing stand container layout.
      */
     ContainerType<BrewingStandContainer> BREWING_STAND = new ContainerType<>(5);
     /**
-     * A cartography table UI container.
-     * Used when a player edits or clones maps through a cartography table block.
+     * Identity for the 3-slot cartography table container layout.
      */
     ContainerType<CartographyTableContainer> CARTOGRAPHY_TABLE = new ContainerType<>(3);
     /**
-     * A single chest block storage container.
-     * Used by normal chest block entities and as the base size for double chest composition.
+     * Identity for the 27-slot chest container layout.
      */
     ContainerType<BlockContainer> CHEST = new ContainerType<>(27);
     /**
-     * A hopper block storage container.
-     * Used by hopper block entities for item transfer between inventories.
+     * Identity for the 5-slot hopper container layout.
      */
     ContainerType<BlockContainer> HOPPER = new ContainerType<>(5);
     /**
-     * A dispenser block storage container.
-     * Used by dispenser block entities for storing and dispensing items.
+     * Identity for the 9-slot dispenser container layout.
      */
     ContainerType<BlockContainer> DISPENSER = new ContainerType<>(9);
     /**
-     * A dropper block storage container.
-     * Used by dropper block entities for storing and dropping items without dispenser behavior.
+     * Identity for the 9-slot dropper container layout.
      */
     ContainerType<BlockContainer> DROPPER = new ContainerType<>(9);
     /**
-     * A chiseled bookshelf storage container.
-     * Used by chiseled bookshelf blocks for their six book slots and sided access behavior.
+     * Identity for the 6-slot chiseled bookshelf container layout.
      */
     ContainerType<Container> CHISELED_BOOKSHELF = new ContainerType<>(6);
     /**
-     * The player's built-in 2x2 crafting input container.
-     * Used by the inventory crafting grid that is available without opening a crafting table.
+     * Identity for the 4-slot crafting grid container layout.
      */
     ContainerType<RecipeContainer> CRAFTING_GRID = new ContainerType<>(4);
     /**
-     * A 3x3 crafting table input container.
-     * Used when a player opens a crafting table block and recipe actions target the larger crafting grid.
+     * Identity for the 9-slot crafting table container layout.
      */
     ContainerType<CraftingTableContainer> CRAFTING_TABLE = new ContainerType<>(9);
     /**
-     * The result slot for player-side crafting output.
-     * Used together with the personal crafting grid to expose the synthesized item before it is taken.
+     * Identity for the 1-slot created output container layout.
      */
     ContainerType<Container> CREATED_OUTPUT = new ContainerType<>(1);
     /**
-     * The temporary cursor-held item container.
-     * Used by inventory transaction handling to represent the stack currently carried by the player's cursor.
+     * Identity for the 1-slot cursor container layout.
      */
     ContainerType<Container> CURSOR = new ContainerType<>(1);
     /**
-     * A virtual storage container representing two linked chest halves.
-     * Used when adjacent chests are combined into a single double chest view.
+     * Identity for the 54-slot double chest container layout.
      */
     ContainerType<BlockContainer> DOUBLE_CHEST = new ContainerType<>(54);
     /**
-     * An enchanting table UI container.
-     * Used by the enchanting table interface for the item and lapis slots involved in enchant selection.
+     * Identity for the 2-slot enchant table container layout.
      */
     ContainerType<EnchantTableContainer> ENCHANT_TABLE = new ContainerType<>(2);
     /**
-     * A player's ender chest storage container.
-     * Used by the ender chest UI while remaining tied to player-owned persistent storage rather than a block inventory.
+     * Identity for the 27-slot ender chest container layout.
      */
     ContainerType<BlockContainer> ENDER_CHEST = new ContainerType<>(27);
     /**
-     * A furnace processing container.
-     * Used by furnace blocks for smelting input, fuel, and output slots.
+     * Identity for the 3-slot furnace container layout.
      */
     ContainerType<FurnaceContainer> FURNACE = new ContainerType<>(3);
     /**
-     * A grindstone UI container.
-     * Used when disenchanting or repairing items through a grindstone block.
+     * Identity for the 3-slot grindstone container layout.
      */
     ContainerType<GrindstoneContainer> GRINDSTONE = new ContainerType<>(3);
     /**
-     * A loom UI container.
-     * Used when applying banner patterns through a loom block.
+     * Identity for the 4-slot loom container layout.
      */
     ContainerType<LoomContainer> LOOM = new ContainerType<>(4);
     /**
-     * An offhand equipment container.
-     * Used by players and other human-like entities for offhand item storage, combat logic, and visual synchronization.
+     * Identity for the 1-slot offhand container layout.
      */
     ContainerType<OffhandContainer> OFFHAND = new ContainerType<>(1);
     /**
-     * The main player inventory container.
-     * Used for the standard 36-slot player inventory, including the selected hotbar slot and most item interactions.
+     * Identity for the 36-slot inventory container layout.
      */
     ContainerType<InventoryContainer> INVENTORY = new ContainerType<>(36);
     /**
-     * A shulker box block storage container.
-     * Used by shulker box block entities and their UI.
+     * Identity for the 27-slot shulker box container layout.
      */
     ContainerType<BlockContainer> SHULKER_BOX = new ContainerType<>(27);
     /**
-     * A smithing table UI container.
-     * Used by smithing recipes such as equipment upgrading and template-based transformations.
+     * Identity for the 4-slot smithing table container layout.
      */
     ContainerType<SmithingTableContainer> SMITHING_TABLE = new ContainerType<>(4);
     /**
-     * A smoker processing container.
-     * Used by smoker blocks for food-focused furnace processing.
+     * Identity for the 3-slot smoker container layout.
      */
     ContainerType<FurnaceContainer> SMOKER = new ContainerType<>(3);
     /**
-     * A small shelf-style storage container.
-     * Used by shelf blocks that expose a fixed set of display or storage slots.
+     * Identity for the 3-slot shelf container layout.
      */
     ContainerType<Container> SHELF = new ContainerType<>(3);
     /**
-     * A stonecutter UI container.
-     * Used when cutting stone-related blocks through the stonecutter interface and its recipe actions.
+     * Identity for the 2-slot stonecutter container layout.
      */
     ContainerType<StonecutterContainer> STONECUTTER = new ContainerType<>(2);
 
-    // Fake Container Types
-
     /**
-     * A UI-only chest container type.
-     * Used by synthetic chest windows created through the fake container system rather than a real world block entity.
+     * The fake type constants identify synthetic chest layouts used by the
+     * fake-container factory and network window registration. Identity for the 27-slot
+     * fake chest container layout.
      */
     ContainerType<FakeContainer> FAKE_CHEST = new ContainerType<>(27);
     /**
-     * A UI-only double chest container type.
-     * Used by synthetic large chest windows created through the fake container system.
+     * Identity for the 54-slot fake double chest container layout.
      */
     ContainerType<FakeContainer> FAKE_DOUBLE_CHEST = new ContainerType<>(54);
 }

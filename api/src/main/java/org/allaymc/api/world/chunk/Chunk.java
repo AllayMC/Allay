@@ -5,16 +5,13 @@ import org.allaymc.api.annotation.ThreadSafe;
 import java.util.function.Consumer;
 
 /**
- * Chunk represents a 16x16 area in a world.
- * <p>
- * All methods in this class are thread-safe. However, there is no thread-safe guarantee to the methods in the return value
- * of these methods, and an example is {@link Chunk#getSection(int)}.
- * <p>
- * Frequent calls to methods in this class
- * result in huge lock overhead. If you are sure that the instance won't be accessed by multiple threads,
- * you can operate on unsafe chunk directly. To get the unsafe chunk, use {@link #toUnsafeChunk()}.
- * <p>
- * Compared to {@link UnsafeChunk}, this class contains more methods, which are also guaranteed to be thread-safe.
+ * {@code Chunk} provides
+ * thread-safe operations on one sixteen-by-sixteen chunk column and
+ * controlled access to its mutable sections. The thread-safety contract covers
+ * method calls, while returned objects such as {@link #getSection(int)} retain
+ * their own synchronization requirements. Callbacks declare block and biome
+ * access separately; direct use of {@link #toUnsafeChunk()} requires the caller
+ * to coordinate all conflicting access.
  *
  * @author Cool_Loong | daoge_cmd
  */
@@ -22,30 +19,25 @@ import java.util.function.Consumer;
 public interface Chunk extends UnsafeChunk {
 
     /**
-     * Apply the chunk with the specified operation.
-     *
-     * @param operation the operation to be applied in the chunk
-     * @param block     the operation type of block
-     * @param biome     the operation type of biome
+     * Runs a callback against this chunk with the requested block and biome
+     * access modes. The callback must declare every accessed data category,
+     * avoid upgrading held read locks to writes, and stop using the borrowed
+     * unsafe view when protected access ends.
      */
     void applyOperation(Consumer<UnsafeChunk> operation, OperationType block, OperationType biome);
 
     /**
-     * Apply the section in the chunk with the specified operation.
-     *
-     * @param sectionY  the section y of the section
-     * @param operation the operation to be applied in the chunk section
-     * @param block     the operation type of block
-     * @param biome     the operation type of biome
-     *
-     * @throws IllegalArgumentException if section y is out of range
+     * Runs a callback against one absolute section Y with the requested block
+     * and biome access modes. Invalid section coordinates throw {@link
+     * IllegalArgumentException}; the callback must restrict access to the
+     * protected section and avoid upgrading read locks to writes.
      */
     void applyOperationInSection(int sectionY, Consumer<ChunkSection> operation, OperationType block, OperationType biome);
 
     /**
-     * Convert this chunk to a {@link UnsafeChunk} which is unsafe in multithreaded environment.
-     *
-     * @return the unsafe chunk
+     * Returns the unsafe view sharing this chunk's underlying data rather than
+     * a copy. Callers must establish compatible synchronization before using it
+     * and must not assume that retaining the view retains any locks.
      */
     UnsafeChunk toUnsafeChunk();
 }

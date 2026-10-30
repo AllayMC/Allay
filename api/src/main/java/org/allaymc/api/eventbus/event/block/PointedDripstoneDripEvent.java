@@ -7,7 +7,10 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a pointed dripstone attempts to drip liquid into a cauldron.
+ * {@code PointedDripstoneDripEvent} represents a pointed dripstone attempt to add
+ * liquid to a cauldron. The inherited block identifies the receiving cauldron rather
+ * than the dripstone, and the liquid flag distinguishes water from lava; cancellation
+ * prevents that filling attempt.
  *
  * @author daoge_cmd
  */
@@ -15,19 +18,21 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class PointedDripstoneDripEvent extends BlockEvent implements CancellableEvent {
     /**
-     * Whether the liquid being dripped is water (true) or lava (false).
+     * {@code water} selects water when {@code true} and lava when {@code false};
+     * {@code isLava} exposes the complementary selection.
      */
     protected boolean water;
 
+    /**
+     * Creates a drip event for the receiving cauldron and liquid selection.
+     */
     public PointedDripstoneDripEvent(Block block, boolean water) {
         super(block);
         this.water = water;
     }
 
     /**
-     * Check if the liquid being dripped is lava.
-     *
-     * @return true if lava, false if water
+     * Returns whether this drip carries lava instead of water.
      */
     public boolean isLava() {
         return !water;

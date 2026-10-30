@@ -35,25 +35,55 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code CommandTreeTest} exercises parameter conversion, optional defaults,
+ * redirects, structural navigation, and failed parsing through the server
+ * command tree. Nested groups build independent trees while sharing the
+ * installed node factory, mock command, and mutable sender fixture.
+ *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 class CommandTreeTest {
 
+    /**
+     * {@code mockCmd} is the shared command fixture named {@code "test"}. Every
+     * case builds a fresh tree around it rather than mutating a shared tree.
+     */
     static Command mockCmd;
+    /**
+     * {@code mockSender} supplies shared permissions and the mutable fake
+     * execution origin. Position tests reset its coordinates before each case
+     * to isolate relative-coordinate expectations.
+     */
     static MockCommandSender mockSender;
 
+    /**
+     * Creates shared command and sender fixtures and installs the server node
+     * factory for fluent builders. The factory holder is global test state,
+     * while each test constructs its own tree and result capture.
+     */
     @BeforeAll
     static void init() {
         mockCmd = Mockito.mock(Command.class);
         Mockito.when(mockCmd.getName()).thenReturn("test");
+        // Fluent builders read a shared API holder, so install the server factory
+        // before any nested case creates parameter nodes from its fresh command tree.
         CommandNodeFactory.FACTORY.set(new AllayCommandNodeFactory());
         mockSender = new MockCommandSender();
     }
 
+    /**
+     * {@code BasicNodeParsingTests} covers primitive, enumeration, literal, and
+     * greedy parameter conversion through terminal executors.
+     */
     @Nested
     class BasicNodeParsingTests {
 
+        /**
+         * Parses the two accepted boolean spellings through an executor that
+         * returns their truth value as command status. The assertions protect
+         * both boolean conversion and executor-visible results.
+         */
         @Test
         void testBoolNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -68,6 +98,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"false"}).isSuccess());
         }
 
+        /**
+         * Parses one ordinary string token into a captured executor result. The
+         * assertion protects unchanged token delivery through the string node
+         * and result index zero.
+         */
         @Test
         void testStringNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -83,6 +118,11 @@ class CommandTreeTest {
             assertEquals("hello", result.get());
         }
 
+        /**
+         * Parses a decimal integer token and reads it through an integer result
+         * capture. The assertion protects boxed numeric conversion and
+         * retrieval at the first result slot.
+         */
         @Test
         void testIntNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -98,6 +138,11 @@ class CommandTreeTest {
             assertEquals(42, result.get());
         }
 
+        /**
+         * Parses an integer token whose value exceeds the signed 32-bit range.
+         * The assertion protects long conversion without accidental narrowing
+         * before the executor reads its result.
+         */
         @Test
         void testLongNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -113,6 +158,11 @@ class CommandTreeTest {
             assertEquals(9999999999L, result.get());
         }
 
+        /**
+         * Parses a decimal token into a captured single-precision result. The
+         * assertion protects delivery of the parsed float value through the
+         * executor's first result slot for an ordinary decimal input.
+         */
         @Test
         void testFloatNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -125,9 +175,15 @@ class CommandTreeTest {
                     });
 
             tree.parse(mockSender, new String[]{"3.14"});
+            // This tolerance still rejects rounding the example to an integer.
             assertEquals(3.14f, result.get(), 0.01f);
         }
 
+        /**
+         * Parses a decimal token containing more precision than the float case.
+         * The assertion protects delivery of the parsed double value through
+         * the executor's first result slot.
+         */
         @Test
         void testDoubleNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -140,9 +196,15 @@ class CommandTreeTest {
                     });
 
             tree.parse(mockSender, new String[]{"3.14159265359"});
+            // This tolerance still rejects reducing the example to two decimal places.
             assertEquals(3.14159265359, result.get(), 0.0001);
         }
 
+        /**
+         * Parses a decimal token into a captured short result. The assertion
+         * protects the node's boxed short representation rather than silently
+         * delivering an integer value to the executor.
+         */
         @Test
         void testShortNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -158,6 +220,12 @@ class CommandTreeTest {
             assertEquals((short) 100, result.get());
         }
 
+        /**
+         * Configures three accepted enumeration spellings and parses accepted
+         * and unknown values. The assertions protect successful string results
+         * for known spellings and rejection of a token outside the configured
+         * set.
+         */
         @Test
         void testEnumsNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -178,6 +246,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"d"}).isSuccess());
         }
 
+        /**
+         * Builds a literal subcommand followed by an integer parameter. The
+         * assertions protect literal-key discrimination and the result-slot
+         * offset caused by the key contributing its own parsed value.
+         */
         @Test
         void testKeyNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -193,6 +266,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"wrong", "123"}).isSuccess());
         }
 
+        /**
+         * Passes several tokens to a terminal message parameter and captures
+         * its result. The assertion protects greedy consumption and joining
+         * with one separating space between the supplied words.
+         */
         @Test
         void testMsgNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -208,6 +286,11 @@ class CommandTreeTest {
             assertEquals("hello world test", result.get());
         }
 
+        /**
+         * Places a greedy remaining-token parameter after a literal command
+         * key. The assertion protects preservation of individual token values
+         * and retrieval from the result slot following the key.
+         */
         @Test
         void testRemainNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -224,6 +307,12 @@ class CommandTreeTest {
             assertEquals(List.of("arg1", "arg2", "arg3"), result.get());
         }
 
+        /**
+         * Parses differently cased forms of accepted enumeration values and one
+         * unknown spelling. The assertions protect case-insensitive acceptance
+         * while preserving the caller's original token casing in the executor
+         * result.
+         */
         @Test
         void testEnumsIgnoreCaseNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -250,6 +339,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"Delta"}).isSuccess());
         }
 
+        /**
+         * Configures a node from the test enum and supplies names with several
+         * casing patterns. The assertions protect conversion back to actual
+         * enum constants and rejection of an undeclared constant name.
+         */
         @Test
         void testEnumClassNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -273,6 +367,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"yellow"}).isSuccess());
         }
 
+        /**
+         * Makes an enum-class node optional with a configured green default.
+         * The assertions protect omission delivering that constant and explicit
+         * input replacing it with the matching blue constant.
+         */
         @Test
         void testEnumClassNodeWithDefault() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -292,6 +391,12 @@ class CommandTreeTest {
             assertEquals(TestColor.BLUE, result.get());
         }
 
+        /**
+         * Parses selector-shaped, player-name, and wildcard text through a
+         * wildcard-target node. The assertions protect unchanged text results
+         * without requiring entity resolution or validating the supplied target
+         * expression.
+         */
         @Test
         void testWildcardTargetNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -316,6 +421,12 @@ class CommandTreeTest {
             assertEquals("*", result.get());
         }
 
+        /**
+         * Supplies two ordinary command token sequences to a greedy
+         * command-text node. The assertions protect reconstruction as
+         * space-separated strings for executor use, without claiming coverage
+         * of quoted-token round trips.
+         */
         @Test
         void testCmdNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -334,6 +445,11 @@ class CommandTreeTest {
             assertEquals("gamemode creative", result.get());
         }
 
+        /**
+         * Parses every configured numeric, full-name, and abbreviated game-mode
+         * alias. The assertions protect their mapped enum values, including the
+         * command node's spectator aliases, and rejection of an unknown mode.
+         */
         @Test
         void testGameModeNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -384,6 +500,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"invalid"}).isSuccess());
         }
 
+        /**
+         * Parses every configured numeric, full-name, and single-letter
+         * difficulty alias. The assertions protect each mapped difficulty value
+         * and ensure an unrelated token fails command parsing.
+         */
         @Test
         void testDifficultyNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -434,19 +555,48 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"invalid"}).isSuccess());
         }
 
+        /**
+         * {@code TestColor} supplies distinct enum constants for name
+         * conversion and omission-default tests.
+         */
         enum TestColor {
-            RED, GREEN, BLUE
+            /**
+             * Red conversion test value.
+             */
+            RED,
+            /**
+             * Green omission-default test value.
+             */
+            GREEN,
+            /**
+             * Blue conversion test value.
+             */
+            BLUE
         }
     }
 
+    /**
+     * {@code PositionNodeTests} covers absolute and relative coordinate triples
+     * using a resettable sender-origin fixture.
+     */
     @Nested
     class PositionNodeTests {
 
+        /**
+         * Resets the shared sender's coordinates to the origin before each
+         * position case. The location object itself remains shared so each test
+         * can set a distinct base for relative-coordinate parsing.
+         */
         @BeforeEach
         void resetLocation() {
             mockSender.getFakeLocation().set(0, 0, 0);
         }
 
+        /**
+         * Parses a complete three-token position from the reset origin. The
+         * assertion protects ordered coordinate assembly into one vector result
+         * without applying a relative offset to absolute values.
+         */
         @Test
         void testAbsolutePosition() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -462,6 +612,12 @@ class CommandTreeTest {
             assertEquals(new Vector3d(11, 45, 14), result.get());
         }
 
+        /**
+         * Sets a nonzero sender origin and supplies positive tilde offsets on
+         * all axes. The assertion protects adding each offset to its
+         * corresponding base coordinate rather than treating it as absolute
+         * input.
+         */
         @Test
         void testRelativePosition() {
             mockSender.getFakeLocation().set(10, 20, 30);
@@ -479,6 +635,11 @@ class CommandTreeTest {
             assertEquals(new Vector3d(11, 22, 33), result.get());
         }
 
+        /**
+         * Sets a nonzero sender origin and supplies negative tilde offsets on
+         * all axes. The assertion protects subtraction from each corresponding
+         * coordinate and preservation of coordinate order in the vector.
+         */
         @Test
         void testNegativeRelativePosition() {
             mockSender.getFakeLocation().set(10, 20, 30);
@@ -496,6 +657,11 @@ class CommandTreeTest {
             assertEquals(new Vector3d(9, 18, 27), result.get());
         }
 
+        /**
+         * Combines a nonzero sender origin with fractional tilde offsets. The
+         * assertion protects decimal offset parsing and addition on each axis
+         * before the executor receives the vector result.
+         */
         @Test
         void testRelativePositionWithDecimals() {
             mockSender.getFakeLocation().set(10, 20, 30);
@@ -514,9 +680,18 @@ class CommandTreeTest {
         }
     }
 
+    /**
+     * {@code OptionalNodeTests} covers omission defaults, optional-child
+     * constraints, and coexistence with other argument branches.
+     */
     @Nested
     class OptionalNodeTests {
 
+        /**
+         * Marks a string parameter optional and invokes its tree without
+         * arguments. The assertion protects selection of the string node's
+         * empty default rather than reporting missing required input.
+         */
         @Test
         void testOptionalParameter() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -528,6 +703,12 @@ class CommandTreeTest {
             assertTrue(tree.parse(mockSender, new String[0]).isSuccess());
         }
 
+        /**
+         * Configures an optional enumeration with a default outside its
+         * accepted explicit spellings. The assertions protect omission
+         * bypassing enumeration matching and explicit accepted input replacing
+         * the stored default.
+         */
         @Test
         void testOptionalWithDefaultValue() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -547,6 +728,11 @@ class CommandTreeTest {
             assertEquals("a", result.get());
         }
 
+        /**
+         * Registers one optional child and then attempts to mark a sibling
+         * optional. The assertion protects the single optional-child constraint
+         * required for an unambiguous end-of-input default path.
+         */
         @Test
         void testOnlyOneOptionalInLeaves() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -557,6 +743,12 @@ class CommandTreeTest {
             );
         }
 
+        /**
+         * Attempts both permission addition after optionality and optionality
+         * after permission addition. The assertions protect rejection in either
+         * configuration order so an optional node cannot carry a permission
+         * requirement.
+         */
         @Test
         void testOptionalCannotHavePermission() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -569,6 +761,12 @@ class CommandTreeTest {
             );
         }
 
+        /**
+         * Builds optional-integer and required-boolean sibling paths with
+         * different executor outcomes. The assertions protect selection from
+         * actual input rather than letting optionality consume a token that
+         * belongs to another matching type.
+         */
         @Test
         void testNormalParamWithOptionalParam() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -584,6 +782,12 @@ class CommandTreeTest {
             assertTrue(tree.parse(mockSender, new String[]{"true"}).isSuccess());
         }
 
+        /**
+         * Builds two consecutive optional enumeration nodes with separate
+         * defaults. The assertions protect successful explicit traversal and
+         * complete omission producing a result slot for each node's configured
+         * default.
+         */
         @Test
         void testDoubleOptionalNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -604,6 +808,12 @@ class CommandTreeTest {
             assertTrue(tree.parse(mockSender, new String[]{}).isSuccess());
         }
 
+        /**
+         * Builds optional and longer required literal paths sharing an initial
+         * prefix. The assertions protect the accepted complete forms and
+         * rejection of a shortened required form under argument-count branch
+         * selection.
+         */
         @Test
         void testComplexOptionalNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -621,9 +831,19 @@ class CommandTreeTest {
         }
     }
 
+    /**
+     * {@code RedirectTests} covers remaining-input traversal and callback
+     * ordering across terminal root redirects.
+     */
     @Nested
     class RedirectTests {
 
+        /**
+         * Builds two root-redirecting key-and-value paths and supplies them in
+         * both orders. The captured values protect continued argument
+         * consumption and fresh result indexing each time parsing restarts at
+         * the root.
+         */
         @Test
         void testRedirect() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -647,6 +867,11 @@ class CommandTreeTest {
             assertEquals(1, v2.get());
         }
 
+        /**
+         * Chains two redirect callbacks before a final executor on distinct
+         * root keys. The assertion protects callback ordering and continued
+         * traversal to the executor using the remaining input.
+         */
         @Test
         void testMultipleRedirects() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -668,9 +893,19 @@ class CommandTreeTest {
         }
     }
 
+    /**
+     * {@code TreeStructureTests} covers terminal discovery, root execution,
+     * ancestry navigation, and separate command branches.
+     */
     @Nested
     class TreeStructureTests {
 
+        /**
+         * Builds two separate parameter paths that each terminate in an
+         * executor. The assertion protects discovery of terminal nodes rather
+         * than counting intermediate structural nodes as completed command
+         * overloads.
+         */
         @Test
         void testGetLeaves() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -687,6 +922,11 @@ class CommandTreeTest {
             assertEquals(2, leaves.size());
         }
 
+        /**
+         * Installs an executor directly on an otherwise empty root and supplies
+         * no arguments. The assertion protects execution of a root that is
+         * itself the terminal node.
+         */
         @Test
         void testRootExec() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -701,6 +941,11 @@ class CommandTreeTest {
             assertTrue(rootExecuted.get());
         }
 
+        /**
+         * Installs a root executor and then attaches a child before parsing
+         * empty input. The assertion protects terminal-only executor dispatch,
+         * since the root ceases to be a leaf after attachment.
+         */
         @Test
         void testRootExecNotCalledWithChildren() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -716,6 +961,11 @@ class CommandTreeTest {
             assertFalse(rootExecuted.get());
         }
 
+        /**
+         * Builds a three-level literal path beneath the root. The assertions
+         * protect assigned depths, immediate parents, multi-level ancestry,
+         * root lookup, and root identity checks on the resulting structure.
+         */
         @Test
         void testNodeNavigation() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -736,6 +986,12 @@ class CommandTreeTest {
             assertFalse(child1.isRoot());
         }
 
+        /**
+         * Builds addition and subtraction paths with identical numeric
+         * parameter shapes beneath different keys. The assertions protect
+         * key-based branch discrimination and retrieval of operand results
+         * after the literal-key result.
+         */
         @Test
         void testMultipleBranches() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -761,9 +1017,18 @@ class CommandTreeTest {
         }
     }
 
+    /**
+     * {@code ParsingFailureTests} covers invalid tokens, missing required
+     * input, extra arguments, and unknown subcommands.
+     */
     @Nested
     class ParsingFailureTests {
 
+        /**
+         * Supplies an unrelated word to a boolean parameter with a success
+         * executor. The assertion protects rejection before execution when the
+         * token is neither accepted boolean spelling.
+         */
         @Test
         void testInvalidBoolValue() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -772,6 +1037,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"notabool"}).isSuccess());
         }
 
+        /**
+         * Supplies nonnumeric text to an integer parameter with a success
+         * executor. The assertion protects numeric mismatch becoming a failed
+         * parse instead of reaching the configured executor.
+         */
         @Test
         void testInvalidIntValue() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -780,6 +1050,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"notanumber"}).isSuccess());
         }
 
+        /**
+         * Supplies a token outside a configured three-value enumeration. The
+         * assertion protects rejection of unknown spellings even when the
+         * terminal executor would otherwise report success.
+         */
         @Test
         void testInvalidEnumValue() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -788,6 +1063,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"d"}).isSuccess());
         }
 
+        /**
+         * Supplies only the literal key for a path requiring a following
+         * integer. The assertion protects failure when the tree cannot select
+         * the required child at end-of-input.
+         */
         @Test
         void testMissingRequiredArgument() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -799,6 +1079,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"cmd"}).isSuccess());
         }
 
+        /**
+         * Supplies an extra token after a literal node with a terminal
+         * executor. The assertion protects leftover-input rejection before the
+         * executor can return its configured successful result.
+         */
         @Test
         void testTooManyArguments() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -809,6 +1094,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"cmd", "extra"}).isSuccess());
         }
 
+        /**
+         * Supplies a root token different from the tree's only literal key. The
+         * assertion protects an unmatched subcommand producing a failed parse
+         * rather than invoking the known path's executor.
+         */
         @Test
         void testUnknownSubcommand() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -820,9 +1110,18 @@ class CommandTreeTest {
         }
     }
 
+    /**
+     * {@code DefaultValueTests} covers configured primitive and string defaults
+     * when optional input is omitted.
+     */
     @Nested
     class DefaultValueTests {
 
+        /**
+         * Configures an optional integer parameter with a nonzero default, then
+         * parses omitted and explicit input. The assertions protect default
+         * insertion and replacement by the explicitly parsed integer.
+         */
         @Test
         void testIntDefaultValue() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -842,6 +1141,12 @@ class CommandTreeTest {
             assertEquals(100, result.get());
         }
 
+        /**
+         * Configures an optional boolean parameter whose default is
+         * {@code true} and supplies no arguments. The assertion protects
+         * insertion of the configured value rather than the ordinary
+         * {@code false} default.
+         */
         @Test
         void testBoolDefaultValue() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -858,6 +1163,11 @@ class CommandTreeTest {
             assertTrue(result.get());
         }
 
+        /**
+         * Configures an optional string parameter with a nonempty default and
+         * supplies no arguments. The assertion protects delivery of that exact
+         * default string to the terminal executor.
+         */
         @Test
         void testStringDefaultValue() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -875,9 +1185,18 @@ class CommandTreeTest {
         }
     }
 
+    /**
+     * {@code RegistryDependentNodeTests} covers registry-backed type conversion
+     * and block-property argument parsing through real registrations.
+     */
     @Nested
     class RegistryDependentNodeTests {
 
+        /**
+         * Parses several registered effect paths and one unknown path through
+         * an effect node. The assertions protect conversion to registered
+         * effect objects and rejection of an unadvertised effect spelling.
+         */
         @Test
         void testEffectNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -901,6 +1220,12 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"invalid_effect"}).isSuccess());
         }
 
+        /**
+         * Parses bare and fully namespaced enchantment identifiers plus an
+         * unknown spelling. The assertions protect default-namespace lookup,
+         * explicit identifier lookup, and conversion into the corresponding
+         * registered enchantment objects.
+         */
         @Test
         void testEnchantmentNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -924,6 +1249,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"invalid_enchant"}).isSuccess());
         }
 
+        /**
+         * Parses bare and fully namespaced item identifiers plus an unknown
+         * item. The assertions protect default-namespace expansion, direct
+         * registry lookup, and rejection of a missing item type.
+         */
         @Test
         void testItemTypeNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -947,6 +1277,11 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"invalid_item"}).isSuccess());
         }
 
+        /**
+         * Parses bare and fully namespaced block identifiers plus an unknown
+         * block. The assertions protect default-namespace expansion, direct
+         * registry lookup, and rejection of a missing block type.
+         */
         @Test
         void testBlockTypeNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -970,6 +1305,12 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"invalid_block"}).isSuccess());
         }
 
+        /**
+         * Parses bare and fully namespaced entity identifiers plus an unknown
+         * entity. The assertions protect current entity-registry resolution and
+         * default-namespace expansion before the executor receives its type
+         * result.
+         */
         @Test
         void testEntityTypeNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -993,6 +1334,12 @@ class CommandTreeTest {
             assertFalse(tree.parse(mockSender, new String[]{"invalid_entity"}).isSuccess());
         }
 
+        /**
+         * Parses empty properties, a valid torch assignment, and an unbracketed
+         * property token after a block type. The assertions protect the
+         * empty-list convention, successful property conversion, and rejection
+         * of missing bracket syntax.
+         */
         @Test
         void testBlockPropertyValuesNode() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -1007,20 +1354,22 @@ class CommandTreeTest {
                         return context.success();
                     });
 
-            // Test with empty properties
             assertTrue(tree.parse(mockSender, new String[]{"stone", "[]"}).isSuccess());
             assertEquals(BlockTypes.STONE, blockResult.get());
             assertTrue(propertyResult.get().isEmpty());
 
-            // Test with torch and facing direction
             assertTrue(tree.parse(mockSender, new String[]{"torch", "[torch_facing_direction=top]"}).isSuccess());
             assertEquals(BlockTypes.TORCH, blockResult.get());
             assertFalse(propertyResult.get().isEmpty());
 
-            // Test without property values (should fail because blockPropertyValues expects [...])
             assertFalse(tree.parse(mockSender, new String[]{"stone", "invalid"}).isSuccess());
         }
 
+        /**
+         * Supplies a torch property assignment with quoted name and value
+         * inside brackets. The assertions protect quote removal before property
+         * lookup and conversion into a nonempty result list.
+         */
         @Test
         void testBlockPropertyValuesNodeWithQuotedValues() {
             var tree = AllayCommandTree.create(mockCmd);
@@ -1033,7 +1382,6 @@ class CommandTreeTest {
                         return context.success();
                     });
 
-            // Test with quoted property names and values
             assertTrue(tree.parse(mockSender, new String[]{"torch", "[\"torch_facing_direction\"=\"top\"]"}).isSuccess());
             assertFalse(propertyResult.get().isEmpty());
         }

@@ -16,18 +16,29 @@ import org.joml.Vector3d;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Dispense behavior for firework rocket items.
- * Spawns a firework rocket entity in front of the dispenser.
+ * {@code FireworksDispenseBehavior} launches firework entities one block beyond the dispenser
+ * center. Item-provided duration and explosions are transferred when the item exposes the
+ * firework component, and the behavior adds the entity before emitting launch sound and a
+ * directional particle.
  *
  * @author daoge_cmd
  */
 public class FireworksDispenseBehavior implements DispenseBehavior {
 
+    /**
+     * Creates a rocket with randomized yaw and transfers duration and explosion data from a
+     * firework-capable item. The rocket retains the item's returned explosion set, so both
+     * components share that storage. The entity is added before effects, and success tells the
+     * caller to consume one selected item. This path assumes entity creation supplies a usable
+     * rocket.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
         var dimension = block.getDimension();
         var spawnPos = getSpawnPosition(block, face);
 
+        // Randomize the initial yaw across a full turn while retaining the fixed
+        // pitch supplied to rocket initialization; this orientation does not itself set motion.
         var firework = EntityTypes.FIREWORKS_ROCKET.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
@@ -36,7 +47,6 @@ public class FireworksDispenseBehavior implements DispenseBehavior {
                         .build()
         );
 
-        // Transfer firework data from item to entity
         if (item instanceof ItemFireworkRocketBaseComponent fireworkItem) {
             firework.setExistenceTicks(fireworkItem.getRandomizedDuration());
             firework.setExplosions(fireworkItem.getExplosions());
@@ -47,6 +57,9 @@ public class FireworksDispenseBehavior implements DispenseBehavior {
         return DispenseResult.success();
     }
 
+    /**
+     * Returns a new mutable position one block beyond the dispenser center.
+     */
     protected Vector3d getSpawnPosition(Block block, BlockFace face) {
         var pos = MathUtils.center(block.getPosition());
         pos.x += face.getOffset().x();
@@ -55,6 +68,11 @@ public class FireworksDispenseBehavior implements DispenseBehavior {
         return pos;
     }
 
+    /**
+     * Emits launch sound at {@code spawnPos} and the shoot particle at the dispenser center.
+     * The caller supplies the rocket's spawn position so the sound follows the spawned entity
+     * rather than the block center.
+     */
     protected void spawnDispenseEffects(Block block, BlockFace face, Vector3d spawnPos) {
         var dimension = block.getDimension();
         var center = MathUtils.center(block.getPosition());

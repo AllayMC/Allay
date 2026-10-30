@@ -9,7 +9,10 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when an item is about to be damaged.
+ * {@code ItemDamageEvent} carries a proposed durability change for an item stack.
+ * The damage attempt dispatches this event after its unbreaking check succeeds;
+ * listeners can cancel the attempt or change the amount passed to the stack's
+ * damage setter.
  *
  * @author zernix2077
  */
@@ -18,17 +21,21 @@ import org.allaymc.api.item.ItemStack;
 public class ItemDamageEvent extends Event implements CancellableEvent {
 
     /**
-     * The item stack that is about to be damaged.
+     * Stack receiving the durability change.
      */
     protected final ItemStack itemStack;
     /**
-     * The amount of damage to apply to the item stack.
-     * This value can be modified to change how much damage the item will receive.
-     * Setting this to zero will effectively prevent any damage from being applied.
+     * {@code damage} holds the proposed durability increase. The damage attempt adds
+     * the listener-modified value to the stack's current damage after dispatch.
      */
     @Setter
     protected int damage;
 
+    /**
+     * Creates a durability-change event retaining the supplied stack and amount.
+     * The constructor does not apply damage; the caller uses the possibly modified
+     * amount only after an uncancelled dispatch.
+     */
     public ItemDamageEvent(ItemStack itemStack, int damage) {
         this.itemStack = itemStack;
         this.damage = damage;

@@ -3,15 +3,16 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Shared component for slab blocks that can resolve their double slab counterpart.
+ * {@code BlockSlabBaseComponent} exposes the double slab counterpart associated with
+ * a single slab block. Placement can use this relationship to combine matching slabs
+ * into a full block, while the inherited base component supplies general lifecycle
+ * operations.
  *
  * @author daoge_cmd
  */
 public interface BlockSlabBaseComponent extends BlockBaseComponent {
     /**
-     * Gets the double slab block type.
-     *
-     * @return the corresponding {@link BlockType}
+     * Returns the double slab block type corresponding to this slab.
      */
     BlockType<?> getDoubleSlabBlockType();
 }

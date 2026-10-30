@@ -10,13 +10,28 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 /**
+ * {@code BlockCraftingTableBaseComponentImpl} opens the crafting table menu after
+ * shared block interaction handlers decline the click. Actual players receive
+ * their retained player container associated with the clicked block, while
+ * simulated players receive a handled result without opening a viewer.
+ *
  * @author daoge_cmd
  */
 public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates this block behavior component for the supplied registered block
+     * type.
+     */
     public BlockCraftingTableBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Runs shared interaction handlers before opening the crafting table menu for
+     * an actual player. {@code interactInfo} must identify the player and clicked
+     * block; the menu receives that position, and simulated players still receive
+     * {@code true}.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {

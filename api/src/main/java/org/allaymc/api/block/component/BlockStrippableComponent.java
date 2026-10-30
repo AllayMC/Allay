@@ -3,26 +3,24 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * Component for blocks that can be stripped into a different block state.
+ * {@code BlockStrippableComponent} resolves stripped block states and identifies
+ * states that are already stripped. The server implementation selects a configured
+ * stripped type and copies the input state's property values, so callers must supply
+ * states compatible with that counterpart.
  *
  * @author IWareQ
  */
 public interface BlockStrippableComponent extends BlockComponent {
     /**
-     * Get the stripped block state of the given block state
-     *
-     * @param unstrippedBlockState the unstripped block state
-     *
-     * @return the stripped block state
+     * Returns a stripped counterpart carrying the input state's property values. The
+     * input must have properties compatible with the stripped type; the server lookup
+     * can return {@code null} when those values do not identify a valid state.
      */
     BlockState getStrippedBlockState(BlockState unstrippedBlockState);
 
     /**
-     * Check if the block state is stripped
-     *
-     * @param blockState the block state
-     *
-     * @return true if the block state is stripped, false otherwise
+     * Returns whether the supplied state belongs to this component's stripped block
+     * type.
      */
     boolean isStripped(BlockState blockState);
 }

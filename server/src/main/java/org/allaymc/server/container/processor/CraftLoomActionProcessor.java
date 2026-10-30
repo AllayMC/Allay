@@ -16,15 +16,29 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Map;
 
 /**
- * Handles loom crafting actions for applying patterns to banners.
+ * {@code CraftLoomActionProcessor} prepares patterned banner output for an opened loom.
+ * The processor checks available banner and dye counts, banner eligibility, the pattern
+ * limit, and any required pattern item before staging the listener-approved result;
+ * subsequent request actions consume ingredients.
  *
  * @author daoge_cmd
  */
 @Slf4j
 public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftLoomAction> {
 
+    /**
+     * {@code MAX_BANNER_PATTERNS} limits existing patterns before another is applied.
+     * The processor rejects a banner already at this count rather than extending its
+     * pattern list.
+     */
     private static final int MAX_BANNER_PATTERNS = 6;
 
+    /**
+     * Prepares a banner result for the positive requested craft count after validating
+     * loom inputs and the selected pattern. The result event can replace or cancel the
+     * proposed output; success stages it with ordinary viewer sending suppressed and
+     * returns {@code null} without consuming ingredient slots.
+     */
     @Override
     public ActionResponse handle(CraftLoomAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getOpenedContainer(ContainerTypes.LOOM);
@@ -43,7 +57,6 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
         var dyeItem = container.getDye();
         var materialItem = container.getMaterial();
 
-        // Validate input banner
         if (inputBanner.isEmptyOrAir()) {
             log.warn("Loom input banner is empty");
             return error();
@@ -54,7 +67,6 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
             return error();
         }
 
-        // Validate dye
         if (dyeItem.isEmptyOrAir()) {
             log.warn("Loom dye is empty");
             return error();
@@ -65,32 +77,27 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
             return error();
         }
 
-        // Validate banner has banner component
         if (!(inputBanner instanceof ItemBannerBaseComponent bannerComponent)) {
             log.warn("Input item is not a banner");
             return error();
         }
 
-        // Check if this is an ominous banner (cannot be patterned)
         if (bannerComponent.getBannerType() == BannerType.OMINOUS) {
             log.warn("Cannot apply patterns to an ominous banner");
             return error();
         }
 
-        // Check pattern limit
         if (bannerComponent.getPatternCount() >= MAX_BANNER_PATTERNS) {
             log.warn("Banner already has maximum number of patterns ({})", MAX_BANNER_PATTERNS);
             return error();
         }
 
-        // Extract dye color from dye item
         if (!(dyeItem instanceof ItemDyeComponent dyeComponent)) {
             log.warn("Invalid dye item in loom: {}", dyeItem.getItemType().getIdentifier());
             return error();
         }
         var dyeColor = dyeComponent.getDyeColor();
 
-        // Get pattern type from action
         var patternId = action.patternId();
         var patternType = BannerPatternType.fromId(patternId);
         if (patternType == null) {
@@ -98,10 +105,8 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
             return error();
         }
 
-        // Validate pattern item requirement
         var requiredPatternItem = patternType.getRequiredPatternItem();
         if (requiredPatternItem != null) {
-            // Special pattern - requires pattern item in material slot
             if (materialItem.isEmptyOrAir() || materialItem.getItemType() != requiredPatternItem) {
                 log.warn("Pattern {} requires pattern item {}, but material slot contains: {}",
                         patternType, requiredPatternItem.getIdentifier(),
@@ -110,31 +115,32 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
             }
         }
 
-        // Create result banner with count = timesCrafted
         var resultBanner = inputBanner.copy();
         if (!(resultBanner instanceof ItemBannerBaseComponent resultBannerComponent)) {
-            // This should never happen since we already validated the input
+            // Copying is delegated to the item implementation; reject an unexpected
+            // missing banner component before applying a pattern to the result.
             log.error("Result banner is not a banner item - this should never happen");
             return error();
         }
 
-        // Add new pattern and set result count
         resultBannerComponent.addPattern(new BannerPattern(patternType, dyeColor));
         resultBanner.setCount(timesCrafted);
 
-        // Fire event
         var event = new LoomTakeResultEvent(player, container, resultBanner);
         if (!event.call()) {
             return error();
         }
 
-        // Place result in created output container
         player.getControlledEntity().getContainer(ContainerTypes.CREATED_OUTPUT)
                 .setItemStack(0, event.getResultItem(), false);
 
         return null;
     }
 
+    /**
+     * Returns the stack-request action type dispatched to {@code
+     * CraftLoomActionProcessor}.
+     */
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.CRAFT_LOOM;

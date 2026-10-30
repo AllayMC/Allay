@@ -6,72 +6,77 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Represents a category of creative items. A category is a collection of named and unnamed groups.
- * Currently, there are only four visible categories in the creative inventory, and they are {@code Construction},
- * {@code Nature}, {@code Equipment}, and {@code Items}.
+ * {@code CreativeItemCategory} contains named and unnamed creative-inventory
+ * groups for one inventory tab. Group indices belong to the whole creative
+ * registry, while this category restricts index and name lookups to its own
+ * registered groups.
  *
  * @author daoge_cmd
  */
 public interface CreativeItemCategory {
     /**
-     * Get a specific group by index in this category.
-     *
-     * @param index the index of the group
-     * @return the group with the specified index. {@code null} will be returned if the group does not exist
+     * Returns this category's group at the supplied registry-wide index.
+     * The result is {@code null} when the index belongs to no group in this category,
+     * even if another category contains that index.
      */
     CreativeItemGroup getGroup(int index);
 
     /**
-     * Get a specific group by name in this category.
+     * Returns the group most recently registered under the supplied name.
+     * The name must not be blank; an unknown nonblank name returns {@code null}.
+     * Matching uses the registered name without trimming or translation.
      *
-     * @param name the name of the group, empty or blank string is not allowed here. Check
-     *             {@link CreativeItemGroups} for all available group names in vanilla.
-     * @return the group with the specified name. {@code null} will be returned if the group does not exist
-     * @throws IllegalArgumentException if the name is empty or blank
+     * @throws IllegalArgumentException if {@code name} is blank
      */
     CreativeItemGroup getNamedGroup(String name);
 
     /**
-     * Register a new named group in the category. See docs in {@link CreativeItemGroup} for more details
-     * about the difference between named and unnamed groups.
-     *
-     * @param name the name of the group, empty string is not allowed here. Translation key is supported
-     * @param icon the icon of the group
-     * @return the registered group
+     * Registers a group with the supplied name and icon references.
+     * The name and icon must be non-{@code null}; duplicate names replace name lookup
+     * while earlier groups remain registered by index. Registration fails after the
+     * registry freezes.
      */
     CreativeItemGroup registerGroup(String name, ItemStack icon);
 
     /**
-     * Register a new unnamed group in the category. See docs in {@link CreativeItemGroup} for more details
-     * about the difference between named and unnamed groups.
-     *
-     * @return the registered group
+     * Registers a group with an empty name and an air icon.
+     * The group receives its own registry-wide index without entering named lookup,
+     * so a category can contain multiple unnamed groups before registration freezes.
      */
     CreativeItemGroup registerUnnamedGroup();
 
     /**
-     * Get all groups in this category.
-     *
-     * @return a map of all groups in this category
+     * Returns an unmodifiable view of this category's registry-indexed groups.
+     * The view reflects additions to the backing map; its group values remain the
+     * same registered objects rather than copies.
      */
     @UnmodifiableView
     Map<Integer, CreativeItemGroup> getGroups();
 
     /**
-     * Get the type of this category.
-     *
-     * @return the type of this category
+     * Returns the creative-inventory tab represented by this category instance.
      */
     Type getType();
 
     /**
-     * Represents the types of categories within the creative inventory. Each type corresponds
-     * to a specific grouping of items that can be seen in the creative inventory.
+     * {@code Type} identifies the four category tabs supported by creative inventory.
      */
     enum Type {
+        /**
+         * Construction inventory category tab.
+         */
         CONSTRUCTION,
+        /**
+         * Nature inventory category tab.
+         */
         NATURE,
+        /**
+         * Equipment inventory category tab.
+         */
         EQUIPMENT,
+        /**
+         * Items inventory category tab.
+         */
         ITEMS,
     }
 }

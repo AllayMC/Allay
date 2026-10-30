@@ -7,7 +7,11 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player is unbanned from the server.
+ * {@code PlayerUnbanEvent} represents a request to remove an existing player
+ * UUID or name ban.
+ * The player manager dispatches this event only when the supplied entry is
+ * currently banned. Cancellation retains that entry; acceptance removes it
+ * without restoring any disconnected session.
  *
  * @author daoge_cmd
  */

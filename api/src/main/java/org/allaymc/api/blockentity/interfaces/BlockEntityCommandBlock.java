@@ -4,7 +4,11 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityCommandBlockBaseComponent;
 
 /**
- * Command block block entity interface.
+ * {@code BlockEntityCommandBlock} combines command execution controls,
+ * command-sender identity, and persisted block-entity state. The command-block
+ * component supplies command text, activation settings, output, and execution
+ * behavior, while the shared base contract associates that state with a
+ * dimension and block position.
  *
  * @author daoge_cmd
  */

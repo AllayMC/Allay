@@ -27,22 +27,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * {@code BlockShelfBaseComponentImpl} manages shelf item exchanges, powered shelf
+ * chains, and comparator signals. Unpowered interactions address one of three slots
+ * on the shelf's front face; powered interactions exchange a chain with the player's
+ * hotbar. Compatible chain members must be powered shelves with matching facing, and
+ * each collected chain contains at most three positions.
+ *
+ * <p>
+ * Chain order determines both the visible end and center properties and the
+ * correspondence between shelf slots and hotbar slots. Exchanges align smaller chains
+ * to the hotbar's right edge, preserving a deterministic item mapping for one, two,
+ * or three shelves. Inventory writes happen successively without rollback, while
+ * creative single-slot use copies the held item instead of swapping it. Comparator
+ * output encodes occupied shelf slots as individual bits.
+ *
  * @author daoge_cmd
  */
 public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * Injected shelf block entity holder.
+     */
     @Dependency
     private BlockBlockEntityHolderComponent<BlockEntityShelf> blockEntityHolderComponent;
 
+    /**
+     * Creates shelf base behavior for the supplied block type.
+     */
     public BlockShelfBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Forwards placement and activates a shelf whose placement position is powered.
+     * Activation updates the power property and chain connections before emitting its
+     * sound, while unpowered placement leaves those properties unchanged.
+     */
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
-
-        // Check redstone power immediately after placement
         if (oldBlock.isPowered()) {
             var dimension = oldBlock.getDimension();
             var pos = oldBlock.getPosition();
@@ -52,6 +75,18 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Handles front-face shelf exchanges for nonsneaking players within the shelf's
+     * usable height. Missing player context, incompatible clicks, and cancelled use
+     * events return {@code false} before inventory exchange.
+     *
+     * <p>
+     * Powered shelves exchange their collected chain with the corresponding hotbar
+     * segment. An unpowered shelf swaps the selected slot with the player's entire
+     * held stack, except creative mode copies the held item into the shelf and keeps
+     * the player's hand unchanged. Container updates occur successively and have no
+     * rollback path.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) {
@@ -67,19 +102,14 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         var blockState = dimension.getBlockState(pos);
         var facing = blockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
         var facingBlockFace = BlockFace.from(facing);
-
-        // Only interact when clicking the front face
         if (interactInfo.blockFace() != facingBlockFace) {
             return false;
         }
-
-        // Check click Y is within shelf area
         var clickedPos = interactInfo.clickedPos();
+        // The middle half of the front face is the usable shelf height.
         if (clickedPos.y() < 0.25f || clickedPos.y() > 0.75f) {
             return false;
         }
-
-        // Calculate slot from click position
         int slot = calculateSlot(facing, clickedPos.x(), clickedPos.z());
 
         var shelf = blockEntityHolderComponent.getBlockEntity(pos.x(), pos.y(), pos.z(), dimension);
@@ -103,12 +133,12 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
             }
             var heldItem = player.getItemInHand();
             Container shelfContainer = shelf.getContainer();
+            // Creative single-slot use copies the held item without returning shelf
+            // contents to the hand; ordinary use exchanges both references.
             if (player.getGameMode() == GameMode.CREATIVE) {
-                // Creative mode: replace slot item with a copy of the held item, no swap
                 var newItem = (heldItem != null && heldItem != ItemAirStack.AIR_STACK) ? heldItem.copy() : ItemAirStack.AIR_STACK;
                 shelfContainer.setItemStack(slot, newItem);
             } else {
-                // Survival/Adventure: directly swap entire hand stack with slot
                 var oldItem = shelfContainer.getItemStack(slot);
                 shelfContainer.setItemStack(slot, heldItem != null ? heldItem : ItemAirStack.AIR_STACK);
                 player.setItemInHand(oldItem);
@@ -118,15 +148,26 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Returns the slot index selected by the click's horizontal coordinate along the
+     * shelf face. The facing-relative projection is normalized into the unit
+     * interval, then divided into three slot regions.
+     */
     private int calculateSlot(MinecraftCardinalDirection facing, float clickX, float clickZ) {
-        // Use the same rotateYCCW + dot product approach as PNX to determine
-        // the horizontal position along the shelf face from left to right
+        // Project the click along the shelf face instead of using a world axis, so
+        // all cardinal orientations share the same slot ordering.
         var offset = BlockFace.from(facing).rotateYCCW().getOffset();
         float distance = clickX * offset.x() + clickZ * offset.z();
         if (distance < 0) distance += 1.0f;
+        // Equal thirds partition the shelf front into three item slots.
         return distance < (1 / 3f) ? 0 : distance < (2 / 3f) ? 1 : 2;
     }
 
+    /**
+     * Forwards neighbor updates and applies changes to the shelf's powered state.
+     * Activation rebuilds its chain; deactivation clears its connection type and
+     * rebuilds neighboring compatible chains before playing the corresponding sound.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -143,56 +184,57 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         var pos = block.getPosition();
 
         if (shouldBePowered) {
-            // Rising edge - activate
             dimension.updateBlockProperty(BlockPropertyTypes.POWERED_BIT, true, pos);
             updateChainConnections(dimension, pos);
             dimension.addSound(MathUtils.center(pos), SimpleSound.ACTIVATED);
         } else {
-            // Falling edge - deactivate
             dimension.updateBlockProperty(BlockPropertyTypes.POWERED_BIT, false, pos);
             dimension.updateBlockProperty(BlockPropertyTypes.POWERED_SHELF_TYPE, 0, pos);
-            // Update neighbors that might be in the same chain
             updateNeighborChains(dimension, pos);
             dimension.addSound(MathUtils.center(pos), SimpleSound.DEACTIVATED);
         }
     }
 
+    /**
+     * Rebuilds visible shelf connection types for the collected powered chain. The
+     * ordered chain determines unconnected, left, center, and right values, and each
+     * dimension property write is applied separately.
+     */
     private void updateChainConnections(Dimension dimension, Vector3ic pos) {
         var blockState = dimension.getBlockState(pos);
         var facing = blockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
-
-        // Collect the full chain including this block
         var chain = collectChain(dimension, pos, facing);
-
-        // Assign POWERED_SHELF_TYPE to each shelf in the chain
+        // The collected list fixes chain membership and order for this pass, instead
+        // of recomputing neighbors between individual connection-property writes.
         for (int i = 0; i < chain.size(); i++) {
             int type;
             if (chain.size() == 1) {
-                type = 0; // UNCONNECTED
+                type = 0;
             } else if (i == 0) {
-                type = 3; // LEFT
+                type = 3;
             } else if (i == chain.size() - 1) {
-                type = 1; // RIGHT
+                type = 1;
             } else {
-                type = 2; // CENTER
+                type = 2;
             }
             dimension.updateBlockProperty(BlockPropertyTypes.POWERED_SHELF_TYPE, type, chain.get(i));
         }
     }
 
+    /**
+     * Rebuilds chains for powered, equally facing shelf neighbors on both sides. The
+     * current shelf's facing determines those perpendicular positions, allowing
+     * deactivation to update the remaining adjacent chain fragments.
+     */
     private void updateNeighborChains(Dimension dimension, Vector3ic pos) {
         var blockState = dimension.getBlockState(pos);
         var facing = blockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
         var facingBlockFace = BlockFace.from(facing);
-
-        // Check both perpendicular neighbors
         var leftDir = facingBlockFace.rotateY();
         var rightDir = facingBlockFace.rotateYCCW();
 
         var leftPos = leftDir.offsetPos(pos);
         var rightPos = rightDir.offsetPos(pos);
-
-        // If the neighbor is a powered shelf with same facing, rebuild its chain
         if (isConnectableShelf(dimension, leftPos, facing)) {
             updateChainConnections(dimension, leftPos);
         }
@@ -201,35 +243,40 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns an ordered list containing the origin and at most two compatible
+     * neighbors. The supplied facing determines left and right directions, while
+     * matching neighbors must be powered shelves facing the same way.
+     *
+     * <p>
+     * The walk first collects up to two shelves on the left, inserts the origin, and
+     * fills any remaining capacity from the right. This left-first selection keeps
+     * the same list order for connection assignment and hotbar exchange; positions
+     * beyond the three-member limit are omitted.
+     */
     private List<Vector3ic> collectChain(Dimension dimension, Vector3ic origin, MinecraftCardinalDirection facing) {
         var facingBlockFace = BlockFace.from(facing);
         var leftDir = facingBlockFace.rotateY();
         var rightDir = facingBlockFace.rotateYCCW();
 
         List<Vector3ic> chain = new ArrayList<>();
-
-        // Walk left to find the leftmost shelf
         var current = leftDir.offsetPos(origin);
         List<Vector3ic> leftShelves = new ArrayList<>();
+        // Two left neighbors fill the remaining capacity beside the origin.
         while (leftShelves.size() < 2 && isConnectableShelf(dimension, current, facing)) {
             leftShelves.add(0, current);
             current = leftDir.offsetPos(current);
         }
-
-        // Build chain: left shelves + self + right shelves
         chain.addAll(leftShelves);
         chain.add(origin);
-
-        // Walk right
         current = rightDir.offsetPos(origin);
+        // Three shelves fill the nine-slot hotbar exchange capacity.
         while (chain.size() < 3 && isConnectableShelf(dimension, current, facing)) {
             chain.add(current);
             current = rightDir.offsetPos(current);
         }
-
-        // Cap at 3
+        // Defensively retain a three-position slice around the origin.
         if (chain.size() > 3) {
-            // Keep only the 3 shelves closest to origin
             int originIdx = chain.indexOf(origin);
             int start = Math.max(0, originIdx - 1);
             int end = Math.min(chain.size(), start + 3);
@@ -239,6 +286,11 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         return chain;
     }
 
+    /**
+     * Returns whether the position contains a powered shelf with the requested
+     * facing. Other block behaviors, unpowered shelf states, and different cardinal
+     * directions prevent that position from joining the chain.
+     */
     private boolean isConnectableShelf(Dimension dimension, Vector3ic pos, MinecraftCardinalDirection facing) {
         var state = dimension.getBlockState(pos);
         if (!(state.getBlockType().getBlockBehavior() instanceof BlockShelfBehavior)) {
@@ -250,17 +302,24 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         return state.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION) == facing;
     }
 
+    /**
+     * Exchanges each collected shelf slot with its corresponding player hotbar slot.
+     * The chain has at most three members, and smaller chains align to the hotbar's
+     * right edge.
+     *
+     * <p>
+     * One shelf maps to slots six through eight, two shelves map to three through
+     * eight, and three shelves use all nine slots. Each pair is read before its two
+     * writes, retaining both item references for the exchange. Missing shelf entities
+     * are skipped, and failures after earlier writes have no rollback.
+     */
     private void performMultiSwap(Dimension dimension, Vector3ic clickedPos, BlockState clickedState,
                                   MinecraftCardinalDirection facing,
                                   org.allaymc.api.entity.interfaces.EntityPlayer player) {
-        // Collect all shelves in the chain
         var chain = collectChain(dimension, clickedPos, facing);
         var inventory = player.getContainer(ContainerTypes.INVENTORY);
-
-        // Hotbar offset: 1 shelf -> slots 6-8, 2 shelves -> slots 3-8, 3 shelves -> slots 0-8
+        // Right alignment reserves three hotbar slots per collected shelf.
         int hotbarOffset = (3 - chain.size()) * 3;
-
-        // Map chain slots to hotbar slots (right-aligned) and swap
         for (int shelfIdx = 0; shelfIdx < chain.size(); shelfIdx++) {
             var shelfPos = chain.get(shelfIdx);
             var shelf = blockEntityHolderComponent.getBlockEntity(shelfPos.x(), shelfPos.y(), shelfPos.z(), dimension);
@@ -273,19 +332,29 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
 
                 var shelfItem = shelfContainer.getItemStack(slotInShelf);
                 var hotbarItem = inventory.getItemStack(hotbarSlot);
-
-                // Swap
+                // Both items were read before either write. Keep the displaced shelf
+                // reference for the following hotbar assignment instead of reading
+                // the modified shelf again.
                 shelfContainer.setItemStack(slotInShelf, hotbarItem);
                 inventory.setItemStack(hotbarSlot, shelfItem);
             }
         }
     }
 
+    /**
+     * Returns whether shelves always support their slot-occupancy comparator
+     * encoding.
+     */
     @Override
     public boolean hasComparatorInputOverride() {
         return true;
     }
 
+    /**
+     * Returns a bit mask whose set bits identify nonair shelf slots. A missing shelf
+     * entity returns {@code 0}, and each present slot contributes its index's bit
+     * rather than an item count.
+     */
     @Override
     public int getComparatorInputOverride(Block block) {
         var shelf = blockEntityHolderComponent.getBlockEntity(block.getPosition());
@@ -296,6 +365,7 @@ public class BlockShelfBaseComponentImpl extends BlockBaseComponentImpl {
         Container shelfContainer = shelf.getContainer();
         for (int i = 0; i < ContainerTypes.SHELF.getSize(); i++) {
             if (shelfContainer.getItemStack(i) != ItemAirStack.AIR_STACK) {
+                // Each occupied slot contributes one bit to the comparator value.
                 output |= (1 << i);
             }
         }

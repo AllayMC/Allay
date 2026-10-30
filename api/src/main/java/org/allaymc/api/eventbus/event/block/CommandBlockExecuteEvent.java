@@ -9,7 +9,10 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityCommandBlock;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a command block is about to execute a command.
+ * {@code CommandBlockExecuteEvent} represents a command block's pending command
+ * execution. The command block supplies the command source, and listeners can replace
+ * the command text; cancellation stops that execution path before the command
+ * registry receives the text.
  *
  * @author daoge_cmd
  */
@@ -17,15 +20,19 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.WORLD)
 public class CommandBlockExecuteEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The command block executing the command.
+     * Executing command block entity.
      */
     protected BlockEntityCommandBlock commandBlock;
     /**
-     * The command being executed.
+     * {@code command} holds the text passed to the command registry after dispatch.
+     * Listeners can replace it before execution begins.
      */
     @Setter
     protected String command;
 
+    /**
+     * Creates an execution event retaining the command block and command text.
+     */
     public CommandBlockExecuteEvent(Block block, BlockEntityCommandBlock commandBlock, String command) {
         super(block);
         this.commandBlock = commandBlock;

@@ -7,59 +7,55 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Shared component for filled map items that store, render, and send map images.
+ * {@code ItemFilledMapBaseComponent} exposes a filled map's identifier and
+ * mutable image, including terrain rendering and delivery to players.
+ * Rendering stores its completed image on the item, while callers can retrieve
+ * or replace the image before sending another update.
  *
  * @author daoge_cmd
  */
 public interface ItemFilledMapBaseComponent extends ItemBaseComponent {
     /**
-     * Gets the image of the map.
-     *
-     * @return the image of the map, or {@code null} if the image is not set
+     * Returns the currently stored map image, or {@code null} when absent. The
+     * returned image is shared with the component, so pixel changes also
+     * affect later map delivery and serialization.
      */
     BufferedImage getImage();
 
     /**
-     * Sets the image of the map. An image in 128x128 is preferred, if the
-     * provided image's size isn't 128x128, it will be resized to 128x128.
-     *
-     * @param image the image to set, or {@code null} to clear the image
+     * Replaces the stored image with a version scaled to 128 by 128 pixels.
+     * The server implementation rejects {@code null}; an exact-size source is
+     * stored before allocation, so a later allocation failure can leave that
+     * source as the current image.
      */
     void setImage(BufferedImage image);
 
     /**
-     * Gets the map id.
-     *
-     * @return the map id
+     * Returns the identifier used when sending this map image.
      */
     long getMapId();
 
     /**
-     * @see #renderMap(Dimension, int, int, int)
+     * Renders and stores a map using one block per image pixel. This overload
+     * passes a zoom of {@code 1} to the full rendering operation and returns
+     * its completion future.
      */
     default CompletableFuture<BufferedImage> renderMap(Dimension dimension, int x, int z) {
         return this.renderMap(dimension, x, z, 1);
     }
 
     /**
-     * Renders the map for the given dimension at the specified coordinates.
-     *
-     * @param dimension the dimension to render the map in
-     * @param startX    the start x coordinate of the map
-     * @param startZ    the start z coordinate of the map
-     * @param zoom      the zoom level of the map, which will be multiplied by the width and height of the area
-     *                  Default value should be 1, which means the map will cover a 128x128 area.
-     * @return the rendered map image
+     * Renders terrain beginning at the supplied block coordinates and stores
+     * the completed image. {@code zoom} selects the block spacing between
+     * samples; a zoom of {@code 0} skips sampling, while asynchronous
+     * rendering failures produce a logged transparent replacement.
      */
     CompletableFuture<BufferedImage> renderMap(Dimension dimension, int startX, int startZ, int zoom);
 
     /**
-     * Sends the map to the player. Usually you should call this method
-     * after called {@link #setImage(BufferedImage)} to let the player
-     * see the updated map image.
-     *
-     * @param player the player to send the map to
-     * @throws IllegalStateException if the map image is not set
+     * Sends the currently stored map image to the supplied player. Callers can
+     * send again after changing the image; an absent image causes
+     * {@link IllegalStateException} before map data is sent.
      */
     void sendToPlayer(Player player);
 }

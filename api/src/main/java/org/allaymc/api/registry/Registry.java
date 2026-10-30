@@ -3,18 +3,18 @@ package org.allaymc.api.registry;
 import java.util.function.Consumer;
 
 /**
- * A wrapper around a value which is loaded based on the output from the provided
- * {@link RegistryLoader}. This class is primarily designed to hold a registration
- * of some kind, however no limits are set on what it can hold, as long as the
- * specified RegistryLoader returns the same value type that is specified in the
- * generic.
+ * {@code Registry} exposes loaded content and operations for populating or replacing that
+ * content. Implementations define its representation, ownership, and mutation
+ * policy. Freezing is optional: the default methods retain compatibility with
+ * implementations that remain mutable, while built-in registries can reject
+ * subsequent mutations through their registry methods.
  *
  * <p>
- * Below, a RegistryLoader is taken in the constructor. RegistryLoaders have two
- * generic types: the input, and the output. The input is what it takes in, whether
- * it be a string which references to a file, or nothing more than an integer. The
- * output is what it generates based on the input, and should be the same type as
- * the {@code CONTENT} generic specified in the registry.
+ * A {@link RegistryLoader} can obtain content from an input such as a file path
+ * or directly transform a supplied value. Content access does not by itself
+ * imply a defensive copy, deep immutability, or concurrent mutation support.
+ * Callers must follow the concrete registry's rules before retaining or
+ * changing its content.
  *
  * <p>
  * Registries can be very simple to create. Here is an example that simply parses a
@@ -23,10 +23,8 @@ import java.util.function.Consumer;
  * <pre>{@code public static final SimpleRegistry<Integer> STRING_TO_INT = SimpleRegistry.create("5", Integer::parseInt);}</pre>
  *
  * <p>
- * This is a simple example which really wouldn't have much of a practical use,
- * however it demonstrates a fairly basic use case of how this system works. Typically
- * though, the first parameter would be a location of some sort, such as a file path
- * where the loader will load the mappings from.
+ * The loader runs when this registry is created; later reads retrieve its
+ * stored result rather than repeating the conversion.
  *
  * @param <CONTENT> the type of the value which is being held by the registry
  *
@@ -34,42 +32,48 @@ import java.util.function.Consumer;
  */
 public interface Registry<CONTENT> {
     /**
-     * Registers what is specified in the given
-     * {@link Consumer} into the underlying value.
-     *
-     * @param consumer the consumer
+     * Passes the stored content to a consumer for registration changes.
+     * Implementations supporting freezing may reject the call after freezing;
+     * callback failures need not roll back changes already applied to content.
      */
     void register(Consumer<CONTENT> consumer);
 
     /**
-     * Gets the underlying value held by this registry.
-     *
-     * @return the underlying value held by this registry
+     * Returns the content currently held by this registry. The result can share
+     * mutable state with the registry, and freezing does not universally imply
+     * an immutable result. Callers must follow the implementation's ownership
+     * rules before modifying it.
      */
     CONTENT getContent();
 
     /**
-     * Sets the underlying value held by this registry.
-     * Clears any existing data associated with the previous
-     * value.
-     *
-     * @param content the underlying value held by this registry
+     * Replaces the content used by subsequent registry operations.
+     * Implementations define whether replacement is allowed after freezing;
+     * references obtained before replacement can still refer to the previous
+     * value, which need not be cleared or closed.
      */
     void setContent(CONTENT content);
 
     /**
-     * Prevents further registration or replacement of this registry's content.
+     * Requests that this registry reject subsequent mutation through its
+     * methods.
      *
-     * <p>The default implementation is a no-op so existing custom registry
-     * implementations remain compatible and mutable unless they opt into freezing.</p>
+     * <p>
+     * The default implementation does nothing, so existing custom registries
+     * remain mutable unless they opt into freezing. Callers must consult the
+     * concrete implementation for guarantees about exposed content references.
      */
     default void freeze() {
     }
 
     /**
-     * Checks whether this registry has been frozen.
+     * Returns whether the implementation reports that registry mutations are
+     * frozen.
      *
-     * <p>Implementations that support freezing should override this method.</p>
+     * <p>
+     * The default returns {@code false}, matching the default no-op
+     * {@code freeze} operation. Implementations supporting freezing override
+     * this method with their state.
      *
      * @return {@code true} if mutations are no longer accepted
      */

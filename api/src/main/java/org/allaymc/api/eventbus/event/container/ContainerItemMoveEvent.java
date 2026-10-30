@@ -8,7 +8,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.type.ItemType;
 
 /**
- * Called when an item is moved between containers, such as by a hopper.
+ * {@code ContainerItemMoveEvent} describes a proposed transfer between two container
+ * slots. Hoppers and player stack-request processors dispatch it before applying their
+ * transfer; cancellation prevents that transfer, while the supplied container and slot
+ * references identify the live source and destination.
  *
  * @author daoge_cmd
  */
@@ -17,30 +20,35 @@ import org.allaymc.api.item.type.ItemType;
 @CallerThread(ThreadType.DIMENSION)
 public class ContainerItemMoveEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The source container.
+     * Container supplying the proposed item transfer.
      */
     protected Container source;
     /**
-     * The source slot index.
+     * Zero-based source container slot index.
      */
     protected int sourceSlot;
     /**
-     * The destination container.
+     * Container receiving the proposed item transfer.
      */
     protected Container destination;
     /**
-     * The destination slot index.
+     * Zero-based destination container slot index.
      */
     protected int destinationSlot;
     /**
-     * The type of item being moved.
+     * Item type selected for the transfer.
      */
     protected ItemType<?> itemType;
     /**
-     * The number of items being moved.
+     * Proposed number of items to move.
      */
     protected int count;
 
+    /**
+     * Creates a transfer event with the supplied live containers and slot indices.
+     * Construction records the proposal without validating capacity or moving items; the
+     * dispatching processor owns those checks and subsequent mutations.
+     */
     public ContainerItemMoveEvent(Container source, int sourceSlot, Container destination, int destinationSlot, ItemType<?> itemType, int count) {
         this.source = source;
         this.sourceSlot = sourceSlot;

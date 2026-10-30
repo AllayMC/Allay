@@ -4,27 +4,47 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * All possible selector types
+ * {@code SelectorType} identifies the candidate-selection modes encoded by
+ * supported selector letters. The selector implementation applies each mode's
+ * initial entity scope and final reduction after argument filtering;
+ * {@code parseSelectorType} accepts the letter alone, without the leading
+ * {@code @}.
  */
 @Getter
 @AllArgsConstructor
 public enum SelectorType {
+    /**
+     * All players in the execution dimension.
+     */
     ALL_PLAYERS("a"),
+    /**
+     * All entities in the execution dimension.
+     */
     ALL_ENTITIES("e"),
-    // Can choose random non-player entities by specifying type
-    // https://zh.minecraft.wiki/w/%E7%9B%AE%E6%A0%87%E9%80%89%E6%8B%A9%E5%99%A8
+    /**
+     * Random surviving entity; the default type argument restricts ordinary use
+     * to players.
+     */
     RANDOM_PLAYER("r"),
+    /**
+     * Entity represented by the command sender.
+     */
     SELF("s"),
+    /**
+     * Nearest surviving player to the adjusted selection origin.
+     */
     NEAREST_PLAYER("p");
 
+    /**
+     * Selector letter without the leading {@code @} character.
+     */
     private final String token;
 
     /**
-     * Parses a string to determine the corresponding {@code SelectorType}.
-     *
-     * @param type The string representation of the selector type
-     * @return The corresponding {@code SelectorType}
-     * @throws SelectorSyntaxException If the provided type does not match any known selector type
+     * Returns the selector mode for an exact, lowercase selector letter.
+     * Unsupported letters raise {@code SelectorSyntaxException}; callers remove
+     * the leading {@code @} and any argument suffix before invoking this
+     * parser.
      */
     public static SelectorType parseSelectorType(String type) throws SelectorSyntaxException {
         return switch (type) {

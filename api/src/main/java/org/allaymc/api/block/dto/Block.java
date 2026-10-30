@@ -26,8 +26,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * An immutable data transfer object that represents a block in a world. It contains the block's state,
- * position and layer. All the methods that available in {@link BlockState} are also available in this class.
+ * {@code Block} represents a stored block state together with a dimension-bearing
+ * position and layer. State-property operations create another snapshot, while
+ * world helpers act on the current dimension contents. Constructors accepting
+ * {@code Position3ic} retain that reference, so callers must preserve its
+ * coordinates to keep equality and hashing stable.
  *
  * @author daoge_cmd | IWareQ
  */
@@ -35,46 +38,52 @@ import java.util.Objects;
 @ToString
 public class Block {
     /**
-     * The block state of this block.
+     * Stored snapshot state reference.
      */
     @Delegate
     private final BlockState blockState;
     /**
-     * The position of the block in the world.
+     * {@code position} supplies coordinates and dimension for world operations.
+     * Constructors accepting a position retain it directly, so later mutation
+     * changes this snapshot's location and hash.
      */
     private final Position3ic position;
     /**
-     * The layer of the block.
+     * Stored block storage layer.
      */
     private final int layer;
 
     /**
-     * @see #Block(BlockState, Position3ic, int)
+     * Creates a snapshot of the dimension's main-layer state at the supplied
+     * coordinates. The coordinates are copied into a dimension-bearing position,
+     * and the stored layer defaults to {@code 0}.
      */
     public Block(Dimension dimension, Vector3ic position) {
         this(dimension, position, 0);
     }
 
     /**
-     * @see #Block(BlockState, Position3ic, int)
+     * Creates a snapshot with copied coordinates and the supplied layer label. This
+     * constructor currently reads the dimension's main-layer state regardless of
+     * {@code layer}, so the stored state can differ from that layer's contents.
      */
     public Block(Dimension dimension, Vector3ic position, int layer) {
         this(dimension.getBlockState(position), new Position3i(position, dimension), layer);
     }
 
     /**
-     * @see #Block(BlockState, Position3ic, int)
+     * Creates a snapshot from the supplied state and retained dimension-bearing
+     * position. Both references must be non-{@code null}, and this overload stores
+     * main layer {@code 0} without reading the world.
      */
     public Block(BlockState blockState, Position3ic position) {
         this(blockState, position, 0);
     }
 
     /**
-     * Creates a new {@code Block} instance with the specified block state, position, and layer.
-     *
-     * @param blockState the state of the block, must not be null
-     * @param position   the position of the block in the world, must not be null
-     * @param layer      the layer of the block, typically 0 for the main layer
+     * Creates a snapshot retaining the supplied state and position references. Both
+     * must be non-{@code null}; this constructor stores the layer without
+     * validation or any check that the state matches current world contents.
      */
     public Block(BlockState blockState, Position3ic position, int layer) {
         this.blockState = Preconditions.checkNotNull(blockState, "blockState cannot be null");
@@ -83,50 +92,45 @@ public class Block {
     }
 
     /**
-     * Sets the property values of the block state and returns a new {@code Block} instance with the updated block state.
-     *
-     * @param propertyValues the list of property values to set for the block state
-     * @return a new {@code Block} instance with the updated block state
+     * Returns a new snapshot with the requested state properties and the same
+     * position reference and layer. The dimension remains unchanged, and
+     * unsupported or duplicate properties follow the state's validation failures.
      */
     public Block setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
         return new Block(blockState.setPropertyValues(propertyValues), position, layer);
     }
 
     /**
-     * Sets a property value and returns a new {@code Block} instance with the updated block state.
-     *
-     * @param propertyValue the property value to set
-     * @return a new {@code Block} instance with the updated block state
+     * Returns a new snapshot with the supplied property wrapper applied to its
+     * state. The position and layer are retained, and this operation does not write
+     * the selected state into the dimension.
      */
     public Block setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
         return new Block(blockState.setPropertyValue(propertyValue), position, layer);
     }
 
     /**
-     * Sets a property value and returns a new {@code Block} instance with the updated block state.
-     *
-     * @param property   the property to set
-     * @param value      the value to set for the property
-     * @param <DATATYPE> the type of the property value
-     * @param <PROPERTY> the type of the block property
-     * @return a new {@code Block} instance with the updated block state
+     * Returns a new snapshot after the property's raw-value conversion and state
+     * selection. The dimension remains unchanged, and the property domain
+     * determines failures for unsupported or invalid values.
      */
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> Block setPropertyValue(PROPERTY property, DATATYPE value) {
         return new Block(blockState.setPropertyValue(property, value), position, layer);
     }
 
     /**
-     * @see #offsetPos(BlockFace, int)
+     * Reads a new snapshot one block along the supplied face in the current layer.
+     * The destination state comes from current world contents rather than this
+     * snapshot's stored state.
      */
     public Block offsetPos(BlockFace blockFace) {
         return offsetPos(blockFace, layer);
     }
 
     /**
-     * Returns a new {@code BlockStateWithPos} offset from the current position in the specified direction.
-     *
-     * @param blockFace the direction to offset
-     * @return a new {@code BlockStateWithPos} at the offset position
+     * Reads a new snapshot one block along the supplied face in the selected layer.
+     * The destination receives copied coordinates in the same dimension, and this
+     * snapshot remains unchanged.
      */
     public Block offsetPos(BlockFace blockFace, int layer) {
         var offset = blockFace.getOffset();
@@ -134,20 +138,18 @@ public class Block {
     }
 
     /**
-     * @see #offsetPos(int, int, int, int)
+     * Reads a new snapshot at the supplied coordinate displacement in the current
+     * layer. The destination state is read from the dimension, and this snapshot's
+     * position reference remains unchanged.
      */
     public Block offsetPos(int x, int y, int z) {
         return offsetPos(x, y, z, layer);
     }
 
     /**
-     * Returns a new {@code BlockStateWithPos} offset from the current position by the given deltas.
-     *
-     * @param x     the x-axis offset
-     * @param y     the y-axis offset
-     * @param z     the z-axis offset
-     * @param layer the layer of the block
-     * @return a new {@code BlockStateWithPos} at the offset position
+     * Reads a new snapshot at the displaced coordinates in the selected layer. The
+     * destination position is newly allocated in the same dimension, preserving the
+     * source snapshot's coordinates.
      */
     public Block offsetPos(int x, int y, int z, int layer) {
         var newPos = position.add(x, y, z, new Vector3i());
@@ -159,59 +161,52 @@ public class Block {
     }
 
     /**
-     * Updates a property of the block at the current position and layer.
-     *
-     * @param <DATATYPE>   the type of the property value
-     * @param propertyType the type of the block property to update
-     * @param value        the new value of the block property
+     * Updates the live dimension state at this position and stored layer. This
+     * snapshot retains its original state reference; the dimension helper skips
+     * unloaded chunks and applies the property's normal state-conversion rules.
      */
     public <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value) {
         getDimension().updateBlockProperty(propertyType, value, position, layer);
     }
 
     /**
-     * Adds a sound at the center of this block's position.
-     *
-     * @param sound the sound to add
+     * Emits the supplied sound through the dimension at the center of this block
+     * position.
      */
     public void addSound(Sound sound) {
         getDimension().addSound(MathUtils.center(position), sound);
     }
 
     /**
-     * Adds a particle effect at the center of this block's position.
-     *
-     * @param particle the particle to spawn
+     * Emits the supplied particle through the dimension at the center of this block
+     * position.
      */
     public void addParticle(Particle particle) {
         getDimension().addParticle(MathUtils.center(position), particle);
     }
 
     /**
-     * Breaks the block at the current position and layer.
-     *
-     * @return {@code true} if the block was successfully broken, {@code false} otherwise.
+     * Attempts to break the live main-layer block at this position without a
+     * supplied tool or entity. This snapshot remains unchanged, and the dimension
+     * reports whether the break succeeds.
      */
     public boolean breakBlock() {
         return breakBlock(null, null);
     }
 
     /**
-     * Breaks the block at the current position and layer using the specified item and entity.
-     *
-     * @param usedItem the item used to break the block, can be {@code null}
-     * @param entity   the entity that broke the block, can be {@code null}
-     * @return {@code true} if the block was successfully broken, {@code false} otherwise.
+     * Attempts to break the live main-layer block using the supplied item and
+     * entity, either of which may be {@code null}. This helper does not pass the
+     * stored layer to the dimension.
      */
     public boolean breakBlock(ItemStack usedItem, Entity entity) {
         return getDimension().breakBlock(position, usedItem, entity);
     }
 
     /**
-     * Replaces the block state at this block's position with a new block state.
-     *
-     * @param blockState the new block state to set at this position
-     * @return a new {@code Block} instance with the updated block state
+     * Writes the supplied state to the dimension's main layer and returns a
+     * snapshot retaining this position and stored layer. The write does not use the
+     * stored layer, and this snapshot's state reference remains unchanged.
      */
     public Block replaceState(BlockState blockState) {
         this.getDimension().setBlockState(this.position, blockState);
@@ -219,94 +214,79 @@ public class Block {
     }
 
     /**
-     * Schedule a block update.
-     *
-     * @param delay the duration to wait before triggering the block update
+     * Requests a future block update at this position through the dimension's
+     * update manager. The helper passes the delay and position without the stored
+     * layer, and scheduling does not change this snapshot.
      */
     public void scheduleUpdateInDelay(Duration delay) {
         this.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(this.position, delay);
     }
 
     /**
-     * Checks whether the current block is air.
-     *
-     * @return {@code true} if the block type is {@link BlockTypes#AIR}, {@code false} otherwise.
+     * Returns whether the stored snapshot state belongs to the air block type.
      */
     public boolean isAir() {
         return blockState.getBlockType() == BlockTypes.AIR;
     }
 
     /**
-     * Checks whether this block's position is currently receiving any redstone power.
-     *
-     * @return {@code true} if this block is receiving redstone power, {@code false} otherwise
+     * Returns whether current world power at this position exceeds zero.
      */
     public boolean isPowered() {
         return this.getDimension().isPoweredAt(this.position);
     }
 
     /**
-     * Calculates the maximum redstone power level received at this block's position from all 6 faces.
-     * This considers both direct weak power and strong power through solid blocks.
-     *
-     * @return the maximum redstone power level (0-15)
+     * Returns the dimension's current maximum received redstone power at this
+     * position.
      */
     public int getPower() {
         return this.getDimension().getPowerAt(this.position);
     }
 
     /**
-     * Gets the maximum strong redstone power being received at this block's position from all 6 faces.
-     *
-     * @return the strong redstone power level (0-15)
+     * Returns the current strong redstone power received from all faces at this
+     * position.
      */
     public int getStrongPower() {
         return this.getDimension().getStrongPowerAt(this.position);
     }
 
     /**
-     * Gets the maximum strong redstone power being received at this block's position.
-     *
-     * @param excludeFaces the faces to exclude from the check
-     * @return the strong redstone power level (0-15)
+     * Returns the current strong redstone power while excluding the supplied
+     * neighboring faces.
      */
     public int getStrongPower(BlockFace... excludeFaces) {
         return this.getDimension().getStrongPowerAt(this.position, excludeFaces);
     }
 
     /**
-     * Gets the maximum weak redstone power being received at this block's position from all 6 faces.
-     *
-     * @return the weak redstone power level (0-15)
+     * Returns the current weak redstone power received from all faces at this
+     * position.
      */
     public int getWeakPower() {
         return this.getDimension().getWeakPowerAt(this.position);
     }
 
     /**
-     * Gets the maximum weak redstone power being received at this block's position.
-     *
-     * @param excludeFaces the faces to exclude from the check
-     * @return the weak redstone power level (0-15)
+     * Returns the current weak redstone power while excluding the supplied
+     * neighboring faces.
      */
     public int getWeakPower(BlockFace... excludeFaces) {
         return this.getDimension().getWeakPowerAt(this.position, excludeFaces);
     }
 
     /**
-     * Retrieves the dimension in which this block state is located.
-     *
-     * @return the {@link Dimension} of the block state
+     * Returns the dimension retained by this snapshot's current position reference.
      */
     public Dimension getDimension() {
         return position.dimension();
     }
 
     /**
-     * Retrieves the block entity at the current position.
-     *
-     * @param <T> the type of the block entity
-     * @return the block entity at the current position
+     * Returns the current block entity at this position, or {@code null} when
+     * absent. The unchecked generic cast leaves callers responsible for choosing a
+     * type compatible with the entity actually stored there.
      */
     @SuppressWarnings("ALL")
     public <T extends BlockEntity> T getBlockEntity() {
@@ -314,14 +294,16 @@ public class Block {
     }
 
     /**
-     * Creates a new {@link Location3i} from this block's position.
-     *
-     * @return a new location with this block's coordinates and dimension
+     * Returns a new location copying this position's coordinates and dimension.
      */
     public Location3i getLocation() {
         return new Location3i(this.position.x(), this.position.y(), this.position.z(), this.getDimension());
     }
 
+    /**
+     * Returns whether another block has equal stored state, position, and layer
+     * values.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Block that)) return false;
@@ -330,6 +312,9 @@ public class Block {
                layer == that.layer;
     }
 
+    /**
+     * Returns a hash derived from the stored state, position, and layer.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(blockState, position, layer);

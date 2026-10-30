@@ -5,10 +5,22 @@ import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.server.entity.effect.*;
 
 /**
+ * {@code EffectTypeRegistryPopulator} supplies the startup population step for built-in
+ * effect types exposed through {@code EffectTypes}. Each concrete effect supplies its built-in
+ * identity and behavior, and its constructor registers that instance in the effect registry. The
+ * public constants are assigned
+ * as each construction succeeds, rather than being published as one combined replacement.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class EffectTypeRegistryPopulator implements Runnable {
+    /**
+     * Constructs and assigns the built-in effect instances in {@code EffectTypes}. The
+     * corresponding
+     * registry must already exist, and a failed construction leaves earlier assignments and
+     * registrations in place rather than rolling them back.
+     */
     @Override
     public void run() {
         EffectTypes.ABSORPTION = new EffectAbsorptionType();

@@ -11,9 +11,19 @@ import org.allaymc.server.command.selector.ParseUtils;
 import java.util.function.Predicate;
 
 /**
+ * {@code L} implements the selector's {@code l} experience-level bound. The
+ * cached predicate accepts only player entities whose current experience level
+ * is at most the supplied integer, including the boundary. The parsed bound is
+ * reusable because it does not capture the sender or selection origin.
+ *
  * @author daoge_cmd
  */
 public class L extends CachedSimpleSelectorArgument {
+    /**
+     * Creates a player-only predicate whose current experience level is at most
+     * one parsed integer. Multiple values and the reversal prefix are rejected;
+     * numeric parsing failures propagate to selector-level error wrapping.
+     */
     @Override
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
@@ -23,11 +33,19 @@ public class L extends CachedSimpleSelectorArgument {
         return entity -> entity instanceof EntityPlayer player && player.getExperienceLevel() <= l;
     }
 
+    /**
+     * Returns {@code "l"} as the registration key for this experience-level
+     * bound.
+     */
     @Override
     public String getKeyName() {
         return "l";
     }
 
+    /**
+     * Returns priority three so experience filtering follows origin and
+     * box-range handlers.
+     */
     @Override
     public int getPriority() {
         return 3;

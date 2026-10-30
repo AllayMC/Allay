@@ -1,15 +1,15 @@
 package org.allaymc.api.entity.data;
 
 /**
- * EntityAnimation represents an animation that may be played on an entity from an active resource pack on
- * the client.
+ * {@code EntityAnimation} describes a resource-pack animation requested for an
+ * entity on the client. The packet encoder forwards the animation, controller,
+ * next state, and stop expression to clients; the active client resource packs
+ * must supply the referenced animation definitions.
  *
- * @param name          the name of the animation to be played
- * @param nextState     the state to transition to after the animation has finished playing within the animation controller
- * @param controller    the name of the controller to be used for the animation. controller with the same name must be defined
- *                      in a resource pack for it to work
- * @param stopCondition the condition that must be met for the animation to stop playing. This is often a MoLang expression
- *                      that can be used to query various entity properties to determine when the animation should stop playing
+ * @param name resource-pack animation identifier sent to the client
+ * @param nextState controller state to enter after the animation finishes
+ * @param controller resource-pack animation controller identifier
+ * @param stopCondition client-evaluated MoLang expression controlling animation termination
  */
 public record EntityAnimation(String name, String nextState, String controller, String stopCondition) {
 }

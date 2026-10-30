@@ -12,9 +12,21 @@ import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkRequestPacket;
 import static org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType.RESOURCE_PACK_CHUNK_REQUEST;
 
 /**
+ * {@code ResourcePackChunkRequestPacketProcessor} serves one requested chunk of
+ * a registered resource pack through the player's negotiated encoder. The
+ * configured chunk size is converted to bytes, and unknown packs or illegal
+ * chunk arguments terminate resource-pack negotiation with a disconnect.
+ *
  * @author daoge_cmd
  */
 public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcessor<ResourcePackChunkRequestPacket> {
+    /**
+     * Sends a chunk for an existing pack using the configured byte chunk size.
+     * Missing packs disconnect immediately; {@code IllegalArgumentException}
+     * during encoding or sending also disconnects, while other failures propagate.
+     * This processor does not release a generated response when the send path
+     * rejects it or throws before transport submission.
+     */
     @Override
     public void handle(Player player, ResourcePackChunkRequestPacket packet) {
         var allayPlayer = (AllayPlayer) player;
@@ -25,6 +37,7 @@ public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcess
             return;
         }
 
+        // Pack settings use kibibytes; the encoder addresses chunks in bytes.
         int chunkSize = AllayServer.getSettings()
                 .resourcePackSettings()
                 .maxChunkSize() * 1024;
@@ -35,10 +48,16 @@ public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcess
                     chunkSize
             ));
         } catch (IllegalArgumentException ignored) {
+            // Invalid size or index cannot identify a usable transfer chunk;
+            // treat argument failures in this encode-and-send path as resource-pack
+            // negotiation failure instead of continuing the transfer.
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_RESOURCEPACK);
         }
     }
 
+    /**
+     * Returns the resource pack chunk request packet type handled here.
+     */
     @Override
     public BedrockPacketType getPacketType() {
         return RESOURCE_PACK_CHUNK_REQUEST;

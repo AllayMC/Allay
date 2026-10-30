@@ -7,14 +7,28 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 /**
+ * {@code OpCommand} adds operator membership for a supplied player name or UUID.
+ * Its handler rejects identifiers already present as operators, updates
+ * membership through the player manager, and separately notifies every matching
+ * online player after the manager has processed the change.
+ *
  * @author daoge_cmd
  */
 public class OpCommand extends Command {
 
+    /**
+     * Creates the {@code /op} command with its built-in authorization permission.
+     */
     public OpCommand() {
         super("op", TrKeys.MC_COMMANDS_OP_DESCRIPTION, Permissions.COMMAND_OP);
     }
 
+    /**
+     * Installs the required operator identifier and grant handler.
+     * Existing operators fail before mutation; accepted identifiers update
+     * manager membership before command feedback and matching online-player
+     * notifications are sent.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().wildcardTarget("player").exec(context -> {

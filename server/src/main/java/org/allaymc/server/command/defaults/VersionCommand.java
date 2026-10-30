@@ -10,16 +10,27 @@ import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.utils.GitProperties;
 
 /**
+ * {@code VersionCommand} reports server and API build versions alongside the
+ * supported Minecraft and protocol ranges. Its handler derives range endpoints
+ * from the configured codecs and adds a development-build notice when the
+ * active API identifies the current build as a development version.
+ *
  * @author daoge_cmd
  */
 public class VersionCommand extends Command {
 
+    /**
+     * Creates the version command and its {@code /ver} and {@code /about} aliases.
+     */
     public VersionCommand() {
         super("version", TrKeys.ALLAY_COMMAND_VERSION_DESCRIPTION, Permissions.COMMAND_VERSION);
         aliases.add("ver");
         aliases.add("about");
     }
 
+    /**
+     * Installs the argument-free version and supported-protocol reporting handler.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {

@@ -6,8 +6,10 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 
 /**
- * EntityProjectile represents an entity which is projectile. Every projectile entity should
- * extend this interface.
+ * {@code EntityProjectile} represents an entity traveling under projectile
+ * physics with age and optional shooter attribution. Specialized projectile
+ * interfaces inherit this combination so impact handlers can access travel
+ * state and launch ownership through one entity contract.
  *
  * @author daoge_cmd
  */

@@ -7,40 +7,40 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.function.Consumer;
 
 /**
- * Button represents a button added to a {@link Dialog} menu and consists of just text.
+ * {@code Button} represents a text action in an entity dialog, with a click callback and an
+ * optional next dialog. Button handling invokes the callback before reading {@code nextDialog}, so
+ * the callback may select the next menu dynamically; a failure prevents that transition.
  *
  * @author daoge_cmd
  */
 public final class Button {
 
     /**
-     * The text of the button.
+     * Displayed dialog button text.
      */
     @Setter
     @Getter
     private String text;
     /**
-     * The callback function to be executed when the button is clicked.
+     * {@code onClick} receives this button before the next-dialog link is read. A callback failure
+     * prevents the transition or close request.
      */
     @Getter
     private Consumer<Button> onClick;
     /**
-     * The dialog associated with the button.
+     * {@code dialog} holds the owner returned by fluent configuration; {@code null} is returned
+     * before this button is added to a dialog.
      */
     private Dialog dialog;
     /**
-     * The next dialog to be displayed when the button is clicked. If no next dialog is set ({@code null}), the dialog will be closed
-     * after the button is clicked.
+     * {@code nextDialog} selects the menu shown after a successful click callback. {@code null}
+     * requests closure instead of another menu.
      */
     @Getter
     private Dialog nextDialog;
 
     /**
-     * Constructs a new {@code Button} instance with the specified text. The button will have
-     * a default no-op click behavior, meaning no action will be performed when the button is clicked
-     * until a specific behavior is defined using {@link #onClick(Consumer)}.
-     *
-     * @param text the text to display on the button
+     * Creates a text button with a no-op callback and no next dialog.
      */
     public Button(String text) {
         this.text = text;
@@ -49,10 +49,7 @@ public final class Button {
     }
 
     /**
-     * Creates a new {@code Button} instance with specified text and a callback function to be invoked upon clicking the button.
-     *
-     * @param text    the text to display on the button
-     * @param onClick a {@link Consumer} that accepts a {@link Button} instance and defines the behavior to execute when the button is clicked
+     * Creates a text button using the supplied click callback reference.
      */
     public Button(String text, Consumer<Button> onClick) {
         this.text = text;
@@ -60,11 +57,9 @@ public final class Button {
     }
 
     /**
-     * Sets a callback function to be executed when the button is clicked.
-     *
-     * @param onClick a {@link Consumer} that accepts a {@link Button} instance and defines the behavior to execute
-     *                when the button is clicked
-     * @return the {@link Dialog} instance associated with the button, allowing method chaining for dialog configuration
+     * Stores the click callback and returns this button's owning dialog for configuration. The
+     * result is {@code null} before attachment; callback exceptions propagate when the viewer
+     * processes a button action.
      */
     public Dialog onClick(Consumer<Button> onClick) {
         this.onClick = onClick;
@@ -72,17 +67,18 @@ public final class Button {
     }
 
     /**
-     * Sets the next dialog to be displayed when the button is clicked. If no next dialog is set, the dialog will be closed
-     * after the button is clicked.
-     *
-     * @param nextDialog the next dialog to be displayed
-     * @return the {@link Dialog} instance associated with the button, allowing method chaining for dialog configuration
+     * Stores the next dialog and returns this button's owning dialog for configuration. A
+     * {@code null} link requests closure after the callback, and the returned owner is {@code null}
+     * before attachment.
      */
     public Dialog nextDialog(Dialog nextDialog) {
         this.nextDialog = nextDialog;
         return this.dialog;
     }
 
+    /**
+     * Stores the dialog returned by this button's fluent configuration operations.
+     */
     @ApiStatus.Internal
     public void setDialog(Dialog dialog) {
         this.dialog = dialog;

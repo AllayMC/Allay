@@ -3,10 +3,12 @@ package org.allaymc.api.world.sound;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * Sound sent when a block is placed.
+ * {@code BlockPlaceSound} describes a block-placement sound using the placed
+ * state as its material. The runtime sends that state hash with the placement
+ * event; constructing this record does not place a block or schedule the sound
+ * for viewers.
  *
- * @param blockState the block state that was placed; the actual sound to play typically depends on
- *                   the type of the block
+ * @param blockState placed state supplying the sound material
  */
 public record BlockPlaceSound(BlockState blockState) implements Sound {
 }

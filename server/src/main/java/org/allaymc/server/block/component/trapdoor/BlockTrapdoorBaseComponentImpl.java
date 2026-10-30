@@ -20,14 +20,28 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.OPEN_BIT;
 import static org.allaymc.server.block.BlockPlaceHelper.EWSN_DIRECTION_4_MAPPER;
 
 /**
+ * {@code BlockTrapdoorBaseComponentImpl} handles trapdoor facing, upper-half
+ * placement, manual toggling, and redstone opening. Player placement uses the shared
+ * stair/trapdoor encoding and click-height rules, while later power-source changes
+ * reevaluate opening without allowing unrelated neighbor changes to close a manually
+ * opened trapdoor.
+ *
  * @author harry-xi | daoge_cmd
  */
 public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * Creates trapdoor base behavior for the supplied block type.
+     */
     public BlockTrapdoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places a trapdoor opposite player facing and selects its upper or lower half. A
+     * {@code null} {@code placementInfo} preserves the supplied state, and the result
+     * reports dimension write acceptance.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -39,15 +53,23 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
+    /**
+     * Forwards placement and synchronizes the incoming trapdoor's opening with
+     * current power. The new block snapshot uses the old snapshot's position, and a
+     * state change emits the corresponding trapdoor sound.
+     */
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
-
-        // Check redstone power immediately after placement
         var newBlock = new Block(newBlockState, oldBlock.getPosition());
         checkRedstonePower(newBlock);
     }
 
+    /**
+     * Offers interaction to companion components before toggling the trapdoor and
+     * playing its sound. Missing interaction context returns {@code false}; otherwise
+     * the manual path reports handling after attempting the property update.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -61,7 +83,6 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         var clickedBlockState = interactInfo.getClickedBlock();
         var isOpen = !clickedBlockState.getPropertyValue(OPEN_BIT);
         clickedBlockState.updateBlockProperty(OPEN_BIT, isOpen);
-        // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
         dimension.addSound(
                 MathUtils.center(clickedBlockState.getPosition()),
                 new TrapdoorSound(clickedBlockState.getBlockState(), isOpen)
@@ -69,14 +90,16 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Forwards the update and reevaluates opening when the new or old neighbor is a
+     * tagged power source. {@code oldNeighborState} may be {@code null}, leaving only
+     * the new neighbor's tag available.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
-
-        // Only check redstone power if:
-        // 1. Neighbor is a power source (new redstone component placed), OR
-        // 2. Old neighbor was a power source (power source removed)
-        // This prevents the trapdoor from closing when normal blocks are placed/broken next to it
+        // Only new or removed tagged power sources reevaluate opening, preserving a
+        // manually opened trapdoor when unrelated neighbors are placed or broken.
         boolean isNewPowerSource = neighbor.getBlockType().hasBlockTag(POWER_SOURCE);
         boolean wasOldPowerSource = oldNeighborState != null && oldNeighborState.getBlockType().hasBlockTag(POWER_SOURCE);
         
@@ -86,9 +109,9 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if the trapdoor should be opened/closed based on redstone power.
-     *
-     * @param block the trapdoor block
+     * Synchronizes opening with whether the trapdoor receives positive redstone
+     * power. An unchanged opening avoids a property write and sound, while a changed
+     * value updates the state before playing its sound.
      */
     protected void checkRedstonePower(Block block) {
         var power = block.getPower();

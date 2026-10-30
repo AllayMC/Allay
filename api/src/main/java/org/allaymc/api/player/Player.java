@@ -23,565 +23,578 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Represents a player in the server. A {@link Player} basically 'control' an {@link EntityPlayer}.
+ * {@code Player} represents a network connection that can control a separate player
+ * entity and receive world, inventory, and interface updates. Login metadata belongs
+ * to the connection, while location, inventory, and survival state belong to its
+ * controlled {@code EntityPlayer}; several operations therefore require login or
+ * spawning to have completed first.
+ *
+ * <p>
+ * Tracked abilities are only one input to effective capabilities. Game mode,
+ * operator status, and explicit connection policy can override individual abilities,
+ * and the capability queries document that precedence. Dimension-change methods
+ * manage client loading presentation around transfer work rather than performing
+ * teleportation themselves. Viewer operations send client state; callers must
+ * continue to update the owning server entity or container when a real gameplay
+ * change is required.
  *
  * @author daoge_cmd
  */
 public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, DDUIViewer, ScoreboardViewer, DialogViewer {
 
+    /**
+     * {@code DEFAULT_SPEED} supplies the initial walking configuration with base
+     * {@code 0.1} and multiplier {@code 1.0} for new connections.
+     */
     Speed DEFAULT_SPEED = new Speed(0.1, 1.0);
+    /**
+     * {@code DEFAULT_FLY_SPEED} supplies the initial horizontal flight configuration
+     * with base {@code 0.05} and multiplier {@code 1.0} for new connections.
+     */
     Speed DEFAULT_FLY_SPEED = new Speed(0.05, 1.0);
+    /**
+     * {@code DEFAULT_VERTICAL_FLY_SPEED} supplies the initial vertical flight
+     * configuration with base {@code 1.0} and multiplier {@code 1.0} for new
+     * connections.
+     */
     Speed DEFAULT_VERTICAL_FLY_SPEED = new Speed(1.0, 1.0);
 
     /**
-     * Retrieves the {@link EntityPlayer} currently controlled by the player.
-     *
-     * @return the {@link EntityPlayer} that this player is controlling, or {@code null} if no entity is being controlled.
+     * Returns the player entity currently controlled by this connection, when one
+     * exists. Connections before spawning return {@code null}; the entity and
+     * connection have separate lifetimes and should not be treated as
+     * interchangeable identities.
      */
     EntityPlayer getControlledEntity();
 
     /**
-     * Get the login data of the client.
-     *
-     * @return the login data of the client
+     * Returns the identity and metadata decoded for this connection after login
+     * processing. The standard implementation leaves it {@code null} before
+     * decoding, so callers must check lifecycle state before using login-dependent
+     * values.
      */
     LoginData getLoginData();
 
     /**
-     * Check if the player is a NetEase (China) client.
-     *
-     * @return {@code true} if the player is using a NetEase client, {@code false} otherwise
+     * Returns whether this connection was classified as a NetEase client.
      */
     boolean isNetEasePlayer();
 
     /**
-     * Get the origin name of the client.
-     * <p>
-     * Origin name is the xbox id of a client, which won't be changed unless the client does changes in his xbox account
-     * This name is used for identifying a client in the server. Check the display name if you want to edit the appearance
-     * of the client's name.
-     *
-     * @return the origin name of the client
+     * Returns the name resolved from this connection's login identity. Login data
+     * must be available; the value can differ from an entity display name and is not
+     * a permanent account identifier.
      */
     default String getOriginName() {
         return getLoginData().getXname();
     }
 
     /**
-     * Disconnect the client.
+     * Disconnects this connection using the default translated disconnection reason.
+     * The detailed overload performs lifecycle cleanup; repeating a completed
+     * disconnect does not restart cleanup in the standard implementation.
      */
     default void disconnect() {
         disconnect(TrKeys.MC_DISCONNECT_DISCONNECTED);
     }
 
     /**
-     * Disconnect the client with the given reason.
-     *
-     * @param reason the reason for disconnecting the client
+     * Disconnects this connection with the supplied reason after claiming its
+     * lifecycle transition. The standard implementation translates after login with
+     * the client language and otherwise uses the default language; cleanup failures
+     * are logged.
      */
     void disconnect(@MayContainTrKey String reason);
 
     /**
-     * Get the client state of this client.
-     *
-     * @return the client state of this client
+     * Returns the connection's current packet-processing and game-joining lifecycle
+     * state.
      */
     ClientState getClientState();
 
     /**
-     * Get the last client state of this client.
-     *
-     * @return the last client state of this client
+     * Returns the state preceding the latest successful connection lifecycle
+     * transition.
      */
     ClientState getLastClientState();
 
     /**
-     * Check if the client is connected.
-     *
-     * @return {@code true} if the client is connected, {@code false} otherwise.
+     * Returns whether the current lifecycle state has reached transport connection.
      */
     default boolean isConnected() {
         return getClientState().ordinal() >= ClientState.CONNECTED.ordinal();
     }
 
     /**
-     * Check if the client is logged in.
-     *
-     * @return {@code true} if the client is logged in, {@code false} otherwise.
+     * Returns whether the current lifecycle state has reached completed login.
      */
     default boolean isLoggedIn() {
         return getClientState().ordinal() >= ClientState.LOGGED_IN.ordinal();
     }
 
     /**
-     * Check if the client has been fully initialized.
-     * <p>
-     * This represents whether the client's client can see the world and proceed with gameplay.
-     *
-     * @return {@code true} if the client has been fully initialized, {@code false} otherwise.
+     * Returns whether the current lifecycle state has reached {@code IN_GAME}.
      */
     default boolean isInitialized() {
         return getClientState().ordinal() >= ClientState.IN_GAME.ordinal();
     }
 
     /**
-     * Check if the client is disconnected.
-     *
-     * @return {@code true} if the client is disconnected, {@code false} otherwise.
+     * Returns whether this connection is currently in the {@code DISCONNECTED}
+     * state.
      */
     default boolean isDisconnected() {
         return getClientState() == ClientState.DISCONNECTED;
     }
 
     /**
-     * Get the socket address of the client.
-     *
-     * @return the socket address of the client
+     * Returns the remote socket address reported by the connection transport.
      */
     SocketAddress getSocketAddress();
 
     /**
-     * Get the ping of the client.
-     *
-     * @return the ping of the client
+     * Returns transport-measured round-trip latency in milliseconds when available.
+     * The standard network interface uses {@code -1} when it cannot provide a
+     * measurement, so callers must preserve that unavailable result.
      */
     int getPing();
 
     /**
-     * Views the specified player's abilities. This will update the permission level shown in the player list and some
-     * in-game permissions/properties like whether the player can fly, chat, and the player's (vertical) fly speed etc.
-     *
-     * @param player the player to view
+     * Sends another player's effective capabilities and permission presentation to
+     * this client. The subject player must have a controlled entity; viewing this
+     * connection's own abilities also refreshes adventure settings and schedules
+     * command descriptions.
      */
     void viewPlayerAbilities(Player player);
 
     /**
-     * Returns the player's current abilities.
-     *
-     * @return an immutable view of the current abilities
+     * Returns an unmodifiable live view of this connection's tracked abilities. The
+     * view reflects later changes and is not an independent snapshot; effective
+     * capability queries also consider mode and policy.
      */
     @UnmodifiableView
     Set<PlayerAbility> getAbilities();
 
     /**
-     * Checks whether the player has the given ability enabled.
-     *
-     * @param ability the ability to check
-     * @return {@code true} if the ability is enabled, {@code false} otherwise
+     * Returns whether the tracked set contains the supplied player ability.
      */
     boolean hasAbility(PlayerAbility ability);
 
     /**
-     * Sets whether the given ability is enabled.
-     *
-     * @param ability the ability to change
-     * @param value   {@code true} to enable the ability, {@code false} to disable it
+     * Changes one tracked ability and schedules client synchronization when its
+     * membership changes. Flight-affecting changes require a controlled entity when
+     * reconciliation updates its flying flag; update notifications run after the
+     * stored set changes.
      */
     void setAbility(PlayerAbility ability, boolean value);
 
     /**
-     * Sets whether the given abilities are enabled.
-     *
-     * @param abilities the abilities to change
-     * @param value     {@code true} to enable the ability, {@code false} to disable it
+     * Enables or disables each supplied tracked ability without replacing unrelated
+     * entries. The standard implementation snapshots prior policy, publishes an
+     * update event when an entity exists, and reconciles effective flight after
+     * changing membership.
      */
     void setAbilities(Set<PlayerAbility> abilities, boolean value);
 
     /**
-     * Replaces the player's abilities with the provided set.
-     *
-     * @param abilities the new abilities
+     * Replaces tracked abilities only when the supplied set differs from current
+     * contents. The complete live {@code getAbilities()} view compares equal and is
+     * a no-op; differing replacement views backed by current storage must be copied
+     * first because replacement clears storage before reading entries.
      */
     void setAbilities(Set<PlayerAbility> abilities);
 
     /**
-     * Enables the given ability.
-     *
-     * @param ability the ability to enable
+     * Enables one tracked ability through the normal ability-update and
+     * synchronization path.
      */
     default void addAbility(PlayerAbility ability) {
         setAbility(ability, true);
     }
 
     /**
-     * Enables the given abilities.
+     * Enables the supplied distinct abilities through the bulk update path.
+     * {@code Set.of} rejects repeated or {@code null} entries before the player's
+     * ability set is changed.
      *
-     * @param abilities the abilities to enable
+     * @throws IllegalArgumentException if an ability occurs more than once
+     * @throws NullPointerException if the array or any ability is {@code null}
      */
     default void addAbilities(PlayerAbility... abilities) {
         setAbilities(Set.of(abilities), true);
     }
 
     /**
-     * Disables the given ability.
-     *
-     * @param ability the abilities to disable
+     * Disables one tracked ability through the normal ability-update and
+     * synchronization path.
      */
     default void removeAbility(PlayerAbility ability) {
         setAbility(ability, false);
     }
 
     /**
-     * Disables the given abilities.
+     * Disables the supplied distinct abilities through the bulk update path.
+     * {@code Set.of} rejects repeated or {@code null} entries before the player's
+     * ability set is changed.
      *
-     * @param abilities the abilities to disable
+     * @throws IllegalArgumentException if an ability occurs more than once
+     * @throws NullPointerException if the array or any ability is {@code null}
      */
     default void removeAbilities(PlayerAbility... abilities) {
         setAbilities(Set.of(abilities), false);
     }
 
     /**
-     * Checks whether the player may currently place blocks.
-     * <p>
-     * Always true for operators, always false for spectator, adventure modes and immutableWorld,
-     * actual ability value otherwise.
-     * <p>
-     * Directly reflects client-side placement behavior.
+     * Returns whether effective world policy and abilities allow this player to
+     * place blocks. The standard implementation first rejects effective
+     * immutable-world state and then rejects {@code ADVENTURE}, including operators
+     * in that mode.
      *
-     * @return {@code true} if placing blocks is currently allowed, {@code false} otherwise
+     * <p>
+     * An operator otherwise succeeds without requiring {@code PLACE_BLOCK}; other
+     * players need that ability. Operator status bypasses the immutable-world query,
+     * including its spectator-derived result, so this helper alone does not reject
+     * every operator in {@code SPECTATOR}. Callers must preserve any additional
+     * action-specific validation.
      */
     boolean canPlaceBlocks();
 
     /**
-     * Checks whether the player may currently break blocks.
-     * <p>
-     * Always true for operators, always false for spectator, adventure modes and immutableWorld,
-     * actual ability value otherwise.
-     * <p>
-     * Directly reflects client-side mining behavior.
+     * Returns whether effective world policy and abilities allow this player to
+     * break blocks. The standard implementation first rejects effective
+     * immutable-world state and then rejects {@code ADVENTURE}, including operators
+     * in that mode.
      *
-     * @return {@code true} if breaking blocks is currently allowed, {@code false} otherwise
+     * <p>
+     * An operator otherwise succeeds without requiring {@code BREAK_BLOCK}; other
+     * players need that ability. Operator status bypasses the immutable-world query,
+     * including its spectator-derived result, so this helper alone does not reject
+     * every operator in {@code SPECTATOR}. Callers must preserve any additional
+     * action-specific validation.
      */
     boolean canBreakBlocks();
 
     /**
-     * Checks whether the player may currently interact with blocks.
-     * <p>
-     * Always true for operators, always false for spectator mode and immutable world, actual ability
-     * value otherwise.
-     * <p>
-     * Directly reflects client-side interaction behavior.
+     * Returns whether effective world policy and abilities permit block interaction.
+     * The standard implementation rejects effective immutable-world state before
+     * explicitly rejecting {@code SPECTATOR}, so spectator operators remain rejected
+     * by this helper.
      *
-     * @return {@code true} if block interaction is currently allowed, {@code false} otherwise
+     * <p>
+     * An operator outside spectator mode succeeds without requiring
+     * {@code INTERACT_BLOCK}. Other players need that ability after the
+     * immutable-world check; adventure mode contributes to immutable-world state for
+     * nonoperators. This query does not perform reach checks or dispatch a
+     * block-interaction event, which remain responsibilities of the action path.
      */
     boolean canInteractWithBlocks();
 
     /**
-     * Checks whether the player may currently open containers.
-     * <p>
-     * Always true for operators, always false for spectator mode and immutable world, actual ability
-     * value otherwise.
+     * Returns whether game mode and abilities permit opening containers. The
+     * standard implementation rejects {@code SPECTATOR} before considering operator
+     * status, so an operator cannot bypass that mode restriction through this
+     * helper.
      *
-     * @return {@code true} if opening containers is currently allowed, {@code false} otherwise
+     * <p>
+     * Other operators succeed without requiring {@code OPEN_CONTAINER}; remaining
+     * players need that ability. The helper does not consult the independent
+     * immutable-world flag or reject adventure mode separately. Callers still
+     * validate the target container and its reachability before applying a
+     * particular open request.
      */
     boolean canOpenContainers();
 
     /**
-     * Checks whether the player may currently attack other players.
-     * <p>
-     * Always true for operators, always false for spectator mode, actual ability value otherwise.
+     * Returns whether game mode and abilities permit attacking another player. The
+     * standard implementation rejects {@code SPECTATOR} before considering operator
+     * status, so an operator cannot bypass that mode restriction through this
+     * helper.
      *
-     * @return {@code true} if attacking players is currently allowed, {@code false} otherwise
+     * <p>
+     * Other operators succeed without requiring {@code ATTACK_PLAYER}; remaining
+     * players need that ability. The query does not enforce world damage rules,
+     * distance, or target validity. The attacking path must still apply those rules
+     * before it changes the target's health or combat state.
      */
     boolean canAttackPlayers();
 
     /**
-     * Checks whether the player may currently attack mobs.
-     * <p>
-     * Always true for operators, always false for spectator mode, actual ability value otherwise.
+     * Returns whether game mode and abilities permit attacking nonplayer mobs. The
+     * standard implementation rejects {@code SPECTATOR} before considering operator
+     * status, so an operator cannot bypass that mode restriction through this
+     * helper.
      *
-     * @return {@code true} if attacking mobs is currently allowed, {@code false} otherwise
+     * <p>
+     * Other operators succeed without requiring {@code ATTACK_MOB}; remaining
+     * players need that ability. The query does not enforce world damage rules,
+     * distance, or target validity. The attacking path must still apply those rules
+     * before it changes the target's health or combat state.
      */
     boolean canAttackMobs();
 
     /**
-     * Checks whether the player may currently fly.
-     * <p>
-     * Always true if isAlwaysFlying and spectator mode, actual ability value otherwise.
+     * Returns whether a controlled player entity is permitted to fly. The standard
+     * implementation requires an entity even when stored flags would otherwise force
+     * flight, so connections without an entity return {@code false}.
      *
-     * @return {@code true} if flying is currently allowed, {@code false} otherwise
+     * <p>
+     * With an entity, effective always-flying state or {@code MAY_FLY} grants
+     * permission. The stored {@code FLYING} ability alone does not grant that
+     * permission. This query does not start flight; input handling and
+     * ability-update synchronization apply the entity's flying state separately.
      */
     boolean canFly();
 
     /**
-     * Checks whether placed blocks should not be consumed from inventory.
-     * <p>
-     * Usually {@code true} in creative mode, but always reflects the actual ability value.
-     *
-     * @return {@code true} if placed blocks are not consumed, {@code false} otherwise
+     * Returns whether the tracked set enables {@code INFINITE_BLOCK} for this
+     * connection.
      */
     boolean hasInfiniteBlock();
 
     /**
-     * Checks whether the player is currently in no clip mode.
-     * <p>
-     * Always true for spectator mode, actual ability value otherwise.
+     * Returns whether a controlled entity is treated as moving through blocks. The
+     * standard implementation requires a controlled entity, then accepts either
+     * {@code NO_CLIP} or {@code SPECTATOR}; a connection without an entity returns
+     * {@code false}.
      *
-     * @return {@code true} if player is in no clip mode, {@code false} otherwise.
+     * <p>
+     * Operator status does not grant this result by itself. The query describes
+     * effective capability rather than changing entity motion or resolving
+     * collisions, and callers must still use the physics and movement paths for
+     * actual location updates.
      */
     boolean isNoClip();
 
     /**
-     * Checks whether the player is currently treated as having immutable world enabled.
-     * <p>
-     * Always false for operators, always true for adventure and spectator modes, actual value
-     * otherwise.
+     * Returns whether this connection is effectively restricted from world editing.
+     * The standard implementation gives operator status precedence and returns
+     * {@code false} for operators even when an explicit flag or restrictive mode is
+     * present.
      *
-     * @return {@code true} if immutable world is currently active, {@code false} otherwise
+     * <p>
+     * For other players, the explicit immutable-world flag takes precedence,
+     * followed by {@code ADVENTURE} or {@code SPECTATOR} on a controlled entity. A
+     * worldless connection without the explicit flag returns {@code false}.
+     * Individual action queries may impose further restrictions after consulting
+     * this result.
      */
     boolean isImmutableWorld();
 
     /**
-     * Sets whether immutable world should be enabled for the player.
-     * <p>
-     * Forces the client to treat the world as non-interactive, similar to adventure mode.
-     *
-     * @param immutableWorld {@code true} to enable immutable world, {@code false} to disable it
+     * Sets the explicit immutable-world flag and schedules an ability refresh when
+     * it changes. Effective policy still gives operator status precedence and may
+     * derive immutability from the controlled entity's game mode.
      */
     void setImmutableWorld(boolean immutableWorld);
 
     /**
-     * Checks whether the player is currently forced to be always flying.
-     * <p>
-     * Always true for spectator mode and no clip, actual value otherwise.
+     * Returns whether flight is forced by the connection's explicit flag,
+     * {@code NO_CLIP}, or a controlled spectator entity. The standard implementation
+     * evaluates these alternatives independently, so an explicit flag or no-clip
+     * ability can return {@code true} before an entity exists.
      *
-     * @return {@code true} if always flying is currently active, {@code false} otherwise
+     * <p>
+     * This result describes effective policy and does not itself alter entity state.
+     * {@code canFly} adds its own entity requirement, and ability-changing
+     * operations synchronize the entity's flying flag using the policy observed
+     * before and after their change.
      */
     boolean isAlwaysFlying();
 
     /**
-     * Sets whether always flying should be active for the player.
-     *
-     * @param alwaysFlying {@code true} to enable always flying, {@code false} to disable it
+     * Sets the explicit always-flying flag and schedules an ability refresh. The
+     * standard implementation invokes entity flight synchronization with its raw
+     * prior flag and post-update permission, so callers must not assume every
+     * cleared policy immediately stops flight.
      */
     void setAlwaysFlying(boolean alwaysFlying);
 
     /**
-     * Views a player list change. The provided players will be added to the player list.
-     *
-     * @param players the players to be added or removed from the player list
-     * @param add     {@code true} to add the players to the list, {@code false} to remove the players
+     * Sends player-list additions or removals for the supplied connections to this
+     * client. {@code add} selects the operation, and the standard encoder reads each
+     * subject's initialized login, entity, and skin data.
      */
     void viewPlayerListChange(Collection<Player> players, boolean add);
 
     /**
-     * Sends a tip to the player.
-     *
-     * @param message The message to send
+     * Sends the supplied text using the client's tip message presentation.
      */
     void sendTip(String message);
 
     /**
-     * Sends a popup to the player.
-     *
-     * @param message The message to send
+     * Sends the supplied text using the client's popup message presentation.
      */
     void sendPopup(String message);
 
     /**
-     * Send a toast to the player. The toast will be displayed at the top of the screen
-     * with a title and content in a period of time.
-     *
-     * @param title   the title of the toast
-     * @param content the content of the toast
+     * Sends a notification toast containing the supplied title and content.
      */
     void sendToast(String title, String content);
 
     /**
-     * Send a title to the player which will be shown in the middle of the screen.
-     *
-     * @param title the title to send
+     * Sends the main title text for the client's centered title display.
      */
     void sendTitle(String title);
 
     /**
-     * Send a subtitle to the player which will be shown below the main title.
-     * If no title is set, the subtitle won't be shown, in other words title must
-     * be set before set subtitle.
-     *
-     * @param subtitle the subtitle to send
+     * Sends subtitle text for the client's title display. A subtitle depends on an
+     * active main title for presentation; this call does not itself send or create
+     * that main title.
      */
     void sendSubtitle(String subtitle);
 
     /**
-     * Send an action bar message to the player which will be shown above player's hot bar.
-     *
-     * @param actionBar the action bar message to send
+     * Sends action-bar text for presentation above the player's hotbar.
      */
     void sendActionBar(String actionBar);
 
     /**
-     * Set the title settings of this player. These settings will be used for the next title, subtitle and actionbar.
-     *
-     * @param fadeInTime  the time in ticks for the title to fade in
-     * @param duration    the time in ticks for the title to stay
-     * @param fadeOutTime the time in ticks for the title to fade out
+     * Sends fade-in, visible duration, and fade-out timing values in game ticks.
+     * These values configure subsequent client title presentation; this call does
+     * not send title text or validate the supplied timing range.
      */
     void setTitleSettings(int fadeInTime, int duration, int fadeOutTime);
 
     /**
-     * Reset the title settings of this player to the default values.
+     * Requests the client's default timing and state for title presentation.
      */
     void resetTitleSettings();
 
     /**
-     * Clear the title that is being displayed on the player's screen
+     * Requests removal of the title currently displayed on this client.
      */
     void clearTitle();
 
     /**
-     * Shake the player's camera with the specified type, intensity and duration.
-     *
-     * @param shakeType the type of shake (positional or rotational)
-     * @param intensity the intensity of the shake
-     * @param duration  the duration of the shake in seconds
+     * Requests positional or rotational camera shake with the supplied intensity and
+     * duration. {@code duration} is measured in seconds; this presentation request
+     * does not move the server-side player entity.
      */
     void shakeCamera(CameraShakeType shakeType, float intensity, float duration);
 
     /**
-     * Stop all camera shakes for this player.
+     * Requests that the client stop its active camera shake presentation.
      */
     void stopCameraShake();
 
     /**
-     * Push a fog setting onto this player's fog stack.
-     *
-     * @param fogId the fog identifier (e.g. {@link FogIds#FOG_DEFAULT})
+     * Appends a fog identifier and sends the updated stack to the client. Repeated
+     * identifiers are retained in stack order; callers supply resource identifiers
+     * understood by the client.
      */
     void pushFog(String fogId);
 
     /**
-     * Pop (remove) the last occurrence of the given fog ID from this player's fog stack.
-     *
-     * @param fogId the fog identifier to match
-     *
-     * @return {@code true} if a fog setting was removed
+     * Removes the last matching fog identifier and sends the stack when a match
+     * exists. The result is {@code false} when absent; earlier occurrences remain in
+     * their previous order.
      */
     boolean popFog(String fogId);
 
     /**
-     * Remove all occurrences of the given fog ID from this player's fog stack.
-     *
-     * @param fogId the fog identifier to match
-     *
-     * @return the number of fog settings removed
+     * Removes every matching fog identifier and returns the number removed. The
+     * standard implementation sends the resulting stack only when at least one entry
+     * changed; other identifiers retain their relative order.
      */
     int removeFog(String fogId);
 
     /**
-     * Get an unmodifiable view of this player's fog stack.
-     *
-     * @return the fog stack
+     * Returns an unmodifiable live view of the connection's ordered fog identifiers.
+     * Repeated identifiers are retained, and later stack mutations remain visible
+     * through the returned view rather than an independent snapshot.
      */
     @UnmodifiableView
     List<String> getFogs();
 
     /**
-     * Remove all fog settings from this player's fog stack.
+     * Clears every fog identifier and sends the empty stack when entries existed. An
+     * already empty stack produces no update; this operation discards the retained
+     * order and does not return a prior snapshot.
      */
     void removeAllFogs();
 
     /**
-     * Sends the experience level to the client.
-     *
-     * @param value the experience level to be sent.
+     * Sends the supplied experience level as a client attribute update.
      */
     void sendExperienceLevel(int value);
 
     /**
-     * Sends the experience progress to the client.
-     *
-     * @param value the progress value to be sent.
+     * Sends the supplied within-level experience progress as a client attribute
+     * update.
      */
     void sendExperienceProgress(float value);
 
     /**
-     * Sends the food level to the client.
-     *
-     * @param value the food level to be sent.
+     * Sends the supplied food level as a client hunger attribute update.
      */
     void sendFoodLevel(int value);
 
     /**
-     * Sends the food saturation level to the client.
-     *
-     * @param value the food saturation level to send.
+     * Sends the supplied food saturation as a client attribute update.
      */
     void sendFoodSaturationLevel(float value);
 
     /**
-     * Sends the food exhaustion level to the client.
-     *
-     * @param value the exhaustion level to be sent.
+     * Sends the supplied food exhaustion as a client attribute update.
      */
     void sendFoodExhaustionLevel(float value);
 
     /**
-     * Sends the health and max health to the client.
-     *
-     * @param health    the current health value to be sent
-     * @param maxHealth the maximum health value to be sent
+     * Sends the supplied current and maximum health as client attribute data.
      */
     void sendHealth(float health, float maxHealth);
 
     /**
-     * Sends the absorption value to the client.
-     *
-     * @param absorption the absorption value to be sent
+     * Sends the supplied absorption amount as a client attribute update.
      */
     void sendAbsorption(float absorption);
 
     /**
-     * Sends a cooldown notification to the client for the specified category.
-     *
-     * @param category the identifier for the cooldown category
-     * @param duration the length of the cooldown in ticks
+     * Sends the selected cooldown category and duration in game ticks to the client.
+     * This notification does not update the controlled entity's server-side cooldown
+     * storage, which the owning item or gameplay logic manages.
      */
     void sendCooldown(String category, int duration);
 
     /**
-     * Sends map image data to the client.
-     *
-     * @param mapId the unique id of the map
-     * @param image the image to be rendered on the map
+     * Sends a map image using the identified map resource. The standard encoder
+     * reads the top-left {@code 128} by {@code 128} pixels without scaling, so the
+     * image must supply at least that region.
      */
     void sendMapData(long mapId, BufferedImage image);
 
     /**
-     * Sends the death info to the client, which will be displayed on the death screen.
-     *
-     * @param deathInfo a pair where the left is the translation key of the death message,
-     *                  and the right is the translation parameters
+     * Sends translated death-screen text using this connection's login language.
+     * {@code deathInfo} supplies the translation key and parameters; callers must
+     * provide decoded login data and a non-{@code null} pair.
      */
     void sendDeathInfo(Pair<String, String[]> deathInfo);
 
     /**
-     * Notifies the client that an item charging action has finished (e.g. crossbow fully loaded).
+     * Notifies the client that its controlled entity finished charging an item.
      */
     void sendItemChargingFinished();
 
     /**
-     * Represents a speed value controlled by a base speed and a multiplier. The actual
-     * speed value is the multiplication of the base speed with the multiplier.
+     * {@code Speed} holds a base speed and multiplier whose product is the effective
+     * speed value. The record performs no range validation, and
+     * {@code addMultiplier} returns a new configuration rather than modifying this
+     * one.
      *
-     * @param baseSpeed  the base speed value
-     * @param multiplier the multiplier of the base speed value
+     * @param baseSpeed unscaled base speed value
+     * @param multiplier multiplier applied to the base
      */
     record Speed(double baseSpeed, double multiplier) {
         /**
-         * Calculates the actual speed by multiplying the base speed with the multiplier.
-         *
-         * @return the calculated speed as a product of the base speed and multiplier
+         * Returns the product of this configuration's {@code baseSpeed} and
+         * {@code multiplier}.
          */
         public double calculate() {
             return baseSpeed * multiplier;
         }
 
         /**
-         * Creates a new {@code Speed} instance by adding the specified multiplier to the current multiplier.
-         *
-         * @param multiplier the multiplier to be added to the current multiplier
-         * @return a new {@code Speed} instance with the updated multiplier
+         * Returns a new speed with the same base and the supplied multiplier added.
          */
         public Speed addMultiplier(double multiplier) {
             return new Speed(this.baseSpeed, this.multiplier + multiplier);
@@ -589,124 +602,109 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     }
 
     /**
-     * Get the speed of the player.
-     *
-     * @return The speed of the player
+     * Returns the walking speed configuration used for this connection's movement
+     * attribute.
      */
     Speed getSpeed();
 
     /**
-     * Set the speed of the player.
-     *
-     * @param speed The speed to set
+     * Replaces the walking speed configuration and sends it when changed. The
+     * standard implementation requires a controlled entity for its attribute packet
+     * and does not validate the speed's numeric range.
      */
     void setSpeed(Speed speed);
 
     /**
-     * Get the fly speed of the player.
-     *
-     * @return The fly speed of the player
+     * Returns the horizontal flying speed configuration for this player connection.
      */
     Speed getFlySpeed();
 
     /**
-     * Sets the fly speed of the player.
-     *
-     * @param flySpeed the fly speed to set
+     * Replaces the horizontal flying speed and refreshes this player's client
+     * abilities when changed. The standard implementation requires a controlled
+     * entity and sends the calculated value through its float protocol
+     * representation.
      */
     void setFlySpeed(Speed flySpeed);
 
     /**
-     * Get the vertical fly speed of the player.
-     *
-     * @return The vertical fly speed of the player
+     * Returns the vertical flying speed configuration for this player connection.
      */
     Speed getVerticalFlySpeed();
 
     /**
-     * Sets the vertical fly speed of the player.
-     *
-     * @param verticalFlySpeed the vertical fly speed to set
+     * Replaces the vertical flying speed and refreshes this player's client
+     * abilities when changed. The standard implementation requires a controlled
+     * entity and sends the calculated value through its float protocol
+     * representation.
      */
     void setVerticalFlySpeed(Speed verticalFlySpeed);
 
     /**
-     * Sets the motion of the player.
-     *
-     * @param motion the motion vector to set
+     * Sends a requested motion vector for the controlled player entity to the
+     * client. The standard implementation encodes the vector without changing the
+     * server entity's stored motion through this helper.
      */
     void setMotion(Vector3dc motion);
 
     /**
-     * Gets the latest input mode reported by the client.
-     *
-     * @return the current input mode, or {@code null} if not available yet
+     * Returns the latest input category decoded from client input packets when
+     * available. The standard implementation leaves this value {@code null} before
+     * the first relevant packet supplies its metadata.
      */
     InputMode getInputMode();
 
     /**
-     * Gets the latest play mode reported by the client.
-     *
-     * @return the current play mode, or {@code null} if not available yet
+     * Returns the latest client play mode decoded from input packets when available.
+     * The standard implementation leaves this value {@code null} before the first
+     * relevant packet supplies its metadata.
      */
     ClientPlayMode getPlayMode();
 
     /**
-     * Gets the latest input interaction model reported by the client.
-     *
-     * @return the current input interaction model, or {@code null} if not available yet
+     * Returns the latest interaction model decoded from client input packets when
+     * available. The standard implementation leaves this value {@code null} before
+     * the first relevant packet supplies its metadata.
      */
     InputInteractionModel getInputInteractionModel();
 
     /**
-     * Sets the visibility of a specific HUD element for the player.
-     *
-     * @param element the {@link HudElement} whose visibility is to be modified
-     * @param visible {@code true} to make the HUD element visible, {@code false} to hide it
+     * Records whether the selected HUD element is visible and schedules a client
+     * update when changed. The standard implementation batches the visibility state
+     * until its next tick rather than sending immediately.
      */
     void setHudElementVisibility(HudElement element, boolean visible);
 
     /**
-     * Determines the visibility of the specified HUD (Heads-Up Display) element.
-     *
-     * @param element the {@code HudElement} whose visibility status is to be checked
-     * @return {@code true} if the HUD element is visible, {@code false} otherwise
+     * Returns whether the selected HUD element is absent from the hidden set.
      */
     boolean getHudElementVisibility(HudElement element);
 
     /**
-     * Transfers the player to another server.
-     *
-     * @param address the address of the server to transfer to
-     * @param port    the port of the server to transfer to
+     * Requests that the client connect to the supplied server address and port. This
+     * sends a transfer packet; it does not itself connect the server to that
+     * destination or confirm the client's arrival.
      */
     void transfer(String address, int port);
 
     /**
-     * Whether the player's client is currently showing the dimension switching loading screen.
-     *
-     * @return {@code true} if a dimension change is in progress
+     * Returns whether this connection currently records an outstanding
+     * dimension-change presentation.
      */
     boolean isChangingDimension();
 
     /**
-     * Show the dimension switching loading screen to the client immediately.
-     * <p>
-     * Call this before performing async work (e.g. chunk loading) to give the
-     * player visual feedback while the server prepares the target dimension.
-     * The flag is automatically cleared when {@link #completeDimensionChange()} is called.
-     *
-     * @param targetDimensionType the target dimension type
-     * @param x             approximate target x coordinate
-     * @param y             approximate target y coordinate
-     * @param z             approximate target z coordinate
+     * Marks dimension switching active and submits the client loading-screen request
+     * before returning. Callers provide the target dimension and approximate
+     * coordinates, then invoke {@code completeDimensionChange} after transfer work
+     * or to dismiss the presentation after failure.
      */
     void beginDimensionChange(DimensionType targetDimensionType, double x, double y, double z);
 
     /**
-     * Complete a dimension change by sending the dimension ack and resetting the flag.
-     * Call this after the player has been added to the target dimension,
-     * or to dismiss the loading screen if the teleport fails.
+     * Clears dimension-switching state and sends the server acknowledgement for the
+     * controlled entity. Callers invoke this after adding the entity to its target
+     * dimension or when dismissing an unsuccessful transfer's loading screen.
      */
     void completeDimensionChange();
 

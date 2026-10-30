@@ -3,17 +3,15 @@ package org.allaymc.api.ddui.element;
 import org.allaymc.api.ddui.Observable;
 
 /**
- * Boolean toggle element.
- * <p>
- * The checked state is exposed through the inherited {@link #getValue()} property.
+ * {@code Toggle} represents a boolean control in a custom-form layout. Its inherited value property
+ * holds the initial checked state or observable binding, and {@code toggled} aliases value
+ * configuration while change callbacks receive client-originated session values.
  *
  * @author daoge_cmd | SerenityJS
  */
 public final class Toggle extends ValueElementBase<Toggle, Boolean> {
     /**
-     * Creates a toggle with a {@code false} initial value.
-     *
-     * @param label the toggle label
+     * Creates a toggle template with the supplied label and an unchecked value.
      */
     public Toggle(String label) {
         super(false);
@@ -21,10 +19,9 @@ public final class Toggle extends ValueElementBase<Toggle, Boolean> {
     }
 
     /**
-     * Creates a toggle bound to an observable.
-     *
-     * @param label   the toggle label
-     * @param toggled the value observable
+     * Creates a toggle template using the supplied observable configuration. Construction captures
+     * current source values; runtime sessions subscribe when compiled, and later literal template
+     * changes do not replace those existing subscriptions.
      */
     public Toggle(String label, Observable<Boolean> toggled) {
         this(label);
@@ -32,27 +29,25 @@ public final class Toggle extends ValueElementBase<Toggle, Boolean> {
     }
 
     /**
-     * Convenience alias of {@code value(toggled)}.
-     *
-     * @param toggled the toggle value
-     * @return this element
+     * Stores the supplied literal in the inherited value property and returns this element. This
+     * alias clears that property's observable binding, while existing sessions keep their current
+     * compiled values.
      */
     public Toggle toggled(boolean toggled) {
         return value(toggled);
     }
 
     /**
-     * Convenience alias of {@code value(toggled)} for observable bindings.
-     *
-     * @param toggled the toggle observable
-     * @return this element
+     * Binds the inherited value property to the supplied observable and returns this element. This
+     * alias uses the same configuration as {@code value}; existing sessions keep the binding
+     * compiled when they opened.
      */
     public Toggle toggled(Observable<Boolean> toggled) {
         return value(toggled);
     }
 
     /**
-     * {@inheritDoc}
+     * Returns this element using its concrete fluent configuration type.
      */
     @Override
     protected Toggle self() {

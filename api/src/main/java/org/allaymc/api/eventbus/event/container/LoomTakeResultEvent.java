@@ -11,7 +11,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player takes the result item from a loom.
+ * {@code LoomTakeResultEvent} represents a proposed patterned banner before
+ * created-output publication. Listeners may replace the result stack or cancel the
+ * action; successful dispatch stores the selected result without immediately sending an
+ * ordinary container slot update.
  *
  * @author daoge_cmd
  */
@@ -20,15 +23,16 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.WORLD)
 public class LoomTakeResultEvent extends ContainerEvent implements CancellableEvent {
     /**
-     * The viewer taking the loom result.
+     * Viewer requesting the loom result.
      */
     protected ContainerViewer viewer;
     /**
-     * The loom container.
+     * Loom container supplying the banner ingredients.
      */
     protected LoomContainer container;
     /**
-     * The result item being taken.
+     * {@code resultItem} becomes the created-output stack after successful dispatch.
+     * Listeners may replace this reference with a non-{@code null} banner result.
      */
     @Setter
     protected ItemStack resultItem;

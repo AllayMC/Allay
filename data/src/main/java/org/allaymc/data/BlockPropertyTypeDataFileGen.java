@@ -19,10 +19,39 @@ import java.nio.file.Path;
 import java.util.*;
 
 /**
+ * {@code BlockPropertyTypeDataFileGen} derives property-type definitions from
+ * the values observed in the unpacked block palette. States are grouped by
+ * block name before their property values are collected, allowing the same
+ * serialized property name to have different domains on different blocks.
+ * Output includes a global definition table and the per-block aliases consumed
+ * by the Java property generator.
+ *
+ * <p>
+ * Domain comparison uses the property name, inferred value type, and number of
+ * observed values, rather than comparing every value. Definitions that differ
+ * by that comparison receive a cardinality suffix and a per-block mapping.
+ * Equal-size domains can still overwrite one another under the same output key,
+ * so the table does not distinguish arbitrary domains of equal size.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class BlockPropertyTypeDataFileGen {
+    /**
+     * Reads palette states and replaces the generated property-definition JSON.
+     * {@code args} is ignored, and resource paths are relative to the
+     * repository root. Property values are first collected per block, then
+     * compared to identify names requiring per-block aliases.
+     *
+     * <p>
+     * Boolean output always contains both values, integer values are sorted
+     * numerically, and enum values retain discovery order. Unknown input kinds
+     * produce diagnostics without aborting collection. Repeated output keys
+     * replace earlier definitions, including distinct same-size domains sharing
+     * a cardinality suffix.
+     *
+     * @throws IOException if the compressed palette cannot be opened or read
+     */
     public static void main(String[] args) throws IOException {
         File file = new File("data/resources/unpacked/block_palette.nbt");
         InputStream stream = new FileInputStream(file);
@@ -56,6 +85,8 @@ public class BlockPropertyTypeDataFileGen {
                 for (Map.Entry<String, Object> valueEntry : state.entrySet()) {
                     PropertyType propertyType = propertyTypeMap.computeIfAbsent(valueEntry.getKey(), (k) -> new PropertyType(entry.getKey(), valueEntry.getKey()));
                     Object value = valueEntry.getValue();
+                    // NBT may encode booleans as zero or one bytes; normalize
+                    // those observations while retaining unknown kinds as diagnosed property descriptors.
                     switch (value) {
                         case Byte b -> {
                             if (b == 1 || b == 0) {
@@ -104,6 +135,8 @@ public class BlockPropertyTypeDataFileGen {
         Map<String, Map<String, String>> specialBlockTypes = new TreeMap<>();
         Map<String, PropertyType> tmpLookUp = new TreeMap<>();
 
+        // Compare each block's domain against the first one for that name;
+        // differing type or cardinality requires aliases for every block using it.
         for (Map.Entry<String, Map<String, PropertyType>> entry : blockToPropertyTypeMap.entrySet()) {
             for (Map.Entry<String, PropertyType> entryInside : entry.getValue().entrySet()) {
                 String propertyName = entryInside.getKey();
@@ -129,8 +162,12 @@ public class BlockPropertyTypeDataFileGen {
             for (Map.Entry<String, PropertyType> entryInside : entry.getValue().entrySet()) {
                 String propertyName = entryInside.getKey();
                 PropertyType propertyType = entryInside.getValue();
+                // Normalize keys for generated Java fields while keeping the
+                // original serializationName in the definition used for stored block-state properties.
                 String keyName = propertyName.replace(':', '_');
                 if (differentSizePropertyTypes.contains(propertyName)) {
+                    // Cardinality selects the alias consumed by the block generator;
+                    // this key cannot distinguish different value sets of the same size.
                     String newKey = keyName + "_" + propertyType.values.size();
                     String fullBlockName = entry.getKey();
                     specialBlockTypes.get(fullBlockName).put(keyName, newKey);
@@ -153,6 +190,8 @@ public class BlockPropertyTypeDataFileGen {
 
             obj.put("serializationName", propertyTypeEntry.getValue().serializationName);
             obj.put("valueType", propertyTypeEntry.getValue().valueType);
+            // Emit numeric domains in numeric order, and expose both boolean
+            // states even when palette observations included only one of those values.
             if (propertyTypeEntry.getValue().valueType.equals("INTEGER")) {
                 List<Integer> values = new ArrayList<>();
                 for (String value : propertyTypeEntry.getValue().values) {
@@ -179,26 +218,63 @@ public class BlockPropertyTypeDataFileGen {
         log.info("Block property type data have been saved to data/resources/unpacked/block_property_types.json");
     }
 
+    /**
+     * Serializes the assembled definition object and replaces its resource
+     * file. The previous file is deleted before the CRLF writer creates the new
+     * one; write failures propagate without restoring the original output.
+     */
     @SneakyThrows
     private static void writeJSONObject(Object obj) {
         Gson gson = new GsonBuilder().setPrettyPrinting().setNumberToNumberStrategy(JsonReader::nextLong).setObjectToNumberStrategy(JsonReader::nextLong).create();
         String json = gson.toJson(obj);
         Path path = Path.of("data/resources/unpacked/block_property_types.json");
+        // Remove the existing resource before writing its replacement; callers
+        // must rerun generation if a subsequent failure leaves the output incomplete.
         Files.deleteIfExists(path);
         Utils.writeFileWithCRLF(path, json);
     }
 
+    /**
+     * {@code PropertyType} represents one block's observed domain for a
+     * serialized property name. Equality combines {@code serializationName},
+     * {@code valueType}, and the cardinality of {@code values}; it ignores
+     * {@code blockName} and the actual value contents when deciding whether
+     * definitions need different aliases.
+     */
     static class PropertyType {
+        // serializationName and valueType identify the observed property category;
+        // values supplies its cardinality, which equality compares instead of individual entries.
+        /** Original serialized property name. */
         final String serializationName;
+        /** Block supplying these observations. */
         final String blockName;
+        /**
+         * {@code values} accumulates distinct values in discovery order.
+         * Changing this set can change {@code equals} and {@code hashCode}
+         * results through its cardinality.
+         */
         final Set<String> values = new LinkedHashSet<>();
+        /**
+         * {@code valueType} records the first inferred value kind. {@code ""}
+         * means no observation has classified this property yet.
+         */
         String valueType = "";
 
+        /**
+         * Creates an unclassified property domain for the supplied block and
+         * serialized name. Observations are added afterward to its mutable set,
+         * and the first classified input establishes the stored value kind.
+         */
         PropertyType(String blockName, String serializationName) {
             this.blockName = blockName;
             this.serializationName = serializationName;
         }
 
+        /**
+         * Returns whether another descriptor has the same name, type, and value
+         * count. Actual values and source block names are ignored, so different
+         * domains of equal cardinality can compare equal.
+         */
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -209,6 +285,11 @@ public class BlockPropertyTypeDataFileGen {
                    Objects.equals(values.size(), that.values.size());
         }
 
+        /**
+         * Returns a hash of the name, inferred type, and current value count.
+         * Adding observations can change this result, so the descriptor must
+         * not be mutated while used as a hash-based collection key.
+         */
         @Override
         public int hashCode() {
             return Objects.hash(serializationName, valueType, values.size());

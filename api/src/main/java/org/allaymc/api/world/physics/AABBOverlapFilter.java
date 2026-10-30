@@ -3,7 +3,10 @@ package org.allaymc.api.world.physics;
 import java.util.function.Predicate;
 
 /**
- * AABBOverlapFilter is used to filtering entities that are overlapping with the specified AABB.
+ * {@code AABBOverlapFilter} selects objects that satisfy an axis-aligned
+ * bounding-box query. Its predicate runs on candidates found by the spatial
+ * index, and the combined bounds and long-identifier contracts let that index
+ * locate and identify each object.
  *
  * @author daoge_cmd
  */

@@ -28,279 +28,222 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * WorldViewer represents an object that can view objects and changes made in the world.
+ * {@code WorldViewer} receives representations of world objects and changes
+ * for presentation to a viewer. Entity, chunk, block, sound, and interface
+ * operations describe client-visible updates; they do not themselves define
+ * simulation mutations. Implementations translate these requests through the
+ * viewer's supported protocol.
  *
  * @author daoge_cmd
  */
 public interface WorldViewer extends PrimitiveShapeViewer {
     /**
-     * Views the entity passed.
-     *
-     * @param entity the entity to view
+     * Presents the supplied entity to this viewer using its current state.
      */
     void viewEntity(Entity entity);
 
     /**
-     * Removes the entity passed.
-     *
-     * @param entity the entity to remove
+     * Removes the supplied entity from this viewer's presented world state.
      */
     void removeEntity(Entity entity);
 
     /**
-     * Views the location of the entity passed.
-     *
-     * @param entity           the entity to view
-     * @param newLocation      the new location of the entity
-     * @param teleporting      whether the entity is being teleported to the new location
+     * Presents an entity location with ordinary movement or teleport
+     * semantics. {@code teleporting} identifies a discontinuous move; callers
+     * supply the destination without relying on this presentation operation to
+     * move the simulated entity.
      */
     void viewEntityLocation(Entity entity, Location3dc newLocation, boolean teleporting);
 
     /**
-     * Views the motion of the entity passed.
-     *
-     * @param entity the entity to view
+     * Presents the supplied motion vector for the specified physics entity.
      */
     <T extends Entity & EntityPhysicsComponent> void viewEntityMotion(T entity, Vector3dc motion);
 
     /**
-     * Views the state of the entity passed.
-     *
-     * @param entity the entity to view
+     * Presents the supplied entity's current metadata to this viewer.
      */
     void viewEntityState(Entity entity);
 
     /**
-     * Views the item in the main hand of the entity passed.
-     *
-     * @param entity the entity to view
+     * Presents the main-hand equipment of the supplied container-holding
+     * entity.
      */
     <T extends Entity & EntityContainerHolderComponent> void viewEntityHand(T entity);
 
     /**
-     * Views the item in offhand of the entity passed.
-     *
-     * @param entity the entity to view
+     * Presents the offhand equipment of the supplied container-holding entity.
      */
     <T extends Entity & EntityContainerHolderComponent> void viewEntityOffhand(T entity);
 
     /**
-     * Views the armors of the entity passed.
-     *
-     * @param entity the entity to view
+     * Presents the armor equipment of the supplied container-holding entity.
      */
     <T extends Entity & EntityContainerHolderComponent> void viewEntityArmors(T entity);
 
     /**
-     * Views the animation performed by the entity passed.
-     *
-     * @param entity    the entity to view
-     * @param animation the animation to play
+     * Presents the selected animation performed by the supplied entity.
      */
     void viewEntityAnimation(Entity entity, EntityAnimation animation);
 
     /**
-     * Views an action that is happening on the entity passed.
-     *
-     * @param entity the entity to view
-     * @param action the action that is performed
+     * Presents the supplied action associated with the specified entity.
      */
     void viewEntityAction(Entity entity, EntityAction action);
 
     /**
-     * Views an effect change in the entity passed.
-     *
-     * @param entity    the entity to view
-     * @param newEffect the new effect instance. Can be {@code null} if the effect is removed
-     * @param oldEffect the old effect instance. Can be {@code null} if the effect is not exist in the entity before
+     * Presents an effect addition, replacement, or removal for the supplied
+     * entity. {@code oldEffect == null} denotes addition, {@code newEffect ==
+     * null} denotes removal, and both values must not be {@code null}
+     * together.
      */
     void viewEntityEffectChange(Entity entity, EffectInstance newEffect, EffectInstance oldEffect);
 
     /**
-     * Views the skin of the player passed.
-     *
-     * @param player the player to view
+     * Presents the current skin associated with the supplied player entity.
      */
     void viewPlayerSkin(EntityPlayer player);
 
     /**
-     * Views an emote being performed by a player with the emote message shown in chat.
-     * <p>
-     * This is a convenience method that delegates to {@link #viewPlayerEmote(EntityPlayer, UUID, boolean)}
-     * with silence set to {@code false}.
-     *
-     * @param player  the player who performed the emote
-     * @param emoteId the id of the emote
+     * Presents a player emote with its chat message enabled for this viewer.
+     * This convenience overload supplies {@code false} for {@code silence} and
+     * delegates to the full emote presentation operation.
      */
     default void viewPlayerEmote(EntityPlayer player, UUID emoteId) {
         viewPlayerEmote(player, emoteId, false);
     }
 
     /**
-     * Views an emote being performed by a player.
-     *
-     * @param player  the player who performed the emote
-     * @param emoteId the id of the emote
-     * @param silence whether the emote message should be shown in the chat screen. The emote message
-     *                is in the following format: {@literal <player_name> is <emote_name>.}
+     * Presents the selected emote performed by the supplied player entity.
+     * {@code silence} requests suppression of the emote chat message when
+     * {@code true}; {@code false} permits the usual client message.
      */
     void viewPlayerEmote(EntityPlayer player, UUID emoteId, boolean silence);
 
     /**
-     * Views the game mode of an {@link EntityPlayer}.
-     *
-     * @param player the player to view
+     * Presents the game mode associated with the supplied player entity.
      */
     void viewPlayerGameMode(EntityPlayer player);
 
     /**
-     * Views the chunk passed.
-     *
-     * @param chunk the chunk to view
+     * Presents the supplied chunk and its associated visible world content.
      */
     void viewChunk(Chunk chunk);
 
     /**
-     * Removes the chunk passed.
-     *
-     * @param chunkHash the chunk to remove
+     * Removes content associated with the chunk identified by its packed
+     * coordinates.
      */
     void removeChunk(long chunkHash);
 
     /**
-     * Views time in the world passed.
-     *
-     * @param timeOfDay the time to view
+     * Presents the supplied world time of day in game ticks.
      */
     void viewTime(int timeOfDay);
 
     /**
-     * Views the game rules passed.
-     *
-     * @param gameRules the game rules to view
+     * Presents the supplied game rule values to this world viewer.
      */
     void viewGameRules(GameRules gameRules);
 
     /**
-     * Views a single block update.
-     *
-     * @param pos        the pos of the block state
-     * @param layer      the layer of the block state
-     * @param blockState the new block state
+     * Presents one block state change at the supplied dimension coordinates
+     * and layer.
      */
     void viewBlockUpdate(Vector3ic pos, int layer, BlockState blockState);
 
     /**
-     * Views a number of block updates in a chunk.
-     *
-     * @param chunk             the chunk where these block updates happen
-     * @param blockUpdates      the block updates in the first layer
-     * @param extraBlockUpdates the block updates in the second layer
+     * Presents batched changes for the chunk's standard and extra block
+     * layers. Each update uses dimension block coordinates with a height
+     * inside the chunk's dimension; callers keep both layer collections
+     * distinct.
      */
     void viewBlockUpdates(Chunk chunk, Collection<BlockUpdate> blockUpdates, Collection<BlockUpdate> extraBlockUpdates);
 
     /**
-     * BlockUpdate holds the information of a single block update.
+     * {@code BlockUpdate} carries one block state change at dimension block
+     * coordinates.
      *
-     * @param x          the x coordinate of the updated block state
-     * @param y          the y coordinate of the updated block state
-     * @param z          the z coordinate of the updated block state
-     * @param blockState the updated block state
+     * @param x dimension block x coordinate
+     * @param y dimension block y coordinate
+     * @param z dimension block z coordinate
+     * @param blockState replacement block state value
      */
     record BlockUpdate(int x, int y, int z, BlockState blockState) {
     }
 
     /**
-     * Views an action performed by a block, including things such as a chest opening.
-     *
-     * @param pos    the pos of the block
-     * @param action the action performed
+     * Presents a block action at the supplied dimension block coordinates.
      */
     void viewBlockAction(Vector3ic pos, BlockAction action);
 
     /**
-     * Views a sound with the specific volume and pitch at the pos passed.
-     *
-     * @param sound    the sound to view
-     * @param pos      the pos of the sound
-     * @param relative whether the sound is relative. If set to {@code false}, the sound will have full volume,
-     *                 regardless of where the Position is, whereas if set to {@code true}, the sound's volume
-     *                 will be based on the distance to the pos passed
+     * Presents the supplied sound at a position with the selected attenuation
+     * policy. {@code relative} enables distance-based volume when {@code
+     * true}; {@code false} requests full volume independent of distance.
      */
     void viewSound(Sound sound, Vector3dc pos, boolean relative);
 
     /**
-     * Stops the sound with the specific name, or stop all sounds if the name is {@code null}.
-     * The sound name is same to the name sent in {@link CustomSound}.
-     *
-     * @param soundName the name of the sound to stop, or {@code null} to stop all sounds
+     * Stops a named sound or every currently playing sound. {@code null}
+     * selects all sounds; other values use the same sound identifier supplied
+     * when a custom sound is presented.
      */
     void stopSound(String soundName);
 
     /**
-     * Stops all currently playing sounds. This is achieved by internally invoking {@code stopSound(null)}.
+     * Requests that this viewer stop all currently playing sounds. This
+     * convenience operation passes {@code null} to {@link #stopSound(String)},
+     * using that operation's all-sounds selection instead of identifying one
+     * sound.
      */
     default void stopAllSounds() {
         stopSound(null);
     }
 
     /**
-     * Views a particle at the pos passed.
-     *
-     * @param particle the particle to view
-     * @param pos      the pos of the particle
+     * Presents the supplied particle at the specified dimension position.
      */
     void viewParticle(Particle particle, Vector3dc pos);
 
     /**
-     * Views the weather passed.
-     *
-     * @param weather the weather to view
+     * Presents the supplied weather state to this world viewer.
      */
     void viewWeather(Weather weather);
 
     /**
-     * Views the block entity passed.
-     *
-     * @param blockEntity the block entity to view
+     * Presents the supplied block entity's client-visible state to this
+     * viewer.
      */
     void viewBlockEntity(BlockEntity blockEntity);
 
     /**
-     * Opens the lectern reading interface for the viewer.
-     *
-     * @param pos the position of the lectern block
+     * Opens the reading interface for the lectern at the supplied coordinates.
      */
     void viewLectern(Vector3ic pos);
 
     /**
-     * Opens the sign editor interface for the viewer.
-     *
-     * @param pos       the position of the sign block
-     * @param frontSide {@code true} if the front side of the sign should be edited, {@code false} otherwise
+     * Opens a sign editor for the selected face at the supplied coordinates.
+     * {@code true} selects the front face and {@code false} selects the back
+     * face for the viewer.
      */
     void viewSignEditor(Vector3ic pos, boolean frontSide);
 
     /**
-     * Views the sleeping indicator showing how many players are currently sleeping.
-     *
-     * @param sleepingCount the number of players currently sleeping
-     * @param totalCount    the total number of players that can sleep
+     * Presents the count of sleeping players and the eligible player total.
      */
     void viewSleepingIndicator(int sleepingCount, int totalCount);
 
     /**
-     * Open the command block editor interface for the viewer.
-     *
-     * @param pos the pos of the command block
+     * Opens the command block editor at the supplied dimension block
+     * coordinates.
      */
     void viewCommandBlockEditor(Vector3ic pos);
 
     /**
-     * Views the enchantment options available to the viewer from an enchanting table.
-     *
-     * @param enchantOptions the list of enchant options, where each pair contains
-     *                       the network id (used to identify the selected option) and the enchant option
+     * Presents available enchantment choices together with their selection
+     * identifiers. Each pair supplies the network ID used to identify the
+     * choice and the corresponding {@code EnchantOption} offered by the table.
      */
     void viewEnchantOptions(List<Pair<Integer, EnchantOption>> enchantOptions);
 }

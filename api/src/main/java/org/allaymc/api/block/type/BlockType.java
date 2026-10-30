@@ -15,155 +15,139 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Represents a type of block.
+ * {@code BlockType} identifies a block family with shared behavior, property
+ * domains, tags, and an associated item type. Its state indexes resolve canonical
+ * property combinations by palette hash or packed property indices, while the
+ * default state supplies the family's configured initial combination.
  *
  * @author daoge_cmd
  */
 public interface BlockType<T extends BlockBehavior> extends Identified {
 
     /**
-     * Get the block behavior associated with this block type.
-     *
-     * @return the block behavior
+     * Returns the behavior instance shared by this type's block states.
      */
     T getBlockBehavior();
 
     /**
-     * Get the properties of this block type.
-     *
-     * @return an unmodifiable view of the map of block property types
+     * Returns the property domains keyed by their serialized names. Callers must
+     * treat the returned view as read-only because state enumeration and
+     * packed-index layout depend on the domains prepared during type construction.
      */
     @UnmodifiableView
     Map<String, BlockPropertyType<?>> getProperties();
 
     /**
-     * Check if the block type has the specified property.
-     *
-     * @param name the property name
-     * @return {@code true} if the block type has the property, {@code false} otherwise.
+     * Returns whether this type declares a property with the supplied serialized
+     * name.
      */
     default boolean hasProperty(String name) {
         return getProperties().containsKey(name);
     }
 
     /**
-     * Check if the block type has the specified property.
-     *
-     * @param propertyType the property type
-     * @return {@code true} if the block type has the property, {@code false} otherwise.
+     * Returns whether this type declares the supplied property's serialized name.
+     * This check does not establish property-instance identity, so a positive
+     * result alone does not guarantee that state property access accepts that
+     * instance.
      */
     default boolean hasProperty(BlockPropertyType<?> propertyType) {
         return getProperties().containsKey(propertyType.getName());
     }
 
     /**
-     * Get all possible states of this block type.
-     *
-     * @return an unmodifiable view of the collection of all block states
+     * Returns the states represented in this type's hash index. Callers must treat
+     * this collection as read-only; it describes the constructed domain rather than
+     * a way to register or remove palette entries.
      */
     @UnmodifiableView
     Collection<BlockState> getAllStates();
 
     /**
-     * Get the hash map which contains all states of this block type.
-     * The key is block state's hash.
-     *
-     * @return an unmodifiable view of the map of block states by their hash
+     * Returns this type's state index keyed by signed palette hashes. Callers must
+     * leave the index unchanged because default-state selection and state lookup
+     * use the entries prepared during construction.
      */
     @UnmodifiableView
     Map<Integer, BlockState> getBlockStateHashMap();
 
     /**
-     * Get the special value map of block states.
-     * The key is block state's special value.
-     *
-     * @return an unmodifiable view of the map of block states by their special values
+     * Returns this type's index keyed by packed property indices, or {@code null}
+     * when its reported width exceeds {@code 64} bits. Callers must treat a present
+     * index as read-only and use hash lookup for wider domains.
      */
     @UnmodifiableView
     Map<Long, BlockState> getSpecialValueMap();
 
     /**
-     * Get the number of bits used for special values.
-     *
-     * @return the number of special value bits
+     * Returns the combined bit width reserved for this type's packed property
+     * indices.
      */
     byte getSpecialValueBits();
 
     /**
-     * Get the default state of this block type.
-     *
-     * @return the default block state
+     * Returns the initial state chosen when this block type was constructed.
      */
     BlockState getDefaultState();
 
     /**
-     * Get the item identifier for this block type.
-     *
-     * @return the item identifier
+     * Returns the registered identifier of this block type's associated item type.
      */
     default Identifier getItemIdentifier() {
         return getItemType().getIdentifier();
     }
 
     /**
-     * Get the item type associated with this block type.
-     *
-     * @return the item type
+     * Returns the item type associated with this block family for item creation.
      */
     ItemType<?> getItemType();
 
     /**
-     * Creates a block state from the given list of property values.
-     *
-     * @param propertyValues the list of property values
-     * @return the block state, or null if the given property values is invalid
+     * Resolves a registered state from the supplied complete serialized property
+     * values. Missing or invalid combinations can return {@code null}; this
+     * operation does not fill omitted properties with defaults or require
+     * property-instance identity.
      */
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     /**
-     * Creates a block state, the property values are copied from the given block state. <br>
-     * The given block state's type must have same property types as this block type.
-     *
-     * @param other the block state to copy property values from
-     * @return the block state, or null if the given block state is invalid
+     * Resolves this type's state using the other state's serialized property
+     * values. The property names and encodings must describe a registered
+     * combination of this type; incompatible combinations can return {@code null}.
      */
     default BlockState copyPropertyValuesFrom(BlockState other) {
         return ofState(other.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new));
     }
 
     /**
-     * Creates a block state from the given block state hash.
-     *
-     * @param blockStateHash the block state hash
-     * @return the block state, or null if the given block state hash is invalid
+     * Returns this type's state indexed by the supplied signed palette hash. An
+     * absent hash returns {@code null}, and this lookup does not reinterpret the
+     * number as a packed property-index key.
      */
     default BlockState ofState(int blockStateHash) {
         return getBlockStateHashMap().get(blockStateHash);
     }
 
     /**
-     * Creates a block state from the given array of property values.
-     *
-     * @param propertyValues the array of property values
-     * @return the block state, or null if the given property values is invalid
+     * Resolves a registered state from the complete supplied property array.
+     * Omitted properties are not defaulted; an unresolved combination can return
+     * {@code null}, while a {@code null} array element is rejected when
+     * constructing the list.
      */
     default BlockState ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
         return ofState(List.of(propertyValues));
     }
 
     /**
-     * Get the set of tags associated with this block type.
-     *
-     * @return an unmodifiable set of block tags
+     * Returns the category tags associated with this block type. Callers must treat
+     * the returned set as read-only because tag checks consult it directly and do
+     * not keep a separate snapshot.
      */
     @Unmodifiable
     Set<BlockTag> getBlockTags();
 
     /**
-     * Check if this block type has the specified tag.
-     *
-     * @param blockTag the block tag
-     * @return {@code true} if the block type has the tag, {@code false} otherwise.
+     * Returns whether this block type's tag set contains the supplied category.
      */
     default boolean hasBlockTag(BlockTag blockTag) {
         return getBlockTags().contains(blockTag);

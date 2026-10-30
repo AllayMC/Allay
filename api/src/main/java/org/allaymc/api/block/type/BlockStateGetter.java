@@ -7,9 +7,10 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**
- * BlockStateGetter is used to get a block state safely using {@link NBTIO}, which means
- * that the plugin developers can get an item type without worrying about being broken
- * in the next minecraft version compared to using {@link BlockTypes} directly.
+ * {@code BlockStateGetter} builds named block-state NBT requests and resolves them
+ * through the installed {@link NBTIO} service. Callers can specify named properties
+ * or a legacy numeric value, allowing the installed updater to interpret the
+ * request without direct references to generated block-type fields.
  *
  * @author daoge_cmd | harry-xi
  */
@@ -17,19 +18,36 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 @UtilityClass
 public final class BlockStateGetter {
     /**
-     * Get a block type by its name.
-     *
-     * @param name The name of the block type
-     * @return The {@link BlockStateGetter.Getter} object
+     * Creates a mutable request builder for the supplied block name. Blank names
+     * throw {@code IllegalArgumentException}, {@code null} fails immediately, and
+     * identifier parsing is deferred until the request reaches the installed NBT
+     * service.
      */
     public static Getter name(String name) {
         return new Getter(name);
     }
 
+    /**
+     * {@code Getter} accumulates one block-state request using named properties or
+     * a legacy value.
+     */
     public static final class Getter {
+        /**
+         * Mutable root block-state request.
+         */
         private final NbtMapBuilder nbtBuilder = NbtMap.builder();
+        /**
+         * {@code stateBuilder} remains {@code null} until the first named property
+         * is supplied. Once present, it prevents selection of the legacy
+         * numeric-value form.
+         */
         private NbtMapBuilder stateBuilder;
 
+        /**
+         * Creates a request with the supplied nonblank block name. The name is
+         * retained without normalization, and this constructor does not resolve its
+         * identifier or check whether a block type is registered.
+         */
         private Getter(String name) {
             if (name.isBlank()) {
                 throw new IllegalArgumentException("Name cannot be blank");
@@ -38,11 +56,10 @@ public final class BlockStateGetter {
         }
 
         /**
-         * Set the property of the block.
-         *
-         * @param name  The name of the property
-         * @param value The value of the property
-         * @return The {@link Getter} object
+         * Adds or replaces a named serialized property and returns this builder.
+         * Once {@code val} has been selected, this method throws {@code
+         * IllegalStateException} to prevent combining named properties with the
+         * legacy request form.
          */
         public Getter property(String name, Object value) {
             if (nbtBuilder.containsKey("val")) {
@@ -56,10 +73,10 @@ public final class BlockStateGetter {
         }
 
         /**
-         * Set the val of the block.
-         *
-         * @param val The val of the block
-         * @return The {@link Getter} object
+         * Sets or replaces the legacy numeric value and returns this builder. Once
+         * any named property has been added, this method throws {@code
+         * IllegalStateException} because the request must use only one
+         * representation.
          */
         public Getter val(int val) {
             if (stateBuilder != null) {
@@ -70,9 +87,10 @@ public final class BlockStateGetter {
         }
 
         /**
-         * Try to get the block state.
-         *
-         * @return the block state, or the default state of {@link BlockTypes#UNKNOWN} if failed to get the block state
+         * Resolves the accumulated request through the installed NBT service. That
+         * service may return the unknown block's default state for unsupported
+         * names or versions, while malformed identifiers and property conversions
+         * can still throw instead of producing a fallback.
          */
         public BlockState blockState() {
             if (stateBuilder != null) {

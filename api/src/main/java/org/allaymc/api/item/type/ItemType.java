@@ -11,89 +11,85 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Set;
 
 /**
- * Represents a type of item, providing methods to create instances of the item as well as to retrieve its properties.
+ * {@code ItemType} identifies an item kind and exposes its shared gameplay data,
+ * tags, optional block association, and stack factory. Individual stacks hold
+ * their own count and extra state; the type supplies the component-backed
+ * capabilities used when those stacks are created.
  *
- * @param <T> the specific type of {@link ItemStack} this ItemType represents
+ * @param <T> stack interface produced by this item type
+ *
  * @author daoge_cmd
  */
 public interface ItemType<T extends ItemStack> extends Identified {
     /**
-     * Create an {@link ItemStack} with the given {@link ItemStackInitInfo}.
-     *
-     * @param info The {@link ItemStackInitInfo} to create the {@link ItemStack} with
-     * @return The created {@link ItemStack}
+     * Creates a stack using the supplied component initialization values.
+     * The item factory assigns this type to {@code info} before component creation;
+     * ordinary stacks require initialization values, while the air implementation
+     * can ignore them.
      */
     T createItemStack(ItemStackInitInfo info);
 
     /**
-     * Create an {@link ItemStack} with a count of 1 and a meta of 0.
-     *
-     * @return The created {@link ItemStack}
+     * Requests a stack initialized with count {@code 1} and metadata {@code 0}.
+     * The initialization builder requests a new network ID and empty extra NBT.
+     * Ordinary stacks use those values; air uses predefined zero count and metadata
+     * without allocating a network ID.
      */
     default T createItemStack() {
         return createItemStack(1);
     }
 
     /**
-     * Create an {@link ItemStack} with the given count and a meta of 0.
-     *
-     * @param count The count of the {@link ItemStack}
-     * @return The created {@link ItemStack}
+     * Requests a stack initialized with the supplied count and metadata {@code 0}.
+     * The builder requests a new network ID and empty extra NBT. Ordinary stacks
+     * use those values; air ignores them and uses predefined zero count and metadata
+     * without allocating an ID.
      */
     default T createItemStack(int count) {
         return createItemStack(count, 0);
     }
 
     /**
-     * Create an {@link ItemStack} with the given count and meta.
-     *
-     * @param count The count of the {@link ItemStack}
-     * @param meta  The meta of the {@link ItemStack}
-     * @return The created {@link ItemStack}
+     * Requests a stack initialized with the supplied count and metadata values.
+     * The builder requests a new network ID and empty extra NBT. The selected
+     * components interpret that initialization; air ignores it and uses predefined
+     * zero count and metadata without allocating an ID.
      */
     default T createItemStack(int count, int meta) {
         return createItemStack(ItemStackInitInfo.builder().count(count).meta(meta).build());
     }
 
     /**
-     * Get the runtime ID of the item.
-     * <p>
-     * The runtime id of an item is mutable and will change
-     * between different versions of the game.
-     *
-     * @return The runtime ID of the item
+     * Returns the runtime identifier assigned to this registered item type.
+     * Runtime identifiers depend on the loaded item definitions and game version;
+     * callers should use the namespaced identifier for persistent identity.
      */
     int getRuntimeId();
 
     /**
-     * Get the block type of the item.
-     *
-     * @return The block type of the item
+     * Returns the block type associated with this item, if one exists.
+     * The result is {@code null} for an item without a mapped block, so callers
+     * must check it before requesting block state or placement behavior.
      */
     BlockType<?> getBlockType();
 
     /**
-     * Get the item tags of the item.
-     *
-     * @return The item tags of the item
+     * Returns the classification-tag set associated with this item type.
+     * Callers must treat the set as read-only under this API contract; the server
+     * type retains and exposes its selected set without universally wrapping it.
      */
     @Unmodifiable
     Set<ItemTag> getItemTags();
 
     /**
-     * Check if the item has the given item tag.
-     *
-     * @param itemTag The item tag to check
-     * @return {@code true} if the item has the item tag, {@code false} otherwise.
+     * Returns whether this item type contains the supplied classification tag.
      */
     default boolean hasItemTag(ItemTag itemTag) {
         return getItemTags().contains(itemTag);
     }
 
     /**
-     * Get the data of this item.
-     *
-     * @return The data of this item
+     * Returns the gameplay properties shared by stacks of this item type.
      */
     ItemData getItemData();
 }

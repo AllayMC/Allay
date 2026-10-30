@@ -10,13 +10,27 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
+ * {@code FogCommand} manages selected players' client fog stacks through their
+ * controllers. Simulated players receive no controller operation but remain in
+ * the target-name output. Missing fog entries produce informational messages
+ * during removal operations without changing the command's successful result.
+ *
  * @author daoge_cmd
  */
 public class FogCommand extends Command {
+    /**
+     * Creates the {@code /fog} command with its built-in authorization permission.
+     */
     public FogCommand() {
         super("fog", TrKeys.MC_COMMANDS_FOG_DESCRIPTION, Permissions.COMMAND_FOG);
     }
 
+    /**
+     * Installs fog push, pop, and removal branches for selected players.
+     * Only actual players receive controller calls. Pop or removal of a missing
+     * fog identifier adds feedback and still allows later targets and the
+     * branch's success message to run.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

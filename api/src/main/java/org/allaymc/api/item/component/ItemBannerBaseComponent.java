@@ -7,86 +7,76 @@ import org.allaymc.api.utils.DyeColor;
 import java.util.List;
 
 /**
- * Shared component for banner items, including base color, banner type, and pattern data.
+ * {@code ItemBannerBaseComponent} exposes a banner item's base color, banner kind,
+ * and ordered pattern layers. The color belongs to item metadata, while the banner
+ * kind and pattern layers participate in extra-tag persistence and transfer to
+ * the placed banner.
  *
  * @author daoge_cmd
  */
 public interface ItemBannerBaseComponent extends ItemBaseComponent {
     /**
-     * Gets the base color of the banner.
-     *
-     * @return the base dye color
+     * Returns the banner base color decoded from inverted dye metadata.
+     * Metadata must identify a supported dye color; the server's direct array
+     * lookup throws for an out-of-range value instead of choosing a default.
      */
     DyeColor getBaseColor();
 
     /**
-     * Sets the base color of the banner.
-     *
-     * @param color the new base dye color
+     * Sets the base dye color represented by this banner item.
      */
     void setBaseColor(DyeColor color);
 
     /**
-     * Gets the type of the banner.
-     *
-     * @return the banner type
+     * Returns the banner kind stored by this item stack.
      */
     BannerType getBannerType();
 
     /**
-     * Sets the type of the banner.
-     *
-     * @param type the new banner type
+     * Sets the banner kind stored by this item stack.
      */
     void setBannerType(BannerType type);
 
     /**
-     * Checks if the banner is an ominous banner.
-     *
-     * @return {@code true} if the banner is ominous, {@code false} otherwise
+     * Returns whether this banner has the {@code BannerType.OMINOUS} kind.
      */
     default boolean isOminous() {
         return getBannerType() == BannerType.OMINOUS;
     }
 
     /**
-     * Gets the list of patterns on the banner.
-     *
-     * @return the list of patterns
+     * Returns the banner's pattern layers in their stored order.
+     * The returned list is a copy of the list container, so adding or removing entries
+     * does not change this banner's patterns.
      */
     List<BannerPattern> getPatterns();
 
     /**
-     * Sets the patterns on the banner.
-     *
-     * @param patterns the new list of patterns
+     * Replaces the banner's ordered pattern layers from the supplied list.
+     * The component copies the list container, so later structural changes to
+     * {@code patterns} do not change the stored layer order.
      */
     void setPatterns(List<BannerPattern> patterns);
 
     /**
-     * Adds a pattern to the banner.
-     *
-     * @param pattern the pattern to add
+     * Appends one pattern layer after the banner's existing layers.
      */
     void addPattern(BannerPattern pattern);
 
     /**
-     * Removes a pattern at the specified index.
-     *
-     * @param index the index of the pattern to remove
-     * @return {@code true} if the pattern was removed, {@code false} if the index was invalid
+     * Removes the pattern layer at the supplied zero-based index.
+     * An index outside the current list returns {@code false} without changing the
+     * list; a removed layer produces {@code true}.
      */
     boolean removePattern(int index);
 
     /**
-     * Clears all patterns from the banner.
+     * Removes every pattern layer currently stored on this banner.
      */
     void clearPatterns();
 
     /**
-     * Gets the number of patterns on the banner.
-     *
-     * @return the pattern count
+     * Returns the number of pattern layers stored on this banner.
      */
     int getPatternCount();
 }

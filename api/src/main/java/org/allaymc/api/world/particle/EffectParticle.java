@@ -3,9 +3,13 @@ package org.allaymc.api.world.particle;
 import java.awt.*;
 
 /**
- * EffectParticle is a particle that shows up around an entity when it has effects on.
+ * {@code EffectParticle} describes the colored spell particles used around
+ * entities with effects. The runtime reads the supplied RGB value directly
+ * during encoding, so callers provide a color and independently choose the
+ * position where the effect appears.
  *
- * @param color the color of the particle
+ * @param color required spell particle tint
+ *
  * @author daoge_cmd
  */
 public record EffectParticle(Color color) implements Particle {

@@ -10,13 +10,27 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
+ * {@code StopSoundCommand} sends named-sound or all-sound stop requests to
+ * selected player controllers. An omitted sound name selects all sounds.
+ * Targets without controllers are skipped during dispatch but remain in the
+ * completion message's list of selected player names.
+ *
  * @author daoge_cmd
  */
 public class StopSoundCommand extends Command {
+    /**
+     * Creates the {@code /stopsound} command with its built-in authorization permission.
+     */
     public StopSoundCommand() {
         super("stopsound", TrKeys.MC_COMMANDS_STOPSOUND_DESCRIPTION, Permissions.COMMAND_STOPSOUND);
     }
 
+    /**
+     * Installs sound stopping with an optional name defaulting to an empty string.
+     * Empty selections fail before dispatch; an empty name stops all sounds.
+     * Nonempty selections succeed even when every selected player lacks a
+     * controller and receives no stop request.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

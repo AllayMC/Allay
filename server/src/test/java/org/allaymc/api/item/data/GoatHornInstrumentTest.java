@@ -8,12 +8,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2026/7/12
+ * {@code GoatHornInstrumentTest} verifies horn metadata, sound names, and goat-variant classification.
  *
  * @author Miroshka000
  */
 class GoatHornInstrumentTest {
 
+    /**
+     * Checks each supported metadata value against the expected instrument order.
+     * The mapping must preserve every vanilla horn variant rather than shifting
+     * later variants when the enum is edited.
+     */
     @Test
     void shouldMapAllVanillaVariantsByMeta() {
         var expected = List.of(
@@ -32,6 +37,11 @@ class GoatHornInstrumentTest {
         }
     }
 
+    /**
+     * Checks every instrument's sound event against its expected horn-call name.
+     * The assertions protect variant-specific playback independently of the metadata
+     * mapping and translated item display name.
+     */
     @Test
     void shouldExposeMatchingSoundNames() {
         assertEquals(SoundNames.HORN_CALL_0, GoatHornInstrument.PONDER.getSoundName());
@@ -44,6 +54,11 @@ class GoatHornInstrumentTest {
         assertEquals(SoundNames.HORN_CALL_7, GoatHornInstrument.DREAM.getSoundName());
     }
 
+    /**
+     * Queries negative, first-out-of-range, and very large horn metadata values.
+     * Each invalid value must select {@code PONDER}, protecting the usable default
+     * instrument for malformed item metadata.
+     */
     @Test
     void shouldFallbackToPonderForInvalidMeta() {
         assertEquals(GoatHornInstrument.PONDER, GoatHornInstrument.fromMeta(-1));
@@ -51,6 +66,11 @@ class GoatHornInstrumentTest {
         assertEquals(GoatHornInstrument.PONDER, GoatHornInstrument.fromMeta(Integer.MAX_VALUE));
     }
 
+    /**
+     * Checks the classification flags for regular and screaming-goat horn variants.
+     * The first four instruments must remain regular, while the remaining four
+     * must retain their screaming-goat classification.
+     */
     @Test
     void shouldSeparateRegularAndScreamingGoatVariants() {
         assertFalse(GoatHornInstrument.PONDER.isScreamingGoatVariant());

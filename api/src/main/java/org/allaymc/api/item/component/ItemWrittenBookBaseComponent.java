@@ -7,88 +7,81 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.List;
 
 /**
- * Shared component for written books that store signed metadata and immutable page content.
+ * {@code ItemWrittenBookBaseComponent} exposes a signed book's title, author
+ * identity, copying generation, and ordered pages. Signed metadata remains
+ * editable through this API, and replacing pages copies the supplied list
+ * rather than making the book content permanently immutable.
  *
  * @author daoge_cmd
  */
 public interface ItemWrittenBookBaseComponent extends ItemBaseComponent {
 
     /**
-     * Gets the title of this book.
-     *
-     * @return the title of this book
+     * Returns the title currently stored in this written book.
      */
     String getTitle();
 
     /**
-     * Sets the title of this book.
-     *
-     * @param title the title of this book
+     * Replaces the title currently stored in this written book. The server
+     * setter retains {@code title} directly without validating its length or
+     * rejecting {@code null} at assignment time.
      */
     void setTitle(String title);
 
     /**
-     * Gets the author of this book.
-     *
-     * @return the author of this book
+     * Returns the author name currently stored in this written book.
      */
     String getAuthor();
 
     /**
-     * Sets the author of this book.
-     *
-     * @param author the author of this book
+     * Replaces the author name currently stored in this written book. The
+     * server setter retains {@code author} directly without checking account
+     * identity or rejecting {@code null} at assignment time.
      */
     void setAuthor(String author);
 
     /**
-     * Gets the author's xuid of this book.
-     *
-     * @return the author's xuid of this book
+     * Returns the author account identifier stored with this book.
      */
     String getXuid();
 
     /**
-     * Sets the author's xuid of this book.
-     *
-     * @param xuid the author's xuid of this book
+     * Replaces the author account identifier stored with this book. The server
+     * setter retains {@code xuid} directly without verifying the account or
+     * rejecting {@code null} at assignment time.
      */
     void setXuid(String xuid);
 
     /**
-     * Gets the written book generation of this book.
-     *
-     * @return the written book generation of this book
+     * Returns the copying generation currently stored with this book.
      */
     WrittenBookGeneration getGeneration();
 
     /**
-     * Sets the written book generation of this book.
-     *
-     * @param generation the written book generation of this book
+     * Replaces the copying generation currently stored with this book. The
+     * server setter accepts {@code null} at assignment time, but later
+     * serialization requires a generation to obtain its ordinal.
      */
     void setGeneration(WrittenBookGeneration generation);
 
     /**
-     * Gets the total number of pages in the book.
-     *
-     * @return the total number of pages in the book
+     * Returns the number of pages currently stored by this book.
      */
     @Range(from = 0, to = 50)
     int getPageCount();
 
     /**
-     * Gets texts of all pages.
-     *
-     * @return texts of all pages
+     * Returns an unmodifiable view of the book's current page list. A later
+     * {@code setPages} call replaces the backing list, so the earlier view
+     * continues to expose its earlier pages.
      */
     @UnmodifiableView
     List<String> getPages();
 
     /**
-     * Sets the pages of this book.
-     *
-     * @param pages the pages of this book
+     * Replaces the book's pages with a copy of the supplied list. The server
+     * accepts any list length without enforcing the annotated page-count
+     * range, and {@code null} causes a copying failure.
      */
     void setPages(List<String> pages);
 }

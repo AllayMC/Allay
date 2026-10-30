@@ -3,98 +3,101 @@ package org.allaymc.api.container.interfaces;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * LoomContainer represents a container for a loom block.
+ * {@code LoomContainer} exposes named slots for a loom container. Its accessors use the
+ * shared container storage and notification rules, so callers can address each slot by
+ * its gameplay role without repeating numeric indices.
  *
  * @author daoge_cmd
  */
 public interface LoomContainer extends BlockContainer {
     /**
-     * The constant representing the input slot index in the loom container.
+     * The slot constants identify loom storage positions used by the named accessors and
+     * container action processing. Banner pattern input slot index.
      */
     int INPUT_SLOT = 0;
 
     /**
-     * The constant representing the dye slot index in the loom container.
+     * Banner dye ingredient slot index.
      */
     int DYE_SLOT = 1;
 
     /**
-     * The constant representing the material slot index in the loom container.
+     * Banner pattern material slot index.
      */
     int MATERIAL_SLOT = 2;
 
     /**
-     * The constant representing the result slot index in the loom container.
+     * Patterned banner result slot index.
      */
     int RESULT_SLOT = 3;
 
     /**
-     * Gets the item in the input slot of the loom.
-     *
-     * @return the ItemStack in the input slot
+     * Returns the stored stack in the banner pattern input slot. The result is shared
+     * with this container; callers that change its contents must notify the slot
+     * afterward.
      */
     default ItemStack getInput() {
         return getItemStack(INPUT_SLOT);
     }
 
     /**
-     * Sets the item in the input slot of the loom.
-     *
-     * @param itemStack the ItemStack to set in the input slot
+     * Replaces the banner pattern input slot and notifies its viewers and listeners.
+     * {@code itemStack} must be non-{@code null}; the container retains the supplied
+     * stack rather than copying it.
      */
     default void setInput(ItemStack itemStack) {
         setItemStack(INPUT_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the dye slot of the loom.
-     *
-     * @return the ItemStack in the dye slot
+     * Returns the stored stack in the banner dye ingredient slot. The result is shared
+     * with this container; callers that change its contents must notify the slot
+     * afterward.
      */
     default ItemStack getDye() {
         return getItemStack(DYE_SLOT);
     }
 
     /**
-     * Sets the item in the dye slot of the loom.
-     *
-     * @param itemStack the ItemStack to set in the dye slot
+     * Replaces the banner dye ingredient slot and notifies its viewers and listeners.
+     * {@code itemStack} must be non-{@code null}; the container retains the supplied
+     * stack rather than copying it.
      */
     default void setDye(ItemStack itemStack) {
         setItemStack(DYE_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the material slot of the loom.
-     *
-     * @return the ItemStack in the material slot
+     * Returns the stored stack in the banner pattern material slot. The result is shared
+     * with this container; callers that change its contents must notify the slot
+     * afterward.
      */
     default ItemStack getMaterial() {
         return getItemStack(MATERIAL_SLOT);
     }
 
     /**
-     * Sets the item in the material slot of the loom.
-     *
-     * @param itemStack the ItemStack to set in the material slot
+     * Replaces the banner pattern material slot and notifies its viewers and listeners.
+     * {@code itemStack} must be non-{@code null}; the container retains the supplied
+     * stack rather than copying it.
      */
     default void setMaterial(ItemStack itemStack) {
         setItemStack(MATERIAL_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the result slot of the loom.
-     *
-     * @return the ItemStack in the result slot
+     * Returns the stored stack in the patterned banner result slot. The result is shared
+     * with this container; callers that change its contents must notify the slot
+     * afterward.
      */
     default ItemStack getResult() {
         return getItemStack(RESULT_SLOT);
     }
 
     /**
-     * Sets the item in the result slot of the loom.
-     *
-     * @param itemStack the ItemStack to set in the result slot
+     * Replaces the patterned banner result slot and notifies its viewers and listeners.
+     * {@code itemStack} must be non-{@code null}; the container retains the supplied
+     * stack rather than copying it.
      */
     default void setResult(ItemStack itemStack) {
         setItemStack(RESULT_SLOT, itemStack);

@@ -9,7 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player attempts to place a book on a lectern.
+ * {@code LecternPlaceBookEvent} represents a player's attempt to place a book on
+ * an empty lectern. The lectern component supplies a copy with count one before
+ * consuming the held item, and cancellation prevents both consumption and
+ * installation of the copied book.
  *
  * @author daoge_cmd
  */
@@ -17,14 +20,21 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.WORLD)
 public class LecternPlaceBookEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The player placing the book.
+     * Player placing the lectern book.
      */
     protected EntityPlayer player;
     /**
-     * The book being placed on the lectern.
+     * {@code book} references the proposed single-book stack. The lectern
+     * component passes this same mutable instance to its block entity after
+     * successful event dispatch.
      */
     protected ItemStack book;
 
+    /**
+     * Creates a book placement request retaining the supplied block, player, and
+     * book references. The lectern component prepares the single-book copy before
+     * construction and installs it only after successful dispatch.
+     */
     public LecternPlaceBookEvent(Block block, EntityPlayer player, ItemStack book) {
         super(block);
         this.player = player;

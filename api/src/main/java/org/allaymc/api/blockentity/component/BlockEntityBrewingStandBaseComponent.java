@@ -1,48 +1,48 @@
 package org.allaymc.api.blockentity.component;
 
 /**
+ * {@code BlockEntityBrewingStandBaseComponent} exposes a brewing stand's
+ * countdown and fuel counters. Brewing progress is measured in server ticks,
+ * while fuel tracks remaining brew operations and the total used for the client
+ * display; setters replace these counters directly.
+ *
  * @author IWareQ
  */
 public interface BlockEntityBrewingStandBaseComponent extends BlockEntityBaseComponent {
     /**
-     * Get the brew time of this brewing stand.
-     *
-     * @return the brew time of this brewing stand
+     * Returns the remaining brewing countdown measured in server ticks.
      */
     int getBrewTime();
 
     /**
-     * Set the brew time of this brewing stand.
-     *
-     * @param time the brew time of this brewing stand
+     * Sets the remaining brewing countdown measured in server ticks. The
+     * implementation stores {@code time} directly; the tick logic interprets
+     * nonpositive values as eligible to complete an otherwise valid brew.
      */
     void setBrewTime(int time);
 
     /**
-     * Get the fuel amount of this brewing stand.
-     *
-     * @return the fuel amount of this brewing stand
+     * Returns the remaining number of brew operations supplied by fuel.
      */
     int getFuelAmount();
 
     /**
-     * Set the fuel amount of this brewing stand.
-     *
-     * @param amount the fuel amount of this brewing stand
+     * Sets the remaining number of fuel-supported brew operations directly.
+     * Nonpositive values make the next processing attempt check the fuel slot;
+     * this setter does not consume or replenish any inventory item.
      */
     void setFuelAmount(int amount);
 
     /**
-     * Get the total fuel of this brewing stand.
-     *
-     * @return the total fuel of this brewing stand
+     * Returns the total fuel counter displayed alongside remaining brew
+     * operations.
      */
     int getFuelTotal();
 
     /**
-     * Set the total fuel of this brewing stand.
-     *
-     * @param amount the total fuel of this brewing stand
+     * Sets the total fuel counter reported to brewing-stand viewers. This
+     * display value is stored separately from remaining fuel; changing it does
+     * not change {@code getFuelAmount()} or consume an inventory item.
      */
     void setFuelTotal(int amount);
 }

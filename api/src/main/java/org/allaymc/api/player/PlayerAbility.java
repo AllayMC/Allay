@@ -1,69 +1,61 @@
 package org.allaymc.api.player;
 
 /**
- * Represents a player ability tracked by the server.
+ * {@code PlayerAbility} identifies an ability tracked independently for a player
+ * connection. The ability set supplements game-mode defaults and is encoded into
+ * client capability flags; checks in server interaction and movement paths still
+ * determine which requested actions the server accepts.
  *
  * @author zernix2077
  */
 public enum PlayerAbility {
     /**
-     * Whether the player can place blocks.
-     * <p>
-     * Directly affects client-side ability to place blocks.
+     * Permission flag for placing blocks.
      */
     PLACE_BLOCK,
 
     /**
-     * Whether the player can break blocks.
-     * <p>
-     * Directly affects client-side ability to break blocks.
+     * Permission flag for breaking blocks.
      */
     BREAK_BLOCK,
 
     /**
-     * Whether the player can interact with blocks, like doors and switches.
-     * <p>
-     * Directly affects client-side ability to perform those interactions.
+     * Permission flag for block interaction.
      */
     INTERACT_BLOCK,
 
     /**
-     * Whether blocks are not consumed when placed down.
-     * <p>
-     * Generally enabled for creative mode, but may also be enabled for any other gamemode, resulting
-     * in the same infinite block behavior client-side.
+     * Client flag for retaining placed blocks.
      */
     INFINITE_BLOCK,
 
     /**
-     * Whether the player can open containers.
+     * Permission flag for opening containers.
      */
     OPEN_CONTAINER,
 
     /**
-     * Whether the player can attack other players.
+     * Permission flag for attacking players.
      */
     ATTACK_PLAYER,
 
     /**
-     * Whether the player can attack mobs.
+     * Permission flag for attacking nonplayer mobs.
      */
     ATTACK_MOB,
 
     /**
-     * Whether the player is currently flying.
+     * Flag indicating current flying state.
      */
     FLYING,
 
     /**
-     * Whether the player may start flying.
+     * Permission flag for starting flight.
      */
     MAY_FLY,
 
     /**
-     * Whether the player can move through blocks.
-     * <p>
-     * Directly affects client-side movement behavior.
+     * Client flag for movement through blocks.
      */
     NO_CLIP,
 }

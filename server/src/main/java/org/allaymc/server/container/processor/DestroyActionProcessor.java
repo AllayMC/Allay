@@ -16,10 +16,21 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
+ * {@code DestroyActionProcessor} removes a requested quantity from a reachable container
+ * stack and reports the remaining slot state. Partial removal keeps the existing stack
+ * identity, while removing the full count installs air and uses the ordinary listener
+ * notification path with viewer sending suppressed.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class DestroyActionProcessor implements ContainerActionProcessor<DestroyAction> {
+    /**
+     * Destroys the requested quantity after checking stack identity, non-air type, and
+     * available count. The handler does not reject zero or negative counts explicitly;
+     * accepted changes notify listeners with {@code send=false} and return the
+     * translated remaining slot state.
+     */
     @Override
     public ActionResponse handle(DestroyAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
@@ -72,6 +83,10 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
         );
     }
 
+    /**
+     * Returns the stack-request action type dispatched to {@code
+     * DestroyActionProcessor}.
+     */
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.DESTROY;

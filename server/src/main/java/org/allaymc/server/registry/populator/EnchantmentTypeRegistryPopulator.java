@@ -5,10 +5,22 @@ import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.server.item.enchantment.*;
 
 /**
+ * {@code EnchantmentTypeRegistryPopulator} supplies the startup population step for built-in
+ * enchantment types exposed through {@code EnchantmentTypes}. Each concrete enchantment supplies
+ * its built-in identity and behavior, and its constructor registers that instance in the
+ * enchantment registry. The public constants are assigned
+ * as each construction succeeds, rather than being published as one combined replacement.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class EnchantmentTypeRegistryPopulator implements Runnable {
+    /**
+     * Constructs and assigns the built-in enchantment instances in {@code EnchantmentTypes}. The
+     * corresponding
+     * registry must already exist, and a failed construction leaves earlier assignments and
+     * registrations in place rather than rolling them back.
+     */
     @Override
     public void run() {
         EnchantmentTypes.AQUA_AFFINITY = new EnchantmentAquaAffinityType();

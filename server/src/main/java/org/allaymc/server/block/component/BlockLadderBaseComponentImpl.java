@@ -14,13 +14,26 @@ import java.util.Objects;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 
 /**
+ * {@code BlockLadderBaseComponentImpl} handles ladder attachment, alternative support
+ * selection, and fall-distance resetting. Player placement rejects vertical clicked
+ * faces and looks for another horizontal support when needed, while neighbor changes
+ * break ladders whose stored attachment face no longer has a full surface.
+ *
  * @author IWareQ
  */
 public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the ladder block behavior for the supplied block type.
+     */
     public BlockLadderBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Forwards horizontal neighbor changes and verifies the stored supporting face
+     * remains full. Vertical changes skip support checks; malformed stored facing
+     * values can fail when no matching face is available.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -36,6 +49,11 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Places a ladder against a valid horizontal support, searching other sides if
+     * necessary. A {@code null} {@code placementInfo} writes the supplied state
+     * directly, while vertical clicks and missing support return {@code false}.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -48,6 +66,9 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         if (!canBeSupportedAt(placementInfo.getClickedBlock().getBlockState(), blockFace)) {
+            // The clicked face cannot support this ladder. Search neighboring
+            // horizontal surfaces so placement can still attach to another suitable
+            // wall.
             blockFace = findValidFace(dimension, placeBlockPos);
         }
 
@@ -55,14 +76,25 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
+        // The stored facing uses BlockFace ordinals rather than horizontal indices,
+        // matching the fromIndex decoding used when later neighbor changes recheck
+        // ladder support.
         return dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(FACING_DIRECTION, blockFace.ordinal()));
     }
 
+    /**
+     * Returns whether ladder contact resets an entity's accumulated fall distance.
+     */
     @Override
     public boolean canResetFallDamage() {
         return true;
     }
 
+    /**
+     * Returns a ladder facing supported by a full horizontal neighbor surface. The
+     * search tries south, north, west, then east support positions and returns
+     * {@code null} when none qualify.
+     */
     private BlockFace findValidFace(Dimension dimension, Vector3ic placeBlockPos) {
         for (var face : new BlockFace[]{BlockFace.SOUTH, BlockFace.NORTH, BlockFace.WEST, BlockFace.EAST}) {
             if (canBeSupportedAt(dimension.getBlockState(face.offsetPos(placeBlockPos)), face.opposite())) {
@@ -73,6 +105,10 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
         return null;
     }
 
+    /**
+     * Returns whether the support shape completely covers the requested attachment
+     * face.
+     */
     private boolean canBeSupportedAt(BlockState blockState, BlockFace face) {
         var shape = blockState.getBlockStateData().collisionShape();
         return shape.isFull(face);

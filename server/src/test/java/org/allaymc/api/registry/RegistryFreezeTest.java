@@ -13,8 +13,17 @@ import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code RegistryFreezeTest} checks freeze policies for custom registries and
+ * the built-in map variants.
+ */
 class RegistryFreezeTest {
 
+    /**
+     * Uses a custom implementation that inherits the default freeze methods.
+     * Freezing must leave registration usable and continue reporting the
+     * registry as mutable.
+     */
     @Test
     void legacyCustomRegistryRemainsMutableWithDefaultFreezeMethods() {
         var content = new AtomicReference<List<String>>(new ArrayList<>());
@@ -42,6 +51,11 @@ class RegistryFreezeTest {
         assertEquals(List.of("still mutable"), registry.getContent());
     }
 
+    /**
+     * Freezes a simple mapped registry while retaining its earlier map
+     * reference. The exposed frozen content must reject writes, and all
+     * registry mutation entry points must reject further changes.
+     */
     @Test
     void simpleMappedRegistryPublishesAnUnmodifiableSnapshot() {
         var registry = SimpleMappedRegistry.<Void, String, Integer>create(ignored -> new HashMap<>());
@@ -59,6 +73,11 @@ class RegistryFreezeTest {
         assertThrows(IllegalStateException.class, () -> registry.setContent(new HashMap<>()));
     }
 
+    /**
+     * Freezes a registry whose declared content type is a concrete linked map.
+     * The content must retain that assignable type and its entries while
+     * registry mutation methods reject later changes.
+     */
     @Test
     void mappedRegistryPreservesConcreteMapTypeWhenFrozen() {
         AbstractMappedRegistry<String, Integer, LinkedHashMap<String, Integer>> registry =
@@ -76,6 +95,11 @@ class RegistryFreezeTest {
         assertThrows(IllegalStateException.class, () -> registry.setContent(new LinkedHashMap<>()));
     }
 
+    /**
+     * Registers one value through both key indexes before freezing. Both
+     * lookups must remain available, while direct writes to either exposed
+     * index and subsequent registry registration must fail.
+     */
     @Test
     void doubleKeyRegistryFreezesBothIndexes() {
         var reference = new AtomicReference<DoubleKeyMappedRegistry<Integer, String, String>>();
@@ -97,6 +121,11 @@ class RegistryFreezeTest {
         assertThrows(IllegalStateException.class, () -> registry.register(2, "two", "other"));
     }
 
+    /**
+     * Registers a bidirectional association before freezing the backing
+     * registry. Both lookup directions must retain the association, and writes
+     * through the forward map, inverse map, or registry must fail.
+     */
     @Test
     void biMappedRegistryFreezesBothDirections() {
         var registry = new TestBiMappedRegistry();
@@ -111,7 +140,14 @@ class RegistryFreezeTest {
         assertThrows(IllegalStateException.class, () -> registry.register("two", 2));
     }
 
+    /**
+     * {@code TestBiMappedRegistry} supplies an initially mutable bidirectional
+     * map for freeze-policy assertions.
+     */
     private static final class TestBiMappedRegistry extends BiMappedRegistry<String, Integer> {
+        /**
+         * Creates an empty bidirectional registry backed by a fresh hash map.
+         */
         private TestBiMappedRegistry() {
             super(null, ignored -> HashBiMap.create());
         }

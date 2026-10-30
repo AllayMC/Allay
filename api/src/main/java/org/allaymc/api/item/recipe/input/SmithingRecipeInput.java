@@ -3,11 +3,15 @@ package org.allaymc.api.item.recipe.input;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Represents the input for a smithing recipe.
+ * {@code SmithingRecipeInput} represents the three ordered ingredient slots
+ * presented to a smithing recipe. The record retains each stack without
+ * validation or copying; {@code SmithingRecipe.match} applies the separate
+ * template, base, and addition descriptors to their corresponding positions.
  *
- * @param template the template item used for the smithing operation
- * @param base     the base item to be upgraded or modified
- * @param addition the additional item required for the smithing operation
+ * @param template shared smithing template slot stack
+ * @param base shared smithing base slot stack
+ * @param addition shared smithing addition slot stack
+ *
  * @author IWareQ | daoge_cmd
  */
 public record SmithingRecipeInput(ItemStack template, ItemStack base, ItemStack addition) implements RecipeInput {

@@ -25,14 +25,40 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
+ * {@code BlockSmallDripleafBaseComponentImpl} implements two-block small dripleaf placement,
+ * survival, and conversion into big dripleaf. The halves share a cardinal direction and differ
+ * by their upper-half flag. Clay supports a lower half directly, while selected dirt-like
+ * ground also requires water at the plant position.
+ *
+ * <p>
+ * Placement checks the upper position and writes the lower half before the upper, with no
+ * rollback if the second write fails. Neighbor changes enforce the half relationship, and
+ * ordinary drops are limited to lower halves broken with shears. Bone meal chooses a
+ * two-to-five-block big-dripleaf column, validates its space, then replaces each position in
+ * order and consumes the item after those writes.
+ *
  * @author daoge_cmd
  */
 public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * Creates the small dripleaf behavior component for the supplied block type.
+     */
     public BlockSmallDripleafBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places lower and upper small-dripleaf states after survival and upper-space checks. The
+     * upper position may be air or water, and both halves use the processed cardinal direction
+     * with distinct {@code UPPER_BLOCK_BIT} values.
+     *
+     * <p>
+     * The lower write runs first and short-circuits the upper write on failure. The return
+     * value is {@code false} if either write fails, but a successful lower write is not
+     * removed when the upper write fails. No separate rollback or growth event coordinates
+     * these changes.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (!canSurvive(dimension, placeBlockPos)) {
@@ -49,16 +75,22 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
         var lowerState = processedState.setPropertyValue(UPPER_BLOCK_BIT, false);
         var upperState = processedState.setPropertyValue(UPPER_BLOCK_BIT, true);
 
+        // Keep the lower write before the upper write; a rejected lower placement
+        // skips the upper half, but a later rejection leaves the lower write intact.
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), lowerState, placementInfo) &&
                dimension.setBlockState(abovePos.x(), abovePos.y(), abovePos.z(), upperState, placementInfo);
     }
 
+    /**
+     * Breaks a half whose required counterpart or support disappears. An upper half checks
+     * only its lower neighbor; a lower half checks its ground and upper counterpart when those
+     * respective faces change.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         var isUpper = block.getPropertyValue(UPPER_BLOCK_BIT);
 
         if (isUpper) {
-            // Upper half: check lower half below
             if (face == BlockFace.DOWN) {
                 var belowState = neighbor.getBlockState();
                 if (belowState.getBlockType() != blockType || belowState.getPropertyValue(UPPER_BLOCK_BIT)) {
@@ -66,7 +98,6 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
                 }
             }
         } else {
-            // Lower half: check support below and upper half above
             if (face == BlockFace.DOWN) {
                 if (!canSurvive(block.getDimension(), block.getPosition())) {
                     block.breakBlock();
@@ -80,24 +111,44 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
         }
     }
 
+    /**
+     * Suppresses ordinary drops from the upper half and delegates lower-half eligibility.
+     * Lower halves still obey inherited creative-mode and required-tool checks before {@code
+     * getDrops} decides whether the used tool yields an item.
+     */
     @Override
     public boolean isDroppable(Block block, ItemStack usedItem, Entity entity) {
-        // Only drop from lower half
         if (block.getPropertyValue(UPPER_BLOCK_BIT)) {
             return false;
         }
         return super.isDroppable(block, usedItem, entity);
     }
 
+    /**
+     * Returns one small-dripleaf item when the supplied tool is shears. A {@code null} tool or
+     * any other item yields an empty set; the separate eligibility hook restricts ordinary
+     * drops to lower halves.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        // Only drops with shears
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
             return Set.of(ItemTypes.SMALL_DRIPLEAF_BLOCK.createItemStack());
         }
         return Set.of();
     }
 
+    /**
+     * Converts a small-dripleaf column to big dripleaf after an unhandled bone-meal
+     * interaction. The callback finds the bottom position, retains its cardinal direction, and
+     * samples a height from two through five. Every target must currently be air, water, or
+     * this small-dripleaf type.
+     *
+     * <p>
+     * Accepted space is replaced bottom-up with untilted stems and one head at the top. The
+     * callback ignores individual write results, performs no rollback, and does not raise a
+     * growth event. It consumes bone meal and emits particles after reaching the replacement
+     * sequence.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -111,12 +162,10 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
         var pos = interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
 
-        // Find the bottom-most small dripleaf in the column
         var bottomPos = new Vector3i(pos);
         if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
             bottomPos.add(0, -1, 0);
         }
-        // Walk down in case of stacked small dripleafs
         while (true) {
             var belowPos = new Vector3i(bottomPos).add(0, -1, 0);
             var belowState = dimension.getBlockState(belowPos);
@@ -130,11 +179,11 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
         var bottomState = dimension.getBlockState(bottomPos);
         var direction = bottomState.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
 
-        // Random height: 2-5 blocks
+        // The sampled conversion height controls both clearance validation and the
+        // later column writes, so a blocked taller sample does not retry a shorter one.
         var random = ThreadLocalRandom.current();
         int height = random.nextInt(4) + 2;
 
-        // Check if there's enough space
         for (int i = 0; i < height; i++) {
             var checkPos = new Vector3i(bottomPos).add(0, i, 0);
             var checkState = dimension.getBlockState(checkPos);
@@ -146,19 +195,18 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
             }
         }
 
-        // Replace with big dripleaf column
+        // Replace the validated column bottom-up; separate write failures do not roll
+        // back earlier segments or prevent consumption after this sequence finishes.
         var bigDripleafType = BlockTypes.BIG_DRIPLEAF;
         for (int i = 0; i < height; i++) {
             var placePos = new Vector3i(bottomPos).add(0, i, 0);
             BlockState newState;
             if (i < height - 1) {
-                // Stem blocks
                 newState = bigDripleafType.getDefaultState()
                         .setPropertyValue(BIG_DRIPLEAF_HEAD, false)
                         .setPropertyValue(BIG_DRIPLEAF_TILT, BigDripleafTilt.NONE)
                         .setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, direction);
             } else {
-                // Head block (top)
                 newState = bigDripleafType.getDefaultState()
                         .setPropertyValue(BIG_DRIPLEAF_HEAD, true)
                         .setPropertyValue(BIG_DRIPLEAF_TILT, BigDripleafTilt.NONE)
@@ -172,17 +220,26 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
         return true;
     }
 
+    /**
+     * Returns whether the lower state and local water support small dripleaf. Clay always
+     * qualifies. Grass, dirt, rooted dirt, and moss qualify only when {@code pos} contains
+     * water, while a matching lower half can support another half.
+     *
+     * <p>
+     * The method checks the supporting block type before consulting water, so wet unsupported
+     * ground does not qualify and dry clay still does. This predicate also serves placement,
+     * where the plant position may still contain a water block rather than a waterlogged
+     * dripleaf state.
+     */
     protected boolean canSurvive(Dimension dimension, Vector3ic pos) {
         var belowPos = BlockFace.DOWN.offsetPos(pos);
         var belowState = dimension.getBlockState(belowPos);
         var belowType = belowState.getBlockType();
 
-        // Clay is always valid
         if (belowType == BlockTypes.CLAY) {
             return true;
         }
 
-        // Dirt-type blocks are valid only if the position is waterlogged
         if (belowType == BlockTypes.GRASS_BLOCK ||
             belowType == BlockTypes.DIRT ||
             belowType == BlockTypes.DIRT_WITH_ROOTS ||
@@ -190,7 +247,6 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
             return isInWater(dimension, pos);
         }
 
-        // Another small dripleaf lower half below (for the upper half placement)
         if (belowType == blockType && !belowState.getPropertyValue(UPPER_BLOCK_BIT)) {
             return true;
         }
@@ -198,6 +254,11 @@ public class BlockSmallDripleafBaseComponentImpl extends BlockBaseComponentImpl 
         return false;
     }
 
+    /**
+     * Returns whether either the liquid lookup or the base block at {@code pos} belongs to the
+     * water family. The second check also recognizes a water block before dripleaf placement
+     * replaces its base-layer state.
+     */
     protected boolean isInWater(Dimension dimension, Vector3ic pos) {
         var liquid = dimension.getLiquid(pos).right();
         if (liquid != null && liquid.getBlockType().hasBlockTag(BlockTags.WATER)) {

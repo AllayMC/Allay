@@ -10,13 +10,27 @@ import org.allaymc.api.permission.Permissions;
 import java.util.List;
 
 /**
+ * {@code PlayAnimationCommand} applies one animation request to every selected
+ * entity. The handler packages the animation name, next state, stop expression,
+ * and controller into a shared animation value, rejects an empty selection,
+ * and reports completion after dispatching the requests.
+ *
  * @author daoge_cmd
  */
 public class PlayAnimationCommand extends Command {
+    /**
+     * Creates the {@code /playanimation} command with its built-in authorization permission.
+     */
     public PlayAnimationCommand() {
         super("playanimation", TrKeys.MC_COMMANDS_PLAYANIMATION_DESCRIPTION, Permissions.COMMAND_PLAYANIMATION);
     }
 
+    /**
+     * Installs animation application with optional client animation parameters.
+     * The next state defaults to {@code "default"}; stop expression and
+     * controller default to empty strings. A nonempty target selection receives
+     * the same constructed animation request.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

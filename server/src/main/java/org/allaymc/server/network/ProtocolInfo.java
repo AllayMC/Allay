@@ -5,16 +5,19 @@ import org.allaymc.api.utils.SemVersion;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.updater.block.BlockStateUpdater;
-import org.allaymc.updater.block.BlockStateUpdater_1_21_110;
+import org.allaymc.updater.block.BlockStateUpdater_1_26_50;
 import org.allaymc.updater.item.ItemStateUpdater;
-import org.allaymc.updater.item.ItemStateUpdater_1_26_20;
+import org.allaymc.updater.item.ItemStateUpdater_1_26_50;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v1001.Bedrock_v1001;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
-import org.cloudburstmc.protocol.bedrock.codec.v2168.Bedrock_v2168_hotfix4;
+import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
 
 /**
- * This class contains information about the current protocol version.
+ * {@code ProtocolInfo} exposes the feature baseline, state-format versions, and
+ * supported international codec bounds used by server networking. Codec bounds
+ * come from the installed protocol registry, with built-in values available
+ * during bootstrap. State updater selections remain independent of whichever
+ * client codec is negotiated.
  *
  * @author daoge_cmd
  */
@@ -22,85 +25,93 @@ import org.cloudburstmc.protocol.bedrock.codec.v2168.Bedrock_v2168_hotfix4;
 public final class ProtocolInfo {
 
     /**
-     * Feature version is the version of the game from which vanilla features will be used.
+     * {@code FEATURE_VERSION} supplies the game version used as the server's
+     * vanilla feature baseline, independently of supported client codec bounds.
      */
-    public static final BedrockCodec FEATURE_VERSION = Bedrock_v1001.CODEC;
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v2193.CODEC;
 
     /**
-     * Bedrock version of the most recent backwards-incompatible change to block states.
-     * <p>
-     * This is different from the current game version. It should match the nearest version
-     * that has block state changes.
+     * {@code BLOCK_STATE_VERSION} identifies the block-state schema serialized by
+     * Allay. The value advances when stored properties change so older states enter
+     * the selected updater before registry lookup, independently of client codecs.
      */
-    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 110, 26, 0);
+    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 26, 50, 0, 0);
 
     /**
-     * The currently used block state updater instance.
+     * {@code BLOCK_STATE_UPDATER} converts stored block-state data through the
+     * selected updater's supported migrations before the server consumes it.
      */
-    public static final BlockStateUpdater BLOCK_STATE_UPDATER = BlockStateUpdater_1_21_110.INSTANCE;
+    public static final BlockStateUpdater BLOCK_STATE_UPDATER = BlockStateUpdater_1_26_50.INSTANCE;
 
     /**
-     * The currently used item state updater instance.
+     * {@code ITEM_STATE_UPDATER} converts stored item data through the selected
+     * updater's supported migrations before server item deserialization consumes it.
      */
-    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_26_20.INSTANCE;
+    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_26_50.INSTANCE;
 
     /**
-     * The encoded version number of the block state version.
+     * {@code BLOCK_STATE_VERSION_NUM} packs {@code BLOCK_STATE_VERSION} into the
+     * protocol integer, with major, minor, patch, and revision occupying successive
+     * bytes from most to least significant.
      */
     public static final int BLOCK_STATE_VERSION_NUM = (BLOCK_STATE_VERSION.major() << 24) |
                                                       (BLOCK_STATE_VERSION.minor() << 16) |
                                                       (BLOCK_STATE_VERSION.patch() << 8) | BLOCK_STATE_VERSION.revision();
 
     /**
-     * Returns the latest international codec.
+     * Returns the latest international codec from the installed registry.
+     * Before default registry installation, the built-in {@code Bedrock_v2193}
+     * codec supplies a bootstrap result for advertisement and version queries.
+     * The installed registry determines all subsequent results.
      *
-     * <p>Before the default protocol registry is installed, this returns the built-in bootstrap value.</p>
-     *
-     * @return the latest codec
+     * @throws NullPointerException if the installed registry has no international protocols
      */
     public static BedrockCodec getLatestCodec() {
         if (ProtocolRegistry.hasDefault()) {
             return ProtocolRegistry.getDefault().getLatest(ClientVariant.INTERNATIONAL).getCodec();
         }
-        return Bedrock_v2168_hotfix4.CODEC;
+        // Advertisements can request a version before registry installation;
+        // retain a bootstrap codec until registered international bounds are available.
+        return Bedrock_v2193.CODEC;
     }
 
     /**
-     * Returns the oldest international codec.
+     * Returns the oldest international codec from the installed registry.
+     * Before default registry installation, the built-in {@code Bedrock_v818}
+     * codec supplies the bootstrap lower bound; installing a registry replaces
+     * that fallback with its registered international minimum.
      *
-     * <p>Before the default protocol registry is installed, this returns the built-in bootstrap value.</p>
-     *
-     * @return the oldest codec
+     * @throws NullPointerException if the installed registry has no international protocols
      */
     public static BedrockCodec getLowestCodec() {
         if (ProtocolRegistry.hasDefault()) {
             return ProtocolRegistry.getDefault().getLowest(ClientVariant.INTERNATIONAL).getCodec();
         }
+        // Early version queries have no installed registry to inspect; expose
+        // the built-in lower bound until registration supplies the negotiated range.
         return Bedrock_v818.CODEC;
     }
 
     /**
-     * Get the feature minecraft version.
-     *
-     * @return the feature minecraft version
+     * Returns the semantic game version of the fixed vanilla feature baseline.
      */
     public static SemVersion getFeatureMinecraftVersion() {
         return SemVersion.from(FEATURE_VERSION.getMinecraftVersion());
     }
 
     /**
-     * Get the latest minecraft version.
-     *
-     * @return the latest minecraft version
+     * Returns the semantic game version of the latest international codec.
+     * The result follows the installed registry, or the bootstrap fallback from
+     * {@link #getLatestCodec()} when no default registry is installed.
      */
     public static SemVersion getLatestMinecraftVersion() {
         return SemVersion.from(getLatestCodec().getMinecraftVersion());
     }
 
     /**
-     * Get the lowest minecraft version.
-     *
-     * @return the lowest minecraft version
+     * Returns the semantic game version of the oldest international codec.
+     * The result follows the installed registry, or the bootstrap fallback from
+     * {@link #getLowestCodec()} when no default registry is installed.
      */
     public static SemVersion getLowestMinecraftVersion() {
         return SemVersion.from(getLowestCodec().getMinecraftVersion());

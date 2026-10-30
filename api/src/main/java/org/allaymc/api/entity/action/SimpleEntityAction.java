@@ -1,29 +1,52 @@
 package org.allaymc.api.entity.action;
 
 /**
- * SimpleEntityAction contains entity actions that do not have additional parameters.
+ * {@code SimpleEntityAction} identifies client-visible entity actions that
+ * need no additional action payload. The entity packet encoder maps each
+ * constant to its protocol animation or event, while callers separately
+ * perform gameplay effects such as damage, eating, or removal.
  *
  * @author daoge_cmd
  */
 public enum SimpleEntityAction implements EntityAction {
-    /// SWING_ARM makes an entity or player swing its arm
+    /**
+     * Arm swing animation for the acting entity.
+     */
     SWING_ARM,
-    /// HURT makes an entity display the animation for being hurt. The entity will be shown as red for a short duration
+    /**
+     * Hurt animation indicating a recent hit to viewers.
+     */
     HURT,
-    /// DEATH makes an entity display the death animation. After this animation, the entity disappears from viewers watching it
+    /**
+     * Death animation for an entity being shown as dead.
+     */
     DEATH,
-    /// EAT makes an entity display the eating particles at its mouth to viewers with the item in its hand being eaten
+    /**
+     * Eating particles using the entity's held item.
+     */
     EAT,
-    /// FIREWORK_EXPLODE makes a firework rocket display an explosion particle
+    /**
+     * Firework explosion event for the rocket entity.
+     */
     FIREWORK_EXPLODE,
-    /// TOTEM_USE displays the totem use particles and animation
+    /**
+     * Totem activation particles and the associated client animation.
+     */
     TOTEM_USE,
-    /// FISHING_HOOK_BITE makes a fishing hook entity display the fish bite animation with bubble and splash effects
+    /**
+     * Fishing hook bite event with client splash effects.
+     */
     FISHING_HOOK_BITE,
-    /// WAKE_UP makes an entity play the wake-up animation (used when a sleeping entity stops sleeping)
+    /**
+     * Wake animation when the entity leaves its sleeping pose.
+     */
     WAKE_UP,
-    /// IN_LOVE makes an entity display love (heart) particles to viewers
+    /**
+     * Heart particles indicating the entity's breeding state.
+     */
     IN_LOVE,
-    /// EAT_GRASS makes an entity display the grass eating animation to viewers (used by sheep)
+    /**
+     * Grass eating animation used by grazing entities.
+     */
     EAT_GRASS
 }

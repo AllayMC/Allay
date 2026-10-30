@@ -12,10 +12,20 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 
 /**
+ * {@code Utils} supplies server initialization helpers for reflective type setup, plugin
+ * descriptor validation, byte concatenation, and YAML configuration binding. Validation
+ * rejects missing descriptor fields, while configuration initialization creates defaults and
+ * reloads the bound file with undeclared keys removed.
+ *
  * @author daoge_cmd
  */
 @UtilityClass
 public class Utils {
+    /**
+     * Invokes the supplied method with a {@code null} receiver and no arguments. Callers provide
+     * a compatible static initializer; reflective access or target failures are wrapped in
+     * {@code IllegalArgumentException} with the reflection exception retained as cause.
+     */
     public static void callInitializer(Method method) {
         try {
             method.invoke(null);
@@ -24,6 +34,13 @@ public class Utils {
         }
     }
 
+    /**
+     * Checks required plugin descriptor fields, dependency names, and a coercible plugin version.
+     * Missing fields or an uncoercible version fail with {@code NullPointerException}, while a
+     * blank dependency name fails with {@code IllegalArgumentException}; ordinary descriptor
+     * strings
+     * are otherwise not required to be nonblank.
+     */
     public static void checkDescriptorValid(PluginDescriptor descriptor) {
         Preconditions.checkNotNull(descriptor.getName(), "Plugin name cannot be null");
         Preconditions.checkNotNull(descriptor.getEntrance(), "Plugin entrance cannot be null");
@@ -41,11 +58,9 @@ public class Utils {
     }
 
     /**
-     * Merge multiple byte arrays into one byte array.
-     *
-     * @param bytes1 the first byte array
-     * @param bytes2 the other byte arrays
-     * @return the merged byte array
+     * Copies the first byte array and every following array into one new result in argument order.
+     * All arrays must be non-{@code null}, and the method does not modify or retain the input array
+     * storage after copying.
      */
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
         int length = bytes1.length;
@@ -65,22 +80,18 @@ public class Utils {
     }
 
     /**
-     * Create a YAML config initializer.
-     *
-     * @param path the path of the config file
-     * @return the YAML config initializer
+     * Returns an initializer that binds a YAML configuration to {@code path}. Invocation enables
+     * orphan removal, saves defaults for a missing file, and reloads with saving enabled to update
+     * declared fields and comments on disk.
      */
     public static OkaeriConfigInitializer createConfigInitializer(Path path) {
         return it -> {
-            // Specify configurer implementation, optionally additional serdes packages
             it.withConfigurer(new YamlSnakeYamlConfigurer());
-            // Specify Path, File or pathname
             it.withBindFile(path);
-            // Automatic removal of undeclared keys
             it.withRemoveOrphans(true);
-            // Save the file if it does not exist
+            // Save defaults before loading so a missing bound file can be read. The following
+            // save-enabled load also writes updated fields and removes undeclared configuration keys.
             it.saveDefaults();
-            // Load and save to update comments/new fields
             it.load(true);
         };
     }

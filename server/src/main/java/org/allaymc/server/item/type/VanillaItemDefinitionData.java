@@ -4,18 +4,15 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemVersion;
 
 /**
- * Raw client registration data loaded for a vanilla item.
- * <p>
- * This data remains in the internal vanilla registry. It is consumed by protocol initialization and is not stored
- * on {@link AllayItemType}, keeping item types independent of encoded protocol payloads.
- * <p>
- * Server-side gameplay behavior such as actual stack handling, durability consumption, and
- * item logic is still driven by {@link org.allaymc.api.item.type.ItemType} and its components;
- * this definition only describes what the client needs to register and render the item.
+ * {@code VanillaItemDefinitionData} holds the raw client-registration payload for
+ * a vanilla item. The internal vanilla registry retains these values for protocol
+ * initialization, while item types and their components supply server gameplay
+ * behavior independently of the encoded client definition.
  *
- * @param componentBased whether the protocol should treat this item as a data-driven/component-based item
- * @param components     the raw NBT payload sent for this item definition, usually containing a root {@code components} compound
- * @param version        the Bedrock item definition version used for protocol compatibility
+ * @param componentBased client component-based registration flag
+ * @param components raw item-definition NBT payload
+ * @param version Bedrock item-definition compatibility version
+ *
  * @author daoge_cmd
  */
 public record VanillaItemDefinitionData(boolean componentBased, NbtMap components, ItemVersion version) {

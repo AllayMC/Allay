@@ -16,13 +16,19 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import java.util.OptionalInt;
 
 /**
- * Abstract base class for {@link NetworkInterface} implementations in the server module.
+ * {@code AllayNetworkInterface} supplies player-session admission for server
+ * transports that create {@link BedrockServerSession} instances. The admission
+ * path checks an IP ban before creating a player, then publishes that player to
+ * the channel attribute before dispatching the connection event. A cancelled
+ * connection event disconnects the session before the login timer is installed.
+ * Subclasses provide transport-specific advertisement and latency behavior.
+ *
  * <p>
- * Provides shared session initialization logic that can be reused by any transport
- * (RakNet, QUIC, TCP, WebSocket, etc.) that creates {@link BedrockServerSession} instances.
- * <p>
- * Subclasses must implement {@link #getPing(BedrockServerSession)} to provide
- * transport-specific ping/latency measurement.
+ * Login can progress after admission returns, so the delayed timeout observes
+ * the player's state when it runs. It disconnects only clients that have not
+ * reached {@code IN_GAME} and are not already {@code DISCONNECTED}. The timeout
+ * does not cancel itself when login finishes; its state check determines whether
+ * a later callback still needs to act.
  *
  * @author daoge_cmd
  */
@@ -30,77 +36,77 @@ import java.util.OptionalInt;
 public abstract class AllayNetworkInterface implements NetworkInterface {
 
     /**
-     * RakNet protocol version used by NetEase clients.
+     * {@code NETEASE_RAKNET_PROTOCOL_VERSION} identifies NetEase connections when
+     * a transport exposes its RakNet version; missing versions do not match.
      */
     protected static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
 
     /**
-     * Start this network interface and begin accepting connections.
-     * <p>
-     * Called when the server starts or when this interface is registered after server start.
+     * Provides the default startup hook used by the network manager.
+     * This base implementation does nothing; transports override it to accept
+     * connections when networking starts or registration occurs after startup.
      */
     public void start() {}
 
     /**
-     * Shutdown this network interface and stop accepting connections.
-     * <p>
-     * Called when this interface is unregistered or when the server stops.
+     * Provides the default shutdown hook used by the network manager.
+     * This base implementation does nothing; transports override it to release
+     * their resources during unregistration or server shutdown, including resources
+     * retained after partial startup.
      */
     public void shutdown() {}
 
     /**
-     * Set the displayed player count on this interface.
-     *
-     * @param count the current player count
+     * Accepts a player-count update without changing this base implementation's state.
      */
     public void setPlayerCount(int count) {}
 
     /**
-     * Set the displayed maximum player count on this interface.
-     *
-     * @param maxPlayerCount the maximum player count
+     * Accepts a player-limit update without changing this base implementation's state.
      */
     public void setMaxPlayerCount(int maxPlayerCount) {}
 
     /**
-     * Get the ping (round-trip latency) for the given session.
-     *
-     * @param session the bedrock server session
-     *
-     * @return the ping in milliseconds, or {@code -1} if not available
+     * Returns transport-measured round-trip latency for the supplied session.
+     * Implementations report milliseconds or {@code -1} when a measurement is
+     * unavailable; callers must supply a session owned by the corresponding
+     * transport.
      */
     public abstract int getPing(BedrockServerSession session);
 
     /**
-     * Get the RakNet protocol version for the given session if the transport exposes it.
-     *
-     * @param session the bedrock server session
-     *
-     * @return the RakNet protocol version, or an empty result if the transport does not provide one
+     * Returns no RakNet version for transports using this default implementation.
+     * Transports that expose a version override this method; an empty result
+     * makes {@link #isNetEaseClient(BedrockServerSession)} treat the connection as
+     * unrecognized rather than assume a NetEase client.
      */
     public OptionalInt getRakNetProtocolVersion(BedrockServerSession session) {
         return OptionalInt.empty();
     }
 
     /**
-     * Determine whether the given session belongs to a NetEase client.
-     *
-     * @param session the bedrock server session
-     *
-     * @return {@code true} if the session is identified as a NetEase client, otherwise {@code false}
+     * Returns whether the transport reports the NetEase RakNet version.
+     * Missing version information returns {@code false}, so transports without
+     * RakNet metadata can reuse session initialization without classifying every
+     * client as NetEase.
      */
     public boolean isNetEaseClient(BedrockServerSession session) {
         return getRakNetProtocolVersion(session).orElse(-1) == NETEASE_RAKNET_PROTOCOL_VERSION;
     }
 
     /**
-     * Initialize a player session from a {@link BedrockServerSession}.
-     * <p>
-     * This method extracts the shared session initialization logic (IP ban check,
-     * player creation, connect event, login timeout) so that any transport can
-     * feed sessions into the same path.
+     * Admits a transport session through the shared player connection path.
+     * The method disconnects banned addresses before player creation and stores
+     * an accepted address's player in {@code PLAYER_ATTRIBUTE_KEY} before calling
+     * {@code PlayerConnectEvent}. Event cancellation disconnects the session
+     * using the listener-selected reason.
      *
-     * @param session the bedrock server session to initialize
+     * <p>
+     * A positive {@code maxLoginTime} schedules one delayed state check in server
+     * ticks. The callback observes login progress when it executes and ignores
+     * clients already in game or disconnected. Successful admission returns
+     * before that callback, and the callback does not provide an atomic boundary
+     * with other changes to the player's state.
      */
     protected void initPlayerSession(BedrockServerSession session) {
         var server = Server.getInstance();
@@ -110,7 +116,6 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
             return;
         }
 
-        // Enable detailed packet logging if debug packets mode is enabled
         if (AllayServer.getSettings().networkSettings().debugPackets()) {
             session.setLogging(true);
         }
@@ -125,9 +130,12 @@ public abstract class AllayNetworkInterface implements NetworkInterface {
 
         var maxLoginTime = AllayServer.getSettings().networkSettings().maxLoginTime();
         if (maxLoginTime > 0) {
+            // Login continues after admission, so inspect the player's later
+            // state before applying the timeout to a connection that finished.
             server.getScheduler().scheduleDelayed(server, () -> {
                 var status = player.getClientState();
                 if (status != ClientState.DISCONNECTED && status.ordinal() < ClientState.IN_GAME.ordinal()) {
+                    // Display the configured tick delay using twenty ticks per second.
                     log.warn("Session {} didn't log in within {} seconds, disconnecting...", session.getSocketAddress(), maxLoginTime / 20d);
                     player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);
                 }

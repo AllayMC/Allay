@@ -1,8 +1,10 @@
 package org.allaymc.api.entity.action;
 
 /**
- * EntityAction represents an action that may be performed by an Entity. Typically, these actions are sent to
- * viewers in the world so that they can see these actions.
+ * {@code EntityAction} identifies an entity animation or particle action that
+ * can be sent to viewers. Concrete actions supply either an enum value or
+ * action-specific data; the entity packet encoder translates those values into
+ * client protocol events.
  *
  * @author daoge_cmd
  */

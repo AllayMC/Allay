@@ -6,30 +6,32 @@ import org.joml.Vector3fc;
 import java.awt.*;
 
 /**
- * Represents text rendered by the client's primitive shape system.
- *
+ * {@code PrimitiveText} represents displayed text with optional background color and
+ * client rendering flags. Its inherited position, color, scale, and viewer registration
+ * follow the primitive-shape contract. Text and flag setters synchronously notify
+ * registered viewers; constructors initially disable all rendering flags unless supplied
+ * explicitly.
  * @author daoge_cmd
  */
 public class PrimitiveText extends PrimitiveShape {
 
     /**
-     * The text to display.
+     * Text content sent to the viewing destination.
      */
     @Getter
     protected String text;
     /**
-     * Whether this text uses the shape rotation.
+     * Whether the text uses the shape rotation.
      */
     @Getter
     protected boolean useRotation;
     /**
-     * The background color of this text.
-     * <p>
-     * Can be {@code null}, and in that case no explicit background color is sent to the client.
+     * {@code backgroundColor} stores the optional text background color. A {@code null}
+     * value remains absent when the shape is converted to its network representation.
      */
     protected Color backgroundColor;
     /**
-     * Whether this text participates in depth testing.
+     * Whether text participates in client depth testing.
      */
     @Getter
     protected boolean depthTest;
@@ -39,46 +41,38 @@ public class PrimitiveText extends PrimitiveShape {
     @Getter
     protected boolean showBackface;
     /**
-     * Whether the text renders its backface.
+     * Whether the text glyphs render their backface.
      */
     @Getter
     protected boolean showTextBackface;
 
     /**
-     * Creates a PrimitiveText with the specified position, color, and text.
-     *
-     * @param position the position of the text in the world; can be {@code null}
-     * @param color    the color of the text; can be {@code null}
-     * @param text     the text to display
+     * Creates a {@code PrimitiveText} with the supplied rendering properties and no
+     * registered viewers. The inherited constructor retains supplied vectors without
+     * copying; later setter calls publish property changes to viewers registered through
+     * {@code addViewer}. All text rendering flags initially use {@code false}, and the
+     * background color is absent.
      */
     public PrimitiveText(Vector3fc position, Color color, String text) {
         this(position, color, text, null);
     }
 
     /**
-     * Creates a PrimitiveText with the specified position, color, and text.
-     *
-     * @param position the position of the text in the world; can be {@code null}
-     * @param color    the color of the text; can be {@code null}
-     * @param text     the text to display
-     * @param scale    the scale of the text; can be {@code null}
+     * Creates a {@code PrimitiveText} with the supplied rendering properties and no
+     * registered viewers. The inherited constructor retains supplied vectors without
+     * copying; later setter calls publish property changes to viewers registered through
+     * {@code addViewer}. All text rendering flags initially use {@code false}, and the
+     * background color is absent.
      */
     public PrimitiveText(Vector3fc position, Color color, String text, Float scale) {
         this(position, color, text, scale, false, null, false, false, false);
     }
 
     /**
-     * Creates a PrimitiveText with the specified position, color, text, and text rendering options.
-     *
-     * @param position         the position of the text in the world; can be {@code null}
-     * @param color            the color of the text; can be {@code null}
-     * @param text             the text to display
-     * @param scale            the scale of the text; can be {@code null}
-     * @param useRotation      whether this text uses the shape rotation
-     * @param backgroundColor  the background color of this text; can be {@code null}
-     * @param depthTest        whether this text participates in depth testing
-     * @param showBackface     whether the text background renders its backface
-     * @param showTextBackface whether the text renders its backface
+     * Creates a {@code PrimitiveText} with the supplied rendering properties and no
+     * registered viewers. The inherited constructor retains supplied vectors without
+     * copying; later setter calls publish property changes to viewers registered through
+     * {@code addViewer}.
      */
     public PrimitiveText(
             Vector3fc position,
@@ -101,9 +95,9 @@ public class PrimitiveText extends PrimitiveShape {
     }
 
     /**
-     * Sets the text to display.
-     *
-     * @param text The text to display
+     * Stores the supplied displayed text and synchronously sends this shape to every
+     * registered viewer. The notification happens even when the value is unchanged;
+     * failures from a viewer propagate after the property is stored.
      */
     public void setText(String text) {
         this.text = text;
@@ -111,9 +105,9 @@ public class PrimitiveText extends PrimitiveShape {
     }
 
     /**
-     * Sets whether this text uses the shape rotation.
-     *
-     * @param useRotation whether this text uses the shape rotation
+     * Stores the supplied rotation flag and synchronously sends this shape to every
+     * registered viewer. The notification happens even when the value is unchanged;
+     * failures from a viewer propagate after the property is stored.
      */
     public void setUseRotation(boolean useRotation) {
         this.useRotation = useRotation;
@@ -121,18 +115,18 @@ public class PrimitiveText extends PrimitiveShape {
     }
 
     /**
-     * Gets the background color of this text.
-     *
-     * @return the background color of this text, or {@code null} if no explicit background color is sent
+     * Returns the stored text background color used during network conversion. A
+     * {@code null} result leaves that rendering option unspecified for the client, rather
+     * than supplying an explicit value.
      */
     public Color getBackgroundColor() {
         return this.backgroundColor;
     }
 
     /**
-     * Sets the background color of this text.
-     *
-     * @param backgroundColor the background color of this text; can be {@code null}
+     * Stores the supplied text background color and synchronously sends this shape to
+     * every registered viewer. The notification happens even when the value is unchanged;
+     * failures from a viewer propagate after the property is stored.
      */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -140,9 +134,9 @@ public class PrimitiveText extends PrimitiveShape {
     }
 
     /**
-     * Sets whether this text participates in depth testing.
-     *
-     * @param depthTest whether this text participates in depth testing
+     * Stores the supplied depth-testing flag and synchronously sends this shape to every
+     * registered viewer. The notification happens even when the value is unchanged;
+     * failures from a viewer propagate after the property is stored.
      */
     public void setDepthTest(boolean depthTest) {
         this.depthTest = depthTest;
@@ -150,9 +144,9 @@ public class PrimitiveText extends PrimitiveShape {
     }
 
     /**
-     * Sets whether the text background renders its backface.
-     *
-     * @param showBackface whether the text background renders its backface
+     * Stores the supplied background backface flag and synchronously sends this shape to
+     * every registered viewer. The notification happens even when the value is unchanged;
+     * failures from a viewer propagate after the property is stored.
      */
     public void setShowBackface(boolean showBackface) {
         this.showBackface = showBackface;
@@ -160,9 +154,9 @@ public class PrimitiveText extends PrimitiveShape {
     }
 
     /**
-     * Sets whether the text renders its backface.
-     *
-     * @param showTextBackface whether the text renders its backface
+     * Stores the supplied glyph backface flag and synchronously sends this shape to every
+     * registered viewer. The notification happens even when the value is unchanged;
+     * failures from a viewer propagate after the property is stored.
      */
     public void setShowTextBackface(boolean showTextBackface) {
         this.showTextBackface = showTextBackface;

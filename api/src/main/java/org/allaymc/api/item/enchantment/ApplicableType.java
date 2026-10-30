@@ -7,42 +7,65 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 
 /**
- * Represents the item type that the enchantment can be applied to.
+ * {@code ApplicableType} classifies item types accepted by enchantment
+ * applicability checks. Each constant implements one category, using item
+ * helpers, registered type identities, item data, or wearable components;
+ * {@code EnchantmentType.canBeAppliedTo} separately accepts ordinary books
+ * before consulting these categories.
  *
  * @author daoge_cmd
  */
 public enum ApplicableType {
     /**
-     * Represents any item type.
+     * Any item type.
      */
     ANY {
+        /**
+         * Returns {@code true} for every supplied value, including
+         * {@code null}. This category does not inspect item data, tags, or
+         * components, so it imposes no item-type constraint on its caller.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return true;
         }
     },
     /**
-     * Represents an armor item.
+     * Items classified as armor.
      */
     ARMOR {
+        /**
+         * Returns whether {@code ItemHelper} classifies the supplied type as
+         * armor.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return ItemHelper.isArmor(itemType);
         }
     },
     /**
-     * Represents an armor item without elytra.
+     * Armor items excluding elytra.
      */
     ARMOR_WITHOUT_ELYTRA {
+        /**
+         * Returns whether the supplied type is armor other than
+         * {@code ItemTypes.ELYTRA}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return ItemHelper.isArmor(itemType) && itemType != ItemTypes.ELYTRA;
         }
     },
     /**
-     * Represents an armor item that can be worn on the head.
+     * Armor for the head.
      */
     HELMET {
+        /**
+         * Returns whether an armor item type produces a wearable stack for
+         * {@code ArmorType.HELMET}. Nonarmor types are rejected before stack
+         * creation, and wearable stacks for another slot also return
+         * {@code false}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
@@ -53,9 +76,15 @@ public enum ApplicableType {
         }
     },
     /**
-     * Represents an armor item that can be worn on the chest.
+     * Armor for the chest.
      */
     CHESTPLATE {
+        /**
+         * Returns whether an armor item type produces a wearable stack for
+         * {@code ArmorType.CHESTPLATE}. Nonarmor types are rejected before
+         * stack creation, and wearable stacks for another slot also return
+         * {@code false}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
@@ -66,9 +95,15 @@ public enum ApplicableType {
         }
     },
     /**
-     * Represents an armor item that can be worn on the legs.
+     * Armor for the legs.
      */
     LEGGINGS {
+        /**
+         * Returns whether an armor item type produces a wearable stack for
+         * {@code ArmorType.LEGGINGS}. Nonarmor types are rejected before stack
+         * creation, and wearable stacks for another slot also return
+         * {@code false}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
@@ -79,9 +114,15 @@ public enum ApplicableType {
         }
     },
     /**
-     * Represents an armor item that can be worn on the feet.
+     * Armor for the feet.
      */
     BOOTS {
+        /**
+         * Returns whether an armor item type produces a wearable stack for
+         * {@code ArmorType.BOOTS}. Nonarmor types are rejected before stack
+         * creation, and wearable stacks for another slot also return
+         * {@code false}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             if (ItemHelper.isArmor(itemType) && itemType.createItemStack() instanceof ItemWearableComponent armor) {
@@ -92,113 +133,164 @@ public enum ApplicableType {
         }
     },
     /**
-     * Represents a sword item.
+     * Items classified as swords.
      */
     SWORD {
+        /**
+         * Returns whether {@code ItemHelper} classifies the supplied type as a
+         * sword.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return ItemHelper.isSword(itemType);
         }
     },
     /**
-     * Represents a sword or axe item.
+     * Sword or axe items.
      */
     SWORD_OR_AXE {
+        /**
+         * Returns whether the supplied item type is a sword or an axe.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return SWORD.canBeAppliedTo(itemType) || ItemHelper.isAxe(itemType);
         }
     },
     /**
-     * Represents an item that is used to dig blocks, like pickaxe, shovel, axe and hoe.
+     * Pickaxe, shovel, axe, or hoe.
      */
     DIGGER {
+        /**
+         * Returns whether the supplied type is a pickaxe, shovel, axe, or hoe.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return ItemHelper.isPickaxe(itemType) || ItemHelper.isShovel(itemType) || ItemHelper.isAxe(itemType) || ItemHelper.isHoe(itemType);
         }
     },
     /**
-     * Represents a digger or shears item.
+     * Digging tools or shears.
      */
     DIGGER_OR_SHEARS {
+        /**
+         * Returns whether the supplied type belongs to {@code DIGGER} or is
+         * {@code ItemTypes.SHEARS}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return DIGGER.canBeAppliedTo(itemType) || itemType == ItemTypes.SHEARS;
         }
     },
     /**
-     * Represents a bow item.
+     * The fishing rod type.
      */
     FISHING_ROD {
+        /**
+         * Returns whether the supplied type is the registered
+         * {@code ItemTypes.FISHING_ROD}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType == ItemTypes.FISHING_ROD;
         }
     },
     /**
-     * Represents an item that is damageable.
+     * Items with damageable data.
      */
     DAMAGEABLE {
+        /**
+         * Returns whether the supplied item type reports damageable item data.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType.getItemData().isDamageable();
         }
     },
     /**
-     * Represents a bow item.
+     * The standard bow type.
      */
     BOW {
+        /**
+         * Returns whether the supplied type is the registered
+         * {@code ItemTypes.BOW}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType == ItemTypes.BOW;
         }
     },
     /**
-     * Represents an item that can be worn.
+     * Items creating wearable stacks.
      */
     WEARABLE {
+        /**
+         * Returns whether the stack produced for the supplied type implements
+         * {@code ItemWearableComponent}. This check invokes
+         * {@code createItemStack} on every call and returns {@code false} when
+         * the resulting stack lacks that component.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType.createItemStack() instanceof ItemWearableComponent;
         }
     },
     /**
-     * Represents a trident item.
+     * The standard trident type.
      */
     TRIDENT {
+        /**
+         * Returns whether the supplied type is the registered
+         * {@code ItemTypes.TRIDENT}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType == ItemTypes.TRIDENT;
         }
     },
     /**
-     * Represents a crossbow item.
+     * The standard crossbow type.
      */
     CROSSBOW {
+        /**
+         * Returns whether the supplied type is the registered
+         * {@code ItemTypes.CROSSBOW}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType == ItemTypes.CROSSBOW;
         }
     },
     /**
-     * Represents a mace item.
+     * The standard mace type.
      */
     MACE {
+        /**
+         * Returns whether the supplied type is the registered
+         * {@code ItemTypes.MACE}.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType == ItemTypes.MACE;
         }
     },
     /**
-     * Represents a spear item.
+     * Items classified as spears.
      */
     SPEAR {
+        /**
+         * Returns whether {@code ItemHelper} classifies the supplied type as a
+         * spear.
+         */
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return ItemHelper.isSpear(itemType);
         }
     };
 
+    /**
+     * Returns whether the supplied item type belongs to this applicability
+     * category.
+     */
     public abstract boolean canBeAppliedTo(ItemType<?> itemType);
 }

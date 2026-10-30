@@ -17,14 +17,13 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Unsafe is similar to {@link Chunk} but is not thread-safe.
- * <p>
- * Compared to {@link Chunk}, unsafe chunk is very fast but is not thread-safe.
- * All the methods in this class should be considered as thread-unsafe, although
- * some of them may be thread-safe depending on the implementation. If you are sure
- * that the instance won't be accessed by multiple threads, you can operate on unsafe
- * chunk directly. However, this may become very dangerous if you do not have enough
- * experience in multithreaded programming.
+ * {@code UnsafeChunk} provides
+ * unsynchronized access to one chunk's block sections, biomes, block
+ * entities, and auxiliary state. X and Z positions within the chunk use zero
+ * through fifteen, while block Y uses the dimension's absolute height range.
+ * Callers sharing the chunk must establish appropriate synchronization or use
+ * its safe wrapper; returned mutable objects remain subject to their own access
+ * rules.
  *
  * @author Cool_Loong | daoge_cmd
  */
@@ -32,205 +31,176 @@ import java.util.function.Consumer;
 public interface UnsafeChunk {
 
     /**
-     * Check if the chunk is loaded.
-     *
-     * @return {@code true} if the chunk is loaded, {@code false} otherwise.
+     * Returns whether this chunk is currently loaded into its dimension.
      */
     boolean isLoaded();
 
     /**
-     * Get the chunk loaders that load this chunk
-     *
-     * @return the chunk loaders
+     * Returns an unmodifiable view of the loaders currently attached to this
+     * chunk. The loader objects remain shared, and membership changes can
+     * become visible after the view is obtained.
      */
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
 
     /**
-     * For-each the chunk loaders of the chunk.
-     *
-     * @param consumer the consumer to be applied to each chunk loader
+     * Invokes the consumer for each current loader on the calling thread. The
+     * consumer receives shared loader objects, and callers remain responsible
+     * for synchronization required by their own operations.
      */
     default void forEachChunkLoaders(Consumer<ChunkLoader> consumer) {
         getChunkLoaders().forEach(consumer);
     }
 
     /**
-     * For-each the chunk loaders of the chunk in the next chunk tick.
-     *
-     * @param consumer the consumer to be applied to each chunk loader
+     * Queues a consumer for the chunk's next task-processing tick, using the
+     * loaders present when it runs. This inherits {@link
+     * #addChunkTask(Runnable)} scheduling behavior rather than capturing
+     * current membership.
      */
     default void forEachChunkLoaderLater(Consumer<ChunkLoader> consumer) {
         addChunkTask(() -> forEachChunkLoaders(consumer));
     }
 
     /**
-     * Add a chunk loader to this chunk.
-     *
-     * @param chunkLoader the chunk loader to add
+     * Attaches the supplied loader to this chunk's loader membership set.
      */
     void addChunkLoader(ChunkLoader chunkLoader);
 
     /**
-     * Remove a chunk loader from this chunk.
-     *
-     * @param chunkLoader the chunk loader to remove
+     * Removes the supplied loader from this chunk's loader membership set.
      */
     void removeChunkLoader(ChunkLoader chunkLoader);
 
     /**
-     * Get the number of chunk loaders that load this chunk.
-     *
-     * @return the number of chunk loaders
+     * Returns the current number of loaders attached to this chunk.
      */
     default int getChunkLoaderCount() {
         return getChunkLoaders().size();
     }
 
     /**
-     * Adds a chunk task to the chunk. The task will be executed in the next chunk tick.
-     *
-     * @param task the task to execute
+     * Queues a task for execution in the next chunk tick. The task runs in the
+     * chunk's processing context, so it must respect that context's access and
+     * blocking restrictions.
      */
     void addChunkTask(Runnable task);
 
     /**
-     * Get the state of the chunk.
-     *
-     * @return the state of the chunk
+     * Returns the generation stage currently associated with this chunk.
      */
     ChunkState getState();
 
     /**
-     * Get the dimension type of the chunk.
-     *
-     * @return the dimension type of the chunk
+     * Returns the dimension type defining this chunk's vertical coordinate
+     * bounds.
      */
     DimensionType getDimensionType();
 
     /**
-     * Get the x coordinate of the chunk.
-     *
-     * @return the x coordinate of the chunk
+     * Returns the chunk X coordinate, measured in sixteen-block columns.
      */
     int getX();
 
     /**
-     * Get the z coordinate of the chunk.
-     *
-     * @return the z coordinate of the chunk
+     * Returns the chunk Z coordinate, measured in sixteen-block columns.
      */
     int getZ();
 
     /**
-     * Remove the block entity in this chunk.
-     *
-     * @param x the x coordinate of the block entity
-     * @param y the y coordinate of the block entity
-     * @param z the z coordinate of the block entity
-     * @return the removed block entity, or {@code null} if not found
-     * @throws IllegalArgumentException if x, y or z is out of range
+     * Removes and returns the block entity at local X/Z and absolute block Y,
+     * or {@code null} when absent. Invalid coordinates throw {@link
+     * IllegalArgumentException}; the returned entity is not a copy.
      */
     BlockEntity removeBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Get the block entity in this chunk.
-     *
-     * @param x the x coordinate of the block entity
-     * @param y the y coordinate of the block entity
-     * @param z the z coordinate of the block entity
-     * @return the block entity in this chunk, or {@code null} if not found
-     * @throws IllegalArgumentException if x, y or z is out of range
+     * Returns the shared block entity at local X/Z and absolute block Y, or
+     * {@code null} when absent. Invalid coordinates throw {@link
+     * IllegalArgumentException} rather than returning an out-of-height default.
      */
     BlockEntity getBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Get all block entities in this chunk.
-     *
-     * @return all block entities in this chunk
+     * Returns an unmodifiable view of block entities keyed by {@link
+     * HashUtils#hashChunkXYZ(int, int, int)}. Values remain shared entities,
+     * and the view does not make operations on those entities thread-safe.
      */
     @UnmodifiableView
     Map<Integer, BlockEntity> getBlockEntities();
 
     /**
-     * Add a block entity to this chunk.
-     *
-     * @param blockEntity the block entity to add
+     * Adds the supplied block entity using its position within this chunk. The
+     * entity remains shared; callers must ensure that its dimension and chunk
+     * coordinates match the owning chunk.
      */
     void addBlockEntity(BlockEntity blockEntity);
 
     /**
-     * Gets Chunk section, range -1 -> -4, 0 -> 59
-     * <p>
-     * Since the array index starts at 0, the maximum value is 59
-     *
-     * @param sectionY the y value of the section
-     * @return the section
+     * Returns block entities belonging to the requested absolute section Y
+     * coordinate. The collection is unmodifiable but contains shared entities;
+     * an out-of-range section coordinate throws {@link
+     * IllegalArgumentException}.
      */
     @UnmodifiableView
     Collection<BlockEntity> getSectionBlockEntities(int sectionY);
 
     /**
-     * Add a scheduled update to a pos in the chunk.
-     *
-     * @param x    the x coordinate of the pos
-     * @param y    the y coordinate of the pos
-     * @param z    the z coordinate of the pos
-     * @param time the scheduled time of the scheduled update
-     * @throws IllegalArgumentException if x, y or z is out of range
+     * Schedules an update at local X/Z and absolute block Y for an absolute
+     * world tick. Invalid coordinates throw {@link IllegalArgumentException};
+     * this deadline is not a delay measured from submission.
      */
     void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, long time);
 
     /**
-     * Check if a pos in the chunk has a scheduled update.
-     *
-     * @param x the x coordinate of the pos
-     * @param y the y coordinate of the pos
-     * @param z the z coordinate of the pos
-     * @return {@code true} if the pos has a scheduled update, otherwise {@code false}.
-     * @throws IllegalArgumentException if x, y or z is out of range
+     * Returns whether an update is currently scheduled at local X/Z and
+     * absolute block Y. Invalid coordinates throw {@link
+     * IllegalArgumentException}; the query does not execute or remove pending
+     * work.
      */
     boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Set block state in this chunk.
-     *
-     * @param x          the x coordinate of the block
-     * @param y          the y coordinate of the block
-     * @param z          the z coordinate of the block
-     * @param blockState the block state to set
-     * @param layer      the layer of the block
-     * @throws IllegalArgumentException if x, y or z is out of range
+     * Replaces a block state at local X/Z and absolute block Y in the selected
+     * layer. Invalid coordinates throw {@link IllegalArgumentException}; {@code
+     * send} requests propagation of the change to chunk viewers.
      */
     void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer, boolean send);
 
     /**
-     * @see #setBlockState(int, int, int, BlockState, int)
+     * Replaces the selected block layer and requests viewer notification for
+     * the change. This delegates to the full mutation method with {@code send}
+     * enabled and inherits its coordinate requirements.
+     *
+     * @see #setBlockState(int, int, int, BlockState, int, boolean)
      */
     default void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer) {
         setBlockState(x, y, z, blockState, layer, true);
     }
 
     /**
-     * @see #setBlockState(int, int, int, BlockState, int)
+     * Replaces the primary block layer and requests viewer notification for the
+     * change. This delegates with layer zero and {@code send} enabled,
+     * inheriting the full mutation method's coordinate requirements.
+     *
+     * @see #setBlockState(int, int, int, BlockState, int, boolean)
      */
     default void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
     }
 
     /**
-     * Get block state in this chunk.
-     *
-     * @param x     the x coordinate of the block
-     * @param y     the y coordinate of the block
-     * @param z     the z coordinate of the block
-     * @param layer the layer of the block
-     * @return the block state in this chunk, or {@code BlockTypes.AIR.getDefaultState()} if y is out of range
-     * @throws IllegalArgumentException if x or z is out of range
+     * Returns the selected layer's block state at local X/Z and absolute block
+     * Y. Heights outside the dimension return air; valid heights require X and
+     * Z within zero through fifteen.
      */
     BlockState getBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer);
 
     /**
+     * Returns the primary-layer block state at local X/Z and absolute block Y.
+     * This delegates to the layer-aware lookup with layer zero, including its
+     * out-of-height air result and coordinate rules.
+     *
      * @see #getBlockState(int, int, int, int)
      */
     default BlockState getBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z) {
@@ -238,103 +208,83 @@ public interface UnsafeChunk {
     }
 
     /**
-     * Get height of the specified position. If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
-     *
-     * @param x the x coordinate of the position
-     * @param z the z coordinate of the position
-     * @return the height
-     * @throws IllegalArgumentException if x or z is out of range
+     * Returns the highest non-air block Y in the requested local horizontal
+     * column. Empty columns return the dimension minimum, and X or Z outside
+     * zero through fifteen throws {@link IllegalArgumentException}.
      */
     short getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 
     /**
-     * Set biome of the specified position.
-     *
-     * @param x         the x coordinate of the position
-     * @param y         the y coordinate of the position
-     * @param z         the z coordinate of the position
-     * @param biomeType the biome type
-     * @throws IllegalArgumentException if x, y or z is out of range
+     * Replaces the biome at local X/Z and absolute block Y. All coordinates
+     * must belong to this chunk's dimension range; invalid positions throw
+     * {@link IllegalArgumentException} rather than changing a default biome.
      */
     void setBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
 
     /**
-     * Get biome of the specified position.
-     *
-     * @param x the x coordinate of the position
-     * @param y the y coordinate of the position
-     * @param z the z coordinate of the position
-     * @return the biome type, or {@link org.allaymc.api.world.biome.BiomeTypes#PLAINS} if y is out of range
-     * @throws IllegalArgumentException if x or z is out of range
+     * Returns the biome at local X/Z and absolute block Y, using plains outside
+     * the dimension's height range. At valid heights, out-of-range local X or Z
+     * throws {@link IllegalArgumentException}.
      */
     BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Get a specific chunk section in this chunk.
-     *
-     * @param sectionY the sectionY of the chunk section
-     * @return the section, should never be {@code null}
-     * @throws IllegalArgumentException if section y is out of range
+     * Returns the shared section, never {@code null}, at an absolute section Y
+     * coordinate.
+     * Out-of-range sections throw {@link IllegalArgumentException}; the
+     * returned section remains mutable and requires its own synchronization
+     * when shared.
      */
     ChunkSection getSection(int sectionY);
 
     /**
-     * Get all chunk sections in this chunk.
-     *
-     * @return all chunk sections in this chunk
+     * Returns an unmodifiable list of sections across the chunk's vertical
+     * range. Entries are shared mutable sections, so the collection restriction
+     * does not make section operations safe for concurrent access.
      */
     @UnmodifiableView
     List<ChunkSection> getSections();
 
     /**
-     * Get the hash of the chunk.
-     *
-     * @return the hash of the chunk
+     * Returns the packed X/Z chunk-coordinate hash used by chunk lookup.
      */
     default long computeChunkHash() {
         return HashUtils.hashXZ(getX(), getZ());
     }
 
     /**
-     * Get all POI entries in this chunk.
-     *
-     * @return all POI entries, keyed by {@link HashUtils#hashChunkXYZ(int, int, int)}
+     * Returns registered point-of-interest entries keyed by {@link
+     * HashUtils#hashChunkXYZ(int, int, int)} using local X/Z and absolute Y.
+     * Implementations define the map's mutability; use the position-based
+     * methods for portable chunk updates.
      */
     Map<Integer, PoiType> getPoiEntries();
 
     /**
-     * Add a POI entry to this chunk.
-     *
-     * @param x    the chunk-local x coordinate (0-15)
-     * @param y    the world y coordinate
-     * @param z    the chunk-local z coordinate (0-15)
-     * @param type the POI type
+     * Registers a point-of-interest type at local X/Z and absolute block Y.
+     * Coordinates must lie within the chunk and dimension bounds; registering a
+     * type replaces any entry at that position.
      */
     void addPoi(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, PoiType type);
 
     /**
-     * Remove a POI entry from this chunk.
-     *
-     * @param x the chunk-local x coordinate (0-15)
-     * @param y the world y coordinate
-     * @param z the chunk-local z coordinate (0-15)
+     * Removes the point-of-interest entry at local X/Z and absolute block Y if
+     * one exists. Coordinates must remain within the chunk and dimension bounds
+     * even when the entry is absent.
      */
     void removePoi(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Get the POI type at the given position, or {@code null} if none.
-     *
-     * @param x the chunk-local x coordinate (0-15)
-     * @param y the world y coordinate
-     * @param z the chunk-local z coordinate (0-15)
-     * @return the POI type, or {@code null}
+     * Returns the point-of-interest type at local X/Z and absolute block Y, or
+     * {@code null} when absent. Coordinates must lie within the chunk and
+     * dimension bounds for the lookup.
      */
     PoiType getPoi(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Convert this unsafe chunk to a {@link Chunk} which is safe in multithreaded environment.
-     *
-     * @return the safe chunk
+     * Returns a safe chunk wrapper over this chunk's shared data. The wrapper
+     * coordinates its supported operations, but continuing to access the unsafe
+     * instance directly still requires compatible caller synchronization.
      */
     Chunk toSafeChunk();
 }

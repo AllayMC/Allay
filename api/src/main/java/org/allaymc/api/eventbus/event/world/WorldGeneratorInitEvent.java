@@ -12,14 +12,12 @@ import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.api.world.generator.function.PostProcessor;
 
 /**
- * Called after a {@link WorldGenerator} is created but before it is attached to its dimension.
- * <p>
- * Plugins can use this event to append custom {@link Noiser}s, {@link Populator}s, and
- * {@link PostProcessor}s to any registered generator. {@link GenerateFunction#init(String)}
- * is called automatically on each added function.
- * <p>
- * This event is fired once per dimension per world load. Use {@link #getDimensionType()} and
- * {@link #getGenerator()}'s name to selectively target generators.
+ * {@code WorldGeneratorInitEvent} exposes a created generator before its
+ * attachment to a dimension during world loading. Listeners can append {@link
+ * Noiser}, {@link Populator}, and {@link PostProcessor} functions; the
+ * generator initializes each appended function with its preset when the
+ * function is added. The dimension type and generator name allow listeners to
+ * select a target.
  *
  * @author daoge_cmd
  */
@@ -28,15 +26,21 @@ import org.allaymc.api.world.generator.function.PostProcessor;
 public class WorldGeneratorInitEvent extends WorldEvent {
 
     /**
-     * The generator being initialized.
+     * {@code generator} references the instance that the pool attaches after
+     * dispatch; listeners configure that same instance through its function
+     * registration operations.
      */
     private final WorldGenerator generator;
 
     /**
-     * The dimension this generator will be attached to.
+     * Type of the target dimension.
      */
     private final DimensionType dimensionType;
 
+    /**
+     * Creates an initialization notification retaining the generator and
+     * target dimension type.
+     */
     public WorldGeneratorInitEvent(World world, WorldGenerator generator, DimensionType dimensionType) {
         super(world);
         this.generator = generator;

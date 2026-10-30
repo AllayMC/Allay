@@ -8,13 +8,27 @@ import org.allaymc.api.world.particle.CustomParticle;
 import org.joml.Vector3d;
 
 /**
+ * {@code ParticleCommand} emits repeated custom-particle requests at one
+ * position in the sender's execution dimension. The handler requires a positive
+ * count and passes the supplied effect identifier to the particle wrapper
+ * without checking whether clients provide that effect.
+ *
  * @author daoge_cmd
  */
 public class ParticleCommand extends Command {
+    /**
+     * Creates the {@code /particle} command with its built-in authorization permission.
+     */
     public ParticleCommand() {
         super("particle", TrKeys.MC_COMMANDS_PARTICLE_DESCRIPTION, Permissions.COMMAND_PARTICLE);
     }
 
+    /**
+     * Installs particle emission with a default count of {@code 1}.
+     * Counts below {@code 1} fail before emission; accepted requests repeat the
+     * same custom particle at the parsed position and then report command
+     * success without client-side effect validation.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

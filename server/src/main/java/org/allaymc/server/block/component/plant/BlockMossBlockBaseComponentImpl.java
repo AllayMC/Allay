@@ -22,29 +22,67 @@ import java.util.function.Supplier;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
 
 /**
- * Block component for moss block and pale moss block.
- * Handles bone meal interaction to spread moss and grow vegetation.
+ * {@code BlockMossBlockBaseComponentImpl} implements bone-meal moss conversion and
+ * configurable weighted vegetation. An interaction requires air above the clicked moss,
+ * consumes bone meal, and samples a patch whose spread type is this component's block type.
+ *
  * <p>
- * The spread target block type is determined by {@code this.blockType},
- * while the vegetation distribution is configurable via constructor.
+ * Patch generation samples horizontal radii, omits corners, and probabilistically includes
+ * edges before finding the highest exposed nonwater surface near the origin height.
+ * Replaceable surfaces become moss, and existing matching moss remains eligible for
+ * vegetation. The component retains the caller's vegetation list but caches its total weight
+ * at construction, so later list mutation can desynchronize selection. Tall plants write
+ * separate halves and fall back to short grass when the upper position is occupied.
  *
  * @author daoge_cmd
  */
 public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
 
+    /**
+     * {@code VERTICAL_RANGE} bounds the exposed-surface search above and below the origin
+     * height for each sampled patch column.
+     */
     private static final int VERTICAL_RANGE = 5;
+    /**
+     * {@code EXTRA_EDGE_COLUMN_CHANCE} controls inclusion of noncorner edge columns after the
+     * rectangular patch radii are sampled independently.
+     */
     private static final float EXTRA_EDGE_COLUMN_CHANCE = 0.75f;
+    /**
+     * {@code VEGETATION_CHANCE} controls whether each converted or already-matching moss
+     * surface receives a weighted vegetation placement attempt.
+     */
     private static final float VEGETATION_CHANCE = 0.6f;
 
+    /**
+     * {@code vegetationEntries} retains the caller's weighted choices without copying. Callers
+     * must keep the list and weights stable because {@code totalWeight} is computed only
+     * during construction.
+     */
     private final List<VegetationEntry> vegetationEntries;
+    /**
+     * {@code totalWeight} caches the constructor-time weight sum used as the random bound.
+     * Vegetation selection requires this value to be positive and consistent with {@code
+     * vegetationEntries}.
+     */
     private final int totalWeight;
 
+    /**
+     * Creates moss behavior with caller-supplied weighted vegetation choices. The list remains
+     * shared, and its total weight is cached immediately; callers must provide a stable list
+     * with a positive usable weight sum.
+     */
     public BlockMossBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, List<VegetationEntry> vegetationEntries) {
         super(blockType);
         this.vegetationEntries = vegetationEntries;
         this.totalWeight = vegetationEntries.stream().mapToInt(VegetationEntry::weight).sum();
     }
 
+    /**
+     * Handles bone meal after inherited interaction handling when air is present above the
+     * clicked moss. The callback consumes the item and emits particles before patch
+     * generation, so it reports success even when no surface is converted.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -57,7 +95,6 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
 
         var pos = interactInfo.clickedBlockPos();
 
-        // Bonemeal only works if the block above is air
         if (dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockType() != BlockTypes.AIR) {
             return false;
         }
@@ -70,8 +107,15 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Spread moss to nearby blocks and grow vegetation, mimicking the
-     * vanilla MOSS_PATCH_BONEMEAL feature.
+     * Samples a moss patch and attempts vegetation on qualifying surfaces. Independent radii
+     * of two or three define a rectangle with omitted corners; noncorner edge columns pass an
+     * additional inclusion roll before their highest exposed surface is found.
+     *
+     * <p>
+     * Replaceable surfaces receive this moss type, while existing matching moss is retained
+     * for vegetation eligibility. The collected positions then receive independent vegetation
+     * rolls. World-write results are not checked, so a conversion call can still lead to a
+     * vegetation attempt even when its dimension write did not take effect.
      */
     private void spreadMoss(Dimension dimension, Vector3ic origin) {
         var random = ThreadLocalRandom.current();
@@ -82,12 +126,10 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
 
         for (int dx = -xRadius; dx <= xRadius; dx++) {
             for (int dz = -zRadius; dz <= zRadius; dz++) {
-                // Skip corner blocks
                 if (Math.abs(dx) == xRadius && Math.abs(dz) == zRadius) {
                     continue;
                 }
 
-                // Edge blocks have a 75% chance to be included
                 if ((Math.abs(dx) == xRadius || Math.abs(dz) == zRadius) &&
                     random.nextFloat() > EXTRA_EDGE_COLUMN_CHANCE) {
                     continue;
@@ -104,13 +146,11 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
                     dimension.setBlockState(surfacePos.x(), surfacePos.y(), surfacePos.z(), blockType.getDefaultState());
                     convertedPositions.add(surfacePos);
                 } else if (surfaceType == blockType) {
-                    // Already the same moss type, still eligible for vegetation
                     convertedPositions.add(surfacePos);
                 }
             }
         }
 
-        // Place vegetation on converted positions
         for (var pos : convertedPositions) {
             if (random.nextFloat() < VEGETATION_CHANCE) {
                 placeVegetation(dimension, pos.x(), pos.y() + 1, pos.z(), random);
@@ -119,10 +159,9 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Find the surface block at the given (x, z) column near the origin Y.
-     * Scans vertically to find a solid block with air above.
-     *
-     * @return the position of the surface block, or null if none found
+     * Returns the highest nonair, nonwater surface with air above within the vertical search
+     * range. {@code null} means no exposed surface was found; solidity and moss-replaceable
+     * tagging are not requirements of this search.
      */
     private Vector3i findSurface(Dimension dimension, int x, int originY, int z) {
         for (int dy = VERTICAL_RANGE; dy >= -VERTICAL_RANGE; dy--) {
@@ -140,8 +179,9 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Place random vegetation at the given position using the weighted
-     * vegetation entries configured for this moss block type.
+     * Selects one weighted vegetation entry for an air position. The cached positive total
+     * supplies the random bound, and the first cumulative weight exceeding the roll wins; tall
+     * selections delegate upper-space handling to {@code placeTallPlant}.
      */
     private void placeVegetation(Dimension dimension, int x, int y, int z, ThreadLocalRandom random) {
         if (dimension.getBlockState(x, y, z).getBlockType() != BlockTypes.AIR) {
@@ -164,16 +204,28 @@ public class BlockMossBlockBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Writes lower and upper plant states when the position above is air. The caller
+     * establishes the lower position's availability; an occupied upper position selects short
+     * grass instead, and neither path verifies the dimension's write result.
+     */
     private void placeTallPlant(Dimension dimension, int x, int y, int z, BlockType<?> type) {
         if (dimension.getBlockState(x, y + 1, z).getBlockType() == BlockTypes.AIR) {
             var defaultState = type.getDefaultState();
             dimension.setBlockState(x, y, z, defaultState.setPropertyValue(UPPER_BLOCK_BIT, false));
             dimension.setBlockState(x, y + 1, z, defaultState.setPropertyValue(UPPER_BLOCK_BIT, true));
         } else {
-            // Fallback to short grass if not enough space
+            // Preserve a vegetation result when the selected tall plant cannot fit;
+            // short grass uses only the lower position already validated by the caller.
             dimension.setBlockState(x, y, z, BlockTypes.SHORT_GRASS.getDefaultState());
         }
     }
 
+    /**
+     * {@code VegetationEntry} represents a weighted plant choice for a moss patch.
+     * @param weight relative selection weight
+     * @param blockType deferred vegetation supplier
+     * @param tallPlant two-block placement flag
+     */
     public record VegetationEntry(int weight, Supplier<BlockType<?>> blockType, boolean tallPlant) {}
 }

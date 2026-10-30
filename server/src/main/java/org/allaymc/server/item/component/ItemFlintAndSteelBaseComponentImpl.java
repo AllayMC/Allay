@@ -16,13 +16,31 @@ import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**
+ * {@code ItemFlintAndSteelBaseComponentImpl} primes TNT and creates fire during
+ * block interactions. Ground ignition selects normal or soul fire from the
+ * support block, while side ignition requires a flammable clicked block.
+ * Unhandled uses continue into block-specific interaction, including candle
+ * behavior.
+ *
  * @author daoge_cmd
  */
 public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
+    /**
+     * Creates a flint and steel component from the supplied stack initialization data.
+     */
     public ItemFlintAndSteelBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Primes TNT or attempts a cancellable fire placement for a player interaction.
+     * The method dispatches inherited component use but continues regardless of
+     * its result, rejects adventure mode, and requires a non-{@code null}
+     * {@code interactInfo}. TNT priming returns {@code true} without requesting
+     * item damage. Accepted fire placement requests one damage point outside
+     * creative mode; cancelled or unsupported ignition returns {@code false}
+     * so block-specific interaction can continue.
+     */
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
@@ -39,7 +57,6 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
         }
 
         if (interactInfo.blockFace() == BlockFace.UP) {
-            // Try to place fire on the ground
             var supportBlockState = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
             if (BlockFireBaseComponentImpl.canSupportFire(supportBlockState)) {
                 var event = new BlockIgniteEvent(
@@ -47,8 +64,8 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
                         null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL
                 );
                 if (event.call()) {
-                    // Check if the block that the player clicked on is a soul fire converter
-                    // In that case, we should place a soul fire instead of a normal fire
+                    // The supporting block selects soul fire; the ignite event refers
+                    // to that support even though the new fire occupies placeBlockPos.
                     var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
                     dimension.setBlockState(placeBlockPos, fireBlockState);
                     dimension.addSound(MathUtils.center(placeBlockPos), SimpleSound.IGNITE);
@@ -59,8 +76,6 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
                 }
             }
         } else {
-            // Check if the block that the player clicked on can be ignited
-            // This branch will be executed when the player clicks on the side of a block
             clickedBlock = interactInfo.getClickedBlock();
             if (clickedBlock.getBlockStateData().flameOdds() > 0) {
                 var event = new BlockIgniteEvent(
@@ -77,8 +92,8 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
             }
         }
 
-        // Return false to pass the call to BlockBehavior::onInteract() method since block types such as candle have flint_and_steel
-        // related logic
+        // Let block-specific interactions handle uses such as candle ignition when
+        // this component has neither primed TNT nor accepted a fire placement.
         return false;
     }
 }

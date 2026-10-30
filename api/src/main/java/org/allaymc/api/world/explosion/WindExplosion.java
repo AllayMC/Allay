@@ -16,16 +16,20 @@ import org.joml.primitives.AABBd;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Represents a wind charge explosion that only applies knockback
- * without damaging entities or destroying blocks.
+ * {@code WindExplosion} configures a wind-charge burst that adds entity motion
+ * and emits particle and sound effects. The source entity is excluded, while
+ * the optional shooter receives a separate close-range jump response when
+ * self-knockback is enabled. No damage or block-destruction pass is
+ * implemented here.
+ *
  * <p>
- * Unlike regular explosions, wind explosions:
- * <ul>
- *     <li>Do not destroy blocks</li>
- *     <li>Do not damage entities</li>
- *     <li>Only apply knockback force to nearby entities</li>
- *     <li>Can optionally apply self-knockback to the shooter</li>
- * </ul>
+ * The entity query first uses a cube and then filters by radial distance.
+ * Within one horizontal block, the shooter receives fixed upward motion and
+ * damped horizontal motion, scaled by resistance; exactly aligned shooters
+ * receive only the upward component. Other cases use configured strengths
+ * without distance attenuation. The ordinary response samples a horizontal
+ * direction for vertically aligned or centered targets because their position
+ * difference cannot provide one.
  *
  * @author daoge_cmd
  */
@@ -34,77 +38,86 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WindExplosion {
 
     /**
-     * The vertical knockback applied to the shooter when they are within
-     * the self-vertical-only range (for wind charge jumping).
+     * {@code SELF_VERTICAL_KNOCKBACK_Y} sets the close-shooter upward motion
+     * before resistance scaling. The horizontal-range test selects this jump
+     * response independently of configured vertical strength.
      */
     protected static final double SELF_VERTICAL_KNOCKBACK_Y = 1.159;
 
     /**
-     * The horizontal range within which the shooter receives vertical-only knockback.
+     * {@code SELF_VERTICAL_ONLY_RANGE} bounds the shooter jump response in
+     * horizontal blocks. Shooters outside this radius use the ordinary
+     * configured horizontal and vertical strengths.
      */
     protected static final double SELF_VERTICAL_ONLY_RANGE = 1.0;
 
     /**
-     * The damping factor for horizontal motion when applying self-knockback.
-     * This reduces horizontal movement to 5% of normal.
+     * {@code SELF_VERTICAL_HORIZONTAL_DAMPING} scales close-shooter horizontal
+     * motion to five percent of configured strength. The jump response still
+     * applies knockback resistance afterward.
      */
     protected static final double SELF_VERTICAL_HORIZONTAL_DAMPING = 0.05;
 
     /**
-     * The radius within which entities will be affected by the knockback.
+     * Entity influence radius in blocks.
      */
     protected double knockbackRadius;
 
     /**
-     * The horizontal knockback strength applied to entities.
+     * Horizontal motion magnitude before resistance scaling.
      */
     protected double knockbackStrength;
 
     /**
-     * The vertical knockback strength applied to entities.
+     * Vertical motion magnitude before resistance scaling.
      */
     protected double knockbackY;
 
     /**
-     * The sound to play when the wind explosion occurs.
+     * Sound descriptor emitted after motion processing.
      */
     protected Sound sound;
 
     /**
-     * The particle to spawn when the wind explosion occurs.
+     * Particle descriptor emitted after motion processing.
      */
     protected Particle particle;
 
     /**
-     * The entity that caused the explosion (e.g., the wind charge projectile).
-     * Used to exclude it from knockback calculation.
+     * {@code source} identifies the entity excluded from the affected-entity
+     * query result. A {@code null} value removes no source before knockback
+     * processing.
      */
     protected Entity source;
 
     /**
-     * The entity that shot the wind charge. If set, this entity will receive
-     * self-knockback (useful for wind charge jump mechanic).
+     * {@code shooter} identifies the entity eligible for the close-range jump
+     * response. {@code applySelfKnockback} determines whether that entity
+     * participates in the burst.
      */
     protected Entity shooter;
 
     /**
-     * Whether the shooter should receive self-knockback.
+     * {@code applySelfKnockback} starts enabled and controls whether {@code
+     * shooter} receives motion. Disabling it excludes the shooter but leaves
+     * other eligible physics entities affected.
      */
     protected boolean applySelfKnockback;
 
     /**
-     * Creates a default wind explosion with player wind charge parameters.
+     * Creates a player-style burst with radius two, horizontal strength {@code
+     * 0.5}, and vertical strength {@code 0.6}. The ordinary wind-charge sound
+     * and particle are selected, and shooter self-knockback starts enabled.
      */
     public WindExplosion() {
         this(2.0, 0.5, 0.6);
     }
 
     /**
-     * Creates a wind explosion with custom parameters.
-     *
-     * @param knockbackRadius   the radius within which entities are affected
-     * @param knockbackStrength the horizontal knockback strength
-     * @param knockbackY        the vertical knockback strength
+     * Creates a burst with explicit radius and motion strengths. This overload
+     * selects the ordinary wind-charge sound and particle, enables shooter
+     * self-knockback, and retains numeric inputs without clamping or range
+     * validation.
      */
     public WindExplosion(double knockbackRadius, double knockbackStrength, double knockbackY) {
         this(knockbackRadius, knockbackStrength, knockbackY,
@@ -112,13 +125,9 @@ public class WindExplosion {
     }
 
     /**
-     * Creates a wind explosion with full customization.
-     *
-     * @param knockbackRadius   the radius within which entities are affected
-     * @param knockbackStrength the horizontal knockback strength
-     * @param knockbackY        the vertical knockback strength
-     * @param sound             the sound to play
-     * @param particle          the particle to spawn
+     * Creates a burst retaining the supplied radius, strengths, sound, and
+     * particle. Self-knockback starts enabled, the source and shooter start as
+     * {@code null}, and numeric inputs are not validated.
      */
     public WindExplosion(double knockbackRadius, double knockbackStrength,
                          double knockbackY, Sound sound, Particle particle) {
@@ -131,19 +140,19 @@ public class WindExplosion {
     }
 
     /**
-     * Factory method to create a wind explosion for player-thrown wind charges.
-     *
-     * @return a WindExplosion configured for player wind charges
+     * Returns a new player-style burst with radius two and enabled
+     * self-knockback. Horizontal strength is {@code 0.5}, vertical strength is
+     * {@code 0.6}, and ordinary wind-charge effects are selected.
      */
     public static WindExplosion playerWindCharge() {
         return new WindExplosion(2.0, 0.5, 0.6);
     }
 
     /**
-     * Factory method to create a wind explosion for breeze wind charges.
-     * Breeze wind charges have larger radius but 90% reduced knockback.
-     *
-     * @return a WindExplosion configured for breeze wind charges
+     * Returns a new breeze-style burst with radius three and disabled
+     * self-knockback. The motion strengths are ninety percent of the
+     * player-style values, and breeze-specific sound and particle descriptors
+     * are selected.
      */
     public static WindExplosion breezeWindCharge() {
         var explosion = new WindExplosion(3.0, 0.5 * 0.9, 0.6 * 0.9);
@@ -154,43 +163,45 @@ public class WindExplosion {
     }
 
     /**
-     * Triggers the wind explosion at a specific position.
-     *
-     * @param dimension the dimension where the explosion occurs
-     * @param pos       the position of the explosion
+     * Applies this burst at the supplied dimension position by delegating to
+     * the coordinate overload. The vector is read immediately; entity motion
+     * and final effects follow the same calling rules as that overload.
      */
     public void explode(Dimension dimension, Vector3dc pos) {
         explode(dimension, pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Triggers the wind explosion at specific coordinates.
+     * Adds wind-burst motion to nearby physics entities and then emits the
+     * configured effects. The caller must coordinate dimension access and keep
+     * this burst's settings stable during the operation; the source entity is
+     * excluded from the query result before motion processing.
      *
-     * @param dimension the dimension where the explosion occurs
-     * @param x         the x coordinate
-     * @param y         the y coordinate
-     * @param z         the z coordinate
+     * <p>
+     * The spherical distance check follows the initial cube query. Enabled
+     * self-knockback uses horizontal distance to select the shooter jump
+     * response, whose aligned case adds only upward motion. Ordinary response
+     * uses configured strengths scaled by resistance and samples a horizontal
+     * direction for aligned or centered targets. Motion is applied entity by
+     * entity, so failures can leave earlier additions in place without
+     * rollback.
      */
     public void explode(Dimension dimension, double x, double y, double z) {
         var explosionPos = new Vector3d(x, y, z);
 
-        // Calculate the bounding box for affected entities
         var aabb = new AABBd(
                 x - knockbackRadius, y - knockbackRadius, z - knockbackRadius,
                 x + knockbackRadius, y + knockbackRadius, z + knockbackRadius
         );
 
-        // Get all entities within range
         var affectedEntities = dimension.getEntityManager()
                 .getPhysicsService()
                 .computeCollidingEntities(aabb);
 
-        // Remove the source entity (wind charge projectile itself)
         if (source != null) {
             affectedEntities.remove(source);
         }
 
-        // Apply knockback to each affected entity
         for (var entity : affectedEntities) {
             if (!(entity instanceof EntityPhysicsComponent physicsComponent)) {
                 continue;
@@ -203,20 +214,18 @@ public class WindExplosion {
                 continue;
             }
 
-            // Skip shooter if self-knockback is disabled
             if (entity == shooter && !applySelfKnockback) {
                 continue;
             }
 
             var kbResistance = physicsComponent.getKnockbackResistance();
 
-            // Calculate knockback direction
             var direction = entityPos.sub(explosionPos, new Vector3d());
             var horizontalDistance = Math.sqrt(direction.x() * direction.x() + direction.z() * direction.z());
 
-            // Check if this is the shooter within vertical-only range
+            // The shooter jump response depends on horizontal separation, so
+            // vertical displacement alone does not select the ordinary burst response.
             if (entity == shooter && applySelfKnockback && horizontalDistance <= SELF_VERTICAL_ONLY_RANGE) {
-                // Apply vertical-only self-knockback (for wind charge jumping)
                 var verticalKb = SELF_VERTICAL_KNOCKBACK_Y * (1.0 - kbResistance);
                 var horizontalKb = knockbackStrength * SELF_VERTICAL_HORIZONTAL_DAMPING * (1.0 - kbResistance);
 
@@ -232,17 +241,19 @@ public class WindExplosion {
                 }
                 physicsComponent.addMotion(motion);
             } else {
-                // Normal knockback for other entities or shooter outside vertical-only range
                 if (horizontalDistance > 0) {
                     direction.x /= horizontalDistance;
                     direction.z /= horizontalDistance;
                 } else if (distance > 0) {
-                    // Entity is directly above or below, use random horizontal direction
+                    // A vertically aligned target has no horizontal direction to
+                    // normalize; sample an angle so ordinary knockback still spreads
+                    // it away horizontally.
                     var angle = ThreadLocalRandom.current().nextDouble() * Math.PI * 2;
                     direction.x = Math.cos(angle);
                     direction.z = Math.sin(angle);
                 } else {
-                    // Entity is at explosion center
+                    // A centered target has no radial direction at all; sample a
+                    // horizontal vector before applying the configured motion strengths.
                     direction.set(ThreadLocalRandom.current().nextDouble() - 0.5, 0, ThreadLocalRandom.current().nextDouble() - 0.5).normalize();
                 }
 
@@ -258,7 +269,6 @@ public class WindExplosion {
             }
         }
 
-        // Play effects
         dimension.addParticle(x, y, z, particle);
         dimension.addSound(x, y, z, sound);
     }

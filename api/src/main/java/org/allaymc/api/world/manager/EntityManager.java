@@ -10,16 +10,20 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * EntityManager is responsible for adding, removing and ticking entities.
+ * {@code EntityManager} manages
+ * a dimension's entity membership, deferred lifecycle changes, and
+ * entity iteration. Add and remove requests are processed later with callbacks,
+ * while immediate chunk iteration belongs to the ticking thread and returns
+ * shared entity objects rather than copies.
  *
  * @author Cool_Loong
  */
 public interface EntityManager {
 
     /**
-     * Add an entity to the dimension.
-     *
-     * @param entity the entity pending to be spawned
+     * Requests deferred addition of an entity without a completion callback.
+     * This delegates to the callback overload with an empty action and does not
+     * make the entity immediately available in the dimension.
      */
     default void addEntity(Entity entity) {
         addEntity(entity, () -> {
@@ -27,20 +31,17 @@ public interface EntityManager {
     }
 
     /**
-     * Add an entity to the dimension.
-     * <p>
-     * The entity won't be added to the dimension immediately. It will be added to the dimension
-     * later, and the callback will be called.
-     *
-     * @param entity   The entity pending to be spawned
-     * @param callback The callback to be called after the entity is added to the dimension
+     * Requests deferred addition of an entity to this dimension and invokes the
+     * callback after it is added. Submission does not establish immediate
+     * membership; implementations define eligibility and handling of rejected
+     * requests.
      */
     void addEntity(Entity entity, Runnable callback);
 
     /**
-     * Remove an entity from the dimension.
-     *
-     * @param entity the entity pending to be despawned
+     * Requests deferred removal of an entity without a completion callback.
+     * This delegates to the callback overload with an empty action, so
+     * membership can remain visible until processing occurs.
      */
     default void removeEntity(Entity entity) {
         removeEntity(entity, () -> {
@@ -48,58 +49,48 @@ public interface EntityManager {
     }
 
     /**
-     * Remove an entity from the dimension.
-     * <p>
-     * The entity won't be removed from the dimension immediately. It will be removed from the
-     * dimension later, and the callback will be called.
-     *
-     * @param entity   The entity pending to be despawned
-     * @param callback The callback to be called after the entity is removed from the dimension
+     * Requests deferred removal of an entity from this dimension and invokes
+     * the callback after removal. Submission does not immediately end
+     * membership, and callers must respect the entity's lifecycle until
+     * processing completes.
      */
     void removeEntity(Entity entity, Runnable callback);
 
     /**
-     * Get the entity in the service by its runtime id.
-     *
-     * @param runtimeId the runtime id of the entity
-     * @return the entity in the service, or {@code null} if not found
+     * Returns the shared entity with the requested runtime identifier, or {@code null}
+     * when absent. Runtime identifiers address live instances rather than the
+     * persistent unique identifiers used by world storage.
      */
     Entity getEntity(long runtimeId);
 
     /**
-     * Get all entities in the service.
-     *
-     * @return all entities in the service
+     * Returns an unmodifiable view of entity membership keyed by runtime
+     * identifier. Values remain shared entities, and callers must respect the
+     * implementation's thread requirements when inspecting membership or entity
+     * state.
      */
     @UnmodifiableView
     Map<Long, Entity> getEntities();
 
     /**
-     * For-each all entities in specified chunk. Note that the consumer will be called
-     * later on the main thread instead of the caller's thread immediately, so that this
-     * method is safe to be called in any thread.
-     *
-     * @param chunkX the x coordinate of the chunk
-     * @param chunkZ the z coordinate of the chunk
+     * Queues iteration of a chunk's entities for the main ticking context
+     * rather than the caller's thread. This method can be submitted from any
+     * thread; membership is evaluated when the task runs.
      */
     void forEachEntitiesInChunk(int chunkX, int chunkZ, Consumer<Entity> consumer);
 
     /**
-     * For-each all entities in specified chunk. Different from {@link #forEachEntitiesInChunk(int, int, Consumer)},
-     * this method will call the consumer immediately, so it is not safe to be called in non-ticking thread.
-     *
-     * @param chunkX the x coordinate of the chunk
-     * @param chunkZ the z coordinate of the chunk
+     * Invokes the consumer immediately for entities in the supplied chunk
+     * coordinates. The caller must be on the ticking thread because iteration
+     * accesses live membership and shared entity locations without deferred
+     * scheduling.
      */
     void forEachEntitiesInChunkImmediately(int chunkX, int chunkZ, Consumer<Entity> consumer);
 
     /**
-     * Get all entities in specified chunk. Since it used {@link #forEachEntitiesInChunkImmediately(int, int, Consumer)},
-     * it is not safe to be called in non-ticking thread.
-     *
-     * @param chunkX the x coordinate of the chunk
-     * @param chunkZ the z coordinate of the chunk
-     * @return all entities in the chunk
+     * Returns a new mutable map of shared entity references in the requested
+     * chunk, keyed by runtime identifier. The caller must be on the ticking
+     * thread because collection uses immediate iteration.
      */
     default Map<Long, Entity> getEntitiesInChunk(int chunkX, int chunkZ) {
         var map = new HashMap<Long, Entity>();
@@ -108,12 +99,9 @@ public interface EntityManager {
     }
 
     /**
-     * Get all players in specified chunk. Same to {@link #getEntitiesInChunk(int, int)}, this method is not safe to be
-     * called in non-ticking thread.
-     *
-     * @param chunkX the x coordinate of the chunk
-     * @param chunkZ the z coordinate of the chunk
-     * @return all players in the chunk
+     * Returns a new mutable map of shared player entities in the requested
+     * chunk, keyed by runtime identifier. The caller must be on the ticking
+     * thread; filtering by player type does not copy entities.
      */
     default Map<Long, EntityPlayer> getPlayersInChunk(int chunkX, int chunkZ) {
         var map = new HashMap<Long, EntityPlayer>();
@@ -126,14 +114,15 @@ public interface EntityManager {
     }
 
     /**
-     * Get the used physics service.
-     *
-     * @return the physics service
+     * Returns the physics service associated with this dimension's entity
+     * manager.
      */
     EntityPhysicsEngine getPhysicsService();
 
     /**
-     * Let the service check auto save later immediately.
+     * Requests an autosave eligibility check at the next manager processing
+     * opportunity. This is a scheduling hint rather than a synchronous save and
+     * does not itself confirm persistence completion.
      */
     void checkAutoSaveImmediately();
 }

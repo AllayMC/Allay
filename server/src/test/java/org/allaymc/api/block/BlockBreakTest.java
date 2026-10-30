@@ -18,12 +18,26 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
+ * {@code BlockBreakTest} checks mining durations for tools, enchantments, effects,
+ * and movement conditions. The cases use registered block behaviors and a shared
+ * player mock to compare grounded, airborne, submerged, and dry results in seconds.
+ *
  * @author IWareQ
  */
 @ExtendWith(AllayTestExtension.class)
 public class BlockBreakTest {
+    /**
+     * {@code player} is the shared mining-context mock used by every case. Tests
+     * change its movement and effect stubs, so state remains until another stub
+     * replaces it.
+     */
     private static final EntityPlayer player = mock(EntityPlayer.class);
 
+    /**
+     * Sets the shared player's ground and water conditions and checks one expected
+     * duration in seconds. The supplied behavior's default state and item are passed
+     * directly to its mining calculation.
+     */
     private static void testBreakTime(double expectedSeconds, BlockBehavior breakingBlock, ItemStack usedItem, boolean isOnGround, boolean isInWater) {
         when(player.isOnGround()).thenReturn(isOnGround);
         when(player.isEyesInWater()).thenReturn(isInWater);
@@ -35,7 +49,9 @@ public class BlockBreakTest {
     }
 
     /**
-     * This tests based on <a href="https://minecraft.wiki/w/Breaking#Calculator">this calculator</a>.
+     * Breaks cobblestone with an air stack across ground and water combinations. The
+     * expected durations protect the base hand-mining time and independent airborne
+     * and underwater penalties.
      */
     @Test
     void testByHand() {
@@ -48,6 +64,11 @@ public class BlockBreakTest {
         testBreakTime(50, cobblestone, usedItem, false, false);
     }
 
+    /**
+     * Breaks cobblestone with a diamond pickaxe across ground and water combinations.
+     * The expected durations protect the correct-tool speed bonus and upward rounding
+     * to whole game ticks.
+     */
     @Test
     void testByValidTool() {
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
@@ -59,6 +80,11 @@ public class BlockBreakTest {
         testBreakTime(1.9, cobblestone, usedItem, false, false);
     }
 
+    /**
+     * Applies conduit power level one while breaking cobblestone by hand. The four
+     * movement and water cases protect the effect-adjusted duration, and the case
+     * clears its enabled-effect stub afterward.
+     */
     @Test
     void testWithHasteOrConduitPower() {
         when(player.hasEffect(EffectTypes.CONDUIT_POWER)).thenReturn(true);
@@ -75,6 +101,11 @@ public class BlockBreakTest {
         when(player.hasEffect(EffectTypes.CONDUIT_POWER)).thenReturn(false);
     }
 
+    /**
+     * Applies mining fatigue level two while breaking cobblestone by hand. The
+     * expected durations protect its compounded slowdown with water and airborne
+     * penalties, and the effect flag is cleared afterward.
+     */
     @Test
     void testWithMiningFatigue() {
         when(player.hasEffect(EffectTypes.MINING_FATIGUE)).thenReturn(true);
@@ -91,6 +122,11 @@ public class BlockBreakTest {
         when(player.hasEffect(EffectTypes.MINING_FATIGUE)).thenReturn(false);
     }
 
+    /**
+     * Equips an aqua-affinity helmet through a mocked armor container. Underwater
+     * durations must match dry durations for the same ground condition, while the
+     * airborne penalty still affects both cases.
+     */
     @Test
     void testWithAquaAffinity() {
         var armorContainer = mock(PlayerArmorContainerImpl.class);
@@ -113,6 +149,11 @@ public class BlockBreakTest {
         when(player.hasContainer(ContainerTypes.ARMOR)).thenReturn(false);
     }
 
+    /**
+     * Breaks cobblestone with a diamond pickaxe carrying efficiency level five.
+     * Ground and water combinations protect the additive enchantment bonus and
+     * tick-rounded result after environmental penalties.
+     */
     @Test
     void testWithEfficiency() {
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
@@ -125,6 +166,11 @@ public class BlockBreakTest {
         testBreakTime(0.45, cobblestone, usedItem, false, false);
     }
 
+    /**
+     * Uses a diamond sword against cobblestone, cobweb, and bamboo under movement and
+     * water combinations. The assertions protect ordinary sword speed, cobweb
+     * suitability, and bamboo instant breaking.
+     */
     @Test
     void testBySword() {
         var blockToBreak = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
@@ -148,6 +194,11 @@ public class BlockBreakTest {
         testBreakTime(0, blockToBreak, usedItem, false, false);
     }
 
+    /**
+     * Uses shears against cobblestone, black wool, cobweb, and oak leaves. Ground and
+     * water combinations protect unsuitable-tool behavior alongside the specialized
+     * shearing speed of the matching block types.
+     */
     @Test
     void testByShears() {
         var breakingBlock = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();

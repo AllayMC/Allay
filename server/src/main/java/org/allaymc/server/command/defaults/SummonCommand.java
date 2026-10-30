@@ -13,14 +13,28 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 /**
+ * {@code SummonCommand} requests entities in the executing entity's dimension,
+ * using its location when coordinates are omitted. The handler rejects player
+ * entities and unloaded destination chunks. Lightning uses the dimension's
+ * strike operation so command-caused lightning follows its event path.
+ *
  * @author daoge_cmd
  */
 public class SummonCommand extends Command {
 
+    /**
+     * Creates the {@code /summon} command with its built-in authorization permission.
+     */
     public SummonCommand() {
         super("summon", TrKeys.MC_COMMANDS_SUMMON_DESCRIPTION, Permissions.COMMAND_SUMMON);
     }
 
+    /**
+     * Installs entity-only summoning with an optional position and count {@code 1}.
+     * The destination chunk must already be loaded. Nonpositive counts perform
+     * no spawning but still report success, and lightning requests use
+     * {@link LightningStrikeEvent.Cause#COMMAND}.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -40,6 +54,7 @@ public class SummonCommand extends Command {
                         pos = sender.getCommandExecuteLocation();
                     }
 
+                    // Flooring preserves the containing chunk for negative fractional destination coordinates.
                     var floorPos = pos.floor(new Vector3d());
                     if (dim.getChunkManager().getChunkByDimensionPos((int) floorPos.x(), (int) floorPos.z()) == null) {
                         context.addError("%" + TrKeys.MC_COMMANDS_SUMMON_OUTOFWORLD);
@@ -48,7 +63,9 @@ public class SummonCommand extends Command {
 
                     int count = context.getResult(2);
                     for (var i = 1; i <= count; i++) {
-                        // Special handling for lightning bolt - use strikeLightning with COMMAND cause
+                        // Lightning uses the strike operation so listeners
+                        // observe a command-caused strike instead of ordinary
+                        // entity creation alone.
                         if (entityType == EntityTypes.LIGHTNING_BOLT) {
                             dim.strikeLightning(pos.x(), pos.y(), pos.z(), LightningStrikeEvent.Cause.COMMAND);
                             continue;

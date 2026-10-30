@@ -8,7 +8,10 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.data.Weather;
 
 /**
- * Called when the weather changes in a world.
+ * {@code WeatherChangeEvent} carries the previous weather and a proposed
+ * replacement for a world. Listeners can cancel this event before the world
+ * setter stores and broadcasts the requested weather; the event exposes both
+ * values without a replacement setter.
  *
  * @author daoge_cmd
  */
@@ -16,14 +19,18 @@ import org.allaymc.api.world.data.Weather;
 @CallerThread(ThreadType.WORLD)
 public class WeatherChangeEvent extends WorldEvent implements CancellableEvent {
     /**
-     * The old weather.
+     * Weather before the proposed change.
      */
     protected Weather oldWeather;
     /**
-     * The new weather.
+     * Weather requested by the world setter.
      */
     protected Weather newWeather;
 
+    /**
+     * Creates a weather proposal retaining the old and requested weather
+     * values.
+     */
     public WeatherChangeEvent(World world, Weather oldWeather, Weather newWeather) {
         super(world);
         this.oldWeather = oldWeather;

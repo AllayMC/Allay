@@ -6,7 +6,10 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.world.World;
 
 /**
- * The base class for all world events.
+ * {@code WorldEvent} supplies the owning world reference shared by world and
+ * chunk event types. The generated constructor retains the supplied handle and
+ * the generated getter exposes it directly; individual event callers determine
+ * when the notification occurs during world operations.
  *
  * @author daoge_cmd
  */
@@ -14,7 +17,7 @@ import org.allaymc.api.world.World;
 @AllArgsConstructor
 public abstract class WorldEvent extends Event {
     /**
-     * The world involved in the event.
+     * World associated with this event.
      */
     protected World world;
 }

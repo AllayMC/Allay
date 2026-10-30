@@ -14,9 +14,18 @@ import static org.allaymc.api.item.type.ItemTypes.SAND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+/**
+ * {@code RecipeRegistryLoaderTest} verifies furnace recipe loading across current shapeless
+ * data and the legacy object-valued input/output representation.
+ */
 @ExtendWith(AllayTestExtension.class)
 class RecipeRegistryLoaderTest {
 
+    /**
+     * Loads the bundled recipe resource after item registration. The resulting registry must
+     * contain the tag-based log cooking recipe and all 223 furnace recipes from
+     * the 1.26.50 export, including the three poplar leaf variants.
+     */
     @Test
     void testLoadCurrentFurnaceRecipes() {
         var recipes = new RecipeRegistryLoader().load(null);
@@ -26,9 +35,13 @@ class RecipeRegistryLoaderTest {
         );
 
         assertInstanceOf(FurnaceRecipe.class, recipes.get(tagRecipeId));
-        assertEquals(220, recipes.values().stream().filter(FurnaceRecipe.class::isInstance).count());
+        assertEquals(223, recipes.values().stream().filter(FurnaceRecipe.class::isInstance).count());
     }
 
+    /**
+     * Parses a current furnace entry whose ingredient is an item tag. Conversion must preserve
+     * that tag, its charcoal output, its explicit negative priority, and its furnace station type.
+     */
     @Test
     void testParseFurnaceLikeShapelessTagRecipe() {
         var json = JsonParser.parseString("""
@@ -50,6 +63,10 @@ class RecipeRegistryLoaderTest {
         assertEquals(FurnaceRecipe.Type.FURNACE, recipe.getType());
     }
 
+    /**
+     * Parses a legacy furnace entry with object-valued input and output fields. The recipe must
+     * retain the sand ingredient and furnace type while defaulting its omitted priority to zero.
+     */
     @Test
     void testParseLegacyFurnaceRecipe() {
         var json = JsonParser.parseString("""

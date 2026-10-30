@@ -15,13 +15,29 @@ import org.joml.Vector3ic;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.HANGING;
 
 /**
+ * {@code BlockHangingSignBaseComponentImpl} places hanging signs using ceiling
+ * shape, player sneaking, and clicked-face direction. Ceiling placement requires a
+ * solid block above and selects attached or free hanging properties from its
+ * bottom face. Neighbor handling later breaks ceiling-hung signs that lose center
+ * support.
+ *
  * @author daoge_cmd
  */
 public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates this block behavior component for the supplied registered block
+     * type.
+     */
     public BlockHangingSignBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places a hanging sign for a supported ceiling or side interaction. A
+     * {@code null} context delegates to shared placement, and an upward clicked
+     * face is rejected. Ceiling attachment uses sneaking and bottom-face fullness
+     * to select the orientation helper; side attachment assigns a rotated facing.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -58,6 +74,11 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
+    /**
+     * Runs shared handling and validates ceiling support for a hanging sign. Only
+     * an upper-neighbor update checks this rule; the support must remain solid
+     * with a full center bottom face.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);

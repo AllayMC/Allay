@@ -35,11 +35,20 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 /**
- * Represents an explosion.
+ * {@code Explosion} configures blast effects and applies them to a dimension
+ * at a caller-selected position. Entity impact combines distance with sampled
+ * block exposure, and block destruction follows randomized rays whose force
+ * decreases through resistant terrain. The mutable settings are reused by each
+ * invocation, so callers must avoid changing them while an explosion is
+ * running.
+ *
  * <p>
- * This object contains the information of an explosion, including the size,
- * whether the fire should be spawned, itemDropChance and so on. It then can
- * be performed in a dimension.
+ * Entity exposure is computed on the server compute pool and joined before
+ * entity effects are applied. Block rays also run in parallel, but block drops
+ * and replacements occur afterward on the invoking thread. Drops are computed
+ * before replacement because block entities can affect their contents.
+ * Failures can leave earlier damage, motion, or block changes applied; this
+ * operation provides no rollback.
  *
  * @author daoge_cmd
  */
@@ -47,8 +56,16 @@ import java.util.function.Predicate;
 @Setter
 public class Explosion {
 
+    /**
+     * {@code RAYS} retains the shared blast directions with a step length of
+     * {@code 0.3} blocks. Subclasses must not mutate its entries while
+     * explosions read them.
+     */
     protected static final Vector3dc[] RAYS = new Vector3dc[1352];
 
+    // The cube surface contains 1352 sample positions, matching RAYS capacity.
+    // Sampling the full cube would overrun the fixed direction table before
+    // explosion rays could be initialized.
     static {
         int index = 0;
         for (double x = 0; x < 16; x++) {
@@ -57,6 +74,7 @@ public class Explosion {
                     if (x != 0 && x != 15 && y != 0 && y != 15 && z != 0 && z != 15) {
                         continue;
                     }
+                    // A 0.3-block step matches resistance attenuation during ray tracing.
                     RAYS[index++] = new Vector3d(x / 15.0 * 2 - 1, y / 15.0 * 2 - 1, z / 15.0 * 2 - 1).normalize(0.3);
                 }
             }
@@ -64,92 +82,107 @@ public class Explosion {
     }
 
     /**
-     * The size of the explosion, it is effectively the radius which entities/blocks will be affected within.
+     * {@code size} controls blast force and half the entity search distance in
+     * blocks. Constructors retain it without rejecting zero, negative, or
+     * nonfinite values.
      */
     protected float size;
     /**
-     * Set this field to {@code true} will cause the explosion to randomly start fires in 1/3 of all destroyed air blocks that are
-     * above opaque blocks.
+     * {@code spawnFire} enables a one-in-three fire attempt for each collected
+     * block position. Fire requires air above a block with a full upper
+     * collision face.
      */
     protected boolean spawnFire;
     /**
-     * Specifies how item drops should be handled. By default,
-     * the item drop chance is {@code 1/size}. If negative, no items will be dropped by
-     * the explosion. If set to 1 or higher, all items are dropped.
+     * {@code itemDropChance} is compared directly with a random value in
+     * {@code [0, 1)} for each nonair, non-TNT block. Negative values prevent
+     * drops; values at least one always pass.
      */
     protected float itemDropChance;
     /**
-     * The sound to play when the explosion is created.
+     * Sound descriptor emitted after blast mutations.
      */
     protected Sound sound;
     /**
-     * The particle to spawn when the explosion is created.
+     * Particle descriptor emitted after blast mutations.
      */
     protected Particle particle;
     /**
-     * The entity that caused the explosion. If keep this field to {@code null},
-     * the explosion will be considered as a block explosion.
-     * <p>
-     * For example if the explosion is caused by a creeper, then this field will be the creeper.
+     * {@code entity} identifies the blast source and is excluded from affected
+     * entities. {@code null} selects block-explosion damage attribution
+     * instead of entity-explosion attribution.
      */
     protected Entity entity;
     /**
-     * Whether this explosion will destroy blocks. Tnt that are underwater won't destroy blocks.
+     * {@code destroyBlocks} controls collection and destruction of blast-hit
+     * blocks. Disabling it also leaves the fire-placement pass without any
+     * collected positions.
      */
     protected boolean destroyBlocks;
     /**
-     * Whether this explosion will affect entities. This including damage and add motion to entities.
+     * {@code affectEntities} controls exposure calculation, motion, and
+     * damage. Disabling it skips entity processing while leaving configured
+     * block and visual effects available.
      */
     protected boolean affectEntities;
     /**
-     * The block type that caused this explosion. Used for custom death messages
-     * (e.g., bed, respawn anchor). If null, uses generic block explosion message.
+     * {@code sourceBlockType} supplies block-explosion damage attribution when
+     * {@code entity} is {@code null}. Entity-sourced blasts ignore this value
+     * when constructing their damage container.
      */
     protected BlockType<?> sourceBlockType;
 
     /**
-     * @see #Explosion(float, boolean, float, Sound, Particle)
+     * Creates a size-four explosion with fire disabled and a one-quarter drop
+     * chance. The default sound and particle are the ordinary explosion sound
+     * and huge-explosion particle, with entity and block effects enabled.
      */
     public Explosion() {
         this(4);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, Sound, Particle)
+     * Creates an explosion of the supplied size with fire disabled. The
+     * default drop chance is {@code 1 / size}, and the size is retained
+     * without range or finiteness checks.
      */
     public Explosion(float size) {
         this(size, false);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, Sound, Particle)
+     * Creates an explosion with the supplied size and fire policy. The default
+     * drop chance is {@code 1 / size}; division by zero and negative sizes are
+     * not rejected during construction.
      */
     public Explosion(float size, boolean spawnFire) {
         this(size, spawnFire, 1.0f / size);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, Sound, Particle)
+     * Creates an explosion with explicit force, fire, and drop settings. This
+     * overload selects {@code SimpleSound.EXPLOSION} and the huge-explosion
+     * particle, while retaining numeric settings without clamping or
+     * validation.
      */
     public Explosion(float size, boolean spawnFire, float itemDropChance) {
         this(size, spawnFire, itemDropChance, SimpleSound.EXPLOSION);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, Sound, Particle)
+     * Creates an explosion with an explicit sound and the huge-explosion
+     * particle. All supplied settings are retained without validation, and
+     * entity processing and block destruction both start enabled.
      */
     public Explosion(float size, boolean spawnFire, float itemDropChance, Sound sound) {
         this(size, spawnFire, itemDropChance, sound, SimpleParticle.HUGE_EXPLOSION);
     }
 
     /**
-     * Create an explosion.
-     *
-     * @param size           the size of the explosion
-     * @param spawnFire      whether fire should be spawned
-     * @param itemDropChance the item drop chance
-     * @param sound          the sound of the explosion
-     * @param particle       the particle of the explosion
+     * Creates an explosion retaining the supplied numeric and effect settings.
+     * The source entity starts as {@code null}, block destruction and entity
+     * processing start enabled, and numeric inputs are not validated or
+     * clamped.
      */
     public Explosion(float size, boolean spawnFire, float itemDropChance, Sound sound, Particle particle) {
         this.size = size;
@@ -163,12 +196,27 @@ public class Explosion {
     }
 
     /**
-     * Return the linear interpolation between a and b at t.
+     * Returns {@code b + a * (t - b)}, using {@code a} as the interpolation
+     * fraction. The helper does not clamp that fraction, so values outside
+     * zero through one extrapolate between the supplied endpoints.
      */
     protected static double lerp(double a, double b, double t) {
         return b + a * (t - b);
     }
 
+    /**
+     * Visits block cells along the segment from {@code start} through {@code
+     * end}, stopping when the predicate rejects a cell. Coincident endpoints
+     * throw {@link IllegalArgumentException}, and the predicate receives one
+     * reused mutable coordinate that it must copy before retaining.
+     *
+     * <p>
+     * The traversal advances the axis whose next boundary is nearest and
+     * checks the segment length before crossing that boundary. Equal boundary
+     * times follow the fixed branch order rather than visiting every touching
+     * cell simultaneously. Stationary axes use infinite boundary distances so
+     * they never win the next-step selection.
+     */
     protected static void traverseBlocks(Vector3dc start, Vector3dc end, Predicate<Vector3ic> predicate) {
         var dir = end.sub(start, new Vector3d());
         if (Double.compare(dir.lengthSquared(), 0.0) == 0) {
@@ -218,6 +266,11 @@ public class Explosion {
         }
     }
 
+    /**
+     * Returns a new vector containing componentwise guarded division results.
+     * Each zero divisor produces zero for its axis, matching the scalar helper
+     * used for stationary-axis traversal distances.
+     */
     protected static Vector3d safeDivide(Vector3dc dividend, Vector3dc divisor) {
         return new Vector3d(
                 safeDivide(dividend.x(), divisor.x()),
@@ -226,7 +279,14 @@ public class Explosion {
         );
     }
 
+    /**
+     * Returns the quotient, or zero when the divisor is zero. Traversal uses
+     * this value for stationary-axis increments because their infinite
+     * boundary distance already prevents those axes from being selected.
+     */
     protected static double safeDivide(double dividend, double divisor) {
+        // A stationary axis already has an infinite boundary distance, so its
+        // increment remains zero without participating in next-boundary selection.
         if (divisor == 0.0) {
             return 0.0;
         }
@@ -234,6 +294,11 @@ public class Explosion {
         return dividend / divisor;
     }
 
+    /**
+     * Returns a new vector of distances to the next block boundary on each
+     * axis. Zero direction components yield positive infinity, excluding
+     * stationary axes from the traversal's next-boundary choice.
+     */
     protected static Vector3d boundary(Vector3dc v1, Vector3dc v2) {
         return new Vector3d(
                 boundary(v1.x(), v2.x()),
@@ -243,10 +308,13 @@ public class Explosion {
     }
 
     /**
-     * Return the distance that must be travelled on an axis from the start point with the direction vector
-     * component to cross a block boundary.
+     * Returns the distance to the next block boundary along an axis. A zero
+     * direction yields positive infinity, while negative motion starting on a
+     * boundary yields zero so traversal immediately enters the preceding cell.
      */
     protected static double boundary(double start, double dir) {
+        // A stationary axis must never beat a moving axis when traversal chooses
+        // its nearest boundary; infinity preserves that ordering without division.
         if (dir == 0.0) {
             return Double.POSITIVE_INFINITY;
         }
@@ -262,10 +330,16 @@ public class Explosion {
         return (1 - (start - Math.floor(start))) / dir;
     }
 
+    /**
+     * Returns a new vector holding the sign of each component.
+     */
     protected static Vector3dc sign(Vector3dc vec) {
         return new Vector3d(sign(vec.x()), sign(vec.y()), sign(vec.z()));
     }
 
+    /**
+     * Returns negative one, zero, or one for the supplied component.
+     */
     protected static double sign(double f) {
         if (f > 0.0) {
             return 1.0;
@@ -277,30 +351,45 @@ public class Explosion {
     }
 
     /**
-     * @see #explode(Dimension, double, double, double)
+     * Applies the configured explosion at the supplied integer dimension
+     * position. This overload reads the vector immediately and delegates all
+     * damage, block mutation, effect emission, and failure behavior to the
+     * coordinate overload.
      */
     public void explode(Dimension dimension, Vector3ic pos) {
         this.explode(dimension, pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * @see #explode(Dimension, double, double, double)
+     * Applies the configured explosion at the supplied floating-point
+     * dimension position. This overload reads the vector immediately and
+     * delegates all damage, block mutation, effect emission, and failure
+     * behavior to the coordinate overload.
      */
     public void explode(Dimension dimension, Vector3dc pos) {
         this.explode(dimension, pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Perform the explosion at a pos in a dimension.
+     * Applies entity impact, optional block destruction, fire attempts, and
+     * final effects at dimension coordinates. The caller must permit world
+     * reads from worker threads and world mutations on the invoking thread,
+     * and must keep this explosion's mutable settings stable throughout the
+     * call.
      *
-     * @param dimension the dimension which the explosion will be performed in
-     * @param x         the x coordinate of the explosion
-     * @param y         the y coordinate of the explosion
-     * @param z         the z coordinate of the explosion
+     * <p>
+     * Entity exposure tasks finish before motion and damage are applied, while
+     * randomized block rays finish before drops or replacements begin.
+     * Multiple rays may collect the same position, and later passes re-read
+     * its current state. Drop calculation precedes air replacement so
+     * block-entity-dependent drops remain available. Exceptions propagate
+     * without undoing earlier effects, and optional fire is limited to
+     * collected positions after block destruction.
      */
     public void explode(Dimension dimension, double x, double y, double z) {
         var explosionPos = new Vector3d(x, y, z);
         var rand = ThreadLocalRandom.current();
+        // Entity impact reaches twice the size used for block-ray force.
         var d = size * 2;
         var aabb = new AABBd(
                 Math.floor(x - d - 1), Math.floor(y - d - 1), Math.floor(z - d - 1),
@@ -309,17 +398,24 @@ public class Explosion {
 
         if (affectEntities) {
             var affectedEntities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
-            // Skip the entity that caused the explosion
+            // Source exclusion prevents a projectile or explosive entity from
+            // receiving its own impact through the ordinary affected-entity pass.
             affectedEntities.remove(entity);
             var impactMap = new ConcurrentHashMap<Entity, Double>();
+            // Join every exposure task before applying entity effects so the
+            // invoking thread consumes completed impact values rather than a
+            // partially populated result map.
             Utils.forEachInParallel(affectedEntities, Server.getInstance().getComputeThreadPool(), affectedEntity -> {
                 var pos = affectedEntity.getLocation();
                 var dist = pos.sub(x, y, z, new Vector3d()).length();
+                // The center has no usable radial direction; exclude it before
+                // distance normalization rather than creating an undefined motion.
                 if (dist > d || dist == 0) {
                     return;
                 }
 
-                // Method exposure() is slow, let's calculate it in parallel
+                // Exposure samples collision geometry independently for this entity;
+                // the shared map publishes its result to the post-join effect pass.
                 impactMap.put(affectedEntity, (1.0 - dist / d) * exposure(dimension, explosionPos, affectedEntity.getOffsetAABB()));
             }).join();
 
@@ -355,6 +451,8 @@ public class Explosion {
 
         List<Vector3ic> affectedBlocks;
         if (destroyBlocks) {
+            // Independent rays collect candidate positions before any block is
+            // removed, keeping each ray's resistance reads ahead of destruction.
             affectedBlocks = Arrays.stream(RAYS)
                     .parallel()
                     .flatMap(ray -> {
@@ -362,13 +460,17 @@ public class Explosion {
                         var lx = x;
                         var ly = y;
                         var lz = z;
-                        // Get the random instance for each thread
+                        // Each parallel ray uses its worker's random source so
+                        // blast-force sampling does not share a mutable generator.
                         var localRand = ThreadLocalRandom.current();
+                        // Randomized initial force and per-step loss bound ray travel
+                        // while material resistance supplies additional attenuation.
                         for (var blastForce = size * (0.7f + localRand.nextDouble() * 0.6f); blastForce > 0; blastForce -= 0.225f) {
                             var current = new Vector3i((int) Math.floor(lx), (int) Math.floor(ly), (int) Math.floor(lz));
                             var resistance = 0.0;
-                            // Do not use getLiquid(), which is much slower. Just get the block in layer 1 and
-                            // check if it is water by comparing it with BlockTypes.WATER and BlockTypes.FLOWING_WATER
+                            // Layer-one water must contribute resistance even when
+                            // the primary layer is a different block, so inspect that
+                            // layer before using primary-block resistance.
                             var layer1 = dimension.getBlockState(current, 1).getBlockType();
                             if (layer1 == BlockTypes.WATER || layer1 == BlockTypes.FLOWING_WATER) {
                                 resistance = 100;
@@ -380,10 +482,10 @@ public class Explosion {
                             lz += ray.z();
 
                             var delta = (resistance / 5.0 + 0.3f) * 0.3f;
-                            // resistance may be very big if the block is an unbreakable block such as
-                            // bedrock, so we should operate it carefully to avoid precision overflow
+                            // Resistance that consumes the remaining force stops this
+                            // ray before the block enters its destruction candidates;
+                            // later rays can still test the same position.
                             if (blastForce < delta) {
-                                // In this case, blastForce - delta will result in a negative value
                                 blastForce = 0;
                             } else {
                                 blastForce -= delta;
@@ -406,7 +508,8 @@ public class Explosion {
             }
 
             if (blockType == BlockTypes.TNT) {
-                // Explosion can prime tnt around
+                // TNT receives a shortened randomized fuse instead of normal drops
+                // and air replacement, preserving chain-explosion behavior for it.
                 BlockTypes.TNT.getBlockBehavior().prime(new Position3i(pos, dimension), 10 + rand.nextInt(30));
                 continue;
             }
@@ -418,14 +521,15 @@ public class Explosion {
                 }
             }
 
-            // Set the block to air after we drop the items. This is because some blocks, such as beds, need to acquire block entities in their
-            // location to determine their drops. If we set the block to air in advance, a NPE will be generated when getting the drop via the
-            // `BlockBehavior.getDrop()` method
+            // Keep the block and its block entity available until getDrops finishes;
+            // replacing it first can remove inventory or other drop information.
+            // Air replacement follows any successful item-drop calculation.
             dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
         }
 
         if (spawnFire) {
             for (var pos : affectedBlocks) {
+                // One third of collected positions reach the support check for fire.
                 if (rand.nextInt(3) != 0) {
                     continue;
                 }
@@ -443,7 +547,18 @@ public class Explosion {
     }
 
     /**
-     * Calculate the exposure of an explosion to an entity, used to calculate the impact of an explosion.
+     * Estimates the fraction of sampled entity-box points whose ray encounters
+     * no block collision shape. The estimate affects blast impact rather than
+     * selecting entities, and the dimension must support reads from the
+     * compute workers used by {@code explode}.
+     *
+     * <p>
+     * Sample spacing depends on box dimensions, with horizontal offsets
+     * centering the sampled grid. A negative spacing component returns zero
+     * instead of traversing an inverted box. Every sample stops at its first
+     * colliding block; coincident sample and origin positions can propagate
+     * the traversal helper's zero-direction exception. The result is the
+     * unobstructed sample count divided by all checks.
      */
     protected double exposure(Dimension dimension, Vector3dc origin, AABBdc box) {
         Vector3dc boxMin = new Vector3d(box.minX(), box.minY(), box.minZ());
@@ -451,10 +566,13 @@ public class Explosion {
         var diff = boxMax.sub(boxMin, new Vector3d()).mul(2.0).add(1, 1, 1);
 
         var step = new Vector3d(1.0 / diff.x(), 1.0 / diff.y(), 1.0 / diff.z());
+        // An inverted box cannot supply a forward sample grid; return no
+        // exposure rather than entering loops with negative progress.
         if (step.x() < 0.0 || step.y() < 0.0 || step.z() < 0.0) {
             return 0.0;
         }
 
+        // Center the horizontal sample grid within the entity box.
         double xOffset = (1.0 - Math.floor(diff.x()) / diff.x()) / 2.0;
         double zOffset = (1.0 - Math.floor(diff.z()) / diff.z()) / 2.0;
 
@@ -477,7 +595,8 @@ public class Explosion {
                             return false;
                         }
 
-                        // Keep traversing if is air
+                        // A block without a ray intersection leaves this sample
+                        // unobstructed so later cells can still hide the target.
                         return true;
                     });
 

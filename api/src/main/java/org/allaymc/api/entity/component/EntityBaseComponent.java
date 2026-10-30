@@ -50,338 +50,307 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
- * Defines the core lifecycle, state, movement, persistence, and viewer interaction hooks shared by entities.
+ * {@code EntityBaseComponent} exposes the lifecycle, identity, placement,
+ * persistence, and viewer-facing behavior common to entity types. Entity
+ * managers own dimension membership, while this component supplies movement
+ * proposals, state queries, NBT data, tags, and property values used by
+ * specialized components and client presentation.
  *
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder, TaskCreator {
 
     /**
-     * Gets the type of this entity.
-     *
-     * @return the type of this entity
+     * Returns the entity definition used to construct this component-backed
+     * entity.
      */
     EntityType<? extends Entity> getEntityType();
 
     /**
-     * Broadcasts the current entity state to all its viewers.
+     * Sends the current entity metadata to its registered viewers.
      */
     void broadcastState();
 
     /**
-     * Get the display name of the entity.
-     * <p>
-     * Display name is used in chat, damage message, etc. Normally, it is equal to the origin name.
-     * However, you can change the display name compared to the origin name. This is very useful for
-     * plugins, especially if the plugin wants to change the appearance of entity's name in chat because
-     * its origin name cannot be changed.
-     *
-     * @return The display name of the player
+     * Returns the configurable entity name used for command and message
+     * presentation.
      */
     String getDisplayName();
 
     /**
-     * Sets the display name of this entity.
-     *
-     * @param displayName the display name to set
+     * Sets the entity display name used for messages and command identity.
      */
     void setDisplayName(String displayName);
 
     /**
-     * Gets the name tag of this entity.
-     *
-     * @return the name tag of this entity
+     * Returns the name tag used in entity metadata, or {@code null} when
+     * absent. An empty string still counts as a present tag for the default
+     * {@code hasNameTag} query.
      */
     String getNameTag();
 
     /**
-     * Sets the name tag of this entity.
-     *
-     * @param nameTag the name tag to set, or {@code null} to clear the name tag
+     * Stores the name tag and broadcasts the resulting entity state. Ordinary
+     * entities can use {@code null} to remove it, while specialized player
+     * presentation has additional requirements for visible player name tags.
      */
     void setNameTag(String nameTag);
 
     /**
-     * Determines whether the entity has a name tag assigned.
-     *
-     * @return {@code true} if the entity has a name tag; {@code false} otherwise
+     * Returns whether the stored name tag reference is nonnull.
      */
     default boolean hasNameTag() {
         return getNameTag() != null;
     }
 
     /**
-     * Determines whether the name tag is always displayed for an entity or object.
-     *
-     * @return {@code true} if the name tag is set to always show, {@code false} otherwise.
+     * Returns whether entity metadata requests continuous name-tag display.
      */
     boolean isNameTagAlwaysShow();
 
     /**
-     * Sets whether the name tag of an entity should always be visible above it.
-     *
-     * @param nameTagAlwaysShow a boolean value where {@code true} makes the name tag always visible,
-     *                          and {@code false} causes it to only display under certain conditions.
+     * Sets continuous name-tag display and broadcasts the updated entity
+     * metadata. The common server implementation sends state even when the
+     * value is unchanged, without adding or removing viewer membership.
      */
     void setNameTagAlwaysShow(boolean nameTagAlwaysShow);
 
     /**
-     * Checks whether this entity is visible to its viewers.
-     *
-     * @return whether this entity is visible to its viewers
+     * Returns whether metadata marks this entity's body as invisible.
      */
     boolean isInvisible();
 
     /**
-     * Sets whether this entity is invisible to its viewers. When set to {@code true}, this
-     * entity will not be visible to its viewers. However, the item in its hand/offhand, the
-     * armor it wears and the effect particle around this entity will still remain visible.
-     *
-     * @param invisible whether the body of this entity is invisible to its viewers
+     * Sets the invisible-body flag and broadcasts entity state. This metadata
+     * flag controls body presentation; equipment and effect particles have
+     * their own presentation paths and are not removed from viewers by this
+     * assignment.
      */
     void setInvisible(boolean invisible);
 
     /**
-     * Checks if the entity is currently immobile.
-     *
-     * @return {@code true} if the Player is currently immobile.
+     * Returns whether ordinary movement preserves this entity's current
+     * coordinates.
      */
     boolean isImmobile();
 
     /**
-     * Sets the immobile state of an object. When set to {@code true}, the entity can't move
-     * around, but is still allowed to look around.
-     *
-     * @param immobile {@code true} to make the entity immobile, {@code false} to make it mobile.
+     * Sets whether ordinary movement preserves the entity's current
+     * coordinates and broadcasts state. An immobile entity can still accept
+     * orientation changes, while direct teleport and pre-spawn placement have
+     * their own paths.
      */
     void setImmobile(boolean immobile);
 
     /**
-     * Gets the scale of the entity, greater scale will result in a bigger model and aabb.
-     * The default value is 1.0
-     *
-     * @return the scale of the entity
+     * Returns the multiplier applied to the base collision box and model
+     * metadata. The common server component starts at {@code 1.0}, and its
+     * setter stores later values without validating their range.
      */
     double getScale();
 
     /**
-     * Sets the scale of the entity.
-     *
-     * @param scale the scale of the entity to set
+     * Sets the model and collision-box multiplier and broadcasts updated
+     * entity metadata. The common server stores the supplied value without
+     * validating positivity or finiteness, so callers must choose a scale
+     * suitable for geometry consumers.
      */
     void setScale(double scale);
 
     /**
-     * Gets the last location of this entity.
-     *
-     * @return the last location of this entity
+     * Returns the reused location object holding prior position coordinates.
+     * Ordinary server movement updates only its {@code x}, {@code y}, and
+     * {@code z}; its angles and dimension are not a complete
+     * previous-placement history, and callers need a copy for stable
+     * coordinate snapshots.
      */
     Location3dc getLastLocation();
 
     /**
-     * Gets the location of this entity.
-     *
-     * @return the location of this entity
+     * Returns the current location through a read-only location interface. The
+     * server retains and reuses its mutable location object, so callers must
+     * copy it when they need a stable independent snapshot.
      */
     Location3dc getLocation();
 
     /**
-     * Set the location before the entity is spawned.
-     * <p>
-     * This method is usually used when you want to spawn the entity at a specific location.
-     * Then you need to set the entity's location before spawn the entity.
+     * Copies a location into an entity that is still in its despawned setup
+     * state. The server rejects NaN coordinates and dispatches internal
+     * location handling, but does not load chunks or insert the entity into a
+     * dimension.
      *
-     * @param location the location you want to set
-     * @throws IllegalStateException if the entity is already spawned
+     * @throws IllegalStateException if the entity is no longer eligible for pre-spawn placement
      */
     void setLocationBeforeSpawn(Location3dc location);
 
     /**
-     * Gets the dimension of this entity.
-     *
-     * @return the dimension of this entity
+     * Returns the dimension currently retained by this entity's location.
      */
     Dimension getDimension();
 
     /**
-     * Gets the world of this entity.
-     *
-     * @return the world of this entity
+     * Returns the world belonging to the entity's current dimension, or
+     * {@code null} before a dimension is assigned. The result follows the
+     * retained location rather than an independent world reference.
      */
     default World getWorld() {
         return getLocation().dimension() != null ? getLocation().dimension().getWorld() : null;
     }
 
     /**
-     * Gets the scheduler of this entity which is running on the entity tick.
-     *
-     * @return the scheduler of this entity
+     * Returns the entity scheduler advanced by its ordinary entity ticks.
      */
     Scheduler getScheduler();
 
     /**
-     * Gets the number of ticks this entity has been alive for.
-     * <p>
-     * Note that the entity tick is independent of the world tick.
-     * If the entity has not been ticked by the world (e.g. the
-     * chunk it resides in is not loaded), its tick count will not
-     * increase, even though the world tick continues to advance.
-     *
-     * @return the entity's tick count
+     * Returns this entity's own ordinary tick count, independent of the
+     * dimension's tick number. The count advances only when the entity is
+     * ticked, so time in an unticked state does not increase it.
      */
     long getTick();
 
     /**
-     * Get the state of the entity.
-     *
-     * @return the state of the entity
+     * Returns the currently stored lifecycle state of this entity.
      */
     EntityState getState();
 
     /**
-     * Check if the entity will be spawned later.
-     *
-     * @return {@code true} if the entity will be spawned later.
+     * Returns whether this entity is currently queued for dimension insertion.
      */
     default boolean willBeSpawnedLater() {
         return getState() == EntityState.SPAWNED_LATER;
     }
 
     /**
-     * Check if the entity will be despawned later.
-     *
-     * @return {@code true} if the entity will be despawned later.
+     * Returns whether this entity is currently queued for dimension removal.
      */
     default boolean willBeDespawnedLater() {
         return getState() == EntityState.DESPAWNED_LATER;
     }
 
     /**
-     * Check if the entity is dead.
-     *
-     * @return {@code true} if the entity is dead.
+     * Returns whether the current lifecycle state is exactly
+     * {@code EntityState.DEAD}.
      */
     default boolean isDead() {
         return getState() == EntityState.DEAD;
     }
 
     /**
-     * Check if the entity is spawned.
-     *
-     * @return {@code true} if the entity is spawned.
+     * Returns whether the current lifecycle state's spawned flag is set. Alive
+     * and dead entities use spawned states, while pending removal already
+     * reports {@code false} before the entity manager finishes detaching
+     * membership.
      */
     default boolean isSpawned() {
         return getState().isSpawned();
     }
 
     /**
-     * Check if the entity is alive.
-     *
-     * @return {@code true} if the entity is alive.
+     * Returns whether the current lifecycle state is exactly
+     * {@code EntityState.ALIVE}.
      */
     default boolean isAlive() {
         return getState() == EntityState.ALIVE;
     }
 
     /**
-     * Checks if the entity has been despawned.
-     *
-     * @return {@code true} if the entity's state is despawned, {@code false} otherwise.
+     * Returns whether the current lifecycle state is exactly
+     * {@code EntityState.DESPAWNED}.
      */
     default boolean isDespawned() {
         return getState() == EntityState.DESPAWNED;
     }
 
     /**
-     * Check if the entity can be spawned.
-     *
-     * @return {@code true} if the entity can be spawned.
+     * Returns whether location setup and lifecycle state permit a spawn
+     * request. The server requires a dimension, coordinates different from its
+     * uninitialized sentinel, and the despawned state; this query does not
+     * insert the entity or load its chunk.
      */
     boolean canBeSpawned();
 
-    // Portal constants
+    /**
+     * {@code NETHER_PORTAL_TRANSITION_TICKS} sets the ordinary
+     * survival/adventure player portal wait to eighty ticks; other common
+     * portal users can reach this threshold immediately.
+     */
     int NETHER_PORTAL_TRANSITION_TICKS = 80;
+    /**
+     * {@code PORTAL_COOLDOWN_TICKS} starts a three-hundred-tick reuse delay
+     * before asynchronous portal preparation, preventing ordinary contact
+     * processing from immediately starting another transfer.
+     */
     int PORTAL_COOLDOWN_TICKS = 300;
 
     /**
-     * Gets the number of ticks the entity has been standing in a nether portal.
-     *
-     * @return the portal ticks
+     * Returns accumulated nether-portal contact time measured in entity ticks.
      */
     int getPortalTicks();
 
     /**
-     * Sets the number of ticks the entity has been standing in a nether portal.
-     *
-     * @param ticks the portal ticks
+     * Sets accumulated nether-portal contact time measured in entity ticks.
      */
     void setPortalTicks(int ticks);
 
     /**
-     * Gets the remaining cooldown ticks before the entity can use a portal again.
-     *
-     * @return the portal cooldown ticks
+     * Returns the stored portal reuse delay measured in entity ticks.
      */
     int getPortalCooldown();
 
     /**
-     * Sets the remaining cooldown ticks before the entity can use a portal again.
-     *
-     * @param cooldown the portal cooldown ticks
+     * Sets the portal reuse delay measured in entity ticks.
      */
     void setPortalCooldown(int cooldown);
 
     /**
-     * Checks if the entity is currently standing in a nether portal.
-     *
-     * @return {@code true} if the entity is in a nether portal
+     * Returns whether a portal contact was marked for portal tick processing.
      */
     boolean isInNetherPortal();
 
     /**
-     * Sets whether the entity is currently standing in a nether portal.
-     *
-     * @param inNetherPortal whether the entity is in a nether portal
+     * Records portal contact for the next portal tick to consume.
      */
     void setInNetherPortal(boolean inNetherPortal);
 
     /**
-     * Teleport the entity to the specified location.
-     *
-     * @param location the location to teleport the entity to
-     * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
+     * Requests a teleport with reason
+     * {@code EntityTeleportEvent.Reason.UNKNOWN}. The normal teleport event
+     * can refuse the request, and a {@code true} result does not wait for
+     * queued transfer between dimensions to finish.
      */
     default boolean teleport(Location3dc location) {
         return teleport(location, EntityTeleportEvent.Reason.UNKNOWN);
     }
 
     /**
-     * Teleport the entity to the specified location.
-     *
-     * @param location the location to teleport the entity to
-     * @param reason   the reason of the teleport
-     * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
+     * Requests a spawned entity teleport after validating the initial target
+     * dimension and dispatching its cancellable event. Same-dimension movement
+     * runs directly; transfer to another dimension queues removal followed by
+     * placement and addition, so acceptance does not establish completed
+     * destination membership.
      */
     boolean teleport(Location3dc location, EntityTeleportEvent.Reason reason);
 
     /**
-     * Teleport the entity to the specified location.
-     *
-     * @param location the location to teleport the entity to
+     * Copies the supplied integer location into a floating-point teleport
+     * request with an unknown reason. The normal cancellation and
+     * spawned-state rules apply, and any cross-dimension transfer remains
+     * queued after acceptance.
      */
     default boolean teleport(Location3ic location) {
         return teleport(new Location3d(location));
     }
 
     /**
-     * Get the runtime id of this entity.
-     *
-     * @return the runtime id of this entity
+     * Returns the runtime identifier used for entity lookup and protocol
+     * references.
      */
     long getRuntimeId();
 
     /**
-     * Same to {@link #getRuntimeId()}.
+     * Returns the runtime identifier used by long-keyed physics and lookup
+     * services.
      */
     @Override
     default long getLongId() {
@@ -389,25 +358,21 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the unique id of this entity. Non-player entities only have the last 8 bytes of the UUID set
-     * {@link UUID#getLeastSignificantBits()} while the most 8 bytes {@link UUID#getMostSignificantBits()}
-     * will be zero. For actual player, this should be same to {@link LoginData#getUuid()}.
-     *
-     * @return the unique id of this entity
+     * Returns the persistent identity associated with this entity. Ordinary
+     * server entities store their identifier in the least significant
+     * sixty-four {@code UUID} bits with zero upper bits; actual player identity can
+     * instead come from its controller's login data.
      */
     UUID getUniqueId();
 
     /**
-     * Get the base aabb of this entity which is not affected by the scale factor ({@link #getScale()}).
-     *
-     * @return the base aabb of this entity
+     * Returns the entity-relative collision box before the scale factor is
+     * applied.
      */
     AABBdc getBaseAABB();
 
     /**
-     * Gets the aabb of this entity which is affected by the scale factor ({@link #getScale()}).
-     *
-     * @return the aabb of this entity
+     * Returns a new entity-relative box with every base coordinate scaled.
      */
     default AABBdc getAABB() {
         var base = getBaseAABB();
@@ -423,136 +388,132 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the offset aabb of this entity.
-     *
-     * @return the offset aabb of this entity
+     * Returns a new scaled entity box translated to the current location.
      */
     default AABBdc getOffsetAABB() {
         return getAABB().translate(getLocation(), new AABBd());
     }
 
     /**
-     * Get the offset aabb of this entity for collision check.
-     *
-     * @return the offset aabb of this entity for collision check
+     * Returns the world-space entity box expanded for collision-contact
+     * checks.
      */
     AABBdc getOffsetAABBForCollisionCheck();
 
     /**
-     * Check if this entity has entity collision. If return {@code true}, method {@link #onCollideWithEntity(Entity)}
-     * will be called when this entity collide with another entity.
-     *
-     * @return {@code true} if the entity has entity collision.
+     * Returns whether ordinary entity collision eligibility is enabled, with
+     * the default enabled.
      */
     default boolean hasEntityCollision() {
         return true;
     }
 
     /**
-     * Called when the entity collides with another entity.
-     *
-     * @param other the entity collides with
+     * Receives an entity-collision callback, with no behavior supplied by
+     * default.
      */
     @ApiStatus.OverrideOnly
     default void onCollideWithEntity(Entity other) {
     }
 
     /**
-     * Called when the entity is inside a block.
-     *
-     * @param block the block that this entity inside
+     * Receives a block-interior callback, with no behavior supplied by
+     * default.
      */
     @ApiStatus.OverrideOnly
     default void onInsideBlock(Block block) {
     }
 
     /**
-     * Called when the entity collides with a block.
-     *
-     * @param block the block that collides with this entity
+     * Receives a block-collision callback, with no behavior supplied by
+     * default.
      */
     @ApiStatus.OverrideOnly
     default void onCollideWithBlock(Block block) {
     }
 
     /**
-     * Called when the entity is hit by a projectile.
-     *
-     * @param projectile the projectile that hits the entity
-     * @param hitPos     the hit pos
+     * Receives a projectile-impact callback, with no behavior supplied by
+     * default.
      */
     @ApiStatus.OverrideOnly
     default void onProjectileHit(EntityProjectile projectile, Vector3dc hitPos) {
     }
 
     /**
-     * Get the viewers of this entity.
-     *
-     * @return the viewers of this entity
+     * Returns an unmodifiable live view of registered entity viewers. This
+     * view shares membership with the entity rather than taking a snapshot, so
+     * caller iteration must respect the same ticking context as viewer
+     * changes.
      */
     @UnmodifiableView
     Set<WorldViewer> getViewers();
 
     /**
-     * Foreach the viewers of this entity.
-     *
-     * @param consumer the consumer to be called
+     * Invokes the consumer for each viewer in the current live set. The helper
+     * does not snapshot or synchronize iteration, so consumers and callers
+     * must avoid conflicting membership changes during traversal.
      */
     default void forEachViewers(Consumer<WorldViewer> consumer) {
         getViewers().forEach(consumer);
     }
 
     /**
-     * Try to set this entity's location. This method is intended to be called by the physics engine, and the
-     * user is not expected to call it. The implementation will call {@link EntityMoveEvent}, and because this
-     * event is cancellable, the method call may not be valid.
-     *
-     * @param newLocation the new location that this entity moves to
-     * @return {@code true} if the method call is valid, {@code false} otherwise.
+     * Proposes movement through {@code EntityMoveEvent}, then applies the
+     * event's destination subject to immobility handling. The event currently
+     * does not support cancellation; the server can still return {@code false}
+     * when an immobile proposal produces no change.
      */
     @ApiStatus.OverrideOnly
     boolean trySetLocation(Location3dc newLocation);
 
     /**
-     * Spawn the entity to the specified viewer.
-     *
-     * @param viewer the viewer to spawn the entity to
+     * Registers a viewer and sends the entity followed by its current state.
+     * The common implementation sends both presentations even when the viewer
+     * was already registered, and this operation does not change dimension
+     * membership.
      */
     void spawnTo(WorldViewer viewer);
 
     /**
-     * Spawn the entity to a number of specified viewers.
-     *
-     * @param viewers the viewers to spawn the entity to
+     * Presents the entity to each supplied viewer using the single-viewer
+     * operation. Registration and packets occur in iteration order; a failure
+     * can leave earlier viewers registered and presented without completing
+     * the collection.
      */
     default void spawnTo(Collection<? extends WorldViewer> viewers) {
         viewers.forEach(this::spawnTo);
     }
 
     /**
-     * Despawn the entity from the specified viewer.
-     *
-     * @param viewer the viewer to despawn the entity from
+     * Removes a viewer from membership and asks that viewer to remove the
+     * entity. The common implementation sends the removal even when the viewer
+     * was not registered, while the entity remains in its dimension.
      */
     void despawnFrom(WorldViewer viewer);
 
     /**
-     * Despawn the entity from a number of specified viewers.
-     *
-     * @param viewers the viewers to spawn the entity to
+     * Removes presentation from each supplied viewer through the single-viewer
+     * operation. The entity remains in its dimension, and a failure can leave
+     * later viewers untouched after earlier removal calls completed.
      */
     default void despawnFrom(Collection<? extends WorldViewer> viewers) {
         viewers.forEach(this::despawnFrom);
     }
 
     /**
-     * Despawn the entity from all viewers. This method will only remove the entity from all the viewers, and it will
-     * still exist in the dimension.
+     * Removes this entity's presentation from every currently registered
+     * viewer. This operation clears viewer membership without removing
+     * dimension or physics membership, and a viewer failure can interrupt the
+     * iteration after preceding removals.
      */
     void despawnFromAll();
 
     /**
-     * @see #remove(Runnable)
+     * Requests queued removal from the current dimension using an empty
+     * completion callback. Lifecycle transition rules can reject the request,
+     * and normal return does not mean that manager membership has already been
+     * detached.
      */
     default void remove() {
         remove(() -> {
@@ -560,30 +521,31 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Remove the entity from the current dimension's {@link EntityManager}. Compared to {@link #despawnFromAll()},
-     * this method will also remove the entity from the world, and {@link #willBeDespawnedLater()} will return
-     * {@code true} after this method is called.
-     *
-     * @param callback the callback to be called after the entity is removed from the world. Can be {@code null}.
+     * Requests dimension removal and invokes the supplied callback after the
+     * queued removal completes normally. The server requires a nonnull
+     * callback; rejected lifecycle transitions or failures before completion
+     * do not invoke it, and prior removal side effects are not rolled back.
      */
     void remove(Runnable callback);
 
     /**
-     * Save the entity to NBT.
-     *
-     * @return the NBT of this entity
+     * Builds entity NBT from component contributions and common persisted
+     * fields. This operation produces a compound without writing storage, and
+     * numeric values use the entity NBT representation, including {@code float}
+     * position and rotation and the ordinary sixty-four-bit unique identifier.
      */
     NbtMap saveNBT();
 
     /**
-     * Load the entity from NBT.
-     *
-     * @param nbt the NBT to load
+     * Applies NBT through component handlers and common-field loading without
+     * a rollback boundary. Missing fields generally retain current values,
+     * tags merge, and persistence-sensitive setters or effect handlers can
+     * produce their usual events and side effects during loading.
      */
     void loadNBT(NbtMap nbt);
 
     /**
-     * Called when the entity is splashed by a splash water bottle.
+     * Receives a splash-water callback, with no behavior supplied by default.
      */
     @ApiStatus.OverrideOnly
     default void onSplash() {
@@ -591,19 +553,19 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
 
     /**
-     * Get the eye height of this entity.
-     *
-     * @return the eye height of this entity
+     * Returns ninety percent of the scaled box height as the default eye
+     * offset.
      */
     default double getEyeHeight() {
+        // Approximate the eye position from ninety percent of the scaled body height.
         return (getAABB().maxY() - getAABB().minY()) * 0.9;
     }
 
     /**
-     * Check if this entity is in an active chunk (within tick radius of a chunk loader).
-     * Inactive entities may have reduced AI update frequency.
-     *
-     * @return {@code true} if the entity is in an active chunk, otherwise {@code false}.
+     * Returns whether the chunk at the floored entity coordinates is active.
+     * Activity follows the dimension's chunk-loader ticking radius and can
+     * guide lower-frequency AI work; it does not itself change lifecycle
+     * membership.
      */
     default boolean isActive() {
         var loc = getLocation();
@@ -613,9 +575,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if the chunk which the entity's location is in is loaded.
-     *
-     * @return {@code true} if the chunk is loaded, otherwise {@code false}.
+     * Returns whether the chunk derived from the current location is loaded.
+     * This helper truncates coordinates to integers before shifting to chunk
+     * coordinates, which differs from flooring for negative fractional
+     * positions near chunk boundaries.
      */
     default boolean isCurrentChunkLoaded() {
         var loc = getLocation();
@@ -625,9 +588,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if the y coordinate of the entity's location is in the range of the dimension.
-     *
-     * @return {@code true} if the y coordinate is in the range, otherwise {@code false}.
+     * Returns whether the current height lies within the dimension's allowed Y
+     * range.
      */
     default boolean isYInRange() {
         var loc = getLocation();
@@ -635,18 +597,18 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if the entity is in the world.
-     *
-     * @return {@code true} if the entity is in the world, otherwise {@code false}.
+     * Returns whether the current height is in range and its derived chunk is
+     * loaded.
      */
     default boolean isInWorld() {
         return isYInRange() && isCurrentChunkLoaded();
     }
 
     /**
-     * Get the current chunk of the entity.
-     *
-     * @return the current chunk of the entity, or {@code null} if the chunk is not loaded
+     * Returns the loaded chunk derived from the current location, or
+     * {@code null} when unavailable. Coordinates are truncated before chunk
+     * conversion, so negative fractional positions follow this helper's
+     * truncation behavior rather than floor-based chunk selection.
      */
     default Chunk getCurrentChunk() {
         var loc = getLocation();
@@ -656,11 +618,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the horizontal face of the entity.
-     *
-     * @return the horizontal face of the entity
+     * Returns the cardinal horizontal face selected from normalized yaw in
+     * degrees. The four sectors use half-open ninety-degree intervals centered
+     * on south, west, north, and east, so boundary angles deterministically
+     * belong to the next sector.
      */
     default BlockFace getHorizontalFace() {
+        // Normalize yaw before selecting half-open cardinal sectors so negative
+        // angles and equivalent full rotations select the same horizontal face.
         var rotation = getLocation().yaw() % 360;
         if (rotation < 0) rotation += 360.0;
 
@@ -676,62 +641,52 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Apply an action to the entity.
-     *
-     * @param action the action to apply
+     * Sends an entity action to viewers through their action presentation
+     * hooks.
      */
     void applyAction(EntityAction action);
 
     /**
-     * Apply an animation to the entity.
-     *
-     * @param animation the animation to apply
+     * Sends a resource-pack animation request through the entity's viewer
+     * hooks.
      */
     void applyAnimation(EntityAnimation animation);
 
     /**
-     * Add a tag to the entity.
-     *
-     * @param tag the tag to add
-     * @return {@code true} if the tag is added, otherwise {@code false}.
+     * Adds an entity tag and returns whether set membership changed.
      */
     boolean addTag(String tag);
 
     /**
-     * Remove a tag from the entity.
-     *
-     * @param tag the tag to remove
-     * @return {@code true} if the tag is removed, otherwise {@code false}.
+     * Removes an entity tag and returns whether set membership changed.
      */
     boolean removeTag(String tag);
 
     /**
-     * Check if the entity has the specified tag.
-     *
-     * @param tag the tag to check
-     * @return {@code true} if the entity has the specified tag, otherwise {@code false}.
+     * Returns whether the entity's tag set contains the supplied value.
      */
     boolean hasTag(String tag);
 
     /**
-     * Get the tags of the entity.
-     *
-     * @return the tags of the entity
+     * Returns an unmodifiable live view of the entity tag set. Changes through
+     * the entity's tag operations remain visible, and callers must observe the
+     * owning entity's mutation context when iterating that shared membership.
      */
     @UnmodifiableView
     Set<String> getTags();
 
     /**
-     * Checks if the entity is colliding with any blocks.
-     *
-     * @return {@code true} if the entity is colliding with any blocks, otherwise {@code false}.
+     * Returns whether a spawned entity's expanded collision-check box
+     * intersects block collision shapes. Unspawned states return {@code false}
+     * without querying blocks, even when the retained location overlaps an
+     * occupied block.
      */
     boolean checkBlockCollision();
 
     /**
-     * Check if the entity's eyes is in water.
-     *
-     * @return {@code true} if the entity's eyes is in water, otherwise {@code false}.
+     * Returns whether the sampled eye point lies in a water-tagged or
+     * bubble-column shape. The test uses one eye-position sample rather than
+     * checking the entire body box or every block intersected by the entity.
      */
     default boolean isEyesInWater() {
         var dim = getDimension();
@@ -743,9 +698,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if the entity is touching water.
-     *
-     * @return {@code true} if the entity is touching water, otherwise {@code false}.
+     * Returns whether the location point lies in a water-tagged or
+     * bubble-column shape. The test samples the entity location rather than
+     * the whole body, so other body contact does not necessarily make this
+     * query {@code true}.
      */
     default boolean isTouchingWater() {
         var dim = getDimension();
@@ -756,15 +712,20 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
                blockState.getBlockStateData().computeOffsetShape(MathUtils.floor(loc)).intersectsPoint(loc);
     }
 
+    /**
+     * Returns whether a block is water-tagged or is the bubble-column block
+     * type.
+     */
     private static boolean isWaterOrBubbleColumn(BlockState blockState) {
         return blockState.getBlockType().hasBlockTag(BlockTags.WATER) ||
                blockState.getBlockType() == BlockTypes.BUBBLE_COLUMN;
     }
 
     /**
-     * Check if the entity is touching lava.
-     *
-     * @return {@code true} if the entity is touching lava, otherwise {@code false}.
+     * Returns whether the entity location point lies inside a lava-tagged
+     * block shape. This single-point test does not scan every body
+     * intersection, so it represents location contact rather than complete
+     * volume immersion.
      */
     default boolean isTouchingLava() {
         var dim = getDimension();
@@ -776,90 +737,84 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Called when the entity interacts with another entity.
-     *
-     * @param player    The player who interacted with the entity, can be {@code null}
-     * @param itemStack The item used to interact with the entity
-     * @return {@code true} if the interaction is successful
+     * Handles a player interaction and returns whether it was accepted, with
+     * the default refusing it. Specialized handlers may receive {@code null}
+     * for the player when the interaction has no player source.
      */
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
         return false;
     }
 
     /**
-     * Check if the entity is persistent. If the entity is not persistent, it will not be saved
-     * through {@link WorldStorage}. If you don't want the entity to be saved, or
-     * you want to save the entity by yourself, you can call {@link #setPersistent(boolean)} with
-     * {@code false}.
-     * <p>
-     * When {@code false}, the entity will always be loaded, and {@link EntityManager}
-     * will not remove and save the entity even if the entity is in unloaded chunk. The entity can only be removed
-     * manually in this case.
-     * <p>
-     * For example, player data is handled by {@link PlayerStorage}, so this returns
-     * {@code false} by default in {@link EntityPlayer}.
-     *
-     * @return {@code true} if the entity is persistent, otherwise {@code false}.
+     * Returns whether the ordinary entity manager may save and unload this
+     * entity through world storage. The default enables persistence; disabling
+     * it leaves storage and eventual removal to other owners, as actual player
+     * state uses separate player storage.
      */
     default boolean isPersistent() {
         return true;
     }
 
     /**
-     * Set whether the entity is persistent.
-     *
-     * @param persistent {@code true} if the entity should be persistent
+     * Selects whether ordinary world-storage handling owns entity persistence
+     * and unload removal. The setter does not immediately save or remove the
+     * entity, and owners disabling persistence must arrange any needed
+     * separate storage and cleanup.
      */
     void setPersistent(boolean persistent);
 
     /**
-     * Gets the current value of an entity property.
-     *
-     * @param propertyType the property type to query
-     * @param <DATATYPE>   the property value type
-     * @return the current value
+     * Returns the stored value for the supplied property definition, falling
+     * back to its configured default when absent. Property definition identity
+     * selects the map entry, and the current server getter does not validate
+     * registration on this entity type.
      */
     <DATATYPE> DATATYPE getPropertyValue(EntityPropertyType<DATATYPE> propertyType);
 
     /**
-     * Sets an entity property value.
-     *
-     * @param propertyType the property type to set
-     * @param value        the value to set
-     * @param <DATATYPE>   the property value type
+     * Stores the value under the supplied property definition without
+     * validation or a state broadcast. Callers must keep values compatible
+     * with their property type because later persistence and network encoding
+     * perform concrete numeric or enum conversions.
      */
     <DATATYPE> void setPropertyValue(EntityPropertyType<DATATYPE> propertyType, DATATYPE value);
 
     /**
-     * Gets all current entity property values.
-     *
-     * @return an unmodifiable view of the map of property types to their current values
+     * Returns the current property-value map exposed by this entity
+     * implementation. The server's generated getter currently returns its
+     * mutable backing map despite the view annotation, so edits through this
+     * reference bypass the property setter and its intended access path.
      */
     @UnmodifiableView
     Map<EntityPropertyType<?>, Object> getPropertyValues();
 
     /**
-     * Attaches a primitive shape to this entity.
-     *
-     * @param primitiveShape the primitive shape to be attached
+     * Registers a primitive shape, sets this entity as its attachment, and
+     * adds current viewers to that shape. The server retains the shape
+     * directly; callers must avoid assigning the same mutable attachment to
+     * conflicting owners.
      */
     void attachPrimitiveShape(PrimitiveShape primitiveShape);
 
     /**
-     * Gets all the attached primitive shapes of this entity.
-     *
-     * @return all the attached primitive shapes of this entity
+     * Returns an unmodifiable live view of registered primitive shapes. The
+     * shape objects remain shared and mutable, so the view prevents membership
+     * changes through the set rather than making attachment state independent.
      */
     @UnmodifiableView
     Set<PrimitiveShape> getAttachedPrimitiveShapes();
 
     /**
-     * Detaches a primitive shape from this entity.
-     *
-     * @param primitiveShape the primitive shape to be detached
+     * Removes current entity viewers from the shape and clears its attached
+     * entity before removing set membership. The common implementation
+     * performs these side effects even when the shape was not in the
+     * registered set.
      */
     void detachPrimitiveShape(PrimitiveShape primitiveShape);
 
+    /**
+     * Returns whether the current lifecycle state is treated as spawned.
+     */
     @Override
     default boolean isValid() {
         return getState().isSpawned();

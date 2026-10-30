@@ -32,12 +32,19 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
 /**
- * Loads NBT data from the given resource path.
+ * {@code NbtRegistryLoader} reads one compound tag from a classpath resource using network NBT
+ * encoding. The returned compound is the registry value; loading closes the resource reader,
+ * and resource or decoding failures become an assertion failure tied to that resource path.
  *
  * @author daoge_cmd
  */
 public class NbtRegistryLoader implements RegistryLoader<String, NbtMap> {
 
+    /**
+     * Reads the first network-encoded compound from the named classpath resource. The reader is
+     * closed before return, and failures including a non-compound root are wrapped in
+     * {@code AssertionError} with the resource name.
+     */
     @Override
     public NbtMap load(String input) {
         try (NBTInputStream nbtInputStream = NbtUtils.createNetworkReader(Utils.getResource(input))) {

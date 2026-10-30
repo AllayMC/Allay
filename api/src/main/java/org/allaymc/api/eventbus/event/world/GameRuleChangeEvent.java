@@ -9,7 +9,10 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.gamerule.GameRule;
 
 /**
- * Called when a game rule is changed.
+ * {@code GameRuleChangeEvent} carries a proposed change to one world game
+ * rule. Listeners may replace {@code newValue} or cancel the event before the
+ * world data setter applies it; replacement values must retain the type
+ * expected by {@code gameRule}.
  *
  * @author Dhaiven
  */
@@ -17,19 +20,23 @@ import org.allaymc.api.world.gamerule.GameRule;
 @CallerThread(ThreadType.WORLD)
 public class GameRuleChangeEvent extends WorldEvent implements CancellableEvent {
     /**
-     * The game rule being changed.
+     * Rule identifying the expected value type.
      */
     protected GameRule gameRule;
     /**
-     * The old game rule value.
+     * Rule value before the proposed change.
      */
     protected Object oldValue;
     /**
-     * The new game rule value.
+     * {@code newValue} holds the listener-editable replacement; consumers
+     * expect the value type declared by {@code gameRule}.
      */
     @Setter
     protected Object newValue;
 
+    /**
+     * Creates a game rule proposal retaining both supplied value references.
+     */
     public GameRuleChangeEvent(World world, GameRule gameRule, Object oldValue, Object newValue) {
         super(world);
         this.gameRule = gameRule;

@@ -1,14 +1,18 @@
 package org.allaymc.api.world.sound;
 
 /**
- * Sound produced while a crossbow is being loaded.
+ * {@code CrossbowLoadSound} describes one stage of loading a crossbow. The
+ * runtime combines {@code stage} with {@code quickCharge} to select the
+ * corresponding ordinary or Quick Charge sound; this descriptor does not
+ * advance the weapon's loading state.
  *
- * @param stage       the loading stage of the crossbow
- * @param quickCharge whether the item being used has the Quick Charge enchantment
+ * @param stage crossbow loading sound stage
+ *
+ * @param quickCharge whether to select Quick Charge sounds
  */
 public record CrossbowLoadSound(LoadingStage stage, boolean quickCharge) implements Sound {
     /**
-     * The stage of crossbow loading.
+     * {@code LoadingStage} identifies the loading phase used to select a crossbow sound.
      */
     public enum LoadingStage {
         /**

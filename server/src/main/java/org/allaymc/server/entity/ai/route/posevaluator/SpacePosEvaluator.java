@@ -4,7 +4,11 @@ import org.allaymc.api.entity.interfaces.EntityIntelligent;
 import org.joml.Vector3dc;
 
 /**
- * Evaluates 3D positions during pathfinding to determine their suitability for movement.
+ * {@code SpacePosEvaluator} decides whether a world position is suitable for
+ * spatial movement by an intelligent entity. The space finder invokes this
+ * check after rejecting missing or colliding candidate blocks, so
+ * implementations can add flying or swimming constraints for the remaining cell
+ * centers.
  *
  * @author daoge_cmd
  */
@@ -12,11 +16,8 @@ import org.joml.Vector3dc;
 public interface SpacePosEvaluator {
 
     /**
-     * Evaluate a 3D position for movement suitability (e.g., flying or swimming).
-     *
-     * @param entity the entity
-     * @param pos    the position to evaluate
-     * @return {@code true} if the position is suitable
+     * Returns whether the supplied spatial position suits this entity's
+     * movement rules.
      */
     boolean evaluate(EntityIntelligent entity, Vector3dc pos);
 }

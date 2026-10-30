@@ -8,13 +8,29 @@ import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**
+ * {@code ItemSweetBerriesBaseComponentImpl} places the default sweet berry
+ * bush block state when its item is planted. The inherited placement path owns
+ * block eligibility, collision checks, and placement side effects, while this
+ * specialization selects {@code BlockTypes.SWEET_BERRY_BUSH} instead of the
+ * item's mapped block type.
+ *
  * @author daoge_cmd
  */
 public class ItemSweetBerriesBaseComponentImpl extends ItemBaseComponentImpl {
+    /**
+     * Creates crop-placement behavior from the supplied item initialization
+     * data.
+     */
     public ItemSweetBerriesBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Attempts to place the default {@code BlockTypes.SWEET_BERRY_BUSH} state
+     * at {@code placeBlockPos}. The inherited helper applies placement or
+     * combination rules and returns their result; player context enables
+     * collision checks and successful-placement consumption.
+     */
     @Override
     public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         return tryPlaceBlockState(dimension, BlockTypes.SWEET_BERRY_BUSH.getDefaultState(), placeBlockPos, placementInfo);

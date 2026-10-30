@@ -9,10 +9,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player is about to pick up a trident entity from the ground.
- * <p>
- * This event is called before the trident is added to the player's inventory.
- * Cancelling this event will prevent the trident from being picked up.
+ * {@code PlayerPickupTridentEvent} describes a thrown trident considered for a
+ * player's inventory. The pickup component dispatches it before inserting the
+ * retained trident stack; cancellation skips insertion and removal, while an
+ * accepted successful insertion clears the projectile's item before removing it.
  *
  * @author daoge_cmd
  */
@@ -20,14 +20,20 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerPickupTridentEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The trident entity being picked up.
+     * Ground trident entity being considered.
      */
     protected EntityThrownTrident trident;
     /**
-     * The trident item that will be added to the player's inventory.
+     * {@code tridentItem} retains the projectile's item stack. The pickup component
+     * inserts this mutable reference before clearing it from the projectile.
      */
     protected ItemStack tridentItem;
 
+    /**
+     * Creates a {@code PlayerPickupTridentEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerPickupTridentEvent(EntityPlayer player, EntityThrownTrident trident, ItemStack tridentItem) {
         super(player);
         this.trident = trident;

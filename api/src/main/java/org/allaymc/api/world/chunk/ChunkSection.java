@@ -6,7 +6,11 @@ import org.allaymc.api.world.biome.BiomeType;
 import org.jetbrains.annotations.Range;
 
 /**
- * Represents a 16*16*16 area in a {@link Chunk}. Note that all methods in this class is not thread-safe.
+ * {@code ChunkSection} provides
+ * block layers and biomes for one sixteen-by-sixteen-by-sixteen
+ * section of a chunk. All coordinates are local to the section, and access is
+ * not thread-safe; callers sharing a section must use the owning chunk's
+ * appropriate locking operation.
  *
  * @author daoge_cmd
  */
@@ -14,51 +18,37 @@ import org.jetbrains.annotations.Range;
 public interface ChunkSection {
 
     /**
-     * Get the block state at the given local position.
-     *
-     * @param x     the local x coordinate of the block state
-     * @param y     the local y coordinate of the block state
-     * @param z     the local z coordinate of the block state
-     * @param layer the layer of the block state
-     * @return the block state at the given position
+     * Returns the block state in the requested layer at section-local
+     * coordinates from zero through fifteen. The caller must hold any required
+     * block read lock while accessing a shared section.
      */
     BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, int layer);
 
     /**
-     * Set the block state at the given local position.
-     *
-     * @param x          the local x coordinate of the block state
-     * @param y          the local y coordinate of the block state
-     * @param z          the local z coordinate of the block state
-     * @param blockState the block state to set
-     * @param layer      the layer of the block state
+     * Replaces the block state in the requested layer at section-local
+     * coordinates from zero through fifteen. The caller must hold any required
+     * block write lock while modifying a shared section.
      */
     void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer);
 
     /**
-     * Get the biome type at the given local position.
-     *
-     * @param x the local x coordinate of the biome type
-     * @param y the local y coordinate of the biome type
-     * @param z the local z coordinate of the biome type
-     * @return the biome type at the given position
+     * Returns the biome at section-local coordinates from zero through fifteen
+     * on every axis. The caller must hold any required biome read lock while
+     * accessing a shared section.
      */
     BiomeType getBiomeType(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Set the biome type at the given local position.
-     *
-     * @param x         the local x coordinate of the biome type
-     * @param y         the local y coordinate of the biome type
-     * @param z         the local z coordinate of the biome type
-     * @param biomeType the biome type to set
+     * Replaces the biome at section-local coordinates from zero through fifteen
+     * on every axis. The caller must hold any required biome write lock while
+     * modifying a shared section.
      */
     void setBiomeType(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
 
     /**
-     * Checks if this section is an air section, which means that all blocks in layer 0 is air.
-     *
-     * @return {@code true} if this section is an air section, {@code false} otherwise.
+     * Returns whether every block in layer zero is air. Other block layers do
+     * not affect this classification, and callers must synchronize access when
+     * the section can change concurrently.
      */
     boolean isAirSection();
 }

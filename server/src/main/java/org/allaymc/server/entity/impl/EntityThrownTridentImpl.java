@@ -13,21 +13,47 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 /**
- * Thrown trident entity implementation.
+ * {@code EntityThrownTridentImpl} represents a thrown trident composed from
+ * supplied component implementations. {@link EntityImpl} supplies the common
+ * entity behavior, while the injected delegates expose their component
+ * contracts through the same entity object. The constructor selects those
+ * implementations from the supplied providers.
  *
  * @author daoge_cmd
  */
 public class EntityThrownTridentImpl extends EntityImpl implements EntityThrownTrident {
 
+    // tridentBaseComponent, projectileComponent, physicsComponent, and ageComponent
+    // retain the component instances selected during superclass initialization.
+    // Injection populates all these delegates before completion hooks run, so
+    // delegated calls use the initialized components.
+    /**
+     * Trident item and return delegate.
+     */
     @Delegate
     private EntityThrownTridentBaseComponent tridentBaseComponent;
+    /**
+     * Projectile shooter reference delegate.
+     */
     @Delegate
     private EntityProjectileComponent projectileComponent;
+    /**
+     * Entity motion and collision delegate.
+     */
     @Delegate
     private EntityPhysicsComponent physicsComponent;
+    /**
+     * Entity lifetime tick delegate.
+     */
     @Delegate
     private EntityAgeComponent ageComponent;
 
+    /**
+     * Creates this entity using {@code initInfo} and the supplied component
+     * providers. Each delegated component type must resolve to exactly one
+     * component instance; superclass initialization wires dependencies and
+     * runs completion hooks before this constructor returns.
+     */
     public EntityThrownTridentImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

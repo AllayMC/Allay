@@ -12,8 +12,17 @@ import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code PacketProcessorHolderTest} checks connection-local processor sharing
+ * and the separation of bootstrap negotiation from gameplay registrations.
+ */
 class PacketProcessorHolderTest {
 
+    /**
+     * Registers one supplier across two client states and constructs two holders.
+     * State changes must reuse one connection's processor while another connection
+     * receives a distinct instance.
+     */
     @Test
     void createsProcessorsPerConnectionAndReusesOneInstanceAcrossStates() {
         var creations = new AtomicInteger();
@@ -43,6 +52,11 @@ class PacketProcessorHolderTest {
         assertEquals(2, creations.get());
     }
 
+    /**
+     * Builds the gameplay registry exposed by the oldest international protocol.
+     * Login must remain registered while bootstrap network-settings negotiation
+     * is absent from that gameplay mapping.
+     */
     @Test
     void gameplayRegistryDoesNotContainBootstrapNegotiationProcessor() {
         var registry = new ExposedProtocol_v766().createGameplayRegistry();
@@ -54,21 +68,42 @@ class PacketProcessorHolderTest {
         ));
     }
 
+    /**
+     * {@code TrackingProcessor} represents one factory-created login processor
+     * whose identity can be compared across holders and client states.
+     */
     private static final class TrackingProcessor extends PacketProcessor<LoginPacket> {
+        /** Creation ordinal identifying this connection's processor. */
         @SuppressWarnings("unused")
         private final int connectionId;
 
+        /**
+         * Creates a tracked processor retaining its factory's creation ordinal.
+         */
         private TrackingProcessor(int connectionId) {
             this.connectionId = connectionId;
         }
 
+        /**
+         * Returns the login packet type used by the sharing scenario.
+         */
         @Override
         public BedrockPacketType getPacketType() {
             return BedrockPacketType.LOGIN;
         }
     }
 
+    /**
+     * {@code ExposedProtocol_v766} exposes gameplay registration without opening
+     * a network connection for the registry assertions.
+     */
     private static final class ExposedProtocol_v766 extends Protocol_v766 {
+        /**
+         * Returns a new frozen registry containing this protocol's gameplay
+         * processors. Freezing satisfies the registry's read requirement before
+         * the test inspects its mappings and keeps later registration from
+         * changing the asserted snapshot.
+         */
         private PacketProcessorRegistry createGameplayRegistry() {
             var registry = new PacketProcessorRegistry();
             registerProcessors(registry);

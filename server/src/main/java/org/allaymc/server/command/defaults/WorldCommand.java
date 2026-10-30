@@ -19,13 +19,42 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
+ * {@code WorldCommand} lists loaded worlds, requests world teleports and
+ * unloads, and opens an interactive world-creation form. Teleports validate
+ * world and dimension availability, using world spawn in the overworld and
+ * {@code (0, 64, 0)} in other dimensions. Feedback reports requests without
+ * confirming teleport acceptance.
+ *
+ * <p>
+ * Unload first requests player transfers to global spawn, then schedules removal
+ * twenty scheduler ticks later. The delay allows transfers to progress but is
+ * not a completion barrier, and the handler returns before removal runs.
+ * Creation captures registry-key lists for form index resolution and constructs
+ * storage and generators only when a response arrives; command success means
+ * the form was sent, not that a world was created.
+ *
  * @author daoge_cmd
  */
 public class WorldCommand extends Command {
+    /**
+     * Creates the {@code /world} command with its built-in authorization permission.
+     */
     public WorldCommand() {
         super("world", TrKeys.ALLAY_COMMAND_WORLD_DESCRIPTION, Permissions.COMMAND_WORLD);
     }
 
+    /**
+     * Installs world listing, entity teleportation, delayed unloading, and creation.
+     * Teleports default to the overworld, and unloading rejects the default
+     * world before requesting any player transfers. Neither path inspects
+     * individual teleport results.
+     *
+     * <p>
+     * Unload schedules removal after twenty scheduler ticks and reports success
+     * before that task runs. Creation requires an actual player and defers world
+     * construction to the form response, using captured option lists to resolve
+     * submitted storage and generator indexes.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -76,7 +105,8 @@ public class WorldCommand extends Command {
                     if (dim.getDimensionType() == DimensionTypes.OVERWORLD) {
                         entity.teleport(world.getSpawnPoint());
                     } else {
-                        // TODO: Find a safe location in nether and the_end
+                        // TODO: Replace this fixed destination with a safe
+                        // spawn search for non-overworld dimensions.
                         entity.teleport(new Location3d(0, 64, 0, dim));
                     }
 
@@ -99,7 +129,9 @@ public class WorldCommand extends Command {
                     }
 
                     world.getPlayers().forEach(player -> player.getControlledEntity().teleport(Server.getInstance().getWorldPool().getGlobalSpawnPoint()));
-                    // Unload the world after 1 second, because teleport players to another world will take some time
+                    // Cross-world transfers need time to progress. Delay removal
+                    // by twenty scheduler ticks, without waiting for individual
+                    // teleport completion or verifying that every request succeeded.
                     Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
                         Server.getInstance().getWorldPool().unloadWorld(worldName);
                         return true;
@@ -110,6 +142,9 @@ public class WorldCommand extends Command {
                 .key("create")
                 .exec((context, player) -> {
                     var langCode = player.getController().getLoginData().getLangCode();
+                    // Retain option ordering with this form so later registry
+                    // iteration changes cannot associate submitted indexes with
+                    // different displayed storage or generator names.
                     var storageTypes = new ArrayList<>(Registries.WORLD_STORAGE_FACTORIES.getContent().keySet());
                     var generatorTypes = new ArrayList<>(Registries.WORLD_GENERATOR_FACTORIES.getContent().keySet());
                     Forms.custom()

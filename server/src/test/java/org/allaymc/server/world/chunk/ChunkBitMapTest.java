@@ -6,9 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * {@code ChunkBitMapTest} checks
+ * initial, set, and cleared values across every column flag.
+ *
  * @author daoge_cmd
  */
 class ChunkBitMapTest {
+    /**
+     * Traverses every column through its initial {@code false} value, a {@code true}
+     * assignment, and a {@code false} assignment. Immediate reads must agree with each
+     * update across the complete map.
+     */
     @Test
     void test() {
         var map = new ChunkBitMap();

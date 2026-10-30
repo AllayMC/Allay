@@ -13,7 +13,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Called when a piston extends or retracts.
+ * {@code BlockPistonEvent} describes a proposed piston extension or retraction before
+ * the server changes the affected blocks. The piston caller dispatches this event on
+ * the dimension thread and abandons movement when cancellation is observed immediately
+ * after dispatch returns. Retraction can still proceed with empty movement collections
+ * when a sticky pull cannot be calculated.
+ *
+ * <p>
+ * The constructor retains the supplied lists and map, and the generated getters expose
+ * those same references. Synchronous listeners finish before the piston caller checks
+ * cancellation and consumes the plan. Asynchronous handlers are submitted without being
+ * awaited, so their later cancellation can miss that check and their collection edits
+ * can race with execution.
+ *
+ * <p>
+ * Listeners must complete plan edits synchronously and keep positions consistent with
+ * {@code originalStates}. Missing source states skip affected destruction entries or
+ * destination placements; a movement source may already have been cleared when
+ * destination placement is skipped.
  *
  * @author daoge_cmd
  */
@@ -21,36 +38,47 @@ import java.util.Map;
 @CallerThread(ThreadType.DIMENSION)
 public class BlockPistonEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The direction the piston is pushing/pulling.
+     * The piston facing direction for both extension and retraction.
      */
     protected BlockFace direction;
 
     /**
-     * The list of block positions that will be moved.
+     * {@code blocksToMove} holds source positions in the movement plan. The getter
+     * exposes the retained list, which the piston caller reads after event dispatch.
      */
     protected List<Vector3ic> blocksToMove;
 
     /**
-     * The list of block positions that will be destroyed.
+     * {@code blocksToDestroy} holds positions selected for breaking. The getter exposes
+     * the retained list, and execution only breaks entries also present in
+     * {@code originalStates}.
      */
     protected List<Vector3ic> blocksToDestroy;
 
     /**
-     * The original block states of the blocks being moved.
-     * Key is the position, value is the block state.
+     * {@code originalStates} maps planned source positions to their original states.
+     * The getter exposes the retained map, which supplies the states placed at movement
+     * destinations.
      */
     protected Map<Vector3ic, BlockState> originalStates;
 
     /**
-     * Whether the piston is extending (true) or retracting (false).
+     * Whether this event describes extension rather than retraction.
      */
     protected boolean extending;
 
     /**
-     * Whether the piston is sticky.
+     * Whether the acting piston uses sticky pulling behavior.
      */
     protected boolean sticky;
 
+    /**
+     * Creates a piston event retaining the supplied movement collections without
+     * copying them. Synchronous listeners can cancel the proposal or edit its plan
+     * before the caller's immediate cancellation check; asynchronous work is not
+     * awaited and can race with execution. {@code direction} remains the piston facing
+     * during retraction.
+     */
     public BlockPistonEvent(
             Block pistonBlock,
             BlockFace direction,

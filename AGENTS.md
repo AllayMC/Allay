@@ -31,19 +31,67 @@ for imports and Lombok usage because no repository-wide formatter or linter is c
 annotations such as `@NonNull` or `@Nullable`; they can cause misleading IDE diagnostics and do not prevent null-pointer
 errors. Preserve relevant thread-safety and API-status annotations.
 
+## Coding and Design Workflow
+
+- Before writing or changing code, load and follow the project
+  [code-complete](.agents/skills/code-complete/SKILL.md) skill for implementation guidance. First inspect existing
+  implementations in the relevant module and follow the project's design and coding style.
+- For decisions about method abstractions, interface design, module boundaries, or responsibilities, also load and
+  follow [a-philosophy-of-software-design](.agents/skills/a-philosophy-of-software-design/SKILL.md). When both skills
+  apply, use it for design and abstraction decisions and `code-complete` for implementation.
+- For code-quality reviews, load both skills and use their criteria to assess implementation quality and design.
+  Keep a read-only review read-only unless the user also requests changes.
+- Read each applicable `SKILL.md` in full on first use and use its mini specification by default. Consult the full
+  specification when the mini rules do not resolve the current tradeoff. Reuse material already read while it remains
+  in context; reread it when the content is lost or the relevant instructions change.
+- Apply these skills within Allay's module boundaries and repository conventions. The
+  [code-comments](.agents/skills/code-comments/SKILL.md) skill governs Java comment coverage, explanatory roles,
+  minimum lengths, placement, and accuracy; general advice about comments in the two design skills does not waive
+  those requirements.
+- Before finishing a code task, perform the applicable skills' checklists on the changed code and affected callers.
+  Keep improvements within the task's scope rather than expanding into unrelated refactoring.
+
 ## Documentation & Comment Style
 
-- Write all Javadoc and implementation comments in clear English.
-- In `api/`, every class, interface, and method requires Javadoc. In `server/`, also document internal interfaces used by
-  downstream developers; do not document every private helper merely for coverage.
-- Write Javadoc as a concise caller-facing contract. Describe only information the signature cannot express, such as
-  defaults, null behaviour, constraints, units, side effects, failures, ownership, lifetime, and threading requirements.
-- Start with a present-tense summary such as "Returns..." or "Creates...". Use `@param`, `@return`, and `@throws` only
-  when they add useful information; avoid filler that repeats names, types, or the summary.
+- Before writing, modifying, or reviewing handwritten Java code or its comments, load and follow
+  [the code-comments skill](.agents/skills/code-comments/SKILL.md). Apply its scope, mandatory coverage, explanatory
+  roles, minimum lengths, placement, and evidence requirements, including for private declarations and tests.
+- Write all Javadoc and implementation comments in clear English. Use Javadoc for in-scope types, constructors, and
+  methods across all modules, including internal interfaces used by downstream developers.
+- Put each edited production file's overview in its primary type's Javadoc, including interfaces, enums, and records.
+  Combine the overview and type contract in one Javadoc comment.
+- Explain purpose and caller-facing contracts, including meaningful defaults, null behaviour, constraints, units,
+  side effects, failures, ownership, lifetime, and threading requirements. Meet the skill's minimum lengths with
+  verified information, without repetition or filler.
+- Start type Javadoc with the type name as the subject and explain what it represents or does. Method and constructor
+  opening summaries may use "Returns..." or "Creates...". Use complete sentences with explicit subjects for longer
+  explanations and independent field rules; compact field labels may remain noun phrases.
+- Local implementation comments may use clear imperative sentences when they explain an operation's reason or
+  consequence. Name concrete fields and methods when their identity matters to the explanation.
+- Use `@param`, `@return`, and `@throws` only when they add useful information; avoid filler that repeats names,
+  types, or the summary.
 - Use implementation comments to explain non-obvious reasons, invariants, protocol rules, edge cases, concurrency,
   performance trade-offs, or required ordering. Do not narrate visible checks, assignments, loops, or calls.
 - Keep comments synchronized with behaviour. Remove stale and commented-out code, and make `TODO` and `FIXME` comments
   actionable. Do not expand a focused change into unrelated documentation cleanup.
+
+## Changelog Guidelines
+
+- Write `CHANGELOG.md` for server users and plugin developers. Select notable release outcomes and keep entries
+  concise; avoid turning implementation work, dependency updates, or generated-data refreshes into a checklist.
+- Group entries marked `(API)` at the beginning of their relevant category. Preserve concrete API names and
+  compatibility or migration details that plugin developers need.
+- Put new APIs, vanilla types and properties, and vanilla feature baseline upgrades under `Added`. Use `Changed`
+  for substantive changes to existing behavior, rather than collecting version-upgrade implementation details.
+- Distinguish supported client/protocol versions from the vanilla feature baseline. Summarize the baseline in one
+  short entry, such as "Updated the vanilla feature baseline to MCBE 1.26.50." Omit BedrockData build numbers and
+  exhaustive lists of refreshed inventories, recipes, tags, sounds, translations, and biomes.
+- Avoid separate entries for state-updater dependency versions or incidental migration work that merely supports
+  the same baseline upgrade. Do not automatically restore previously removed updater or chunk-palette migration
+  entries when summarizing commits. Retain explanations for independently meaningful fixes and API compatibility
+  changes; an editorial deletion does not imply that the underlying behavior is absent or incorrect.
+- Before finishing, check category placement, API ordering, and whether each entry describes a distinct notable
+  outcome. Follow the user's corrected wording and level of detail in the existing changelog.
 
 ## Testing Guidelines
 

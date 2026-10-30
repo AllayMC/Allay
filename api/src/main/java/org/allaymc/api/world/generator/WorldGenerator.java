@@ -14,8 +14,19 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * WorldGenerator is responsible for generating chunks in the dimension. It is composed of multiple {@link GenerateFunction}
- * which will be called in different generation stages based on their types.
+ * {@code WorldGenerator} organizes the noise, population, and post-processing functions used to
+ * generate a dimension's chunks. Construction initializes each retained
+ * function with the preset, while generator initialization events can append
+ * more functions before the dimension is assigned.
+ *
+ * <p>
+ * Assigning a non-{@code null} dimension locks further additions and then invokes the
+ * configured dimension callback. The reference is stored before that callback
+ * runs, so callback failure does not reopen configuration. Function lists are
+ * exposed as unmodifiable lists, but their elements remain shared and may serve
+ * concurrent chunk-generation tasks. The builder can reuse those elements
+ * across generators, causing their initialization methods to run again; callers
+ * must manage that sharing and complete configuration before generation begins.
  *
  * @author daoge_cmd
  */
@@ -27,24 +38,53 @@ public class WorldGenerator {
      */
     private final String name;
     /**
-     * A preset string that will be passed to the generator instance. The format of the preset string depends
-     * on the generator implementation, for example, the generator implementation can require text preset to a
-     * JSON format.
+     * {@code preset} holds the configuration text passed unchanged to each
+     * generation function. Each implementation defines its accepted format and
+     * validation behavior.
      */
     private final String preset;
 
+    // The noisers, populators, and postProcessors lists preserve stage order
+    // and expose unmodifiable membership. Additions replace one list before
+    // dimension assignment; function instances remain shared across generation
+    // tasks.
+    /**
+     * Ordered terrain-generation functions.
+     */
     private List<Noiser> noisers;
+    /**
+     * Ordered neighboring-feature functions.
+     */
     private List<Populator> populators;
+    /**
+     * Ordered final-stage generation functions.
+     */
     private List<PostProcessor> postProcessors;
 
+    /**
+     * {@code dimensionConsumer} runs after {@code dimension} is assigned.
+     * Callback failure leaves that reference stored and does not reopen
+     * configuration.
+     */
     @Getter(AccessLevel.NONE)
     private final Consumer<Dimension> dimensionConsumer;
 
     /**
-     * Dimension that this generator is associated with. Will be set later.
+     * {@code dimension} starts as {@code null}. A non-{@code null} value prevents
+     * later function additions and another dimension assignment.
      */
     private Dimension dimension;
 
+    /**
+     * Creates a generator retaining function instances and initializing them in
+     * noise, population, then post-processing order. The supplied lists are
+     * wrapped without copying, so callers must not mutate those backing lists
+     * after construction. Every function receives the same preset before the
+     * dimension callback is retained. An initialization failure aborts
+     * construction without undoing earlier function initialization, and shared
+     * function instances can therefore retain changes from an unsuccessful
+     * build.
+     */
     private WorldGenerator(
             String name,
             String preset,
@@ -65,25 +105,26 @@ public class WorldGenerator {
     }
 
     /**
-     * Create a new WorldGeneratorBuilder instance.
-     *
-     * @return a new WorldGeneratorBuilder
+     * Returns a new mutable builder for a dimension's generation pipeline.
      */
     public static WorldGeneratorBuilder builder() {
         return new WorldGeneratorBuilder();
     }
 
     /**
-     * Append a noiser to this generator.
-     * <p>
-     * Can only be called before the dimension is set (i.e., during {@code WorldGeneratorInitEvent}).
-     * {@link GenerateFunction#init(String)} will be called automatically with the generator's preset.
+     * Appends a noise function after initializing it with this generator's
+     * preset. Callers must serialize configuration and invoke this operation
+     * before assigning a non-{@code null} dimension, normally during
+     * {@code WorldGeneratorInitEvent}.
      *
      * @param noiser the noiser to add
      * @throws IllegalStateException if the dimension has already been set
      */
     public void addNoiser(Noiser noiser) {
         checkNotLocked();
+        // Initialize the candidate before publishing its list membership; a
+        // failed initialization leaves this generator's list unchanged but does
+        // not undo mutations inside the shared function.
         noiser.init(preset);
         var list = new ArrayList<>(noisers);
         list.add(noiser);
@@ -91,16 +132,19 @@ public class WorldGenerator {
     }
 
     /**
-     * Append a populator to this generator.
-     * <p>
-     * Can only be called before the dimension is set (i.e., during {@code WorldGeneratorInitEvent}).
-     * {@link GenerateFunction#init(String)} will be called automatically with the generator's preset.
+     * Appends a population function after initializing it with this generator's
+     * preset. Callers must serialize configuration and invoke this operation
+     * before assigning a non-{@code null} dimension, normally during
+     * {@code WorldGeneratorInitEvent}.
      *
      * @param populator the populator to add
      * @throws IllegalStateException if the dimension has already been set
      */
     public void addPopulator(Populator populator) {
         checkNotLocked();
+        // Initialize the candidate before publishing its list membership; a
+        // failed initialization leaves this generator's list unchanged but does
+        // not undo mutations inside the shared function.
         populator.init(preset);
         var list = new ArrayList<>(populators);
         list.add(populator);
@@ -108,22 +152,30 @@ public class WorldGenerator {
     }
 
     /**
-     * Append a post-processor to this generator.
-     * <p>
-     * Can only be called before the dimension is set (i.e., during {@code WorldGeneratorInitEvent}).
-     * {@link GenerateFunction#init(String)} will be called automatically with the generator's preset.
+     * Appends a post-processing function after initializing it with this
+     * generator's preset. Callers must serialize configuration and invoke this
+     * operation before assigning a non-{@code null} dimension, normally during
+     * {@code WorldGeneratorInitEvent}.
      *
      * @param postProcessor the post-processor to add
      * @throws IllegalStateException if the dimension has already been set
      */
     public void addPostProcessor(PostProcessor postProcessor) {
         checkNotLocked();
+        // Initialize the candidate before publishing its list membership; a
+        // failed initialization leaves this generator's list unchanged but does
+        // not undo mutations inside the shared function.
         postProcessor.init(preset);
         var list = new ArrayList<>(postProcessors);
         list.add(postProcessor);
         postProcessors = Collections.unmodifiableList(list);
     }
 
+    /**
+     * Rejects configuration changes after a non-{@code null} dimension has been
+     * assigned. This is a lifecycle guard rather than synchronization, so
+     * callers must serialize initialization with dimension assignment.
+     */
     private void checkNotLocked() {
         if (dimension != null) {
             throw new IllegalStateException("Cannot modify generator after dimension has been set: " + name);
@@ -131,41 +183,82 @@ public class WorldGenerator {
     }
 
     /**
-     * Set the dimension of this generator.
-     * <p>
-     * This method is called by the implementation and should only be called by the implementation. Calling
-     * this method from outside the implementation will result in throwing {@link IllegalStateException}.
-     *
-     * @param dimension the dimension
-     * @throws IllegalStateException if the method is called twice
+     * Assigns the owning dimension and invokes the configured callback after
+     * storing the reference. This method is reserved for runtime dimension
+     * initialization; the implementation checks only whether a non-{@code null}
+     * dimension was previously stored. A callback exception leaves that
+     * reference assigned and further configuration locked. Passing {@code null} does
+     * not establish the lock and still invokes the callback, so runtime callers
+     * must supply their actual non-{@code null} dimension.
      */
     public void setDimension(Dimension dimension) {
         if (this.dimension != null) {
             throw new IllegalStateException("Dimension has already been set for this generator: " + this.name);
         }
 
+        // Publish the dimension before invoking its callback so callbacks can
+        // query ownership; a callback failure leaves the generator assigned
+        // instead of reopening its configuration phase.
         this.dimension = dimension;
         this.dimensionConsumer.accept(dimension);
     }
 
+    /**
+     * {@code WorldGeneratorBuilder} collects generator configuration while
+     * retaining the supplied generation-function instances. Building
+     * initializes those shared instances and can be repeated with the same
+     * builder.
+     */
     public static final class WorldGeneratorBuilder {
 
+        /**
+         * {@code name} holds the required generator name. {@code build} rejects
+         * its initial {@code null} value and any blank replacement text.
+         */
         private String name;
+        /**
+         * {@code preset} defaults to {@code ""} and is passed to each function.
+         * Each implementation interprets the text using its own configuration
+         * format.
+         */
         private String preset = "";
+        /**
+         * {@code noisers} retains noise functions in an immutable membership
+         * list. Each build initializes the same supplied instances again.
+         */
         private List<Noiser> noisers = List.of();
+        /**
+         * {@code populators} retains population functions in an immutable
+         * membership list. Each build initializes the same supplied instances
+         * again.
+         */
         private List<Populator> populators = List.of();
+        /**
+         * {@code postProcessors} retains final-stage functions in an immutable
+         * membership list. Each build initializes the same supplied instances
+         * again.
+         */
         private List<PostProcessor> postProcessors = List.of();
+        /**
+         * {@code dimensionConsumer} runs after ownership assignment and defaults
+         * to no action. Generators built from this configuration share the
+         * callback instance.
+         */
         private Consumer<Dimension> dimensionConsumer = $ -> {
         };
 
+        /**
+         * Creates an empty generator configuration with no generation functions
+         * selected.
+         */
         private WorldGeneratorBuilder() {
         }
 
         /**
-         * Set the name of the generator.
-         *
-         * @param name the name
-         * @return the builder
+         * Selects the name that identifies a built generator and returns this
+         * builder. The setter stores {@code null} or blank text unchanged;
+         * {@code build} performs required-name validation when construction is
+         * requested.
          */
         public WorldGeneratorBuilder name(String name) {
             this.name = name;
@@ -173,10 +266,9 @@ public class WorldGenerator {
         }
 
         /**
-         * Set the preset of the generator.
-         *
-         * @param preset the preset
-         * @return the builder
+         * Sets the preset text passed unchanged to every configured generation
+         * function. The builder defaults to an empty string; each function
+         * decides its own preset format and validation behavior.
          */
         public WorldGeneratorBuilder preset(String preset) {
             this.preset = preset;
@@ -184,10 +276,9 @@ public class WorldGenerator {
         }
 
         /**
-         * Set the noisers of the generator.
-         *
-         * @param noisers the noisers
-         * @return the builder
+         * Replaces the ordered noise functions and returns this builder. The
+         * varargs elements are retained in an unmodifiable list, {@code null} elements
+         * are rejected, and building initializes the shared function instances.
          */
         public WorldGeneratorBuilder noisers(Noiser... noisers) {
             this.noisers = List.of(noisers);
@@ -195,10 +286,10 @@ public class WorldGenerator {
         }
 
         /**
-         * Set the populators of the generator.
-         *
-         * @param populators the populators
-         * @return the builder
+         * Replaces the ordered population functions and returns this builder.
+         * The varargs elements are retained in an unmodifiable list, {@code null}
+         * elements are rejected, and building initializes the shared function
+         * instances.
          */
         public WorldGeneratorBuilder populators(Populator... populators) {
             this.populators = List.of(populators);
@@ -206,10 +297,10 @@ public class WorldGenerator {
         }
 
         /**
-         * Set the post processors of the generator.
-         *
-         * @param postProcessors the post processors
-         * @return the builder
+         * Replaces the ordered post-processing functions and returns this
+         * builder. The varargs elements are retained in an unmodifiable list,
+         * {@code null} elements are rejected, and building initializes the shared
+         * function instances.
          */
         public WorldGeneratorBuilder postProcessors(PostProcessor... postProcessors) {
             this.postProcessors = List.of(postProcessors);
@@ -217,11 +308,9 @@ public class WorldGenerator {
         }
 
         /**
-         * Set a consumer that will be called when the dimension is set.
-         * This is used to set the dimension of the generator.
-         *
-         * @param dimensionConsumer the consumer to call with the dimension
-         * @return the builder
+         * Replaces the callback invoked after a generator receives its
+         * dimension and returns this builder. The callback must be non-{@code null} for
+         * successful assignment and can observe the stored dimension reference.
          */
         public WorldGeneratorBuilder onDimensionSet(Consumer<Dimension> dimensionConsumer) {
             this.dimensionConsumer = dimensionConsumer;
@@ -229,9 +318,10 @@ public class WorldGenerator {
         }
 
         /**
-         * Build the WorldGenerator instance.
-         *
-         * @return the WorldGenerator
+         * Creates and initializes a generator after rejecting a {@code null} or blank
+         * name. Function instances are retained and initialized again on every
+         * build, so repeated builds can affect previously built generators
+         * sharing those functions.
          */
         public WorldGenerator build() {
             if (name == null || name.isBlank()) {

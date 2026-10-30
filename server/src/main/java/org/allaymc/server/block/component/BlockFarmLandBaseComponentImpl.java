@@ -20,13 +20,27 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MOISTURIZED_AMOUNT;
 
 /**
+ * {@code BlockFarmLandBaseComponentImpl} maintains farmland hydration, support
+ * clearance, and trample conversion. Nearby water restores moisture; dry farmland
+ * loses moisture and becomes dirt only when no crop occupies the block above.
+ * Trampling checks entity fall distance and size before dispatching its cancellable
+ * event.
+ *
  * @author daoge_cmd
  */
 public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the farm land block behavior for the supplied block type.
+     */
     public BlockFarmLandBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Forwards the neighbor event and converts farmland to dirt beneath a solid upper
+     * neighbor. Other faces do not apply this conversion, leaving moisture and crop
+     * checks to random updates.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -36,6 +50,11 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Updates moisture from nearby water and converts fully dry farmland without a
+     * crop to dirt. Hydrated farmland restores maximum moisture, while existing crops
+     * preserve zero-moisture farmland from this conversion.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
@@ -49,7 +68,6 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
             } else {
                 var blockAbove = block.offsetPos(BlockFace.UP);
                 if (!blockAbove.getBlockType().hasBlockTag(BlockTags.CROP)) {
-                    // Convert farmland to dirt only if there is no crop above.
                     dimension.setBlockState(pos, BlockTypes.DIRT.getDefaultState());
                 }
             }
@@ -59,14 +77,15 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Check for water within 4 blocks in each direction from the farmland.
-     *
-     * @param block The farmland block
-     * @return {@code true} if the farmland is hydrated, {@code false} otherwise.
+     * Returns whether water occurs within four horizontal blocks at the farmland's
+     * level or one block above. The check accepts water from either liquid layer
+     * reported by the dimension.
      */
     protected boolean hydrated(Block block) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
+        // Water at farmland height or one block above hydrates the four-block
+        // horizontal neighborhood.
         for (var y = 0; y <= 1; y++) {
             for (var x = -4; x <= 4; x++) {
                 for (var z = -4; z <= 4; z++) {
@@ -81,10 +100,20 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Attempts trample conversion when fall distance and entity size qualify. Players
+     * bypass the size test, and cancellation of {@code EntityTrampleFarmlandEvent}
+     * prevents replacement of the farmland with dirt.
+     */
     @Override
     public void onEntityFallOn(Entity entity, Block block) {
         if (entity instanceof EntityPhysicsComponent physicsComponent &&
+            // The half-block offset leaves short falls without a positive trample
+            // probability.
             ThreadLocalRandom.current().nextFloat() < physicsComponent.getFallDistance() - 0.5f) {
+            // Players can trample regardless of size; other entities must exceed the
+            // tested bounding volume after passing the fall-distance probability
+            // gate.
             var aabb = entity.getAABB();
             var width = aabb.maxX() - aabb.minX();
             var height = aabb.maxY() - aabb.minY();
@@ -97,11 +126,17 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns one dirt item as the ordinary farmland block drop.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.DIRT.createItemStack());
     }
 
+    /**
+     * Returns whether farmland receives random updates for moisture maintenance.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;

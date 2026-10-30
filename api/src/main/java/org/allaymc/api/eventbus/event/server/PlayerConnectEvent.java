@@ -9,9 +9,11 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
- * Called when a player connects to the server.
- * <p>
- * This event is called before the player is logged in.
+ * {@code PlayerConnectEvent} represents a newly created player connection
+ * awaiting acceptance before login.
+ * The network interface emits this event after its IP ban check and player
+ * construction. Cancellation disconnects the session with the event's reason
+ * before the normal login timeout is scheduled.
  *
  * @author daoge_cmd
  */
@@ -19,12 +21,17 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.NETWORK)
 public class PlayerConnectEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
-     * The reason that will be shown to the player if the event is cancelled.
+     * {@code disconnectReason} supplies the reason sent directly to the network
+     * session when this event is cancelled. The connection acceptance path does not
+     * translate this value itself.
      */
     @MayContainTrKey
     @Setter
     protected String disconnectReason;
 
+    /**
+     * Creates a connection request with an initial rejection reason.
+     */
     public PlayerConnectEvent(Player player, String disconnectReason) {
         super(player);
         this.disconnectReason = disconnectReason;

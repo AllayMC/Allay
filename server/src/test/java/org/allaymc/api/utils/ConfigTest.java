@@ -24,18 +24,43 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code ConfigTest} verifies configuration formats, defaults, typed access, nested sections, and
+ * file persistence through isolated temporary paths.
+ *
  * @author daoge_cmd
  */
 class ConfigTest {
 
+    /**
+     * {@code tempDir} is the JUnit-managed root for each test's configuration files. Test paths
+     * remain inside this temporary directory rather than using the server's normal configuration
+     * files.
+     */
     @TempDir
     Path tempDir;
 
+    // yamlFile, jsonFile, propertiesFile, and enumFile select different format paths beneath
+    // tempDir. setUp assigns them before each test so tests begin with isolated filenames.
+    /**
+     * YAML test file path.
+     */
     private File yamlFile;
+    /**
+     * JSON test file path.
+     */
     private File jsonFile;
+    /**
+     * Properties test file path.
+     */
     private File propertiesFile;
+    /**
+     * Line-list test file path.
+     */
     private File enumFile;
 
+    /**
+     * Assigns per-format file paths beneath the current temporary test directory.
+     */
     @BeforeEach
     void setUp() {
         yamlFile = tempDir.resolve("test.yml").toFile();
@@ -46,16 +71,26 @@ class ConfigTest {
 
     // ==================== Helper Methods ====================
 
+    /**
+     * Creates an unbound YAML configuration for in-memory accessor test cases.
+     */
     private Config createYamlConfig() {
         return new Config(Config.YAML);
     }
 
+    /**
+     * Encodes fixture text as a UTF-8 byte stream for configuration parsing.
+     */
     private InputStream toInputStream(String content) {
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }
 
     // ==================== Constructor Tests ====================
 
+    /**
+     * Creates the default in-memory configuration. Its correctness flag and empty root must be
+     * available before a backing file has been assigned to the instance.
+     */
     @Test
     void testDefaultConstructor() {
         Config config = new Config();
@@ -64,6 +99,10 @@ class ConfigTest {
         assertTrue(config.getAll().isEmpty());
     }
 
+    /**
+     * Creates an in-memory configuration for each supported format selector. Every selected format
+     * must start with the correctness flag set for later parsing and saving.
+     */
     @ParameterizedTest
     @ValueSource(ints = {Config.YAML, Config.JSON, Config.PROPERTIES, Config.ENUM})
     void testConstructorWithType(int type) {
@@ -71,6 +110,10 @@ class ConfigTest {
         assertTrue(config.isCorrect());
     }
 
+    /**
+     * Constructs a configuration for an absent YAML-named path using detection. The instance must
+     * report correctness and create the requested file during construction.
+     */
     @Test
     void testConstructorWithFilePath() {
         Config config = new Config(yamlFile.toString());
@@ -78,6 +121,10 @@ class ConfigTest {
         assertTrue(yamlFile.exists());
     }
 
+    /**
+     * Constructs a configuration from an absent JSON-named file object. The instance must report
+     * correctness and create that requested path during the constructor call.
+     */
     @Test
     void testConstructorWithFile() {
         Config config = new Config(jsonFile);
@@ -85,6 +132,10 @@ class ConfigTest {
         assertTrue(jsonFile.exists());
     }
 
+    /**
+     * Creates a YAML configuration for a missing file with supplied defaults. String and integer
+     * getters must expose the provided entries after construction completes.
+     */
     @Test
     void testConstructorWithDefaultMap() {
         ConfigSection defaultMap = new ConfigSection();
@@ -99,6 +150,10 @@ class ConfigTest {
 
     // ==================== Type Detection Tests ====================
 
+    /**
+     * Loads existing files whose extensions are recognized or unknown. The correctness flag must
+     * reflect format detection while valid empty JSON receives an object fixture.
+     */
     @ParameterizedTest
     @CsvSource({"test.yml, true", "test.json, true", "test.unknown, false"})
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -113,12 +168,20 @@ class ConfigTest {
         assertEquals(expectedCorrect, config.isCorrect());
     }
 
+    /**
+     * Constructs a configuration for a missing properties-named file using detection. The creation
+     * path must leave the instance marked correct even before existing-file detection occurs.
+     */
     @Test
     void testDetectPropertiesFormat() {
         Config config = new Config(propertiesFile.toString(), Config.DETECT);
         assertTrue(config.isCorrect());
     }
 
+    /**
+     * Constructs a configuration for a missing line-list file using detection. The creation path
+     * must create an instance whose correctness flag is initially set.
+     */
     @Test
     void testDetectEnumFormat() {
         Config config = new Config(enumFile.toString(), Config.DETECT);
@@ -127,6 +190,10 @@ class ConfigTest {
 
     // ==================== YAML Format Tests ====================
 
+    /**
+     * Loads YAML containing scalar values, a nested section, and a list. Typed and dotted-path
+     * reads must expose those values and the list length from the fixture.
+     */
     @Test
     void testYamlLoadAndSave() throws IOException {
         String yamlContent = """
@@ -155,6 +222,10 @@ class ConfigTest {
         assertEquals(2, list.size());
     }
 
+    /**
+     * Writes modified YAML values to the bound file and constructs another instance. The new
+     * instance must read the saved name and integer count unchanged.
+     */
     @Test
     void testYamlSaveAndReload() {
         Config config = new Config(yamlFile.toString(), Config.YAML);
@@ -169,6 +240,10 @@ class ConfigTest {
 
     // ==================== JSON Format Tests ====================
 
+    /**
+     * Loads a JSON object containing scalar fields and a nested object. Typed numeric access and
+     * dotted-path string access must expose the corresponding fixture values.
+     */
     @Test
     void testJsonLoadAndSave() throws IOException {
         String jsonContent = """
@@ -183,6 +258,10 @@ class ConfigTest {
         assertEquals("innerValue", config.getString("nested.innerKey"));
     }
 
+    /**
+     * Writes modified JSON values and loads the same file through another instance. The saved
+     * title and numeric priority must remain accessible after that reload.
+     */
     @Test
     void testJsonSaveAndReload() {
         Config config = new Config(jsonFile.toString(), Config.JSON);
@@ -197,6 +276,10 @@ class ConfigTest {
 
     // ==================== Properties Format Tests ====================
 
+    /**
+     * Loads properties containing {@code "on"}/{@code "off"}, {@code "true"}/{@code "false"}, and {@code "yes"}/{@code "no"} spellings. Each accepted word
+     * must become the corresponding boolean value rather than remain ordinary text.
+     */
     @Test
     void testPropertiesLoadBooleanVariants() throws IOException {
         String content = "enabled=on\ndisabled=off\nflag=true\nnoflag=false\nyesFlag=yes\nnoFlag=no\n";
@@ -211,6 +294,10 @@ class ConfigTest {
         assertFalse(config.getBoolean("noFlag"));
     }
 
+    /**
+     * Saves strings and booleans using the properties writer. The file must contain the string
+     * entry and the writer's {@code "on"}/{@code "off"} representation for boolean values.
+     */
     @Test
     void testPropertiesSave() throws IOException {
         Config config = new Config(propertiesFile.toString(), Config.PROPERTIES);
@@ -227,6 +314,10 @@ class ConfigTest {
 
     // ==================== Enum Format Tests ====================
 
+    /**
+     * Loads three membership lines, adds another key, and saves the list file. A new configuration
+     * must recognize the added membership after loading that file.
+     */
     @Test
     void testEnumLoadAndSave() throws IOException {
         Files.writeString(enumFile.toPath(), "item1\nitem2\nitem3\n");
@@ -245,6 +336,10 @@ class ConfigTest {
 
     // ==================== InputStream Tests ====================
 
+    /**
+     * Loads YAML from an in-memory stream into an unbound configuration. The load result must
+     * succeed and make both string and numeric fixture values available.
+     */
     @Test
     void testLoadFromInputStream() {
         Config config = createYamlConfig();
@@ -253,11 +348,19 @@ class ConfigTest {
         assertEquals(10, config.getInt("count"));
     }
 
+    /**
+     * Passes a {@code null} stream to a valid in-memory YAML configuration. The load operation must return
+     * {@code false} without claiming that any input data was parsed.
+     */
     @Test
     void testLoadFromNullInputStream() {
         assertFalse(createYamlConfig().load((InputStream) null));
     }
 
+    /**
+     * Loads an in-memory JSON stream with a caller-supplied serializer. The operation must report
+     * success and expose both its string and numeric fields afterward.
+     */
     @Test
     void testLoadAsJsonFromInputStream() {
         Config config = new Config(Config.JSON);
@@ -269,6 +372,10 @@ class ConfigTest {
 
     // ==================== Getter Tests ====================
 
+    /**
+     * Reads one present key and one missing key using an explicit fallback. The existing value
+     * must win while the missing key returns the supplied default.
+     */
     @Test
     void testGetWithDefault() {
         Config config = createYamlConfig();
@@ -277,6 +384,10 @@ class ConfigTest {
         assertEquals("default", config.get("nonexistent", "default"));
     }
 
+    /**
+     * Reads a stored integer and missing paths with implicit and explicit defaults. The getter
+     * must retain the stored value and select the expected missing-path fallbacks.
+     */
     @Test
     void testGetInt() {
         Config config = createYamlConfig();
@@ -286,6 +397,10 @@ class ConfigTest {
         assertEquals(100, config.getInt("nonexistent", 100));
     }
 
+    /**
+     * Reads a stored long beyond the integer range and two missing paths. Long access must retain
+     * its width and apply implicit or explicit defaults only when absent.
+     */
     @Test
     void testGetLong() {
         Config config = createYamlConfig();
@@ -295,6 +410,10 @@ class ConfigTest {
         assertEquals(100L, config.getLong("nonexistent", 100L));
     }
 
+    /**
+     * Reads a stored fractional value and missing paths with two fallback choices. Floating-point
+     * assertions must retain the stored fraction within the selected comparison tolerance.
+     */
     @Test
     void testGetDouble() {
         Config config = createYamlConfig();
@@ -304,6 +423,10 @@ class ConfigTest {
         assertEquals(1.5, config.getDouble("nonexistent", 1.5), 0.00001);
     }
 
+    /**
+     * Reads a stored string and missing paths with default text. The existing name must be
+     * returned while absent keys use empty or explicitly supplied fallback strings.
+     */
     @Test
     void testGetString() {
         Config config = createYamlConfig();
@@ -313,6 +436,10 @@ class ConfigTest {
         assertEquals("default", config.getString("nonexistent", "default"));
     }
 
+    /**
+     * Reads stored {@code true} and {@code false} values and missing paths. Boolean access must retain the stored
+     * choices and use implicit {@code false} or explicit {@code true} for absence.
+     */
     @Test
     void testGetBoolean() {
         Config config = createYamlConfig();
@@ -324,6 +451,10 @@ class ConfigTest {
         assertTrue(config.getBoolean("nonexistent", true));
     }
 
+    /**
+     * Stores values of each supported scalar and list family. Type predicates must recognize the
+     * stored wrapper kinds without treating strings as integers or integers as strings.
+     */
     @Test
     void testTypeChecks() {
         Config config = createYamlConfig();
@@ -347,6 +478,10 @@ class ConfigTest {
 
     // ==================== Section Tests ====================
 
+    /**
+     * Creates a nested section through a dotted write and reads its child. Existing-section lookup
+     * must expose that child, while a missing section yields an empty result.
+     */
     @Test
     void testGetSection() {
         Config config = createYamlConfig();
@@ -359,6 +494,10 @@ class ConfigTest {
         assertTrue(config.getSection("nonexistent").isEmpty());
     }
 
+    /**
+     * Stores one nested section and one scalar string at the root. The section predicate must
+     * distinguish the nested container from the scalar entry.
+     */
     @Test
     void testIsSection() {
         Config config = createYamlConfig();
@@ -369,6 +508,10 @@ class ConfigTest {
         assertFalse(config.isSection("notSection"));
     }
 
+    /**
+     * Stores two section-valued entries and one scalar root entry. Root section selection must
+     * include the two containers and exclude the non-section value from its result.
+     */
     @Test
     void testGetSections() {
         Config config = createYamlConfig();
@@ -384,6 +527,10 @@ class ConfigTest {
 
     // ==================== List Tests ====================
 
+    /**
+     * Reads a stored list and missing list paths. The result must retain the stored element count
+     * and select {@code null} or an explicit fallback for absence.
+     */
     @Test
     void testGetList() {
         Config config = createYamlConfig();
@@ -396,6 +543,11 @@ class ConfigTest {
         assertEquals(List.of("default"), config.getList("nonexistent", List.of("default")));
     }
 
+    /**
+     * Stores lists of each supported scalar family and uses typed list accessors. Results must
+     * retain expected lengths and representative first values for string, integer, and boolean
+     * lists.
+     */
     @Test
     void testGetTypedLists() {
         Config config = createYamlConfig();
@@ -424,6 +576,10 @@ class ConfigTest {
         assertTrue(config.getBooleanList("booleans").getFirst());
     }
 
+    /**
+     * Stores a list containing a linked map in the configuration. Map-list selection must retain
+     * one map element rather than dropping it during typed list extraction.
+     */
     @Test
     void testGetMapList() {
         Config config = createYamlConfig();
@@ -436,6 +592,10 @@ class ConfigTest {
 
     // ==================== Exists and Remove Tests ====================
 
+    /**
+     * Checks exact and case-insensitive presence before removing a root key. Presence must respect
+     * the selected case mode, and the removed key must disappear afterward.
+     */
     @Test
     void testExistsAndRemove() {
         Config config = createYamlConfig();
@@ -453,6 +613,10 @@ class ConfigTest {
 
     // ==================== GetAll/SetAll Tests ====================
 
+    /**
+     * Copies current entries and then replaces the root from a linked map. The replacement must
+     * expose its new key and discard the previous root keys.
+     */
     @Test
     void testGetAllAndSetAll() {
         Config config = createYamlConfig();
@@ -469,6 +633,10 @@ class ConfigTest {
         assertFalse(config.exists("key1"));
     }
 
+    /**
+     * Stores a root value and requests the mutable root section. The returned section must be
+     * present and expose the same entry through its own lookup.
+     */
     @Test
     void testGetRootSection() {
         Config config = createYamlConfig();
@@ -479,6 +647,11 @@ class ConfigTest {
 
     // ==================== Keys Tests ====================
 
+    /**
+     * Creates root and nested entries before taking key snapshots. Child-inclusive enumeration
+     * must contain dotted descendants, while root-only enumeration retains their parent but
+     * excludes those descendants.
+     */
     @Test
     void testGetKeys() {
         Config config = createYamlConfig();
@@ -495,6 +668,10 @@ class ConfigTest {
 
     // ==================== SetDefault Tests ====================
 
+    /**
+     * Applies defaults containing one existing key and one missing key. The existing value must
+     * remain, and the return count must include only the newly added entry.
+     */
     @Test
     void testSetDefault() {
         Config config = createYamlConfig();
@@ -512,6 +689,10 @@ class ConfigTest {
 
     // ==================== Reload Tests ====================
 
+    /**
+     * Saves an initial YAML value, replaces its file text, and reloads the same instance. The
+     * in-memory getter must observe the replacement file value afterward.
+     */
     @Test
     void testReload() throws IOException {
         Config config = new Config(yamlFile.toString(), Config.YAML);
@@ -523,6 +704,10 @@ class ConfigTest {
         assertEquals("newValue", config.getString("key"));
     }
 
+    /**
+     * Requests reload on an unbound YAML configuration. The operation must throw the missing-file
+     * state error rather than attempting to parse an unspecified backing path.
+     */
     @Test
     void testReloadWithoutFile() {
         assertThrows(IllegalStateException.class, () -> createYamlConfig().reload());
@@ -530,6 +715,10 @@ class ConfigTest {
 
     // ==================== Save Tests ====================
 
+    /**
+     * Binds and saves an in-memory YAML configuration to a supplied file. The operation must
+     * report success and another instance must read the saved value.
+     */
     @Test
     void testSaveToFile() {
         Config config = createYamlConfig();
@@ -539,11 +728,19 @@ class ConfigTest {
         assertEquals("value", new Config(yamlFile, Config.YAML).getString("key"));
     }
 
+    /**
+     * Requests save on an unbound in-memory configuration. The missing destination must raise a
+     * state error instead of reporting a successfully persisted configuration.
+     */
     @Test
     void testSaveWithoutFile() {
         assertThrows(IllegalStateException.class, () -> createYamlConfig().save());
     }
 
+    /**
+     * Saves an in-memory configuration using a caller-supplied JSON serializer. A later JSON load
+     * must find the saved string at the same root key.
+     */
     @Test
     void testSaveAsJson() {
         Config config = new Config(Config.JSON);
@@ -555,6 +752,10 @@ class ConfigTest {
 
     // ==================== Nested Key Tests ====================
 
+    /**
+     * Writes a value through three path levels and reads intermediate sections. Dotted getters and
+     * section predicates must agree on the resulting nested structure.
+     */
     @Test
     void testNestedKeys() {
         Config config = createYamlConfig();
@@ -570,6 +771,10 @@ class ConfigTest {
 
     // ==================== Error Handling Tests ====================
 
+    /**
+     * Loads an existing file with an unknown extension under automatic detection. Incorrect
+     * configurations must supply the tested scalar fallbacks and an empty key set.
+     */
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void testIncorrectConfigReturnsDefaults() throws IOException {
@@ -586,12 +791,21 @@ class ConfigTest {
         assertTrue(config.getKeys().isEmpty());
     }
 
+    /**
+     * Loads text that cannot form the expected JSON object. Construction must propagate the
+     * configuration wrapper exception rather than accepting malformed data as an empty
+     * configuration.
+     */
     @Test
     void testInvalidJsonThrowsException() throws IOException {
         Files.writeString(jsonFile.toPath(), "invalid json {{{");
         assertThrows(ConfigException.class, () -> new Config(jsonFile.toString(), Config.JSON));
     }
 
+    /**
+     * Loads an empty YAML file and an empty JSON object file. Both supported representations must
+     * produce an empty root map rather than requiring populated configuration entries.
+     */
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void testLoadEmptyFiles() throws IOException {
@@ -604,6 +818,11 @@ class ConfigTest {
 
     // ==================== Constants Tests ====================
 
+    /**
+     * Checks extension mappings and compatibility selector values together. Standard aliases must
+     * resolve to their expected format selectors, including the properties and enumeration
+     * constant aliases.
+     */
     @Test
     void testFormatMapAndConstants() {
         assertEquals(Config.PROPERTIES, Config.format.get("properties"));

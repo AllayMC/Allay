@@ -3,75 +3,77 @@ package org.allaymc.api.container.interfaces;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * AnvilContainer represents a container for an anvil block.
+ * {@code AnvilContainer} exposes named slots for an anvil container. Its accessors use
+ * the shared container storage and notification rules, so callers can address each slot
+ * by its gameplay role without repeating numeric indices.
  *
  * @author daoge_cmd
  */
 public interface AnvilContainer extends BlockContainer {
     /**
-     * The constant representing the input slot index in the anvil container.
+     * The slot constants identify anvil storage positions used by the named accessors
+     * and container action processing. Repair or rename input slot index.
      */
     int INPUT_SLOT = 0;
 
     /**
-     * The constant representing the material slot index in the anvil container.
+     * Repair material or second input slot index.
      */
     int MATERIAL_SLOT = 1;
 
     /**
-     * The constant representing the result slot index in the anvil container.
+     * Anvil result slot index.
      */
     int RESULT_SLOT = 2;
 
     /**
-     * Gets the item in the input slot of the anvil.
-     *
-     * @return the ItemStack in the input slot
+     * Returns the stored stack in the repair or rename input slot. The result is shared
+     * with this container; callers that change its contents must notify the slot
+     * afterward.
      */
     default ItemStack getInput() {
         return getItemStack(INPUT_SLOT);
     }
 
     /**
-     * Sets the item in the input slot of the anvil.
-     *
-     * @param itemStack the ItemStack to set in the input slot
+     * Replaces the repair or rename input slot and notifies its viewers and listeners.
+     * {@code itemStack} must be non-{@code null}; the container retains the supplied
+     * stack rather than copying it.
      */
     default void setInput(ItemStack itemStack) {
         setItemStack(INPUT_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the material slot of the anvil.
-     *
-     * @return the ItemStack in the material slot
+     * Returns the stored stack in the repair material or second input slot. The result
+     * is shared with this container; callers that change its contents must notify the
+     * slot afterward.
      */
     default ItemStack getMaterial() {
         return getItemStack(MATERIAL_SLOT);
     }
 
     /**
-     * Sets the item in the material slot of the anvil.
-     *
-     * @param itemStack the ItemStack to set in the material slot
+     * Replaces the repair material or second input slot and notifies its viewers and
+     * listeners. {@code itemStack} must be non-{@code null}; the container retains the
+     * supplied stack rather than copying it.
      */
     default void setMaterial(ItemStack itemStack) {
         setItemStack(MATERIAL_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the result slot of the anvil.
-     *
-     * @return the ItemStack in the result slot
+     * Returns the stored stack in the anvil result slot. The result is shared with this
+     * container; callers that change its contents must notify the slot afterward.
      */
     default ItemStack getResult() {
         return getItemStack(RESULT_SLOT);
     }
 
     /**
-     * Sets the item in the result slot of the anvil.
-     *
-     * @param itemStack the ItemStack to set in the result slot
+     * Replaces the anvil result slot and notifies its viewers and listeners. {@code
+     * itemStack} must be non-{@code null}; the container retains the supplied stack
+     * rather than copying it.
      */
     default void setResult(ItemStack itemStack) {
         setItemStack(RESULT_SLOT, itemStack);

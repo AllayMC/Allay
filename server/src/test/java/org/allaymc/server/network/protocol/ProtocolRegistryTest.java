@@ -6,6 +6,8 @@ import org.allaymc.server.network.processor.PacketProcessorRegistry;
 import org.allaymc.server.network.protocol.v766.PacketEncoder_v766;
 import org.allaymc.server.network.protocol.v766.Protocol_v766_NetEase;
 import org.allaymc.server.network.protocol.v2168.Protocol_v2168;
+import org.allaymc.server.network.protocol.v2169.Protocol_v2169;
+import org.allaymc.server.network.protocol.v2193.Protocol_v2193;
 import org.allaymc.server.network.protocol.v819.Protocol_v819;
 import org.allaymc.server.network.protocol.v819.Protocol_v819_NetEase;
 import org.allaymc.server.network.protocol.v860.Protocol_v860_NetEase;
@@ -29,8 +31,17 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code ProtocolRegistryTest} checks exact protocol registration, frozen
+ * lookup snapshots, and process-wide default installation.
+ */
 @ExtendWith(AllayTestExtension.class)
 class ProtocolRegistryTest {
+    /**
+     * Builds the default registry from initialized server content. Exact
+     * variant/version pairs and distribution-specific bounds must match the
+     * explicitly supported set, while unregistered versions remain unresolved.
+     */
     @Test
     void defaultRegistryPublishesOnlySupportedVariantVersionPairs() {
         var registry = ProtocolRegistry.createDefault();
@@ -43,11 +54,21 @@ class ProtocolRegistryTest {
         assertNull(registry.resolve(ClientVariant.NETEASE, 818));
         assertEquals(818, registry.getLowest(ClientVariant.INTERNATIONAL).getProtocolVersion());
         assertInstanceOf(Protocol_v2168.class, registry.resolve(ClientVariant.INTERNATIONAL, 2168));
-        assertEquals(2168, registry.getLatest(ClientVariant.INTERNATIONAL).getProtocolVersion());
+        assertInstanceOf(Protocol_v2169.class, registry.resolve(ClientVariant.INTERNATIONAL, 2169));
+        assertInstanceOf(Protocol_v2193.class, registry.resolve(ClientVariant.INTERNATIONAL, 2193));
+        assertEquals(2193, registry.getLatest(ClientVariant.INTERNATIONAL).getProtocolVersion());
+        assertNull(registry.resolve(ClientVariant.INTERNATIONAL, 2194));
+        assertNull(registry.resolve(ClientVariant.INTERNATIONAL, 2225));
+        assertNull(registry.resolve(ClientVariant.NETEASE, 2193));
         assertEquals(766, registry.getLowest(ClientVariant.NETEASE).getProtocolVersion());
         assertEquals(860, registry.getLatest(ClientVariant.NETEASE).getProtocolVersion());
     }
 
+    /**
+     * Registers two international versions and one NetEase version before
+     * freezing. Lookups must reject premature access, preserve exact identities
+     * afterward, and return sorted per-variant lists without version fallback.
+     */
     @Test
     void resolvesOnlyTheExactVariantAndVersion() {
         var internationalV818 = initializedProtocol(Bedrock_v818.CODEC, ClientVariant.INTERNATIONAL);
@@ -76,6 +97,12 @@ class ProtocolRegistryTest {
         assertSame(internationalV819, registry.getLatest(ClientVariant.INTERNATIONAL));
     }
 
+    /**
+     * Attempts to register a protocol whose initialization has not run.
+     * Registration must fail with {@code IllegalArgumentException}, and the
+     * registry must remain mutable rather than publish incomplete protocol
+     * data.
+     */
     @Test
     void rejectsAnUninitializedProtocol() {
         var registry = new ProtocolRegistry();
@@ -85,6 +112,11 @@ class ProtocolRegistryTest {
         assertFalse(registry.isFrozen());
     }
 
+    /**
+     * Registers two initialized protocols with the same variant and wire
+     * version. The duplicate must fail, and freezing must preserve the original
+     * protocol object under that key.
+     */
     @Test
     void rejectsDuplicateVariantAndVersionWithoutReplacingTheOriginal() {
         var original = initializedProtocol(Bedrock_v819.CODEC, ClientVariant.INTERNATIONAL);
@@ -98,6 +130,11 @@ class ProtocolRegistryTest {
         assertSame(original, registry.resolve(ClientVariant.INTERNATIONAL, 819));
     }
 
+    /**
+     * Attempts to {@code freeze} an empty registry, then registers a protocol
+     * and freezes successfully. Published collections must reject mutation, and
+     * further registrations or another {@code freeze} must fail.
+     */
     @Test
     void freezeRejectsEmptyRegistryAndPreventsFurtherRegistration() {
         var registry = new ProtocolRegistry();
@@ -121,6 +158,11 @@ class ProtocolRegistryTest {
         assertThrows(IllegalStateException.class, registry::freeze);
     }
 
+    /**
+     * Starts a reader before freezing a registry with two client variants. Once
+     * readiness is observed, exact lookups, variant lists, and the complete
+     * collection must all expose the registered entries.
+     */
     @Test
     void freezeAtomicallyPublishesOneCompleteSnapshotToConcurrentReaders() throws Exception {
         var international = initializedProtocol(Bedrock_v819.CODEC, ClientVariant.INTERNATIONAL);
@@ -130,6 +172,9 @@ class ProtocolRegistryTest {
         registry.register(netEase);
         var readerStarted = new CountDownLatch(1);
         var readerFailure = new AtomicReference<Throwable>();
+        // Start a reader before publication and transfer its failure back to
+        // the test thread; deadlines keep a missing publication from hanging
+        // validation.
         var reader = Thread.ofPlatform().start(() -> {
             readerStarted.countDown();
             try {
@@ -148,6 +193,8 @@ class ProtocolRegistryTest {
             }
         });
 
+        // Wait until the reader exists before publishing, then join it so
+        // assertions cannot outlive this test or lose a background failure.
         assertTrue(readerStarted.await(5, TimeUnit.SECONDS));
         registry.freeze();
         reader.join(TimeUnit.SECONDS.toMillis(6));
@@ -156,11 +203,19 @@ class ProtocolRegistryTest {
         assertNull(readerFailure.get(), () -> String.valueOf(readerFailure.get()));
     }
 
+    /**
+     * Temporarily clears the global default while holding its installation
+     * monitor. Mutable installation and repeated installation must fail, and
+     * the previous process-wide default is restored after the test.
+     */
     @Test
     void defaultRegistryRejectsInvalidAndRepeatedInstallation() throws Exception {
         Field defaultRegistryField = ProtocolRegistry.class.getDeclaredField("defaultRegistry");
         defaultRegistryField.setAccessible(true);
 
+        // Share the installation monitor while replacing the global reference,
+        // and restore it in finally so the fixture cannot leak into subsequent
+        // tests.
         synchronized (ProtocolRegistry.class) {
             var originalDefault = defaultRegistryField.get(null);
             try {
@@ -187,55 +242,101 @@ class ProtocolRegistryTest {
         }
     }
 
+    /**
+     * Creates an isolated protocol fixture and completes its initialization
+     * before returning it.
+     */
     private static Protocol initializedProtocol(BedrockCodec codec, ClientVariant variant) {
         var protocol = protocol(codec, variant);
         protocol.initialize();
         return protocol;
     }
 
+    /**
+     * Creates an uninitialized protocol fixture for the requested codec and
+     * client distribution.
+     */
     private static Protocol protocol(BedrockCodec codec, ClientVariant variant) {
         return new TestProtocol(codec, variant);
     }
 
+    /**
+     * {@code TestProtocol} supplies empty protocol payloads so registry tests
+     * isolate identity and publication behavior.
+     */
     private static final class TestProtocol extends Protocol {
+        /**
+         * Creates the empty-data protocol fixture with the supplied
+         * registration identity.
+         */
         private TestProtocol(BedrockCodec codec, ClientVariant variant) {
             super(codec, variant);
         }
 
+        /**
+         * Leaves the supplied processor registry empty for protocol registry
+         * tests.
+         */
         @Override
         protected void registerProcessors(PacketProcessorRegistry registry) {
         }
 
+        /**
+         * Returns an empty item-definition list for the isolated registry
+         * fixture.
+         */
         @Override
         protected List<ItemDefinition> createItemDefinitions() {
             return List.of();
         }
 
+        /**
+         * Returns an empty block-definition list for the isolated registry
+         * fixture.
+         */
         @Override
         protected List<BlockDefinition> createBlockDefinitions() {
             return List.of();
         }
 
+        /**
+         * Returns no creative groups for the isolated registry fixture.
+         */
         @Override
         protected List<CreativeItemGroup> createCreativeGroups() {
             return List.of();
         }
 
+        /**
+         * Returns no creative entries for the isolated registry fixture.
+         */
         @Override
         protected List<CreativeItemData> createCreativeItems() {
             return List.of();
         }
 
+        /**
+         * Returns no custom block properties for the isolated registry fixture.
+         */
         @Override
         protected List<BlockPropertyData> createCustomBlockProperties() {
             return List.of();
         }
 
+        /**
+         * Creates an empty, internally consistent recipe table for this
+         * registry fixture.
+         */
         @Override
         protected RecipeTable createRecipeTable() {
             return new RecipeTable(List.of(), List.of(), new Int2ObjectOpenHashMap<Recipe>());
         }
 
+        /**
+         * Creates the baseline encoder using the exact supplied data instance.
+         * The fixture needs no packet-specific behavior, but initialization
+         * still verifies the encoder and protocol share that bundle.
+         */
         @Override
         protected PacketEncoder createEncoder(ProtocolData data) {
             return new PacketEncoder_v766(data);

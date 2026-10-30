@@ -8,12 +8,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates a field to be injected with the {@link ComponentManager} instance.
+ * {@code Manager} marks a field for injection with its owner's
+ * {@link ComponentManager} instance.
  *
  * <p>
- * Enables the component system to inject a {@link ComponentManager} reference into the annotated field,
- * allowing interaction with the component management system. The field must be accessible and compatible
- * with {@link ComponentManager} or its implementations.
+ * The injector makes annotated fields accessible through the component's class
+ * hierarchy and assigns the owner's shared manager. Field types must accept
+ * that manager implementation. Assignment precedes listener registration for
+ * the component, and all such registrations finish before completion hooks run.
  * </p>
  *
  * @author daoge_cmd

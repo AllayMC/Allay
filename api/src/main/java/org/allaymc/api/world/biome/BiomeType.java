@@ -3,27 +3,26 @@ package org.allaymc.api.world.biome;
 import org.allaymc.api.utils.identifier.Identifier;
 
 /**
+ * {@code BiomeType} identifies a registered biome and exposes the data consumed by gameplay and
+ * network encoding. Resource identifiers provide namespaced lookup, while
+ * numeric IDs identify biome values stored in chunk palettes; implementations
+ * supply the associated climate and rendering data.
+ *
  * @author daoge_cmd
  */
 public interface BiomeType {
     /**
-     * Get the identifier of the biome.
-     *
-     * @return the identifier of the biome
+     * Returns the namespaced identifier used to register this biome type.
      */
     Identifier getIdentifier();
 
     /**
-     * Get the id of the biome.
-     *
-     * @return the id of the biome
+     * Returns the numeric biome identifier used by chunk palette storage.
      */
     int getId();
     
     /**
-     * Retrieves the biome data associated with this biome type.
-     *
-     * @return a {@link BiomeData} object that contains information and properties of the biome
+     * Returns the climate and rendering data associated with this biome type.
      */
     BiomeData getBiomeData();
 }

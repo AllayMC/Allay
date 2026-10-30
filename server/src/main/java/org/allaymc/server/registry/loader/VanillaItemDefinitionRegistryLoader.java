@@ -15,9 +15,20 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * {@code VanillaItemDefinitionRegistryLoader} reads bundled item component definitions from
+ * compressed NBT and associates them with built-in item IDs. Each value retains the
+ * component-based flag, a compound containing the component data, and the protocol item
+ * version used when advertising that definition.
+ *
  * @author daoge_cmd
  */
 public class VanillaItemDefinitionRegistryLoader implements RegistryLoader<Void, Map<ItemId, VanillaItemDefinitionData>> {
+    /**
+     * Loads GZIP-compressed {@code item_components.nbt} into a mutable enum map. Every resource
+     * identifier must resolve to a built-in item ID, and malformed roots, unknown IDs, or
+     * unsupported
+     * version values abort loading rather than returning partial definitions.
+     */
     @SneakyThrows
     @Override
     public Map<ItemId, VanillaItemDefinitionData> load(Void unused) {

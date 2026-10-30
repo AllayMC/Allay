@@ -9,7 +9,10 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a block is updated due to a neighboring block change.
+ * {@code BlockNeighborUpdateEvent} represents a pending neighbor-driven update of a
+ * block snapshot. The neighboring block and relative face identify the source of the
+ * update, while the previous neighbor state is optional; cancellation suppresses that
+ * update callback.
  *
  * @author daoge_cmd
  */
@@ -17,18 +20,24 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class BlockNeighborUpdateEvent extends BlockEvent implements CancellableEvent {
     /**
-     * The neighboring block that triggered the update.
+     * Neighbor causing the update.
      */
     protected Block neighbor;
     /**
-     * The face on which the neighboring block is located.
+     * Direction from block to neighbor.
      */
     protected BlockFace blockFace;
     /**
-     * The previous state of the neighboring block.
+     * {@code oldNeighborState} holds the neighbor's previous state and may be
+     * {@code null} when the update source does not supply it.
      */
     protected BlockState oldNeighborState;
 
+    /**
+     * Creates a neighbor update event with the relative face and old neighbor state.
+     * {@code oldNeighborState} may be {@code null} when the previous state is unknown
+     * to the update source.
+     */
     public BlockNeighborUpdateEvent(Block block, Block neighbor, BlockFace blockFace, BlockState oldNeighborState) {
         super(block);
         this.neighbor = neighbor;

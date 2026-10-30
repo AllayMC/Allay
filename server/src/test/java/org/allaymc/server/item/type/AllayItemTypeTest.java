@@ -13,10 +13,17 @@ import static org.allaymc.api.item.type.ItemTypes.DIAMOND;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * {@code AllayItemTypeTest} verifies component-backed item defaults, mutation rules, and specialized capabilities.
+ *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 public class AllayItemTypeTest {
+    /**
+     * Creates a diamond stack with only its count explicitly initialized.
+     * The stack must expose the expected type, zero metadata and damage, empty
+     * display state, and an empty persistent-data container.
+     */
     @Test
     void testCreation() {
         var itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().count(1).build());
@@ -29,44 +36,53 @@ public class AllayItemTypeTest {
         assertEquals(DIAMOND, itemStack.getItemType());
     }
 
+    /**
+     * Mutates count, metadata, lore, and custom name on a diamond stack.
+     * The stored values must be readable through the generated item interface,
+     * and negative count or metadata must be rejected.
+     */
     @Test
     void testGenericFunctions() {
         var diamond = DIAMOND.createItemStack(ItemStackInitInfo.builder().count(1).build());
 
-        // Count
         diamond.setCount(2);
         assertEquals(2, diamond.getCount());
         assertThrows(IllegalArgumentException.class, () -> diamond.setCount(-1));
 
-        // Meta
         diamond.setMeta(1);
         assertEquals(1, diamond.getMeta());
         assertThrows(IllegalArgumentException.class, () -> diamond.setMeta(-1));
 
-        // Lore
         diamond.setLore(List.of("testLore1", "testLore2"));
         assertEquals(List.of("testLore1", "testLore2"), diamond.getLore());
 
-        // CustomName
         diamond.setCustomName("TestCustomName");
         assertEquals("TestCustomName", diamond.getCustomName());
     }
 
+    /**
+     * Attempts durability changes on a diamond item and a diamond axe.
+     * The ordinary diamond must ignore damage, while the axe stores positive damage
+     * and rejects a negative damage value.
+     */
     @Test
     void testDurability() {
         var diamond = DIAMOND.createItemStack(ItemStackInitInfo.builder().count(1).build());
         var axe = ItemTypes.DIAMOND_AXE.createItemStack(1);
 
-        // Diamond doesn't support durability
         diamond.setDamage(1);
         assertEquals(0, diamond.getDamage());
 
-        // Instead, diamond axe supports durability
         axe.setDamage(1);
         assertEquals(1, axe.getDamage());
         assertThrows(IllegalArgumentException.class, () -> axe.setDamage(-1));
     }
 
+    /**
+     * Creates a milk bucket through its registered item type.
+     * The stack must expose the edible capability and report both drinking behavior
+     * and permission to consume regardless of hunger.
+     */
     @Test
     void testMilkBucketIsDrinkable() {
         var milkBucket = ItemTypes.MILK_BUCKET.createItemStack(1);

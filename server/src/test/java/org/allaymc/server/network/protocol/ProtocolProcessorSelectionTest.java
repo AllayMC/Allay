@@ -14,9 +14,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code ProtocolProcessorSelectionTest} checks login distribution overrides
+ * and gameplay processor availability against registered codecs.
+ */
 @ExtendWith(AllayTestExtension.class)
 class ProtocolProcessorSelectionTest {
 
+    /**
+     * Creates connected holders for every registered protocol and selects the
+     * login processor. NetEase variants must use their specialized processor,
+     * while international variants retain the ordinary login processor class.
+     */
     @Test
     void netEaseProtocolsOverrideTheInternationalLoginProcessorFactory() {
         var registry = ProtocolRegistry.getDefault();
@@ -35,10 +44,18 @@ class ProtocolProcessorSelectionTest {
         }
     }
 
+    /**
+     * Advances each protocol holder through the required login and spawn states
+     * into gameplay. Selected data-store and screen-close packets must have
+     * processors exactly where their codecs register those packets.
+     */
     @Test
     void gameplayProcessorsMatchTheirCodecRegistrationBoundaries() {
         for (var protocol : ProtocolRegistry.getDefault().getProtocols()) {
             var holder = protocol.createProcessorHolder();
+            // Follow declared predecessor states before inspecting gameplay
+            // processors so unavailable handlers cannot be confused with a
+            // holder still in login.
             assertTrue(holder.setClientState(ClientState.CONNECTED));
             assertTrue(holder.setClientState(ClientState.LOGGED_IN));
             assertTrue(holder.setClientState(ClientState.SPAWNED));
@@ -49,6 +66,12 @@ class ProtocolProcessorSelectionTest {
         }
     }
 
+    /**
+     * Checks packet codec registration and processor availability against a
+     * specified introduction version. The assertion uses the supplied holder
+     * state, so callers must enter the state whose processor registrations are
+     * being tested.
+     */
     private static void assertProcessorMatchesCodec(
             Protocol protocol,
             PacketProcessorHolder holder,

@@ -6,42 +6,45 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PacketSignal;
 
 /**
+ * {@code PacketProcessor} defines asynchronous admission and synchronous handling
+ * for one Bedrock packet type. A protocol session invokes the asynchronous hook first and
+ * forwards an unhandled packet to the synchronous hook. The world queue
+ * supplies synchronous execution when the player has a world; before that, the
+ * session invokes the synchronous hook directly on the receiving thread.
+ * Default implementations defer and then do nothing, allowing subclasses to
+ * implement only the phase they need.
+ *
  * @author Cool_Loong | daoge_cmd
  */
 public abstract class PacketProcessor<T extends BedrockPacket> {
 
     /**
-     * Handle the packet synchronously on the world thread.
-     * <p>
-     * This method is called when {@link #handleAsync} returns {@link PacketSignal#UNHANDLED},
-     * indicating that the packet needs to be processed on the world thread for thread-safety.
+     * Handles work deferred by the asynchronous hook; the default
+     * implementation has no effect. Sessions normally call this through the
+     * player's world queue, but players without a world use the receiving
+     * thread directly.
      *
-     * @param player      the player who sent the packet
-     * @param packet      the packet to handle
-     * @param receiveTime the tick at which the packet was received. This is the
-     *                    entity tick if the player is in a world, otherwise the server tick.
+     * @param receiveTime entity tick when associated with a world, otherwise
+     * the server receive tick
      */
     public void handleSync(Player player, T packet, long receiveTime) {
-        // Do nothing
     }
 
     /**
-     * Handle the packet asynchronously on the network thread.
-     * <p>
-     * If the packet can be fully handled asynchronously, return {@link PacketSignal#HANDLED}.
-     * Otherwise, return {@link PacketSignal#UNHANDLED} and the packet will be forwarded
-     * to {@link #handleSync} for processing on the world thread.
+     * Decides whether further synchronous handling is required; the default
+     * always returns {@code UNHANDLED}. Sessions invoke this hook on their receive
+     * path, so implementations that consume a packet should return {@code HANDLED}
+     * instead of scheduling world work.
      *
-     * @param player      the player who sent the packet
-     * @param packet      the packet to handle
-     * @param receiveTime the tick at which the packet was received. This is the
-     *                    entity tick if the player is in a world, otherwise the server tick.
-     *
-     * @return {@link PacketSignal#HANDLED} if fully processed, {@link PacketSignal#UNHANDLED} to defer to sync handling
+     * @param receiveTime entity tick when associated with a world, otherwise
+     * the server receive tick
      */
     public PacketSignal handleAsync(Player player, T packet, long receiveTime) {
         return PacketSignal.UNHANDLED;
     }
 
+    /**
+     * Returns the packet type that this processor accepts from its holder.
+     */
     public abstract BedrockPacketType getPacketType();
 }

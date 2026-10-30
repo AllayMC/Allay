@@ -22,31 +22,52 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 /**
- * Base component for candle block behavior.
- * <p>
- * Candles can:
- * - Stack up to 4 candles in one block (candles property 0-3)
- * - Be lit with flint and steel (lit property true/false)
- * - Be extinguished by clicking with empty hand
- * - Be placed on a full cake to create candle cake
+ * {@code BlockCandleBaseComponentImpl} handles candle counts, ignition,
+ * extinguishing, and conversion of a full cake to candle cake. The stored candle
+ * count is zero-based, while dropped item counts add one; a deferred supplier
+ * identifies the matching candle-cake type for conversion.
  *
  * @author daoge_cmd
  */
 public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
 
-    public static final int MAX_CANDLES = 3; // 0-3 means 1-4 candles
+    /**
+     * {@code MAX_CANDLES} is the largest stored zero-based candle count, representing
+     * a group of four candle items.
+     */
+    public static final int MAX_CANDLES = 3;
 
+    /**
+     * {@code candleCakeType} resolves the matching cake variant only when needed,
+     * allowing its block type registration to complete after component construction.
+     */
     private final Supplier<BlockType<?>> candleCakeType;
 
+    /**
+     * Creates candle behavior retaining a deferred candle-cake type supplier.
+     * {@code candleCakeTypeSupplier} is evaluated when a full cake is converted,
+     * rather than resolving its block type during construction.
+     */
     public BlockCandleBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Supplier<BlockType<?>> candleCakeTypeSupplier) {
         super(blockType);
         this.candleCakeType = candleCakeTypeSupplier;
     }
 
+    /**
+     * Creates candle behavior using a deferred lookup for the supplied candle-cake
+     * identifier. {@code candleCakeId} provides its block type only when placement
+     * needs to convert a full cake.
+     */
     public BlockCandleBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId candleCakeId) {
         this(blockType, candleCakeId::getBlockType);
     }
 
+    /**
+     * Converts a clicked unbitten cake to the configured candle-cake state, otherwise
+     * using inherited placement. A {@code null} {@code placementInfo} uses ordinary
+     * placement; cake conversion reports {@code true} without checking the write
+     * result.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -56,8 +77,6 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
         var clickedBlockPos = placementInfo.clickedBlockPos();
         var clickedBlockState = dimension.getBlockState(clickedBlockPos);
         var clickedBlockType = clickedBlockState.getBlockType();
-
-        // Check if placing on a full cake
         if (clickedBlockType == BlockTypes.CAKE) {
             var bites = clickedBlockState.getPropertyValue(BlockPropertyTypes.BITE_COUNTER);
             if (bites == 0) {
@@ -72,11 +91,14 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
+    /**
+     * Increments an existing matching candle type while its stored count is below
+     * {@code MAX_CANDLES}. Different types and full groups return {@code false};
+     * accepted combinations report success after attempting the property update.
+     */
     @Override
     public boolean combine(Dimension dimension, BlockState blockState, Vector3ic combineBlockPos, PlayerInteractInfo placementInfo) {
         var existingState = dimension.getBlockState(combineBlockPos);
-
-        // Only combine if same candle type
         if (existingState.getBlockType() != blockState.getBlockType()) {
             return false;
         }
@@ -85,12 +107,16 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
         if (currentCandles >= MAX_CANDLES) {
             return false;
         }
-
-        // Increment candle count
         dimension.updateBlockProperty(BlockPropertyTypes.CANDLES, currentCandles + 1, combineBlockPos);
         return true;
     }
 
+    /**
+     * Handles lighting, additional candles, and extinguishing when player context is
+     * present. Flint and steel lights an unlit group; any candle item can increase
+     * its count, and lit groups extinguish with non-flint-and-steel items when
+     * stacking did not handle the interaction.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) {
@@ -100,16 +126,12 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
         var pos = interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
         var isLit = blockState.getPropertyValue(BlockPropertyTypes.LIT);
-
-        // Light with flint and steel
         if (!isLit && itemStack.getItemType() == ItemTypes.FLINT_AND_STEEL) {
             dimension.updateBlockProperty(BlockPropertyTypes.LIT, true, pos);
             dimension.addSound(MathUtils.center(pos), SimpleSound.IGNITE);
             itemStack.tryIncreaseDamage(1);
             return true;
         }
-
-        // If holding a candle and current candle count is not full, let's increase the current candle count
         if (itemStack instanceof ItemCandleStack) {
             var currentCandles = blockState.getPropertyValue(BlockPropertyTypes.CANDLES);
             if (currentCandles < MAX_CANDLES) {
@@ -118,8 +140,6 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
                 return true;
             }
         }
-
-        // Extinguish with empty hand or any non-flint-and-steel item
         if (isLit && itemStack.getItemType() != ItemTypes.FLINT_AND_STEEL) {
             dimension.updateBlockProperty(BlockPropertyTypes.LIT, false, pos);
             dimension.addSound(MathUtils.center(pos), SimpleSound.FIRE_EXTINGUISH);
@@ -129,8 +149,14 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns one candle item per stored candle plus its zero-based offset. The
+     * resulting count ranges from one through four for valid candle states,
+     * preserving the number represented by the group.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        // The stored count starts at zero for one candle.
         var candleCount = block.getBlockState().getPropertyValue(BlockPropertyTypes.CANDLES) + 1;
         return Set.of(this.blockType.getItemType().createItemStack(candleCount));
     }

@@ -17,13 +17,28 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3ic;
 
 /**
+ * {@code ItemAxeBaseComponentImpl} handles an axe's log-stripping and copper
+ * surface interactions. It proposes each replacement through {@code BlockFadeEvent}
+ * before changing the world, damaging a noncreative player's axe, and producing
+ * the interaction's feedback. A recognized interaction remains handled when the
+ * event is cancelled.
+ *
  * @author IWareQ, daoge_cmd
  */
 public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
+    /**
+     * Creates an axe base component using the supplied stack initialization.
+     */
     public ItemAxeBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Attempts log stripping, wax removal, or one-stage copper scraping.
+     * The caller must supply interaction information. A recognized transformation
+     * returns {@code true} even when its fade event is cancelled; the inherited
+     * component-event result does not determine this override's result.
+     */
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
@@ -31,12 +46,10 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         var clickedBlockPos = interactInfo.clickedBlockPos();
         var clickedBlockState = dimension.getBlockState(clickedBlockPos);
 
-        // Try to strip logs
         if (clickedBlockState.getBehavior() instanceof BlockStrippableComponent strippableComponent) {
             if (!strippableComponent.isStripped(clickedBlockState)) {
                 var strippedBlockState = strippableComponent.getStrippedBlockState(clickedBlockState);
                 tryFadeBlock(dimension, interactInfo, strippedBlockState, () -> {
-                    // Idk why mojang does not use UsingItemOnBlock for player
                     interactInfo.player().applyAction(SimpleEntityAction.SWING_ARM);
                     dimension.addSound(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), new ItemUseOnBlockSound(clickedBlockState));
                 });
@@ -44,7 +57,6 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
             }
         }
 
-        // Try to remove wax or scrape copper
         if (clickedBlockState.getBehavior() instanceof BlockOxidationComponent oxidationComponent) {
             if (oxidationComponent.isWaxed()) {
                 var nextBlockType = oxidationComponent.getBlockWithWaxed(false);
@@ -68,6 +80,13 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Applies an uncancelled fade event's replacement and invokes its feedback action.
+     * Cancellation leaves the block, axe damage, and feedback unchanged. After an
+     * allowed event, the world update precedes the noncreative player's durability
+     * attempt and {@code postBlockPlace}; this helper does not roll back a failed
+     * later action.
+     */
     private void tryFadeBlock(Dimension dimension, PlayerInteractInfo interactInfo, BlockState newBlockState, Runnable postBlockPlace) {
         var clickedBlockPos = interactInfo.clickedBlockPos();
         var oldBlock = new Block(

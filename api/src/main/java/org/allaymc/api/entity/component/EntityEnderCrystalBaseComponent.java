@@ -1,23 +1,24 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Shared component for ender crystal entities that expose base visibility state.
+ * {@code EntityEnderCrystalBaseComponent} exposes the visible-base setting of
+ * an ender crystal. The setting controls the crystal's displayed base
+ * independently of its common entity location and lifecycle, and entity state
+ * encoding uses it when preparing the crystal metadata for viewers.
  *
  * @author daoge_cmd
  */
 public interface EntityEnderCrystalBaseComponent extends EntityBaseComponent {
 
     /**
-     * Checks whether the base of the Ender Crystal is visible.
-     *
-     * @return {@code true} if the base is visible, {@code false} otherwise
+     * Returns whether the ender crystal's displayed base is visible.
      */
     boolean isBaseVisible();
 
     /**
-     * Sets the visibility of the base of the ender crystal.
-     *
-     * @param value {@code true} to make the base visible, {@code false} to hide it
+     * Sets the visible-base flag and broadcasts updated crystal metadata to
+     * current viewers. The server stores the value even when unchanged, and
+     * subsequent NBT serialization includes that stored visibility setting.
      */
     void setBaseVisibility(boolean value);
 }

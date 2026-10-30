@@ -8,28 +8,53 @@ import java.util.*;
 import java.util.function.Supplier;
 
 /**
- * Stores packet processor factories by client state and packet type.
+ * {@code PacketProcessorRegistry} stores processor factories by client state and
+ * packet type during protocol initialization. Registration replaces an existing
+ * factory for the same pair,
+ * allowing a later protocol override to specialize one state without rebuilding
+ * unrelated registrations. A factory object can be stored under several states
+ * so connection holders can share one created processor across those entries.
  *
- * <p>The registry is mutable while a protocol is being initialized. Once frozen, it exposes an
- * immutable snapshot that can be used to create connection-specific processor holders.</p>
+ * <p>
+ * Mutation and freezing use the registry monitor. Freezing copies the
+ * insertion-ordered mapping into an unmodifiable snapshot before publishing the
+ * volatile {@code frozen} flag; readers require that flag before obtaining the
+ * snapshot. The snapshot retains factory identities rather than created
+ * processors, leaving connection-local state allocation to each holder. No
+ * registration can be added after freezing, and factory output types are
+ * checked when holders are constructed.
  *
  * @author daoge_cmd
  */
 public final class PacketProcessorRegistry {
+    /**
+     * {@code factories} stores insertion-ordered registrations while mutable.
+     * {@code register} and {@code freeze} access this map under the registry
+     * monitor, and it is never exposed
+     * directly.
+     */
     private final Map<Key, Supplier<? extends PacketProcessor<?>>> factories = new LinkedHashMap<>();
 
+    // The frozen flag publishes frozenFactories after its copied map is
+    // assigned. Readers test the flag first; these fields are never reset after
+    // publication.
+    /**
+     * {@code frozen} marks the registry as frozen and publishes its completed
+     * factory snapshot to readers.
+     */
     @Getter
     private volatile boolean frozen;
+    /**
+     * {@code frozenFactories} holds the unmodifiable registration snapshot once
+     * frozen. Factory objects retain their original identities for holder-side
+     * deduplication.
+     */
     private Map<Key, Supplier<? extends PacketProcessor<?>>> frozenFactories;
 
     /**
-     * Register a processor factory for one client state.
-     *
-     * <p>A later registration for the same state and packet type replaces the previous factory.</p>
-     *
-     * @param state      the client state
-     * @param packetType the packet type
-     * @param factory    the connection-specific processor factory
+     * Registers a nonnull factory for one nonnull state and packet type. Later
+     * registration for the same key replaces its factory; frozen registries
+     * reject this operation before validating its arguments.
      */
     public synchronized void register(
             ClientState state,
@@ -44,14 +69,17 @@ public final class PacketProcessorRegistry {
     }
 
     /**
-     * Register the same processor factory for one or more client states.
+     * Registers one factory object for a nonempty set of client states. The
+     * set, each state, packet type, and factory must be nonnull, and callers
+     * must keep the supplied set stable throughout this operation.
      *
-     * <p>The exact factory object is stored for every state. A holder therefore creates one processor
-     * instance for all entries that share that factory object.</p>
-     *
-     * @param packetType the packet type
-     * @param factory    the connection-specific processor factory
-     * @param states     the client states
+     * <p>
+     * Every state is validated before the first registration changes. Thus an
+     * empty set or {@code null} element cannot leave a partially updated set of
+     * registrations. Valid entries replace factories under the registry
+     * monitor, and the unchanged factory identity lets a holder reuse one
+     * processor across all of these state keys. Frozen registries reject the
+     * operation.
      */
     public synchronized void register(
             Set<ClientState> states,
@@ -66,6 +94,8 @@ public final class PacketProcessorRegistry {
             throw new IllegalArgumentException("At least one client state is required");
         }
 
+        // Validate the complete state set before changing any key so a bad
+        // later state cannot leave earlier registrations partially replaced.
         for (var state : states) {
             Objects.requireNonNull(state, "state");
         }
@@ -75,24 +105,33 @@ public final class PacketProcessorRegistry {
     }
 
     /**
-     * Freeze this registry and publish its immutable factory snapshot.
+     * Publishes an unmodifiable copy of the current factory mapping and
+     * prevents later registration. Repeated calls return without replacing the
+     * previously published snapshot, preserving its identity for subsequent
+     * connection holders.
      *
-     * <p>Calling this method more than once is harmless.</p>
+     * <p>
+     * The copied mapping is assigned before the volatile {@code frozen} flag is set.
+     * Readers that observe the flag can therefore access the completed snapshot
+     * without acquiring this monitor. The copy retains supplier references, so
+     * immutability protects registry membership rather than any mutable state
+     * inside a supplier.
      */
     public synchronized void freeze() {
         if (frozen) {
             return;
         }
 
+        // Assign the finished snapshot before the volatile flag so readers
+        // cannot observe a frozen registry whose factory map is still absent.
         frozenFactories = Collections.unmodifiableMap(new LinkedHashMap<>(factories));
         frozen = true;
     }
 
     /**
-     * Get the immutable frozen factory snapshot.
-     *
-     * @return the frozen factory snapshot
-     * @throws IllegalStateException if this registry has not been frozen
+     * Returns the frozen factory snapshot without copying it again. Calling
+     * before freezing throws {@code IllegalStateException}; after publication the map
+     * cannot change, although its supplier objects remain shared references.
      */
     Map<Key, Supplier<? extends PacketProcessor<?>>> getFactories() {
         if (!frozen) {
@@ -101,6 +140,12 @@ public final class PacketProcessorRegistry {
         return frozenFactories;
     }
 
+    /**
+     * Rejects mutation once the registry has published its frozen snapshot.
+     * Callers hold the registry monitor while checking this condition and
+     * changing registrations, preventing a concurrent freeze between those
+     * operations.
+     */
     private void ensureMutable() {
         if (frozen) {
             throw new IllegalStateException("Packet processor registry is frozen");
@@ -108,12 +153,18 @@ public final class PacketProcessorRegistry {
     }
 
     /**
-     * Identifies a processor registration by client state and packet type.
+     * {@code Key} identifies a processor registration by nonnull client state and packet
+     * type.
      *
-     * @param state      the client state
-     * @param packetType the packet type
+     * @param state matching client lifecycle state
+     * @param packetType matching Bedrock packet type
      */
     public record Key(ClientState state, BedrockPacketType packetType) {
+        /**
+         * Creates a registration key after rejecting a {@code null} state or packet
+         * type. The key retains both supplied enum values for equality-based
+         * registration lookup and replacement in the registry.
+         */
         public Key {
             Objects.requireNonNull(state, "state");
             Objects.requireNonNull(packetType, "packetType");

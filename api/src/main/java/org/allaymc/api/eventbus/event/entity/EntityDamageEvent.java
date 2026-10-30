@@ -8,7 +8,11 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when an entity takes damage.
+ * {@code EntityDamageEvent} exposes a damage attempt before attacker and victim
+ * modifiers are applied. Listeners share the original mutable
+ * {@code DamageContainer}; cancellation stops later damage processing, although
+ * the living component has already recorded the attempt for its damage
+ * cooldown.
  *
  * @author daoge_cmd
  */
@@ -18,10 +22,19 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class EntityDamageEvent extends EntityEvent implements CancellableEvent {
 
     /**
-     * The damage data for this event.
+     * {@code damageContainer} holds the original mutable attempt data.
+     * Listeners and the remaining damage pipeline use the same instance, so
+     * listener changes affect the amount and knockback processed after
+     * dispatch.
      */
     protected DamageContainer damageContainer;
 
+    /**
+     * Creates an event retaining the supplied victim and mutable damage
+     * container. Neither reference is copied or validated, so the caller must
+     * supply the entity and attempt data that subsequent listeners and damage
+     * processing should use.
+     */
     public EntityDamageEvent(Entity entity, DamageContainer damageContainer) {
         super(entity);
         this.damageContainer = damageContainer;

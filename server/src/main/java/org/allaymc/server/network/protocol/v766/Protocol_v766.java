@@ -21,17 +21,41 @@ import java.util.EnumSet;
 import java.util.Locale;
 
 /**
- * Oldest complete protocol baseline. The international v766 variant is intentionally not registered.
+ * {@code Protocol_v766} supplies baseline packet processors and legacy
+ * custom-block encoding for the international protocol inheritance chain. Its
+ * processor registrations cover each client state, and its material and
+ * collision hooks select the older component layouts. The public constructor
+ * selects the v766 codec, but the default registry does not register an
+ * international v766 instance. Concrete variants and later protocol classes
+ * inherit this baseline while retaining their own negotiated identities.
  */
 public abstract class Protocol_v766 extends Protocol {
+    /**
+     * Creates an uninitialized international protocol using the v766 codec. The
+     * constructor records its identity without building payloads or processors;
+     * callers must invoke {@code initialize} after all subtype construction has
+     * finished.
+     */
     public Protocol_v766() {
         this(Bedrock_v766.CODEC, ClientVariant.INTERNATIONAL);
     }
 
+    /**
+     * Creates an uninitialized instance retaining the supplied codec and client
+     * distribution. Subclasses use this constructor to reuse implementation
+     * while keeping their own identity; runtime data is built only by the later
+     * initialization call.
+     */
     protected Protocol_v766(BedrockCodec codec, ClientVariant variant) {
         super(codec, variant);
     }
 
+    /**
+     * Registers the baseline processors by client state and packet type. Some
+     * factories span spawned and gameplay states, while selected packets
+     * receive no-op processors during spawning; later protocol hooks may
+     * replace individual registrations before the registry freezes.
+     */
     @Override
     protected void registerProcessors(PacketProcessorRegistry registry) {
         registry.register(
@@ -64,6 +88,9 @@ public abstract class Protocol_v766 extends Protocol {
                 BedrockPacketType.CLIENT_CACHE_BLOB_STATUS,
                 ClientCacheBlobStatusPacketProcessor::new
         );
+        // Spawn-time packets can arrive before gameplay admission; no-op
+        // handlers consume these types until the in-game registrations become
+        // selectable.
         registry.register(ClientState.SPAWNED, BedrockPacketType.PLAYER_AUTH_INPUT, () -> new NoopPacketProcessor(BedrockPacketType.PLAYER_AUTH_INPUT));
         registry.register(ClientState.SPAWNED, BedrockPacketType.MOB_EQUIPMENT, () -> new NoopPacketProcessor(BedrockPacketType.MOB_EQUIPMENT));
         registry.register(ClientState.SPAWNED, BedrockPacketType.INTERACT, () -> new NoopPacketProcessor(BedrockPacketType.INTERACT));
@@ -117,11 +144,19 @@ public abstract class Protocol_v766 extends Protocol {
         registry.register(ClientState.IN_GAME, BedrockPacketType.COMMAND_BLOCK_UPDATE, CommandBlockUpdatePacketProcessor::new);
     }
 
+    /**
+     * Encodes the legacy material fields with face dimming stored as an
+     * individual boolean. Texture, rendering mode, ambient occlusion, and
+     * lowercase tint are retained; newer packed flags are not emitted by this
+     * baseline.
+     */
     @Override
     protected NbtMap encodeMaterialInstance(
             CustomBlockStateDefinition.MaterialInstance material,
             TintMethod tintMethod
     ) {
+        // Legacy material payloads have a separate face_dimming field, so the
+        // later packed flag representation cannot be reused by this baseline.
         return NbtMap.builder()
                 .putString("texture", material.texture())
                 .putString("render_method", material.renderMethod().getId())
@@ -131,11 +166,22 @@ public abstract class Protocol_v766 extends Protocol {
                 .build();
     }
 
+    /**
+     * Encodes collision using the legacy merged-box representation.
+     * {@code null} or empty shapes disable collision; separate solids become
+     * one bounding box with the inherited horizontal-origin shift and one-block
+     * height cap.
+     */
     @Override
     protected NbtMap encodeCollisionBox(VoxelShape shape) {
         return encodeMergedBox(shape);
     }
 
+    /**
+     * Creates the {@code PacketEncoder_v766} implementation using the exact
+     * supplied data instance. The enclosing initialization lifecycle verifies
+     * this shared identity before publishing the protocol for connection use.
+     */
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
         return new PacketEncoder_v766(data);

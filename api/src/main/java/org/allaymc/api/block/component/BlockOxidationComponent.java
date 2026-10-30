@@ -4,47 +4,44 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Component for blocks whose state changes with oxidation level and waxing state.
+ * {@code BlockOxidationComponent} exposes a copper block's oxidation level, wax
+ * state, and corresponding block types. Oxidation lookup preserves the current wax
+ * state, wax lookup preserves the current oxidation level, and the default
+ * eligibility check excludes waxed or fully oxidized variants.
  *
  * @author IWareQ
  */
 public interface BlockOxidationComponent extends BlockComponent {
     /**
-     * Gets the block with the specified oxidation level.
-     *
-     * @param oxidationLevel the {@link OxidationLevel}
-     * @return the corresponding {@link BlockType}
+     * Returns the corresponding block type at the requested oxidation level. The
+     * lookup retains this component's wax state, allowing callers to change oxidation
+     * without choosing a different waxed variant.
      */
     BlockType<? extends BlockOxidationComponent> getBlockWithOxidationLevel(OxidationLevel oxidationLevel);
 
     /**
-     * Checks if the block can oxidize further.
-     *
-     * @return {@code true} if oxidizable, {@code false} otherwise
+     * Returns whether this block can advance to another oxidation level. The default
+     * permits advancement only when this component is unwaxed and its level differs
+     * from {@code OxidationLevel.OXIDIZED}.
      */
     default boolean canOxidate() {
         return this.getOxidationLevel() != OxidationLevel.OXIDIZED && !this.isWaxed();
     }
 
     /**
-     * Gets the current oxidation level of the block.
-     *
-     * @return the current {@link OxidationLevel}
+     * Returns the oxidation level represented by this block component.
      */
     OxidationLevel getOxidationLevel();
 
     /**
-     * Checks if the block is waxed.
-     *
-     * @return {@code true} if waxed, {@code false} otherwise
+     * Returns whether this block component represents a waxed variant.
      */
     boolean isWaxed();
 
     /**
-     * Gets the block with the specified waxed state.
-     *
-     * @param waxed the waxed state
-     * @return the corresponding {@link BlockType}
+     * Returns the corresponding block type with the requested wax state. The lookup
+     * retains this component's oxidation level, allowing callers to wax or unwax a
+     * block without changing its oxidation.
      */
     BlockType<? extends BlockOxidationComponent> getBlockWithWaxed(boolean waxed);
 }

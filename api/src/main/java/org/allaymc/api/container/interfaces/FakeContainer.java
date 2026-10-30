@@ -11,15 +11,27 @@ import org.allaymc.api.player.Player;
 import java.util.function.Consumer;
 
 /**
- * FakeContainer is a type of container that is `fake`. They are not held by any {@link ContainerHolder}, and
- * is usually used to display a GUI. To create fake container instance, use {@link FakeContainerFactory#getFactory()}.
+ * {@code FakeContainer} represents a synthetic inventory interface backed by client-side
+ * block updates rather than a world container holder. Plugins create instances through
+ * {@link FakeContainerFactory} and use the stored items and click listeners to present
+ * an interface. The normal container slot operations still control contents and their
+ * notifications.
+ *
+ * <p>
+ * Opening requires fake blocks to reach the player before the container window opens, so
+ * {@code addPlayer} schedules the opening after block updates. Callers must use that
+ * operation instead of {@code addViewer}. Closing restores the world block view through
+ * the implementation; click listeners observe attempted fake-slot transfers rather than
+ * ordinary slot-change notifications.
  *
  * @author daoge_cmd
  */
 public interface FakeContainer extends Container {
 
     /**
-     * @see #addPlayer(Player, Consumer)
+     * Starts opening this synthetic interface for the player with an ignored outcome
+     * callback. Fake block updates precede the delayed window open, so the container is
+     * not necessarily open when this call returns.
      */
     default void addPlayer(Player player) {
         addPlayer(player, $ -> {
@@ -27,60 +39,55 @@ public interface FakeContainer extends Container {
     }
 
     /**
-     * Adds a player to the fake container, allowing them to interact with it.
-     * The callback is invoked with {@code true} if the player was successfully added,
-     * or {@code false} otherwise.
-     * <p>
-     * Please note that you should use this method instead of using {@link #addViewer(ContainerViewer)},
-     * since we need to send fake blocks to the client before we can open the container. This requires
-     * a delay between the two operations (send fake blocks, open container) due to the client limitation.
+     * Starts fake block publication followed by a delayed attempt to open the player's
+     * window. The callback runs after the opening attempt and receives its reported
+     * outcome.
      *
-     * @param player   the player to be added to the container
-     * @param callback a callback function that handles whether the addition was successful
+     * <p>
+     * The current server implementation reports {@code false} and then {@code true} when
+     * opening is rejected; callers cannot rely on a single callback for that path.
+     * Direct {@code addViewer} is unsupported because it omits the block publication
+     * delay.
      */
     void addPlayer(Player player, Consumer<Boolean> callback);
 
     /**
-     * Adds a click listener to the fake container. The listener will be called when
-     * the item in the specified slot is clicked/moved by an {@link EntityPlayer}.
-     *
-     * @param listener the listener to add
+     * Registers a listener for attempted transfers from the specified fake slot. Fake
+     * container transfer handling invokes these listeners before rejecting movement of
+     * the displayed stack, independently of ordinary slot-change listeners.
      */
     void addClickListener(int slot, Runnable listener);
 
     /**
-     * Removes a previously added click listener from the fake container.
-     *
-     * @param listener the listener to remove. Should be the same one that was added previously
+     * Removes the supplied listener from the specified fake slot's click listener set.
+     * Callers must supply the registered listener instance; removing an absent
+     * registration leaves subsequent clicks unaffected.
      */
     void removeClickListener(int slot, Runnable listener);
 
     /**
-     * Removes all registered click listeners from the fake container.
+     * Removes every registered click listener from all fake container slots.
      */
     void removeAllClickListeners();
 
     /**
-     * Sets the custom name of the fake container. The custom name will appear in the header of the container UI.
-     *
-     * @param customName the custom name of the container to set, or {@code null} to remove the custom name
+     * Sets the optional title used for subsequent fake block publication. {@code null}
+     * removes the custom title; changing this value does not itself resend fake blocks
+     * to players already viewing the container.
      */
     void setCustomName(String customName);
 
     /**
-     * Retrieves the custom name of the fake container.
-     *
-     * @return the custom name of the fake container, or {@code null} if no custom name has been set
+     * Returns the title used for subsequent fake block publication. {@code null} means
+     * that no custom title is configured, allowing the client to display its normal
+     * container title instead.
      */
     String getCustomName();
 
     /**
-     * Sets an {@link ItemStack} to a specific slot in the container and attaches a listener
-     * that will be notified when the item in the slot is clicked or interacted with by a {@link EntityPlayer}.
-     *
-     * @param slot      the slot index where the {@link ItemStack} will be placed
-     * @param itemStack the {@link ItemStack} to set in the specified slot
-     * @param listener  the listener to attach to the slot
+     * Stores the slot's item and then registers its click listener. Item assignment
+     * follows ordinary container notifications before listener registration; existing
+     * click listeners on that slot remain registered alongside the supplied listener.
      */
     default void setItemStackWithListener(int slot, ItemStack itemStack, Runnable listener) {
         setItemStack(slot, itemStack);

@@ -13,9 +13,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * {@code WorldDataCodecTest} checks
+ * world metadata round trips, default values, and unsupported storage
+ * versions.
+ */
 @ExtendWith(AllayTestExtension.class)
 class WorldDataCodecTest {
 
+    /**
+     * Serializes explicitly configured world metadata and reads it into a new
+     * object. Difficulty, display name, spawn coordinates, time counters, and
+     * startup count must retain their values.
+     */
     @Test
     void testWriteAndReadRoundTrip() {
         var original = AllayWorldData.builder()
@@ -38,9 +48,15 @@ class WorldDataCodecTest {
         assertEquals(3L, restored.getWorldStartCount());
     }
 
+    /**
+     * Reads metadata containing only the supported storage-version tag. The
+     * reader must supply the documented display name, spawn position, sunrise
+     * time, and zero-valued counters for omitted properties.
+     */
     @Test
     void testReadWithDefaultValues() {
-        // Minimal NbtMap with only required version fields
+        // Omit gameplay and network fields to exercise their defaults while retaining
+        // a valid storage version that lets reconstruction reach the gameplay assertions.
         var nbt = NbtMap.builder()
                 .putInt("StorageVersion", WorldDataCodec.CURRENT_STORAGE_VERSION)
                 .build();
@@ -54,6 +70,11 @@ class WorldDataCodecTest {
         assertEquals(0L, worldData.getWorldStartCount());
     }
 
+    /**
+     * Provides a metadata storage version one slot newer than the reader
+     * supports. Reconstruction must reject it with a storage exception before
+     * returning world metadata.
+     */
     @Test
     void testUnsupportedStorageVersionThrows() {
         var nbt = NbtMap.builder()

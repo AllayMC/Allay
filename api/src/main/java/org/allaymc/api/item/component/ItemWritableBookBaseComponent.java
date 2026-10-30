@@ -6,75 +6,63 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.List;
 
 /**
- * Shared component for writable books whose pages can be edited and reordered.
+ * {@code ItemWritableBookBaseComponent} exposes editable book pages through
+ * zero-based indices. Page edits accept indices from {@code 0} through
+ * {@code 49}, while insertion shifts later pages and replacement can fill
+ * intervening positions with empty text.
  *
  * @author daoge_cmd
  */
 public interface ItemWritableBookBaseComponent extends ItemBaseComponent {
 
     /**
-     * Gets the total number of pages in the book.
-     *
-     * @return the total number of pages in the book
+     * Returns the number of pages currently stored by this book.
      */
     @Range(from = 0, to = 50)
     int getPageCount();
 
     /**
-     * Gets texts of all pages.
-     *
-     * @return texts of all pages
+     * Returns an unmodifiable view of the current page list. Edits to that
+     * list remain visible through the view, but replacing the list while
+     * loading data leaves earlier views attached to their earlier list.
      */
     @UnmodifiableView
     List<String> getPages();
 
     /**
-     * Gets the text of a specific page from the book.
-     *
-     * @param page the specific page
-     *
-     * @return the text of the specific page, or {@code null} if the page does not exist
-     *
-     * @throws IllegalArgumentException if the page is out of bounds
+     * Returns the text at an existing zero-based page index. The server
+     * rejects indices outside {@code 0} through {@code 49} and throws an index
+     * exception for an allowed index without a stored page.
      */
     String getPageText(@Range(from = 0, to = 49) int page);
 
     /**
-     * Removes a specific page from the book.
-     *
-     * @param page the specific page to be removed
-     *
-     * @throws IllegalArgumentException if the page is out of bounds
+     * Removes an existing page and shifts later pages toward the beginning.
+     * {@code page} must identify a stored page within {@code 0} through
+     * {@code 49}; an absent position causes an index exception.
      */
     void removePage(@Range(from = 0, to = 49) int page);
 
     /**
-     * Inserts a page within the book.
-     *
-     * @param page the page to insert
-     * @param text the text of the page
-     *
-     * @throws IllegalArgumentException if the page is out of bounds or text bytes length is longer than 256 characters
+     * Inserts text before the given page or at the current end. {@code page}
+     * must be within {@code 0} through {@code 49} and no greater than the page
+     * count; {@code text} must encode to at most 256 bytes in the platform
+     * default charset.
      */
     void insertPage(@Range(from = 0, to = 49) int page, String text);
 
     /**
-     * Set the text of a specific page, and if the page doesn't exist it will be created
-     *
-     * @param page the specific page
-     * @param text the text to set
-     *
-     * @throws IllegalArgumentException if the page is out of bounds or text bytes length is longer than 256 characters
+     * Stores text at the specified page, adding empty pages for intervening
+     * positions. {@code page} must be within {@code 0} through {@code 49}, and
+     * non-{@code null} {@code text} must encode to at most 256 bytes in the
+     * platform default charset.
      */
     void setPage(@Range(from = 0, to = 49) int page, String text);
 
     /**
-     * Swaps two different pages.
-     *
-     * @param page1 the first page
-     * @param page2 the second page
-     *
-     * @throws IllegalArgumentException if page1 or page2 is out of bounds
+     * Exchanges the text at two existing zero-based page indices. Both indices
+     * must identify stored pages within {@code 0} through {@code 49}; swapping
+     * a page with itself leaves its text unchanged.
      */
     void swapPage(@Range(from = 0, to = 49) int page1, @Range(from = 0, to = 49) int page2);
 }

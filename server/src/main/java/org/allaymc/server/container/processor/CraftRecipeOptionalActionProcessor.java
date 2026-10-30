@@ -20,18 +20,68 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * {@code CraftRecipeOptionalActionProcessor} calculates anvil repair, enchantment merge,
+ * and rename results for the currently opened anvil. Request-local filter strings supply
+ * the selected custom name, and input repair history combines with operation costs to
+ * determine the charged experience levels and future repair penalty.
+ *
+ * <p>
+ * Material repairs and equal-item repairs use different durability bonuses. Enchantment
+ * compatibility, levels, rarity, and book discounts affect the operation cost, while a
+ * present rename caps that total at the configured limit. Noncreative execution can
+ * damage the anvil and deduct experience before the result event runs; cancelling that
+ * event prevents output publication without restoring those prior effects.
+ *
  * @author IWareQ
  */
 @Slf4j
 public class CraftRecipeOptionalActionProcessor implements ContainerActionProcessor<CraftRecipeOptionalAction> {
+    /**
+     * {@code FILTER_STRINGS_DATA_KEY} names the request-local string array supplied by
+     * packet processing and read for anvil rename selection.
+     */
     public static final String FILTER_STRINGS_DATA_KEY = "filterStrings";
 
+    // ANVIL_MATERIAL_REPAIR_MULTIPLIER and ANVIL_ITEM_REPAIR_MULTIPLIER scale
+    // different repair paths against maximum durability: consumable materials restore
+    // a fraction per item, while equal-item merging adds its separate bonus.
+    /**
+     * Material repair percentage of maximum item durability.
+     */
     private static final int ANVIL_MATERIAL_REPAIR_MULTIPLIER = 25;
+    /**
+     * Equal-item merge bonus percentage of maximum durability.
+     */
     private static final int ANVIL_ITEM_REPAIR_MULTIPLIER = 12;
 
+    /**
+     * {@code ANVIL_DAMAGE_CHANCE} is the probability of attempting anvil damage during
+     * an accepted noncreative operation, before the result event is dispatched.
+     */
     private static final float ANVIL_DAMAGE_CHANCE = 0.12f;
+    /**
+     * {@code ANVIL_COST_LIMIT} caps totals whenever renaming is requested and rejects
+     * larger noncreative totals when that rename cap does not apply.
+     */
     private static final int ANVIL_COST_LIMIT = 39;
 
+    /**
+     * Builds an anvil result from input, material, and request filter strings. The
+     * player must have an anvil open, and any selected filter index must address the
+     * supplied array; the existing length guard does not reject every invalid index.
+     *
+     * <p>
+     * Repair history adds to operation costs from material repair, durability merging,
+     * enchantment compatibility and levels, and renaming. A present rename caps the
+     * total at {@code ANVIL_COST_LIMIT}, even when other operations also contribute.
+     * Noncreative players must afford the accepted cost.
+     *
+     * <p>
+     * Anvil damage and experience deduction occur before the take-result event.
+     * Cancellation returns an error without restoring those effects; successful dispatch
+     * stages the listener's result and returns {@code null}, leaving input consumption
+     * to later actions.
+     */
     @Override
     public ActionResponse handle(CraftRecipeOptionalAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getOpenedContainer(ContainerTypes.ANVIL);
@@ -68,11 +118,13 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
 
             var maxDamage = resultItem.getMaxDamage();
 
-            // Case 1: Repair by repairing materials
             if (
                     inputItem instanceof ItemRepairableComponent repairableComponent &&
                     repairableComponent.canBeRepairedBy(materialItem.getItemType())
             ) {
+                // Material repair converts the configured percentage into durability
+                // points, capped by the damage remaining on the result after each
+                // material item.
                 var delta = Math.min(resultItem.getDamage(), maxDamage * ANVIL_MATERIAL_REPAIR_MULTIPLIER / 100);
                 if (delta <= 0) {
                     log.warn("Input item is already fully repaired");
@@ -89,19 +141,19 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
 
                 resultItem.setDamage(newDamage);
             } else {
-                // Case 2: Merge equal items
                 var isEnchantedBook = materialItem.getItemType() == ItemTypes.ENCHANTED_BOOK;
 
-                // Step 1: Merge durability
                 if (!isEnchantedBook && inputItem.getItemType() == materialItem.getItemType()) {
                     actionCost += 2;
 
+                    // Equal-item repair receives its separate percentage bonus when
+                    // converting both inputs' damage into the result's remaining
+                    // damage value.
                     var bonusDamage = maxDamage * ANVIL_ITEM_REPAIR_MULTIPLIER / 100;
                     var mergedDamage = inputItem.getDamage() + materialItem.getDamage() - bonusDamage;
                     resultItem.setDamage(Math.max(0, mergedDamage - maxDamage));
                 }
 
-                // Step 2: Merge enchantments
                 boolean hasIncompatible = false;
                 boolean hasCompatible = false;
                 for (var materialEnchantment : materialItem.getEnchantments()) {
@@ -144,6 +196,9 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                     }
 
                     var rarityCost = materialEnchantmentType.getRarity().getAnvilCost();
+                    // Book-supplied enchantments halve the rarity cost with integer
+                    // truncation but retain at least one level of cost per applied
+                    // increase.
                     if (isEnchantedBook) {
                         rarityCost = Math.max(1, rarityCost / 2);
                     }
@@ -159,13 +214,12 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             }
         }
 
-        // Case 3: Renaming
         var renamed = filterStrings.length != 0;
         if (renamed) {
             var customName = filterStrings[action.filteredStringIndex()];
             if (customName == null || customName.isEmpty()) {
                 if (!resultItem.getCustomName().isEmpty()) {
-                    customName = ""; // Clear the custom name
+                    customName = "";
                 }
             }
 
@@ -179,7 +233,9 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             return error();
         }
 
-        // If our only action was renaming, the cost should never exceed 40
+        // Any supplied rename activates this cap, including requests with repair or
+        // enchantment costs; the implementation does not restrict the cap to
+        // rename-only operations.
         if (totalCost > ANVIL_COST_LIMIT && renamed) {
             totalCost = ANVIL_COST_LIMIT;
         }
@@ -196,6 +252,9 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 return error();
             }
 
+            // Apply anvil damage and charge experience before the result event; a
+            // later cancellation prevents output publication but does not compensate
+            // these earlier effects.
             var anvilPos = container.getBlockPos();
             if (ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE) {
                 var anvilState = entity.getDimension().getBlockState(anvilPos);
@@ -218,6 +277,9 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
 
         var newRepairCost = Math.max(inputItem.getRepairCost(), materialItem.getRepairCost());
         if (actionCost > 1 || !renamed) {
+            // Nontrivial operations increase future repair history by doubling the
+            // larger input penalty and adding one; rename-only work preserves the
+            // larger existing penalty.
             newRepairCost = newRepairCost * 2 + 1;
         }
 
@@ -232,6 +294,9 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         return null;
     }
 
+    /**
+     * Returns the optional recipe action type used for anvil requests.
+     */
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.CRAFT_RECIPE_OPTIONAL;

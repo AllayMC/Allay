@@ -12,124 +12,102 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * BlockState represents a state of a {@link BlockType}. Each {@link BlockState} is a singleton which means you can directly
- * use `==` to compare whether two block state are equal. All the known block state can be found in {@link Registries#BLOCK_STATE_PALETTE}.
+ * {@code BlockState} represents a block type's selected property combination and
+ * exposes its palette hash, serialized NBT, behavior, and metadata. Registered
+ * states are canonical palette entries, so property updates select existing state
+ * objects rather than changing the original state's property values.
  *
  * @author daoge_cmd
  */
 public interface BlockState {
 
     /**
-     * Gets the block type of this block state.
-     *
-     * @return the associated {@link BlockType}
+     * Returns the block type that owns this state's property combination.
      */
     BlockType<?> getBlockType();
 
     /**
-     * Gets the hash of this block state. The block state hash is a 32-bit integer with completely
-     * different hash values for different block states, and this value does not change as long as
-     * the held {@link BlockPropertyType} do not change (e.g. rename, delete, add).
-     *
-     * @return the hash value
+     * Returns the signed 32-bit palette hash computed from the block identifier and
+     * serialized property values. The hash is not a mathematical guarantee against
+     * collisions; callers use the registered palette entry for state identity.
      */
     int blockStateHash();
 
     /**
-     * Gets the special value identifying this state.
-     * <p>
-     * For all states of a block type, the states have unique special values from one state to another,
-     * and the special value can be computed through the state's property values
-     *
-     * @return the special value as a long
+     * Returns the property-index key packed in the owning type's property order.
+     * The key is meaningful within that type when its property widths fit in a
+     * {@code long}; wider domains require hash-based lookup instead.
      */
     long specialValue();
 
     /**
-     * Gets the property values of this state.
-     *
-     * @return unmodifiable map of {@link BlockPropertyType} to {@link BlockPropertyType.BlockPropertyValue}
+     * Returns an unmodifiable map associating each property domain with its
+     * selected wrapper. The map retains the property and wrapper objects, so
+     * callers use those exact property instances when querying or updating this
+     * state.
      */
     @UnmodifiableView
     Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues();
 
     /**
-     * Creates a new state with updated property values.
-     *
-     * @param propertyValues list of {@link BlockPropertyType.BlockPropertyValue} to set
-     * @return new {@link BlockState} with applied values
-     * @throws IllegalArgumentException if any value is unsupported by this block type
+     * Selects the canonical state after replacing the supplied properties and
+     * retaining the others. Each property must be supported by identity and appear
+     * once; unsupported or duplicate property entries throw {@code
+     * IllegalArgumentException}.
      */
     BlockState setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     /**
-     * Gets the value of a specific property.
-     *
-     * @param property   the {@link BlockPropertyType} to query
-     * @param <DATATYPE> property value type
-     * @param <PROPERTY> property type subtype
-     * @return the property value
-     * @throws IllegalArgumentException if property is unsupported by this block type
+     * Returns the raw value for the exact supplied property instance. A separate
+     * property with the same name is not sufficient; an unsupported property
+     * produces {@code IllegalArgumentException}.
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY property);
 
     /**
-     * Creates a new state with an updated property value.
-     *
-     * @param propertyValue the {@link BlockPropertyType.BlockPropertyValue} to apply
-     * @return new {@link BlockState} with the updated value
-     * @throws IllegalArgumentException if value is unsupported by this block type
+     * Selects the canonical state after replacing one supported property wrapper.
+     * The original state stays unchanged, and an unsupported property instance
+     * throws {@code IllegalArgumentException} rather than being matched by its
+     * name.
      */
     BlockState setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
 
     /**
-     * Creates a new state with a specific property value set.
-     *
-     * @param property   the {@link BlockPropertyType} to modify
-     * @param value      the value to set
-     * @param <DATATYPE> property value type
-     * @param <PROPERTY> property type subtype
-     * @return new {@link BlockState} with the updated value
-     * @throws IllegalArgumentException if property or value is unsupported by this block type
+     * Converts the raw value through its property domain and selects the resulting
+     * canonical state. The property must be supported by identity, and invalid raw
+     * values follow that property's conversion failure behavior.
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setPropertyValue(PROPERTY property, DATATYPE value);
 
     /**
-     * Gets the unsigned version of the block state hash.
-     *
-     * @return the unsigned version of the block state hash
+     * Returns the state hash as an unsigned 32-bit value stored in a {@code long}.
      */
     default long unsignedBlockStateHash() {
         return Integer.toUnsignedLong(blockStateHash());
     }
 
     /**
-     * Gets the NBT representation of this state.
-     *
-     * @return {@link NbtMap} of this block state
+     * Returns the serialized block identifier, property values, and state-version
+     * NBT.
      */
     NbtMap getBlockStateNBT();
 
     /**
-     * Converts this state to its item form.
-     *
-     * @return {@link ItemStack} representing this state
+     * Creates one item of the item type associated with this block type. The
+     * conversion uses the item's default construction settings and does not promise
+     * to encode this state's individual property values.
      */
     ItemStack toItemStack();
 
     /**
-     * Gets the behavior of this block state.
-     *
-     * @return the {@link BlockBehavior} instance
+     * Returns the behavior shared by states of the owning block type.
      */
     default BlockBehavior getBehavior() {
         return getBlockType().getBlockBehavior();
     }
 
     /**
-     * Gets the data for this block state.
-     *
-     * @return the {@link BlockStateData} instance
+     * Returns the metadata selected for this state by its owning behavior.
      */
     default BlockStateData getBlockStateData() {
         return getBehavior().getBlockStateData(this);

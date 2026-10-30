@@ -4,5 +4,12 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.blockentity.interfaces.BlockEntityEnderChest;
 
+/**
+ * {@code BlockEnderChestBehavior} exposes ender chest block behavior together with
+ * access to its typed block entity. {@code getBlockEntity} resolves the
+ * {@code BlockEntityEnderChest} at a world position, while the inherited
+ * {@code BlockBehavior} contract supplies the ordinary placement, update, and
+ * interaction entry points.
+ */
 public interface BlockEnderChestBehavior extends BlockBehavior, BlockBlockEntityHolderComponent<BlockEntityEnderChest> {
 }

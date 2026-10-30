@@ -11,13 +11,28 @@ import org.joml.Vector3d;
 import java.util.List;
 
 /**
+ * {@code FillCommand} places one block state throughout an inclusive cuboid in
+ * the sender's execution dimension. The handler validates the corners and
+ * requested state before visiting positions; its reported count includes every
+ * placement attempt, even when a block-change event prevents an individual edit.
+ *
  * @author daoge_cmd
  */
 public class FillCommand extends Command {
+    /**
+     * Creates the {@code /fill} command with its built-in authorization permission.
+     */
     public FillCommand() {
         super("fill", TrKeys.MC_COMMANDS_FILL_DESCRIPTION, Permissions.COMMAND_FILL);
     }
 
+    /**
+     * Installs cuboid filling with optional block property values.
+     * Fractional corners select containing blocks, reversed corners are
+     * normalized, and omitted properties select the block's default state.
+     * Placement attempts occur independently and contribute to feedback without
+     * checking whether each edit was accepted.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -26,6 +41,7 @@ public class FillCommand extends Command {
                 .blockType("blockType")
                 .blockPropertyValues("blockPropertyValues").optional()
                 .exec(context -> {
+                    // Flooring selects containing blocks before inclusive cuboid bounds are computed.
                     var from = context.<Vector3d>getResult(0).floor();
                     var to = context.<Vector3d>getResult(1).floor();
 

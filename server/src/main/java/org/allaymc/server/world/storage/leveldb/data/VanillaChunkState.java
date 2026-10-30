@@ -1,7 +1,11 @@
 package org.allaymc.server.world.storage.leveldb.data;
 
 /**
- * Indicates the state of generation of the chunk in vanilla.
+ * {@code VanillaChunkState} names
+ * vanilla chunk-generation states using their persisted ordinal values.
+ * The LevelDB loader accepts the done state as completed terrain and treats
+ * other stored states as a new chunk; an absent state record follows the
+ * separate legacy-loading path.
  *
  * @author daoge_cmd
  */
@@ -15,7 +19,7 @@ public enum VanillaChunkState {
      */
     NEEDS_POPULATION,
     /**
-     * Chunk is fully finished (which is the state generally found in world saves from vanilla).
+     * Completed vanilla terrain state accepted by the LevelDB chunk loader.
      */
     DONE
 }

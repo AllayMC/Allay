@@ -12,146 +12,146 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * WorldStorage represents the storage of a world, which is responsible for reading and writing chunks and world data.
- * The instance of WorldStorage will be created for each world and won't be shared between worlds.
- * <p>
- * The implementation of these methods should all be thread-safe.
+ * {@code WorldStorage} stores
+ * one world's chunks, entities, and world metadata behind a common
+ * persistence contract. Each world receives its own storage instance, and
+ * implementations must make their operations thread-safe. World lifecycle hooks
+ * establish the owning world before ticking and release storage resources at
+ * shutdown.
  *
  * @author daoge_cmd | Cool_Loong
  */
 public interface WorldStorage {
     /**
-     * This method will be called every world tick.
-     *
-     * @param currentTick the current world tick
+     * Performs storage maintenance for the current world tick. The world
+     * invokes this hook once per tick; the default implementation performs no
+     * work and retains no tick state.
      */
     @ApiStatus.OverrideOnly
     default void tick(long currentTick) {
     }
 
     /**
-     * This method will be called before the first tick of the world. The implementation can decide
-     * whether to hold the world object (if the implementation needs the world object during runtime).
-     * Note that user is not allowed to call this method.
-     *
-     * @param world the world object
+     * Associates the storage with the world that owns it before the first world
+     * tick. This hook is reserved for the world lifecycle; the default
+     * implementation does not retain the supplied reference.
      */
     @ApiStatus.OverrideOnly
     default void setWorld(World world) {
     }
 
     /**
-     * Start batch write mode. In this mode, chunk writes via {@link #writeChunk(Chunk)} will be
-     * accumulated and flushed in a single I/O operation when {@link #flushBatchWrite()} is called.
-     * This significantly reduces write overhead when saving many chunks at once (e.g., on shutdown).
+     * Starts a batch in which chunk writes accumulate until the matching flush.
+     * Implementations supporting batching combine those writes into one I/O
+     * operation; the default hook has no effect.
      */
     @ApiStatus.OverrideOnly
     default void startBatchWrite() {
     }
 
     /**
-     * Flush all accumulated chunk writes in a single batch operation and exit batch write mode.
-     * Must be called after {@link #startBatchWrite()}.
+     * Flushes accumulated chunk writes and exits batch mode after a preceding
+     * start request. Implementations supporting batching submit the accumulated
+     * writes together; the default hook performs no persistence work.
      */
     @ApiStatus.OverrideOnly
     default void flushBatchWrite() {
     }
 
     /**
-     * Shutdown the storage.
+     * Releases storage resources when the owning world stops using this
+     * instance. The default implementation has no resources to release;
+     * implementations define the handling of pending work during shutdown.
      */
     default void shutdown() {
     }
 
     /**
-     * Read a chunk from the storage.
-     *
-     * @param chunkX        the x coordinate of the chunk
-     * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionType the dimension type of the chunk
-     * @return a chunk future
+     * Reads the chunk at the supplied chunk coordinates in the requested
+     * dimension. The returned future delivers the loaded chunk; implementations
+     * document their handling of absent data and read failures.
      */
     CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
-     * Similar to {@link #readChunk(int, int, DimensionType)} but is synchronous.
+     * Reads the requested chunk on the calling thread and returns the loaded
+     * result. Coordinates identify chunks rather than individual blocks;
+     * implementations define how absent or unreadable data is handled.
      */
     Chunk readChunkSync(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
-     * Write a chunk to the storage.
-     *
-     * @param chunk the chunk to write
-     * @return a future which will be completed when the chunk is written
+     * Writes the supplied chunk and returns a future that completes when the
+     * chunk is written. Callers use that completion to observe the write
+     * operation described by this storage contract.
      */
     CompletableFuture<Void> writeChunk(Chunk chunk);
 
     /**
-     * Similar to {@link #writeChunk(Chunk)} but is synchronous.
+     * Writes the supplied chunk synchronously, completing the write before this
+     * method returns. This is the calling-thread counterpart of {@link
+     * #writeChunk(Chunk)} and exposes failures through the implementation's
+     * synchronous error handling.
      */
     void writeChunkSync(Chunk chunk);
 
     /**
-     * Read the entities in a chunk.
-     *
-     * @param chunkX        the x coordinate of the chunk
-     * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionType the dimension type of the chunk
-     * @return the entities in the chunk
+     * Reads the entities stored for the requested chunk and dimension. The
+     * future supplies a map keyed by persistent entity identifiers; these keys
+     * identify stored entities rather than network runtime instances.
      */
     CompletableFuture<Map<Long, Entity>> readEntities(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
-     * Similar to {@link #readEntities(int, int, DimensionType)} but is synchronous.
+     * Reads the requested chunk's entities on the calling thread and returns
+     * their persistent identifier mapping. Implementations define recovery for
+     * missing entity records and unsupported serialized entity types.
      */
     Map<Long, Entity> readEntitiesSync(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
-     * Write the entities in a chunk.
-     *
-     * @param chunkX        the x coordinate of the chunk
-     * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionType the dimension type of the chunk
-     * @param entities      the entities to write. Note that the key is the unique id of the entity, not the runtime id
-     *                      If an empty map is passed, all existing entities in the chunk will be removed.
-     * @return a future which will be completed when the entities are written
+     * Replaces the stored entities for the requested chunk and dimension with
+     * the supplied mapping. Keys are entity unique identifiers, not runtime
+     * identifiers; an empty map removes existing entities. The returned future
+     * completes when the entities are written.
      */
     CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities);
 
     /**
-     * Similar to {@link #writeEntities(int, int, DimensionType, Map)} but is synchronous.
+     * Replaces the requested chunk's stored entities before returning on the
+     * calling thread. Keys use unique identifiers rather than runtime
+     * identifiers, and an empty mapping removes the entities previously stored
+     * for that chunk.
      */
     void writeEntitiesSync(int chunkX, int chunkZ, DimensionType dimensionType, Map<Long, Entity> entities);
 
     /**
-     * Check if the storage contains a chunk.
-     *
-     * @param chunkX        the x coordinate of the chunk
-     * @param chunkZ        the z coordinate of the chunk
-     * @param dimensionType the dimension type of the chunk
-     * @return {@code true} if the storage contains the chunk, {@code false} otherwise
+     * Returns whether storage contains chunk data at the supplied chunk
+     * coordinates in the requested dimension. The result concerns persisted
+     * data; implementations define which stored records establish that a chunk
+     * exists.
      */
     boolean containChunk(int chunkX, int chunkZ, DimensionType dimensionType);
 
     /**
-     * Write world data to the storage.
-     *
-     * @param worldData the world data to write
+     * Writes the supplied world metadata to this storage instance.
+     * Implementations define their supported metadata representation and
+     * failure behavior; this operation is separate from writing individual
+     * chunks and their entities.
      */
     void writeWorldData(WorldData worldData);
 
     /**
-     * Read world data from the storage.
-     *
-     * @return the world data
+     * Reads the world metadata associated with this storage instance.
+     * Implementations define their defaults for a new world and the failure
+     * behavior for unreadable or unsupported stored metadata.
      */
     WorldData readWorldData();
 
     /**
-     * Retrieves the name associated with the world storage. Which should be the same
-     * registered in {@link Registries#WORLD_STORAGE_FACTORIES}.
-     *
-     * @return the name of the world storage
+     * Returns the storage factory name used to identify this implementation in
+     * the world storage registry. The value must match the name registered in
+     * {@link Registries#WORLD_STORAGE_FACTORIES} for this implementation.
      */
     String getName();
 }

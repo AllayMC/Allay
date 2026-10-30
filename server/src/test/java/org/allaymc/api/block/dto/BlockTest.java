@@ -11,10 +11,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 /**
+ * {@code BlockTest} verifies block snapshot construction guards and state-position
+ * equality.
+ *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 public class BlockTest {
+    /**
+     * Constructs snapshots with a missing position or dimension. The constructors
+     * must reject these inputs with a {@code null}-pointer failure instead of creating a
+     * block whose required location is absent.
+     */
     @Test
     void testConstructors() {
         var blockState = BlockTypes.GRASS_BLOCK.getDefaultState();
@@ -23,6 +31,11 @@ public class BlockTest {
         assertThrows(NullPointerException.class, () -> new Block((Dimension) null, pos));
     }
 
+    /**
+     * Compares snapshots with matching and differing stored states and coordinates.
+     * Equal state-position pairs must compare equally, while changing either tested
+     * component must make the snapshots unequal.
+     */
     @Test
     void testEquals() {
         var blockState1 = BlockTypes.GRASS_BLOCK.getDefaultState();

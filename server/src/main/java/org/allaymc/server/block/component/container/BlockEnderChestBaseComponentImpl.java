@@ -16,13 +16,28 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import java.util.Set;
 
 /**
+ * {@code BlockEnderChestBaseComponentImpl} opens each player's personal Ender
+ * chest inventory from an unobstructed chest block. Shared interaction handlers
+ * run first, and a solid block above prevents opening. Normal break drops contain
+ * eight obsidian rather than the player's personal stored items.
+ *
  * @author IWareQ
  */
 public class BlockEnderChestBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates this container block component for the supplied registered block
+     * type.
+     */
     public BlockEnderChestBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Runs shared handlers and opens personal storage when the block above is
+     * nonsolid. {@code interactInfo} must identify the clicked block and player;
+     * actual players receive the container and its contents, while simulated
+     * players still return {@code true}.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -44,6 +59,9 @@ public class BlockEnderChestBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Returns one stack of eight obsidian for ordinary break drops.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.OBSIDIAN.createItemStack(8));

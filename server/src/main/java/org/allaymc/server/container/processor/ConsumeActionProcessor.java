@@ -16,13 +16,28 @@ import java.util.Map;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
+ * {@code ConsumeActionProcessor} removes requested ingredients from reachable container
+ * slots and reports their remaining count and identity. Recipe validation belongs to
+ * preceding crafting actions; this processor checks the source stack and requested
+ * quantity, then suppresses ordinary viewer packets while retaining slot listener
+ * effects.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeAction> {
+    /**
+     * Consumes the requested source quantity after checking the stack ID, non-air type,
+     * nonzero count, and available quantity. Partial consumption retains the source
+     * identity, while full consumption installs air. Notifications use {@code
+     * send=false}, and the response reports the remaining slot through translated
+     * network indices.
+     */
     @Override
     public ActionResponse handle(ConsumeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
+        // Recipe actions own ingredient matching; this handler checks the selected
+        // stack and quantity before applying consumption, without independently
+        // revalidating a recipe.
         var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.source().containerName());
         var sourceStackNetworkId = action.source().stackNetworkId();
         var slot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.source().slot());
@@ -79,6 +94,10 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
         );
     }
 
+    /**
+     * Returns the stack-request action type dispatched to {@code
+     * ConsumeActionProcessor}.
+     */
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.CONSUME;

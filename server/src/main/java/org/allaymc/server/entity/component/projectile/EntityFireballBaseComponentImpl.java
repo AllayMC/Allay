@@ -8,7 +8,10 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 /**
- * Base component implementation for fireball (large fireball / ghast fireball) entities.
+ * {@code EntityFireballBaseComponentImpl} represents an explosive fireball
+ * with configurable blast power. The component starts with power one and
+ * exposes a one-block local hitbox, while inherited projectile entity behavior
+ * supplies the common location and persistence contracts.
  *
  * @author daoge_cmd
  */
@@ -17,19 +20,29 @@ import org.joml.primitives.AABBdc;
 public class EntityFireballBaseComponentImpl extends EntityProjectileBaseComponentImpl implements EntityFireballBaseComponent {
 
     /**
-     * The explosion power of the fireball (Ghast fireballs have power 1).
+     * {@code EXPLOSION_POWER} initializes the mutable blast strength used when
+     * explosive fireballs create their impact explosion.
      */
     protected static final float EXPLOSION_POWER = 1.0f;
 
+    /**
+     * Current explosive fireball blast strength.
+     */
     protected float explosionPower = EXPLOSION_POWER;
 
+    /**
+     * Creates the fireball base with the supplied entity initialization
+     * context.
+     */
     public EntityFireballBaseComponentImpl(EntityInitInfo info) {
         super(info);
     }
 
+    /**
+     * Returns the explosive fireball local one-block bounding box in blocks.
+     */
     @Override
     public AABBdc getBaseAABB() {
-        // Large fireball hitbox is 1.0 x 1.0 x 1.0
         return new AABBd(-0.5, 0.0, -0.5, 0.5, 1.0, 0.5);
     }
 }

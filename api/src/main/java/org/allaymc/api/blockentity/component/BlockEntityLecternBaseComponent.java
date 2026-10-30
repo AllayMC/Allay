@@ -3,55 +3,58 @@ package org.allaymc.api.blockentity.component;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Base component for lectern block entity.
+ * {@code BlockEntityLecternBaseComponent} exposes a lectern's retained book,
+ * page selection, and stored page count. The server recalculates page count
+ * when assigning a book and clamps ordinary page changes to that retained
+ * count, while persistence stores the fields separately.
  *
  * @author daoge_cmd
  */
 public interface BlockEntityLecternBaseComponent extends BlockEntityBaseComponent {
     /**
-     * Get the book currently on the lectern.
-     *
-     * @return the book item, or {@code null} if no book is present
+     * Returns the retained book item, or {@code null} for an empty lectern. The
+     * server exposes the same mutable stack, so caller mutations do not
+     * automatically recompute page count or update comparator output.
      */
     ItemStack getBook();
 
     /**
-     * Set the book on the lectern.
-     *
-     * @param book the book item, or {@code null} to remove the book
+     * Retains a book reference, resets its selected page, and refreshes derived
+     * state. {@code null} clears the book; the server derives page count only
+     * from written or writable book capabilities and then updates comparators
+     * and viewers.
      */
     void setBook(ItemStack book);
 
     /**
-     * Check if the lectern has a book.
-     *
-     * @return true if a book is present
+     * Returns whether the lectern retains a non-{@code null} book reference.
      */
     boolean hasBook();
 
     /**
-     * Get the current page number (0-indexed).
-     *
-     * @return the current page
+     * Returns the zero-based page index currently retained by the lectern.
      */
     int getCurrentPage();
 
     /**
-     * Set the current page number (0-indexed).
-     *
-     * @param page the page number
+     * Selects a page using the retained page count and updates observers. The
+     * server clamps ordinary inputs to the available range, but raw NBT counts
+     * can affect integer bounds; {@code Integer.MIN_VALUE} causes subtraction
+     * overflow.
      */
     void setCurrentPage(int page);
 
     /**
-     * Get the total number of pages in the book.
-     *
-     * @return the total pages, or 0 if no book
+     * Returns the stored page count associated with the lectern's book. Book
+     * assignment derives it from supported book types, while NBT loading
+     * retains a supplied count directly without recomputing it.
      */
     int getTotalPages();
 
     /**
-     * Drop the book from the lectern.
+     * Requests a retained book's drop and clears it through the ordinary
+     * setter. An empty lectern does nothing; after the request returns, page
+     * fields reset and observers refresh without waiting for entity admission.
      */
     void dropBook();
 }

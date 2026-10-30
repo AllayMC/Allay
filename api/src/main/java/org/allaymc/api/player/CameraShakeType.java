@@ -1,7 +1,10 @@
 package org.allaymc.api.player;
 
 /**
- * Represents the type of camera shake that can be applied to a player's view.
+ * {@code CameraShakeType} identifies whether a camera shake changes position or
+ * rotation. {@code Player.shakeCamera} passes this selection to the client; these
+ * constants describe presentation behavior and do not change the player entity's
+ * server-side location or rotation.
  *
  * @author daoge_cmd
  */

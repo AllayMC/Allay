@@ -8,7 +8,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Event triggered when an item frame is used.
+ * {@code ItemFrameUseEvent} represents a proposed item frame interaction with an
+ * entity and action. The action distinguishes inserting an item, rotating the
+ * displayed item, and dropping it; frame behavior checks cancellation before applying
+ * the corresponding item or rotation change.
  *
  * @author daoge_cmd
  */
@@ -17,14 +20,20 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class ItemFrameUseEvent extends BlockEvent implements CancellableEvent {
 
     /**
-     * The entity that is using the item frame.
+     * {@code entity} identifies the interacting entity and may be {@code null} for a
+     * punch without an attributed entity.
      */
     protected Entity entity;
     /**
-     * The action performed on the item frame.
+     * Requested item frame action.
      */
     protected Action action;
 
+    /**
+     * Creates an item frame event with its entity and requested action.
+     * {@code entity} may be {@code null} when a punch reaching the frame has no
+     * responsible entity.
+     */
     public ItemFrameUseEvent(Block block, Entity entity, Action action) {
         super(block);
         this.entity = entity;
@@ -32,11 +41,20 @@ public class ItemFrameUseEvent extends BlockEvent implements CancellableEvent {
     }
 
     /**
-     * The type of item frame interaction.
+     * {@code Action} identifies the item or rotation change requested for a frame.
      */
     public enum Action {
+        /**
+         * Displayed item removal action.
+         */
         DROP,
+        /**
+         * Held item insertion action.
+         */
         PUT,
+        /**
+         * Displayed item rotation action.
+         */
         ROTATE
     }
 }

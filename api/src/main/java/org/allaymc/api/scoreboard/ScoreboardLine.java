@@ -7,35 +7,52 @@ import org.allaymc.api.scoreboard.scorer.Scorer;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * A single line on the scoreboard.
- * <p>
- * Composed of {@link Scorer} and score.
+ * {@code ScoreboardLine} represents a scorer and mutable score belonging to an objective.
+ * Construction assigns a process-local client line identifier without inserting the line into its
+ * owner. Score changes can be cancelled before storage, while successful changes notify the owning
+ * scoreboard afterward.
  *
  * @author daoge_cmd
  */
 @Getter
 public final class ScoreboardLine {
 
+    /**
+     * {@code LINE_ID_COUNTER} allocates client line identifiers across newly constructed lines,
+     * independently of objective names and scorer identities.
+     */
     private static final AtomicLong LINE_ID_COUNTER = new AtomicLong(0);
 
     /**
-     * The scoreboard to which this score line belongs
+     * Owning objective for events and updates.
      */
     private final Scoreboard scoreboard;
     /**
-     * Tracker
+     * Scorer identity associated with this line.
      */
     private final Scorer scorer;
     /**
-     * Line ID, each line on the scoreboard is identified by this ID on the client
+     * Process-local client line identifier.
      */
     private final long lineId;
+    /**
+     * Current numeric line score.
+     */
     private int score;
 
+    /**
+     * Creates an uninserted line with score zero and a newly allocated client identifier. The
+     * supplied scoreboard remains the line's owner for later score events and viewer notifications.
+     */
     public ScoreboardLine(Scoreboard scoreboard, Scorer scorer) {
         this(scoreboard, scorer, 0);
     }
 
+    /**
+     * Creates an uninserted line with the supplied score and a newly allocated client identifier.
+     * The supplied scoreboard and scorer references are retained without adding the line to the
+     * scoreboard's map.
+     */
     public ScoreboardLine(Scoreboard scoreboard, Scorer scorer, int score) {
         this.scoreboard = scoreboard;
         this.scorer = scorer;
@@ -43,6 +60,11 @@ public final class ScoreboardLine {
         this.lineId = LINE_ID_COUNTER.incrementAndGet();
     }
 
+    /**
+     * Attempts to store a new score after any enabled value-change event permits it. Cancellation
+     * returns {@code false} without storage or notification; viewer failure occurs after the new
+     * score has been stored.
+     */
     public boolean setScore(int score) {
         if (scoreboard.wouldCallEvent()) {
             var event = new ScoreboardLineValueChangeEvent(scoreboard, this, this.score, score);
@@ -56,27 +78,25 @@ public final class ScoreboardLine {
     }
 
     /**
-     * Increase the score
-     *
-     * @param addition Amount to increase
-     * @return Whether it was successful (false if the event was cancelled)
+     * Adds the supplied amount through the normal score-change operation, using Java integer
+     * arithmetic. An enabled event can cancel the change; arithmetic overflow wraps before the
+     * proposed score is dispatched.
      */
     public boolean addScore(int addition) {
         return setScore(getScore() + addition);
     }
 
     /**
-     * Decrease the score
-     *
-     * @param reduction Amount to decrease
-     * @return Whether it was successful (false if the event was cancelled)
+     * Subtracts the supplied amount through the normal score-change operation, using Java integer
+     * arithmetic. An enabled event can cancel the change; arithmetic overflow wraps before the
+     * proposed score is dispatched.
      */
     public boolean removeScore(int reduction) {
         return setScore(getScore() - reduction);
     }
 
     /**
-     * Notify the owning scoreboard object to update this line information
+     * Notifies the owning scoreboard that this line's score should be sent to viewers.
      */
     private void updateScore() {
         scoreboard.updateScore(this);

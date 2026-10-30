@@ -31,11 +31,43 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * {@code SubChunkRequestPacketProcessor} builds sub-chunk responses from requested
+ * offsets, terrain sections, height maps, and block-entity data. A request naming
+ * a missing or different
+ * dimension receives an empty response. In the matching dimension, each offset
+ * produces its own success, all-air, or error entry, preserving the
+ * relationship between the client's requested position and the collected
+ * result.
+ *
+ * <p>
+ * Only nonnull section blobs enter cache admission. Returned hashes are
+ * consumed in that same subset order, while all-air and error entries use
+ * protocol-appropriate empty blob IDs. If cache admission fails or no blobs
+ * qualify, the response instead carries inline section data. Logical and render
+ * height maps share bytes through separately retained views so the packet can
+ * release both safely. Height and section collection use separate read
+ * operations, so the response does not promise one atomic snapshot across all
+ * terrain and entity data.
+ *
  * @author Cool_Loong | daoge_cmd
  */
 @Slf4j
 public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequestPacket> {
 
+    /**
+     * {@code SubChunkInfo} keeps one requested offset associated with its collected
+     * terrain and auxiliary data.
+     *
+     * @param offset relative requested section offset
+     * @param result collection outcome for this offset
+     * @param hMapType relative column-height representation
+     * @param hMapData column bytes for mixed heights, or {@code null} when the
+     * height-map type requires no payload
+     * @param sectionBlob encoded nonair terrain bytes, or {@code null} when the result
+     * reports all-air data or an error
+     * @param blockEntityBytes separately encoded block entities, or {@code null} when
+     * the section has none or block-entity serialization fails
+     */
     private record SubChunkInfo(
         Vector3i offset,
         SubChunkRequestResult result,
@@ -45,6 +77,21 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         byte[] blockEntityBytes
     ) {}
 
+    /**
+     * Collects and sends a sub-chunk response for an {@code AllayPlayer} with a
+     * controlled entity. A mismatched or missing requested dimension produces
+     * an empty uncached response, and every completed path returns {@code HANDLED}.
+     *
+     * <p>
+     * Cache generation is captured before data collection so admission can
+     * reject a stale player cache state afterward. Only nonnull section blobs
+     * are submitted, and successful result entries consume their hashes in the
+     * same order while errors and all-air entries do not advance that index.
+     * Refused or unavailable caching falls back to inline terrain plus
+     * block-entity bytes. The generated packet owns its reference-counted
+     * payloads when passed to the player's send path. This processor has no
+     * cleanup path for payloads left unsent by encoding failures or send rejection.
+     */
     @Override
     public PacketSignal handleAsync(Player player, SubChunkRequestPacket packet, long receiveTime) {
         var allayPlayer = (AllayPlayer) player;
@@ -52,7 +99,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         var entity = player.getControlledEntity();
         var dimensionType = Registries.DIMENSIONS.getByK1(packet.getDimension());
         if (dimensionType == null || dimensionType != entity.getDimension().getDimensionType()) {
-            // Outdated sub chunk request from a previous dimension
+            // A stale or unknown dimension must not read terrain from the
+            // player's current dimension under the old request identity;
+            // acknowledge it with no section entries.
             allayPlayer.sendPacket(encoder.encodeSubChunk(
                     packet.getDimension(),
                     packet.getSubChunkPosition(),
@@ -74,13 +123,17 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
         var centerPosition = packet.getSubChunkPosition();
 
-        // Phase 1: Collect raw data
+        // Retain every requested offset and result before choosing an encoding
+        // path, so errors and all-air sections keep their positions alongside
+        // cached data.
         var infos = new ArrayList<SubChunkInfo>(packet.getPositionOffsets().size());
         for (var offset : packet.getPositionOffsets()) {
             infos.add(collectSubChunkInfo(player, dimensionType, centerPosition, offset));
         }
 
-        // Collect non-null section blobs for caching
+        // Cache admission receives only actual section blobs; keep this subset
+        // in request order so successful entries can consume its hashes
+        // sequentially.
         List<byte[]> nonAirBlobs = new ArrayList<>();
         for (var info : infos) {
             if (info.sectionBlob != null) {
@@ -90,13 +143,18 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
         long[] hashes = null;
         if (cache != null && !nonAirBlobs.isEmpty()) {
+            // Admission checks the captured generation and transaction capacity
+            // after collection; only an accepted transaction can support hash
+            // references in the response.
             hashes = cache.tryStoreBlobsAndOpenTransaction(playerId, cacheGen, nonAirBlobs.toArray(new byte[0][]));
         }
 
         boolean cacheEnabled = hashes != null;
         var responseData = new ArrayList<SubChunkData>(infos.size());
         if (cacheEnabled) {
-            // Cached path
+            // Advance the hash index only for successful nonair entries,
+            // preserving alignment with the filtered blob list despite
+            // intervening error or all-air results.
             int hashIndex = 0;
 
             for (var info : infos) {
@@ -106,7 +164,6 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
                 setHeightMaps(subChunkData, info.hMapType, info.hMapData);
 
-                // Data
                 if (info.result == SubChunkRequestResult.SUCCESS) {
                     subChunkData.setBlobId(hashes[hashIndex++]);
                     if (info.blockEntityBytes != null) {
@@ -115,7 +172,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                         subChunkData.setData(Unpooled.EMPTY_BUFFER);
                     }
                 } else {
-                    // SUCCESS_ALL_AIR or error results
+                    // These entries contributed no cached blob, so use the
+                    // version-specific empty identifier without consuming the
+                    // next successful entry's hash.
                     subChunkData.setBlobId(getEmptyBlobId(allayPlayer.getProtocol().getCodec()));
                     subChunkData.setData(Unpooled.EMPTY_BUFFER);
                 }
@@ -123,7 +182,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 responseData.add(subChunkData);
             }
         } else {
-            // Non-cached path
+            // Missing or refused cache admission requires inline terrain; keep
+            // block entity bytes after the section blob so the response remains
+            // usable without cache references.
             for (var info : infos) {
                 var subChunkData = new SubChunkData();
                 subChunkData.setPosition(info.offset);
@@ -131,7 +192,6 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
                 setHeightMaps(subChunkData, info.hMapType, info.hMapData);
 
-                // Data - combine section blob + block entities
                 if (info.result == SubChunkRequestResult.SUCCESS) {
                     ByteBuf buffer = Unpooled.wrappedBuffer(info.sectionBlob);
                     if (info.blockEntityBytes != null) {
@@ -139,7 +199,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                     }
                     subChunkData.setData(buffer);
                 } else {
-                    // SUCCESS_ALL_AIR or error results
+                    // All-air and error outcomes carry no terrain payload;
+                    // preserve their result codes while supplying an empty
+                    // buffer for this uncached path.
                     subChunkData.setData(Unpooled.EMPTY_BUFFER);
                 }
 
@@ -157,27 +219,65 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
     }
 
     /**
-     * Assigns independently releasable buffer views to the logical and render height maps.
+     * Assigns logical and render height maps with separately releasable buffer
+     * views. A {@code null} byte array leaves both payload fields {@code null} while retaining
+     * the supplied height-map type, matching optional-payload serializers.
+     *
+     * <p>
+     * For actual data, the logical field wraps the caller's array and the
+     * render field receives a retained duplicate. Both fields therefore share
+     * the same bytes, but each contributes one reference that {@code SubChunkData}
+     * releases independently. The caller must not mutate the array while those
+     * views are in use, and this helper assumes it is populating fields without
+     * existing owned buffers to release.
      */
     static void setHeightMaps(SubChunkData subChunkData, HeightMapDataType type, byte[] data) {
         subChunkData.setHeightMapType(type);
         subChunkData.setRenderHeightMapType(type);
         if (data == null) {
-            subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
-            subChunkData.setRenderHeightMapData(Unpooled.EMPTY_BUFFER);
+            // Optional height-map serializers test for null rather than buffer
+            // length; leave both payloads absent when the selected map type has
+            // no bytes.
+            subChunkData.setHeightMapData(null);
+            subChunkData.setRenderHeightMapData(null);
             return;
         }
 
         ByteBuf heightMap = Unpooled.wrappedBuffer(data);
         subChunkData.setHeightMapData(heightMap);
+        // SubChunkData releases the logical and render fields separately, so
+        // the shared storage needs a second retained reference before
+        // assignment.
         subChunkData.setRenderHeightMapData(heightMap.retainedDuplicate());
     }
 
+    /**
+     * Returns the absent-blob representation required by the selected codec.
+     * Versions from {@code v2168} use a {@code null} optional ID, while earlier serializers
+     * receive a numeric zero placeholder for entries with no cached terrain.
+     */
     static Long getEmptyBlobId(BedrockCodec codec) {
-        // v2168 made the cache blob ID optional. Older serializers still require a placeholder value.
+        // New serializers encode optional blob IDs, while older ones still
+        // write a mandatory long; choose absence or its zero placeholder at
+        // that boundary.
         return codec.getProtocolVersion() >= Bedrock_v2168.CODEC.getProtocolVersion() ? null : 0L;
     }
 
+    /**
+     * Collects the result and encoded data for one requested section offset.
+     * Out-of-range heights and unloaded chunks return explicit error results
+     * with no payload, and this method never requests a chunk load to satisfy
+     * the lookup.
+     *
+     * <p>
+     * Column heights are classified relative to the requested section:
+     * uniformly higher or lower terrain omits the byte map, while mixed columns
+     * retain per-column values and sentinels. A separate section read
+     * distinguishes all-air from encoded terrain. Block-entity {@code IOException} is
+     * logged and omits that auxiliary payload without changing the terrain
+     * result. The separate read operations do not establish an atomic snapshot
+     * across height, terrain, and block entities.
+     */
     private SubChunkInfo collectSubChunkInfo(Player player, DimensionType dimensionType, Vector3i center, Vector3i offset) {
         var entity = player.getControlledEntity();
 
@@ -194,7 +294,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             return new SubChunkInfo(offset, SubChunkRequestResult.CHUNK_NOT_FOUND, HeightMapDataType.NO_DATA, null, null, null);
         }
 
-        // Compute height map
+        // Classify columns relative to the requested section; uniform high or
+        // low results omit map bytes, while mixed columns retain explicit
+        // values and out-of-section sentinels.
         byte[][] heightMapHolder = new byte[1][];
         HeightMapDataType[] hMapTypeHolder = new HeightMapDataType[1];
 
@@ -206,16 +308,25 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     int height = unsafeChunk.getHeight(x, z);
+                    // Sixteen block heights share one absolute section
+                    // coordinate.
                     int heightSectionY = height >> 4;
+                    // Height-map bytes use Z-major columns with X varying
+                    // fastest.
                     int index = (z << 4) | x;
 
                     if (heightSectionY > sectionY) {
+                        // Sixteen marks terrain above this section's local
+                        // height range.
                         heightMap[index] = 16;
                         allLower = false;
                     } else if (heightSectionY < sectionY) {
+                        // Minus one marks terrain below this section's local
+                        // height range.
                         heightMap[index] = -1;
                         allHigher = false;
                     } else {
+                        // Keep only the height within this sixteen-block section.
                         heightMap[index] = (byte) (height & 0xf);
                         allHigher = false;
                         allLower = false;
@@ -235,7 +346,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             }
         }, OperationType.READ, OperationType.NONE);
 
-        // Encode section and block entities
+        // Section data is read separately from heights, allowing all-air
+        // results to omit both the terrain blob and block-entity payload
+        // without implying a single combined terrain snapshot.
         byte[][] sectionBlobHolder = new byte[1][];
         byte[][] blockEntityBytesHolder = new byte[1][];
         SubChunkRequestResult[] resultHolder = new SubChunkRequestResult[1];
@@ -261,8 +374,14 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                         buffer.readBytes(beBytes);
                         blockEntityBytesHolder[0] = beBytes;
                     } catch (IOException e) {
+                        // Keep the section result but omit its failed
+                        // block-entity payload; partial bytes are not assigned
+                        // to the response after an IOException.
                         log.error("Error while encoding block entity in sub-chunk ({}, {}, {})", chunkX, sectionY, chunkZ, e);
                     } finally {
+                        // The response retains a copied byte array rather than
+                        // this temporary writer buffer, so release the buffer
+                        // after either success or failure.
                         buffer.release();
                     }
                 } else {
@@ -281,6 +400,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         );
     }
 
+    /**
+     * Returns the sub-chunk request packet type handled by this processor.
+     */
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.SUB_CHUNK_REQUEST;

@@ -19,9 +19,17 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * {@code BiomeDataRegistryLoader} reads bundled biome metadata into a map keyed by built-in
+ * biome IDs. Its serializer resolves symbolic biome tags and RGBA color objects, and loading
+ * fails when resource data cannot be decoded into the expected built-in definitions.
+ *
  * @author daoge_cmd
  */
 public class BiomeDataRegistryLoader implements RegistryLoader<Void, Map<BiomeId, BiomeData>> {
+    /**
+     * {@code SERIALIZER} decodes biome colors from RGBA channel objects and resolves symbolic
+     * {@code BiomeTag} names through {@code BiomeTags} while reading bundled biome definitions.
+     */
     protected static final Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var obj = json.getAsJsonObject();
@@ -38,6 +46,11 @@ public class BiomeDataRegistryLoader implements RegistryLoader<Void, Map<BiomeId
             })
             .create();
 
+    /**
+     * Loads {@code biome_definitions.json} into a new mutable enum map. The input is ignored,
+     * and resource, parsing, or identifier failures become an {@code AssertionError} rather than
+     * a partial returned registry.
+     */
     @Override
     public Map<BiomeId, BiomeData> load(Void $) {
         var map = new EnumMap<BiomeId, BiomeData>(BiomeId.class);

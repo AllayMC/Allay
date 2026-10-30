@@ -14,13 +14,46 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * {@code PlaySoundCommand} sends a custom sound to selected player controllers.
+ * The first target supplies an omitted position, and an empty selection uses
+ * the sender when it is an {@link EntityPlayer} instance. Distant recipients
+ * either receive the minimum-volume fallback at their own positions or produce
+ * individual distance errors.
+ *
+ * <p>
+ * Volume above {@code 1} extends the base sixteen-block hearing range by the
+ * same multiplier. For finite {@code minimumVolume}, a target beyond that range
+ * remains eligible only when the minimum is positive, and the sound moves to
+ * that target's position. Targets without controllers receive no request, and
+ * distance errors do not prevent later recipients from being considered. The
+ * command succeeds when at least one controller receives a request, even if
+ * other selected recipients were skipped or too far away.
+ *
  * @author daoge_cmd
  */
 public class PlaySoundCommand extends Command {
+    /**
+     * Creates the {@code /playsound} command with its built-in authorization permission.
+     */
     public PlaySoundCommand() {
         super("playsound", TrKeys.MC_COMMANDS_PLAYSOUND_DESCRIPTION, Permissions.COMMAND_PLAYSOUND);
     }
 
+    /**
+     * Installs sound delivery with volume and pitch {@code 1} and minimum volume
+     * {@code 0}. Negative minimum volume fails before delivery. Targets without
+     * controllers are skipped, distance failures do not stop later targets,
+     * and at least one dispatched sound is required for overall success.
+     *
+     * <p>
+     * Omitted coordinates use the first selected target's location, including
+     * when that target has no controller. The handler then evaluates distance
+     * separately for each recipient. A positive finite minimum permits a
+     * distant target to receive the relocated fallback; nonpositive finite
+     * values add an error instead. {@code Float.NaN} passes both minimum-volume
+     * rejection checks and reaches the fallback unchanged, because this handler
+     * has no finite-value check.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -43,7 +76,9 @@ public class PlaySoundCommand extends Command {
                         return context.fail();
                     }
 
-                    // If no players specified, use sender if sender is a player
+                    // Player senders provide a recipient when selection is
+                    // empty; other senders have no controller to receive
+                    // the fallback.
                     if (players.isEmpty()) {
                         if (sender instanceof EntityPlayer player) {
                             players = List.of(player);
@@ -53,13 +88,13 @@ public class PlaySoundCommand extends Command {
                         }
                     }
 
-                    // If no position specified, use the first target's position
                     if (position == null) {
                         var firstPlayer = players.iterator().next();
                         var loc = firstPlayer.getLocation();
                         position = new Vector3d(loc.x(), loc.y(), loc.z());
                     }
 
+                    // Volume above one extends the base sixteen-block hearing range.
                     double maxDistance = volume > 1 ? volume * 16 : 16;
 
                     List<String> successes = new ArrayList<>();
@@ -76,10 +111,11 @@ public class PlaySoundCommand extends Command {
                                 continue;
                             }
 
-                            // Play sound at player's position with minimum volume
+                            // Relocate the sound so distant recipients that
+                            // pass the minimum-volume check receive a request.
+                            // NaN also passes that check and is forwarded unchanged.
                             controller.viewSound(new CustomSound(sound, minimumVolume, pitch), playerLoc, false);
                         } else {
-                            // Play sound at specified position with specified volume
                             controller.viewSound(new CustomSound(sound, volume, pitch), position, false);
                         }
 

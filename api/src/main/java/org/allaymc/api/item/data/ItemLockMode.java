@@ -1,21 +1,24 @@
 package org.allaymc.api.item.data;
 
 /**
- * Represents the lock mode of an item.
+ * {@code ItemLockMode} represents the inventory lock policy stored on an item.
+ * Item extra-tag persistence encodes the policy as its enum ordinal under
+ * {@code "minecraft:item_lock"}; {@code NONE} is the default and is omitted when
+ * the base component saves an item.
  *
  * @author daoge_cmd
  */
 public enum ItemLockMode {
     /**
-     * The item is not locked.
+     * No inventory lock policy.
      */
     NONE,
     /**
-     * The item is locked in a slot.
+     * Lock to current slot.
      */
     LOCK_IN_SLOT,
     /**
-     * The item is locked in the inventory.
+     * Lock within current inventory.
      */
     LOCK_IN_INVENTORY
 }

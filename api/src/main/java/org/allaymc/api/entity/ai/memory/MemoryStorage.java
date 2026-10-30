@@ -5,104 +5,95 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Storage for entity AI memory data.
+ * {@code MemoryStorage} stores typed AI values shared by sensors, behaviors,
+ * and controllers. An absent entry can obtain its memory type's default, while
+ * an explicitly stored {@code null} remains empty for typed reads until the
+ * entry is cleared or replaced.
  *
  * @author daoge_cmd
  */
 public interface MemoryStorage {
 
     /**
-     * Store a value for the given memory type.
-     *
-     * @param type  the memory type
-     * @param value the value to store
-     * @param <T> the type of data
+     * Stores the supplied value under the memory key, replacing any existing
+     * value. An explicit {@code null} suppresses the key's default until the
+     * entry is removed or replaced.
      */
     <T> void put(MemoryType<T> type, T value);
 
     /**
-     * Retrieve the value for the given memory type, or its default value if not set.
-     *
-     * @param type the memory type
-     * @param <T> the type of data
-     * @return the stored value, or the default value
+     * Returns the stored value or obtains the type's default for an absent
+     * entry. An explicitly stored {@code null} returns {@code null}; a
+     * non-{@code null} default may become a stored value.
      */
     <T> T get(MemoryType<T> type);
 
     /**
-     * Get an unmodifiable view of all stored memory entries.
-     *
-     * @return all memory entries
+     * Returns an unmodifiable view of the implementation's stored entries.
+     * Values remain shared, and implementations may expose their internal
+     * explicit-null marker through this untyped view rather than through typed
+     * {@code get} calls.
      */
     @UnmodifiableView
     Map<MemoryType<?>, Object> getAll();
 
     /**
-     * Clear all stored memory data.
+     * Removes all entries from this memory storage. Subsequent typed reads can
+     * obtain defaults again, including for entries whose explicit {@code null}
+     * previously suppressed their type's default.
      */
     void clear();
 
     /**
-     * Check if this memory storage has no data.
-     *
-     * @return {@code true} if empty
+     * Returns whether this storage contains no entries at all. An explicit
+     * {@code null} still occupies an entry, so per-key emptiness can differ
+     * from emptiness of the whole storage.
      */
     boolean isEmpty();
 
     /**
-     * Check if a specific memory type has no value stored (null or absent).
-     *
-     * @param type the memory type
-     * @param <T> the type of data
-     * @return {@code true} if empty for this type
+     * Returns whether the specified key is absent or explicitly contains {@code
+     * null}. This check does not obtain a default, so an absent key with a
+     * non-{@code null} default remains empty until read.
      */
     <T> boolean isEmpty(MemoryType<T> type);
 
     /**
-     * Check if this memory storage has data.
-     *
-     * @return {@code true} if not empty
+     * Returns whether this storage contains at least one entry. An explicitly
+     * stored {@code null} counts as an entry even though a typed read of that
+     * key returns {@code null}.
      */
     default boolean notEmpty() {
         return !isEmpty();
     }
 
     /**
-     * Check if a specific memory type has a value stored.
-     *
-     * @param type the memory type
-     * @param <T> the type of data
-     * @return {@code true} if not empty for this type
+     * Returns whether the specified key currently holds a non-{@code null}
+     * stored value. This check does not obtain the type's default or create an
+     * entry for an absent key.
      */
     default <T> boolean notEmpty(MemoryType<T> type) {
         return !isEmpty(type);
     }
 
     /**
-     * Clear the value for a specific memory type.
-     *
-     * @param type the memory type to clear
-     * @param <T> the type of data
+     * Removes the entry for the supplied memory key. A later typed read may
+     * obtain the key's default again, even when the removed entry explicitly
+     * stored {@code null}.
      */
     <T> void clear(MemoryType<T> type);
 
     /**
-     * Atomically store a value only if no value is currently stored for this type.
-     *
-     * @param type  the memory type
-     * @param value the value to store
-     * @param <T> the type of data
-     * @return {@code true} if the value was stored, {@code false} if a value already existed
+     * Stores a value atomically when this key is absent or explicitly empty.
+     * The result is {@code true} when the replacement occurs, including when
+     * the supplied replacement is {@code null}.
      */
     <T> boolean putIfAbsent(MemoryType<T> type, T value);
 
     /**
-     * Compare a stored memory value with the given value using {@code equals}.
-     *
-     * @param type  the memory type
-     * @param value the value to compare
-     * @param <T> the type of data
-     * @return {@code true} if the stored value equals the given value
+     * Returns whether the typed memory value equals the supplied value using
+     * null-safe equality. Reading an absent key can obtain and retain its
+     * default before the comparison is made.
      */
     <T> boolean compareDataTo(MemoryType<T> type, T value);
 }

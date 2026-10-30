@@ -3,11 +3,13 @@ package org.allaymc.api.component;
 import org.allaymc.api.utils.identifier.Identifier;
 
 /**
- * Defines the contract for a component implementation.
- * <p>
- * All component implementations must implement this interface. The namespace ID, marked by a static constant
- * annotated with {@link Identifier.Component}, is used for dependency injection in the component system.
- * </p>
+ * {@code Component} marks implementations supplying part of a composed object's
+ * behavior.
+ * Component interfaces describe the capabilities exposed by an implementation,
+ * while fields on the composed object select implementations by assignable
+ * type. A static {@link Identifier} field annotated with
+ * {@link Identifier.Component} identifies an implementation for provider
+ * registration and dependencies that explicitly select an identifier.
  *
  * @author daoge_cmd
  */

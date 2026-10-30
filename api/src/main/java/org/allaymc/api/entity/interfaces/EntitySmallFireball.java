@@ -1,7 +1,10 @@
 package org.allaymc.api.entity.interfaces;
 
 /**
- * Represents a small fireball entity, typically shot by blazes or dispensers with fire charges.
+ * {@code EntitySmallFireball} identifies a small fireball traveling under
+ * projectile physics. The inherited projectile contract carries motion, age,
+ * and shooter attribution, while the server entity type selects the ignition
+ * and damage behavior used for its impacts.
  *
  * @author daoge_cmd
  */

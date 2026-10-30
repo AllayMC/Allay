@@ -7,7 +7,11 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player is added to the whitelist.
+ * {@code WhitelistAddPlayerEvent} represents a request to add a player UUID or
+ * name to the whitelist.
+ * The player manager dispatches this event only for a previously absent entry.
+ * Cancellation prevents insertion, while acceptance changes membership without
+ * changing whether whitelist enforcement is enabled.
  *
  * @author Dhaiven
  */

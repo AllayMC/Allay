@@ -1,57 +1,49 @@
 package org.allaymc.api.blockentity.component;
 
 /**
- * Base component for bell block entity.
+ * {@code BlockEntityBellBaseComponent} exposes a bell's ringing flag, animation
+ * counter, strike direction, and ring operation. The server starts a ring by
+ * resetting its counter, plays a strike sound, and sends state to viewers until
+ * the ringing interval finishes.
  *
  * @author daoge_cmd
  */
 public interface BlockEntityBellBaseComponent extends BlockEntityBaseComponent {
     /**
-     * Check if the bell is currently ringing.
-     *
-     * @return true if the bell is ringing
+     * Returns whether the bell currently marks its ringing animation active.
      */
     boolean isRinging();
 
     /**
-     * Set the ringing state of the bell.
-     *
-     * @param ringing whether the bell should be ringing
+     * Replaces the stored ringing flag without initiating a bell strike.
      */
     void setRinging(boolean ringing);
 
     /**
-     * Get the remaining ticks of the ringing animation.
-     *
-     * @return the remaining ticks
+     * Returns the number of elapsed ticks in the ringing animation.
      */
     int getTicks();
 
     /**
-     * Set the remaining ticks of the ringing animation.
-     *
-     * @param ticks the remaining ticks
+     * Replaces the elapsed ringing-animation counter with the supplied tick
+     * value.
      */
     void setTicks(int ticks);
 
     /**
-     * Get the direction from which the bell was struck.
-     *
-     * @return the direction (0-3 for horizontal directions)
+     * Returns the stored horizontal direction from which the bell was struck.
      */
     int getDirection();
 
     /**
-     * Set the direction from which the bell was struck.
-     *
-     * @param direction the direction (0-3 for horizontal directions)
+     * Replaces the stored horizontal strike direction used by bell animation.
      */
     void setDirection(int direction);
 
     /**
-     * Ring the bell from the specified direction.
-     *
-     * @param direction the direction from which the bell is struck
+     * Starts a new bell strike using the supplied horizontal direction. The
+     * server resets elapsed ticks, marks ringing active, plays the hit sound,
+     * and sends the new state to viewers.
      */
     void ring(int direction);
 }

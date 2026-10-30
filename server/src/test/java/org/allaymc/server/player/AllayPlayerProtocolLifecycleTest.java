@@ -26,9 +26,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * {@code AllayPlayerProtocolLifecycleTest} verifies send-boundary empty results and
+ * protocol installation ordering against disconnection callbacks.
+ */
 @ExtendWith(AllayTestExtension.class)
 class AllayPlayerProtocolLifecycleTest {
 
+    /**
+     * Supplies {@code null} packets, {@code null} collections, and empty collections to both send
+     * paths. Each call must return without requiring a negotiated protocol or
+     * passing a nonexistent packet to transport handling.
+     */
     @Test
     void emptyEncoderResultsAreIgnoredAtTheSendBoundary() {
         var player = new TestPlayer(mock(BedrockServerSession.class), mock(AllayNetworkInterface.class));
@@ -41,6 +50,12 @@ class AllayPlayerProtocolLifecycleTest {
         player.sendPacketsImmediately(List.of());
     }
 
+    /**
+     * Pauses protocol installation at the transport connection check while a
+     * disconnect callback competes. Releasing installation must leave the installed
+     * session disconnected and invoke player cleanup once after the lifecycle lock
+     * is released.
+     */
     @Test
     void disconnectWaitsForProtocolInstallAndTransitionsInstalledSession() throws Exception {
         var handler = new AtomicReference<BedrockPacketHandler>();
@@ -55,11 +70,15 @@ class AllayPlayerProtocolLifecycleTest {
             return true;
         });
 
+        // Run installation and disconnection on separate workers while latches hold installation
+        // inside the lifecycle lock, making the tested ordering deterministic.
         try (var executor = Executors.newFixedThreadPool(2)) {
             var install = executor.submit(() -> player.installProtocol(protocol));
             assertTrue(installReachedConnectionCheck.await(5, TimeUnit.SECONDS));
             var disconnect = executor.submit(() -> handler.get().onDisconnect("closed"));
 
+            // Release installation after scheduling the competing disconnect so both futures can
+            // finish and the final state can verify serialized lifecycle handling.
             allowInstallToContinue.countDown();
 
             assertTrue(install.get(5, TimeUnit.SECONDS));
@@ -71,6 +90,11 @@ class AllayPlayerProtocolLifecycleTest {
         assertEquals(1, player.disconnectCallbacks.get());
     }
 
+    /**
+     * Delivers a disconnect callback before attempting protocol installation.
+     * Installation must return failure without publishing a protocol session, while
+     * the client state remains disconnected and cleanup runs once.
+     */
     @Test
     void protocolCannotBeInstalledAfterDisconnectCallbackWins() {
         var handler = new AtomicReference<BedrockPacketHandler>();
@@ -86,6 +110,11 @@ class AllayPlayerProtocolLifecycleTest {
         assertEquals(1, player.disconnectCallbacks.get());
     }
 
+    /**
+     * Creates a mocked session that captures its installed packet handler reference.
+     * Tests invoke that handler directly to model transport callbacks without
+     * starting a network connection or peer pipeline.
+     */
     private static BedrockServerSession sessionCapturingHandler(AtomicReference<BedrockPacketHandler> handler) {
         var session = mock(BedrockServerSession.class);
         doAnswer(invocation -> {
@@ -95,6 +124,11 @@ class AllayPlayerProtocolLifecycleTest {
         return session;
     }
 
+    /**
+     * Creates an initialized mocked protocol with empty definitions and a frozen
+     * processor registry. The transport codec, peer, and helper stubs allow real
+     * installation to proceed without a running network pipeline.
+     */
     private static Protocol protocolForInstall(BedrockServerSession session) {
         var registry = new PacketProcessorRegistry();
         registry.freeze();
@@ -118,13 +152,28 @@ class AllayPlayerProtocolLifecycleTest {
         return protocol;
     }
 
+    /**
+     * {@code TestPlayer} counts disconnect cleanup callbacks without running real
+     * server membership cleanup. This isolates lifecycle ordering assertions from
+     * unrelated player storage and dimension state.
+     */
     private static final class TestPlayer extends AllayPlayer {
+        /**
+         * Count of observed player cleanup callbacks.
+         */
         private final AtomicInteger disconnectCallbacks = new AtomicInteger();
 
+        /**
+         * Creates a player over supplied mocked transport and network dependencies.
+         */
         private TestPlayer(BedrockServerSession session, AllayNetworkInterface sourceInterface) {
             super(session, sourceInterface);
         }
 
+        /**
+         * Counts the cleanup callback selected by the connection lifecycle
+         * transition.
+         */
         @Override
         protected void onDisconnect(String disconnectReason) {
             disconnectCallbacks.incrementAndGet();

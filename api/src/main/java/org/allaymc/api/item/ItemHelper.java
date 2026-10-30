@@ -10,16 +10,20 @@ import org.allaymc.api.item.type.ItemType;
 import java.util.Arrays;
 
 /**
+ * {@code ItemHelper} classifies item types through their registered item tags.
+ * Tier queries search the corresponding quality-order array and return its first
+ * matching tier, while category queries test one tag without constructing or
+ * examining an item stack.
+ *
  * @author daoge_cmd
  */
 @UtilityClass
 @Slf4j
 public final class ItemHelper {
     /**
-     * Get the tool tier of an item.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return The {@link ToolTier} object, or {@code null} if the item does not have a tool tier
+     * Returns the first tool tier whose tag belongs to {@code itemType}.
+     * {@code ToolTier.ORDER_OF_QUALITY} determines precedence when several tier tags
+     * match; the result is {@code null} when no tier tag matches.
      */
     public static ToolTier getToolTier(ItemType<?> itemType) {
         return Arrays.stream(ToolTier.ORDER_OF_QUALITY)
@@ -29,10 +33,9 @@ public final class ItemHelper {
     }
 
     /**
-     * Get the armor tier of an item.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return The {@link ArmorTier} object, or {@code null} if the item does not have an armor tier
+     * Returns the first armor tier whose tag belongs to {@code itemType}.
+     * {@code ArmorTier.ORDER_OF_QUALITY} determines precedence when several tier tags
+     * match; the result is {@code null} when no tier tag matches.
      */
     public static ArmorTier getArmorTier(ItemType<?> itemType) {
         return Arrays.stream(ArmorTier.ORDER_OF_QUALITY)
@@ -42,100 +45,70 @@ public final class ItemHelper {
     }
 
     /**
-     * Check if an item is a tool.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a tool, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_TOOL} classification tag.
      */
     public static boolean isTool(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_TOOL);
     }
 
     /**
-     * Check if an item is a sword.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a sword, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_SWORD} classification tag.
      */
     public static boolean isSword(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_SWORD);
     }
 
     /**
-     * Check if an item is a pickaxe.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a pickaxe, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_PICKAXE} classification tag.
      */
     public static boolean isPickaxe(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_PICKAXE);
     }
 
     /**
-     * Check if an item is a hoe.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a hoe, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_HOE} classification tag.
      */
     public static boolean isHoe(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_HOE);
     }
 
     /**
-     * Check if an item is an axe.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is an axe, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_AXE} classification tag.
      */
     public static boolean isAxe(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_AXE);
     }
 
     /**
-     * Check if an item is a shovel.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a shovel, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_SHOVEL} classification tag.
      */
     public static boolean isShovel(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_SHOVEL);
     }
 
     /**
-     * Check if an item is a weapon.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a weapon, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_ARMOR} classification tag.
      */
     public static boolean isArmor(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_ARMOR);
     }
 
     /**
-     * Check if an item is a head.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a head, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.HEAD} classification tag.
      */
     public static boolean isHead(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.HEAD);
     }
 
     /**
-     * Check if an item is a trimmable armor.
-     *
-     * @param itemType The {@link ItemType} of the item
-     * @return {@code true} if the item is a trimmable armor, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.TRIMMABLE_ARMORS} classification tag.
      */
     public static boolean isTrimmableArmor(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.TRIMMABLE_ARMORS);
     }
 
     /**
-     * Checks if the given item is classified as a spear.
-     *
-     * @param itemType The {@link ItemType} of the item to check.
-     * @return {@code true} if the item is a spear, {@code false} otherwise.
+     * Returns whether {@code itemType} carries the {@code ItemTags.IS_SPEAR} classification tag.
      */
     public static boolean isSpear(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_SPEAR);

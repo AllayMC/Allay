@@ -19,29 +19,65 @@ import org.joml.Vector3ic;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Implementation of pointed dripstone block behavior.
+ * {@code BlockPointedDripstoneBaseComponentImpl} manages pointed dripstone placement,
+ * column thickness, growth, and liquid dripping. Hanging and standing columns use
+ * opposite base and tip directions, so the same neighboring block positions have
+ * different structural roles depending on {@code HANGING}. Placement can extend a
+ * column or merge opposing tips, then updates nearby thickness properties to reflect
+ * the resulting shape.
+ *
  * <p>
- * Pointed dripstone can form stalactites (hanging) and stalagmites (ground).
- * They can grow, drip liquids, and deal fall damage.
+ * Thickness calculation gives opposing-tip merges priority over distance-based tip,
+ * frustum, base, and middle states. Column scans use a fixed height bound, while
+ * unsupported standing columns break upward and hanging-column falling is delegated
+ * to a separate component. Hanging tips can grow into air and locate liquid above
+ * their support before searching for a receiving cauldron. Cauldron filling uses
+ * liquid-specific probability and a cancellable event; ordered state writes
+ * throughout this component are not rolled back when a dimension write fails.
  *
  * @author daoge_cmd
  */
 public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentImpl {
-
-    // Growth probability per random tick (approximately 1.14%)
+    /**
+     * {@code GROWTH_PROBABILITY} sets the per-random-update chance for an eligible
+     * hanging tip to attempt downward growth.
+     */
     private static final double GROWTH_PROBABILITY = 0.011377778;
-
-    // Drip probabilities
+    /**
+     * {@code WATER_DRIP_PROBABILITY} controls water filling attempts after a hanging
+     * tip locates liquid and a receiving cauldron.
+     */
     private static final double WATER_DRIP_PROBABILITY = 45.0 / 256.0;
+    /**
+     * {@code LAVA_DRIP_PROBABILITY} controls lava filling attempts separately from
+     * water, using the same cauldron eligibility and cancellation path.
+     */
     private static final double LAVA_DRIP_PROBABILITY = 15.0 / 256.0;
-
-    // Maximum height of a dripstone column
+    /**
+     * {@code MAX_COLUMN_HEIGHT} bounds column-length scans and growth, limiting how
+     * far thickness and dripping logic inspect a connected formation.
+     */
     private static final int MAX_COLUMN_HEIGHT = 11;
 
+    /**
+     * Creates pointed dripstone base behavior for the supplied block type.
+     */
     public BlockPointedDripstoneBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places pointed dripstone using the clicked face and neighboring column states.
+     * A {@code null} {@code placementInfo} delegates to inherited placement; player
+     * placement rejects positions with air both above and below.
+     *
+     * <p>
+     * Existing dripstone above or below selects extension or opposing-tip merge
+     * behavior. The method adjusts adjacent thickness values as it creates the new
+     * tip or merge point, and those writes can trigger further block updates. Most
+     * branches return {@code true} without checking dimension write results, so
+     * callers cannot infer that all related states were stored.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
@@ -58,38 +94,27 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
         boolean hasDripstoneBelow = belowState.getBlockType() == BlockTypes.POINTED_DRIPSTONE;
         boolean isAboveAir = aboveState.getBlockType() == BlockTypes.AIR;
         boolean isBelowAir = belowState.getBlockType() == BlockTypes.AIR;
-
-        // Check if placement is valid (must have solid block or dripstone to attach to)
         if (isAboveAir && isBelowAir) {
             return false;
         }
 
-        /*
-         * State determination based on PNX1.0:
-         * State 1: Both above and below have dripstone - merge
-         * State 2: Only above has dripstone - extend stalactite (hanging)
-         * State 3: Neither has dripstone - new single dripstone
-         * State 4: Only below has dripstone - extend stalagmite (not hanging)
-         */
+        // Classify both vertical neighbors together because bridging two columns
+        // requires merge handling, while a single existing column determines the
+        // extension direction.
         int state = hasDripstoneAbove ? (hasDripstoneBelow ? 1 : 2) : (!hasDripstoneBelow ? 3 : 4);
         boolean hanging = false;
 
         switch (state) {
             case 1 -> {
-                // Both above and below have dripstone - create merge point
                 setMergeBlock(dimension, blockState, x, y, z, false);
                 setBlockThicknessAt(dimension, x, y + 1, z, true, DripstoneThickness.MERGE);
             }
             case 2 -> {
-                // Only above has dripstone - extend stalactite downward
                 if (!isBelowAir) {
-                    // Solid block below
                     if (face == BlockFace.UP) {
-                        // Clicked on solid from below - merge with stalactite above
                         setBlockThicknessAt(dimension, x, y + 1, z, true, DripstoneThickness.MERGE);
                         setMergeBlock(dimension, blockState, x, y, z, false);
                     } else {
-                        // Extend stalactite downward
                         setTipBlock(dimension, blockState, x, y, z, true);
                         updateColumnAfterAdd(dimension, x, y, z, true);
                     }
@@ -98,32 +123,25 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
                 hanging = true;
             }
             case 3 -> {
-                // Neither has dripstone - new single dripstone
                 setTipBlock(dimension, blockState, x, y, z, face != BlockFace.UP);
                 return true;
             }
             case 4 -> {
-                // Only below has dripstone - extend stalagmite upward
                 if (!isAboveAir) {
-                    // Solid block above
                     if (face == BlockFace.DOWN) {
-                        // Clicked on solid from above - merge with stalagmite below
                         setMergeBlock(dimension, blockState, x, y, z, true);
                         setBlockThicknessAt(dimension, x, y - 1, z, false, DripstoneThickness.MERGE);
                     } else {
-                        // Extend stalagmite upward
                         setTipBlock(dimension, blockState, x, y, z, false);
                         updateColumnAfterAdd(dimension, x, y, z, false);
                     }
                     return true;
                 }
-                // hanging stays false for stalagmite
             }
         }
-
-        // For state 1, just return true
-        // For state 2 (hanging=true) and state 4 (hanging=false) when continuing here:
-        // update the column and place tip block
+        // Column shape updates target support-side blocks around the incoming tip;
+        // the merge case has already written its central block before this shared
+        // path.
         updateColumnAfterAdd(dimension, x, y, z, hanging);
         if (state == 1) {
             return true;
@@ -133,7 +151,9 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
     }
 
     /**
-     * Place a dripstone block as TIP.
+     * Attempts to write a tip state with the requested hanging orientation. The
+     * supplied state supplies other properties, and the dimension write result is
+     * ignored by this helper.
      */
     private void setTipBlock(Dimension dimension, BlockState blockState, int x, int y, int z, boolean hanging) {
         var newState = blockState
@@ -143,7 +163,9 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
     }
 
     /**
-     * Place a dripstone block as MERGE.
+     * Attempts to write a merge state with the requested hanging orientation. The
+     * supplied state supplies other properties, and the dimension write result is
+     * ignored by this helper.
      */
     private void setMergeBlock(Dimension dimension, BlockState blockState, int x, int y, int z, boolean hanging) {
         var newState = blockState
@@ -153,7 +175,9 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
     }
 
     /**
-     * Update an existing dripstone block's thickness.
+     * Updates orientation and thickness only when the position currently contains
+     * pointed dripstone. Other block types are left unchanged, and the dimension
+     * write result is ignored after a matching state is found.
      */
     private void setBlockThicknessAt(Dimension dimension, int x, int y, int z, boolean hanging, DripstoneThickness thickness) {
         var state = dimension.getBlockState(x, y, z);
@@ -167,48 +191,50 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
     }
 
     /**
-     * Update the column thickness after adding a new dripstone.
-     * Updates blocks above (for hanging) or below (for not hanging) based on new column length.
+     * Updates the nearest support-side thickness values after adding a tip. The
+     * hanging flag reverses the support direction, and {@code getColumnLength}
+     * returns a capped count that includes the supplied position.
+     *
+     * <p>
+     * The closest matching block becomes a frustum. When a second support-side block
+     * exists, it becomes a base for the shorter case or middle for longer columns.
+     * Other existing thickness values stay unchanged in this helper; each targeted
+     * write verifies that pointed dripstone is still present.
      */
     private void updateColumnAfterAdd(Dimension dimension, int x, int y, int z, boolean hanging) {
         int length = getColumnLength(dimension, x, y, z, hanging);
         int dy = hanging ? 1 : -1;
-
-        // Update thickness based on distance from the new tip
         if (length == 1) {
-            // Only one block above/below the tip - make it FRUSTUM
             setBlockThicknessAt(dimension, x, y + dy, z, hanging, DripstoneThickness.FRUSTUM);
         } else if (length == 2) {
-            // Two blocks - BASE and FRUSTUM
             setBlockThicknessAt(dimension, x, y + dy * 2, z, hanging, DripstoneThickness.BASE);
             setBlockThicknessAt(dimension, x, y + dy, z, hanging, DripstoneThickness.FRUSTUM);
         } else if (length >= 3) {
-            // Three or more - MIDDLE, FRUSTUM (and the rest stay as they are)
             setBlockThicknessAt(dimension, x, y + dy * 2, z, hanging, DripstoneThickness.MIDDLE);
             setBlockThicknessAt(dimension, x, y + dy, z, hanging, DripstoneThickness.FRUSTUM);
         }
     }
 
+    /**
+     * Forwards the neighbor event, breaks unsupported standing columns, and
+     * recalculates thickness after adjacent dripstone or air changes. Hanging support
+     * loss is handled by the falling component rather than this standing-column break
+     * path.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
 
         var hanging = block.getPropertyValue(BlockPropertyTypes.HANGING);
         var supportFace = hanging ? BlockFace.UP : BlockFace.DOWN;
-
-        // Check if support was removed for stalagmites (they break, don't fall)
-        // Stalactites are handled by the fallable component
         if (!hanging && face == supportFace) {
             var supportBlock = block.offsetPos(supportFace);
             if (!supportBlock.getBlockStateData().isSolid() &&
                 supportBlock.getBlockType() != BlockTypes.POINTED_DRIPSTONE) {
-                // Stalagmites just break
                 breakColumn(block.getDimension(), block.getPosition().x(), block.getPosition().y(),
                         block.getPosition().z());
             }
         }
-
-        // Handle thickness when adjacent dripstone changes
         if (neighbor.getBlockType() == BlockTypes.POINTED_DRIPSTONE ||
             neighbor.getBlockType() == BlockTypes.AIR) {
             recalculateThickness(block);
@@ -216,18 +242,16 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
     }
 
     /**
-     * Breaks a stalagmite column (non-hanging dripstones).
+     * Attempts to break pointed dripstone at the supplied position and recurses
+     * through standing dripstone above it. Individual break results are ignored, so
+     * cancellation of one break does not stop attempts farther up the column.
      */
     private void breakColumn(Dimension dimension, int x, int y, int z) {
         var currentState = dimension.getBlockState(x, y, z);
         if (currentState.getBlockType() != BlockTypes.POINTED_DRIPSTONE) {
             return;
         }
-
-        // Break this block
         dimension.breakBlock(x, y, z, null, null);
-
-        // Break the rest of the column (upward for stalagmites)
         int nextY = y + 1;
         var nextState = dimension.getBlockState(x, nextY, z);
         if (nextState.getBlockType() == BlockTypes.POINTED_DRIPSTONE &&
@@ -236,12 +260,15 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
         }
     }
 
+    /**
+     * Refreshes thickness from the dimension's current state when pointed dripstone
+     * still occupies the position. A block already removed by preceding support
+     * handling is skipped, and unchanged thickness avoids another property write.
+     */
     private void recalculateThickness(Block block) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
         int x = pos.x(), y = pos.y(), z = pos.z();
-
-        // Check if the block is still a pointed dripstone (it may have been broken)
         var currentState = dimension.getBlockState(x, y, z);
         if (currentState.getBlockType() != BlockTypes.POINTED_DRIPSTONE) {
             return;
@@ -257,11 +284,17 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
         }
     }
 
+    /**
+     * Returns a capped column count including the supplied position and matching
+     * support-side dripstone. The hanging flag selects scan direction, and a
+     * different block type or orientation ends the scan.
+     */
     private int getColumnLength(Dimension dimension, int x, int y, int z, boolean hanging) {
         int length = 1;
         int dy = hanging ? 1 : -1;
         int currentY = y + dy;
 
+        // The height cap limits work on unusually long dripstone columns.
         while (length < MAX_COLUMN_HEIGHT) {
             var state = dimension.getBlockState(x, currentY, z);
             if (state.getBlockType() != BlockTypes.POINTED_DRIPSTONE) {
@@ -277,13 +310,25 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
         return length;
     }
 
+    /**
+     * Determines thickness from opposing tips and matching dripstone distances toward
+     * the base and tip. The hanging flag selects which vertical direction has each
+     * structural role, and both distance scans are bounded.
+     *
+     * <p>
+     * An immediately adjacent opposite-facing dripstone takes merge precedence before
+     * distance checks. Otherwise no tip-side neighbors means tip, one means frustum,
+     * and larger tip distance selects base only when no base-side neighbors remain.
+     * All remaining positions become middle, keeping the same rules for hanging and
+     * standing formations.
+     */
     private DripstoneThickness calculateThickness(Dimension dimension, int x, int y, int z, boolean hanging) {
-        // For hanging=true (stalactite): base is UP, tip is DOWN
-        // For hanging=false (stalagmite): base is DOWN, tip is UP
+        // Hanging columns place their base above the tip; standing columns reverse
+        // those roles, so both distance scans must use this shared orientation.
         int baseDir = hanging ? 1 : -1;
         int tipDir = -baseDir;
-
-        // Check for merge first (dripstone from opposite direction)
+        // Opposing adjacent tips form a merge even when the column distances would
+        // otherwise identify a tip, so test that identity before thickness distances.
         var oppositeState = dimension.getBlockState(x, y + tipDir, z);
         if (oppositeState.getBlockType() == BlockTypes.POINTED_DRIPSTONE) {
             var oppositeHanging = oppositeState.getPropertyValue(BlockPropertyTypes.HANGING);
@@ -291,10 +336,9 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
                 return DripstoneThickness.MERGE;
             }
         }
-
-        // Count distance to tip (blocks in tip direction with same hanging value)
         int distanceToTip = 0;
         int currentY = y + tipDir;
+        // Bound tip-distance inspection by the same column height limit.
         while (distanceToTip < MAX_COLUMN_HEIGHT) {
             var state = dimension.getBlockState(x, currentY, z);
             if (state.getBlockType() != BlockTypes.POINTED_DRIPSTONE) {
@@ -306,10 +350,9 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
             distanceToTip++;
             currentY += tipDir;
         }
-
-        // Count distance to base (blocks in base direction with same hanging value)
         int distanceToBase = 0;
         currentY = y + baseDir;
+        // Bound base-distance inspection by the same column height limit.
         while (distanceToBase < MAX_COLUMN_HEIGHT) {
             var state = dimension.getBlockState(x, currentY, z);
             if (state.getBlockType() != BlockTypes.POINTED_DRIPSTONE) {
@@ -321,81 +364,81 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
             distanceToBase++;
             currentY += baseDir;
         }
-
-        // Determine thickness based on position
         if (distanceToTip == 0) {
-            // This is the tip
             return DripstoneThickness.TIP;
         } else if (distanceToTip == 1) {
-            // One block from tip
             return DripstoneThickness.FRUSTUM;
         } else if (distanceToBase == 0) {
-            // This is at the base (attached to solid block)
             return DripstoneThickness.BASE;
         } else {
-            // In the middle
             return DripstoneThickness.MIDDLE;
         }
     }
 
+    /**
+     * Returns whether pointed dripstone receives random growth and drip updates.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Attempts growth and liquid dripping only for hanging tip states. Growth has its
+     * own random gate, while dripping is checked afterward even when the tip did not
+     * grow during this update.
+     */
     @Override
     public void onRandomUpdate(Block block) {
         var thickness = block.getPropertyValue(BlockPropertyTypes.DRIPSTONE_THICKNESS);
         var hanging = block.getPropertyValue(BlockPropertyTypes.HANGING);
-
-        // Only tips can grow and drip
         if (thickness != DripstoneThickness.TIP || !hanging) {
             return;
         }
-
-        // Try to grow
         if (ThreadLocalRandom.current().nextDouble() < GROWTH_PROBABILITY) {
             tryGrow(block);
         }
-
-        // Try to drip liquid
         tryDrip(block);
     }
 
+    /**
+     * Attempts to add a hanging tip in the air block below a column shorter than the
+     * height limit. It then changes the current tip to frustum without checking
+     * either state-write result.
+     */
     private void tryGrow(Block block) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
         int x = pos.x(), y = pos.y(), z = pos.z();
-
-        // Check if there's space below
         var below = dimension.getBlockState(x, y - 1, z);
         if (below.getBlockType() != BlockTypes.AIR) {
             return;
         }
-
-        // Check column height
         int columnHeight = getColumnLength(dimension, x, y, z, true);
+        // The growth limit keeps new tips within the bounded column scan.
         if (columnHeight >= MAX_COLUMN_HEIGHT) {
             return;
         }
-
-        // Grow downward
         var newTip = block.getBlockState()
                 .setPropertyValue(BlockPropertyTypes.HANGING, true)
                 .setPropertyValue(BlockPropertyTypes.DRIPSTONE_THICKNESS, DripstoneThickness.TIP);
 
+        // Write the new lower tip before changing the former tip to frustum. Both
+        // results are ignored, so failures can leave only part of this growth
+        // applied.
         dimension.setBlockState(x, y - 1, z, newTip);
-
-        // Update current block to FRUSTUM
         dimension.updateBlockProperty(BlockPropertyTypes.DRIPSTONE_THICKNESS, DripstoneThickness.FRUSTUM, pos);
     }
 
+    /**
+     * Searches above the hanging column for water or lava, then searches downward for
+     * a receiving cauldron. The first nonair block stops the downward search, and a
+     * liquid source also produces a drip sound without requiring successful filling.
+     */
     private void tryDrip(Block block) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
         int x = pos.x(), y = pos.y(), z = pos.z();
-
-        // Find the top of the stalactite
         int topY = y;
         while (true) {
             var above = dimension.getBlockState(x, topY + 1, z);
@@ -403,12 +446,14 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
                 break;
             }
             topY++;
+            // Bound upward source searching by the height limit used for column
+            // growth.
             if (topY - y > MAX_COLUMN_HEIGHT) {
                 return;
             }
         }
-
-        // Check if there's liquid above the stalactite
+        // Liquid is read two positions above the top dripstone, leaving the
+        // intervening block as the support between source liquid and column.
         var sourceBlock = dimension.getBlockState(x, topY + 2, z);
         var sourceType = sourceBlock.getBlockType();
 
@@ -418,8 +463,6 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
         if (!isWater && !isLava) {
             return;
         }
-
-        // Find cauldron below
         int searchY = y - 1;
         while (searchY > dimension.getDimensionType().getMinHeight()) {
             var belowState = dimension.getBlockState(x, searchY, z);
@@ -427,50 +470,48 @@ public class BlockPointedDripstoneBaseComponentImpl extends BlockBaseComponentIm
 
             if (belowType != BlockTypes.AIR) {
                 if (belowType == BlockTypes.CAULDRON) {
-                    // Found cauldron - try to fill
                     tryFillCauldron(dimension, x, searchY, z, isWater);
                 }
                 break;
             }
             searchY--;
         }
-
-        // Add drip sound
         dimension.addSound(x + 0.5, y, z + 0.5, new PointedDripstoneDripSound(isWater));
     }
 
+    /**
+     * Attempts a liquid-specific random filling action for the supplied cauldron
+     * coordinates. A cancellable drip event runs before checking its stored liquid
+     * and fill level; empty cauldrons accept the liquid, while nonempty cauldrons
+     * require a matching type and spare capacity.
+     */
     private void tryFillCauldron(Dimension dimension, int x, int y, int z, boolean isWater) {
         var rand = ThreadLocalRandom.current();
         double probability = isWater ? WATER_DRIP_PROBABILITY : LAVA_DRIP_PROBABILITY;
 
+        // Liquid-specific probabilities gate filling independently of the tip growth
+        // draw.
         if (rand.nextDouble() > probability) {
             return;
         }
 
         var cauldronState = dimension.getBlockState(x, y, z);
-
-        // Call event
         var event = new PointedDripstoneDripEvent(
                 new Block(cauldronState, new Position3i(x, y, z, dimension), 0), isWater);
         event.call();
         if (event.isCancelled()) {
             return;
         }
-
-        // Check current cauldron state
         var currentLiquid = cauldronState.getPropertyValue(BlockPropertyTypes.CAULDRON_LIQUID);
         var fillLevel = cauldronState.getPropertyValue(BlockPropertyTypes.FILL_LEVEL);
         var expectedLiquid = isWater ? CauldronLiquid.WATER : CauldronLiquid.LAVA;
-
-        // Fill empty cauldron or add to matching type
         if (fillLevel == 0) {
-            // Empty cauldron - fill with liquid
             var newState = cauldronState
                     .setPropertyValue(BlockPropertyTypes.CAULDRON_LIQUID, expectedLiquid)
                     .setPropertyValue(BlockPropertyTypes.FILL_LEVEL, 1);
             dimension.setBlockState(x, y, z, newState);
+        // Six is the maximum stored cauldron fill level.
         } else if (currentLiquid == expectedLiquid && fillLevel < 6) {
-            // Add to matching liquid cauldron
             dimension.updateBlockProperty(BlockPropertyTypes.FILL_LEVEL, fillLevel + 1, x, y, z);
         }
     }

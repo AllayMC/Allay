@@ -41,11 +41,31 @@ import org.joml.Vector3d;
 import java.util.function.Supplier;
 
 /**
+ * {@code ItemTypeInitializer} registers specialized vanilla item types and assigns
+ * their {@code ItemTypes} catalog fields. The startup populator invokes its
+ * public parameterless initializers before the generated default initializer,
+ * so non-{@code null} specialized fields retain their component composition.
+ *
+ * <p>
+ * Each builder registers the type before the surrounding assignment publishes
+ * its catalog reference. Family helpers retain separate vanilla identities even
+ * when their stacks share implementation classes; their component factories
+ * select repair materials, colors, equipment slots, or deferred block and entity
+ * lookups. Required item-data registries must already be loaded and registration
+ * must remain mutable. A later failure does not undo types installed by earlier
+ * statements, and invoking these initializers again can replace existing registry
+ * and catalog references.
+ *
  * @author daoge_cmd
  */
 @SuppressWarnings("unused")
 @UtilityClass
 public final class ItemTypeInitializer {
+    /**
+     * Registers the banner item type and assigns {@code ItemTypes.BANNER}.
+     * The specialized base component supplies banner color, kind, pattern storage,
+     * and standing-versus-wall placement instead of the generic base provider.
+     */
     public static void initBanner() {
         ItemTypes.BANNER = AllayItemType
                 .builder(ItemBannerStackImpl.class)
@@ -54,6 +74,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the honeycomb item type with its specialized base component.
+     * The selected component supplies honeycomb block interactions, and the completed
+     * builder result becomes the {@code ItemTypes.HONEYCOMB} catalog reference.
+     */
     public static void initHoneycomb() {
         ItemTypes.HONEYCOMB = AllayItemType
                 .builder(ItemHoneycombStackImpl.class)
@@ -62,6 +87,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the music-disc catalog entries with their explicit disc-kind mappings.
+     * Each identifier receives a separate type through {@code buildMusicDisc}, while
+     * the component's {@code DiscType} supplies display and comparator data.
+     */
     public static void initMusicDiscs() {
         ItemTypes.MUSIC_DISC_13 = buildMusicDisc(ItemId.MUSIC_DISC_13, DiscType.DISC_13);
         ItemTypes.MUSIC_DISC_CAT = buildMusicDisc(ItemId.MUSIC_DISC_CAT, DiscType.DISC_CAT);
@@ -87,6 +117,11 @@ public final class ItemTypeInitializer {
         ItemTypes.MUSIC_DISC_BOUNCE = buildMusicDisc(ItemId.MUSIC_DISC_BOUNCE, DiscType.DISC_BOUNCE);
     }
 
+    /**
+     * Builds and registers a music-disc type retaining the supplied disc kind.
+     * Each stack receives a disc base component initialized from its stack values;
+     * the caller publishes the returned type to its catalog field.
+     */
     private static ItemType<ItemMusicDiscStack> buildMusicDisc(ItemId itemId, DiscType discType) {
         return AllayItemType
                 .builder(ItemMusicDiscStackImpl.class)
@@ -95,6 +130,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers ordinary and effect-bearing food types with their nutrition components.
+     * Ordinary foods select explicit food and saturation values, while specialized
+     * edible components provide additional effects. Plantable berry and potato items
+     * also receive their specialized base interactions.
+     */
     public static void initFoods() {
         ItemTypes.TROPICAL_FISH = AllayItemType
                 .builder(ItemTropicalFishStackImpl.class)
@@ -387,6 +428,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers spawn-egg catalog entries with their configured entity identities.
+     * Each egg keeps its own vanilla item identifier, and {@code buildSpawnEgg}
+     * binds the entity mapping without resolving an entity type during registration.
+     */
     public static void initSpawnEgg() {
         ItemTypes.AGENT_SPAWN_EGG = buildSpawnEgg(ItemId.AGENT_SPAWN_EGG, EntityId.AGENT);
         ItemTypes.ALLAY_SPAWN_EGG = buildSpawnEgg(ItemId.ALLAY_SPAWN_EGG, EntityId.ALLAY);
@@ -455,7 +501,6 @@ public final class ItemTypeInitializer {
         ItemTypes.SNIFFER_SPAWN_EGG = buildSpawnEgg(ItemId.SNIFFER_SPAWN_EGG, EntityId.SNIFFER);
         ItemTypes.SNOW_GOLEM_SPAWN_EGG = buildSpawnEgg(ItemId.SNOW_GOLEM_SPAWN_EGG, EntityId.SNOW_GOLEM);
         ItemTypes.SULFUR_CUBE_SPAWN_EGG = buildSpawnEgg(ItemId.SULFUR_CUBE_SPAWN_EGG, EntityId.SULFUR_CUBE);
-//        ItemTypes.SPAWN_EGG = buildSpawnEgg(ItemId.SPAWN_EGG); // ??
         ItemTypes.SPIDER_SPAWN_EGG = buildSpawnEgg(ItemId.SPIDER_SPAWN_EGG, EntityId.SPIDER);
         ItemTypes.SQUID_SPAWN_EGG = buildSpawnEgg(ItemId.SQUID_SPAWN_EGG, EntityId.SQUID);
         ItemTypes.STRAY_SPAWN_EGG = buildSpawnEgg(ItemId.STRAY_SPAWN_EGG, EntityId.STRAY);
@@ -481,6 +526,11 @@ public final class ItemTypeInitializer {
         ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG, EntityId.ZOMBIE_VILLAGER);
     }
 
+    /**
+     * Builds and registers an egg type for the supplied entity identity.
+     * The stack base component retains {@code entityId} for later spawn handling;
+     * the returned item type remains specific to {@code itemId}.
+     */
     private static ItemType<ItemSpawnEggStack> buildSpawnEgg(ItemId itemId, EntityId entityId) {
         return AllayItemType
                 .builder(ItemSpawnEggStackImpl.class)
@@ -492,6 +542,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers sword catalog entries with sword-tool and repair capabilities.
+     * Each vanilla identifier selects its configured material through
+     * {@code buildSword}, so stacks share the sword implementation while retaining
+     * their own item data and repair mapping.
+     */
     public static void initSword() {
         ItemTypes.DIAMOND_SWORD = buildSword(ItemId.DIAMOND_SWORD, ItemId.DIAMOND);
         ItemTypes.GOLDEN_SWORD = buildSword(ItemId.GOLDEN_SWORD, ItemId.GOLD_INGOT);
@@ -502,6 +558,11 @@ public final class ItemTypeInitializer {
         ItemTypes.COPPER_SWORD = buildSword(ItemId.COPPER_SWORD, ItemId.COPPER_INGOT);
     }
 
+    /**
+     * Builds and registers a sword with its tool behavior and repair material.
+     * The repair component resolves {@code repairItemId} lazily, while the sword
+     * tool component receives each stack's initialization values.
+     */
     private static ItemType<ItemSwordStack> buildSword(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemSwordStackImpl.class)
@@ -511,6 +572,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers pickaxe catalog entries with tool and repair capabilities.
+     * Each vanilla identifier keeps its own gameplay data, while the shared helper
+     * binds the material used by that type's repair component.
+     */
     public static void initPickaxe() {
         ItemTypes.DIAMOND_PICKAXE = buildPickaxe(ItemId.DIAMOND_PICKAXE, ItemId.DIAMOND);
         ItemTypes.GOLDEN_PICKAXE = buildPickaxe(ItemId.GOLDEN_PICKAXE, ItemId.GOLD_INGOT);
@@ -521,6 +587,11 @@ public final class ItemTypeInitializer {
         ItemTypes.COPPER_PICKAXE = buildPickaxe(ItemId.COPPER_PICKAXE, ItemId.COPPER_INGOT);
     }
 
+    /**
+     * Builds and registers a pickaxe with standard tool behavior and repair support.
+     * The tool component uses stack initialization, while the repair component
+     * defers resolving the supplied material identity until queried.
+     */
     private static ItemType<ItemPickaxeStack> buildPickaxe(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemPickaxeStackImpl.class)
@@ -530,6 +601,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers axe catalog entries with surface interactions, tool behavior, and
+     * repair support. Each type retains its vanilla identity and data while
+     * {@code buildAxe} attaches the corresponding repair-material resolver.
+     */
     public static void initAxe() {
         ItemTypes.DIAMOND_AXE = buildAxe(ItemId.DIAMOND_AXE, ItemId.DIAMOND);
         ItemTypes.GOLDEN_AXE = buildAxe(ItemId.GOLDEN_AXE, ItemId.GOLD_INGOT);
@@ -540,6 +616,11 @@ public final class ItemTypeInitializer {
         ItemTypes.COPPER_AXE = buildAxe(ItemId.COPPER_AXE, ItemId.COPPER_INGOT);
     }
 
+    /**
+     * Builds and registers an axe with specialized base and standard tool components.
+     * The base handles axe block interactions, while the separate repair capability
+     * resolves the supplied repair material on demand.
+     */
     private static ItemType<ItemAxeStack> buildAxe(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemAxeStackImpl.class)
@@ -550,6 +631,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers shovel catalog entries with standard tool and repair components.
+     * The shared stack class retains each type's vanilla data, and the helper
+     * selects the material accepted for that type's repairs.
+     */
     public static void initShovel() {
         ItemTypes.DIAMOND_SHOVEL = buildShovel(ItemId.DIAMOND_SHOVEL, ItemId.DIAMOND);
         ItemTypes.GOLDEN_SHOVEL = buildShovel(ItemId.GOLDEN_SHOVEL, ItemId.GOLD_INGOT);
@@ -560,6 +646,11 @@ public final class ItemTypeInitializer {
         ItemTypes.COPPER_SHOVEL = buildShovel(ItemId.COPPER_SHOVEL, ItemId.COPPER_INGOT);
     }
 
+    /**
+     * Builds and registers a shovel with standard tool and repair capabilities.
+     * The generic base provider remains available through the builder, while the
+     * repair component resolves the selected material lazily.
+     */
     private static ItemType<ItemShovelStack> buildShovel(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemShovelStackImpl.class)
@@ -569,6 +660,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers hoe catalog entries with hoe-specific tool behavior and repair support.
+     * Each selected material is bound through the helper while vanilla item data
+     * and identity remain specific to the catalog entry.
+     */
     public static void initHoe() {
         ItemTypes.DIAMOND_HOE = buildHoe(ItemId.DIAMOND_HOE, ItemId.DIAMOND);
         ItemTypes.GOLDEN_HOE = buildHoe(ItemId.GOLDEN_HOE, ItemId.GOLD_INGOT);
@@ -579,6 +675,11 @@ public final class ItemTypeInitializer {
         ItemTypes.COPPER_HOE = buildHoe(ItemId.COPPER_HOE, ItemId.COPPER_INGOT);
     }
 
+    /**
+     * Builds and registers a hoe with its specialized tool component and repair
+     * material. The tool provider receives stack initialization; the repair provider
+     * defers material lookup until a compatibility query runs.
+     */
     private static ItemType<ItemHoeStack> buildHoe(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemHoeStackImpl.class)
@@ -588,6 +689,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers colored and uncolored shulker-box catalog entries with stored-item
+     * base behavior. The entries retain separate vanilla identities while using the
+     * same component implementation for slot persistence and placed-container
+     * contents.
+     */
     public static void initShulkerBox() {
         ItemTypes.BLACK_SHULKER_BOX = buildShulkerBox(ItemId.BLACK_SHULKER_BOX);
         ItemTypes.BLUE_SHULKER_BOX = buildShulkerBox(ItemId.BLUE_SHULKER_BOX);
@@ -609,6 +716,11 @@ public final class ItemTypeInitializer {
         ItemTypes.YELLOW_SHULKER_BOX = buildShulkerBox(ItemId.YELLOW_SHULKER_BOX);
     }
 
+    /**
+     * Builds and registers one shulker-box type with stored-inventory base behavior.
+     * The helper preserves {@code itemId} as its vanilla identity; later stack
+     * construction supplies the initialization used to restore carried contents.
+     */
     private static ItemType<ItemShulkerBoxStack> buildShulkerBox(ItemId itemId) {
         return AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
@@ -617,6 +729,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the air item type and assigns {@code ItemTypes.AIR}.
+     * The selected air base component uses predefined zero-count initialization and
+     * skips factory extra-tag loading, replacing the generic base provider.
+     */
     public static void initAir() {
         ItemTypes.AIR = AllayItemType
                 .builder(ItemAirStackImpl.class)
@@ -625,6 +742,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers helmet catalog entries with their armor-slot and repair mappings.
+     * Leather helmets also receive dye support; the turtle helmet uses its own base
+     * stack and scute repair component without the shared trim provider.
+     */
     public static void initHelmets() {
         ItemTypes.CHAINMAIL_HELMET = buildArmor(ItemHelmetStackImpl.class, ItemId.CHAINMAIL_HELMET, ArmorType.HELMET, ItemId.IRON_INGOT);
         ItemTypes.DIAMOND_HELMET = buildArmor(ItemHelmetStackImpl.class, ItemId.DIAMOND_HELMET, ArmorType.HELMET, ItemId.DIAMOND);
@@ -642,6 +764,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers chestplate catalog entries and the chest-slot elytra type.
+     * Leather chestplates add dye support, while elytra uses armor base behavior and
+     * phantom-membrane repair without the shared armor trim provider.
+     */
     public static void initChestplates() {
         ItemTypes.CHAINMAIL_CHESTPLATE = buildArmor(ItemChestplateStackImpl.class, ItemId.CHAINMAIL_CHESTPLATE, ArmorType.CHESTPLATE, ItemId.IRON_INGOT);
         ItemTypes.DIAMOND_CHESTPLATE = buildArmor(ItemChestplateStackImpl.class, ItemId.DIAMOND_CHESTPLATE, ArmorType.CHESTPLATE, ItemId.DIAMOND);
@@ -659,6 +786,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers leggings catalog entries with the leggings equipment slot and their
+     * repair materials. The leather entry uses the dyeable helper; other entries
+     * use the shared armor helper with trim support.
+     */
     public static void initLeggings() {
         ItemTypes.CHAINMAIL_LEGGINGS = buildArmor(ItemLeggingsStackImpl.class, ItemId.CHAINMAIL_LEGGINGS, ArmorType.LEGGINGS, ItemId.IRON_INGOT);
         ItemTypes.DIAMOND_LEGGINGS = buildArmor(ItemLeggingsStackImpl.class, ItemId.DIAMOND_LEGGINGS, ArmorType.LEGGINGS, ItemId.DIAMOND);
@@ -669,6 +801,11 @@ public final class ItemTypeInitializer {
         ItemTypes.COPPER_LEGGINGS = buildArmor(ItemLeggingsStackImpl.class, ItemId.COPPER_LEGGINGS, ArmorType.LEGGINGS, ItemId.COPPER_INGOT);
     }
 
+    /**
+     * Registers boot catalog entries with the boots equipment slot and repair
+     * materials. Leather boots add custom-color support, while the common armor
+     * composition supplies wearability, durability behavior, and trim persistence.
+     */
     public static void initBoots() {
         ItemTypes.CHAINMAIL_BOOTS = buildArmor(ItemBootsStackImpl.class, ItemId.CHAINMAIL_BOOTS, ArmorType.BOOTS, ItemId.IRON_INGOT);
         ItemTypes.DIAMOND_BOOTS = buildArmor(ItemBootsStackImpl.class, ItemId.DIAMOND_BOOTS, ArmorType.BOOTS, ItemId.DIAMOND);
@@ -679,6 +816,12 @@ public final class ItemTypeInitializer {
         ItemTypes.COPPER_BOOTS = buildArmor(ItemBootsStackImpl.class, ItemId.COPPER_BOOTS, ArmorType.BOOTS, ItemId.COPPER_INGOT);
     }
 
+    /**
+     * Builds and registers armor with base, wearable, trim, and repair components.
+     * The caller must keep {@code stackClass} consistent with the inferred return
+     * type because its generic cast is unchecked; the supplied armor type selects
+     * the equipment slot.
+     */
     @SuppressWarnings("unchecked")
     private static <T extends ItemStack> ItemType<T> buildArmor(Class<? extends ItemStack> stackClass, ItemId itemId, ArmorType armorType, ItemId repairItemId) {
         return AllayItemType
@@ -691,6 +834,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Builds and registers dyeable leather armor with wear, trim, and leather-repair
+     * capabilities. The caller must match {@code stackClass} to the inferred return
+     * type because its generic cast is unchecked; the armor type selects the slot.
+     */
     @SuppressWarnings("unchecked")
     private static <T extends ItemStack> ItemType<T> buildLeatherArmor(Class<? extends ItemStack> stackClass, ItemId itemId, ArmorType armorType) {
         return AllayItemType
@@ -704,6 +852,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers leather horse armor with custom-color capability and vanilla data.
+     * This composition adds the dyeable component only; it does not attach the
+     * player armor-slot transfer behavior used by ordinary wearable armor.
+     */
     public static void initLeatherHorseArmor() {
         ItemTypes.LEATHER_HORSE_ARMOR = AllayItemType
                 .builder(ItemLeatherHorseArmorStackImpl.class)
@@ -712,6 +865,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers each listed sign item with its matching standing and wall block
+     * identities. The shared sign component resolves those block types later, so
+     * registration preserves material-specific placement without performing block
+     * lookup immediately.
+     */
     public static void initSigns() {
         ItemTypes.ACACIA_SIGN = buildSign(ItemId.ACACIA_SIGN, BlockId.ACACIA_WALL_SIGN, BlockId.ACACIA_STANDING_SIGN);
         ItemTypes.BAMBOO_SIGN = buildSign(ItemId.BAMBOO_SIGN, BlockId.BAMBOO_WALL_SIGN, BlockId.BAMBOO_STANDING_SIGN);
@@ -725,8 +884,14 @@ public final class ItemTypeInitializer {
         ItemTypes.SPRUCE_SIGN = buildSign(ItemId.SPRUCE_SIGN, BlockId.SPRUCE_WALL_SIGN, BlockId.SPRUCE_STANDING_SIGN);
         ItemTypes.WARPED_SIGN = buildSign(ItemId.WARPED_SIGN, BlockId.WARPED_WALL_SIGN, BlockId.WARPED_STANDING_SIGN);
         ItemTypes.PALE_OAK_SIGN = buildSign(ItemId.PALE_OAK_SIGN, BlockId.PALE_OAK_WALL_SIGN, BlockId.PALE_OAK_STANDING_SIGN);
+        ItemTypes.POPLAR_SIGN = buildSign(ItemId.POPLAR_SIGN, BlockId.POPLAR_WALL_SIGN, BlockId.POPLAR_STANDING_SIGN);
     }
 
+    /**
+     * Builds and registers a sign type with deferred standing and wall block
+     * lookups. The supplied block identities remain separate from the item identity,
+     * and the sign base component selects their placement path later.
+     */
     private static ItemType<ItemSignStack> buildSign(ItemId itemId, BlockId wallBlockId, BlockId standingBlockId) {
         return AllayItemType
                 .builder(ItemSignStackImpl.class)
@@ -738,6 +903,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers empty, liquid, and entity-bearing buckets alongside the drinkable
+     * milk bucket. Ordinary bucket compositions resolve their liquid and optional
+     * entity later; milk uses an edible component instead of bucket-emptying
+     * behavior.
+     */
     public static void initBuckets() {
         ItemTypes.AXOLOTL_BUCKET = buildBucket(ItemId.AXOLOTL_BUCKET, BlockId.WATER, EntityId.AXOLOTL);
         ItemTypes.BUCKET = buildBucket(ItemId.BUCKET, BlockId.AIR, null);
@@ -753,6 +924,11 @@ public final class ItemTypeInitializer {
         ItemTypes.WATER_BUCKET = buildBucket(ItemId.WATER_BUCKET, BlockId.WATER, null);
     }
 
+    /**
+     * Builds and registers a bucket with configured liquid and optional entity
+     * identities. {@code entityId} may be {@code null} for liquid-only or empty
+     * buckets; the component resolves both content types when queried.
+     */
     private static ItemType<ItemBucketStack> buildBucket(ItemId itemId, BlockId liquidBlockId, EntityId entityId) {
         return AllayItemType
                 .builder(ItemBucketStackImpl.class)
@@ -761,6 +937,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Builds and registers milk with its dedicated drinkable consumption component.
+     * The composition leaves the generic base provider in place and does not add
+     * the ordinary liquid-placement bucket component.
+     */
     private static ItemType<ItemMilkBucketStack> buildMilkBucket() {
         return AllayItemType
                 .builder(ItemMilkBucketStackImpl.class)
@@ -769,6 +950,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers flint and steel with its specialized item base behavior.
+     * The resulting type retains vanilla gameplay data and replaces the generic
+     * base provider with the ignition-capable implementation.
+     */
     public static void initFlintAndSteel() {
         ItemTypes.FLINT_AND_STEEL = AllayItemType
                 .builder(ItemFlintAndSteelStackImpl.class)
@@ -777,6 +963,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the end-crystal item type with its entity-placement base component.
+     * The completed type uses vanilla data, while the specialized component handles
+     * support, space, and player restrictions when the item is used.
+     */
     public static void initEndCrystal() {
         ItemTypes.END_CRYSTAL = AllayItemType
                 .builder(ItemEndCrystalStackImpl.class)
@@ -785,6 +976,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the listed seed and pod types with their planting base components.
+     * Each item retains its own vanilla identity and uses its corresponding
+     * component to decide the crop and placement behavior.
+     */
     public static void initSeeds() {
         ItemTypes.WHEAT_SEEDS = AllayItemType
                 .builder(ItemWheatSeedsStackImpl.class)
@@ -818,6 +1014,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers ordinary, writable, and written books with separate base components.
+     * Each composition retains its own vanilla data, while writable and written
+     * implementations supply the corresponding stored-book behavior to their stacks.
+     */
     public static void initBook() {
         ItemTypes.BOOK = AllayItemType
                 .builder(ItemBookStackImpl.class)
@@ -836,6 +1037,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers empty and filled map types with their specialized base components.
+     * The two catalog fields keep distinct vanilla identities, allowing stack
+     * behavior to distinguish map creation from existing map data.
+     */
     public static void initMap() {
         ItemTypes.FILLED_MAP = AllayItemType
                 .builder(ItemFilledMapStackImpl.class)
@@ -849,6 +1055,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers throwable items, including climate-specific eggs and cooldown-aware
+     * launchers. Ender pearls start a twenty-tick player cooldown and wind charges
+     * start ten ticks before inherited launch processing; a later launch rejection
+     * does not undo those cooldowns.
+     */
     public static void initProjectile() {
         ItemTypes.SNOWBALL = AllayItemType
                 .builder(ItemSnowballStackImpl.class)
@@ -869,8 +1081,9 @@ public final class ItemTypeInitializer {
                                 return false;
                             }
 
-                            // NOTICE: No need to send cooldown to the client since the client will display cooldown
-                            // automatically if the item/category has cool down after used it
+                            // Start the twenty-tick server cooldown before inherited
+                            // launch dispatch; a cancelled launch does not refund it,
+                            // and this call does not send a cooldown packet.
                             player.setCooldown(ItemTypes.ENDER_PEARL, 20, false);
                         }
 
@@ -894,6 +1107,9 @@ public final class ItemTypeInitializer {
                                 return false;
                             }
 
+                            // Start the ten-tick server cooldown before inherited
+                            // launch dispatch, retaining it even if projectile launch
+                            // later fails or its event is cancelled.
                             player.setCooldown(ItemTypes.WIND_CHARGE, 10, false);
                         }
 
@@ -903,6 +1119,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Builds and registers an egg item with the supplied climate variant.
+     * The egg projectile component captures that variant for later projectile
+     * behavior while the type retains the selected vanilla egg identity.
+     */
     private static ItemType<ItemEggStack> buildEgg(ItemId itemId, ClimateVariant climateVariant) {
         return AllayItemType
                 .builder(ItemEggStackImpl.class)
@@ -911,6 +1132,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers drinkable and splash potion types with potion-state components.
+     * The splash launcher transfers the item's metadata-selected potion kind to
+     * its created projectile, while drinkable potions also receive their dedicated
+     * edible component.
+     */
     public static void initPotion() {
         ItemTypes.POTION = AllayItemType
                 .builder(ItemPotionStackImpl.class)
@@ -922,23 +1149,39 @@ public final class ItemTypeInitializer {
             @Override
             protected EntityProjectile createProjectile(Entity shooter, Vector3d shootPos) {
                 var projectile = (EntitySplashPotion) super.createProjectile(shooter, shootPos);
+                // Potion identity lives in item metadata, so transfer its decoded
+                // kind to the projectile before inherited launch handling proceeds.
                 projectile.setPotionType(PotionType.fromId(thisItemStack.getMeta()));
                 return projectile;
             }
         });
     }
 
+    /**
+     * Registers lingering potions with potion-state and bottle-projectile components.
+     * The specialized projectile callback transfers the item's metadata-selected
+     * potion kind to the created lingering entity before inherited launch handling
+     * continues.
+     */
     public static void initLingeringPotion() {
         ItemTypes.LINGERING_POTION = buildThrowablePotion(ItemLingeringPotionStackImpl.class, ItemId.LINGERING_POTION, () -> new ItemBottleProjectileComponentImpl(EntityId.LINGERING_POTION, 0.5) {
             @Override
             protected EntityProjectile createProjectile(Entity shooter, Vector3d shootPos) {
                 var projectile = (EntityLingeringPotion) super.createProjectile(shooter, shootPos);
+                // Potion identity lives in item metadata, so transfer its decoded
+                // kind to the projectile before inherited launch handling proceeds.
                 projectile.setPotionType(PotionType.fromId(thisItemStack.getMeta()));
                 return projectile;
             }
         });
     }
 
+    /**
+     * Builds and registers a potion type with state and supplied bottle-launcher
+     * components. The supplier creates the specialized projectile behavior later;
+     * the caller must match {@code stackClass} to the inferred result type because
+     * the class cast is unchecked.
+     */
     @SuppressWarnings("unchecked")
     private static <T extends ItemStack> ItemType<T> buildThrowablePotion(
             Class<? extends ItemStack> stackClass,
@@ -953,6 +1196,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the bow with its specialized base behavior and string repair
+     * capability. The component composition retains vanilla gameplay data and
+     * resolves the configured repair material when compatibility is queried.
+     */
     public static void initBow() {
         ItemTypes.BOW = AllayItemType
                 .builder(ItemBowStackImpl.class)
@@ -962,6 +1210,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers goat horns with the instrument-aware cooldown and sound base
+     * component. Instrument variants remain metadata values of this one item type
+     * rather than separate registered types for each horn sound.
+     */
     public static void initGoatHorn() {
         ItemTypes.GOAT_HORN = AllayItemType
                 .builder(ItemGoatHornStackImpl.class)
@@ -970,6 +1223,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the crossbow with its specialized base behavior and string repair
+     * capability. The type retains vanilla gameplay data, while the selected base
+     * component owns the stack's loading and firing behavior.
+     */
     public static void initCrossbow() {
         ItemTypes.CROSSBOW = AllayItemType
                 .builder(ItemCrossbowStackImpl.class)
@@ -979,6 +1237,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the bed item type with its specialized placement base component.
+     * The composition retains vanilla item data while choosing the helper path
+     * that disables the generic entity-collision precheck for bed placement.
+     */
     public static void initBed() {
         ItemTypes.BED = AllayItemType
                 .builder(ItemBedStackImpl.class)
@@ -987,6 +1250,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers paintings with the fitting-painting selection and placement base
+     * component. The type retains vanilla gameplay data, while its specialized base
+     * constructs painting entities rather than relying on ordinary block placement.
+     */
     public static void initPainting() {
         ItemTypes.PAINTING = AllayItemType
                 .builder(ItemPaintingStackImpl.class)
@@ -995,6 +1263,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers firework stars with their specialized base data component.
+     * The selected implementation supplies stored explosion metadata through the
+     * stack's base behavior while the type retains its vanilla item identity.
+     */
     public static void initFireworkStar() {
         ItemTypes.FIREWORK_STAR = AllayItemType
                 .builder(ItemFireworkStarStackImpl.class)
@@ -1003,6 +1276,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers firework rockets with their specialized base data and use behavior.
+     * The builder keeps the vanilla item identity and selects the rocket component
+     * instead of adding the generic base provider.
+     */
     public static void initFireworkRocket() {
         ItemTypes.FIREWORK_ROCKET = AllayItemType
                 .builder(ItemFireworkRocketStackImpl.class)
@@ -1011,6 +1289,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers decorated-pot items with their sherd-persisting base component.
+     * The type retains vanilla data, and later stacks carry four-face decoration
+     * values through the specialized base's extra-tag persistence path.
+     */
     public static void initDecoratedPot() {
         ItemTypes.DECORATED_POT = AllayItemType
                 .builder(ItemDecoratedPotStackImpl.class)
@@ -1019,6 +1302,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers color-specific dye types and the separate black-color {@code DYE}
+     * catalog entry. Each item retains its own vanilla identity while the dye
+     * component exposes its explicitly configured color without reading stack
+     * metadata.
+     */
     public static void initDye() {
         ItemTypes.WHITE_DYE = buildDye(ItemId.WHITE_DYE, DyeColor.WHITE);
         ItemTypes.ORANGE_DYE = buildDye(ItemId.ORANGE_DYE, DyeColor.ORANGE);
@@ -1036,10 +1325,16 @@ public final class ItemTypeInitializer {
         ItemTypes.GREEN_DYE = buildDye(ItemId.GREEN_DYE, DyeColor.GREEN);
         ItemTypes.RED_DYE = buildDye(ItemId.RED_DYE, DyeColor.RED);
         ItemTypes.BLACK_DYE = buildDye(ItemId.BLACK_DYE, DyeColor.BLACK);
-        // This item type is replaced by 'minecraft:ink_sac', but I don't know why mojang doesn't remove it
+        // DYE receives the same black color through a separate registered item
+        // type, preserving the catalog entry's own vanilla identifier.
         ItemTypes.DYE = buildDye(ItemId.DYE, DyeColor.BLACK);
     }
 
+    /**
+     * Builds and registers a dye type with a fixed configured color.
+     * The supplier creates a dye capability for later stacks, while the builder
+     * retains the generic item base and the supplied vanilla identity.
+     */
     private static ItemType<ItemDyeStack> buildDye(ItemId itemId, DyeColor dyeColor) {
         return AllayItemType
                 .builder(ItemDyeStackImpl.class)
@@ -1048,6 +1343,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers spear catalog entries with their configured repair materials.
+     * The current helper adds repair capability only; these definitions do not yet
+     * bind a specialized spear attack or tool behavior component.
+     */
     public static void initSpear() {
         ItemTypes.COPPER_SPEAR = buildSpear(ItemId.COPPER_SPEAR, ItemId.COPPER_INGOT);
         ItemTypes.IRON_SPEAR = buildSpear(ItemId.IRON_SPEAR, ItemId.IRON_INGOT);
@@ -1058,7 +1358,13 @@ public final class ItemTypeInitializer {
         ItemTypes.WOODEN_SPEAR = buildSpear(ItemId.WOODEN_SPEAR, ItemId.PLANKS);
     }
 
-    // TODO: implement spear
+    // TODO: Add the specialized spear attack and tool providers here when their
+    // implementations are available; this helper currently binds repair support only.
+    /**
+     * Builds and registers a spear type with repair capability and generic base
+     * state. The supplied material is resolved lazily; specialized spear gameplay
+     * is not attached by this current component composition.
+     */
     private static ItemType<ItemSpearStack> buildSpear(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemSpearStackImpl.class)
@@ -1067,6 +1373,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers redstone dust with its redstone-wire placement base component.
+     * The type retains vanilla identity and gameplay data while the specialized
+     * base chooses the wire block independently of generic block mapping.
+     */
     public static void initRedstoneWire() {
         ItemTypes.REDSTONE = AllayItemType
                 .builder(ItemRedstoneStackImpl.class)
@@ -1075,6 +1386,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers string with its tripwire-placement base component and vanilla data.
+     * The selected base supplies the tripwire block state for placement instead
+     * of relying only on the item's generic block mapping.
+     */
     public static void initString() {
         ItemTypes.STRING = AllayItemType
                 .builder(ItemStringStackImpl.class)
@@ -1083,6 +1399,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the repeater item with its unpowered-repeater placement base.
+     * The resulting type retains vanilla gameplay data, and the specialized base
+     * selects the initial block variant before shared placement handling.
+     */
     public static void initRepeater() {
         ItemTypes.REPEATER = AllayItemType
                 .builder(ItemRepeaterStackImpl.class)
@@ -1091,6 +1412,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the comparator item with its unpowered-comparator placement base.
+     * The resulting type retains vanilla gameplay data, and the specialized base
+     * selects the initial block variant before shared placement handling.
+     */
     public static void initComparator() {
         ItemTypes.COMPARATOR = AllayItemType
                 .builder(ItemComparatorStackImpl.class)
@@ -1099,6 +1425,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the mace with specialized combat base behavior and sword-tool
+     * capability. The composition also binds breeze-rod repair support while keeping
+     * the mace's own vanilla gameplay data and identifier.
+     */
     public static void initMace() {
         ItemTypes.MACE = AllayItemType
                 .builder(ItemMaceStackImpl.class)
@@ -1109,6 +1440,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the shield with its specialized base component and plank repair
+     * capability. The type keeps vanilla gameplay data, while the selected base
+     * provides shield-specific stack and use behavior.
+     */
     public static void initShield() {
         ItemTypes.SHIELD = AllayItemType
                 .builder(ItemShieldStackImpl.class)
@@ -1118,6 +1454,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the trident item with its specialized weapon base component.
+     * The builder retains vanilla gameplay data and selects trident behavior in
+     * place of the generic base provider for later stack construction.
+     */
     public static void initTrident() {
         ItemTypes.TRIDENT = AllayItemType
                 .builder(ItemTridentStackImpl.class)
@@ -1126,6 +1467,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers fishing rods with their specialized base behavior and string repair
+     * capability. The composition retains vanilla gameplay data while the rod base
+     * manages the stack's fishing interaction behavior.
+     */
     public static void initFishingRod() {
         ItemTypes.FISHING_ROD = AllayItemType
                 .builder(ItemFishingRodStackImpl.class)
@@ -1135,6 +1481,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the armor-stand item with its specialized entity-placement base.
+     * The completed type retains vanilla gameplay data, while the component creates
+     * the stand through the item's interaction path rather than generic block
+     * placement.
+     */
     public static void initArmorStand() {
         ItemTypes.ARMOR_STAND = AllayItemType
                 .builder(ItemArmorStandStackImpl.class)
@@ -1143,6 +1495,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers the inventory nether-wart item with its planting base component.
+     * The specialized composition belongs to {@code ItemTypes.ITEM_NETHER_WART},
+     * retaining that catalog identity while supplying the corresponding planting
+     * behavior.
+     */
     public static void initNetherWart() {
         ItemTypes.ITEM_NETHER_WART = AllayItemType
                 .builder(ItemItemNetherWartStackImpl.class)
@@ -1151,6 +1509,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers cocoa beans with their specialized planting base component.
+     * The type retains vanilla item data and selects cocoa planting behavior rather
+     * than relying solely on the generic mapped-block placement path.
+     */
     public static void initCocoaBeans() {
         ItemTypes.COCOA_BEANS = AllayItemType
                 .builder(ItemCocoaBeansStackImpl.class)
@@ -1159,6 +1522,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers kelp with its specialized planting base component and vanilla data.
+     * The selected component supplies the item's placement rules while the builder
+     * retains the kelp catalog identity for later stack creation.
+     */
     public static void initKelp() {
         ItemTypes.KELP = AllayItemType
                 .builder(ItemKelpStackImpl.class)
@@ -1167,6 +1535,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers waterlilies with their specialized placement base component.
+     * The item keeps vanilla identity and gameplay data while the selected base
+     * supplies its placement behavior instead of the generic base provider.
+     */
     public static void initWaterlily() {
         ItemTypes.WATERLILY = AllayItemType
                 .builder(ItemWaterlilyStackImpl.class)
@@ -1175,6 +1548,12 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers carved pumpkins with helmet-slot wearable capability and generic
+     * base state. The wearable constructor enables interaction-based equipment by
+     * default, so this composition can transfer the item into a player's helmet
+     * slot.
+     */
     public static void initCarvedPumpkin() {
         ItemTypes.CARVED_PUMPKIN = AllayItemType
                 .builder(ItemCarvedPumpkinStackImpl.class)
@@ -1183,6 +1562,11 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    /**
+     * Registers head and skull catalog entries with helmet-slot wearable metadata.
+     * The helper disables automatic equipment transfer during interactions, while
+     * each entry retains its separate vanilla item identity and gameplay data.
+     */
     public static void initHeads() {
         ItemTypes.CREEPER_HEAD = buildHead(ItemId.CREEPER_HEAD);
         ItemTypes.DRAGON_HEAD = buildHead(ItemId.DRAGON_HEAD);
@@ -1194,6 +1578,11 @@ public final class ItemTypeInitializer {
         ItemTypes.ZOMBIE_HEAD = buildHead(ItemId.ZOMBIE_HEAD);
     }
 
+    /**
+     * Builds and registers a head item with helmet-slot wearable capability.
+     * The wearable flag is {@code false}, which disables its inventory-transfer
+     * helper while keeping the armor type available to capability consumers.
+     */
     private static ItemType<ItemHeadStack> buildHead(ItemId itemId) {
         return AllayItemType
                 .builder(ItemHeadStackImpl.class)

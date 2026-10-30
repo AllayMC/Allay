@@ -11,14 +11,29 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code ScheduledUpdateCodecTest} checks
+ * pending-update deletion markers and preservation of stored positions
+ * and times.
+ */
 @ExtendWith(AllayTestExtension.class)
 class ScheduledUpdateCodecTest {
 
+    /**
+     * Serializes an empty update collection with a nonzero current world tick.
+     * The codec must return {@code null} instead of retaining a record that contains
+     * only tick metadata.
+     */
     @Test
     void testSerializeEmptyReturnsNull() {
         assertNull(ScheduledUpdateCodec.serialize(List.of(), 100L));
     }
 
+    /**
+     * Encodes three pending updates at distinct heights with different
+     * execution ticks. Decoding must preserve each world position and its
+     * absolute execution time under the expected position hash.
+     */
     @Test
     void testSerializeAndDeserialize() {
         var info1 = new ScheduledUpdateInfo(new Vector3i(1, 64, 2), 100L);
@@ -32,7 +47,6 @@ class ScheduledUpdateCodecTest {
         var deserialized = ScheduledUpdateCodec.deserialize(data);
         assertEquals(3, deserialized.size());
 
-        // Verify each entry by its hash key
         for (var original : updates) {
             var pos = original.getPos();
             int key = HashUtils.hashChunkXYZ(pos.x() & 15, pos.y(), pos.z() & 15);

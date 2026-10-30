@@ -8,10 +8,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player is about to pick up an item entity from the ground.
- * <p>
- * This event is called before the item is added to the player's inventory.
- * Cancelling this event will prevent the item from being picked up.
+ * {@code PlayerPickupItemEvent} describes a ground item entity considered for a
+ * player's inventory. The pickup component dispatches it before transferring its
+ * stack; cancellation skips this pickup attempt, while an accepted attempt may still
+ * leave items behind when inventory space is insufficient.
  *
  * @author daoge_cmd
  */
@@ -19,10 +19,15 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.DIMENSION)
 public class PlayerPickupItemEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The item entity being picked up.
+     * Ground item entity being considered.
      */
     protected EntityItem itemEntity;
 
+    /**
+     * Creates a {@code PlayerPickupItemEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerPickupItemEvent(EntityPlayer player, EntityItem itemEntity) {
         super(player);
         this.itemEntity = itemEntity;

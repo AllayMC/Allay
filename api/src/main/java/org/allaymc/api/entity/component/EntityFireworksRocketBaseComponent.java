@@ -7,75 +7,74 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Set;
 
 /**
- * Shared component for firework rocket entities, including explosion data and optional player attachment.
+ * {@code EntityFireworksRocketBaseComponent} exposes a rocket lifetime,
+ * explosion definitions, and optional player attachment. Lifetime processing
+ * compares elapsed ticks with the configured duration, while the physics
+ * component uses attachment to follow a player instead of applying free-flight
+ * acceleration.
  *
  * @author daoge_cmd
  */
 public interface EntityFireworksRocketBaseComponent extends EntityBaseComponent {
     /**
-     * Gets the duration of the firework's existence in ticks. The firework rocket will
-     * explode after this many ticks.
-     *
-     * @return the duration of the firework's existence in ticks
+     * Returns the configured rocket lifetime threshold measured in ticks. The
+     * rocket expires after its elapsed count exceeds this value, so the
+     * comparison does not trigger at equality.
      */
     int getExistenceTicks();
 
     /**
-     * Sets the duration of the firework's existence in ticks.
-     *
-     * @param ticks the duration of the firework's existence in ticks; must be greater than or equal to 0
+     * Stores the rocket lifetime threshold measured in ticks without resetting
+     * elapsed time. The next tick compares the incremented elapsed count with
+     * this threshold, and an already exceeded threshold expires immediately.
      */
     void setExistenceTicks(int ticks);
 
     /**
-     * Gets the number of ticks that this firework rocket has existed.
-     *
-     * @return the number of ticks that this firework rocket has been active, which is always a non-negative integer
+     * Returns the stored count of ticks elapsed for this rocket.
      */
     int getExistedTicks();
 
     /**
-     * Sets the number of ticks that this entity has existed.
-     *
-     * @param ticks the number of ticks this entity has existed; should be a non-negative value
+     * Replaces the stored elapsed lifetime without changing the configured
+     * threshold. The next tick increments this count before testing
+     * expiration, so callers can advance or postpone expiration through this
+     * value.
      */
     void setExistedTicks(int ticks);
 
     /**
-     * Retrieves the set of firework explosions associated with the firework rocket.
-     *
-     * @return a {@code Set} of {@code FireworkExplosion} objects representing the explosions configured for the firework rocket
+     * Returns the shared explosion definitions associated with this rocket.
+     * Callers must treat the returned set as read-only; the server retains the
+     * set supplied to {@code setExplosions} rather than copying its entries.
      */
     @UnmodifiableView
     Set<FireworkExplosion> getExplosions();
 
     /**
-     * Sets the firework explosions associated with this item.
-     *
-     * @param explosions a set of {@link FireworkExplosion} that specifies the various explosions to be used for this
-     *                   firework rocket. Passing an empty set will result in no explosions
+     * Retains the supplied explosion set and publishes updated rocket state.
+     * Callers must supply a nonnull set and coordinate later changes
+     * themselves, because lifetime processing and serialization read the same
+     * set.
      */
     void setExplosions(Set<FireworkExplosion> explosions);
 
     /**
-     * Gets the player attached to this firework rocket. When a firework rocket is attached to a player,
-     * the firework will boost the speed of the player when flying.
-     *
-     * @return the attached player, or {@code null} if no player is attached
+     * Returns the attached player, or {@code null} for a freely moving rocket.
+     * Attachment supplies the client target and makes rocket physics follow
+     * the player on each tick.
      */
     EntityPlayer getAttachedPlayer();
 
     /**
-     * Sets the player attached to this firework rocket.
-     *
-     * @param player the player to attach to the firework rocket, or {@code null} to detach a currently attached player
+     * Stores the player that this rocket follows during subsequent physics
+     * ticks. Passing {@code null} detaches the rocket and allows its
+     * configured horizontal multiplier and upward acceleration to apply again.
      */
     void setAttachedPlayer(EntityPlayer player);
 
     /**
-     * Determines whether a player is currently attached to this firework rocket.
-     *
-     * @return {@code true} if a player is attached to this firework rocket; {@code false} otherwise
+     * Returns whether this rocket currently retains a nonnull attached player.
      */
     default boolean isAttached() {
         return getAttachedPlayer() != null;

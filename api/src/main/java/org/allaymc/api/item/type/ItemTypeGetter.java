@@ -6,9 +6,10 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**
- * ItemTypeGetter is used to get an item type safely using {@link NBTIO}, which means
- * that the plugin developers can get an item type without worrying about being broken
- * in the next minecraft version compared to using {@link ItemTypes} directly.
+ * {@code ItemTypeGetter} resolves item types through the NBT compatibility loader.
+ * Callers describe a name or legacy ID with optional metadata, allowing item-state
+ * updaters to translate old representations before the current item registry
+ * performs lookup. Resolution follows the installed {@code NBTIO} implementation.
  *
  * @author daoge_cmd
  */
@@ -16,28 +17,42 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 public class ItemTypeGetter {
 
     /**
-     * Get an item type by its name.
+     * Creates a lookup description using the supplied item name.
+     * Blank names are rejected immediately; the NBT loader handles identifier
+     * interpretation and metadata-dependent compatibility when {@code itemType} is
+     * called.
      *
-     * @param name The name of the item type
-     * @return The {@link Getter} object
+     * @throws IllegalArgumentException if {@code name} is blank
      */
     public static Getter name(String name) {
         return new Getter(name);
     }
 
     /**
-     * Get an item type by its id.
-     *
-     * @param id The id of the item type
-     * @return The {@link Getter} object
+     * Creates a lookup description using a legacy numeric item ID.
+     * The ID is stored as text under {@code "Id"}; the NBT compatibility loader
+     * interprets it when {@code itemType} is called.
      */
     public static Getter id(int id) {
         return new Getter(id);
     }
 
+    /**
+     * {@code Getter} accumulates one NBT item description for compatibility-based type lookup.
+     */
     public static final class Getter {
+        /**
+         * Mutable NBT lookup description.
+         */
         private final NbtMapBuilder nbtMapBuilder = NbtMap.builder();
 
+        /**
+         * Creates a name-based NBT lookup after rejecting blank input.
+         * The supplied name is retained without trimming; the item-state updater and
+         * registry interpret it during later resolution.
+         *
+         * @throws IllegalArgumentException if {@code name} is blank
+         */
         private Getter(String name) {
             if (name.isBlank()) {
                 throw new IllegalArgumentException("Name cannot be blank");
@@ -45,15 +60,17 @@ public class ItemTypeGetter {
             nbtMapBuilder.putString("Name", name);
         }
 
+        /**
+         * Creates an NBT lookup storing the legacy numeric ID as text.
+         */
         private Getter(int id) {
             nbtMapBuilder.putString("Id", String.valueOf(id));
         }
 
         /**
-         * Set the meta of the item.
-         *
-         * @param meta The meta of the item
-         * @return The {@link Getter} object
+         * Selects metadata for this lookup and returns the same description.
+         * The value replaces any earlier {@code "Damage"} entry and participates in
+         * legacy item-state conversion when the loader resolves the type.
          */
         public Getter meta(int meta) {
             nbtMapBuilder.putInt("Damage", meta);
@@ -61,9 +78,9 @@ public class ItemTypeGetter {
         }
 
         /**
-         * Try to get the item type.
-         *
-         * @return the item type, or {@link ItemTypes#UNKNOWN} if failed to get the item type
+         * Resolves this description through the installed NBT loader and returns its
+         * stack's item type. The server loader converts compatibility data before lookup
+         * and returns the air type when loading fails.
          */
         public ItemType<?> itemType() {
             return NBTIO.getAPI().fromItemStackNBT(nbtMapBuilder.build()).getItemType();

@@ -5,20 +5,26 @@ import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.server.AllayServer;
 
 /**
- * ParseUtils provides some commonly used static functions about target selector parsing.
+ * {@code ParseUtils} interprets numeric offsets and common value constraints
+ * used by entity selector arguments. Tilde-prefixed numbers add to a supplied
+ * origin, while absolute values ignore it. Helpers also enforce single-value
+ * and reversal rules and map supported game-mode tokens to selector-facing
+ * numbers.
  */
 @UtilityClass
 public class ParseUtils {
 
     /**
-     * Parse the offset int value
-     *
-     * @param value Text
-     * @param base  Base value
-     * @return Offset value
+     * Returns an absolute integer value or a tilde offset added to
+     * {@code base}. A bare {@code "~"} returns {@code base} unchanged;
+     * malformed numeric text raises {@code SelectorSyntaxException} with the
+     * numeric parse failure as its cause. Relative addition uses ordinary
+     * integer arithmetic and can overflow without a range check.
      */
     public static int parseOffsetInt(String value, int base) throws SelectorSyntaxException {
         try {
+            // The selector's tilde prefix selects relative coordinates; only that
+            // form adds the supplied origin, while absolute input remains independent.
             if (value.startsWith("~")) {
                 return value.length() != 1 ? base + Integer.parseInt(value.substring(1)) : base;
             } else {
@@ -30,14 +36,15 @@ public class ParseUtils {
     }
 
     /**
-     * Parse the offset double value
-     *
-     * @param value Text
-     * @param base  Base value
-     * @return Offset value
+     * Returns an absolute single-precision value or a tilde offset added to
+     * {@code base}. A bare {@code "~"} returns {@code base} unchanged;
+     * malformed numeric text raises {@code SelectorSyntaxException} with the
+     * numeric parse failure as its cause.
      */
     public static float parseOffsetFloat(String value, float base) throws SelectorSyntaxException {
         try {
+            // The selector's tilde prefix selects relative coordinates; only that
+            // form adds the supplied origin, while absolute input remains independent.
             if (value.startsWith("~")) {
                 return value.length() != 1 ? base + Float.parseFloat(value.substring(1)) : base;
             } else {
@@ -49,14 +56,15 @@ public class ParseUtils {
     }
 
     /**
-     * Parse the offset double value
-     *
-     * @param value Text
-     * @param base  Base value
-     * @return Offset value
+     * Returns an absolute double-precision value or a tilde offset added to
+     * {@code base}. A bare {@code "~"} returns {@code base} unchanged;
+     * malformed numeric text raises {@code SelectorSyntaxException} with the
+     * numeric parse failure as its cause.
      */
     public static double parseOffsetDouble(String value, double base) throws SelectorSyntaxException {
         try {
+            // The selector's tilde prefix selects relative coordinates; only that
+            // form adds the supplied origin, while absolute input remains independent.
             if (value.startsWith("~")) {
                 return value.length() != 1 ? base + Double.parseDouble(value.substring(1)) : base;
             } else {
@@ -68,19 +76,17 @@ public class ParseUtils {
     }
 
     /**
-     * Check if the parameter is reversed
-     *
-     * @param value Given string
-     * @return Whether it is reversed
+     * Returns whether the supplied selector value begins with the reversal
+     * marker {@code !}.
      */
     public static boolean checkReversed(String value) {
         return value.startsWith("!");
     }
 
     /**
-     * Require the parameter not to be reversed. If reversed, throw {@link SelectorSyntaxException}
-     *
-     * @param value Given string
+     * Rejects a value whose first character is the reversal marker {@code !}.
+     * Other values pass unchanged; this check does not parse or otherwise
+     * validate the remaining value text.
      */
     public static void cannotReversed(String value) throws SelectorSyntaxException {
         if (checkReversed(value)) {
@@ -89,10 +95,10 @@ public class ParseUtils {
     }
 
     /**
-     * Require the parameter not to be more than 1
-     *
-     * @param args    Parameter list
-     * @param keyName Parameter key name
+     * Rejects more than one occurrence of a selector key with an
+     * argument-specific syntax error. An empty {@code args} array passes this
+     * guard, so handlers accessing its first element still require at least one
+     * supplied value.
      */
     public static void singleArgument(String[] args, String keyName) throws SelectorSyntaxException {
         if (args.length > 1) {
@@ -101,12 +107,9 @@ public class ParseUtils {
     }
 
     /**
-     * Check if the given value is between the given two numbers
-     *
-     * @param bound1 Boundary 1
-     * @param bound2 Boundary 2
-     * @param value  The value
-     * @return Whether the given value is between the given two numbers
+     * Returns whether the value lies between the two bounds, including both
+     * endpoints. Bound order is irrelevant; ordinary comparisons reject
+     * {@code NaN} inputs rather than providing a special numeric fallback.
      */
     public static boolean checkBetween(double bound1, double bound2, double value) {
         return bound1 < bound2 ?
@@ -115,12 +118,11 @@ public class ParseUtils {
     }
 
     /**
-     * Parse the game mode number from the given game mode string
-     * <p>
-     * This method matches the parameter with the predefined value of the original selector parameter m
-     *
-     * @param token String
-     * @return Game mode number
+     * Returns the selector-facing number for an exact supported game-mode
+     * token. Survival, creative, and adventure map to {@code 0}, {@code 1}, and
+     * {@code 2}; spectator maps to {@code 6}. {@code "d"} and {@code "default"}
+     * read the configured default mode's ordinal, and unknown tokens raise
+     * {@code SelectorSyntaxException}.
      */
     public static int parseGameMode(String token) throws SelectorSyntaxException {
         return switch (token) {

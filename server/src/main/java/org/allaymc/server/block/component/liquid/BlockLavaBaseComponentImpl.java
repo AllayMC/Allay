@@ -30,31 +30,55 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 
 /**
+ * {@code BlockLavaBaseComponentImpl} implements lava flow characteristics, contact damage,
+ * nearby ignition, and hardening. Lava cannot occupy another block's liquid layer or form new
+ * sources, and its horizontal decay and update delay depend on whether the dimension is the
+ * Nether.
+ *
+ * <p>
+ * Hardening combines the current lava's source flag with nearby water, blue ice, and
+ * underlying soul soil. Neighbor scans exclude the lower face and update the proposed solid as
+ * qualifying neighbors are visited, so scan order can affect mixed basalt and water
+ * conditions. Every accepted hardening proposal writes the handler-selected state before
+ * emitting fizz, while cancellation leaves the caller free to continue normal liquid
+ * processing.
+ *
  * @author daoge_cmd
  */
 public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
+    /**
+     * Creates the lava behavior component for the supplied block type.
+     */
     public BlockLavaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Returns whether the supplied block type carries the lava-family tag.
+     */
     @Override
     public boolean isSameLiquidType(BlockType<?> blockType) {
         return blockType.hasBlockTag(BlockTags.LAVA);
     }
 
+    /**
+     * Applies lava combustion and periodic contact damage to living entities. Combustion and
+     * damage have separate cancellable events; fire-vulnerable entities receive a four-point
+     * lava damage proposal every ten entity ticks.
+     */
     @Override
     public void onEntityInside(Block block, Entity entity) {
         if (!(entity instanceof EntityLiving living)) {
             return;
         }
 
-        // Set on fire ticks
+        // Convert fifteen seconds of combustion to twenty game ticks per second.
         var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, block, 20 * 15);
         if (event1.call()) {
             living.setOnFireTicks(event1.getOnFireTicks());
         }
 
-        // Lava damage
+        // The ten-tick cadence limits repeated contact damage while the entity remains inside lava.
         if (living.hasFireDamage() && entity.getTick() % 10 == 0) {
             var event2 = new EntityDamageEvent(entity, DamageContainer.lava(4));
             if (event2.call()) {
@@ -63,6 +87,11 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
     }
 
+    /**
+     * Attempts surrounding-block hardening before processing a neighbor update as flowing
+     * lava. A failed or cancelled hardening proposal falls through to the inherited hook,
+     * which dispatches the neighbor event and requests liquid scheduling.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         if (!tryHarden(block, null)) {
@@ -70,6 +99,11 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
     }
 
+    /**
+     * Attempts surrounding-block hardening before the scheduled liquid update proceeds.
+     * Successful hardening consumes this update; absent conditions or a cancelled proposal
+     * leave the inherited source and flow processing available.
+     */
     @Override
     public void onScheduledUpdate(Block block) {
         if (!tryHarden(block, null)) {
@@ -77,12 +111,29 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
     }
 
+    /**
+     * Dispatches inherited post-placement behavior and checks the newly placed lava for
+     * hardening. The check uses a snapshot containing {@code newBlockState} at the old block's
+     * position and layer, rather than the replaced state.
+     */
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
         tryHarden(new Block(newBlockState, oldBlock.getPosition(), oldBlock.getLayer()), null);
     }
 
+    /**
+     * Attempts to replace lava with a solid selected from its source state and surroundings. A
+     * supplied {@code flownIntoBy} must be water: source lava proposes obsidian and other lava
+     * proposes cobblestone. A {@code null} input instead scans every neighboring face except
+     * the lower face.
+     *
+     * <p>
+     * During that scan, blue ice with soul soil below proposes basalt, while water proposes
+     * obsidian or cobblestone. Later qualifying neighbors can overwrite the proposed solid.
+     * The hardening event can replace the solid or cancel the operation; acceptance writes at
+     * the lava position before emitting fizz and returning {@code true}.
+     */
     @Override
     public boolean tryHarden(Block block, Block flownIntoBy) {
         var dimension = block.getDimension();
@@ -104,7 +155,6 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                     continue;
                 }
 
-                // This method also considered BlockTypes.FLOWING_WATER as the same liquid type
                 if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(neighborBlockType)) {
                     waterBlockState = neighborBlock.getBlockState();
                     if (isSource(block.getBlockState())) {
@@ -150,6 +200,18 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Attempts nearby ignition when {@code DO_FIRE_TICK} is enabled. A random branch checks
+     * air positions one level above lava for combustible neighbors; its first eligible
+     * candidate ends the attempt after dispatching an ignition event.
+     *
+     * <p>
+     * The other branch checks three nearby positions at the lava's height for combustible
+     * blocks with air above. That branch proposes ignition using the checked block and writes
+     * the selected fire state at that same position after acceptance. Both branches choose
+     * soul fire from the block below their write position, and cancellation skips the
+     * corresponding fire write.
+     */
     // See https://minecraft.wiki/w/Lava#Fire_spread
     @Override
     public void onRandomUpdate(Block block) {
@@ -198,12 +260,18 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns soul fire when the block below {@code pos} carries the soul-fire-converter tag.
+     * Otherwise the ignition attempt uses ordinary fire; the supplied position identifies the
+     * proposed fire location.
+     */
     protected BlockState getFireBlockState(Dimension dimension, Vector3ic pos) {
-        // Check if the block that the player clicked on is a soul fire converter
-        // In that case, we should place a soul fire instead of a normal fire
         return dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
     }
 
+    /**
+     * Returns whether any directly adjacent block has positive flame odds.
+     */
     protected boolean canNeighborBurn(Dimension dimension, Vector3ic pos) {
         for (var face : BlockFace.VALUES) {
             if (dimension.getBlockState(face.offsetPos(pos)).getBlockStateData().flameOdds() > 0) {
@@ -214,26 +282,43 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns whether lava receives random updates for nearby ignition attempts.
+     */
     @Override
     public boolean canRandomUpdate() {
         return true;
     }
 
+    /**
+     * Returns the depth lost by horizontal lava flow in the supplied dimension. Nether lava
+     * loses one level per step; every other dimension loses two levels per step.
+     */
     @Override
     public int getFlowDecay(DimensionType dimensionType) {
         return dimensionType == DimensionTypes.NETHER ? 1 : 2;
     }
 
+    /**
+     * Returns lava's scheduled flow delay in game ticks for the supplied dimension. Nether
+     * lava updates after ten ticks, while lava in every other dimension uses thirty ticks.
+     */
     @Override
     public int getFlowSpeed(DimensionType dimensionType) {
         return dimensionType == DimensionTypes.NETHER ? 10 : 30;
     }
 
+    /**
+     * Returns whether lava participates in source formation, which it disables.
+     */
     @Override
     public boolean canFormSource() {
         return false;
     }
 
+    /**
+     * Returns whether lava supports containment, which this implementation always disables.
+     */
     @Override
     public boolean canBeContained() {
         return false;

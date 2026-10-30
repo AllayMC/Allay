@@ -16,85 +16,75 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Represents a world in the server.
+ * {@code World} exposes a loaded world's dimensions, persistent metadata,
+ * scheduler, and lifecycle state. A world owns shared time and weather while
+ * dimensions provide spatial simulation. Callers schedule world-level
+ * mutations through its scheduler and use {@link #getState()} to inspect
+ * lifecycle progress.
  *
  * @author daoge_cmd
  */
 public interface World extends TaskCreator {
 
     /**
-     * Get the name of the world.
-     * <p>
-     * Unlike the display name, this name is considered to be the id of the world.
-     *
-     * @return the name;
+     * Returns the stable pool key identifying this world instance.
      */
     String getName();
 
     /**
-     * Get the thread which the world is running on.
-     *
-     * @return the thread which the world is running on
+     * Returns the thread assigned to run this world's loop.
      */
     Thread getWorldThread();
 
     /**
-     * Gets the {@code WorldStorage} instance associated with the world. The {@code WorldStorage} is
-     * responsible for managing the persistent storage operations such as reading and writing chunks
-     * and world data for this specific world instance.
-     *
-     * @return the {@code WorldStorage} instance for the world
+     * Returns the storage backend assigned to this world instance.
      */
     WorldStorage getWorldStorage();
 
     /**
-     * Whether the world is using virtual thread as the ticking thread of the world and the dimension in the world.
-     *
-     * @return {@code true} if the world is using virtual thread, otherwise {@code false}
+     * Returns whether this world selects virtual threads for its simulation
+     * loops.
      */
     boolean isVirtualTickingThread();
 
     /**
-     * Get the tick of the world.
-     *
-     * @return the tick of the world
+     * Returns the loop counter initialized from persisted total world time.
      */
     long getTick();
 
     /**
-     * Get the TPS of the world.
-     *
-     * @return the TPS of the world
+     * Returns the recent tick callback capacity estimate, capped at the target
+     * rate. The estimate uses callback duration rather than counting completed
+     * ticks over elapsed wall time.
      */
     float getTPS();
 
     /**
-     * Get the MSPT of the world.
-     *
-     * @return the MSPT of the world
+     * Returns the recent mean tick callback duration in milliseconds. Loop
+     * parking and idle callbacks are excluded, and concurrent reads can
+     * observe a sample window while it changes.
      */
     float getMSPT();
 
     /**
-     * Get the tick usage of the world.
-     *
-     * @return the tick usage of the world
+     * Returns mean tick callback duration divided by the configured tick
+     * budget. The ratio excludes loop parking and idle work and can exceed
+     * {@code 1} for overloaded ticks.
      */
     float getTickUsage();
 
     /**
-     * Get the dimension by its dimension type in this world.
-     *
-     * @param dimensionType the dimension type
-     * @return the dimension, or {@code null} if the dimension is not found
+     * Returns the loaded dimension for the supplied registered dimension type.
+     * A {@code null} result means this world has no dimension of that type;
+     * registry membership alone does not load it.
      */
     Dimension getDimension(DimensionType dimensionType);
 
     /**
-     * Get the dimension by the dimension identifier in this world.
-     *
-     * @param dimensionIdentifier the dimension identifier
-     * @return the dimension, or {@code null} if the dimension is not found
+     * Returns a loaded dimension after resolving its registered identifier. An
+     * unregistered identifier or a registered type absent from this world
+     * produces {@code null}, allowing callers to distinguish lookup failure
+     * from a loaded dimension.
      */
     default Dimension getDimension(org.allaymc.api.utils.identifier.Identifier dimensionIdentifier) {
         var dimensionType = Registries.DIMENSIONS.getByK2(dimensionIdentifier);
@@ -102,10 +92,9 @@ public interface World extends TaskCreator {
     }
 
     /**
-     * Get the dimension by the dimension id in this world.
-     *
-     * @param dimensionId the dimension id
-     * @return the dimension, or {@code null} if the dimension is not found
+     * Returns a loaded dimension after resolving its registered numeric ID. An
+     * unregistered ID or a registered type absent from this world produces
+     * {@code null}; this lookup does not create dimensions.
      */
     default Dimension getDimension(int dimensionId) {
         var dimensionType = Registries.DIMENSIONS.getByK1(dimensionId);
@@ -113,107 +102,104 @@ public interface World extends TaskCreator {
     }
 
     /**
-     * Get the overworld dimension in this world.
-     *
-     * @return the overworld dimension, {@code null} should never being returned
+     * Returns the overworld dimension required by normal world loading.
      */
     default Dimension getOverWorld() {
         return getDimension(DimensionTypes.OVERWORLD);
     }
 
     /**
-     * Get the nether dimension in this world.
-     *
-     * @return the nether dimension, or {@code null} if the nether dimension is not found
+     * Returns this world's nether dimension when that type is loaded. The
+     * result is {@code null} when world configuration disables the nether or
+     * the dimension has not been attached.
      */
     default Dimension getNether() {
         return getDimension(DimensionTypes.NETHER);
     }
 
     /**
-     * Get the end dimension in this world.
-     *
-     * @return the end dimension, or {@code null} if the end dimension is not found
+     * Returns this world's end dimension when that type is loaded. The result
+     * is {@code null} when world configuration disables the end or the
+     * dimension has not been attached.
      */
     default Dimension getTheEnd() {
         return getDimension(DimensionTypes.THE_END);
     }
 
     /**
-     * Get all dimensions in this world.
-     *
-     * @return all dimensions in this world
+     * Returns an unmodifiable view of this world's dimension mapping. The view
+     * retains the same dimension instances and reflects changes to the
+     * underlying mapping rather than copying dimensions.
      */
     @UnmodifiableView
     Map<DimensionType, Dimension> getDimensions();
 
     /**
-     * Get the players in this world.
-     *
-     * @return the players in this world
+     * Returns an unmodifiable collection of players across this world's
+     * dimensions. The collection contains the existing player references;
+     * retaining it does not track later membership changes in those
+     * dimensions.
      */
     @UnmodifiableView
     Collection<Player> getPlayers();
 
     /**
-     * Get the scheduler of the world which is running on the world tick.
-     *
-     * @return the scheduler of the world
+     * Returns the scheduler advanced by this world's tick callback.
      */
     Scheduler getScheduler();
 
     /**
-     * Get the world data of the world.
-     *
-     * @return the world data of the world
+     * Returns the shared mutable metadata associated with this world. Callers
+     * must coordinate mutations with world execution and use the metadata
+     * setters when changes require events or client notifications.
      */
     WorldData getWorldData();
 
     /**
-     * Save the world data of the world.
+     * Dispatches the metadata save event and invokes this world's storage
+     * writer. Storage implementations determine when the bytes become
+     * persistent, so return from this method does not universally establish
+     * durable completion.
      */
     void saveWorldData();
 
     /**
-     * Retrieves the current state of the world.
-     *
-     * @return the world state
+     * Returns the currently published lifecycle phase for this world.
      */
     WorldState getState();
 
     /**
-     * Get the weather of the world.
-     *
-     * @return the weathers of the world
+     * Returns the weather currently selected for this world's players.
      */
     Weather getWeather();
 
     /**
-     * Set the weather of the world.
-     *
-     * @param weather the weather to set
+     * Requests a weather replacement through the cancellable weather event. An
+     * unchanged value skips dispatch; an accepted change updates the world and
+     * sends the resulting weather to its players.
      */
     void setWeather(Weather weather);
 
     /**
-     * Set the required sleep duration (in ticks) before day advancement is attempted.
-     * Called when a player starts sleeping.
-     *
-     * @param ticks the number of ticks to wait
+     * Sets the countdown before the world next attempts day advancement.
+     * Positive values count down during eligible sleep ticks; nonpositive
+     * values leave no active countdown, and later eligibility is checked when
+     * it expires.
      */
     void setRequiredSleepTicks(int ticks);
 
     /**
-     * Set the weather to {@link Weather#CLEAR}.
+     * Requests clear weather through the normal cancellable world weather
+     * setter. Listeners may reject the change, and an already clear world
+     * skips the event and further player notifications.
      */
     default void clearWeather() {
         setWeather(Weather.CLEAR);
     }
 
     /**
-     * Get the spawn point of the world.
-     *
-     * @return the spawn point of the world
+     * Returns a new location combining world spawn coordinates with the
+     * overworld.
      */
     default Location3dc getSpawnPoint() {
         var vec = getWorldData().getSpawnPoint();
@@ -221,22 +207,23 @@ public interface World extends TaskCreator {
     }
 
     /**
-     * Check whether the world is runtime-only. Runtime-only world will not be loaded after the
-     * server restarted. This is useful for the world created for game room which will be deleted
-     * when shutdown.
-     *
-     * @return {@code true} if the world is runtime-only, otherwise {@code false}
+     * Returns whether shutdown omits this world from saved startup
+     * configuration. The flag controls future automatic loading; the world's
+     * storage and ordinary metadata or chunk writes still operate.
      */
     boolean isRuntimeOnly();
 
     /**
-     * Sets whether the world is runtime-only.
-     *
-     * @param runtimeOnly {@code true} to mark the world as runtime-only, or {@code false} to keep it persistent.
-     * @see #isRuntimeOnly()
+     * Sets whether shutdown omits this world from saved startup configuration.
+     * The flag applies when the pool rewrites configuration and does not
+     * delete world storage or disable normal persistence.
      */
     void setRuntimeOnly(boolean runtimeOnly);
 
+    /**
+     * Returns whether this world currently accepts creator-bound scheduled
+     * tasks.
+     */
     @Override
     default boolean isValid() {
         return getState() == WorldState.RUNNING;

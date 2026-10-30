@@ -10,7 +10,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Called when a player picks a block using the pick block key (middle mouse button).
+ * {@code PlayerBlockPickEvent} represents a creative player's request to select a
+ * block item. Listeners can cancel the pick or replace {@code itemBlock} and
+ * {@code includeBlockEntity} before the processor attaches block-entity data and
+ * searches the inventory for a matching item type.
  *
  * @author daoge_cmd
  */
@@ -18,20 +21,27 @@ import org.allaymc.api.item.ItemStack;
 @CallerThread(ThreadType.WORLD)
 public class PlayerBlockPickEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The clicked block.
+     * Block targeted by the pick request.
      */
     protected Block clickedBlock;
     /**
-     * Whether block entity data should be included in the picked item.
+     * {@code includeBlockEntity} controls whether the processor attaches available
+     * block-entity NBT to the selected candidate before searching the inventory.
      */
     @Setter
     protected boolean includeBlockEntity;
     /**
-     * The item stack to give to the player.
+     * {@code itemBlock} holds the candidate stack. The processor reads the
+     * listener-selected reference and may attach block-entity NBT directly to it.
      */
     @Setter
     protected ItemStack itemBlock;
 
+    /**
+     * Creates a {@code PlayerBlockPickEvent} for the supplied player and event data.
+     * The constructor retains reference-valued arguments without copying them and
+     * does not dispatch or apply the represented action.
+     */
     public PlayerBlockPickEvent(EntityPlayer player, Block clickedBlock, boolean includeBlockEntity, ItemStack itemBlock) {
         super(player);
         this.clickedBlock = clickedBlock;

@@ -3,23 +3,26 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.world.explosion.FireworkExplosion;
 
 /**
- * Shared component for firework star items that store a single firework explosion definition.
+ * {@code ItemFireworkStarBaseComponent} exposes the explosion definition
+ * stored by a firework star. The definition supplies the shape and colors used
+ * by firework crafting and serialization; an absent definition is represented
+ * by {@code null}.
  *
  * @author daoge_cmd
  */
 public interface ItemFireworkStarBaseComponent extends ItemBaseComponent {
     /**
-     * Retrieves the {@code FireworkExplosion} associated with this instance.
-     *
-     * @return the {@code FireworkExplosion} representing the explosion of the firework,
-     * or {@code null} if no explosion is set.
+     * Returns the stored explosion definition, or {@code null} when absent.
+     * The returned record can retain mutable color lists, so consumers must
+     * consider those lists when retaining or changing the definition.
      */
     FireworkExplosion getExplosion();
 
     /**
-     * Sets the {@code FireworkExplosion} for this component.
-     *
-     * @param explosion the {@code FireworkExplosion} to set. Provide {@code null} to remove the explosion.
+     * Replaces the explosion definition stored by this firework star.
+     * {@code null} removes the definition; the server retains the supplied
+     * record rather than copying its color-list contents for independent
+     * mutation.
      */
     void setExplosion(FireworkExplosion explosion);
 }

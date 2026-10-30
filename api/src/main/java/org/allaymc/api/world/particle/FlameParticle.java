@@ -3,10 +3,13 @@ package org.allaymc.api.world.particle;
 import java.awt.*;
 
 /**
- * FlameParticle is a particle shown around torches. It can have any colour specified.
- * If the colour is not specified, it will default to the normal flame particle.
+ * {@code FlameParticle} describes a flame effect with an explicit color
+ * payload. The runtime reads the supplied RGB value directly during encoding;
+ * callers must supply a color because this descriptor provides no default
+ * flame tint for {@code null}.
  *
- * @param color the color of this particle
+ * @param color required flame particle tint
+ *
  * @author daoge_cmd
  */
 public record FlameParticle(Color color) implements Particle {

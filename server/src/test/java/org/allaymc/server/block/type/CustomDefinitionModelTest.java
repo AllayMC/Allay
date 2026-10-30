@@ -10,7 +10,16 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@code CustomDefinitionModelTest} verifies definition snapshots, defensive vector
+ * access, defaults, and serialization boundaries.
+ */
 class CustomDefinitionModelTest {
+    /**
+     * Changes raw component maps and material builders after constructing block
+     * definitions. Built definitions must retain their original entries, reject map
+     * mutation, and reject an unsupported placement rotation offset.
+     */
     @Test
     void blockDefinitionModelsDefensivelyCopyBuilderData() {
         var rawComponents = new LinkedHashMap<String, NbtMap>();
@@ -41,6 +50,12 @@ class CustomDefinitionModelTest {
                 () -> new CustomBlockDefinition(45, Map.of(), Map.of()));
     }
 
+    /**
+     * Mutates both a source vector and a vector returned from an item render
+     * offset. The stored coordinates must remain unchanged, creative destruction
+     * must default to enabled, and the supplied raw-component map must reject
+     * structural mutation.
+     */
     @Test
     void customItemDefinitionHasUsefulDefaultsAndCopiesVectors() {
         var source = new Vector3f(1, 2, 3);
@@ -65,6 +80,11 @@ class CustomDefinitionModelTest {
         assertThrows(UnsupportedOperationException.class, () -> definition.rawComponents().clear());
     }
 
+    /**
+     * Inspects the built-in block and item definition classes for directly declared
+     * NBT serialization methods. The models must leave wire serialization to
+     * protocol consumers rather than expose such methods themselves.
+     */
     @Test
     void builtInModelsDoNotExposeSerializationMethods() {
         assertFalse(hasSerializationMethod(CustomBlockDefinition.class));
@@ -72,6 +92,10 @@ class CustomDefinitionModelTest {
         assertFalse(hasSerializationMethod(CustomItemDefinition.class));
     }
 
+    /**
+     * Returns whether the class directly declares a case-insensitive {@code toNbt}
+     * method name.
+     */
     private static boolean hasSerializationMethod(Class<?> type) {
         for (var method : type.getDeclaredMethods()) {
             if (method.getName().equalsIgnoreCase("toNbt")) {

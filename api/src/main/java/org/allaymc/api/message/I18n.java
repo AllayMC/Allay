@@ -5,41 +5,48 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.utils.tuple.Pair;
 
 /**
- * I18n is used to translate the text which contains translation key in the game.
+ * {@code I18n} translates namespaced message keys and prepares vanilla keys for client-side
+ * translation. Default overloads use the configured language and no formatting arguments unless
+ * supplied explicitly; implementations provide key discovery and server-side lookup.
+ *
+ * <p>
+ * {@code toClientFriendlyStyle0} distinguishes the vanilla namespace from server-owned namespaces.
+ * Vanilla keys lose only their namespace and keep any percent starter and surrounding text so the
+ * client can recognize them. Other namespaces use server translation. This conversion assumes key
+ * discovery supplies a valid colon index; absent or malformed namespaced keys can fail during
+ * substring extraction rather than returning unchanged text.
  *
  * @author daoge_cmd
  */
 public interface I18n {
 
     /**
-     * The fallback lang code.
-     * <p>
-     * Fallback lang code is used when the translation key is not found in the specified lang code.
+     * {@code FALLBACK_LANG} selects the English catalog when a requested-language lookup has no
+     * translation for the discovered key.
      */
     LangCode FALLBACK_LANG = LangCode.en_US;
     /**
-     * A holder which holds the implementation of {@link I18n}.
+     * {@code I18N} holds the translation implementation exposed by {@code get}; initialization is
+     * supplied through the API instance holder.
      */
     AllayAPI.APIInstanceHolder<I18n> I18N = AllayAPI.APIInstanceHolder.create();
     /**
-     * The namespace used in the vanilla translation key.
+     * {@code VANILLA_LANG_NAMESPACE} identifies keys left for client translation after their
+     * namespace is removed from the outgoing message.
      */
     String VANILLA_LANG_NAMESPACE = Identifier.DEFAULT_NAMESPACE;
 
     /**
-     * Get the I18n instance.
-     *
-     * @return the I18n instance
+     * Returns the translation implementation currently installed in the API holder.
      */
     static I18n get() {
         return I18N.get();
     }
 
     /**
-     * Check if the character is a valid key character.
-     *
-     * @param character the character
-     * @return true if the character is a valid key character, otherwise false
+     * Returns whether the character is allowed inside a translation key. The accepted set contains
+     * ASCII letters and digits, underscores, hyphens, periods, and colons; percent is a separate
+     * key starter.
      */
     static boolean isValidKeyCharacter(char character) {
         return character == '_' || character == '-' ||
@@ -50,94 +57,98 @@ public interface I18n {
     }
 
     /**
-     * @see #tr(LangCode, String, Object...)
+     * Translates the discovered message key using the configured default language and no formatting
+     * arguments. Missing translations leave the source text unchanged; only the discovered key span
+     * is replaced.
      */
     default String tr(@MayContainTrKey String tr) {
         return tr(getDefaultLangCode(), tr);
     }
 
     /**
-     * @see #tr(LangCode, String, Object...)
+     * Translates the discovered message key using the configured default language and the supplied
+     * formatting arguments. Missing translations leave the source text unchanged; only the
+     * discovered key span is replaced.
      */
     default String tr(@MayContainTrKey String tr, Object... args) {
         return tr(getDefaultLangCode(), tr, args);
     }
 
     /**
-     * @see #tr(LangCode, String, Object...)
+     * Translates the discovered message key using the requested language and no formatting
+     * arguments. Missing translations leave the source text unchanged; only the discovered key span
+     * is replaced.
      */
     default String tr(LangCode langCode, @MayContainTrKey String tr) {
         return tr(langCode, tr, new Object[0]);
     }
 
     /**
-     * Translate the text which may contain translation key.
-     *
-     * @param langCode the lang code used
-     * @param tr       the text, which may contain translation key
-     * @param args     the arguments used in the translation
-     * @return the translated text
+     * Translates the discovered message key using the requested language and the supplied
+     * formatting arguments. Missing translations leave the source text unchanged; only the
+     * discovered key span is replaced.
      */
     String tr(LangCode langCode, @MayContainTrKey String tr, Object... args);
 
     /**
-     * Find the I18n key info in the string.
-     *
-     * @param str the string
-     * @return the I18n key info
+     * Finds the candidate key span beginning after the first percent starter, or at the start of
+     * the text when no starter exists. The result can lack a colon; malformed multiple-colon
+     * candidates use {@code KeyInfo.EMPTY}.
      */
     KeyInfo findI18nKey(@MayContainTrKey String str);
 
     /**
-     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     * Returns text prepared for client translation using the configured default language. Vanilla
+     * namespaces are removed; other keys are translated on the server, and the input must contain a
+     * discoverable namespaced key.
      */
     default String toClientFriendlyStyle(@MayContainTrKey String tr) {
         return toClientFriendlyStyle(getDefaultLangCode(), tr);
     }
 
     /**
-     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     * Returns text prepared for client translation using the configured default language. Vanilla
+     * namespaces are removed; other keys are translated on the server, and the input must contain a
+     * discoverable namespaced key.
      */
     default String toClientFriendlyStyle(@MayContainTrKey String tr, Object... args) {
         return toClientFriendlyStyle(getDefaultLangCode(), tr, args);
     }
 
     /**
-     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     * Returns text prepared for client translation using the requested language. Vanilla namespaces
+     * are removed; other keys are translated on the server, and the input must contain a
+     * discoverable namespaced key.
      */
     default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr) {
         return toClientFriendlyStyle(langCode, tr, new Object[0]);
     }
 
     /**
-     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     * Returns text prepared for client translation using the requested language. Vanilla namespaces
+     * are removed; other keys are translated on the server, and the input must contain a
+     * discoverable namespaced key.
      */
     default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr, Object... args) {
         return toClientFriendlyStyle0(langCode, tr, args).left();
     }
 
     /**
-     * Convert the translation key to a client-friendly style.
-     * <p>
-     * The translation key in Allay is in the format of 'namespace:path'. Namespace "minecraft"
-     * will be used for the vanilla translation key, and "allay" will be used for Allay's translation key.
-     * <p>
-     * However, the translation key in the vanilla client does not have a namespace, so if we want to translate the
-     * text client-side, we need to remove the namespace.
-     * <p>
-     * This method will find and remove "minecraft" namespace in the translation key and does not translate
-     * these texts. Only a translation key that does not in "minecraft" namespace will be translated.
+     * Prepares a namespaced message for client or server translation and reports which path was
+     * used. The input must contain a discovered key with a valid colon index.
      *
-     * @param langCode the lang code
-     * @param tr       the translation key
-     * @param args     the arguments
-     * @return the converted text and whether the translation key is vanilla
+     * <p>
+     * Vanilla keys retain their surrounding text and optional percent starter while losing the
+     * namespace, allowing the client to interpret the same key location. The returned flag is
+     * {@code true} for that path. Other namespaces delegate to server translation and return
+     * {@code false}; absent or invalid key metadata can cause substring bounds failures.
      */
     default Pair<String, Boolean> toClientFriendlyStyle0(LangCode langCode, @MayContainTrKey String tr, Object... args) {
         var keyInfo = findI18nKey(tr);
         var namespace = tr.substring(keyInfo.hasStarter() ? keyInfo.startIndex() + 1 : keyInfo.startIndex(), keyInfo.colonIndex());
         if (VANILLA_LANG_NAMESPACE.equals(namespace)) {
-            // Preserve '%'
+            // Keep the percent starter and preceding text because they identify
+            // the vanilla key at its original position for client-side translation.
             var prefix = keyInfo.hasStarter() ? tr.substring(0, keyInfo.startIndex() + 1) : "";
             return new Pair<>(prefix + tr.substring(keyInfo.colonIndex() + 1), true);
         }
@@ -146,29 +157,30 @@ public interface I18n {
     }
 
     /**
-     * Get the default lang code.
-     *
-     * @return the default lang code
+     * Returns the language used by translation overloads without an explicit language.
      */
     LangCode getDefaultLangCode();
 
     /**
-     * Set the default lang code.
-     *
-     * @param langCode the lang code
+     * Stores the language used by subsequent translation overloads without an explicit language.
      */
     void setDefaultLangCode(LangCode langCode);
 
     /**
-     * KeyInfo stores the information of the translation key in a string.
+     * {@code KeyInfo} describes a discovered candidate key and its character positions in the
+     * source message.
      *
-     * @param startIndex the start index of the translation key
-     * @param endIndex   the end index of the translation key
-     * @param colonIndex the colon (":" character) index of the translation key
-     * @param key        the translation key
-     * @param hasStarter whether the translation key has a starter character ("%" character)
+     * @param startIndex first key character position, including a percent starter when present
+     * @param endIndex inclusive final key character position
+     * @param colonIndex namespace separator position, or {@code -1} when absent
+     * @param key discovered key text without the percent starter
+     * @param hasStarter whether the span includes a percent starter
      */
     record KeyInfo(int startIndex, int endIndex, int colonIndex, String key, boolean hasStarter) {
+        /**
+         * {@code EMPTY} marks a candidate rejected for multiple colons, using negative indexes, a
+         * {@code null} key, and no starter flag.
+         */
         public static final KeyInfo EMPTY = new KeyInfo(-1, -1, -1, null, false);
     }
 }

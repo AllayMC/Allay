@@ -12,14 +12,30 @@ import org.allaymc.api.permission.Permissions;
 import java.util.Collection;
 
 /**
+ * {@code EnchantCommand} adds one enchantment to the held items of selected
+ * players. The handler validates the requested level before visiting targets,
+ * then stops at the first empty hand or incompatible enchantment. Earlier
+ * targets keep their changes when a later target fails validation.
+ *
  * @author daoge_cmd
  */
 public class EnchantCommand extends Command {
 
+    /**
+     * Creates the {@code /enchant} command with its built-in authorization permission.
+     */
     public EnchantCommand() {
         super("enchant", TrKeys.MC_COMMANDS_ENCHANT_DESCRIPTION, Permissions.COMMAND_ENCHANT);
     }
 
+    /**
+     * Installs enchantment application with level {@code 1} and limits enabled.
+     * Normal levels range from {@code 1} through
+     * {@code enchantmentType.getMaxLevel()}.
+     * {@code ignoreLimit} bypasses level bounds but still checks existing
+     * enchantment incompatibility. Successful targets are updated immediately,
+     * and a later failure leaves those updates in place.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()

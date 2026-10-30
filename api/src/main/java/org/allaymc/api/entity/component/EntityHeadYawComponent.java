@@ -1,23 +1,22 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Component for entities whose head yaw can rotate independently from body yaw.
+ * {@code EntityHeadYawComponent} exposes an entity's head rotation separately
+ * from its body rotation. Head yaw uses degrees and can change without
+ * replacing the entity location's body yaw, allowing movement encoding to
+ * represent where the entity looks independently of its facing.
  *
  * @author daoge_cmd
  */
 public interface EntityHeadYawComponent extends EntityComponent {
 
     /**
-     * Gets the head yaw of this entity.
-     *
-     * @return the head yaw in degrees
+     * Returns the independently stored head yaw angle in degrees.
      */
     double getHeadYaw();
 
     /**
-     * Sets the head yaw of this entity independently from the body yaw.
-     *
-     * @param headYaw the head yaw in degrees
+     * Sets head yaw in degrees independently of body yaw.
      */
     void setHeadYaw(double headYaw);
 }

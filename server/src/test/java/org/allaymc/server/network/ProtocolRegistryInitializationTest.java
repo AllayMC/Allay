@@ -2,6 +2,8 @@ package org.allaymc.server.network;
 
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.world.biome.BiomeTags;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.server.network.protocol.ClientVariant;
 import org.allaymc.server.network.protocol.ProtocolRegistry;
 import org.allaymc.server.registry.InternalRegistries;
@@ -12,9 +14,30 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+/**
+ * {@code ProtocolRegistryInitializationTest} checks frozen startup registries
+ * and protocol cache contents.
+ */
 @ExtendWith(AllayTestExtension.class)
 class ProtocolRegistryInitializationTest {
 
+    /**
+     * Resolves the newly imported cave and forest biomes through their vanilla IDs.
+     * Both entries must retain the metadata tags used by gameplay and biome encoding.
+     */
+    @Test
+    void registersSulfurCavesAndDappledForestWithTheirMetadata() {
+        assertSame(BiomeTypes.SULFUR_CAVES, Registries.BIOMES.getByK1(194));
+        assertSame(BiomeTypes.DAPPLED_FOREST, Registries.BIOMES.getByK1(195));
+        assertTrue(BiomeTypes.SULFUR_CAVES.getBiomeData().tags().contains(BiomeTags.SULFUR_CAVES));
+        assertTrue(BiomeTypes.DAPPLED_FOREST.getBiomeData().tags().contains(BiomeTags.DAPPLED_FOREST));
+    }
+
+    /**
+     * Uses the default protocol initialization installed by the test extension.
+     * Its source registries must be frozen, and a later block-state registration
+     * must fail instead of mutating cached protocol inputs.
+     */
     @Test
     void defaultProtocolInitializationFreezesSourceRegistries() {
         assertTrue(Registries.ITEMS.isFrozen());
@@ -33,6 +56,11 @@ class ProtocolRegistryInitializationTest {
         );
     }
 
+    /**
+     * Reads the initialized international protocol's cached domain data. Definition
+     * and creative-content counts must match their registries, and recipe entries
+     * must retain the registered recipe objects rather than detached replacements.
+     */
     @Test
     void protocolCachesAreBuiltFromRegisteredDomainObjects() {
         var protocol = ProtocolRegistry.getDefault().resolve(ClientVariant.INTERNATIONAL, 975);

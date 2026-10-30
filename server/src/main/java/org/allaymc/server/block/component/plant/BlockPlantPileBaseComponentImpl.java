@@ -21,13 +21,33 @@ import java.util.Set;
 import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
+ * {@code BlockPlantPileBaseComponentImpl} implements oriented ground-cover piles whose growth
+ * value encodes one less than their item quantity. Player placement requires an upper face on
+ * the accepted ground set and orients the pile opposite the player's horizontal face. Lower
+ * support changes can break the pile through ordinary block breaking.
+ *
+ * <p>
+ * Interaction combines the held item with the current pile growth. Bone meal advances
+ * unfinished piles but makes a full pile drop an additional item, while matching ordinary
+ * items can only increase unfinished piles. The callback consumes held items after the
+ * selected direct update or item drop without a growth event or rollback, and the growth
+ * encoding determines the later ordinary drop count.
+ *
  * @author daoge_cmd
  */
 public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
+    /**
+     * Creates the plant pile behavior component for the supplied block type.
+     */
     public BlockPlantPileBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
+    /**
+     * Places a pile on an upper face of accepted soil and orients it opposite the player's
+     * horizontal face. {@code placementInfo} and its player are required because this override
+     * reads both directly.
+     */
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo.blockFace() != BlockFace.UP || !canPlaceOn(placementInfo.getClickedBlock().getBlockType())) {
@@ -45,6 +65,11 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
         );
     }
 
+    /**
+     * Dispatches the inherited neighbor hook and breaks a pile when lower support leaves its
+     * accepted ground set. Changes on other faces do not invoke this local support-removal
+     * rule.
+     */
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face, BlockState oldNeighborState) {
         super.onNeighborUpdate(block, neighbor, face, oldNeighborState);
@@ -54,6 +79,11 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
+    /**
+     * Returns whether the type belongs to the pile's accepted ground set. Grass, mycelium,
+     * podzol, dirt, rooted dirt, farmland, mud, muddy mangrove roots, and moss all qualify
+     * here.
+     */
     protected boolean canPlaceOn(BlockType<?> blockType) {
         return blockType == GRASS_BLOCK ||
                blockType == MYCELIUM ||
@@ -66,6 +96,17 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
                blockType == MOSS_BLOCK;
     }
 
+    /**
+     * Handles bone meal or a matching pile item after inherited interaction handling. Bone
+     * meal advances growth below three, otherwise drops another pile item; either bone-meal
+     * path consumes the held item and emits particles.
+     *
+     * <p>
+     * A matching ordinary item advances only an unfinished pile and consumes the item without
+     * particles. These direct updates do not dispatch a growth event or inspect the
+     * property-write result. The held {@code itemStack} must be nonnull because its type is
+     * read before either local action is selected.
+     */
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) {
@@ -74,10 +115,12 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
 
         var center = MathUtils.center(interactInfo.clickedBlockPos());
         var block = interactInfo.getClickedBlock();
-        var growth = block.getPropertyValue(BlockPropertyTypes.GROWTH);
+        var growth = block.getPropertyValue(BlockPropertyTypes.GROWTH_8);
         if (itemStack.getItemType() == ItemTypes.BONE_MEAL) {
+            // Growth three represents the full four-item pile; further bone meal
+            // creates an extra item instead of increasing the stored growth encoding.
             if (growth < 3) {
-                block.updateBlockProperty(BlockPropertyTypes.GROWTH, growth + 1);
+                block.updateBlockProperty(BlockPropertyTypes.GROWTH_8, growth + 1);
             } else {
                 interactInfo.player().getDimension().dropItem(this.blockType.getItemType().createItemStack(), center);
             }
@@ -88,7 +131,7 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         if (itemStack.getItemType() == this.blockType.getItemType() && growth < 3) {
-            block.updateBlockProperty(BlockPropertyTypes.GROWTH, growth + 1);
+            block.updateBlockProperty(BlockPropertyTypes.GROWTH_8, growth + 1);
             interactInfo.player().tryConsumeItemInHand();
             return true;
         }
@@ -96,8 +139,13 @@ public class BlockPlantPileBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Returns this pile's item stack with count equal to growth plus one. The growth property
+     * stores a zero-based quantity, so an otherwise empty-looking growth-zero pile still
+     * yields one item.
+     */
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Set.of(block.getBlockType().getItemType().createItemStack(block.getPropertyValue(BlockPropertyTypes.GROWTH) + 1));
+        return Set.of(block.getBlockType().getItemType().createItemStack(block.getPropertyValue(BlockPropertyTypes.GROWTH_8) + 1));
     }
 }

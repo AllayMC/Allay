@@ -3,22 +3,21 @@ package org.allaymc.api.item.component;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Shared component for sign items that resolve their standing and wall sign block variants.
+ * {@code ItemSignBaseComponent} identifies the standing and wall block variants
+ * for a sign item. Placement code selects a variant according to the clicked face,
+ * while these accessors keep the material-specific block mapping attached to the
+ * item's component.
  *
  * @author daoge_cmd
  */
 public interface ItemSignBaseComponent extends ItemBaseComponent {
     /**
-     * Get the wall sign block type.
-     *
-     * @return The wall sign block type
+     * Returns the wall-mounted sign block variant for this item.
      */
     BlockType<?> getWallSignType();
 
     /**
-     * Get the standing sign block type.
-     *
-     * @return The standing sign block type
+     * Returns the standing sign block variant for this item.
      */
     BlockType<?> getStandingSignType();
 }

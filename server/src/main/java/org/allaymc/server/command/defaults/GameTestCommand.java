@@ -54,20 +54,62 @@ import java.util.function.Consumer;
 import java.util.function.LongFunction;
 
 /**
+ * {@code GameTestCommand} exposes interactive diagnostics for blocks, entities,
+ * items, forms, and primitive rendering. Most branches require a player entity,
+ * and controller-specific probes require an actual player. Individual handlers
+ * can mutate the world, replace held items, write files, or install callbacks;
+ * command completion does not restore those effects.
+ *
+ * <p>
+ * The {@link DDUI} probe derives labels, visibility, and enabled states from
+ * observables shared with response callbacks. Expert-mode changes also clamp the selected
+ * difficulty to its new range. The OBJ renderer converts one-based vertex
+ * references into list indexes and renders face boundaries without using texture
+ * or normal references. Export replaces its previous JSON file before writing,
+ * so write failure has no old-file recovery. Form callbacks and installed event
+ * listeners can continue running after their command result has returned.
+ *
  * @author daoge_cmd
  */
 public class GameTestCommand extends Command {
 
+    /**
+     * Creates the authorized diagnostic command and its {@code /gt} alias.
+     */
     public GameTestCommand() {
         super("gametest", TrKeys.MC_GAMETEST_DESCRIPTION, "allay.command.gametest");
         aliases.add("gt");
     }
 
+    /**
+     * Returns whether clients should display this command as a debug command.
+     */
     @Override
     public boolean isDebugCommand() {
         return true;
     }
 
+    /**
+     * Installs diagnostic branches with their individual sender restrictions.
+     * Player branches can change world or item state immediately, while form
+     * branches return after opening the form and run response callbacks later.
+     * Translation and selected file or {@code DDUI} failures become failed
+     * command results; other exceptions propagate to command dispatch.
+     *
+     * <p>
+     * {@code DDUI} callbacks preserve the configured difficulty range when
+     * expert mode changes and limit names to twenty-four characters. OBJ input uses positive
+     * one-based vertex references without range validation. Its optional
+     * position currently expects {@link Vector3fc} although position parsing
+     * supplies {@link Vector3d}, so supplying that argument causes a type failure.
+     *
+     * <p>
+     * Export deletes the previous mapping file before writing. Event and form
+     * callbacks retain their own lifetimes beyond this method's result, and
+     * primitive shapes remain installed until a removal operation is requested.
+     * The explosion probe defaults to size {@code 4}, no fire, and the sender's
+     * execution coordinates when its position is omitted.
+     */
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -107,6 +149,9 @@ public class GameTestCommand extends Command {
                     try {
                         player.sendMessage(I18n.get().tr(langCode, key, args));
                     } catch (Throwable t) {
+                        // This translation probe converts every thrown failure
+                        // into the same unknown-key response, so its command
+                        // result does not distinguish formatting errors.
                         context.addOutput(TextFormat.RED + "Unknown key!");
                         return context.fail();
                     }
@@ -124,6 +169,7 @@ public class GameTestCommand extends Command {
                     }
 
                     var loc = player.getLocation();
+                    // Flooring chooses the block containing the player's fractional position.
                     var floorLoc = loc.floor(new Vector3d());
                     loc.dimension().setBlockState((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), blockType.getDefaultState());
                     return context.success();
@@ -137,16 +183,27 @@ public class GameTestCommand extends Command {
                         var itemStack = blockState.toItemStack();
                         var itemId = ItemId.fromIdentifier(itemStack.getItemType().getIdentifier());
                         if (itemId == null) {
-                            // Is not vanilla item
+                            // ItemId has no runtime identifier for this item.
+                            // Omit its state while retaining mappings for items
+                            // recognized by the vanilla identifier table.
                             continue;
                         }
                         var meta = itemStack.getMeta();
+                        // Zero metadata uses the bare runtime identifier; other
+                        // metadata values retain a suffix so their item states
+                        // remain distinguishable in the exported mapping.
                         map.put(itemId.getRuntimeId() + (meta == 0 ? "" : ":" + meta), blockState.blockStateHash());
                     }
 
+                    // JSONUtils appends to its destination, so remove the old
+                    // mapping first. A later write failure has no saved copy
+                    // of the previous export to restore.
                     try {
                         Files.deleteIfExists(Path.of("item_id_to_block_state_hash_map.json"));
                     } catch (IOException e) {
+                        // Deletion failure stops this export before the
+                        // append-oriented writer can mix a new JSON document
+                        // with the existing destination's contents.
                         context.addOutput(TextFormat.RED + "" + e);
                         return context.fail();
                     }
@@ -157,6 +214,7 @@ public class GameTestCommand extends Command {
                 .root()
                 .key("suicide")
                 .exec((context, player) -> {
+                    // The fixed diagnostic damage requests a lethal-sized attack.
                     player.attack(114514);
                     return context.success();
                 }, SenderType.PLAYER)
@@ -208,6 +266,7 @@ public class GameTestCommand extends Command {
                 .intNum("c")
                 .blockType("block")
                 .exec((context, player) -> {
+                    // Flooring anchors the ellipsoid at a containing block position.
                     var pos = MathUtils.floor((Vector3dc) context.getResult(1));
                     int a = context.getResult(2);
                     int b = context.getResult(3);
@@ -216,6 +275,9 @@ public class GameTestCommand extends Command {
                     int max = Math.max(a, Math.max(b, c));
                     BlockType<?> block = context.getResult(5);
 
+                    // Scale each axis against the smallest radius so the
+                    // squared-distance test describes the requested ellipsoid
+                    // inside bounds set by the largest radius.
                     for (int x = pos.x - max; x <= pos.x + max; x++) {
                         for (int y = pos.y - max; y <= pos.y + max; y++) {
                             for (int z = pos.z - max; z <= pos.z + max; z++) {
@@ -245,6 +307,7 @@ public class GameTestCommand extends Command {
                 .root()
                 .key("getheight")
                 .exec((context, player) -> {
+                    // Flooring chooses the column containing the player's current position.
                     var floorLoc = player.getLocation().floor(new Vector3d());
                     player.sendMessage("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
                     return context.success();
@@ -253,6 +316,7 @@ public class GameTestCommand extends Command {
                 .key("getlightdata")
                 .pos("pos")
                 .exec((context, player) -> {
+                    // Flooring selects the containing block for integer light-engine queries.
                     var floorLoc = ((Vector3d) context.getResult(1)).floor();
                     int x = (int) floorLoc.x;
                     int y = (int) floorLoc.y;
@@ -274,6 +338,7 @@ public class GameTestCommand extends Command {
                 .key("itemdamage")
                 .exec((context, player) -> {
                     var item = player.getItemInHand();
+                    // Half-maximum damage rounds down when maximum durability is odd.
                     item.setDamage(item.getMaxDamage() / 2);
                     player.setItemInHand(item);
                     return context.success();
@@ -363,6 +428,9 @@ public class GameTestCommand extends Command {
                     var imperativeLabelVisible = DDUI.observable(false);
                     var verboseDisabled = DDUI.observable(false);
 
+                    // Preserve unsupported preset numbers in the fallback
+                    // label so snapshots identify the actual value instead
+                    // of silently displaying a recognized theme name.
                     LongFunction<String> themeName = value -> switch ((int) value) {
                         case 0 -> "Classic";
                         case 1 -> "Builder";
@@ -370,6 +438,9 @@ public class GameTestCommand extends Command {
                         default -> "Unknown(" + value + ")";
                     };
                     Runnable refreshSummary = () -> {
+                        // A visible placeholder keeps the profile header and
+                        // summary identifiable when client input contains only
+                        // whitespace instead of a name.
                         var currentName = name.get().isBlank() ? "<empty>" : name.get();
                         profileHeader.set("Profile: " + currentName);
                         title.set("DDUI Coverage Lab [" + themeName.apply(theme.get()) + "]");
@@ -453,6 +524,7 @@ public class GameTestCommand extends Command {
                     form.element(closeButton);
 
                     nameField.onChange((session, value) -> {
+                        // The demo's displayed name limit is twenty-four characters.
                         if (value.length() > 24) {
                             name.set(value.substring(0, 24));
                         }
@@ -468,6 +540,9 @@ public class GameTestCommand extends Command {
                         refreshSummary.run();
                     });
                     expertToggle.onChange((session, value) -> {
+                        // Changing modes replaces the allowed slider interval.
+                        // Clamp the existing selection before refreshing labels
+                        // so the displayed difficulty stays inside that interval.
                         difficultyMin.set(value ? 2L : 1L);
                         difficultyMax.set(value ? 10L : 5L);
                         if (difficulty.get() < difficultyMin.get()) {
@@ -523,6 +598,7 @@ public class GameTestCommand extends Command {
                         verboseDisabled.set(!verboseDisabled.get());
                         session.setDisabled(verboseToggle, verboseDisabled.get());
 
+                        // Eleven-value wrapping keeps this probe inside its zero-to-ten slider range.
                         var nextScratchValue = (session.get(scratchSlider) + 1L) % 11L;
                         session.set(scratchField, "session.set at tick " + Server.getInstance().getTick());
                         session.set(scratchSlider, nextScratchValue);
@@ -539,6 +615,9 @@ public class GameTestCommand extends Command {
                     try {
                         form.sendTo(controller);
                     } catch (UnsupportedOperationException e) {
+                        // Unsupported DDUI opening becomes immediate failure
+                        // feedback instead of being treated as a completed
+                        // interaction with this form's later response callbacks.
                         context.addError(e.getMessage());
                         return context.fail();
                     }
@@ -558,6 +637,9 @@ public class GameTestCommand extends Command {
                                 .onClose((session, reason) -> controller.sendMessage("Message box closed: " + reason))
                                 .sendTo(controller);
                     } catch (UnsupportedOperationException e) {
+                        // This message-box probe reports unsupported opening
+                        // through the immediate command result instead of
+                        // treating it as a completed response interaction.
                         context.addError(e.getMessage());
                         return context.fail();
                     }
@@ -595,8 +677,14 @@ public class GameTestCommand extends Command {
                         var data = event.getBlock().getBlockStateData();
                         System.out.println(data.collisionShape());
                         System.out.println(data.shape());
+                        // Preserve the inspected block after printing its
+                        // state and shapes, allowing repeated diagnostics to
+                        // observe the same block rather than breaking it.
                         event.setCancelled(true);
                     };
+                    // The event bus removes listeners by consumer identity.
+                    // Separate invocations retain no shared listener field,
+                    // so disabling depends on reuse of this noncapturing lambda.
                     if (enable) {
                         Server.getInstance().getEventBus().registerListenerFor(BlockBreakEvent.class, lambda);
                         player.sendMessage("Break block to see the blockstate");
@@ -617,6 +705,9 @@ public class GameTestCommand extends Command {
                     try {
                         objData = Files.readString(Path.of(filename));
                     } catch (IOException e) {
+                        // OBJ input must be available before geometry parsing
+                        // begins. Report read failure without installing any
+                        // primitive shapes from this request.
                         context.addError(e.getMessage());
                         return context.fail();
                     }
@@ -624,10 +715,10 @@ public class GameTestCommand extends Command {
                     Vector3fc pos = context.getResult(3);
                     if (pos == null) {
                         var playerLocation = player.getLocation();
+                        // Primitive geometry uses floats, reducing precision from entity locations.
                         pos = new Vector3f((float) playerLocation.x(), (float) playerLocation.y(), (float) playerLocation.z());
                     }
 
-                    // Parse the obj data
                     var vertices = new ArrayList<Vector3f>();
                     var lines = new ArrayList<List<Integer>>();
                     var faces = new ArrayList<List<Integer>>();
@@ -648,6 +739,7 @@ public class GameTestCommand extends Command {
                             case "l" -> {
                                 List<Integer> lineIndices = new ArrayList<>();
                                 for (int i = 1; i < tokens.length; i++) {
+                                    // OBJ vertex references start at one; Java list indexes start at zero.
                                     lineIndices.add(Integer.parseInt(tokens[i]) - 1);
                                 }
                                 lines.add(lineIndices);
@@ -655,11 +747,15 @@ public class GameTestCommand extends Command {
                             case "f" -> {
                                 List<Integer> faceIndices = new ArrayList<>();
                                 for (int i = 1; i < tokens.length; i++) {
-                                    // Handle format like "3/285/285" - extract only the vertex index (first number)
+                                    // Face tokens can also name texture and
+                                    // normal indexes. Keep the vertex component
+                                    // because this renderer draws only geometric
+                                    // edges from its vertex list.
                                     String vertexRef = tokens[i];
                                     if (vertexRef.contains("/")) {
                                         vertexRef = vertexRef.split("/")[0];
                                     }
+                                    // Convert the retained one-based vertex reference to list indexing.
                                     faceIndices.add(Integer.parseInt(vertexRef) - 1);
                                 }
                                 faces.add(faceIndices);
@@ -675,7 +771,6 @@ public class GameTestCommand extends Command {
 
                     List<PrimitiveLine> shapes = new ArrayList<>();
 
-                    // Draw lines
                     for (var line : lines) {
                         for (int i = 0; i < line.size() - 1; i++) {
                             var start = vertices.get(line.get(i));
@@ -686,7 +781,8 @@ public class GameTestCommand extends Command {
                         }
                     }
 
-                    // Draw faces
+                    // Face boundaries close by joining the final vertex back
+                    // to the first, unlike open OBJ line sequences.
                     for (List<Integer> face : faces) {
                         for (int i = 0; i < face.size(); i++) {
                             var start = vertices.get(face.get(i));
@@ -697,7 +793,6 @@ public class GameTestCommand extends Command {
                         }
                     }
 
-                    // Add primitive shapes to the dimension
                     for (var shape : shapes) {
                         player.getDimension().addPrimitiveShape(shape);
                     }
@@ -731,6 +826,9 @@ public class GameTestCommand extends Command {
                     try {
                         var image = ImageIO.read(Files.newInputStream(path));
                         if (image == null) {
+                            // No image reader recognized the input. Preserve
+                            // the held map's current image and report failure
+                            // before any map update is sent.
                             context.addError("Failed to load image from file: " + filename);
                             return context.fail();
                         }
@@ -739,6 +837,9 @@ public class GameTestCommand extends Command {
                         map.sendToPlayer(player.getController());
                         context.addOutput("Map image set successfully!");
                     } catch (IOException e) {
+                        // Image decoding failures become command errors before
+                        // a new image can be assigned to the held map or sent
+                        // to its player.
                         context.addError("Error reading file: " + e.getMessage());
                         return context.fail();
                     }
@@ -750,6 +851,7 @@ public class GameTestCommand extends Command {
                 .str("category", null).optional()
                 .exec((context, player) -> {
                     String category = context.getResult(1);
+                    // Twenty ticks gives a one-second cooldown at the nominal tick rate.
                     if (category != null) {
                         player.setCooldown(category, 20);
                     } else {
@@ -869,6 +971,9 @@ public class GameTestCommand extends Command {
                 .optional()
                 .exec((context, sender) -> {
                     List<Entity> entities = context.getResult(1);
+                    // Omitted and unmatched selections have no attachment
+                    // recipient. Use the executor in both cases so this
+                    // probe still attaches a shape to an entity.
                     var entity = entities != null && !entities.isEmpty() ? entities.getFirst() : sender;
                     var primitiveText = new PrimitiveText(new Vector3f(0f, 3f, 0f), null, "test");
                     entity.attachPrimitiveShape(primitiveText);

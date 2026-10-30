@@ -10,19 +10,35 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Dispense behavior for climate-variant eggs (blue egg, brown egg).
+ * {@code EggProjectileDispenseBehavior} launches egg projectiles with a configured
+ * climate variant. The inherited projectile helpers select the spawn position and
+ * unit-speed launch motion, while this specialization assigns the variant before
+ * requesting entity addition and publishing the dispense effects.
  *
  * @author daoge_cmd
  */
 public class EggProjectileDispenseBehavior extends ProjectileDispenseBehavior {
 
+    /**
+     * Climate variant assigned to each launched egg.
+     */
     protected final ClimateVariant climateVariant;
 
+    /**
+     * Creates an egg projectile handler retaining the supplied climate variant.
+     * Launches use the egg entity type and a base speed multiplier of one before
+     * random projectile spread.
+     */
     public EggProjectileDispenseBehavior(ClimateVariant climateVariant) {
         super(EntityTypes.EGG, 1.0);
         this.climateVariant = climateVariant;
     }
 
+    /**
+     * Creates an egg projectile, sets its climate variant, and requests entity
+     * addition. A {@code null} factory result returns failure; success follows
+     * submission and effects without waiting for deferred admission.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
         var dimension = block.getDimension();

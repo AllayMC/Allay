@@ -6,10 +6,11 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.player.Player;
 
 /**
- * PlayerDisconnectEvent will be called when the player disconnects.
- * <p>
- * Different from {@link PlayerQuitEvent}, this event will always
- * be called when the player disconnects, even if the player is not logged in.
+ * {@code PlayerDisconnectEvent} reports a player session's disconnection before
+ * container and player-manager cleanup. Unlike {@link PlayerQuitEvent}, this
+ * notification also covers
+ * connections that never completed login or spawning. The disconnect has
+ * already happened, so listeners cannot cancel it or assume an entity exists.
  *
  * @author daoge_cmd
  */
@@ -21,6 +22,9 @@ public class PlayerDisconnectEvent extends ServerPlayerEvent {
      */
     protected String disconnectReason;
 
+    /**
+     * Creates a disconnection notification carrying the session's supplied reason.
+     */
     public PlayerDisconnectEvent(Player player, String disconnectReason) {
         super(player);
         this.disconnectReason = disconnectReason;

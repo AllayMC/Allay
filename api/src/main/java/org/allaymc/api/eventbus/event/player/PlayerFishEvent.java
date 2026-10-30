@@ -12,10 +12,10 @@ import org.allaymc.api.item.ItemStack;
 import org.joml.Vector3dc;
 
 /**
- * Called when a player successfully catches something while fishing.
- * <p>
- * This event is only called when the player reels in the line and
- * catches either an item (fish/treasure/junk) or hooks an entity.
+ * {@code PlayerFishEvent} describes a successful fishing reel involving either loot
+ * or a hooked entity. Listeners may cancel the reward or pull, or alter the values
+ * consumed by that path; the fishing implementation removes the hook after either
+ * outcome even when cancelled.
  *
  * @author daoge_cmd
  */
@@ -23,41 +23,43 @@ import org.joml.Vector3dc;
 @CallerThread(ThreadType.WORLD)
 public class PlayerFishEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The fishing hook entity.
+     * Fishing hook being reeled in.
      */
     protected final EntityFishingHook fishingHook;
 
     /**
-     * The caught item, or null if an entity was hooked.
+     * {@code caughtItem} supplies item loot when non-{@code null}. The entity-hook
+     * constructor initializes it to {@code null}, and listeners may suppress loot by
+     * clearing it.
      */
     @Setter
     protected ItemStack caughtItem;
 
     /**
-     * The experience to be given to the player.
+     * {@code experience} supplies experience points for the loot path. The caller
+     * drops orbs only for positive values and ignores this field for hooked
+     * entities.
      */
     @Setter
     protected int experience;
 
     /**
-     * The hooked entity, or null if an item was caught.
+     * {@code hookedEntity} identifies the hooked target for the entity path. The
+     * item-loot constructor initializes it to {@code null}.
      */
     protected final Entity hookedEntity;
 
     /**
-     * The motion to apply to the caught item/entity.
+     * {@code motion} retains the velocity applied to loot or a physics-capable
+     * hooked entity. The caller reads the listener-selected vector after approval.
      */
     @Setter
     protected Vector3dc motion;
 
     /**
-     * Creates a new PlayerFishEvent for catching an item.
-     *
-     * @param player      the player
-     * @param fishingHook the fishing hook
-     * @param caughtItem  the caught item
-     * @param experience  the experience to give
-     * @param motion      the motion to apply to the item
+     * Creates a fishing event for item loot with the supplied reward and motion.
+     * {@code hookedEntity} is {@code null}; the constructor retains
+     * {@code caughtItem} and {@code motion} without copying them.
      */
     public PlayerFishEvent(EntityPlayer player, EntityFishingHook fishingHook, ItemStack caughtItem, int experience, Vector3dc motion) {
         super(player);
@@ -69,12 +71,10 @@ public class PlayerFishEvent extends PlayerEvent implements CancellableEvent {
     }
 
     /**
-     * Creates a new PlayerFishEvent for hooking an entity.
-     *
-     * @param player       the player
-     * @param fishingHook  the fishing hook
-     * @param hookedEntity the hooked entity
-     * @param motion       the motion to apply to the entity
+     * Creates a fishing event for pulling the supplied hooked entity.
+     * {@code caughtItem} is {@code null} and {@code experience} is zero; the
+     * constructor retains {@code hookedEntity} and {@code motion} without copying
+     * them.
      */
     public PlayerFishEvent(EntityPlayer player, EntityFishingHook fishingHook, Entity hookedEntity, Vector3dc motion) {
         super(player);
@@ -86,18 +86,14 @@ public class PlayerFishEvent extends PlayerEvent implements CancellableEvent {
     }
 
     /**
-     * Checks if an item was caught.
-     *
-     * @return {@code true} if an item was caught
+     * Returns whether the current event contains a non-{@code null} caught item.
      */
     public boolean hasCaughtItem() {
         return caughtItem != null;
     }
 
     /**
-     * Checks if an entity was hooked.
-     *
-     * @return {@code true} if an entity was hooked
+     * Returns whether the event contains a non-{@code null} hooked entity.
      */
     public boolean hasHookedEntity() {
         return hookedEntity != null;

@@ -27,17 +27,14 @@
 package org.allaymc.server.datastruct.dag;
 
 /**
- * This exception is thrown if a loop occurs in the DAG graph.
- *
+ * {@code DAGCycleException} reports an ordering edge that would create a directed cycle.
+ * The diagnostic message includes the two supplied endpoint objects so callers can
+ * identify the conflicting dependency when graph insertion rejects it.
  * @author steve | CoolLoong
  */
 public class DAGCycleException extends Exception {
     /**
-     * Constructs an instance of <code>DAGCycleException</code> with
-     * the specified detail message and details of objects causing the cycle.
-     *
-     * @param before the before object
-     * @param after  the following object
+     * Creates a cycle diagnostic containing the proposed before and after endpoints.
      */
     public DAGCycleException(Object before, Object after) {
         super("(before: " + before + " - after: " + after + ")");

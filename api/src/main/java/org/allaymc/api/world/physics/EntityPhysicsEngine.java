@@ -7,95 +7,93 @@ import org.joml.primitives.AABBdc;
 import java.util.List;
 
 /**
- * EntityPhysicsEngine is responsible for handling entity physics.
+ * {@code EntityPhysicsEngine} exposes entity overlap queries and collision
+ * results cached by physics processing. Query overloads select different
+ * self-exclusion and collision-flag rules, while cached results describe the
+ * most recent collision pass rather than recomputing current overlaps.
  *
  * @author daoge_cmd
  */
 public interface EntityPhysicsEngine {
 
     /**
-     * Compute the entities that are colliding with the specified entity.
-     *
-     * @param entity The entity to compute the colliding entities
-     * @return The entities that are colliding with the specified entity
+     * Finds overlapping entities excluding the queried entity by runtime
+     * identifier. This overload applies no candidate collision-flag filter, so
+     * entities with collision disabled can still appear in the returned list.
      */
     default List<Entity> computeCollidingEntities(Entity entity) {
         return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getRuntimeId() != entity.getRuntimeId());
     }
 
     /**
-     * Compute the entities that are colliding with the specified aabb.
-     *
-     * @param aabb The aabb to compute the colliding entities
-     * @return The entities that are colliding with the specified aabb
+     * Finds indexed entities whose world-space bounds overlap {@code aabb}.
+     * This overload accepts every candidate regardless of its entity-collision
+     * flag and performs no self-exclusion for a particular source entity.
      */
     default List<Entity> computeCollidingEntities(AABBdc aabb) {
         return computeCollidingEntities(aabb, entity -> true);
     }
 
     /**
-     * Compute the entities that are colliding with the specified entity.
-     *
-     * @param entity                   The entity to compute the colliding entities
-     * @param ignoreEntityHasCollision Whether to ignore the entity's "hasCollision" property
-     * @return The entities that are colliding with the specified entity
+     * Finds overlaps excluding the source runtime identifier and optionally
+     * checking source collision eligibility. When {@code
+     * ignoreEntityHasCollision} is {@code false}, this overload checks {@code
+     * entity.hasEntityCollision()} rather than each candidate collision flag.
      */
     default List<Entity> computeCollidingEntities(Entity entity, boolean ignoreEntityHasCollision) {
         return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getRuntimeId() != entity.getRuntimeId() && (ignoreEntityHasCollision || entity.hasEntityCollision()));
     }
 
     /**
-     * Compute the entities that are colliding with the specified aabb.
-     *
-     * @param aabb                     The entity to compute the colliding entities
-     * @param ignoreEntityHasCollision Whether to ignore the entity's "hasCollision" property
-     * @return The entities that are colliding with the specified aabb
+     * Finds entities overlapping {@code aabb} and optionally filters each
+     * candidate collision flag. Passing {@code true} includes
+     * collision-disabled candidates, while {@code false} retains only
+     * candidates whose {@code hasEntityCollision()} returns {@code true}.
      */
     default List<Entity> computeCollidingEntities(AABBdc aabb, boolean ignoreEntityHasCollision) {
         return computeCollidingEntities(aabb, entity -> ignoreEntityHasCollision || entity.hasEntityCollision());
     }
 
     /**
-     * Compute the entities that are colliding with the specified aabb.
-     *
-     * @param aabb      The entity to compute the colliding entities
-     * @param predicate The predicate to filter the entities
-     * @return The entities that are colliding with the specified aabb and pass the predicate
+     * Finds indexed entities overlapping {@code aabb} that also pass {@code
+     * predicate}. The predicate supplies all entity-specific filtering for
+     * this query, including any desired source exclusion or entity-collision
+     * flag checks.
      */
     List<Entity> computeCollidingEntities(AABBdc aabb, AABBOverlapFilter<Entity> predicate);
 
     /**
-     * @see #computeCollidingEntities(VoxelShape, boolean)
+     * Finds entities whose world-space bounds intersect the supplied voxel
+     * shape. This overload applies candidate entity-collision eligibility by
+     * delegating with {@code ignoreEntityHasCollision} set to {@code false}.
      */
     default List<Entity> computeCollidingEntities(VoxelShape voxelShape) {
         return computeCollidingEntities(voxelShape, false);
     }
 
     /**
-     * Compute the entities that are colliding with the specified voxel shape.
-     *
-     * @param voxelShape               The voxel shape to compute the colliding entities
-     * @param ignoreEntityHasCollision Whether to ignore the entity's has collision
-     * @return The entities that are colliding with the specified voxel shape
+     * Finds entities whose world-space bounds intersect the supplied voxel
+     * shape. Passing {@code ignoreEntityHasCollision} as {@code true} includes
+     * candidates whose entity-collision flag would otherwise exclude them from
+     * the result.
      */
     List<Entity> computeCollidingEntities(VoxelShape voxelShape, boolean ignoreEntityHasCollision);
 
     /**
-     * Get the cached entity colliding result of the specified entity.
-     *
-     * @param entity The entity to get the cached entity colliding result
-     * @return The cached entity colliding result of the specified entity
+     * Returns collision-enabled candidates from the most recent cached
+     * collision pass. This overload uses {@code ignoreEntityHasCollision} set
+     * to {@code false}; callers must treat the returned collection as
+     * engine-owned storage.
      */
     default List<Entity> getCachedEntityCollidingResult(Entity entity) {
         return getCachedEntityCollidingResult(entity, false);
     }
 
     /**
-     * Get the cached entity colliding result of the specified entity.
-     *
-     * @param entity                   The entity to get the cached entity colliding result
-     * @param ignoreEntityHasCollision Whether to ignore the entity's "hasCollision" property
-     * @return The cached entity colliding result of the specified entity
+     * Returns the most recently cached overlaps for an entity with collision
+     * enabled. Collision-disabled source entities return an empty list even
+     * when {@code ignoreEntityHasCollision} is {@code true}; the server may
+     * filter its shared cached list in place.
      */
     List<Entity> getCachedEntityCollidingResult(Entity entity, boolean ignoreEntityHasCollision);
 }

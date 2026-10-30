@@ -17,10 +17,25 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+/**
+ * {@code BusinessPacketEncoderTest} checks baseline business packets for input
+ * preservation and mutable payload isolation.
+ */
 class BusinessPacketEncoderTest {
 
+    /**
+     * {@code encoder} supplies one baseline encoder per test instance. These
+     * cases exercise packet construction without accessing the mocked
+     * {@code ProtocolData} bundle.
+     */
     private final PacketEncoder encoder = new PacketEncoder_v766(mock(ProtocolData.class));
 
+    /**
+     * Encodes representative business packets twice with the same inputs.
+     * Packet objects and selected collection containers must be independent,
+     * while item-stack response entries deliberately retain their supplied
+     * identities.
+     */
     @Test
     void simpleBusinessPacketsAreFreshAndCarryTheirInputs() {
         var domainPosition = new org.joml.Vector3i(1, 2, 3);
@@ -49,6 +64,8 @@ class BusinessPacketEncoderTest {
             assertTrue(firstSubChunk.isCacheEnabled());
             assertTrue(firstSubChunk.getSubChunks().isEmpty());
         } finally {
+            // These packets are never handed to a transport, so release both
+            // references even when a payload assertion aborts the test.
             assertTrue(firstSubChunk.release());
             assertTrue(secondSubChunk.release());
         }
@@ -82,6 +99,11 @@ class BusinessPacketEncoderTest {
         assertEquals("{\"type\":\"custom_form\"}", firstSettings.getFormData());
     }
 
+    /**
+     * Builds two cache-miss responses from the same source bytes. Mutating the
+     * source and one response must leave the other response's buffer contents
+     * unchanged.
+     */
     @Test
     void cacheMissPacketsOwnIndependentBlobBuffers() {
         var blob = new byte[]{1, 2, 3, 4};
@@ -98,6 +120,9 @@ class BusinessPacketEncoderTest {
             assertNotSame(first, second);
             assertNotSame(first.getBlobs().get(11L), second.getBlobs().get(11L));
         } finally {
+            // Each response owns its cloned blob buffers; release both unsent
+            // packets after assertions so their storage does not outlive this
+            // test.
             assertTrue(first.release());
             assertTrue(second.release());
         }

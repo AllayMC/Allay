@@ -1,55 +1,48 @@
 package org.allaymc.api.permission;
 
 /**
- * Represents three different states of a permission.
- *
- * <p>Possible values:</p>
- * <p></p>
- * <ul>
- * <li>{@link #TRUE} - a positive permission</li>
- * <li>{@link #FALSE} - a negative (negated) permission</li>
- * <li>{@link #UNDEFINED} - a non-existent permission</li>
- * </ul>
+ * {@code Tristate} represents a granted, explicitly denied, or undefined
+ * permission decision. Its three constants preserve the difference between a
+ * denial and the absence of a decision, although {@link #asBoolean()} maps both
+ * of those cases to {@code false} for authorization checks.
  *
  * @author daoge_cmd
  */
 public enum Tristate {
 
     /**
-     * A value indicating a positive permission.
+     * An explicit permission grant.
      */
     TRUE(true),
 
     /**
-     * A value indicating a negative (negated) permission.
+     * An explicit permission denial.
      */
     FALSE(false),
 
     /**
-     * A value indicating a non-existent permission.
+     * An absent permission decision.
      */
     UNDEFINED(false);
 
     /**
-     * Returns a {@link Tristate} from a boolean.
+     * Returns the explicit grant or denial represented by {@code val}.
      *
      * @param val the boolean value
-     * @return {@link #TRUE} or {@link #FALSE}, if the value is <code>true</code> or
-     * <code>false</code>, respectively.
+     * @return {@link #TRUE} for {@code true}, or {@link #FALSE} for {@code false}
      */
     public static Tristate fromBoolean(boolean val) {
         return val ? TRUE : FALSE;
     }
 
     /**
-     * Returns a {@link Tristate} from a nullable boolean.
-     *
-     * <p>Unlike {@link #fromBoolean(boolean)}, this method returns {@link #UNDEFINED}
-     * if the value is null.</p>
+     * Returns the decision represented by a nullable boolean value.
+     * A {@code null} input yields {@link #UNDEFINED}, preserving the absence of
+     * a decision instead of converting it into an explicit denial.
      *
      * @param val the boolean value
-     * @return {@link #UNDEFINED}, {@link #TRUE} or {@link #FALSE}, if the value is <code>null</code>,
-     * <code>true</code> or <code>false</code>, respectively.
+     * @return {@link #UNDEFINED} for {@code null}, {@link #TRUE} for
+     *         {@code true}, or {@link #FALSE} for {@code false}
      */
     public static Tristate fromNullableBoolean(Boolean val) {
         if (val == null) {
@@ -58,18 +51,21 @@ public enum Tristate {
         return val ? TRUE : FALSE;
     }
 
-    private final boolean booleanValue;
+    private final boolean booleanValue; // boolean authorization decision
 
+    /**
+     * Creates a decision with its stored boolean authorization result.
+     */
     Tristate(boolean booleanValue) {
         this.booleanValue = booleanValue;
     }
 
     /**
-     * Returns the value of the Tristate as a boolean.
+     * Returns the boolean authorization result for this permission decision.
+     * {@link #UNDEFINED} and {@link #FALSE} both return {@code false}, so callers
+     * requiring an explicit denial must compare the enum constants instead.
      *
-     * <p>A value of {@link #UNDEFINED} converts to false.</p>
-     *
-     * @return a boolean representation of the Tristate.
+     * @return {@code true} only for {@link #TRUE}
      */
     public boolean asBoolean() {
         return this.booleanValue;

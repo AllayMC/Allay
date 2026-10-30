@@ -4,32 +4,34 @@ import org.allaymc.api.ddui.Observable;
 import org.allaymc.api.ddui.Property;
 
 /**
- * Integer slider element with configurable minimum and maximum bounds.
+ * {@code Slider} represents an integer-valued custom-form slider with configurable lower and upper
+ * bounds. Its value and bounds can use observable sources; template construction and setters store
+ * supplied values without checking range ordering or clamping the selection.
  *
  * @author daoge_cmd | SerenityJS
  */
 public final class Slider extends ValueElementBase<Slider, Long> {
+    /**
+     * Slider lower-bound template property.
+     */
     private final Property<Long> min = new Property<>(0L);
+    /**
+     * Slider upper-bound template property.
+     */
     private final Property<Long> max = new Property<>(0L);
 
     /**
-     * Creates a slider with the minimum value as its initial value.
-     *
-     * @param label the slider label
-     * @param min   the minimum value
-     * @param max   the maximum value
+     * Creates a slider template with the supplied label and integer range. The initial selection
+     * uses {@code min}; construction does not validate bound ordering or clamp the selected value.
      */
     public Slider(String label, long min, long max) {
         this(label, min, max, min);
     }
 
     /**
-     * Creates a slider with a literal initial value.
-     *
-     * @param label the slider label
-     * @param min   the minimum value
-     * @param max   the maximum value
-     * @param value the initial value
+     * Creates a slider template with the supplied label and integer range. The initial selection
+     * uses {@code value}; construction does not validate bound ordering or clamp the selected
+     * value.
      */
     public Slider(String label, long min, long max, long value) {
         super(value);
@@ -39,12 +41,9 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Creates a slider whose value is bound to an observable.
-     *
-     * @param label the slider label
-     * @param value the value observable
-     * @param min   the minimum value
-     * @param max   the maximum value
+     * Creates a slider template using the supplied observable configuration. Construction captures
+     * current source values; runtime sessions subscribe when compiled, and later literal template
+     * changes do not replace those existing subscriptions.
      */
     public Slider(String label, Observable<Long> value, long min, long max) {
         this(label, min, max, value.get());
@@ -52,12 +51,9 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Creates a slider whose value and range are bound to observables.
-     *
-     * @param label the slider label
-     * @param value the value observable
-     * @param min   the minimum-value observable
-     * @param max   the maximum-value observable
+     * Creates a slider template using the supplied observable configuration. Construction captures
+     * current source values; runtime sessions subscribe when compiled, and later literal template
+     * changes do not replace those existing subscriptions.
      */
     public Slider(String label, Observable<Long> value, Observable<Long> min, Observable<Long> max) {
         this(label, min.get(), max.get(), value.get());
@@ -67,19 +63,18 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Gets the minimum-value property of this slider.
-     *
-     * @return the minimum-value property
+     * Returns this element's mutable {@code min} template property. Reconfiguring that property
+     * affects subsequent session compilation; existing sessions retain their current compiled
+     * binding and do not receive literal template changes.
      */
     public Property<Long> getMin() {
         return min;
     }
 
     /**
-     * Sets the minimum slider value.
-     *
-     * @param min the minimum slider value
-     * @return this element
+     * Stores the supplied min template value and returns this element for further configuration.
+     * This operation clears that property's observable binding and does not send updates to
+     * existing sessions.
      */
     public Slider min(long min) {
         this.min.set(min);
@@ -87,10 +82,9 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Binds the minimum slider value to an observable.
-     *
-     * @param min the minimum-value observable
-     * @return this element
+     * Binds the min template property to the supplied observable and returns this element. New
+     * sessions subscribe to that source; this reconfiguration does not replace bindings already
+     * compiled by existing sessions.
      */
     public Slider min(Observable<Long> min) {
         this.min.bind(min);
@@ -98,19 +92,18 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Gets the maximum-value property of this slider.
-     *
-     * @return the maximum-value property
+     * Returns this element's mutable {@code max} template property. Reconfiguring that property
+     * affects subsequent session compilation; existing sessions retain their current compiled
+     * binding and do not receive literal template changes.
      */
     public Property<Long> getMax() {
         return max;
     }
 
     /**
-     * Sets the maximum slider value.
-     *
-     * @param max the maximum slider value
-     * @return this element
+     * Stores the supplied max template value and returns this element for further configuration.
+     * This operation clears that property's observable binding and does not send updates to
+     * existing sessions.
      */
     public Slider max(long max) {
         this.max.set(max);
@@ -118,10 +111,9 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * Binds the maximum slider value to an observable.
-     *
-     * @param max the maximum-value observable
-     * @return this element
+     * Binds the max template property to the supplied observable and returns this element. New
+     * sessions subscribe to that source; this reconfiguration does not replace bindings already
+     * compiled by existing sessions.
      */
     public Slider max(Observable<Long> max) {
         this.max.bind(max);
@@ -129,7 +121,7 @@ public final class Slider extends ValueElementBase<Slider, Long> {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns this element using its concrete fluent configuration type.
      */
     @Override
     protected Slider self() {

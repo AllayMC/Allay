@@ -8,14 +8,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Registry loader for compostable items.
- * <p>
- * Each item is registered with its compost probability (0.0 to 1.0).
+ * {@code CompostableItemRegistryLoader} associates built-in item types with their chance of
+ * raising a composter's fill level. Probabilities are fractions from zero to one; later
+ * registrations replace earlier values for repeated item types, and unresolved item constants
+ * are omitted from the returned table.
  *
  * @author daoge_cmd
  */
 public class CompostableItemRegistryLoader implements RegistryLoader<Void, Map<ItemType<?>, Float>> {
 
+    /**
+     * Creates the mutable table of built-in compost probabilities, ignoring the input. Item types
+     * must already be initialized; unresolved constants are skipped, and repeated types retain
+     * the chance supplied by their last registration group.
+     */
     @Override
     public Map<ItemType<?>, Float> load(Void $) {
         var map = new HashMap<ItemType<?>, Float>();
@@ -90,8 +96,15 @@ public class CompostableItemRegistryLoader implements RegistryLoader<Void, Map<I
         return map;
     }
 
+    /**
+     * Assigns the supplied probability to each resolved item type in {@code map}. A repeated item
+     * overwrites its earlier chance, while {@code null} constants are skipped rather than being
+     * used as map keys.
+     */
     private void registerCompostable(Map<ItemType<?>, Float> map, float chance, ItemType<?>... itemTypes) {
         for (var itemType : itemTypes) {
+            // Some item constants can be unavailable during partial initialization. Exclude
+            // those entries so the composter table only contains resolved item type keys.
             if (itemType != null) {
                 map.put(itemType, chance);
             }

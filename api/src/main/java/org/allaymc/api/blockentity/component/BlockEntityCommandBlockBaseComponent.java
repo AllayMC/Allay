@@ -3,190 +3,196 @@ package org.allaymc.api.blockentity.component;
 import org.allaymc.api.command.CommandSender;
 
 /**
- * Base component for command block block entity.
+ * {@code BlockEntityCommandBlockBaseComponent} exposes command-block execution
+ * settings, retained results, and command-sender behavior. The server derives
+ * execution mode from the surrounding block type, evaluates conditional
+ * neighbors, and can propagate execution through facing chain blocks
+ * independently of the stored command's success count.
  *
  * @author daoge_cmd
  */
 public interface BlockEntityCommandBlockBaseComponent extends BlockEntityBaseComponent, CommandSender {
 
     /**
-     * Represents the mode of a command block.
+     * {@code CommandBlockMode} identifies impulse, repeating, and chain
+     * execution categories selected from the surrounding command-block type.
      *
      * @author daoge_cmd
      */
     enum CommandBlockMode {
+        /**
+         * Ordinary impulse execution mode.
+         */
         NORMAL,
+        /**
+         * Active repeating execution mode.
+         */
         REPEATING,
+        /**
+         * Facing-linked chain execution mode.
+         */
         CHAIN;
 
+        /**
+         * {@code VALUES} caches declaration-order modes so NBT mode IDs can be
+         * resolved without allocating a fresh enum array for each lookup.
+         */
         private static final CommandBlockMode[] VALUES = values();
 
         /**
-         * Get a CommandBlockMode by its id.
-         *
-         * @param id the id
-         * @return the CommandBlockMode, or {@code null} if the id is invalid
+         * Returns the mode associated with a declaration-order numeric ID.
+         * Negative IDs and IDs beyond the known constants return {@code null},
+         * leaving callers to choose how unsupported stored mode data is
+         * handled.
          */
         public static CommandBlockMode fromId(int id) {
+            // Unknown persisted IDs cannot identify a known mode, so expose
+            // absence to the loader rather than selecting a different execution
+            // category silently.
             if (id < 0 || id >= VALUES.length) return null;
             return VALUES[id];
         }
     }
 
     /**
-     * Get the command stored in this command block.
-     *
-     * @return the command string
+     * Returns the retained command text used when execution is permitted. The
+     * server initially stores an empty string and permits {@code null}; both
+     * values skip command dispatch while the execution path can still propagate
+     * a chain.
      */
     String getCommand();
 
     /**
-     * Set the command to be executed by this command block.
-     *
-     * @param command the command string
+     * Stores command text for a later execution attempt without dispatching it.
+     * The server retains {@code null} as an empty-command selection and does
+     * not broadcast or reset existing execution results through this setter.
      */
     void setCommand(String command);
 
     /**
-     * Get the mode of this command block based on the block type.
-     *
-     * @return the mode
+     * Returns the mode derived from the block type at this entity's position.
+     * The server recognizes repeating and chain block types explicitly and
+     * treats other surrounding block types as {@code CommandBlockMode.NORMAL}.
      */
     CommandBlockMode getMode();
 
     /**
-     * Check if this command block is in "always active" (auto) mode.
-     *
-     * @return true if auto mode is enabled
+     * Returns whether the stored always-active execution setting is enabled.
      */
     boolean isAuto();
 
     /**
-     * Set whether this command block is in "always active" (auto) mode.
-     *
-     * @param auto true to enable auto mode
+     * Replaces the always-active flag consulted by subsequent execution
+     * attempts.
      */
     void setAuto(boolean auto);
 
     /**
-     * Check if this command block is in conditional mode.
-     *
-     * @return true if conditional mode is enabled
+     * Returns whether execution depends on the command block behind this one.
      */
     boolean isConditional();
 
     /**
-     * Set whether this command block is in conditional mode.
-     *
-     * @param conditional true to enable conditional mode
+     * Replaces the conditional-mode flag consulted by subsequent execution
+     * attempts.
      */
     void setConditional(boolean conditional);
 
     /**
-     * Check if the condition for this command block is met.
-     *
-     * @return true if the condition is met
+     * Returns the retained condition result from the latest condition
+     * evaluation.
      */
     boolean isConditionMet();
 
     /**
-     * Check if this command block is powered by redstone.
-     *
-     * @return true if powered
+     * Returns whether this command block remembers an active redstone input.
      */
     boolean isPowered();
 
     /**
-     * Set the powered state of this command block.
-     *
-     * @param powered true if powered
+     * Replaces the remembered redstone-input flag used by execution activation
+     * checks.
      */
     void setPowered(boolean powered);
 
     /**
-     * Get the success count of the last command execution.
-     *
-     * @return the success count
+     * Returns the retained result count consulted by conditional successor
+     * blocks.
      */
     int getSuccessCount();
 
     /**
-     * Set the success count.
-     *
-     * @param count the success count
+     * Replaces the retained command result count without dispatching another
+     * command.
      */
     void setSuccessCount(int count);
 
     /**
-     * Check if this command block is tracking output.
-     *
-     * @return true if tracking output
+     * Returns whether output messages are retained as this block's latest
+     * output.
      */
     boolean isTrackingOutput();
 
     /**
-     * Set whether this command block should track output.
-     *
-     * @param trackOutput true to track output
+     * Changes whether later command output replaces the retained output text.
+     * The server leaves existing text unchanged when tracking is disabled, and
+     * this setting does not independently control player broadcasts.
      */
     void setTrackingOutput(boolean trackOutput);
 
     /**
-     * Get the last output of this command block.
-     *
-     * @return the last output, or null if none
+     * Returns retained output text, or {@code null} when none is currently
+     * stored. The server can retain earlier text while tracking is disabled and
+     * clears text before dispatching a nonempty permitted command.
      */
     String getLastOutput();
 
     /**
-     * Set the last output of this command block.
-     *
-     * @param lastOutput the last output
+     * Replaces retained output text without sending it to players. {@code null}
+     * clears the reference, and the server's generated setter does not change
+     * the tracking flag or execution result count.
      */
     void setLastOutput(String lastOutput);
 
     /**
-     * Get the tick delay for this command block.
-     *
-     * @return the tick delay
+     * Returns the nonnegative repeating-execution delay setting measured in
+     * game ticks.
      */
     int getTickDelay();
 
     /**
-     * Set the tick delay for this command block.
-     *
-     * @param tickDelay the tick delay
+     * Stores the repeating-execution delay setting used by later ticking. The
+     * server clamps negative inputs to zero without resetting the existing
+     * activation counter, so an in-progress interval uses the new bound.
      */
     void setTickDelay(int tickDelay);
 
     /**
-     * Check if this command block should execute on the first tick.
-     *
-     * @return true if executing on first tick
+     * Returns whether a repeating block triggers on its next activation edge.
      */
     boolean isExecuteOnFirstTick();
 
     /**
-     * Set whether this command block should execute on the first tick.
-     *
-     * @param executeOnFirstTick true to execute on first tick
+     * Replaces the flag controlling execution on a repeating block's activation
+     * edge.
      */
     void setExecuteOnFirstTick(boolean executeOnFirstTick);
 
     /**
-     * Trigger the command block execution.
-     *
-     * @return true if execution was successful
+     * Starts an execution attempt at chain depth zero through {@code execute}.
+     * The returned flag follows that operation's continuation semantics and
+     * does not by itself establish that a command was dispatched or succeeded.
      */
     default boolean trigger() {
         return execute(0);
     }
 
     /**
-     * Execute the command in this command block.
-     *
-     * @param chainDepth the current chain depth for preventing infinite loops
-     * @return true if execution was successful
+     * Attempts command-block processing at the supplied recursive chain depth.
+     * The server returns {@code false} for rejected attempts and cancelled
+     * command events; {@code true} can also represent duplicate-tick
+     * suppression or an inactive block that propagates its chain without a
+     * successful command.
      */
     boolean execute(int chainDepth);
 }

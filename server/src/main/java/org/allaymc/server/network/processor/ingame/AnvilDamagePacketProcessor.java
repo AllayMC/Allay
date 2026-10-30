@@ -6,12 +6,19 @@ import org.cloudburstmc.protocol.bedrock.packet.AnvilDamagePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 /**
- * For security reasons, we do not process this packet.
- * Anvil damage handled in {@link CraftRecipeOptionalActionProcessor}
+ * {@code AnvilDamagePacketProcessor} ignores client anvil-damage packets through
+ * the inherited empty synchronous handler. Anvil wear is decided while
+ * processing the optional crafting action
+ * in {@link CraftRecipeOptionalActionProcessor}, keeping it tied to the
+ * server's anvil operation rather than accepting a separate client damage
+ * notification.
  *
  * @author IWareQ
  */
 public class AnvilDamagePacketProcessor extends PacketProcessor<AnvilDamagePacket> {
+    /**
+     * Returns the anvil damage packet type handled by this processor.
+     */
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.ANVIL_DAMAGE;

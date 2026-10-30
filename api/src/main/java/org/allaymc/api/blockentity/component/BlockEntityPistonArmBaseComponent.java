@@ -8,130 +8,137 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Base component interface for piston arm block entities.
+ * {@code BlockEntityPistonArmBaseComponent} exposes piston animation phases,
+ * attached source positions, and movement preparation. Facing and sticky state
+ * describe the piston, while progress and state codes describe the current
+ * animation. The server restores moved blocks when its paired progress values
+ * converge at an endpoint.
+ *
+ * <p>
+ * Movement callers first prepare extension or retraction, which broadcasts the
+ * initial arm state, then create the temporary moving-block entities, and
+ * finally call {@code startMoving}. Continued ticking advances the animation;
+ * {@code startMoving} does not schedule ticks itself. The attached-position
+ * list is copied as a container, while position objects remain shared with the
+ * supplied movement description.
  *
  * @author daoge_cmd
  */
 public interface BlockEntityPistonArmBaseComponent extends BlockEntityBaseComponent {
 
     /**
-     * The movement step per tick (0.25f = 2 game ticks to complete).
+     * {@code MOVE_STEP} advances both animation phases by one quarter per tick;
+     * the server finishes only after both clamped phases reach the same
+     * endpoint.
      */
     float MOVE_STEP = 0.25f;
 
     /**
-     * Get the facing direction of the piston.
-     *
-     * @return the facing direction
+     * Returns the stored direction used for the piston's outward movement.
      */
     BlockFace getFacing();
 
     /**
-     * Set the facing direction of the piston.
-     *
-     * @param facing the facing direction
+     * Stores the direction used by later animation and restoration operations.
+     * The server retains the supplied enum without a viewer update or
+     * validation; callers provide a non-{@code null} direction before movement
+     * or saving.
      */
     void setFacing(BlockFace facing);
 
     /**
-     * Check if this piston is sticky.
-     *
-     * @return true if sticky
+     * Returns whether the retained piston configuration marks this piston
+     * sticky.
      */
     boolean isSticky();
 
     /**
-     * Set whether this piston is sticky.
-     *
-     * @param sticky true if sticky
+     * Replaces the retained sticky-piston configuration flag without starting
+     * an animation.
      */
     void setSticky(boolean sticky);
 
     /**
-     * Check if the piston is currently extending.
-     *
-     * @return true if extending
+     * Returns whether the prepared animation represents outward rather than
+     * retracting movement.
      */
     boolean isExtending();
 
     /**
-     * Get the current progress of the piston animation (0.0 to 1.0).
-     *
-     * @return the progress
+     * Returns the current main animation phase used for collision and
+     * persistence.
      */
     float getProgress();
 
     /**
-     * Get the previous tick's progress value.
-     *
-     * @return the last progress
+     * Returns the second animation phase used to derive entity displacement.
+     * The server advances it alongside {@code progress}; {@code startMoving}
+     * places it one step outside the normal interval, so it is not simply the
+     * previous tick's value.
      */
     float getLastProgress();
 
     /**
-     * Check if the piston animation has finished.
-     *
-     * @return true if finished
+     * Returns whether this component currently marks animation processing
+     * finished. The server changes this flag through preparation and
+     * completion; loading NBT alone does not reconstruct the flag from
+     * persisted state codes.
      */
     boolean isFinished();
 
     /**
-     * Get the list of attached block positions being moved.
-     *
-     * @return the attached block positions
+     * Returns a copied list of attached source-position references. The server
+     * copies the list container but retains its coordinate objects, so callers
+     * can modify the returned list independently while mutable positions remain
+     * shared.
      */
     List<Vector3ic> getAttachedBlocks();
 
     /**
-     * Prepare for extending animation. This sends initial state to client
-     * and must be called BEFORE creating MOVING_BLOCK entities.
-     *
-     * @param blocksToMove    the blocks to move
-     * @param originalStates  the original states of the blocks
+     * Prepares and broadcasts an extension before moving-block entities are
+     * created. The server shallowly copies source positions and original
+     * states, resets both phases to zero, and leaves temporary-block creation
+     * to the caller.
      */
     void preExtending(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates);
 
     /**
-     * Prepare for retracting animation. This sends initial state to client
-     * and must be called BEFORE creating MOVING_BLOCK entities.
-     *
-     * @param blocksToMove   the blocks to move (for sticky piston)
-     * @param originalStates the original states of the blocks
+     * Prepares and broadcasts a retraction before moving-block entities are
+     * created. The server shallowly copies source positions and original
+     * states, resets both phases to one, and leaves temporary-block creation to
+     * the caller.
      */
     void preRetracting(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates);
 
     /**
-     * Start the actual movement animation after MOVING_BLOCK entities are created.
-     * This adjusts lastProgress and schedules tick updates.
+     * Separates animation phases after the caller has created the moving
+     * blocks. The server adjusts only the second phase; callers must prepare
+     * movement first and continue normal ticking because this operation
+     * schedules no work.
      */
     void startMoving();
 
     /**
-     * Check if the piston is currently powered by redstone.
-     *
-     * @return true if powered
+     * Returns whether the piston currently remembers an active redstone input.
      */
     boolean isPowered();
 
     /**
-     * Set the powered state of the piston.
-     *
-     * @param powered true if powered
+     * Replaces the remembered redstone-input flag without directly starting
+     * piston movement.
      */
     void setPowered(boolean powered);
 
     /**
-     * Get the current state of the piston (for NBT).
-     * 0 = retracted, 1 = extending, 2 = extended, 3 = retracting
-     *
-     * @return the state
+     * Returns the retained piston state code used by NBT. Ordinary transitions
+     * use {@code 0} for retracted, {@code 1} for extending, {@code 2} for
+     * extended, and {@code 3} for retracting.
      */
     byte getState();
 
     /**
-     * Get the new state of the piston (for NBT).
-     *
-     * @return the new state
+     * Returns the paired target-state code retained for piston NBT
+     * serialization.
      */
     byte getNewState();
 }

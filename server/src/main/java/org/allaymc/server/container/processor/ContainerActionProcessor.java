@@ -22,84 +22,112 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * {@code ContainerActionProcessor} processes one action within an ordered item-stack
+ * request and supplies shared container lookup, slot translation, identity validation,
+ * and equipment placement rules. A request-local data map connects related actions such
+ * as recipe selection and output creation. Implementations apply their effects directly;
+ * the caller does not roll back earlier actions when a later action fails.
+ *
+ * <p>
+ * Container lookup prefers opened windows before held containers and resolves only the
+ * slot category from a full container name. Translation metadata preserves network and
+ * internal slot identities in both directions. Positive client stack IDs must match,
+ * while nonpositive IDs skip comparison. Fake slots dispatch click callbacks instead of
+ * allowing a transfer, and equipment placement checks distinguish offhand eligibility
+ * and armor positions.
+ *
  * @author daoge_cmd
  */
 public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
 
+    /**
+     * {@code ERROR_RESPONSE} is the shared failed-action result with no slot changes.
+     * Request processing uses its status to stop later actions without undoing earlier
+     * effects.
+     */
     ActionResponse ERROR_RESPONSE = new ActionResponse(false, List.of());
 
     /**
-     * Processes an item stack request action and returns the response.
-     *
-     * @param action             the specific {@link ItemStackRequestAction} to handle
-     * @param player             the {@link Player} who initiated the action
-     * @param currentActionIndex the index of this action within the request's action array
-     * @param actions            the full array of {@link ItemStackRequestAction} objects in the request
-     * @param dataPool           a {@link Map} for storing temporary data between actions in the request
-     * @return the {@link ActionResponse} indicating the result of processing the action
+     * Processes one action in its request context. A successful response contributes
+     * changed-slot data, a failed response stops remaining actions, and {@code null}
+     * contributes no response entry after any effects already applied. {@code dataPool}
+     * remains shared only among actions in this request.
      */
     ActionResponse handle(T action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool);
 
     /**
-     * Retrieves the type of action this processor handles.
-     *
-     * @return the {@link ItemStackRequestActionType} this processor is designed for
+     * Returns the request action type accepted by this handler.
      */
     ItemStackRequestActionType getType();
 
     /**
-     * Returns a default error response for failed actions.
-     *
-     * @return the predefined {@link #ERROR_RESPONSE} instance
+     * Returns the shared failed-action response with no container changes.
      */
     default ActionResponse error() {
         return ERROR_RESPONSE;
     }
 
     /**
-     * Validates whether the client's stack unique ID matches the expected server ID.
-     * <p>
-     * This method is used to ensure data integrity between client and server. If the client's
-     * stack unique ID is less than 0, it indicates the client is deferring to the server's
-     * data, typically in multi-action requests where the first action validates the ID.
-     *
-     * @param expectedId the expected stack unique ID from the server
-     * @param clientId   the stack unique ID provided by the client
-     * @return {@code true} if validation fails, {@code false} if validation passes
+     * Returns whether a positive client stack ID differs from the server ID. Zero and
+     * negative client values skip comparison, so this helper alone does not validate the
+     * identity of those requests.
      */
     default boolean failToValidateStackUniqueId(int expectedId, int clientId) {
-        // If the client's stackNetworkId is less than 0, it indicates that the client ensures data integrity and requests adherence to the server's data.
-        // This usually happens when an ItemStackRequest contains multiple actions with the same source/destination container.
-        // The first action checks the id, so subsequent actions do not need to repeat the check.
+        // Nonpositive client IDs defer to current server state; only positive IDs
+        // participate in this comparison, including later actions referencing earlier
+        // request results.
         return clientId > 0 && expectedId != clientId;
     }
 
     /**
-     * Returns the reachable container for the given container name. This includes opened containers and
-     * containers that the player holds.
+     * Resolves a reachable container by preferring an opened window over held storage
+     * with the same slot category. The dynamic name ID is ignored, and no matching
+     * container returns {@code null}.
      */
     @SuppressWarnings("unchecked")
     static <T extends Container> T getContainerFrom(Player player, FullContainerName containerName) {
         var playerImpl = (EntityPlayerImpl) player.getControlledEntity();
         var container = ((AllayPlayer) player).getOpenedContainer(containerName.container());
+        // Held storage remains reachable when no matching window is open; the slot
+        // category, rather than the dynamic container ID, selects this fallback.
         if (container == null) {
             container = ((EntityPlayerContainerHolderComponentImpl) playerImpl.getContainerHolderComponent()).getContainer(containerName.container());
         }
         return (T) container;
     }
 
+    /**
+     * Returns the network category for an internal slot using its container metadata.
+     * The container must have registered metadata and the index must address its slot
+     * table before this lookup.
+     */
     static ContainerSlotType getSlotType(Container container, int slot) {
         return ContainerNetworkInfo.getInfo(container.getContainerType()).getSlotType(slot);
     }
 
+    /**
+     * Translates an internal slot to its network index using the inverse metadata map.
+     * Missing metadata or an absent mapping fails rather than returning a sentinel slot
+     * index.
+     */
     static int toNetworkSlotIndex(Container container, int index) {
         return ContainerNetworkInfo.getInfo(container.getContainerType()).networkSlotIndexMapper().inverse().get(index);
     }
 
+    /**
+     * Translates a network slot to its internal index using container metadata. Missing
+     * metadata or an absent mapping fails rather than returning a sentinel, so callers
+     * must supply reachable mapped slots.
+     */
     static int fromNetworkSlotIndex(Container container, int index) {
         return ContainerNetworkInfo.getInfo(container.getContainerType()).networkSlotIndexMapper().get(index);
     }
 
+    /**
+     * Dispatches a click for a fake transfer endpoint and returns whether a fake
+     * container was found. Source takes precedence when both endpoints are fake; callers
+     * reject movement after a {@code true} result.
+     */
     static boolean tryHandleFakeContainer(Container source, int sourceSlot, Container destination, int destinationSlot) {
         if (source instanceof FakeContainerImpl fakeContainer) {
             fakeContainer.onClick(sourceSlot);
@@ -114,6 +142,17 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
         return false;
     }
 
+    /**
+     * Returns whether equipment placement permits the item in the specified container
+     * slot. Air always succeeds, allowing clearing or swapping an empty value regardless
+     * of equipment restrictions.
+     *
+     * <p>
+     * Offhand storage requires the allow-offhand item tag, while armor storage requires
+     * a wearable whose armor type matches the selected helmet, chestplate, leggings, or
+     * boots index. Other containers are accepted without recipe, capacity, or index
+     * validation here.
+     */
     static boolean canPlaceItemToSlot(Container container, int slot, ItemStack item) {
         if (item.getItemType() == ItemTypes.AIR) {
             return true;

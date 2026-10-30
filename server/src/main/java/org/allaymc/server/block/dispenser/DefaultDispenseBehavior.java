@@ -18,15 +18,27 @@ import org.joml.primitives.AABBd;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Default dispense behavior that tries to equip armor on nearby entities,
- * or drops the item with random motion if no entity can be equipped.
+ * {@code DefaultDispenseBehavior} attempts nearby armor equipping before falling
+ * back to one-item ejection. Supported armor selects a slot in the first eligible
+ * living entity with an empty armor position; other items and unsuccessful
+ * searches produce a copied dropped stack with randomized motion.
  *
  * @author daoge_cmd
  */
 public class DefaultDispenseBehavior implements DispenseBehavior {
 
+    /**
+     * {@code INSTANCE} is the shared ordinary dispensing fallback. Item-specific
+     * handlers delegate unsupported targets here for armor equip or one-item
+     * ejection.
+     */
     public static final DefaultDispenseBehavior INSTANCE = new DefaultDispenseBehavior();
 
+    /**
+     * Equips eligible armor first, otherwise drops one copied item with randomized
+     * motion. Both completed paths emit dispenser effects and return success,
+     * leaving the caller to consume the selected original item.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
         if (tryEquipArmor(block, face, item)) {
@@ -34,11 +46,17 @@ public class DefaultDispenseBehavior implements DispenseBehavior {
             return DispenseResult.success();
         }
 
+        // An unsupported armor item or a search without an eligible empty slot
+        // still needs an output action, so eject one item through the shared
+        // fallback path.
         dropItem(block, face, item);
         spawnDispenseEffects(block, face);
         return DispenseResult.success();
     }
 
+    /**
+     * Emits the dispenser click sound and directional shoot particle.
+     */
     protected void spawnDispenseEffects(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var center = MathUtils.center(block.getPosition());
@@ -46,6 +64,13 @@ public class DefaultDispenseBehavior implements DispenseBehavior {
         dimension.addParticle(center, new ShootParticle(face));
     }
 
+    /**
+     * Equips a single copied armor item on the first eligible nearby living
+     * entity. The candidate needs an armor container whose matching slot contains
+     * {@code null} or {@code ItemAirStack.AIR_STACK}; other stored stacks are
+     * retained. An unsupported item or an unsuccessful search returns
+     * {@code false}.
+     */
     protected boolean tryEquipArmor(Block block, BlockFace face, ItemStack item) {
         var armorSlot = getArmorSlot(item);
         if (armorSlot == -1) {
@@ -55,6 +80,8 @@ public class DefaultDispenseBehavior implements DispenseBehavior {
         var dimension = block.getDimension();
         var dispensePos = getDispensePosition(block, face);
 
+        // Search one block across and two blocks vertically around the ejection
+        // point.
         var aabb = new AABBd(
                 dispensePos.x - 0.5, dispensePos.y - 1, dispensePos.z - 0.5,
                 dispensePos.x + 0.5, dispensePos.y + 1, dispensePos.z + 0.5
@@ -87,6 +114,11 @@ public class DefaultDispenseBehavior implements DispenseBehavior {
         return false;
     }
 
+    /**
+     * Returns the armor slot index for a supported wearable stack. Helmet,
+     * chestplate, leggings, and boots use indices zero through three; an
+     * unsupported item returns {@code -1}.
+     */
     protected int getArmorSlot(ItemStack item) {
         if (item instanceof ItemHelmetStack) {
             return 0;
@@ -100,11 +132,17 @@ public class DefaultDispenseBehavior implements DispenseBehavior {
         return -1;
     }
 
+    /**
+     * Drops a single copied item at the dispenser output with randomized motion.
+     * The caller retains the original stack and performs inventory consumption
+     * after this behavior returns its success result.
+     */
     protected void dropItem(Block block, BlockFace face, ItemStack item) {
         var dimension = block.getDimension();
         var dispensePos = getDispensePosition(block, face);
 
         var random = ThreadLocalRandom.current();
+        // Select an outward horizontal speed between 0.2 and 0.3 before spread.
         var offset = random.nextDouble() * 0.1 + 0.2;
 
         var motion = new Vector3d();
@@ -112,6 +150,8 @@ public class DefaultDispenseBehavior implements DispenseBehavior {
         motion.y = 0.2;
         motion.z = face.getOffset().z() * offset;
 
+        // Independent Gaussian spread perturbs all axes after the outward motion
+        // is set, so ejected items do not share one exact flight direction.
         motion.x += random.nextGaussian() * 0.0075 * 6;
         motion.y += random.nextGaussian() * 0.0075 * 6;
         motion.z += random.nextGaussian() * 0.0075 * 6;
@@ -121,12 +161,20 @@ public class DefaultDispenseBehavior implements DispenseBehavior {
         dimension.dropItem(dropItem, dispensePos, motion);
     }
 
+    /**
+     * Returns a new output position shared by item ejection and armor search
+     * geometry. The position begins at the block center, moves outward along the
+     * face, and lowers by the face-dependent mouth adjustment.
+     */
     protected Vector3d getDispensePosition(Block block, BlockFace face) {
         var pos = MathUtils.center(block.getPosition());
+        // A 0.7-block face offset places the origin beyond the block boundary.
         pos.x += face.getOffset().x() * 0.7;
         pos.y += face.getOffset().y() * 0.7;
         pos.z += face.getOffset().z() * 0.7;
 
+        // Keep horizontal ejections below mid-height; vertical faces use a smaller
+        // downward adjustment.
         if (face.getAxis() == BlockFace.Axis.Y) {
             pos.y -= 0.125;
         } else {

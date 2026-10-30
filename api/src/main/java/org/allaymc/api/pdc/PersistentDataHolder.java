@@ -1,23 +1,19 @@
 package org.allaymc.api.pdc;
 
 /**
- * The {@link PersistentDataHolder} interface defines an object that can store custom persistent metadata.
- *
- * <p>
- * For read-only operations, prefer using {@link PersistentDataViewHolder}, as it supports a wider range of types.
- * </p>
+ * {@code PersistentDataHolder} represents an object with editable custom persistent metadata.
+ * Its container stores namespaced entries separately from the object's built-in Minecraft data,
+ * and its more specific return type lets callers update the same metadata exposed through
+ * {@link PersistentDataViewHolder}.
  *
  * @author IWareQ | Bukkit
  */
 public interface PersistentDataHolder extends PersistentDataViewHolder {
     /**
-     * Returns a custom tag container for storing tags on the object.
-     * <p>
-     * Note that all tags stored in this container are placed under a custom namespace.
-     * This means that modifying default tags (such as Minecraft's built-in tags) via this container is not possible.
-     * </p>
-     *
-     * @return the persistent metadata container associated with this object
+     * Returns the object's editable custom metadata container. Changes affect custom entries used
+     * by the object's persistence path; the container does not provide access to replace the
+     * object's
+     * built-in Minecraft tags.
      */
     PersistentDataContainer getPersistentDataContainer();
 }

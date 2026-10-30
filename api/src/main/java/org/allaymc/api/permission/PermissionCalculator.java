@@ -1,17 +1,21 @@
 package org.allaymc.api.permission;
 
 /**
- * PermissionCalculator is used to calculate whether a permissible object has a certain permission.
+ * {@code PermissionCalculator} supplies permission decisions for a subject
+ * represented by its implementation. Each query distinguishes a grant, an
+ * explicit denial, and an undefined permission, allowing {@link Permissible}
+ * consumers to retain that distinction before converting decisions to booleans.
  *
  * @author daoge_cmd
  */
 public interface PermissionCalculator {
     /**
-     * Calculates the {@link Tristate} state for the given permission.
-     * This method is used to determine if a given permission is positively granted,
-     * explicitly denied, or undefined for a permissible object.
+     * Calculates the permission decision for the implementation's subject.
+     * Implementations return {@link Tristate#TRUE} for a grant,
+     * {@link Tristate#FALSE} for an explicit denial, or
+     * {@link Tristate#UNDEFINED} when they supply no decision.
      *
-     * @param permission the {@link Tristate} state of the permission
+     * @param permission the permission name whose decision is requested
      */
     Tristate calculatePermission(String permission);
 }

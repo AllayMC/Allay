@@ -7,51 +7,50 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Shared component for firework rocket items, including flight duration and explosion payloads.
+ * {@code ItemFireworkRocketBaseComponent} exposes a rocket's base flight
+ * duration and explosion definitions. Rocket launching converts the duration
+ * into randomized game ticks and passes the configured explosions to the
+ * entity, while item serialization stores flight duration as a byte.
  *
  * @author daoge_cmd
  */
 public interface ItemFireworkRocketBaseComponent extends ItemBaseComponent {
     /**
-     * Retrieves the duration of the firework in seconds.
-     *
-     * @return The duration of the firework in seconds. Returns an integer value representing the time
-     * the firework will last when launched
+     * Returns the base flight duration in whole seconds before randomization.
      */
     int getDuration();
 
     /**
-     * Calculates and retrieves a randomized duration for the firework in ticks.
-     * The duration is derived from the firework's base duration (in seconds) multiplied by 20 (to convert to ticks),
-     * with an additional random value between 0 (inclusive) and 12 (exclusive) added for a variance effect.
-     *
-     * @return The randomized firework duration in ticks as an integer value.
+     * Returns a newly randomized rocket lifetime in game ticks. The
+     * calculation converts {@code getDuration()} from seconds at twenty ticks
+     * per second and adds zero through eleven extra ticks.
      */
     default int getRandomizedDuration() {
+        // Twenty ticks per second converts flight seconds; the extra ticks vary launch lifetimes.
         return getDuration() * 20 + ThreadLocalRandom.current().nextInt(12);
     }
 
     /**
-     * Sets the duration for the firework rocket. The duration determines the time in seconds for which
-     * the firework will travel before exploding.
-     *
-     * @param duration the duration of the firework in seconds. It must be a non-negative integer.
+     * Replaces the base flight duration used for subsequent rocket launches.
+     * The server setter stores {@code duration} without validation, and
+     * serialization narrows the stored integer to a signed byte.
      */
     void setDuration(int duration);
 
     /**
-     * Retrieves the set of firework explosions associated with the firework rocket.
-     *
-     * @return a {@code Set} of {@code FireworkExplosion} objects representing the explosions configured for the firework rocket
+     * Returns the explosion definitions currently configured for this rocket.
+     * The server returns its backing set directly, so mutations through that
+     * set affect subsequent launching and serialization despite the view
+     * annotation.
      */
     @UnmodifiableView
     Set<FireworkExplosion> getExplosions();
 
     /**
-     * Sets the firework explosions associated with this item.
-     *
-     * @param explosions a set of {@link FireworkExplosion} that specifies the various explosions to be used for this
-     *                   firework rocket. Passing an empty set will result in no explosions
+     * Replaces the rocket's configured explosion definitions with the supplied
+     * set. The server retains {@code explosions} directly, and subsequent tag
+     * loading adds entries to it; callers must provide mutable storage when
+     * loading is required.
      */
     void setExplosions(Set<FireworkExplosion> explosions);
 }

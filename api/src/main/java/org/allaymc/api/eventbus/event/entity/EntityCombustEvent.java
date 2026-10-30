@@ -8,7 +8,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when an entity is set on fire.
+ * {@code EntityCombustEvent} carries a proposed fire duration and its block or
+ * entity source. Contact handlers dispatch this event before assigning fire
+ * ticks; cancellation prevents that assignment, and an accepted event supplies
+ * the listener-adjusted {@code onFireTicks} value to the living component.
  *
  * @author daoge_cmd
  */
@@ -17,20 +20,30 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class EntityCombustEvent extends EntityEvent implements CancellableEvent {
 
     /**
-     * The type of the combuster.
+     * Category identifying the reported block or entity combustion source.
      */
     protected final CombusterType combusterType;
     /**
-     * The block or entity that caused the combustion.
+     * {@code combuster} retains the reported source object without conversion.
+     * Callers use {@code combusterType} to interpret it as the block or entity
+     * responsible for the attempted ignition.
      */
     protected final Object combuster;
 
     /**
-     * The number of ticks the entity should remain on fire.
+     * {@code onFireTicks} holds the proposed burning duration in ticks.
+     * Contact handlers read the listener-adjusted value only after accepting
+     * this event's cancellation result.
      */
     @Setter
     protected int onFireTicks;
 
+    /**
+     * Creates a combustion proposal retaining its entity and source
+     * references. The constructor records the duration without applying fire
+     * or validating that {@code combuster} matches the supplied
+     * {@code combusterType}.
+     */
     public EntityCombustEvent(Entity entity, CombusterType combusterType, Object combuster, int onFireTicks) {
         super(entity);
         this.combusterType = combusterType;
@@ -39,10 +52,17 @@ public class EntityCombustEvent extends EntityEvent implements CancellableEvent 
     }
 
     /**
-     * The type of source that caused the combustion.
+     * {@code CombusterType} identifies whether a combustion source is a block
+     * or entity.
      */
     public enum CombusterType {
+        /**
+         * Block source for the attempted entity ignition.
+         */
         BLOCK,
+        /**
+         * Entity source for the attempted entity ignition.
+         */
         ENTITY
     }
 }

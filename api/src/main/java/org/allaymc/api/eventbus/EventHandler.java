@@ -6,7 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation to mark a method as an event handler.
+ * {@code EventHandler} marks a method for discovery when its containing listener
+ * is registered.
+ * A handler must return {@code void} and accept one parameter derived from the event
+ * base class. Its parameter selects an exact event class; these options govern
+ * dispatch mode, priority, and whether cancellation suppresses the invocation.
  *
  * @author daoge_cmd
  */
@@ -14,23 +18,31 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface EventHandler {
     /**
-     * Whether the event handler should be called asynchronously.
+     * Returns whether dispatch submits this handler to the bus's executor.
+     * The default is synchronous execution on the dispatching thread; asynchronous
+     * execution shares the event object and is not awaited by the event call.
      *
-     * @return {@code true} if the event handler should be called asynchronously, otherwise {@code false}
+     * @return {@code true} for executor submission, otherwise {@code false}
      */
     boolean async() default false;
 
     /**
-     * The priority of the event handler. Event handler with the bigger priority will be called first.
+     * Returns the handler's dispatch priority, with larger values visited first.
+     * The default is zero. Priority orders asynchronous submissions along with
+     * synchronous calls, but does not establish asynchronous start or completion order.
      *
      * @return the priority of the event handler
      */
     int priority() default 0;
 
     /**
-     * Whether cancelled events should be ignored by this handler.
+     * Returns whether cancellation should suppress this handler's invocation.
+     * The default is {@code false}. The server implementation checks this condition
+     * before asynchronous submission and again inside the submitted task, using
+     * the shared event's cancellation state at each check.
      *
-     * @return {@code true} if the event handler should not be invoked for cancelled events, otherwise {@code false}
+     * @return {@code true} to suppress invocation for cancelled events, otherwise
+     *         {@code false}
      */
     boolean ignoreCancelled() default false;
 }

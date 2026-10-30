@@ -10,7 +10,10 @@ import org.allaymc.api.item.ItemStack;
 import org.joml.Vector3fc;
 
 /**
- * Event called when a player interacts with an entity.
+ * {@code PlayerInteractEntityEvent} describes a player's interaction with a target
+ * entity using the held stack. The inventory transaction processor dispatches it
+ * before invoking item or target interaction behavior; cancellation suppresses those
+ * calls, and the event retains the supplied target, stack, and click vector.
  *
  * @author daoge_cmd
  */
@@ -19,18 +22,25 @@ import org.joml.Vector3fc;
 public class PlayerInteractEntityEvent extends PlayerEvent implements CancellableEvent {
 
     /**
-     * The entity that the player is interacting with.
+     * Entity targeted by the interaction.
      */
     protected Entity entity;
     /**
-     * The item stack that the player is used to interact with the entity.
+     * {@code itemStack} retains the player's mutable held stack. The transaction
+     * processor invokes interaction behavior on that same item after approval.
      */
     protected ItemStack itemStack;
     /**
-     * The position where the player clicked on the entity.
+     * {@code clickPos} retains the packet-derived click vector. The constructor does
+     * not copy or normalize the supplied coordinates.
      */
     protected Vector3fc clickPos;
 
+    /**
+     * Creates a {@code PlayerInteractEntityEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerInteractEntityEvent(EntityPlayer player, Entity entity, ItemStack itemStack, Vector3fc clickPos) {
         super(player);
         this.entity = entity;

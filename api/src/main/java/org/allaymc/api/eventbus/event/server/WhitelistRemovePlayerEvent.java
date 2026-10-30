@@ -7,7 +7,11 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player is removed from the whitelist.
+ * {@code WhitelistRemovePlayerEvent} represents a request to remove an existing
+ * whitelist entry for a player.
+ * Cancellation preserves membership and prevents the accompanying disconnects.
+ * On acceptance, the player manager removes the entry and disconnects matching
+ * online players, including when whitelist enforcement is currently disabled.
  *
  * @author Dhaiven
  */

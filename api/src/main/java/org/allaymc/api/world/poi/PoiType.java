@@ -1,11 +1,12 @@
 package org.allaymc.api.world.poi;
 
 /**
- * Represents a Point of Interest type. Used to index "interesting" block positions
- * (portals, beds, job sites, etc.) per chunk for fast spatial queries.
- * <p>
- * Built-in POI types are available in {@link PoiTypes}.
- * Custom POI types can be registered via {@link org.allaymc.api.registry.Registries#POI_TYPES}.
+ * {@code PoiType} represents a named kind of point of interest stored at chunk-local positions.
+ * Built-in types are available in {@link PoiTypes}; block-to-type associations
+ * are registered through {@link org.allaymc.api.registry.Registries#POI_TYPES},
+ * and record equality compares names rather than object identity.
+ *
+ * @param name persistent point-of-interest type name
  *
  * @author daoge_cmd
  */

@@ -1,7 +1,376 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
-import org.allaymc.api.block.interfaces.*;
+import org.allaymc.api.block.interfaces.BlockActivatorRailBehavior;
+import org.allaymc.api.block.interfaces.BlockAirBehavior;
+import org.allaymc.api.block.interfaces.BlockAllowBehavior;
+import org.allaymc.api.block.interfaces.BlockAmethystBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockAmethystClusterBehavior;
+import org.allaymc.api.block.interfaces.BlockAncientDebrisBehavior;
+import org.allaymc.api.block.interfaces.BlockAndesiteBehavior;
+import org.allaymc.api.block.interfaces.BlockAnvilBehavior;
+import org.allaymc.api.block.interfaces.BlockAzaleaBehavior;
+import org.allaymc.api.block.interfaces.BlockBambooBehavior;
+import org.allaymc.api.block.interfaces.BlockBambooMosaicBehavior;
+import org.allaymc.api.block.interfaces.BlockBarrelBehavior;
+import org.allaymc.api.block.interfaces.BlockBarrierBehavior;
+import org.allaymc.api.block.interfaces.BlockBasaltBehavior;
+import org.allaymc.api.block.interfaces.BlockBeaconBehavior;
+import org.allaymc.api.block.interfaces.BlockBedBehavior;
+import org.allaymc.api.block.interfaces.BlockBedrockBehavior;
+import org.allaymc.api.block.interfaces.BlockBeeNestBehavior;
+import org.allaymc.api.block.interfaces.BlockBeehiveBehavior;
+import org.allaymc.api.block.interfaces.BlockBeetrootBehavior;
+import org.allaymc.api.block.interfaces.BlockBellBehavior;
+import org.allaymc.api.block.interfaces.BlockBigDripleafBehavior;
+import org.allaymc.api.block.interfaces.BlockBigFlower;
+import org.allaymc.api.block.interfaces.BlockBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockBlastFurnaceBehavior;
+import org.allaymc.api.block.interfaces.BlockBoneBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBookshelfBehavior;
+import org.allaymc.api.block.interfaces.BlockBorderBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBrewingStandBehavior;
+import org.allaymc.api.block.interfaces.BlockBrickBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBricksBehavior;
+import org.allaymc.api.block.interfaces.BlockBrownMushroomBehavior;
+import org.allaymc.api.block.interfaces.BlockBrownMushroomBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBubbleColumnBehavior;
+import org.allaymc.api.block.interfaces.BlockBuddingAmethystBehavior;
+import org.allaymc.api.block.interfaces.BlockBushBehavior;
+import org.allaymc.api.block.interfaces.BlockButtonBehavior;
+import org.allaymc.api.block.interfaces.BlockCactusBehavior;
+import org.allaymc.api.block.interfaces.BlockCactusFlowerBehavior;
+import org.allaymc.api.block.interfaces.BlockCakeBehavior;
+import org.allaymc.api.block.interfaces.BlockCalciteBehavior;
+import org.allaymc.api.block.interfaces.BlockCalibratedSculkSensorBehavior;
+import org.allaymc.api.block.interfaces.BlockCameraBehavior;
+import org.allaymc.api.block.interfaces.BlockCampfireBehavior;
+import org.allaymc.api.block.interfaces.BlockCandleBehavior;
+import org.allaymc.api.block.interfaces.BlockCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.BlockCarpetBehavior;
+import org.allaymc.api.block.interfaces.BlockCarrotsBehavior;
+import org.allaymc.api.block.interfaces.BlockCartographyTableBehavior;
+import org.allaymc.api.block.interfaces.BlockCarvedPumpkinBehavior;
+import org.allaymc.api.block.interfaces.BlockCauldronBehavior;
+import org.allaymc.api.block.interfaces.BlockCaveVinesBehavior;
+import org.allaymc.api.block.interfaces.BlockCaveVinesBodyWithBerriesBehavior;
+import org.allaymc.api.block.interfaces.BlockCaveVinesHeadWithBerriesBehavior;
+import org.allaymc.api.block.interfaces.BlockChainCommandBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockChalkboardBehavior;
+import org.allaymc.api.block.interfaces.BlockChemicalHeatBehavior;
+import org.allaymc.api.block.interfaces.BlockChestBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledBookshelfBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledCinnabarBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledPolishedBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledQuartzBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledSulfurBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockChorusFlowerBehavior;
+import org.allaymc.api.block.interfaces.BlockChorusPlantBehavior;
+import org.allaymc.api.block.interfaces.BlockCinnabarBehavior;
+import org.allaymc.api.block.interfaces.BlockClayBehavior;
+import org.allaymc.api.block.interfaces.BlockClientRequestPlaceholderBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCoalBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCoarseDirtBehavior;
+import org.allaymc.api.block.interfaces.BlockCobbledDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockCobblestoneBehavior;
+import org.allaymc.api.block.interfaces.BlockCocoaBehavior;
+import org.allaymc.api.block.interfaces.BlockCommandBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockComparatorBehavior;
+import org.allaymc.api.block.interfaces.BlockComposterBehavior;
+import org.allaymc.api.block.interfaces.BlockCompoundCreatorBehavior;
+import org.allaymc.api.block.interfaces.BlockConcreteBehavior;
+import org.allaymc.api.block.interfaces.BlockConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.BlockConduitBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperBarsBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperChainBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperGolemStatueBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperLanternBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralFanBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
+import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
+import org.allaymc.api.block.interfaces.BlockCraftingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockCreakingHeartBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonFungusBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonNyliumBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockCryingObsidianBehavior;
+import org.allaymc.api.block.interfaces.BlockDarkPrismarineBehavior;
+import org.allaymc.api.block.interfaces.BlockDaylightDetectorBehavior;
+import org.allaymc.api.block.interfaces.BlockDeadbushBehavior;
+import org.allaymc.api.block.interfaces.BlockDecoratedPotBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateTilesBehavior;
+import org.allaymc.api.block.interfaces.BlockDenyBehavior;
+import org.allaymc.api.block.interfaces.BlockDeprecatedAnvilBehavior;
+import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock1Behavior;
+import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock2Behavior;
+import org.allaymc.api.block.interfaces.BlockDetectorRailBehavior;
+import org.allaymc.api.block.interfaces.BlockDiamondBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockDioriteBehavior;
+import org.allaymc.api.block.interfaces.BlockDirtBehavior;
+import org.allaymc.api.block.interfaces.BlockDirtWithRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockDispenserBehavior;
+import org.allaymc.api.block.interfaces.BlockDoorBehavior;
+import org.allaymc.api.block.interfaces.BlockDoubleCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.BlockDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.BlockDragonEggBehavior;
+import org.allaymc.api.block.interfaces.BlockDriedGhastBehavior;
+import org.allaymc.api.block.interfaces.BlockDriedKelpBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockDripstoneBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockDropperBehavior;
+import org.allaymc.api.block.interfaces.BlockElementBehavior;
+import org.allaymc.api.block.interfaces.BlockEmeraldBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockEnchantingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockEndGatewayBehavior;
+import org.allaymc.api.block.interfaces.BlockEndPortalBehavior;
+import org.allaymc.api.block.interfaces.BlockEndPortalFrameBehavior;
+import org.allaymc.api.block.interfaces.BlockEndRodBehavior;
+import org.allaymc.api.block.interfaces.BlockEndStoneBehavior;
+import org.allaymc.api.block.interfaces.BlockEnderChestBehavior;
+import org.allaymc.api.block.interfaces.BlockExposedCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockFarmlandBehavior;
+import org.allaymc.api.block.interfaces.BlockFenceBehavior;
+import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
+import org.allaymc.api.block.interfaces.BlockFernBehavior;
+import org.allaymc.api.block.interfaces.BlockFireBehavior;
+import org.allaymc.api.block.interfaces.BlockFireflyBushBehavior;
+import org.allaymc.api.block.interfaces.BlockFletchingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockFlowerPotBehavior;
+import org.allaymc.api.block.interfaces.BlockFloweringAzaleaBehavior;
+import org.allaymc.api.block.interfaces.BlockFrameBehavior;
+import org.allaymc.api.block.interfaces.BlockFrogSpawnBehavior;
+import org.allaymc.api.block.interfaces.BlockFurnaceBehavior;
+import org.allaymc.api.block.interfaces.BlockGildedBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockGlassBehavior;
+import org.allaymc.api.block.interfaces.BlockGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.BlockGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowFrameBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowLichenBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowingobsidianBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockGoldBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockGoldenRailBehavior;
+import org.allaymc.api.block.interfaces.BlockGraniteBehavior;
+import org.allaymc.api.block.interfaces.BlockGrassBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockGrassPathBehavior;
+import org.allaymc.api.block.interfaces.BlockGravelBehavior;
+import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockHangingRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockHangingSignBehavior;
+import org.allaymc.api.block.interfaces.BlockHardenedClayBehavior;
+import org.allaymc.api.block.interfaces.BlockHayBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHeadBehavior;
+import org.allaymc.api.block.interfaces.BlockHeavyCoreBehavior;
+import org.allaymc.api.block.interfaces.BlockHoneyBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHoneycombBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHopperBehavior;
+import org.allaymc.api.block.interfaces.BlockIceBehavior;
+import org.allaymc.api.block.interfaces.BlockInfestedBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockInfoUpdate2Behavior;
+import org.allaymc.api.block.interfaces.BlockInfoUpdateBehavior;
+import org.allaymc.api.block.interfaces.BlockInvisibleBedrockBehavior;
+import org.allaymc.api.block.interfaces.BlockIronBarsBehavior;
+import org.allaymc.api.block.interfaces.BlockIronBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockIronChainBehavior;
+import org.allaymc.api.block.interfaces.BlockIronDoorBehavior;
+import org.allaymc.api.block.interfaces.BlockIronTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.BlockJigsawBehavior;
+import org.allaymc.api.block.interfaces.BlockJukeboxBehavior;
+import org.allaymc.api.block.interfaces.BlockKelpBehavior;
+import org.allaymc.api.block.interfaces.BlockLabTableBehavior;
+import org.allaymc.api.block.interfaces.BlockLadderBehavior;
+import org.allaymc.api.block.interfaces.BlockLanternBehavior;
+import org.allaymc.api.block.interfaces.BlockLapisBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockLargeFernBehavior;
+import org.allaymc.api.block.interfaces.BlockLeavesBehavior;
+import org.allaymc.api.block.interfaces.BlockLecternBehavior;
+import org.allaymc.api.block.interfaces.BlockLeverBehavior;
+import org.allaymc.api.block.interfaces.BlockLightBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockLightningRodBehavior;
+import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
+import org.allaymc.api.block.interfaces.BlockLitPumpkinBehavior;
+import org.allaymc.api.block.interfaces.BlockLodestoneBehavior;
+import org.allaymc.api.block.interfaces.BlockLoomBehavior;
+import org.allaymc.api.block.interfaces.BlockMagmaBehavior;
+import org.allaymc.api.block.interfaces.BlockMangrovePropaguleBehavior;
+import org.allaymc.api.block.interfaces.BlockMangroveRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockMaterialReducerBehavior;
+import org.allaymc.api.block.interfaces.BlockMelonBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockMelonStemBehavior;
+import org.allaymc.api.block.interfaces.BlockMobSpawnerBehavior;
+import org.allaymc.api.block.interfaces.BlockMossBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockMossyCobblestoneBehavior;
+import org.allaymc.api.block.interfaces.BlockMovingBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockMudBehavior;
+import org.allaymc.api.block.interfaces.BlockMuddyMangroveRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockMushroomStemBehavior;
+import org.allaymc.api.block.interfaces.BlockMyceliumBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherBrickBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherSproutsBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherWartBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherWartBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockNetheriteBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherrackBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherreactorBehavior;
+import org.allaymc.api.block.interfaces.BlockNoteblockBehavior;
+import org.allaymc.api.block.interfaces.BlockObserverBehavior;
+import org.allaymc.api.block.interfaces.BlockObsidianBehavior;
+import org.allaymc.api.block.interfaces.BlockOchreFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockOreBehavior;
+import org.allaymc.api.block.interfaces.BlockOxidizedCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockPackedMudBehavior;
+import org.allaymc.api.block.interfaces.BlockPaleHangingMossBehavior;
+import org.allaymc.api.block.interfaces.BlockPaleMossBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockPearlescentFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockPistonArmCollisionBehavior;
+import org.allaymc.api.block.interfaces.BlockPistonBehavior;
+import org.allaymc.api.block.interfaces.BlockPitcherCropBehavior;
+import org.allaymc.api.block.interfaces.BlockPlanksBehavior;
+import org.allaymc.api.block.interfaces.BlockPlantPile;
+import org.allaymc.api.block.interfaces.BlockPodzolBehavior;
+import org.allaymc.api.block.interfaces.BlockPointedDripstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedAndesiteBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedBasaltBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedCinnabarBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedDioriteBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedGraniteBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedSulfurBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockPortalBehavior;
+import org.allaymc.api.block.interfaces.BlockPotatoesBehavior;
+import org.allaymc.api.block.interfaces.BlockPotentSulfurBehavior;
+import org.allaymc.api.block.interfaces.BlockPowderSnowBehavior;
+import org.allaymc.api.block.interfaces.BlockPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockPrismarineBehavior;
+import org.allaymc.api.block.interfaces.BlockPumpkinBehavior;
+import org.allaymc.api.block.interfaces.BlockPumpkinStemBehavior;
+import org.allaymc.api.block.interfaces.BlockPurpurBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockPurpurPillarBehavior;
+import org.allaymc.api.block.interfaces.BlockQuartzBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockQuartzPillarBehavior;
+import org.allaymc.api.block.interfaces.BlockRailBehavior;
+import org.allaymc.api.block.interfaces.BlockRawCopperBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRawGoldBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRawIronBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRedMushroomBehavior;
+import org.allaymc.api.block.interfaces.BlockRedMushroomBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRedNetherBrickBehavior;
+import org.allaymc.api.block.interfaces.BlockRedSandBehavior;
+import org.allaymc.api.block.interfaces.BlockRedShrubBehavior;
+import org.allaymc.api.block.interfaces.BlockRedstoneBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRedstoneLampBehavior;
+import org.allaymc.api.block.interfaces.BlockRedstoneWireBehavior;
+import org.allaymc.api.block.interfaces.BlockReedsBehavior;
+import org.allaymc.api.block.interfaces.BlockReinforcedDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockRepeaterBehavior;
+import org.allaymc.api.block.interfaces.BlockRepeatingCommandBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockReserved6Behavior;
+import org.allaymc.api.block.interfaces.BlockResinBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockResinClumpBehavior;
+import org.allaymc.api.block.interfaces.BlockRespawnAnchorBehavior;
+import org.allaymc.api.block.interfaces.BlockSandBehavior;
+import org.allaymc.api.block.interfaces.BlockSandstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockSaplingBehavior;
+import org.allaymc.api.block.interfaces.BlockScaffoldingBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkCatalystBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkSensorBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkShriekerBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkVeinBehavior;
+import org.allaymc.api.block.interfaces.BlockSeaLanternBehavior;
+import org.allaymc.api.block.interfaces.BlockSeaPickleBehavior;
+import org.allaymc.api.block.interfaces.BlockSeagrassBehavior;
+import org.allaymc.api.block.interfaces.BlockShelfBehavior;
+import org.allaymc.api.block.interfaces.BlockShelfMushroomBehavior;
+import org.allaymc.api.block.interfaces.BlockShortDryGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockShortGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockShroomlightBehavior;
+import org.allaymc.api.block.interfaces.BlockShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.BlockSignBehavior;
+import org.allaymc.api.block.interfaces.BlockSlabBehavior;
+import org.allaymc.api.block.interfaces.BlockSlimeBehavior;
+import org.allaymc.api.block.interfaces.BlockSmallDripleafBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockSmallFlower;
+import org.allaymc.api.block.interfaces.BlockSmithingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockSmokerBehavior;
+import org.allaymc.api.block.interfaces.BlockSmoothBasaltBehavior;
+import org.allaymc.api.block.interfaces.BlockSmoothQuartzBehavior;
+import org.allaymc.api.block.interfaces.BlockSmoothStoneBehavior;
+import org.allaymc.api.block.interfaces.BlockSnifferEggBehavior;
+import org.allaymc.api.block.interfaces.BlockSnowBehavior;
+import org.allaymc.api.block.interfaces.BlockSnowLayerBehavior;
+import org.allaymc.api.block.interfaces.BlockSoulSandBehavior;
+import org.allaymc.api.block.interfaces.BlockSoulSoilBehavior;
+import org.allaymc.api.block.interfaces.BlockSpongeBehavior;
+import org.allaymc.api.block.interfaces.BlockSporeBlossomBehavior;
+import org.allaymc.api.block.interfaces.BlockStairsBehavior;
+import org.allaymc.api.block.interfaces.BlockStandingBannerBehavior;
+import org.allaymc.api.block.interfaces.BlockStickyPistonArmCollisionBehavior;
+import org.allaymc.api.block.interfaces.BlockStickyPistonBehavior;
+import org.allaymc.api.block.interfaces.BlockStoneBehavior;
+import org.allaymc.api.block.interfaces.BlockStonecutterBehavior;
+import org.allaymc.api.block.interfaces.BlockStonecutterBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockStrawBedBehavior;
+import org.allaymc.api.block.interfaces.BlockStructureBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockStructureVoidBehavior;
+import org.allaymc.api.block.interfaces.BlockSulfurBehavior;
+import org.allaymc.api.block.interfaces.BlockSulfurSpikeBehavior;
+import org.allaymc.api.block.interfaces.BlockSuspiciousGravelBehavior;
+import org.allaymc.api.block.interfaces.BlockSuspiciousSandBehavior;
+import org.allaymc.api.block.interfaces.BlockSweetBerryBushBehavior;
+import org.allaymc.api.block.interfaces.BlockTallDryGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockTallGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockTargetBehavior;
+import org.allaymc.api.block.interfaces.BlockTerracottaBehavior;
+import org.allaymc.api.block.interfaces.BlockTntBehavior;
+import org.allaymc.api.block.interfaces.BlockTorchBehavior;
+import org.allaymc.api.block.interfaces.BlockTorchflowerCropBehavior;
+import org.allaymc.api.block.interfaces.BlockTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.BlockTrappedChestBehavior;
+import org.allaymc.api.block.interfaces.BlockTrialSpawnerBehavior;
+import org.allaymc.api.block.interfaces.BlockTripWireBehavior;
+import org.allaymc.api.block.interfaces.BlockTripwireHookBehavior;
+import org.allaymc.api.block.interfaces.BlockTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockTurtleEggBehavior;
+import org.allaymc.api.block.interfaces.BlockTwistingVinesBehavior;
+import org.allaymc.api.block.interfaces.BlockUnderwaterTntBehavior;
+import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
+import org.allaymc.api.block.interfaces.BlockVaultBehavior;
+import org.allaymc.api.block.interfaces.BlockVerdantFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockVineBehavior;
+import org.allaymc.api.block.interfaces.BlockWallBannerBehavior;
+import org.allaymc.api.block.interfaces.BlockWallBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedFungusBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedNyliumBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedWartBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockWaterlilyBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedExposedCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedOxidizedCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedWeatheredCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockWeatheredCopperChestBehavior;
+import org.allaymc.api.block.interfaces.BlockWebBehavior;
+import org.allaymc.api.block.interfaces.BlockWeepingVinesBehavior;
+import org.allaymc.api.block.interfaces.BlockWetSpongeBehavior;
+import org.allaymc.api.block.interfaces.BlockWheatBehavior;
+import org.allaymc.api.block.interfaces.BlockWoodBehavior;
+import org.allaymc.api.block.interfaces.BlockWoolBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 
 @MinecraftVersionSensitive
@@ -25,6 +394,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> ACACIA_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> ACACIA_FENCE;
 
     /**
@@ -78,6 +453,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> ACACIA_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -139,6 +515,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> ANDESITE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -205,6 +582,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> BAMBOO_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> BAMBOO_FENCE;
 
     /**
@@ -235,6 +618,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> BAMBOO_MOSAIC_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -265,6 +649,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> BAMBOO_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -327,7 +712,7 @@ public final class BlockTypes {
     public static BlockType<BlockBeehiveBehavior> BEEHIVE;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockBeetrootBehavior> BEETROOT;
 
@@ -364,6 +749,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> BIRCH_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> BIRCH_FENCE;
 
     /**
@@ -417,6 +808,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> BIRCH_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -459,7 +851,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> BLACK_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> BLACK_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> BLACK_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> BLACK_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> BLACK_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -470,11 +879,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> BLACK_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> BLACK_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> BLACK_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> BLACK_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> BLACK_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> BLACK_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> BLACK_WOOL_STAIRS;
 
     public static BlockType<BlockBlackstoneBehavior> BLACKSTONE;
 
@@ -489,6 +921,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> BLACKSTONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -523,7 +956,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> BLUE_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> BLUE_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> BLUE_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> BLUE_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> BLUE_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -538,11 +988,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> BLUE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> BLUE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> BLUE_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> BLUE_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> BLUE_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> BLUE_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> BLUE_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#DEPRECATED}
@@ -595,6 +1068,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -624,7 +1098,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> BROWN_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> BROWN_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> BROWN_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> BROWN_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> BROWN_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -642,11 +1133,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> BROWN_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> BROWN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> BROWN_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> BROWN_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> BROWN_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> BROWN_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> BROWN_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#DRAG_DOWN}
@@ -711,7 +1225,7 @@ public final class BlockTypes {
     public static BlockType<BlockCandleCakeBehavior> CANDLE_CAKE;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockCarrotsBehavior> CARROTS;
 
@@ -775,6 +1289,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> CHERRY_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> CHERRY_FENCE;
 
     /**
@@ -828,6 +1348,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> CHERRY_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -920,6 +1441,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> CINNABAR_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -947,6 +1469,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> CINNABAR_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -986,6 +1509,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> COBBLED_DEEPSLATE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1065,6 +1589,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockConduitBehavior> CONDUIT;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> COPPER_BARS;
 
     public static BlockType<BlockCopperBehavior> COPPER_BLOCK;
@@ -1171,6 +1701,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> CRIMSON_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> CRIMSON_FENCE;
 
     /**
@@ -1219,6 +1755,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> CRIMSON_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1256,6 +1793,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1300,7 +1838,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> CYAN_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> CYAN_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> CYAN_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> CYAN_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> CYAN_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -1311,11 +1866,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> CYAN_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> CYAN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> CYAN_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> CYAN_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> CYAN_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> CYAN_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> CYAN_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -1343,6 +1921,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> DARK_OAK_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> DARK_OAK_FENCE;
 
     /**
@@ -1396,6 +1980,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> DARK_OAK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1426,6 +2011,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> DARK_PRISMARINE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1544,6 +2130,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> DEEPSLATE_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1587,6 +2174,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> DEEPSLATE_TILE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1643,6 +2231,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> DIORITE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1945,6 +2534,7 @@ public final class BlockTypes {
     public static BlockType<BlockEnchantingTableBehavior> ENCHANTING_TABLE;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -1997,6 +2587,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> EXPOSED_COPPER;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> EXPOSED_COPPER_BARS;
 
     /**
@@ -2050,6 +2646,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> EXPOSED_CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -2143,6 +2740,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> GLASS_PANE;
 
     /**
@@ -2186,6 +2789,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> GRANITE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -2221,7 +2825,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> GRAY_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> GRAY_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> GRAY_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> GRAY_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> GRAY_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -2232,11 +2853,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> GRAY_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> GRAY_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> GRAY_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> GRAY_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> GRAY_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> GRAY_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> GRAY_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -2253,7 +2897,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> GREEN_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> GREEN_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> GREEN_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> GREEN_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> GREEN_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -2264,11 +2925,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> GREEN_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> GREEN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> GREEN_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> GREEN_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> GREEN_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> GREEN_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> GREEN_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#ATTACHMENT}
@@ -2280,70 +2964,172 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> HARD_BLACK_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_BLACK_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_BLUE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_BLUE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_BROWN_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_BROWN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_CYAN_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_CYAN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_GRAY_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_GRAY_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_GREEN_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_GREEN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_LIGHT_BLUE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_LIGHT_BLUE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_LIGHT_GRAY_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_LIGHT_GRAY_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_LIME_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_LIME_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_MAGENTA_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_MAGENTA_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_ORANGE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_ORANGE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_PINK_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_PINK_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_PURPLE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_PURPLE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_RED_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_RED_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_WHITE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_WHITE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockGlassBehavior> HARD_YELLOW_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> HARD_YELLOW_STAINED_GLASS_PANE;
 
     public static BlockType<BlockHardenedClayBehavior> HARDENED_CLAY;
@@ -2410,6 +3196,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockInvisibleBedrockBehavior> INVISIBLE_BEDROCK;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockIronBarsBehavior> IRON_BARS;
 
     public static BlockType<BlockIronBlockBehavior> IRON_BLOCK;
@@ -2463,6 +3255,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> JUNGLE_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> JUNGLE_FENCE;
 
     /**
@@ -2516,6 +3314,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> JUNGLE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -2583,7 +3382,7 @@ public final class BlockTypes {
     public static BlockType<BlockLiquidBehavior> LAVA;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
     public static BlockType<BlockPlantPile> LEAF_LITTER;
@@ -2647,7 +3446,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> LIGHT_BLUE_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> LIGHT_BLUE_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> LIGHT_BLUE_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> LIGHT_BLUE_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> LIGHT_BLUE_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -2658,11 +3474,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> LIGHT_BLUE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> LIGHT_BLUE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> LIGHT_BLUE_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> LIGHT_BLUE_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> LIGHT_BLUE_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> LIGHT_BLUE_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> LIGHT_BLUE_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -2679,17 +3518,57 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> LIGHT_GRAY_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> LIGHT_GRAY_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> LIGHT_GRAY_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> LIGHT_GRAY_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> LIGHT_GRAY_CONCRETE_STAIRS;
 
     public static BlockType<BlockShulkerBoxBehavior> LIGHT_GRAY_SHULKER_BOX;
 
     public static BlockType<BlockGlassBehavior> LIGHT_GRAY_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> LIGHT_GRAY_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> LIGHT_GRAY_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> LIGHT_GRAY_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> LIGHT_GRAY_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> LIGHT_GRAY_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> LIGHT_GRAY_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
@@ -2724,7 +3603,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> LIME_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> LIME_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> LIME_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> LIME_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> LIME_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -2735,11 +3631,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> LIME_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> LIME_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> LIME_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> LIME_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> LIME_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> LIME_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> LIME_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -2789,7 +3708,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> MAGENTA_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> MAGENTA_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> MAGENTA_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> MAGENTA_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> MAGENTA_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -2800,11 +3736,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> MAGENTA_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> MAGENTA_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> MAGENTA_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> MAGENTA_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> MAGENTA_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> MAGENTA_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> MAGENTA_WOOL_STAIRS;
 
     public static BlockType<BlockMagmaBehavior> MAGMA;
 
@@ -2827,6 +3786,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> MANGROVE_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> MANGROVE_FENCE;
 
     /**
@@ -2883,6 +3848,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> MANGROVE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -2924,7 +3890,7 @@ public final class BlockTypes {
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockMelonStemBehavior> MELON_STEM;
 
@@ -2947,6 +3913,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> MOSSY_COBBLESTONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -2972,6 +3939,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> MOSSY_STONE_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3003,6 +3971,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> MUD_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3038,6 +4007,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> NETHER_BRICK_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> NETHER_BRICK_FENCE;
 
     /**
@@ -3046,6 +4021,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> NETHER_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3088,6 +4064,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> NORMAL_STONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3100,6 +4077,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> OAK_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> OAK_FENCE;
 
     /**
@@ -3141,6 +4124,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> OAK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3181,17 +4165,46 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> ORANGE_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> ORANGE_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> ORANGE_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> ORANGE_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> ORANGE_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
     public static BlockType<BlockGlazedTerracottaBehavior> ORANGE_GLAZED_TERRACOTTA;
 
+    /**
+     * {@link BlockPropertyTypes#PERSISTENT_BIT}
+     * {@link BlockPropertyTypes#UPDATE_BIT}
+     */
+    public static BlockType<BlockLeavesBehavior> ORANGE_POPLAR_LEAVES;
+
     public static BlockType<BlockShulkerBoxBehavior> ORANGE_SHULKER_BOX;
 
     public static BlockType<BlockGlassBehavior> ORANGE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> ORANGE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> ORANGE_TERRACOTTA;
@@ -3200,12 +4213,35 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoolBehavior> ORANGE_WOOL;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> ORANGE_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> ORANGE_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> ORANGE_WOOL_STAIRS;
+
     public static BlockType<BlockSmallFlower> OXEYE_DAISY;
 
     public static BlockType<BlockCopperBehavior> OXIDIZED_CHISELED_COPPER;
 
     public static BlockType<BlockCopperBehavior> OXIDIZED_COPPER;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> OXIDIZED_COPPER_BARS;
 
     /**
@@ -3259,6 +4295,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> OXIDIZED_CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3314,6 +4351,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> PALE_OAK_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> PALE_OAK_FENCE;
 
     /**
@@ -3367,6 +4410,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> PALE_OAK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3434,7 +4478,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> PINK_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> PINK_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> PINK_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> PINK_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> PINK_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -3442,7 +4503,7 @@ public final class BlockTypes {
     public static BlockType<BlockGlazedTerracottaBehavior> PINK_GLAZED_TERRACOTTA;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
     public static BlockType<BlockPlantPile> PINK_PETALS;
@@ -3451,6 +4512,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> PINK_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> PINK_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> PINK_TERRACOTTA;
@@ -3458,6 +4525,23 @@ public final class BlockTypes {
     public static BlockType<BlockSmallFlower> PINK_TULIP;
 
     public static BlockType<BlockWoolBehavior> PINK_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> PINK_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> PINK_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> PINK_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -3470,7 +4554,7 @@ public final class BlockTypes {
     public static BlockType<BlockPistonArmCollisionBehavior> PISTON_ARM_COLLISION;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
     public static BlockType<BlockPitcherCropBehavior> PITCHER_CROP;
@@ -3506,6 +4590,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_ANDESITE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3529,6 +4614,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3567,6 +4653,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3594,6 +4681,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_CINNABAR_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3621,6 +4709,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_DEEPSLATE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3648,6 +4737,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_DIORITE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3666,6 +4756,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_GRANITE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3684,6 +4775,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_SULFUR_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3711,6 +4803,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> POLISHED_TUFF_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3725,6 +4818,106 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> POLISHED_TUFF_WALL;
 
+    /**
+     * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     */
+    public static BlockType<BlockButtonBehavior> POPLAR_BUTTON;
+
+    /**
+     * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#OPEN_BIT}
+     * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
+     */
+    public static BlockType<BlockDoorBehavior> POPLAR_DOOR;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> POPLAR_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
+    public static BlockType<BlockFenceBehavior> POPLAR_FENCE;
+
+    /**
+     * {@link BlockPropertyTypes#IN_WALL_BIT}
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#OPEN_BIT}
+     */
+    public static BlockType<BlockFenceGateBehavior> POPLAR_FENCE_GATE;
+
+    /**
+     * {@link BlockPropertyTypes#ATTACHED_BIT}
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#GROUND_SIGN_DIRECTION}
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockHangingSignBehavior> POPLAR_HANGING_SIGN;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockWoodBehavior> POPLAR_LOG;
+
+    public static BlockType<BlockPlanksBehavior> POPLAR_PLANKS;
+
+    /**
+     * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
+     */
+    public static BlockType<BlockPressurePlateBehavior> POPLAR_PRESSURE_PLATE;
+
+    /**
+     * {@link BlockPropertyTypes#AGE_BIT}
+     */
+    public static BlockType<BlockSaplingBehavior> POPLAR_SAPLING;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> POPLAR_SHELF;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> POPLAR_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> POPLAR_STAIRS;
+
+    /**
+     * {@link BlockPropertyTypes#GROUND_SIGN_DIRECTION}
+     */
+    public static BlockType<BlockSignBehavior> POPLAR_STANDING_SIGN;
+
+    /**
+     * {@link BlockPropertyTypes#DIRECTION_4}
+     * {@link BlockPropertyTypes#OPEN_BIT}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     */
+    public static BlockType<BlockTrapdoorBehavior> POPLAR_TRAPDOOR;
+
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     */
+    public static BlockType<BlockSignBehavior> POPLAR_WALL_SIGN;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockWoodBehavior> POPLAR_WOOD;
+
     public static BlockType<BlockSmallFlower> POPPY;
 
     /**
@@ -3733,7 +4926,7 @@ public final class BlockTypes {
     public static BlockType<BlockPortalBehavior> PORTAL;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockPotatoesBehavior> POTATOES;
 
@@ -3772,6 +4965,7 @@ public final class BlockTypes {
     public static BlockType<BlockBricksBehavior> PRISMARINE_BRICKS;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3788,6 +4982,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> PRISMARINE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3809,7 +5004,7 @@ public final class BlockTypes {
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockPumpkinStemBehavior> PUMPKIN_STEM;
 
@@ -3828,7 +5023,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> PURPLE_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> PURPLE_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> PURPLE_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> PURPLE_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> PURPLE_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -3839,11 +5051,34 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> PURPLE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> PURPLE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> PURPLE_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> PURPLE_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> PURPLE_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> PURPLE_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> PURPLE_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
@@ -3866,6 +5101,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> PURPUR_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3896,6 +5132,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> QUARTZ_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3927,7 +5164,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> RED_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> RED_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> RED_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> RED_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> RED_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -3954,6 +5208,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> RED_NETHER_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3967,6 +5222,12 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#WALL_POST_BIT}
      */
     public static BlockType<BlockWallBehavior> RED_NETHER_BRICK_WALL;
+
+    /**
+     * {@link BlockPropertyTypes#PERSISTENT_BIT}
+     * {@link BlockPropertyTypes#UPDATE_BIT}
+     */
+    public static BlockType<BlockLeavesBehavior> RED_POPLAR_LEAVES;
 
     public static BlockType<BlockRedSandBehavior> RED_SAND;
 
@@ -3983,6 +5244,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> RED_SANDSTONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -3997,10 +5259,18 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> RED_SANDSTONE_WALL;
 
+    public static BlockType<BlockRedShrubBehavior> RED_SHRUB;
+
     public static BlockType<BlockShulkerBoxBehavior> RED_SHULKER_BOX;
 
     public static BlockType<BlockGlassBehavior> RED_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> RED_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> RED_TERRACOTTA;
@@ -4008,6 +5278,23 @@ public final class BlockTypes {
     public static BlockType<BlockSmallFlower> RED_TULIP;
 
     public static BlockType<BlockWoolBehavior> RED_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> RED_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> RED_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> RED_WOOL_STAIRS;
 
     public static BlockType<BlockRedstoneBlockBehavior> REDSTONE_BLOCK;
 
@@ -4053,6 +5340,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> RESIN_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4099,6 +5387,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> SANDSTONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4155,6 +5444,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockSeagrassBehavior> SEAGRASS;
 
+    /**
+     * {@link BlockPropertyTypes#GROWTH_2}
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockShelfMushroomBehavior> SHELF_MUSHROOM;
+
     public static BlockType<BlockShortDryGrassBehavior> SHORT_DRY_GRASS;
 
     public static BlockType<BlockShortGrassBehavior> SHORT_GRASS;
@@ -4209,6 +5504,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> SMOOTH_QUARTZ_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4227,6 +5523,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4245,6 +5542,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4323,6 +5621,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> SPRUCE_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> SPRUCE_FENCE;
 
     /**
@@ -4376,6 +5680,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> SPRUCE_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4436,6 +5741,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> STONE_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4464,6 +5770,7 @@ public final class BlockTypes {
     public static BlockType<BlockPressurePlateBehavior> STONE_PRESSURE_PLATE;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4475,6 +5782,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
     public static BlockType<BlockStonecutterBlockBehavior> STONECUTTER_BLOCK;
+
+    /**
+     * {@link BlockPropertyTypes#HEAD_PIECE_BIT}
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#OCCUPIED_BIT}
+     */
+    public static BlockType<BlockStrawBedBehavior> STRAW_BED;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
@@ -4574,6 +5888,16 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
+    public static BlockType<BlockWoodBehavior> STRIPPED_POPLAR_LOG;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockWoodBehavior> STRIPPED_POPLAR_WOOD;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
     public static BlockType<BlockWoodBehavior> STRIPPED_SPRUCE_LOG;
 
     /**
@@ -4611,6 +5935,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> SULFUR_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4644,6 +5969,7 @@ public final class BlockTypes {
     public static BlockType<BlockSulfurSpikeBehavior> SULFUR_SPIKE;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4676,7 +6002,7 @@ public final class BlockTypes {
     public static BlockType<BlockSuspiciousSandBehavior> SUSPICIOUS_SAND;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockSweetBerryBushBehavior> SWEET_BERRY_BUSH;
 
@@ -4704,7 +6030,7 @@ public final class BlockTypes {
     public static BlockType<BlockSmallFlower> TORCHFLOWER;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockTorchflowerCropBehavior> TORCHFLOWER_CROP;
 
@@ -4729,6 +6055,10 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#ATTACHED_BIT}
      * {@link BlockPropertyTypes#DISARMED_BIT}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      * {@link BlockPropertyTypes#POWERED_BIT}
      * {@link BlockPropertyTypes#SUSPENDED_BIT}
      */
@@ -4768,6 +6098,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> TUFF_BRICK_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4795,6 +6126,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> TUFF_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4898,6 +6230,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleSlabBehavior> WARPED_DOUBLE_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockFenceBehavior> WARPED_FENCE;
 
     /**
@@ -4946,6 +6284,7 @@ public final class BlockTypes {
     public static BlockType<BlockSlabBehavior> WARPED_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -4986,6 +6325,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_COPPER;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> WAXED_COPPER_BARS;
 
     /**
@@ -5039,6 +6384,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> WAXED_CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -5053,6 +6399,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_COPPER;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> WAXED_EXPOSED_COPPER_BARS;
 
     /**
@@ -5106,6 +6458,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -5132,6 +6485,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_COPPER;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> WAXED_OXIDIZED_COPPER_BARS;
 
     /**
@@ -5185,6 +6544,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -5205,6 +6565,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_COPPER;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> WAXED_WEATHERED_COPPER_BARS;
 
     /**
@@ -5258,6 +6624,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -5278,6 +6645,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WEATHERED_COPPER;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockCopperBarsBehavior> WEATHERED_COPPER_BARS;
 
     /**
@@ -5331,6 +6704,7 @@ public final class BlockTypes {
     public static BlockType<BlockCopperSlabBehavior> WEATHERED_CUT_COPPER_SLAB;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
      */
@@ -5357,7 +6731,7 @@ public final class BlockTypes {
     public static BlockType<BlockWetSpongeBehavior> WET_SPONGE;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#GROWTH_8}
      */
     public static BlockType<BlockWheatBehavior> WHEAT;
 
@@ -5376,7 +6750,24 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> WHITE_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> WHITE_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> WHITE_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> WHITE_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> WHITE_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -5387,6 +6778,12 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlassBehavior> WHITE_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> WHITE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> WHITE_TERRACOTTA;
@@ -5396,7 +6793,24 @@ public final class BlockTypes {
     public static BlockType<BlockWoolBehavior> WHITE_WOOL;
 
     /**
-     * {@link BlockPropertyTypes#GROWTH}
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> WHITE_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> WHITE_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> WHITE_WOOL_STAIRS;
+
+    /**
+     * {@link BlockPropertyTypes#GROWTH_8}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
     public static BlockType<BlockPlantPile> WILDFLOWERS;
@@ -5442,22 +6856,68 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcreteBehavior> YELLOW_CONCRETE;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> YELLOW_CONCRETE_DOUBLE_SLAB;
+
     public static BlockType<BlockConcretePowderBehavior> YELLOW_CONCRETE_POWDER;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> YELLOW_CONCRETE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> YELLOW_CONCRETE_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
     public static BlockType<BlockGlazedTerracottaBehavior> YELLOW_GLAZED_TERRACOTTA;
 
+    /**
+     * {@link BlockPropertyTypes#PERSISTENT_BIT}
+     * {@link BlockPropertyTypes#UPDATE_BIT}
+     */
+    public static BlockType<BlockLeavesBehavior> YELLOW_POPLAR_LEAVES;
+
     public static BlockType<BlockShulkerBoxBehavior> YELLOW_SHULKER_BOX;
 
     public static BlockType<BlockGlassBehavior> YELLOW_STAINED_GLASS;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_NORTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
+     * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
+     */
     public static BlockType<BlockGlassPaneBehavior> YELLOW_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> YELLOW_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> YELLOW_WOOL;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockDoubleSlabBehavior> YELLOW_WOOL_DOUBLE_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
+     */
+    public static BlockType<BlockSlabBehavior> YELLOW_WOOL_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CORNER}
+     * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
+     * {@link BlockPropertyTypes#WEIRDO_DIRECTION}
+     */
+    public static BlockType<BlockStairsBehavior> YELLOW_WOOL_STAIRS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}

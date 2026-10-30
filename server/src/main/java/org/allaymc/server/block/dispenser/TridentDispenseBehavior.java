@@ -16,14 +16,39 @@ import org.joml.Vector3d;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Dispense behavior for tridents. Tridents preserve their enchantments when dispensed.
+ * {@code TridentDispenseBehavior} launches trident projectiles carrying a copied
+ * source trident item. The projectile reads enchantment and item properties from
+ * that retained item, so the copy is assigned before the entity is submitted for
+ * admission.
+ *
+ * <p>
+ * The input must be a trident stack because the copied item is cast to
+ * {@code ItemTridentStack}. The launched copy has count one, and no favored
+ * inventory slot is assigned by this handler. Motion normalizes the biased face
+ * direction before base-speed scaling and uses half the ordinary projectile spread
+ * coefficient; a {@code null} factory result produces a failed dispense result
+ * before item assignment or effects.
  *
  * @author daoge_cmd
  */
 public class TridentDispenseBehavior implements DispenseBehavior {
 
+    /**
+     * {@code SPEED_MULTIPLIER} scales the normalized launch direction before
+     * random spread. The final vector can have another magnitude after its
+     * Gaussian offsets.
+     */
     protected static final double SPEED_MULTIPLIER = 1.25;
 
+    /**
+     * Creates a thrown trident carrying a one-count copy of the supplied trident
+     * item. The input must copy to {@code ItemTridentStack}; the projectile stores
+     * that copy before entity submission so later enchantment processing observes
+     * its item properties. A {@code null} factory result returns failure, while
+     * successful submission emits effects and returns before deferred entity
+     * admission completes. The handler leaves {@code favoredSlot} at the entity's
+     * default {@code -1}.
+     */
     @Override
     public DispenseResult dispense(Block block, BlockFace face, ItemStack item) {
         var dimension = block.getDimension();
@@ -42,11 +67,12 @@ public class TridentDispenseBehavior implements DispenseBehavior {
             return DispenseResult.fail();
         }
 
-        // Store the trident item (enchantments are read from item directly)
+        // Attach the source item before entity submission because the projectile
+        // reads enchantments from that retained item instead of separate launch
+        // metadata.
         var tridentItem = (ItemTridentStack) item.copy();
         tridentItem.setCount(1);
         entity.setTridentItem(tridentItem);
-        // Dispensed tridents have no favored slot (default -1)
 
         dimension.getEntityManager().addEntity(entity);
         spawnDispenseEffects(block, face);
@@ -54,14 +80,19 @@ public class TridentDispenseBehavior implements DispenseBehavior {
         return DispenseResult.success();
     }
 
+    /**
+     * Emits the trident-throw sound and directional dispenser shoot particle.
+     */
     protected void spawnDispenseEffects(Block block, BlockFace face) {
         var dimension = block.getDimension();
         var center = MathUtils.center(block.getPosition());
-        // Trident uses its own throw sound
         dimension.addSound(center, SimpleSound.TRIDENT_THROW);
         dimension.addParticle(center, new ShootParticle(face));
     }
 
+    /**
+     * Returns a new centered position one block along the output face.
+     */
     protected Vector3d getSpawnPosition(Block block, BlockFace face) {
         var pos = MathUtils.center(block.getPosition());
         pos.x += face.getOffset().x();
@@ -70,17 +101,24 @@ public class TridentDispenseBehavior implements DispenseBehavior {
         return pos;
     }
 
+    /**
+     * Returns a new trident launch vector with upward bias and random spread. The
+     * base direction uses {@code SPEED_MULTIPLIER}, then each coordinate receives
+     * half the ordinary projectile spread coefficient.
+     */
     protected Vector3d calculateMotion(BlockFace face) {
         var random = ThreadLocalRandom.current();
         var motion = new Vector3d();
 
         motion.x = face.getOffset().x();
+        // Apply upward bias before normalization so the resulting direction
+        // includes the lift.
         motion.y = face.getOffset().y() + 0.1;
         motion.z = face.getOffset().z();
 
         motion.normalize().mul(SPEED_MULTIPLIER);
 
-        // Add random spread (50% accuracy compared to default)
+        // Halve the ordinary projectile spread coefficient for trident launches.
         double accuracy = 6 * 0.5;
         motion.x += random.nextGaussian() * 0.0075 * accuracy;
         motion.y += random.nextGaussian() * 0.0075 * accuracy;

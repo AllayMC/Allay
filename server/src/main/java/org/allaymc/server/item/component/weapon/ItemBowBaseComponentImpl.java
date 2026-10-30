@@ -19,27 +19,56 @@ import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3d;
 
 /**
+ * {@code ItemBowBaseComponentImpl} launches arrows with draw-dependent speed
+ * and bow enchantments. Creative players shoot ordinary arrows without
+ * ammunition, while other players select arrows from the offhand before the
+ * inventory; Infinity preserves ordinary arrows but still consumes tipped
+ * arrows.
+ *
  * @author harryxi | daoge_cmd
  */
 @Slf4j
 public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
+    /**
+     * Creates a bow base component from the supplied stack initialization data.
+     */
     public ItemBowBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 
+    /**
+     * Returns whether the player can begin drawing this bow.
+     * Creative mode always qualifies; other players need an arrow stack in the
+     * offhand or inventory even when the bow has Infinity. This check does not
+     * consume ammunition.
+     */
     @Override
     public boolean canUseItemInAir(EntityPlayer player) {
         return player.getGameMode() == GameMode.CREATIVE || hasArrow(player);
     }
 
+    /**
+     * Attempts a bow shot after at least three ticks of use.
+     * The shot reaches full force at twenty ticks; creative mode uses an ordinary
+     * arrow, while other modes select ammunition and copy its potion type.
+     *
+     * <p>
+     * Ammunition consumption occurs before {@code EntityShootBowEvent}, so a
+     * cancelled event returns {@code false} without restoring consumed arrows.
+     * Accepted shots add the prepared arrow, request one bow damage point outside
+     * creative mode, and play the shooting sound.
+     */
     @Override
     public boolean useItemInAir(EntityPlayer player, long usedTime) {
+        // Reject brief draws before any ammunition is selected or consumed.
         if (usedTime < 3) {
             return false;
         }
 
         var creative = player.getGameMode() == GameMode.CREATIVE;
+        // Twenty draw ticks reach full force; longer draws retain the same capped
+        // speed rather than continuing to accelerate the arrow.
         var force = Math.min(usedTime * (usedTime + 40.0) / 1200.0, 1.0);
         var speed = force * 5;
 
@@ -60,8 +89,12 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
         var dimension = player.getDimension();
         var location = player.getLocation();
+        // Keep entity creation and the shooting sound at the same eye-relative
+        // origin; the small downward offset applies to both effects.
         var shootPos = new Vector3d(location.x(), location.y() + player.getEyeHeight() - 0.1, location.z());
         var playerMotion = new Vector3d(player.getMotion());
+        // Arrow velocity inherits player motion. Remove grounded vertical motion
+        // so aim and horizontal movement control a grounded shot's trajectory.
         if (player.isOnGround()) {
             playerMotion.setComponent(1, 0);
         }
@@ -81,6 +114,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         arrow.setPowerLevel(powerLevel);
         arrow.setPunchLevel(punchLevel);
         if (flameLevel != 0) {
+            // Convert five seconds of burning into twenty-tick seconds.
             arrow.setOnFireTicks(20 * 5);
         }
         arrow.setCritical(force >= 1.0);
@@ -99,14 +133,19 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         return true;
     }
 
+    /**
+     * Returns whether the offhand or inventory contains an arrow stack.
+     * The offhand is checked first, and the search does not change stack counts
+     * or reserve an arrow for a later shot.
+     */
     protected boolean hasArrow(EntityPlayer player) {
-        // Find offhand arrow first
         Container container = player.getContainer(ContainerTypes.OFFHAND);
         if (container.getItemStack(OffhandContainerImpl.OFFHAND_SLOT) instanceof ItemArrowStack) {
             return true;
         }
 
-        // Arrow is not in offhand, search in inventory again
+        // An absent offhand arrow falls back to the main inventory, which supplies
+        // ammunition when the player leaves the offhand available for another item.
         container = player.getContainer(ContainerTypes.INVENTORY);
         for (var itemStack : container.getItemStacks()) {
             if (itemStack instanceof ItemArrowStack) {
@@ -117,20 +156,27 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         return false;
     }
 
+    /**
+     * Selects an offhand arrow before the first inventory arrow and applies the
+     * requested consumption rule. The method returns the selected stack reference,
+     * or {@code null} when none exists; {@code infinity} preserves only arrows
+     * whose potion type is {@code null}. The caller decides whether creative
+     * mode should bypass this operation.
+     */
     protected ItemArrowStack findArrow(EntityPlayer player, boolean infinity) {
         Container container;
         int slot;
         ItemArrowStack arrow = null;
 
-        // Find offhand arrow first
         container = player.getContainer(ContainerTypes.OFFHAND);
         slot = OffhandContainerImpl.OFFHAND_SLOT;
         if (container.getItemStack(slot) instanceof ItemArrowStack a) {
             arrow = a;
         }
 
+        // Fall back to inventory only when the offhand has no arrow, preserving
+        // the offhand choice when both locations contain different potion variants.
         if (arrow == null) {
-            // Arrow is not in offhand, search in inventory again
             container = player.getContainer(ContainerTypes.INVENTORY);
             var itemStacks = container.getItemStacks();
             for (slot = 0; slot < itemStacks.size(); slot++) {
@@ -143,11 +189,11 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         }
 
         if (arrow == null) {
-            // No arrow found
             return null;
         }
 
-        // Bows with infinity enchantment do not consume normal types of arrows when shooting
+        // Remove a one-item slot entirely; otherwise notify the container after
+        // changing its shared stack so clients observe the new ammunition count.
         if (!infinity || arrow.getPotionType() != null) {
             if (arrow.getCount() == 1) {
                 container.clearSlot(slot);

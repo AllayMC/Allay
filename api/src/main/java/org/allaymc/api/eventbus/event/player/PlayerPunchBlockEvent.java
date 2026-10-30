@@ -9,7 +9,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Called when a player punches a block.
+ * {@code PlayerPunchBlockEvent} describes the start of a player's attempt to punch a
+ * block face. The input processor dispatches it before the block's punch callback;
+ * cancellation suppresses that callback but does not itself cancel the processor's
+ * remaining block-breaking setup.
  *
  * @author daoge_cmd
  */
@@ -17,14 +20,19 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @CallerThread(ThreadType.WORLD)
 public class PlayerPunchBlockEvent extends PlayerEvent implements CancellableEvent {
     /**
-     * The block being punched.
+     * Block receiving the punch attempt.
      */
     protected Block block;
     /**
-     * The face of the block being punched.
+     * Block face receiving the punch.
      */
     protected BlockFace blockFace;
 
+    /**
+     * Creates a {@code PlayerPunchBlockEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerPunchBlockEvent(EntityPlayer player, Block block, BlockFace blockFace) {
         super(player);
         this.block = block;

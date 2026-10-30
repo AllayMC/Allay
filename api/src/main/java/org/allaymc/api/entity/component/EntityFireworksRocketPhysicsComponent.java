@@ -1,47 +1,44 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Physics component for firework rockets with configurable upward thrust and sideways acceleration.
+ * {@code EntityFireworksRocketPhysicsComponent} configures the acceleration of
+ * a freely flying firework rocket. The horizontal multiplier scales existing
+ * motion each tick, while upward motion adds vertical acceleration; attachment
+ * suppresses this free-flight update while the rocket follows its player.
  *
  * @author daoge_cmd
  */
 public interface EntityFireworksRocketPhysicsComponent extends EntityPhysicsComponent {
 
     /**
-     * The default multiplier for sideways motion applied to the entity's horizontal movement along the x and z axes
-     * in each tick.
+     * {@code DEFAULT_SIDEWAYS_MOTION_MULTIPLIER} initializes the per-tick
+     * horizontal scaling used by freely flying rockets.
      */
     double DEFAULT_SIDEWAYS_MOTION_MULTIPLIER = 1.15;
     /**
-     * The default value for upwards motion that is applied to the vertical (y-axis) motion of an entity every tick.
+     * {@code DEFAULT_UPWARDS_MOTION} initializes free-flight upward
+     * acceleration in blocks per tick squared for rockets.
      */
     double DEFAULT_UPWARDS_MOTION = 0.04;
 
     /**
-     * Gets the sideways motion multiplier, which will be multiplied to motion in x/z every tick.
-     *
-     * @return the sideways motion multiplier
+     * Returns the per-tick multiplier applied to horizontal free-flight
+     * motion.
      */
     double getSidewaysMotionMultiplier();
 
     /**
-     * Sets the sideways motion multiplier, which will be applied to the x and z motion of the entity every tick.
-     *
-     * @param multiplier the sideways motion multiplier to set; must be a valid double value
+     * Stores the per-tick multiplier applied to horizontal free-flight motion.
      */
     void setSidewaysMotionMultiplier(double multiplier);
 
     /**
-     * Gets the upwards motion, which will be added to the y motion of the entity every tick.
-     *
-     * @return the upwards motion multiplier
+     * Returns free-flight upward acceleration in blocks per tick squared.
      */
     double getUpwardsMotion();
 
     /**
-     * Sets the upwards motion, which will be added to the vertical (y-axis) motion of the entity every tick.
-     *
-     * @param motion the upwards motion to set; must be a valid double value
+     * Stores free-flight upward acceleration in blocks per tick squared.
      */
     void setUpwardsMotion(double motion);
 }

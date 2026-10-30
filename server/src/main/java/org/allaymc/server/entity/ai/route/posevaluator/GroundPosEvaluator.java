@@ -4,7 +4,10 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.interfaces.EntityIntelligent;
 
 /**
- * Evaluates ground blocks during pathfinding to determine their suitability for standing.
+ * {@code GroundPosEvaluator} decides whether a support block is suitable for an
+ * intelligent entity's ground route. The ground finder passes the block beneath
+ * a candidate standing level, allowing implementations to consider hazards,
+ * collision shapes, and the entity's ability to stand there.
  *
  * @author daoge_cmd
  */
@@ -12,11 +15,8 @@ import org.allaymc.api.entity.interfaces.EntityIntelligent;
 public interface GroundPosEvaluator {
 
     /**
-     * Evaluate a standing block for ground walking suitability.
-     *
-     * @param entity the entity
-     * @param block  the block being evaluated
-     * @return {@code true} if the entity can stand on this block
+     * Returns whether the supplied support block permits this entity to stand
+     * there.
      */
     boolean evaluate(EntityIntelligent entity, Block block);
 }

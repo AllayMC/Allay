@@ -23,10 +23,31 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
+ * {@code AllayMetrics} registers bStats measurements for the server process and
+ * its connected players.
+ * Reporting is controlled by server configuration, and the reporter's enabled
+ * predicate follows {@code ServerState.RUNNING}. Chart suppliers read current platform,
+ * protocol, version, and player data when the metrics library requests samples.
+ * Repeated registration is not suppressed, so bootstrap is responsible for
+ * invoking startup once for its server lifecycle.
+ *
+ * <p>
+ * Java version reporting retains the complete runtime version as a nested
+ * label while deriving a broader release-family bucket. Legacy 1.x versions
+ * and modern major-version strings use different grouping rules; early-access
+ * suffixes are removed from the modern family label when numeric major digits
+ * are found, without losing those suffixes from the full version label.
+ *
  * @author daoge_cmd | IWareQ
  */
 @Slf4j
 public class AllayMetrics {
+    /**
+     * Creates a metrics reporter and registers charts when reporting is enabled.
+     * Disabled configuration returns immediately. Each invocation creates a new
+     * reporter; sampling is delegated to bStats and gated by the server's
+     * {@code ServerState.RUNNING} rather than by retaining a reporter here.
+     */
     public static void start() {
         var settings = AllayServer.getSettings().bStatsSettings();
         if (!settings.enable()) {
@@ -37,7 +58,7 @@ public class AllayMetrics {
         var metrics = new MetricsBase(
                 "server-implementation",
                 settings.serverUUID(),
-                23352, // https://bstats.org/plugin/server-implementation/Allay/23352
+                23352, // Allay's registered bStats service identifier: https://bstats.org/plugin/server-implementation/Allay/23352
                 true,
                 AllayMetrics::appendPlatformData,
                 builder -> {},
@@ -55,6 +76,7 @@ public class AllayMetrics {
         metrics.addCustomChart(new SimplePie("minecraft_version", () -> ProtocolInfo.getLatestCodec().getMinecraftVersion()));
         metrics.addCustomChart(new SimplePie("allay_api_version", GitProperties::getBuildApiVersion));
         metrics.addCustomChart(new SimplePie("allay_server_version", GitProperties::getBuildVersion));
+        // Report maximum heap in binary gigabytes rounded to two decimal places.
         metrics.addCustomChart(new SimplePie("max_memory", () -> String.format("%.2f", Runtime.getRuntime().maxMemory() / (1024d * 1024d * 1024d)) + "G"));
         metrics.addCustomChart(new SimplePie("xbox_auth", () -> AllayServer.getSettings().networkSettings().xboxAuth() ? "Required" : "Not required"));
 
@@ -71,6 +93,9 @@ public class AllayMetrics {
         metrics.addCustomChart(new DrilldownPie("java_version", new JavaVersionRetriever()));
     }
 
+    /**
+     * Appends operating-system identity and available processor count to the payload.
+     */
     private static void appendPlatformData(JsonObjectBuilder builder) {
         builder.appendField("osName", System.getProperty("os.name"));
         builder.appendField("osArch", System.getProperty("os.arch"));
@@ -78,12 +103,29 @@ public class AllayMetrics {
         builder.appendField("coreCount", Runtime.getRuntime().availableProcessors());
     }
 
+    /**
+     * Counts stream elements into the integer values required by player charts.
+     */
     public static <T> Collector<T, ?, Integer> countingInt() {
         return Collectors.reducing(0, e -> 1, Integer::sum);
     }
 
+    /**
+     * {@code JavaVersionRetriever} groups the exact Java version under its release
+     * family for bStats.
+     */
     private static class JavaVersionRetriever implements Callable<Map<String, Map<String, Integer>>> {
         // The following code can be attributed to the PaperMC project
+        /**
+         * Builds one release-family bucket containing the unmodified Java version.
+         * The complete {@code java.version} string is stored first so grouping cannot
+         * discard patch or prerelease information from the nested chart label.
+         * Legacy 1.x versions use the prefix before the final dot as their
+         * family. Modern versions use the first dot-separated field, replacing
+         * it with its first numeric run when available; a field without digits
+         * is retained as supplied. Each invocation counts this process once
+         * in the resulting family and exact-version pair.
+         */
         @Override
         public Map<String, Map<String, Integer>> call() {
             Map<String, Map<String, Integer>> map = new HashMap<>();
@@ -92,9 +134,8 @@ public class AllayMetrics {
             entry.put(javaVersion, 1);
 
             // http://openjdk.java.net/jeps/223
-            // Java decided to change their versioning scheme and in doing so modified the java.version system
-            // property to return $major[.$minor][.$security][-ea], as opposed to 1.$major.0_$identifier
-            // we can handle pre-9 by checking if the "major" is equal to "1", otherwise, 9+
+            // Java 9 and later use the JEP 223 version scheme. Keep legacy 1.x
+            // grouping separate so earlier versions retain their release-family labels.
             String majorVersion = javaVersion.split("\\.")[0];
             String release;
 
@@ -103,8 +144,8 @@ public class AllayMetrics {
             if (majorVersion.equals("1")) {
                 release = "Java " + javaVersion.substring(0, indexOf);
             } else {
-                // of course, it really wouldn't be all that simple if they didn't add a quirk, now would it
-                // valid strings for the major may potentially include values such as -ea to deannotate a pre-release
+                // A modern first field can include a prerelease suffix such as
+                // -ea; use its numeric run for grouping while preserving the full nested label.
                 Matcher versionMatcher = Pattern.compile("\\d+").matcher(majorVersion);
                 if (versionMatcher.find()) {
                     majorVersion = versionMatcher.group(0);

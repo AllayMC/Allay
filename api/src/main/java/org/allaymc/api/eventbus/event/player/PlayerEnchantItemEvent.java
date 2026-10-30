@@ -12,7 +12,10 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import java.util.List;
 
 /**
- * Called when a player enchants an item using an enchanting table.
+ * {@code PlayerEnchantItemEvent} holds a proposed enchanting-table operation and its
+ * lapis cost. Listeners can cancel the operation or replace {@code enchantments} and
+ * {@code requiredLapisLazuliCount}; the crafting processor reads those final values
+ * before checking materials and applying the enchantments.
  *
  * @author daoge_cmd
  */
@@ -21,20 +24,31 @@ import java.util.List;
 public class PlayerEnchantItemEvent extends PlayerEvent implements CancellableEvent {
 
     /**
-     * The item stack being enchanted.
+     * {@code itemStack} retains the mutable input item. The crafting processor
+     * applies accepted enchantments to this same stack after checking its
+     * requirements.
      */
     protected ItemStack itemStack;
     /**
-     * The enchantments to apply.
+     * {@code enchantments} supplies the accepted enchantment list. The crafting
+     * processor reads the listener-selected reference after dispatch without copying
+     * it here.
      */
     @Setter
     protected List<EnchantmentInstance> enchantments;
     /**
-     * The required amount of lapis lazuli.
+     * {@code requiredLapisLazuliCount} supplies the accepted material cost. The
+     * crafting processor uses it after dispatch; this event does not constrain its
+     * range.
      */
     @Setter
     protected int requiredLapisLazuliCount;
 
+    /**
+     * Creates a {@code PlayerEnchantItemEvent} for the supplied player and event
+     * data. The constructor retains reference-valued arguments without copying them
+     * and does not dispatch or apply the represented action.
+     */
     public PlayerEnchantItemEvent(EntityPlayer player, ItemStack itemStack, List<EnchantmentInstance> enchantments, int requiredLapisLazuliCount) {
         super(player);
         this.itemStack = itemStack;

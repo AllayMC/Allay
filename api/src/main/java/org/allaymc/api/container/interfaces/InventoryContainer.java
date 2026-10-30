@@ -4,41 +4,44 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * InventoryContainer represents a container that holds a player's inventory items.
+ * {@code InventoryContainer} exposes the item occupying the selected player inventory
+ * slot. The hand accessors read and replace container storage, while ordinary slot
+ * notifications allow implementations to update equipment shown to entity viewers.
+ * {@code getHandSlot()} identifies which inventory slot the hand accessors target.
  *
  * @author daoge_cmd
  */
 public interface InventoryContainer extends Container {
     /**
-     * Gets the item currently in the hand.
-     *
-     * @return the ItemStack in the hand
+     * Returns the stack occupying the selected player inventory slot. The stack remains
+     * shared with the container, so direct changes require the corresponding slot
+     * notification to update viewers.
      */
     ItemStack getItemInHand();
 
     /**
-     * Sets the item in the hand.
-     *
-     * @param itemStack the ItemStack to set in the hand
+     * Replaces the stack occupying the selected player inventory slot and notifies
+     * container observers. The supplied stack must be non-{@code null} and remains
+     * shared with the container after assignment.
      */
     void setItemInHand(ItemStack itemStack);
 
     /**
-     * Clears the item in the hand, effectively removing it.
+     * Clears the selected player inventory slot by installing the shared air stack. The
+     * ordinary slot notification path also updates container viewers and any registered
+     * equipment listeners.
      */
     void clearItemInHand();
 
     /**
-     * Gets the current hand slot index that the player is using.
-     *
-     * @return the index of the current hand slot
+     * Returns the inventory index currently used by the hand accessors.
      */
     int getHandSlot();
 
     /**
-     * Sets the hand slot index for the player.
-     *
-     * @param handSlot the index to set as the current hand slot
+     * Selects the inventory slot targeted by subsequent hand accessors. This container
+     * setter stores the index without validating the hotbar range or publishing a
+     * held-item update to viewers.
      */
     void setHandSlot(int handSlot);
 }

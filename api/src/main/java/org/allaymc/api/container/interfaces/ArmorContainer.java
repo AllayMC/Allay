@@ -4,98 +4,98 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * ArmorContainer represents a container that holds armor items.
+ * {@code ArmorContainer} exposes named slots for an armor equipment container. Its
+ * accessors use the shared container storage and notification rules, so callers can
+ * address each slot by its gameplay role without repeating numeric indices.
  *
  * @author daoge_cmd
  */
 public interface ArmorContainer extends Container {
     /**
-     * The constant representing the helmet slot index in the armor container.
+     * The slot constants identify armor equipment storage positions used by the named
+     * accessors and container action processing. Helmet equipment slot index.
      */
     int HELMET_SLOT = 0;
 
     /**
-     * The constant representing the chestplate slot index in the armor container.
+     * Chestplate equipment slot index.
      */
     int CHESTPLATE_SLOT = 1;
 
     /**
-     * The constant representing the leggings slot index in the armor container.
+     * Leggings equipment slot index.
      */
     int LEGGINGS_SLOT = 2;
 
     /**
-     * The constant representing the boots slot index in the armor container.
+     * Boots equipment slot index.
      */
     int BOOTS_SLOT = 3;
 
     /**
-     * Gets the item in the helmet slot.
-     *
-     * @return the ItemStack in the helmet slot
+     * Returns the stored stack in the helmet equipment slot. The result is shared with
+     * this container; callers that change its contents must notify the slot afterward.
      */
     default ItemStack getHelmet() {
         return getItemStack(HELMET_SLOT);
     }
 
     /**
-     * Sets the item in the helmet slot.
-     *
-     * @param itemStack the ItemStack to set in the helmet slot
+     * Replaces the helmet equipment slot and notifies its viewers and listeners. {@code
+     * itemStack} must be non-{@code null}; the container retains the supplied stack
+     * rather than copying it.
      */
     default void setHelmet(ItemStack itemStack) {
         setItemStack(HELMET_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the chestplate slot.
-     *
-     * @return the ItemStack in the chestplate slot
+     * Returns the stored stack in the chestplate equipment slot. The result is shared
+     * with this container; callers that change its contents must notify the slot
+     * afterward.
      */
     default ItemStack getChestplate() {
         return getItemStack(CHESTPLATE_SLOT);
     }
 
     /**
-     * Sets the item in the chestplate slot.
-     *
-     * @param itemStack the ItemStack to set in the chestplate slot
+     * Replaces the chestplate equipment slot and notifies its viewers and listeners.
+     * {@code itemStack} must be non-{@code null}; the container retains the supplied
+     * stack rather than copying it.
      */
     default void setChestplate(ItemStack itemStack) {
         setItemStack(CHESTPLATE_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the leggings slot.
-     *
-     * @return the ItemStack in the leggings slot
+     * Returns the stored stack in the leggings equipment slot. The result is shared with
+     * this container; callers that change its contents must notify the slot afterward.
      */
     default ItemStack getLeggings() {
         return getItemStack(LEGGINGS_SLOT);
     }
 
     /**
-     * Sets the item in the leggings slot.
-     *
-     * @param itemStack the ItemStack to set in the leggings slot
+     * Replaces the leggings equipment slot and notifies its viewers and listeners.
+     * {@code itemStack} must be non-{@code null}; the container retains the supplied
+     * stack rather than copying it.
      */
     default void setLeggings(ItemStack itemStack) {
         setItemStack(LEGGINGS_SLOT, itemStack);
     }
 
     /**
-     * Gets the item in the boots slot.
-     *
-     * @return the ItemStack in the boots slot
+     * Returns the stored stack in the boots equipment slot. The result is shared with
+     * this container; callers that change its contents must notify the slot afterward.
      */
     default ItemStack getBoots() {
         return getItemStack(BOOTS_SLOT);
     }
 
     /**
-     * Sets the item in the boots slot.
-     *
-     * @param itemStack the ItemStack to set in the boots slot
+     * Replaces the boots equipment slot and notifies its viewers and listeners. {@code
+     * itemStack} must be non-{@code null}; the container retains the supplied stack
+     * rather than copying it.
      */
     default void setBoots(ItemStack itemStack) {
         setItemStack(BOOTS_SLOT, itemStack);

@@ -8,12 +8,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates a method to be invoked after component initialization completes.
+ * {@code OnInitFinish} marks a method for invocation after component
+ * initialization completes.
  *
  * <p>
- * Methods with this annotation are called post-initialization with a single
- * {@link ComponentInitInfo} parameter. Must be public, return void,
- * and take exactly one parameter. Useful for setup or validation after dependency injection.
+ * Participating methods must be public, return {@code void}, and accept one parameter
+ * compatible with the supplied {@link ComponentInitInfo} instance; inherited
+ * public methods are included. Other method shapes are skipped. All injections
+ * and listener registrations finish first, but the owner's subclass constructor
+ * has not yet completed, and hook methods have no explicitly sorted order.
  * </p>
  *
  * @author daoge_cmd
