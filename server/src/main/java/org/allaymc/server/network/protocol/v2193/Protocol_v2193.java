@@ -1,11 +1,16 @@
 package org.allaymc.server.network.protocol.v2193;
 
 import org.allaymc.server.network.protocol.ClientVariant;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.network.protocol.v2169.Protocol_v2169;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
+import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@code Protocol_v2193} configures wire protocol 2193 within the international
@@ -41,6 +46,18 @@ public class Protocol_v2193 extends Protocol_v2169 {
      * supplied data instance. The enclosing initialization lifecycle verifies
      * this shared identity before publishing the protocol for connection use.
      */
+    @Override
+    protected List<BlockPropertyData> createCustomBlockProperties() {
+        var properties = new ArrayList<>(VanillaData_v2193.DATA_DRIVEN_BLOCK_PROPERTIES);
+        properties.addAll(super.createCustomBlockProperties());
+        return List.copyOf(properties);
+    }
+
+    @Override
+    protected NetworkBlockPalette createBlockPalette() {
+        return NetworkBlockPalette.current();
+    }
+
     @Override
     protected PacketEncoder createEncoder(ProtocolData data) {
         return new PacketEncoder_v2193(data);

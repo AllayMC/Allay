@@ -110,6 +110,11 @@ public abstract class Protocol {
      */
     private DefinitionRegistry<BlockDefinition> blockDefinitionRegistry;
     /**
+     * {@code blockPalette} holds the block states this protocol's clients know,
+     * which chunks, block updates and block definitions are encoded with.
+     */
+    private NetworkBlockPalette blockPalette;
+    /**
      * {@code initialized} publishes completion after every required component
      * has been assigned. Guarded accessors read this volatile flag before
      * exposing initialization results to other threads.
@@ -155,6 +160,8 @@ public abstract class Protocol {
         var itemDefinitions = SimpleDefinitionRegistry.<ItemDefinition>builder()
                 .addAll(encodedItemDefinitions)
                 .build();
+        // Block definitions are built from the palette, so it must be known first.
+        this.blockPalette = Objects.requireNonNull(createBlockPalette(), "createBlockPalette returned null");
         var encodedBlockDefinitions = createBlockDefinitions();
         var blockDefinitions = SimpleDefinitionRegistry.<BlockDefinition>builder()
                 .addAll(encodedBlockDefinitions)
@@ -171,7 +178,8 @@ public abstract class Protocol {
                     createCreativeGroups(),
                     createCreativeItems(),
                     createCustomBlockProperties(),
-                    createRecipeTable()
+                    createRecipeTable(),
+                    blockPalette
             );
             var packetEncoder = Objects.requireNonNull(createEncoder(protocolData), "createEncoder returned null");
             if (packetEncoder.getData() != protocolData) {
@@ -189,6 +197,7 @@ public abstract class Protocol {
             // cannot be reversed here.
             this.itemDefinitionRegistry = null;
             this.blockDefinitionRegistry = null;
+            this.blockPalette = null;
             throw exception;
         }
     }
@@ -421,15 +430,22 @@ public abstract class Protocol {
     }
 
     /**
-     * Builds definitions for every state in the registered block types. Each
-     * definition exposes the state hash as its runtime ID; iteration follows
-     * the source registries and state collections without an explicit sort.
+     * Builds the definitions this protocol's clients decode, which by default are
+     * those of its block palette. Each definition exposes the palette's network
+     * hash as its runtime ID.
      */
     protected List<BlockDefinition> createBlockDefinitions() {
-        return Registries.BLOCKS.getContent().values().stream()
-                .flatMap(blockType -> blockType.getAllStates().stream())
-                .map(blockState -> (BlockDefinition) blockState::blockStateHash)
-                .toList();
+        return blockPalette.definitions();
+    }
+
+    /**
+     * Returns the block palette this protocol's clients know block states by. Protocols older than the current block
+     * states override this with their palette.
+     *
+     * @return the block palette
+     */
+    protected NetworkBlockPalette createBlockPalette() {
+        return NetworkBlockPalette.current();
     }
 
     /**
@@ -1145,7 +1161,7 @@ public abstract class Protocol {
      * identities.
      */
     protected final ItemData encodeItemStack(ItemStack itemStack) {
-        return NetworkHelper.toNetwork(itemStack, itemDefinitionRegistry, blockDefinitionRegistry);
+        return NetworkHelper.toNetwork(itemStack, itemDefinitionRegistry, blockDefinitionRegistry, blockPalette);
     }
 
     /**
