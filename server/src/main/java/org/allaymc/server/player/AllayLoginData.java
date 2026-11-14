@@ -71,6 +71,16 @@ public class AllayLoginData implements LoginData {
      */
     private DeviceInfo deviceInfo;
     /**
+     * {@code platformOnlineId} holds the platform online ID from the client data;
+     * it is empty, never {@code null}, when the client sends none.
+     */
+    private String platformOnlineId = "";
+    /**
+     * {@code minecraftId} holds the PlayFab ID claim ({@code mid}) of the identity
+     * token; only a verified login uses it for the skin PlayFab ID.
+     */
+    private String minecraftId;
+    /**
      * Optional client language code.
      */
     private LangCode langCode;
@@ -159,6 +169,50 @@ public class AllayLoginData implements LoginData {
     }
 
     /**
+     * Returns the PlayFab ID from the client data, or {@code null} if the client did not send one.
+     * <p>
+     * Clients send it as {@code PlayFabId}; {@code PlayFabID} is still accepted for older senders.
+     *
+     * @param skinMap the decoded client data
+     * @return the PlayFab ID, or {@code null}
+     */
+    static String readPlayFabId(JsonObject skinMap) {
+        for (var key : new String[]{"PlayFabId", "PlayFabID"}) {
+            if (skinMap.has(key)) {
+                return skinMap.get(key).getAsString();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the PlayFab ID to put into the player's skin. Like BDS, the verified ID from the authentication token wins
+     * over the client-supplied one, which 1.26.52 clients leave empty.
+     *
+     * @param authed      whether the login chain was verified
+     * @param minecraftId the PlayFab ID claim ({@code mid}) of the authentication token, if any
+     * @param clientValue the PlayFab ID from the client data, if any
+     * @return the PlayFab ID, or {@code null}
+     */
+    static String resolvePlayFabId(boolean authed, String minecraftId, String clientValue) {
+        if (authed && minecraftId != null && !minecraftId.isBlank()) {
+            return minecraftId;
+        }
+        return clientValue;
+    }
+
+    /**
+     * Returns the platform online ID from the client data, or an empty string if the client did not send one.
+     *
+     * @param skinMap the decoded client data
+     * @return the platform online ID, never {@code null}
+     */
+    static String readPlatformOnlineId(JsonObject skinMap) {
+        var value = skinMap.get("PlatformOnlineId");
+        return value != null && value.isJsonPrimitive() ? value.getAsString() : "";
+    }
+
+    /**
      * Returns the persistent UUID selected for authenticated or offline identity.
      * Authenticated input requires a non-{@code null} {@code identity}, which is
      * retained unchanged rather than recalculated from an account name.
@@ -199,6 +253,7 @@ public class AllayLoginData implements LoginData {
         this.xname = extraData.displayName;
         this.uuid = extraData.identity;
         this.xuid = extraData.xuid;
+        this.minecraftId = extraData.minecraftId;
         this.identityPublicKey = result.identityClaims().identityPublicKey;
 
         if (isNetEaseClient) {
@@ -264,6 +319,8 @@ public class AllayLoginData implements LoginData {
             this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
         }
 
+        this.platformOnlineId = readPlatformOnlineId(skinMap);
+
         // Fill only a missing offline name from client metadata before UUID resolution; authenticated
         // names must remain tied to their validated identity claims.
         if (!this.authed && (this.xname == null || this.xname.isBlank()) && skinMap.has("ThirdPartyName")) {
@@ -323,8 +380,13 @@ public class AllayLoginData implements LoginData {
             skinBuilder.armSize(skinMap.get("ArmSize").getAsString());
         }
 
-        if (skinMap.has("PlayFabID")) {
-            skinBuilder.playFabId(skinMap.get("PlayFabID").getAsString());
+        var playFabId = resolvePlayFabId(this.authed, this.minecraftId, readPlayFabId(skinMap));
+        if (playFabId != null) {
+            skinBuilder.playFabId(playFabId);
+        }
+
+        if (skinMap.has("ProfileHash")) {
+            skinBuilder.profileHash(skinMap.get("ProfileHash").getAsString());
         }
 
         skinBuilder.skinData(this.getImage(skinMap, "Skin"));

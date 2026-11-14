@@ -19,6 +19,43 @@ class AllayLoginDataTest {
      * fail rather than derive another UUID.
      */
     @Test
+    void testPlayFabIdIsReadFromTheKeyClientsSend() {
+        var clientData = new com.google.gson.JsonObject();
+        clientData.addProperty("PlayFabId", "f17248eadd1fd0a8");
+
+        assertEquals("f17248eadd1fd0a8", AllayLoginData.readPlayFabId(clientData));
+    }
+
+    @Test
+    void testPlayFabIdFallsBackToTheLegacyKeyAndIsOptional() {
+        var legacy = new com.google.gson.JsonObject();
+        legacy.addProperty("PlayFabID", "abc");
+
+        assertEquals("abc", AllayLoginData.readPlayFabId(legacy));
+        assertNull(AllayLoginData.readPlayFabId(new com.google.gson.JsonObject()));
+    }
+
+    @Test
+    void testVerifiedPlayFabIdFromTheTokenWinsOverTheClientValue() {
+        assertEquals("F17248EADD1FD0A8", AllayLoginData.resolvePlayFabId(true, "F17248EADD1FD0A8", "client"));
+        assertEquals("client", AllayLoginData.resolvePlayFabId(true, " ", "client"));
+        assertEquals("client", AllayLoginData.resolvePlayFabId(true, null, "client"));
+        // An unverified token's claim is not trusted.
+        assertEquals("client", AllayLoginData.resolvePlayFabId(false, "F17248EADD1FD0A8", "client"));
+        assertNull(AllayLoginData.resolvePlayFabId(false, null, null));
+    }
+
+    @Test
+    void testPlatformOnlineIdIsReadFromClientDataAndDefaultsToEmpty() {
+        var clientData = new com.google.gson.JsonObject();
+        clientData.addProperty("PlatformOnlineId", "12345");
+        clientData.addProperty("DeviceModel", "B550M DS3H");
+
+        assertEquals("12345", AllayLoginData.readPlatformOnlineId(clientData));
+        assertEquals("", AllayLoginData.readPlatformOnlineId(new com.google.gson.JsonObject()));
+    }
+
+    @Test
     void testAuthenticatedIdentityIsPreserved() {
         var identity = UUID.nameUUIDFromBytes(
                 "pocket-auth-1-xuid:123456789".getBytes(StandardCharsets.UTF_8)
