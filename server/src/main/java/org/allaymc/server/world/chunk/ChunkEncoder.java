@@ -5,9 +5,9 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.datastruct.palette.Palette;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
 import org.cloudburstmc.nbt.NbtUtils;
 
 /**
@@ -36,11 +36,12 @@ public final class ChunkEncoder {
      * failure is logged, releases partial output, and returns the shared empty
      * buffer. Block-entity failures are handled internally and may instead
      * leave partial NBT in the result.
+     * {@code blockPalette} selects the block states the target protocol knows.
      */
-    public static ByteBuf writeToNetwork(AllayUnsafeChunk chunk) {
+    public static ByteBuf writeToNetwork(AllayUnsafeChunk chunk, NetworkBlockPalette blockPalette) {
         var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            writeBlocks(chunk, byteBuf);
+            writeBlocks(chunk, byteBuf, blockPalette);
             writeBiomes(chunk, byteBuf);
             // This encoder emits no border-block entries, but their count still
             // terminates the biome portion of the payload expected by the client.
@@ -85,8 +86,9 @@ public final class ChunkEncoder {
      * callers must stabilize section palettes while encoding. The section must
      * contain exactly {@code AllayChunkSection.LAYER_COUNT} block palettes because the header uses
      * that constant while the loop writes every supplied array entry.
+     * {@code blockPalette} selects the block states the target protocol knows.
      */
-    public static void writeToNetwork(AllayChunkSection section, ByteBuf byteBuf) {
+    public static void writeToNetwork(AllayChunkSection section, ByteBuf byteBuf, NetworkBlockPalette blockPalette) {
         byteBuf.writeByte(AllayChunkSection.CURRENT_CHUNK_SECTION_VERSION);
         // The header advertises LAYER_COUNT even though the loop consumes the entire
         // supplied array, so callers must keep its length consistent with that count.
@@ -96,7 +98,7 @@ public final class ChunkEncoder {
         byteBuf.writeByte(section.sectionY());
 
         for (var blockLayer : section.blockLayers()) {
-            blockLayer.writeToNetwork(byteBuf, BlockState::blockStateHash, null);
+            blockLayer.writeToNetwork(byteBuf, blockPalette::toNetwork, null);
         }
     }
 
@@ -104,11 +106,12 @@ public final class ChunkEncoder {
      * Returns an independent byte array containing one section's block payload
      * without block entities. The temporary buffer is released even when
      * encoding fails; callers must stabilize the section during access.
+     * {@code blockPalette} selects the block states the target protocol knows.
      */
-    public static byte[] encodeSectionBlob(AllayChunkSection section) {
+    public static byte[] encodeSectionBlob(AllayChunkSection section, NetworkBlockPalette blockPalette) {
         var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            writeToNetwork(section, byteBuf);
+            writeToNetwork(section, byteBuf, blockPalette);
             byte[] data = new byte[byteBuf.readableBytes()];
             byteBuf.readBytes(data);
             return data;
@@ -161,11 +164,12 @@ public final class ChunkEncoder {
      * Appends sections in ascending absolute Y order across the dimension's
      * complete vertical range. The supplied buffer remains caller-owned, and
      * all section data must remain stable throughout traversal.
+     * {@code blockPalette} selects the block states the target protocol knows.
      */
-    private static void writeBlocks(AllayUnsafeChunk chunk, ByteBuf byteBuf) {
+    private static void writeBlocks(AllayUnsafeChunk chunk, ByteBuf byteBuf, NetworkBlockPalette blockPalette) {
         var dimensionType = chunk.getDimensionType();
         for (int i = dimensionType.minSectionY(); i <= dimensionType.maxSectionY(); i++) {
-            ChunkEncoder.writeToNetwork(chunk.getSection(i), byteBuf);
+            ChunkEncoder.writeToNetwork(chunk.getSection(i), byteBuf, blockPalette);
         }
     }
 

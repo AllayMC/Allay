@@ -112,7 +112,7 @@ public abstract class PacketEncoder {
      * registries.
      */
     protected final ItemData encodeItemStack(ItemStack itemStack) {
-        return NetworkHelper.toNetwork(itemStack, itemDefinitions, blockDefinitions);
+        return NetworkHelper.toNetwork(itemStack, itemDefinitions, blockDefinitions, data.blockPalette(), data.itemPalette());
     }
 
     /**
@@ -122,7 +122,7 @@ public abstract class PacketEncoder {
      * conversion.
      */
     protected final List<ItemData> encodeItemStacks(List<ItemStack> itemStacks) {
-        return NetworkHelper.toNetwork(itemStacks, itemDefinitions, blockDefinitions);
+        return NetworkHelper.toNetwork(itemStacks, itemDefinitions, blockDefinitions, data.blockPalette(), data.itemPalette());
     }
 
     /**

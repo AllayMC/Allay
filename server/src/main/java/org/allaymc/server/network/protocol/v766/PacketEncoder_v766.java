@@ -59,6 +59,7 @@ import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.network.NetworkHelper;
+import org.allaymc.server.network.protocol.NetworkBlockPalette;
 import org.allaymc.server.network.protocol.PacketEncoder;
 import org.allaymc.server.network.protocol.ProtocolData;
 import org.allaymc.server.player.ChunkCache;
@@ -81,6 +82,7 @@ import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.camera.CameraShakeAction;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.DimensionDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -489,7 +491,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
                                 (AllayUnsafeChunk) unsafeChunk,
                                 cache,
                                 playerId,
-                                cacheGeneration
+                                cacheGeneration,
+                                getData().blockPalette()
                         ),
                 OperationType.READ,
                 OperationType.READ
@@ -586,7 +589,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
             AllayUnsafeChunk chunk,
             ChunkCache cache,
             UUID playerId,
-            int cacheGeneration
+            int cacheGeneration,
+            NetworkBlockPalette blockPalette
     ) {
         var dimensionType = chunk.getDimensionType();
         var packet = new LevelChunkPacket();
@@ -603,7 +607,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
             byte[][] allBlobs = new byte[sectionCount + 1][];
             for (int i = 0; i < sectionCount; i++) {
                 allBlobs[i] = ChunkEncoder.encodeSectionBlob(
-                        chunk.getSection(dimensionType.minSectionY() + i)
+                        chunk.getSection(dimensionType.minSectionY() + i),
+                        blockPalette
                 );
             }
             allBlobs[sectionCount] = ChunkEncoder.encodeBiomesBlob(chunk);
@@ -630,7 +635,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
         // path rather than publishing hashes for blobs that admission did not
         // accept.
         packet.setCachingEnabled(false);
-        packet.setData(ChunkEncoder.writeToNetwork(chunk));
+        packet.setData(ChunkEncoder.writeToNetwork(chunk, blockPalette));
         return packet;
     }
 
@@ -667,7 +672,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
         var packet = new UpdateBlockPacket();
         packet.setBlockPosition(NetworkHelper.toNetwork(position));
         packet.setDataLayer(layer);
-        packet.setDefinition(blockState::blockStateHash);
+        int networkHash = getData().blockPalette().toNetwork(blockState);
+        packet.setDefinition(() -> networkHash);
         packet.getFlags().add(UpdateBlockPacket.Flag.NETWORK);
         return packet;
     }
@@ -694,8 +700,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
         Objects.requireNonNull(blockUpdates, "blockUpdates");
         Objects.requireNonNull(extraBlockUpdates, "extraBlockUpdates");
         var packets = new UpdateSubChunkBlocksPacket[chunk.getDimensionType().chunkSectionCount()];
-        encodeBlockUpdates(packets, chunk, blockUpdates, false);
-        encodeBlockUpdates(packets, chunk, extraBlockUpdates, true);
+        encodeBlockUpdates(packets, chunk, blockUpdates, false, getData().blockPalette());
+        encodeBlockUpdates(packets, chunk, extraBlockUpdates, true, getData().blockPalette());
         return Arrays.stream(packets).filter(Objects::nonNull).toList();
     }
 
@@ -715,7 +721,8 @@ public class PacketEncoder_v766 extends PacketEncoder {
             UpdateSubChunkBlocksPacket[] packets,
             Chunk chunk,
             Collection<BlockUpdate> blockUpdates,
-            boolean extraLayer
+            boolean extraLayer,
+            NetworkBlockPalette blockPalette
     ) {
         for (var update : blockUpdates) {
             var sectionY = update.y() >> 4;
@@ -736,7 +743,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
 
             var entry = new BlockChangeEntry(
                     Vector3i.from(update.x(), update.y(), update.z()),
-                    update.blockState()::blockStateHash,
+                    blockDefinition(blockPalette.toNetwork(update.blockState())),
                     NetworkHelper.BLOCK_UPDATE_NETWORK,
                     -1,
                     BlockChangeEntry.MessageType.NONE
@@ -947,7 +954,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             case BlockBreakParticle blockBreak -> {
                 packet.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
-                packet.setData(blockBreak.blockState().blockStateHash());
+                packet.setData(getData().blockPalette().toNetwork(blockBreak.blockState()));
             }
             case PunchBlockParticle punch -> {
                 packet.setType(switch (Objects.requireNonNull(punch.blockFace())) {
@@ -958,7 +965,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                     case WEST -> LevelEvent.PARTICLE_BREAK_BLOCK_WEST;
                     case EAST -> LevelEvent.PARTICLE_BREAK_BLOCK_EAST;
                 });
-                packet.setData(punch.blockState().blockStateHash());
+                packet.setData(getData().blockPalette().toNetwork(punch.blockState()));
             }
             case FlameParticle flame -> {
                 packet.setType(ParticleType.FLAME);
@@ -970,7 +977,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 // payload layout.
                 packet.setType(ParticleType.ICON_CRACK);
                 packet.setData(
-                        (itemBreak.itemStack().getItemType().getRuntimeId() << 16)
+                        (getData().itemPalette().toNetwork(itemBreak.itemStack().getItemType()).getRuntimeId() << 16)
                         | itemBreak.itemStack().getMeta()
                 );
             }
@@ -1430,7 +1437,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
         // so specialized metadata, such as baby scale, wins when keys overlap.
         addGenericMetadata(entity, metadata);
         addComponentSpecificMetadata(entity, metadata);
-        addTypeSpecificMetadata(entity, metadata);
+        addTypeSpecificMetadata(entity, metadata, getData().blockPalette());
         return metadata;
     }
 
@@ -1551,13 +1558,17 @@ public class PacketEncoder_v766 extends PacketEncoder {
         }
     }
 
+    private static BlockDefinition blockDefinition(int networkHash) {
+        return () -> networkHash;
+    }
+
     /**
      * Adds metadata unique to supported concrete entity kinds. Missing
      * projectile owners use minus one, optional name or damage information is
      * omitted when unavailable, and unrecognized entity kinds add no further
-     * entries.
+     * entries. {@code blockPalette} selects the block states the target protocol knows.
      */
-    private static void addTypeSpecificMetadata(Entity entity, EntityDataMap metadata) {
+    private static void addTypeSpecificMetadata(Entity entity, EntityDataMap metadata, NetworkBlockPalette blockPalette) {
         switch (entity) {
             case EntityTnt tnt -> {
                 metadata.setFlag(EntityFlag.IGNITED, true);
@@ -1578,7 +1589,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             case EntityFallingBlock fallingBlock -> {
                 metadata.setFlag(EntityFlag.FIRE_IMMUNE, true);
-                metadata.put(EntityDataTypes.VARIANT, fallingBlock.getBlockState().blockStateHash());
+                metadata.put(EntityDataTypes.VARIANT, blockPalette.toNetwork(fallingBlock.getBlockState()));
             }
             case EntityXpOrb xpOrb -> metadata.put(EntityDataTypes.VALUE, xpOrb.getExperienceValue());
             case EntityArrow arrow -> metadata.setFlag(EntityFlag.CRITICAL, arrow.isCritical());
@@ -1964,7 +1975,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
                 // Eating uses the same packed runtime item ID and metadata
                 // layout as item particles, preserving which held item supplies
                 // the visual.
-                int data = (item.getItemType().getRuntimeId() << 16) | item.getMeta();
+                int data = (getData().itemPalette().toNetwork(item.getItemType()).getRuntimeId() << 16) | item.getMeta();
                 yield List.of(createEntityEventPacket(entity, EntityEventType.EATING_ITEM, data));
             }
             case SimpleEntityAction.FIREWORK_EXPLODE ->
@@ -2386,39 +2397,39 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             case DoorSound so -> {
                 packet.setSound(so.open() ? SoundEvent.DOOR_OPEN : SoundEvent.DOOR_CLOSE);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case ButtonPressSound so -> {
                 packet.setSound(SoundEvent.BUTTON_CLICK_ON);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case ButtonReleaseSound so -> {
                 packet.setSound(SoundEvent.BUTTON_CLICK_OFF);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case PressurePlateSound so -> {
                 packet.setSound(so.activated() ? SoundEvent.PRESSURE_PLATE_CLICK_ON : SoundEvent.PRESSURE_PLATE_CLICK_OFF);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case TrapdoorSound so -> {
                 packet.setSound(so.open() ? SoundEvent.TRAPDOOR_OPEN : SoundEvent.TRAPDOOR_CLOSE);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case FenceGateSound so -> {
                 packet.setSound(so.open() ? SoundEvent.FENCE_GATE_OPEN : SoundEvent.FENCE_GATE_CLOSE);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case BlockPlaceSound so -> {
                 packet.setSound(SoundEvent.PLACE);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case BlockBreakingSound so -> {
                 packet.setSound(SoundEvent.HIT);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case ItemUseOnBlockSound so -> {
                 packet.setSound(SoundEvent.ITEM_USE_ON);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case AttackSound so -> {
                 packet.setIdentifier("minecraft:player");
@@ -2486,7 +2497,7 @@ public class PacketEncoder_v766 extends PacketEncoder {
             }
             case RespawnAnchorChargeSound so -> {
                 packet.setSound(SoundEvent.RESPAWN_ANCHOR_CHARGE);
-                packet.setExtraData(so.blockState().blockStateHash());
+                packet.setExtraData(getData().blockPalette().toNetwork(so.blockState()));
             }
             case ChiseledBookshelfSound so -> {
                 PlaySoundPacket playSound = new PlaySoundPacket();

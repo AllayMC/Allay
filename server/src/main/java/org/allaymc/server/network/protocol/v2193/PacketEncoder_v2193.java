@@ -7,7 +7,11 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.DimensionDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.DimensionDataPacket;
 import org.cloudburstmc.protocol.bedrock.packet.JigsawStructureDataPacket;
+import org.cloudburstmc.protocol.bedrock.packet.VoxelShapesPacket;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -94,5 +98,14 @@ public class PacketEncoder_v2193 extends PacketEncoder_v2169 {
         var packet = new JigsawStructureDataPacket();
         packet.setJigsawStructureDataTag(JIGSAW_STRUCTURE_DATA);
         return packet;
+    }
+
+    @Override
+    public Collection<VoxelShapesPacket> encodeVoxelShapes() {
+        var packet = new VoxelShapesPacket();
+        packet.setShapes(new ArrayList<>(VanillaData_v2193.VOXEL_SHAPES));
+        packet.setNameMap(new HashMap<>(VanillaData_v2193.VOXEL_SHAPE_NAMES));
+        packet.setCustomShapeCount(0);
+        return List.of(packet);
     }
 }
