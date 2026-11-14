@@ -14,8 +14,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
-- (API) Added `FormViewer.updateForm(Form)`, which redraws a form the viewer has open by sending it again with its
-  form id.
 - (API) Added the new vanilla block and item types, biome constants, stair corner and horizontal connection properties.
   Split `BlockPropertyTypes.GROWTH` into `GROWTH_2` and `GROWTH_8`; existing crop code uses `GROWTH_8`.
 - Added support for MCBE 1.26.40 and its 1.26.44 protocol hotfix.
@@ -23,6 +21,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Updated the vanilla feature baseline to MCBE 1.26.50.
 - Introduced new multi version architecture (mvv2).
+- Fences, glass panes, iron and copper bars and trip wire now resolve their `minecraft:connection_*` sides on the server,
+  as required by the 1.26.50 block states.
 
 ### Fixed
 

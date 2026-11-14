@@ -11,7 +11,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.allaymc.server.block.component.BlockHorizontalConnectionBaseComponentImpl;
 import org.joml.Vector3ic;
 
 import java.time.Duration;
@@ -34,9 +34,13 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * break-time pulse or silent removal. Searches stop at the first hook or intervening
  * non-wire block and use only facing hooks within forty-one block offsets.
  *
+ * <p>
+ * The {@code minecraft:connection_*} sides of a segment join neighboring tripwire and
+ * hooks that face it, and are kept up to date on placement and neighbor updates.
+ *
  * @author daoge_cmd
  */
-public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockTripWireBaseComponentImpl extends BlockHorizontalConnectionBaseComponentImpl {
 
     /**
      * {@code CHECK_INTERVAL} requests entity polling every ten game ticks while a
@@ -56,6 +60,15 @@ public class BlockTripWireBaseComponentImpl extends BlockBaseComponentImpl {
      * The new-state wrapper supplies the segment position, and the helper schedules
      * hook callbacks rather than calculating their connection states immediately.
      */
+    @Override
+    protected boolean connectsTo(BlockState self, BlockFace face, BlockState neighbor) {
+        var type = neighbor.getBlockType();
+        if (type == BlockTypes.TRIPWIRE_HOOK) {
+            return BlockFace.fromHorizontalIndex(neighbor.getPropertyValue(DIRECTION_4)) == face.opposite();
+        }
+        return type == BlockTypes.TRIP_WIRE;
+    }
+
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
