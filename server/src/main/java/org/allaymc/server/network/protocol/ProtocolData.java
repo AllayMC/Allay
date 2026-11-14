@@ -28,6 +28,7 @@ import java.util.Objects;
  * @param customBlockProperties custom block properties in network order
  *
  * @param recipeTable encoded recipes and their server-side lookup index
+ * @param blockPalette the block palette the protocol's clients know block states by
  */
 public record ProtocolData(
         List<ItemDefinition> itemDefinitions,
@@ -35,7 +36,8 @@ public record ProtocolData(
         List<CreativeItemGroup> creativeGroups,
         List<CreativeItemData> creativeItems,
         List<BlockPropertyData> customBlockProperties,
-        RecipeTable recipeTable
+        RecipeTable recipeTable,
+        NetworkBlockPalette blockPalette
 ) {
     /**
      * Creates a protocol payload bundle with copied, unmodifiable lists.
@@ -50,5 +52,6 @@ public record ProtocolData(
         creativeItems = List.copyOf(Objects.requireNonNull(creativeItems, "creativeItems"));
         customBlockProperties = List.copyOf(Objects.requireNonNull(customBlockProperties, "customBlockProperties"));
         recipeTable = Objects.requireNonNull(recipeTable, "recipeTable");
+        blockPalette = Objects.requireNonNull(blockPalette, "blockPalette");
     }
 }

@@ -2,6 +2,7 @@ package org.allaymc.server.registry.loader;
 
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.server.world.generator.DebugNoiser;
 import org.allaymc.server.world.generator.FlatNoiser;
 
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class WorldGeneratorFactoryRegistryLoader implements RegistryLoader<Void,
         var map = new HashMap<String, Function<String, WorldGenerator>>();
         map.put("VOID", preset -> WorldGenerator.builder().name("VOID").preset(preset).build());
         map.put("FLAT", preset -> WorldGenerator.builder().name("FLAT").noisers(new FlatNoiser()).preset(preset).build());
+        map.put("DEBUG", preset -> WorldGenerator.builder().name("DEBUG").noisers(new DebugNoiser()).preset(preset).build());
         return map;
     }
 }

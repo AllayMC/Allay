@@ -67,11 +67,13 @@ class ProtocolRegistryInitializationTest {
         var data = protocol.getData();
 
         assertEquals(Registries.ITEMS.getContent().size(), data.itemDefinitions().size());
+        // 975 clients know the block states of their own palette.
+        assertEquals(data.blockPalette().definitions().size(), data.blockDefinitions().size());
         assertEquals(
                 Registries.BLOCKS.getContent().values().stream()
                         .mapToInt(blockType -> blockType.getAllStates().size())
                         .sum(),
-                data.blockDefinitions().size()
+                ProtocolRegistry.getDefault().resolve(ClientVariant.INTERNATIONAL, 2193).getData().blockDefinitions().size()
         );
         assertEquals(Registries.CREATIVE_ITEMS.getGroups().size(), data.creativeGroups().size());
         assertEquals(Registries.CREATIVE_ITEMS.getEntries().size(), data.creativeItems().size());
