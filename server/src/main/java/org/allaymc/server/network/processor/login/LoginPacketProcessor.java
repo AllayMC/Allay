@@ -68,7 +68,15 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     @Override
     public void handle(Player player, LoginPacket packet) {
         var allayPlayer = (AllayPlayer) player;
-        var loginData = decodeLoginData(packet);
+        AllayLoginData loginData;
+        try {
+            loginData = decodeLoginData(packet);
+        } catch (RuntimeException exception) {
+            log.warn("Failed to decode login packet received from {}", player.getSocketAddress(), exception);
+            player.disconnect();
+            return;
+        }
+
         if (loginData == null) {
             log.warn("Failed to decode login packet received from {}. The client will be disconnected", player.getSocketAddress());
             player.disconnect();
