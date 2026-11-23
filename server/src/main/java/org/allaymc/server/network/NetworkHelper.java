@@ -26,6 +26,9 @@ import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.data.EntityId;
+import org.allaymc.server.item.data.ItemId;
+import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -251,6 +254,24 @@ public final class NetworkHelper {
     }
 
     /**
+     * Returns the vanilla item id of the given item type, or {@code null} for a custom item.
+     *
+     * @param itemType the item type
+     * @return the vanilla item id, or {@code null}
+     */
+    private static ItemId vanillaItemId(ItemType<?> itemType) {
+        if (!(itemType instanceof AllayItemType<?> allayItemType) || allayItemType.isCustomItem()) {
+            return null;
+        }
+        return ItemId.fromIdentifier(itemType.getIdentifier());
+    }
+
+    private static boolean isBlockItem(ItemId vanillaItemId) {
+        var definition = InternalRegistries.VANILLA_ITEM_DEFINITIONS.get(vanillaItemId);
+        return definition != null && definition.isBlockItem();
+    }
+
+    /**
      * Encodes an item stack using definitions from the target protocol.
      * Air uses the protocol air payload with the target item definition.
      * Other stacks retain count, metadata, extra data, and network identity;
@@ -275,10 +296,28 @@ public final class NetworkHelper {
                     .build();
         }
 
+        int meta = itemStack.getMeta();
+        Integer blockStateHash = null;
         var blockState = itemStack.toBlockState();
-        var blockDefinition = blockState == null ? null : blockDefinitions.getDefinition(blockState.blockStateHash());
-        if (blockState != null && blockDefinition == null) {
-            throw new IllegalStateException("Missing block definition for state " + blockState.blockStateHash());
+        if (blockState != null) {
+            var vanillaItemId = vanillaItemId(itemType);
+            if (vanillaItemId == null) {
+                blockStateHash = blockState.blockStateHash();
+            } else if (isBlockItem(vanillaItemId)) {
+                // Like BDS, a block item keeps its meta in its block, e.g. an upward piston, and is sent with meta 0.
+                var metaStates = InternalRegistries.BLOCK_ITEM_META_STATES.get(vanillaItemId);
+                blockStateHash = metaStates != null && metaStates.containsKey(meta) ? metaStates.get(meta) : blockState.blockStateHash();
+                meta = 0;
+            }
+            // Otherwise, like BDS, no block: doors, hanging signs, cauldrons and the like place a block, but the client
+            // draws them from their item texture.
+        }
+        BlockDefinition blockDefinition = null;
+        if (blockStateHash != null) {
+            blockDefinition = blockDefinitions.getDefinition(blockStateHash);
+            if (blockDefinition == null) {
+                throw new IllegalStateException("Missing block definition for state " + blockStateHash);
+            }
         }
         var extraTag = itemStack.saveExtraTag();
         return ItemData
@@ -286,7 +325,7 @@ public final class NetworkHelper {
                 .definition(getItemDefinition(itemType, itemDefinitions))
                 .blockDefinition(blockDefinition)
                 .count(itemStack.getCount())
-                .damage(itemStack.getMeta())
+                .damage(meta)
                 // Like BDS, an item without extra data is sent without NBT.
                 // With an empty compound, 1.26.50 clients draw no held model
                 // for flat block items such as ladders, iron bars, and string.

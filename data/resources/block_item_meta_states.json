@@ -1,0 +1,92 @@
+{
+  "minecraft:amethyst_cluster": {
+    "1": -960283518
+  },
+  "minecraft:big_dripleaf": {
+    "4": -1078914111
+  },
+  "minecraft:brown_mushroom_block": {
+    "14": 203547508
+  },
+  "minecraft:chest": {
+    "2": -1132117234
+  },
+  "minecraft:copper_chest": {
+    "2": -327497521
+  },
+  "minecraft:dispenser": {
+    "3": 1036524128
+  },
+  "minecraft:dropper": {
+    "3": -1277280225
+  },
+  "minecraft:ender_chest": {
+    "2": 1239582919
+  },
+  "minecraft:exposed_copper_chest": {
+    "2": 987437688
+  },
+  "minecraft:glow_lichen": {
+    "0": 534169277
+  },
+  "minecraft:large_amethyst_bud": {
+    "1": -406581079
+  },
+  "minecraft:medium_amethyst_bud": {
+    "1": 553552024
+  },
+  "minecraft:mushroom_stem": {
+    "15": -19901229
+  },
+  "minecraft:oxidized_copper_chest": {
+    "2": -1538055545
+  },
+  "minecraft:piston": {
+    "1": 1961230256
+  },
+  "minecraft:pointed_dripstone": {
+    "8": 1659726445
+  },
+  "minecraft:red_mushroom_block": {
+    "14": -1161199409
+  },
+  "minecraft:small_amethyst_bud": {
+    "1": -1262046363
+  },
+  "minecraft:small_dripleaf_block": {
+    "7": 1070937763
+  },
+  "minecraft:sticky_piston": {
+    "1": -1993329665
+  },
+  "minecraft:stonecutter_block": {
+    "2": -1945031079
+  },
+  "minecraft:sulfur_spike": {
+    "8": -1334289858
+  },
+  "minecraft:suspicious_gravel": {
+    "1": 623036
+  },
+  "minecraft:suspicious_sand": {
+    "1": -2140609367
+  },
+  "minecraft:trapped_chest": {
+    "2": 828777955
+  },
+  "minecraft:waxed_copper_chest": {
+    "2": -1874727137
+  },
+  "minecraft:waxed_exposed_copper_chest": {
+    "2": -500711928
+  },
+  "minecraft:waxed_oxidized_copper_chest": {
+    "2": 1084588487
+  },
+  "minecraft:waxed_weathered_copper_chest": {
+    "2": 998383803
+  },
+  "minecraft:weathered_copper_chest": {
+    "2": -710286221
+  }
+}

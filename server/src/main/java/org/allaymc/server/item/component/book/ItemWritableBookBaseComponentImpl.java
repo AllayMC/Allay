@@ -151,8 +151,12 @@ public class ItemWritableBookBaseComponentImpl extends ItemBaseComponentImpl imp
      */
     @Override
     public NbtMap saveExtraTag() {
-        return super.saveExtraTag().toBuilder()
-                .putList(TAG_PAGES, NbtType.COMPOUND, this.pages.stream().map(page -> NbtMap.builder().putString(TAG_TEXT, page).build()).toList()).build();
+        var builder = super.saveExtraTag().toBuilder();
+        // Like BDS, an empty book has no pages tag.
+        if (!this.pages.isEmpty()) {
+            builder.putList(TAG_PAGES, NbtType.COMPOUND, this.pages.stream().map(page -> NbtMap.builder().putString(TAG_TEXT, page).build()).toList());
+        }
+        return builder.build();
     }
 
     /**
