@@ -21,6 +21,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
@@ -177,6 +178,10 @@ public final class ComponentImplProcessor extends AbstractProcessor {
                 messager.printMessage(Diagnostic.Kind.ERROR, "@GenerateImpl may only annotate interface declarations", element);
                 continue;
             }
+            if (iface.getNestingKind() != NestingKind.TOP_LEVEL) {
+                messager.printMessage(Diagnostic.Kind.ERROR, "@GenerateImpl may only annotate top-level interfaces", iface);
+                continue;
+            }
             var anno = iface.getAnnotation(GenerateImpl.class);
             var baseClassElement = resolveBaseClass(iface, anno.baseClass());
             if (baseClassElement == null) {
@@ -267,6 +272,7 @@ public final class ComponentImplProcessor extends AbstractProcessor {
         Set<String> existingZeroArgMethodNames = collectAllMethodNames(composedType, baseClass);
 
         var classBuilder = TypeSpec.classBuilder(implSimpleName)
+                .addOriginatingElement(originatingElement)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class)
                         .addMember("value", "{$S, $S}", "unchecked", "deprecation")

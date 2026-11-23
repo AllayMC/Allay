@@ -2,13 +2,21 @@ package org.allaymc.server.component;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
+import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.component.ComponentInitInfo;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.server.block.impl.BlockBehaviorImpl;
+import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.item.impl.ItemStackImpl;
 import org.allaymc.server.utils.ComponentInjectException;
 import org.allaymc.server.utils.ReflectionUtils;
 
@@ -19,6 +27,7 @@ import java.lang.invoke.VarHandle;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -153,14 +162,17 @@ public final class ComponentBlueprint<T extends ComponentClass> {
 
     /**
      * Resolves a concrete {@link ComponentClass} implementation class from either
-     * an existing implementation class or a composed API interface. When an
-     * interface is supplied, lookup checks the same package for
-     * {@code <Name>Impl} first (supporting plugin-defined interfaces) and then
-     * checks the matching {@code org.allaymc.server.<domain>.impl.<Name>Impl}
-     * package for built-in Allay interfaces.
+     * an existing implementation class or a composed API interface. The four
+     * domain root interfaces ({@link BlockBehavior}, {@link ItemStack},
+     * {@link Entity}, and {@link BlockEntity}) map directly to their shared
+     * server base implementations. Other interfaces check the same package for
+     * {@code <Name>Impl} using the interface's own class loader first (so plugin
+     * interfaces resolve even when a builder defaults to the server class loader)
+     * before falling back to {@code classLoader} and Allay's server
+     * {@code impl} package.
      *
      * @param interfaceOrImplClass concrete implementation class or composed API interface
-     * @param classLoader          class loader used to locate generated implementation classes
+     * @param classLoader          fallback class loader used when locating generated implementation classes
      *
      * @return the resolved concrete {@link ComponentClass} subtype
      *
@@ -176,15 +188,32 @@ public final class ComponentBlueprint<T extends ComponentClass> {
             return (Class<T>) interfaceOrImplClass;
         }
 
-        var loader = classLoader != null ? classLoader : interfaceOrImplClass.getClassLoader();
+        if (interfaceOrImplClass == BlockBehavior.class) {
+            return (Class<T>) BlockBehaviorImpl.class;
+        }
+        if (interfaceOrImplClass == ItemStack.class) {
+            return (Class<T>) ItemStackImpl.class;
+        }
+        if (interfaceOrImplClass == Entity.class) {
+            return (Class<T>) EntityImpl.class;
+        }
+        if (interfaceOrImplClass == BlockEntity.class) {
+            return (Class<T>) BlockEntityImpl.class;
+        }
+
+        var ifaceLoader = interfaceOrImplClass.getClassLoader();
         var samePackageCandidate = interfaceOrImplClass.getName() + "Impl";
-        try {
-            var resolved = Class.forName(samePackageCandidate, false, loader);
-            if (ComponentClass.class.isAssignableFrom(resolved)) {
+        // Prefer the interface's own class loader first so plugin-defined interfaces
+        // resolve their sibling *Impl classes when Allay*Type.Builder.build() uses Allay's loader.
+        var resolved = tryLoadComponentClass(samePackageCandidate, ifaceLoader);
+        if (resolved != null) {
+            return (Class<T>) resolved;
+        }
+        if (classLoader != null && classLoader != ifaceLoader) {
+            resolved = tryLoadComponentClass(samePackageCandidate, classLoader);
+            if (resolved != null) {
                 return (Class<T>) resolved;
             }
-        } catch (ClassNotFoundException ignored) {
-            // Fall through to check Allay's server impl package for built-in API interfaces.
         }
 
         var name = interfaceOrImplClass.getName();
@@ -194,17 +223,27 @@ public final class ComponentBlueprint<T extends ComponentClass> {
             var serverCandidate = "org.allaymc.server."
                     + name.substring(apiPrefix.length()).replace(interfacesToken, ".impl.")
                     + "Impl";
-            try {
-                var resolved = Class.forName(serverCandidate, false, loader);
-                if (ComponentClass.class.isAssignableFrom(resolved)) {
-                    return (Class<T>) resolved;
-                }
-            } catch (ClassNotFoundException ignored) {
-                // Report both attempted names in the failure message below.
+            var serverLoader = classLoader != null ? classLoader : ComponentBlueprint.class.getClassLoader();
+            resolved = tryLoadComponentClass(serverCandidate, serverLoader);
+            if (resolved != null) {
+                return (Class<T>) resolved;
             }
         }
 
         throw new ComponentInjectException("Cannot resolve ComponentClass implementation for interface " + interfaceOrImplClass.getName());
+    }
+
+    /**
+     * Attempts to load {@code className} from {@code loader} and returns it only
+     * when it is assignable to {@link ComponentClass}, or {@code null} otherwise.
+     */
+    private static Class<?> tryLoadComponentClass(String className, ClassLoader loader) {
+        try {
+            var resolved = Class.forName(className, false, loader);
+            return ComponentClass.class.isAssignableFrom(resolved) ? resolved : null;
+        } catch (ClassNotFoundException ignored) {
+            return null;
+        }
     }
 
     /**
@@ -520,9 +559,16 @@ public final class ComponentBlueprint<T extends ComponentClass> {
     }
 
     /**
-     * Resolves a {@link VarHandle} for {@code field} through its declaring class.
+     * Resolves a mutable {@link VarHandle} for {@code field} through its
+     * declaring class, rejecting {@code final} fields at build time so runtime
+     * wiring never fails with {@code UnsupportedOperationException}.
      */
     private static VarHandle unreflectField(Field field) {
+        if (Modifier.isFinal(field.getModifiers())) {
+            throw new ComponentInjectException(
+                    "Injected field " + field.getDeclaringClass().getName() + "#" + field.getName() + " cannot be final"
+            );
+        }
         try {
             var lookup = MethodHandles.privateLookupIn(field.getDeclaringClass(), LOOKUP);
             return lookup.unreflectVarHandle(field);
@@ -659,33 +705,6 @@ public final class ComponentBlueprint<T extends ComponentClass> {
      */
     public boolean hasEventHandler(Class<? extends Event> eventClass) {
         return eventDispatchTable.containsKey(eventClass);
-    }
-
-    /**
-     * Returns the declared component class at slot {@code index}.
-     */
-    public Class<?> getComponentClass(int index) {
-        return componentClasses[index];
-    }
-
-    /**
-     * Returns the number of configured component slots in this blueprint.
-     */
-    public int getComponentCount() {
-        return providers.length;
-    }
-
-    /**
-     * Returns whether every component slot other than slot zero is a shared
-     * singleton provider.
-     */
-    public boolean hasOnlyStatelessSiblingComponents() {
-        for (int i = 1; i < providers.length; i++) {
-            if (!providers[i].isSingleton()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

@@ -1,18 +1,25 @@
 package org.allaymc.server.component;
 
+import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.server.block.component.BlockStrippableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockSuspiciousFallableComponentImpl;
+import org.allaymc.server.block.impl.BlockBehaviorImpl;
+import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
+import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.item.impl.ItemStackImpl;
 import org.allaymc.server.utils.ComponentInjectException;
 import org.junit.jupiter.api.Test;
 
@@ -125,6 +132,12 @@ class ComponentBlueprintTest {
                         ComponentProvider.of(() -> new RecordingSiblingComponentImpl(new ArrayList<>()), RecordingSiblingComponentImpl.class)
                 ), FixtureInitInfo.class));
 
+        // Final injected field must fail fast at compile time rather than at runtime.
+        assertThrows(ComponentInjectException.class, () ->
+                ComponentBlueprint.compile(EmptyOwner.class, List.of(
+                        ComponentProvider.of(FinalFieldComponentImpl::new, FinalFieldComponentImpl.class)
+                ), null));
+
         // Optional dependency builds cleanly when absent.
         var optionalBlueprint = ComponentBlueprint.compile(EmptyOwner.class, List.of(
                 ComponentProvider.of(OptionalDepComponentImpl::new, OptionalDepComponentImpl.class)
@@ -155,6 +168,27 @@ class ComponentBlueprintTest {
         );
         assertEquals(LowPriorityListener.class, ComponentProvider.resolveComponentKey(LowPriorityListener.class));
         assertEquals(HighPriorityListener.class, ComponentProvider.resolveComponentKey(HighPriorityListener.class));
+    }
+
+    /**
+     * Resolves concrete implementation classes for all four domain root
+     * interfaces and for a same-package generated interface even when the
+     * fallback class loader cannot see the interface's package. Resolution must
+     * map every root interface to its shared base implementation and prefer the
+     * interface's own class loader for plugin-style sibling implementations.
+     */
+    @Test
+    void testResolveImplClassRootInterfacesAndClassLoaderPrecedence() {
+        assertEquals(BlockBehaviorImpl.class, ComponentBlueprint.resolveImplClass(BlockBehavior.class, null));
+        assertEquals(ItemStackImpl.class, ComponentBlueprint.resolveImplClass(ItemStack.class, null));
+        assertEquals(EntityImpl.class, ComponentBlueprint.resolveImplClass(Entity.class, null));
+        assertEquals(BlockEntityImpl.class, ComponentBlueprint.resolveImplClass(BlockEntity.class, null));
+
+        // Platform class loader cannot see application/test classes; interface's own loader must win.
+        assertEquals(
+                CustomPluginComposedFixtureImpl.class,
+                ComponentBlueprint.resolveImplClass(CustomPluginComposedFixture.class, ClassLoader.getPlatformClassLoader())
+        );
     }
 
     /**
@@ -323,6 +357,13 @@ class ComponentBlueprintTest {
         /** Owner field incompatible with {@link EmptyOwner}. */
         @ComponentObject
         private Entity wrongOwner;
+    }
+
+    /** Component declaring an illegal final injected manager field. */
+    static final class FinalFieldComponentImpl implements ItemComponent {
+        /** Final manager field that must be rejected during blueprint compilation. */
+        @Manager
+        private final ComponentManager manager = null;
     }
 
     /** Component declaring an optional dependency that may be omitted. */

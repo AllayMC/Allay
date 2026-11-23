@@ -45,7 +45,7 @@ public class ItemHoeToolComponentImpl extends ItemToolComponentImpl {
         // from nearby water during subsequent world processing.
         event.getDimension().setBlockState(blockPos, BlockTypes.FARMLAND.ofState(BlockPropertyTypes.MOISTURIZED_AMOUNT.createValue(0)));
         event.getDimension().addSound(MathUtils.center(blockPos), new ItemUseOnBlockSound(clickedBlock.getBlockState()));
-        event.getInteractInfo().player().getItemInHand().tryIncreaseDamage(1);
+        event.getItemStack().tryIncreaseDamage(1);
         event.setCanBeUsed(true);
     }
 }
