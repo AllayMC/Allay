@@ -18,11 +18,9 @@ import org.allaymc.api.item.interfaces.ItemBucketStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.BucketEmptySound;
 import org.allaymc.api.world.sound.BucketFillSound;
 import org.allaymc.server.block.data.BlockId;
-import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 import org.joml.Vector3ic;
@@ -48,12 +46,6 @@ import java.util.function.Supplier;
 @Slf4j
 public class ItemBucketComponentImpl implements ItemBucketComponent {
 
-    /**
-     * {@code IDENTIFIER} names this behavior provider in the item component system,
-     * allowing item type builders to select or replace this component by identifier.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_bucket_component");
 
     /**
      * {@code liquidType} resolves liquid contents on demand. A missing supplier makes
@@ -66,12 +58,6 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
      * liquid supplier.
      */
     protected final Supplier<EntityType<?>> entityType;
-
-    /**
-     * Injected component-owning bucket item stack.
-     */
-    @ComponentObject
-    protected ItemBucketStack thisBucketStack;
 
     /**
      * Creates a bucket capability retaining its liquid and entity suppliers.
@@ -153,7 +139,8 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
                 // event; only recognized water or lava types perform the exchange.
             }
 
-            if (!new PlayerBucketFillEvent(player, thisBucketStack, interactInfo).call()) {
+            var bucketStack = (ItemBucketStack) event.getItemStack();
+            if (!new PlayerBucketFillEvent(player, bucketStack, interactInfo).call()) {
                 return;
             }
 
@@ -173,7 +160,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             return;
         }
 
-        if (!new PlayerBucketEmptyEvent(player, thisBucketStack, interactInfo).call()) {
+        if (!new PlayerBucketEmptyEvent(player, (ItemBucketStack) event.getItemStack(), interactInfo).call()) {
             return;
         }
 

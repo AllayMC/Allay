@@ -19,7 +19,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.component.ComponentManager;
@@ -52,12 +51,6 @@ import static org.allaymc.api.item.ItemHelper.isSword;
  * @author daoge_cmd
  */
 public class BlockBaseComponentImpl implements BlockBaseComponent {
-    /**
-     * {@code IDENTIFIER} names the default block base component when component
-     * providers and dependency injection identify its implementation.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
 
     /**
      * {@code manager} is injected before component events are dispatched and routes

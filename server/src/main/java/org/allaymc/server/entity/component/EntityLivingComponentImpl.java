@@ -30,7 +30,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.component.ComponentClass;
@@ -71,13 +70,6 @@ import static java.lang.Math.min;
  */
 public class EntityLivingComponentImpl implements EntityLivingComponent {
 
-    /**
-     * {@code IDENTIFIER} selects this living component during provider
-     * assembly, allowing specialized implementations to replace the common
-     * health and damage behavior.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_living_component");
 
     // TAG_ACTIVE_EFFECTS, TAG_FIRE, TAG_ABSORPTION, TAG_HEALTH, and TAG_MAX_HEALTH
     // identify the living-state values shared by the load and save event handlers.

@@ -61,9 +61,9 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl impleme
 
     /**
      * Creates and adds the egg's entity at the clicked world position.
-     * A {@code null} interaction returns {@code false}; successful creation returns
-     * {@code true} without reducing this stack or consulting the inherited
-     * item-use handlers. The resolved entity type must be available for creation.
+     * A {@code null} interaction or unresolved entity type returns {@code false};
+     * successful creation returns {@code true} without reducing this stack or
+     * consulting the inherited item-use handlers.
      */
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
@@ -71,9 +71,14 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl impleme
             return false;
         }
 
+        var resolvedEntityType = getEntityType();
+        if (resolvedEntityType == null) {
+            return false;
+        }
+
         var clickedPos = interactInfo.clickedPos();
         var clickedBlockPos = interactInfo.clickedBlockPos();
-        var entity = getEntityType().createEntity(
+        var entity = resolvedEntityType.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(

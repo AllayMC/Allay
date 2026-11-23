@@ -15,7 +15,6 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.fire.BlockFireBaseComponentImpl;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -84,7 +83,6 @@ public class EntityLightningBoltBaseComponentImpl extends EntityBaseComponentImp
      * with its initial flash. A random count of one to three repeat flashes
      * follows that initial appearance before the bolt removes itself.
      */
-    @OnInitFinish
     @Override
     public void onInitFinish(EntityInitInfo initInfo) {
         super.onInitFinish(initInfo);

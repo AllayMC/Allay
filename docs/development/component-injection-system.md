@@ -2,89 +2,67 @@
 comments: true
 ---
 
-# Understanding the Component Injection System
+# Understanding the Component System
 
-The AllayMC includes a lightweight yet powerful component injection system designed to manage dependencies and
-lifecycle events for modular components. This system simplifies the construction of complex objects by automating
-dependency resolution and initialization. This article explains how it works, its key concepts, and how to use it
-effectively.
+AllayMC uses a compile-time and build-time component architecture to compose modular behavior across blocks, items,
+entities, and block entities without deep single-inheritance hierarchies.
 
 ## Overview
 
-The component injection system in AllayMC is inspired by dependency injection framework like **Guice** but
-tailored for simplicity and performance in a game server context. It allows developers to define modular `Component`
-implementations, specify their dependencies, and let the system handle instantiation and wiring. This reduces
-boilerplate code and ensures consistent initialization.
+Instead of scanning reflection metadata or allocating an `EventBus` for every created object, Allay compiles an
+immutable `ComponentBlueprint` once inside `Allay*Type.Builder.build()`:
 
-The system uses annotations and reflection to manage dependencies, making it flexible yet easy to understand once you
-grasp the core concepts.
+1. **Contract-class keying**: Components are keyed automatically by their top-level `Component` contract interface
+   (such as `EntityPhysicsComponent`, `BlockFallableComponent`, or `ItemToolComponent`), so specialized subclasses
+   automatically replace default providers without maintaining static `@Identifier.Component` fields. Event-only
+   components that implement only a root marker (`ItemComponent`, `EntityComponent`, etc.) keep their concrete class as
+   their key and coexist without collisions.
+2. **Build-time fail-fast validation**: `ComponentBlueprint.compile(...)` validates all owner delegate fields,
+   required `@Dependency` fields, `@ComponentObject` assignability, `@Manager` fields, singleton statelessness rules,
+   and `@EventHandler` signatures when the type is registered.
+3. **Zero-reflection wiring and type-level event dispatch**: Wiring uses pre-resolved `VarHandle`s and `MethodHandle`s
+   in deterministic insertion order (with the base component placed first). Internal component events (`C*Event`)
+   dispatch synchronously through a priority-ordered type-level table without allocating a per-instance event bus or
+   swallowing handler exceptions.
+4. **Compile-time delegation generation (`:processor`)**: Built-in server `*Impl` classes and plugin custom composed
+   interfaces annotated with `@GenerateImpl` are generated in plain Java at compile time by the annotation processor,
+   eliminating handwritten `@Delegate` boilerplate.
 
-## How It Works
+## Component Annotations & Lifecycle
 
-The injection process begins with the creation of component instances. A `ComponentClass` receives a list of
-`ComponentProvider` and `ComponentInitInfo`, and each provider creates a `Component` instance using the provided
-information.
-The system then inspects fields annotated with `@Dependency` and resolves dependencies. If the identifier is not
-provided,
-the component is selected by type. If it is provided, the system performs an exact match search. If the dependency is
-not found and is not marked as `optional`, a `ComponentInjectException` is thrown.
-
-Once all dependencies are resolved, they are injected into the corresponding fields. Fields annotated with
-
-- `@ComponentObject` - receive a reference to the owning `ComponentClass`.
-- `@Manager` - receive a `ComponentManager`.
-
-The system then registers the components as event listeners in the `EventBus`, allowing them to respond
-to changes and interact with other parts of the system.
-
-### Lifecycle Management
-
-- **Post-Initialization**: Methods annotated with `@OnInitFinish` are called after all injections, receiving the
-  `ComponentInitInfo`.
+- `@Dependency` (`optional = false` by default): injects a unique sibling component matching the field type.
+- `@ComponentObject`: injects the owning composed object (`Entity`, `ItemStack`, `BlockBehavior`, or `BlockEntity`).
+- `@Manager`: injects the lightweight `ComponentManager` used to dispatch internal `C*Event` notifications.
+- `ComponentLifecycle<I>`: server-side interface providing `default void onInitFinish(I initInfo)` invoked in
+  deterministic base-first order after wiring completes (regular Java inheritance applies, so subclasses overriding
+  `onInitFinish` do not need an annotation).
 
 ## Usage Guide
 
-AllayMC provides an easy way to register and inject components into:
+### 1. Defining a Stateless Event-Only Component
 
-- Items
-- Blocks
-- Block entities
-- Entities
-
-As an example, we will consider component injection into **items**.
-
-### Defining a Components
-
-Implement the `ItemComponent` interface and define an identifier:
+Stateless components that obtain their owning stack from `CItem*Event.getItemStack()` can be registered once as a
+shared singleton across all instances of an item type:
 
 ```java
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
-import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemBreakBlockEvent;
 
-public class ItemSayHiComponentImpl implements ItemComponent {
-    @Identifier.Component/*(1)!*/
-    public static final Identifier IDENTIFIER = new Identifier("my:say_hi_component");
-
-    @ComponentObject/*(2)!*/
-    private ItemStack thisItem;
+public final class ItemSayHiComponentImpl implements ItemComponent {
+    public static final ItemSayHiComponentImpl INSTANCE = new ItemSayHiComponentImpl();
 
     @EventHandler
-    public void onItemSayHi(CItemBreakBlockEvent event) {
-        System.out.println("Hi from ItemSayHiComponent(" + thisItem.getItemType().getIdentifier() + ")!");
+    protected void onBreakBlock(CItemBreakBlockEvent event) {
+        System.out.println("Hi from ItemSayHiComponent(" + event.getItemStack().getItemType().getIdentifier() + ")!");
     }
 }
 ```
 
-1. Used for the `@Dependency` annotation. Defining an identifier for a component is optional but recommended to avoid
-   conflicts. If we have `ComponentA` and `ComponentB` without identifiers, `ComponentB` will override `ComponentA` upon
-   addition.
-2. This annotation injects the component owner into the component itself. If this component is added to
-   `ItemTypes.STICK`,
-   the `thisItem` field will reference `ItemStickStackImpl`.
+### 2. Customizing the Base Component
+
+Extending `ItemBaseComponentImpl` automatically resolves to the `ItemBaseComponent` slot and replaces the default base
+provider:
 
 ```java
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -98,62 +76,51 @@ public class ItemStickBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        interactInfo.player().sendText("Hi from base component!");
-        super.rightClickItemOn(dimension, placeBlockPos, interactInfo);
+    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+        interactInfo.player().sendMessage("Hi from base component!");
+        return super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
     }
 }
 ```
 
-!!! tip
+### 3. Registering Components on a Type
 
-    You don’t need to create an `IDENTIFIER` when extending `ItemBaseComponentImpl` because it already defines one:
-    ```java
-    public class ItemBaseComponentImpl implements ItemBaseComponent {
-        @Identifier.Component
-        public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
-    }
-    ```
-
-### Adding Components to Items
+When no extra API interface methods are needed, use the parameterless `builder()` overload (defaulting to
+`ItemStackImpl`, `BlockBehaviorImpl`, `EntityImpl`, or `BlockEntityImpl`):
 
 ```java
-ItemTypes.STICK = AllayItemType
-        .builder(ItemStickStackImpl.class)
-        .vanillaItem(ItemId.STICK)
+AllayItemType
+        .builder()
+        .identifier("myplugin:magic_stick")
         .addComponent(ItemStickBaseComponentImpl::new, ItemStickBaseComponentImpl.class)
-        .addComponent(ItemSayHiComponentImpl::new, ItemSayHiComponentImpl.class)
-        .build();
-
-ItemTypes.CARROT_ON_A_STICK = AllayItemType
-        .builder(ItemCarrotOnAStickStackImpl.class)
-        .vanillaItem(ItemId.CARROT_ON_A_STICK)
-        .addComponent(ItemSayHiComponentImpl::new, ItemSayHiComponentImpl.class)
+        .addComponent(ItemSayHiComponentImpl.INSTANCE) // shared stateless singleton
         .build();
 ```
 
-Here, `ItemStickBaseComponentImpl` is the **main component** that provides core functionality,
-while `ItemSayHiComponentImpl` is an **additional component** that extends behavior.
-A single main component can exist per item, but multiple additional components can be registered.
+### 4. Generating a Custom Composed `*Impl` with `@GenerateImpl`
 
-If we break a block using `STICK`, it will output:
+When a plugin exposes a custom composed API interface combining multiple component contracts, annotate the interface
+with `@GenerateImpl` and add `annotationProcessor("org.allaymc.allay:processor:<version>")` to the build:
 
-```text
-Hi from ItemSayHiComponent(minecraft:stick)!
+```java
+import org.allaymc.api.component.annotation.GenerateImpl;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.component.ItemEdibleComponent;
+import org.allaymc.api.item.component.ItemToolComponent;
+
+@GenerateImpl
+public interface MyMagicSword extends ItemStack, ItemToolComponent, ItemEdibleComponent {
+}
 ```
 
-And for `CARROT_ON_A_STICK`:
+The annotation processor generates `MyMagicSwordImpl` in the same package, and `AllayItemType.builder(MyMagicSword.class)`
+resolves it automatically:
 
-```text
-Hi from ItemSayHiComponent(minecraft:carrot_on_a_stick)!
+```java
+AllayItemType
+        .builder(MyMagicSword.class)
+        .identifier("myplugin:magic_sword")
+        .addComponent(ItemSwordToolComponentImpl.INSTANCE)
+        .addComponent(new ItemEdibleComponentImpl(4, 2.4f))
+        .build();
 ```
-
-This is a basic example of working with components. More advanced examples can be
-found [here](https://github.com/AllayMC/Allay/tree/master/server/src/main/java/org/allaymc/server/item/component).
-
-## Conclusion
-
-The AllayMC component injection system offers a flexible way to build modular, dependency-driven applications. By
-understanding component creating, and the annotation-driven injection process, developers can create
-maintainable and scalable game logic.
-

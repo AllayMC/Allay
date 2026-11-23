@@ -7,7 +7,6 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.ChiseledBookshelfContainerImpl;
 
 /**
@@ -68,7 +67,7 @@ public class BlockEntityChiseledBookshelfContainerHolderComponentImpl extends Bl
      * container replacement does not migrate any callbacks registered on the
      * original inventory.
      */
-    @OnInitFinish
+    @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         for (int slot = 0; slot < container.getItemStackArray().length; slot++) {

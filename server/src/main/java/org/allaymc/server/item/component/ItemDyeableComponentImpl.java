@@ -3,7 +3,6 @@ package org.allaymc.server.item.component;
 import lombok.Getter;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemDyeableComponent;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.item.component.event.CItemLoadExtraTagEvent;
 import org.allaymc.server.item.component.event.CItemSaveExtraTagEvent;
 
@@ -20,12 +19,6 @@ import java.awt.*;
 @Getter
 public class ItemDyeableComponentImpl implements ItemDyeableComponent {
 
-    /**
-     * {@code IDENTIFIER} names this behavior provider in the item component system,
-     * allowing item type builders to select or replace this component by identifier.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_dyeable_component");
 
     /**
      * {@code TAG_CUSTOM_COLOR} identifies packed item color data shared by this

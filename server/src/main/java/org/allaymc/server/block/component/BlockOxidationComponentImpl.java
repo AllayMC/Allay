@@ -8,7 +8,6 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockRandomUpdateEvent;
 import org.allaymc.server.block.component.event.CBlockTryRandomUpdateEvent;
 import org.allaymc.server.component.annotation.Dependency;
@@ -37,12 +36,6 @@ import java.util.function.BiFunction;
 @Getter
 @RequiredArgsConstructor
 public class BlockOxidationComponentImpl implements BlockOxidationComponent {
-    /**
-     * {@code IDENTIFIER} names the copper oxidation implementation when component
-     * providers and dependency injection identify this component.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_oxidation_component");
 
     /**
      * {@code PRE_OXIDATION_CHANCE} is the random lower-bound cutoff that skips a

@@ -36,6 +36,14 @@ public class EntityImpl extends ComponentClass implements Entity {
     private EntityBaseComponent baseComponent;
 
     /**
+     * Creates an uninitialized entity to be wired immediately by
+     * {@link org.allaymc.server.component.ComponentBlueprint}.
+     */
+    protected EntityImpl() {
+        super();
+    }
+
+    /**
      * Creates a component-backed common entity from the supplied initialization
      * data. Superclass wiring constructs providers and resolves each delegate
      * field before returning; the supplied providers must yield exactly one

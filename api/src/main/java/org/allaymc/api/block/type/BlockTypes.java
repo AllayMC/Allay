@@ -1,93 +1,26 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
-import org.allaymc.api.block.interfaces.BlockActivatorRailBehavior;
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
-import org.allaymc.api.block.interfaces.BlockAllowBehavior;
-import org.allaymc.api.block.interfaces.BlockAmethystBlockBehavior;
+import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.interfaces.BlockAmethystClusterBehavior;
-import org.allaymc.api.block.interfaces.BlockAncientDebrisBehavior;
-import org.allaymc.api.block.interfaces.BlockAndesiteBehavior;
 import org.allaymc.api.block.interfaces.BlockAnvilBehavior;
-import org.allaymc.api.block.interfaces.BlockAzaleaBehavior;
-import org.allaymc.api.block.interfaces.BlockBambooBehavior;
-import org.allaymc.api.block.interfaces.BlockBambooMosaicBehavior;
 import org.allaymc.api.block.interfaces.BlockBarrelBehavior;
-import org.allaymc.api.block.interfaces.BlockBarrierBehavior;
-import org.allaymc.api.block.interfaces.BlockBasaltBehavior;
 import org.allaymc.api.block.interfaces.BlockBeaconBehavior;
 import org.allaymc.api.block.interfaces.BlockBedBehavior;
-import org.allaymc.api.block.interfaces.BlockBedrockBehavior;
-import org.allaymc.api.block.interfaces.BlockBeeNestBehavior;
-import org.allaymc.api.block.interfaces.BlockBeehiveBehavior;
-import org.allaymc.api.block.interfaces.BlockBeetrootBehavior;
-import org.allaymc.api.block.interfaces.BlockBellBehavior;
-import org.allaymc.api.block.interfaces.BlockBigDripleafBehavior;
 import org.allaymc.api.block.interfaces.BlockBigFlower;
-import org.allaymc.api.block.interfaces.BlockBlackstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockBlastFurnaceBehavior;
-import org.allaymc.api.block.interfaces.BlockBoneBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockBookshelfBehavior;
-import org.allaymc.api.block.interfaces.BlockBorderBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockBrewingStandBehavior;
-import org.allaymc.api.block.interfaces.BlockBrickBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockBricksBehavior;
-import org.allaymc.api.block.interfaces.BlockBrownMushroomBehavior;
-import org.allaymc.api.block.interfaces.BlockBrownMushroomBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockBubbleColumnBehavior;
-import org.allaymc.api.block.interfaces.BlockBuddingAmethystBehavior;
-import org.allaymc.api.block.interfaces.BlockBushBehavior;
-import org.allaymc.api.block.interfaces.BlockButtonBehavior;
-import org.allaymc.api.block.interfaces.BlockCactusBehavior;
-import org.allaymc.api.block.interfaces.BlockCactusFlowerBehavior;
-import org.allaymc.api.block.interfaces.BlockCakeBehavior;
-import org.allaymc.api.block.interfaces.BlockCalciteBehavior;
-import org.allaymc.api.block.interfaces.BlockCalibratedSculkSensorBehavior;
-import org.allaymc.api.block.interfaces.BlockCameraBehavior;
-import org.allaymc.api.block.interfaces.BlockCampfireBehavior;
 import org.allaymc.api.block.interfaces.BlockCandleBehavior;
 import org.allaymc.api.block.interfaces.BlockCandleCakeBehavior;
 import org.allaymc.api.block.interfaces.BlockCarpetBehavior;
-import org.allaymc.api.block.interfaces.BlockCarrotsBehavior;
-import org.allaymc.api.block.interfaces.BlockCartographyTableBehavior;
-import org.allaymc.api.block.interfaces.BlockCarvedPumpkinBehavior;
 import org.allaymc.api.block.interfaces.BlockCauldronBehavior;
-import org.allaymc.api.block.interfaces.BlockCaveVinesBehavior;
-import org.allaymc.api.block.interfaces.BlockCaveVinesBodyWithBerriesBehavior;
-import org.allaymc.api.block.interfaces.BlockCaveVinesHeadWithBerriesBehavior;
-import org.allaymc.api.block.interfaces.BlockChainCommandBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockChalkboardBehavior;
-import org.allaymc.api.block.interfaces.BlockChemicalHeatBehavior;
 import org.allaymc.api.block.interfaces.BlockChestBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledBookshelfBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledCinnabarBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledPolishedBlackstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledQuartzBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledSulfurBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledTuffBehavior;
-import org.allaymc.api.block.interfaces.BlockChorusFlowerBehavior;
-import org.allaymc.api.block.interfaces.BlockChorusPlantBehavior;
-import org.allaymc.api.block.interfaces.BlockCinnabarBehavior;
-import org.allaymc.api.block.interfaces.BlockClayBehavior;
-import org.allaymc.api.block.interfaces.BlockClientRequestPlaceholderBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockCoalBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockCoarseDirtBehavior;
-import org.allaymc.api.block.interfaces.BlockCobbledDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockCobblestoneBehavior;
-import org.allaymc.api.block.interfaces.BlockCocoaBehavior;
-import org.allaymc.api.block.interfaces.BlockCommandBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockComparatorBehavior;
-import org.allaymc.api.block.interfaces.BlockComposterBehavior;
-import org.allaymc.api.block.interfaces.BlockCompoundCreatorBehavior;
-import org.allaymc.api.block.interfaces.BlockConcreteBehavior;
 import org.allaymc.api.block.interfaces.BlockConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.BlockConduitBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBarsBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperChainBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperChestBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperDoorBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperGolemStatueBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
@@ -95,282 +28,60 @@ import org.allaymc.api.block.interfaces.BlockCopperLanternBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperStairsBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralFanBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
-import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
-import org.allaymc.api.block.interfaces.BlockCraftingTableBehavior;
-import org.allaymc.api.block.interfaces.BlockCreakingHeartBehavior;
-import org.allaymc.api.block.interfaces.BlockCrimsonFungusBehavior;
-import org.allaymc.api.block.interfaces.BlockCrimsonNyliumBehavior;
-import org.allaymc.api.block.interfaces.BlockCrimsonRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockCryingObsidianBehavior;
-import org.allaymc.api.block.interfaces.BlockDarkPrismarineBehavior;
 import org.allaymc.api.block.interfaces.BlockDaylightDetectorBehavior;
-import org.allaymc.api.block.interfaces.BlockDeadbushBehavior;
 import org.allaymc.api.block.interfaces.BlockDecoratedPotBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateTilesBehavior;
-import org.allaymc.api.block.interfaces.BlockDenyBehavior;
-import org.allaymc.api.block.interfaces.BlockDeprecatedAnvilBehavior;
-import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock1Behavior;
-import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock2Behavior;
-import org.allaymc.api.block.interfaces.BlockDetectorRailBehavior;
-import org.allaymc.api.block.interfaces.BlockDiamondBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockDioriteBehavior;
-import org.allaymc.api.block.interfaces.BlockDirtBehavior;
-import org.allaymc.api.block.interfaces.BlockDirtWithRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockDispenserBehavior;
-import org.allaymc.api.block.interfaces.BlockDoorBehavior;
 import org.allaymc.api.block.interfaces.BlockDoubleCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.BlockDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.BlockDragonEggBehavior;
-import org.allaymc.api.block.interfaces.BlockDriedGhastBehavior;
-import org.allaymc.api.block.interfaces.BlockDriedKelpBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockDripstoneBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockDropperBehavior;
-import org.allaymc.api.block.interfaces.BlockElementBehavior;
-import org.allaymc.api.block.interfaces.BlockEmeraldBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockEnchantingTableBehavior;
-import org.allaymc.api.block.interfaces.BlockEndGatewayBehavior;
-import org.allaymc.api.block.interfaces.BlockEndPortalBehavior;
-import org.allaymc.api.block.interfaces.BlockEndPortalFrameBehavior;
-import org.allaymc.api.block.interfaces.BlockEndRodBehavior;
-import org.allaymc.api.block.interfaces.BlockEndStoneBehavior;
 import org.allaymc.api.block.interfaces.BlockEnderChestBehavior;
-import org.allaymc.api.block.interfaces.BlockExposedCopperChestBehavior;
-import org.allaymc.api.block.interfaces.BlockFarmlandBehavior;
-import org.allaymc.api.block.interfaces.BlockFenceBehavior;
 import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
-import org.allaymc.api.block.interfaces.BlockFernBehavior;
-import org.allaymc.api.block.interfaces.BlockFireBehavior;
-import org.allaymc.api.block.interfaces.BlockFireflyBushBehavior;
-import org.allaymc.api.block.interfaces.BlockFletchingTableBehavior;
 import org.allaymc.api.block.interfaces.BlockFlowerPotBehavior;
-import org.allaymc.api.block.interfaces.BlockFloweringAzaleaBehavior;
-import org.allaymc.api.block.interfaces.BlockFrameBehavior;
-import org.allaymc.api.block.interfaces.BlockFrogSpawnBehavior;
 import org.allaymc.api.block.interfaces.BlockFurnaceBehavior;
-import org.allaymc.api.block.interfaces.BlockGildedBlackstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockGlassBehavior;
 import org.allaymc.api.block.interfaces.BlockGlassPaneBehavior;
 import org.allaymc.api.block.interfaces.BlockGlazedTerracottaBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowFrameBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowLichenBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowingobsidianBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockGoldBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockGoldenRailBehavior;
-import org.allaymc.api.block.interfaces.BlockGraniteBehavior;
-import org.allaymc.api.block.interfaces.BlockGrassBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockGrassPathBehavior;
 import org.allaymc.api.block.interfaces.BlockGravelBehavior;
-import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockHangingRootsBehavior;
 import org.allaymc.api.block.interfaces.BlockHangingSignBehavior;
-import org.allaymc.api.block.interfaces.BlockHardenedClayBehavior;
-import org.allaymc.api.block.interfaces.BlockHayBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockHeadBehavior;
-import org.allaymc.api.block.interfaces.BlockHeavyCoreBehavior;
-import org.allaymc.api.block.interfaces.BlockHoneyBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockHoneycombBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockHopperBehavior;
-import org.allaymc.api.block.interfaces.BlockIceBehavior;
 import org.allaymc.api.block.interfaces.BlockInfestedBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockInfoUpdate2Behavior;
-import org.allaymc.api.block.interfaces.BlockInfoUpdateBehavior;
-import org.allaymc.api.block.interfaces.BlockInvisibleBedrockBehavior;
 import org.allaymc.api.block.interfaces.BlockIronBarsBehavior;
-import org.allaymc.api.block.interfaces.BlockIronBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockIronChainBehavior;
-import org.allaymc.api.block.interfaces.BlockIronDoorBehavior;
-import org.allaymc.api.block.interfaces.BlockIronTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.BlockJigsawBehavior;
 import org.allaymc.api.block.interfaces.BlockJukeboxBehavior;
-import org.allaymc.api.block.interfaces.BlockKelpBehavior;
-import org.allaymc.api.block.interfaces.BlockLabTableBehavior;
-import org.allaymc.api.block.interfaces.BlockLadderBehavior;
 import org.allaymc.api.block.interfaces.BlockLanternBehavior;
-import org.allaymc.api.block.interfaces.BlockLapisBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockLargeFernBehavior;
 import org.allaymc.api.block.interfaces.BlockLeavesBehavior;
 import org.allaymc.api.block.interfaces.BlockLecternBehavior;
-import org.allaymc.api.block.interfaces.BlockLeverBehavior;
-import org.allaymc.api.block.interfaces.BlockLightBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockLightningRodBehavior;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
-import org.allaymc.api.block.interfaces.BlockLitPumpkinBehavior;
-import org.allaymc.api.block.interfaces.BlockLodestoneBehavior;
-import org.allaymc.api.block.interfaces.BlockLoomBehavior;
-import org.allaymc.api.block.interfaces.BlockMagmaBehavior;
-import org.allaymc.api.block.interfaces.BlockMangrovePropaguleBehavior;
-import org.allaymc.api.block.interfaces.BlockMangroveRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockMaterialReducerBehavior;
-import org.allaymc.api.block.interfaces.BlockMelonBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockMelonStemBehavior;
-import org.allaymc.api.block.interfaces.BlockMobSpawnerBehavior;
-import org.allaymc.api.block.interfaces.BlockMossBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockMossyCobblestoneBehavior;
-import org.allaymc.api.block.interfaces.BlockMovingBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockMudBehavior;
-import org.allaymc.api.block.interfaces.BlockMuddyMangroveRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockMushroomStemBehavior;
-import org.allaymc.api.block.interfaces.BlockMyceliumBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherBrickBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherSproutsBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherWartBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherWartBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockNetheriteBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherrackBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherreactorBehavior;
 import org.allaymc.api.block.interfaces.BlockNoteblockBehavior;
-import org.allaymc.api.block.interfaces.BlockObserverBehavior;
-import org.allaymc.api.block.interfaces.BlockObsidianBehavior;
-import org.allaymc.api.block.interfaces.BlockOchreFroglightBehavior;
 import org.allaymc.api.block.interfaces.BlockOreBehavior;
-import org.allaymc.api.block.interfaces.BlockOxidizedCopperChestBehavior;
-import org.allaymc.api.block.interfaces.BlockPackedMudBehavior;
-import org.allaymc.api.block.interfaces.BlockPaleHangingMossBehavior;
-import org.allaymc.api.block.interfaces.BlockPaleMossBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockPearlescentFroglightBehavior;
-import org.allaymc.api.block.interfaces.BlockPistonArmCollisionBehavior;
-import org.allaymc.api.block.interfaces.BlockPistonBehavior;
-import org.allaymc.api.block.interfaces.BlockPitcherCropBehavior;
-import org.allaymc.api.block.interfaces.BlockPlanksBehavior;
 import org.allaymc.api.block.interfaces.BlockPlantPile;
-import org.allaymc.api.block.interfaces.BlockPodzolBehavior;
 import org.allaymc.api.block.interfaces.BlockPointedDripstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedAndesiteBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedBasaltBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedBlackstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedCinnabarBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedDioriteBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedGraniteBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedSulfurBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedTuffBehavior;
-import org.allaymc.api.block.interfaces.BlockPortalBehavior;
-import org.allaymc.api.block.interfaces.BlockPotatoesBehavior;
-import org.allaymc.api.block.interfaces.BlockPotentSulfurBehavior;
-import org.allaymc.api.block.interfaces.BlockPowderSnowBehavior;
-import org.allaymc.api.block.interfaces.BlockPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockPrismarineBehavior;
-import org.allaymc.api.block.interfaces.BlockPumpkinBehavior;
-import org.allaymc.api.block.interfaces.BlockPumpkinStemBehavior;
-import org.allaymc.api.block.interfaces.BlockPurpurBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockPurpurPillarBehavior;
-import org.allaymc.api.block.interfaces.BlockQuartzBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockQuartzPillarBehavior;
-import org.allaymc.api.block.interfaces.BlockRailBehavior;
-import org.allaymc.api.block.interfaces.BlockRawCopperBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRawGoldBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRawIronBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRedMushroomBehavior;
-import org.allaymc.api.block.interfaces.BlockRedMushroomBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRedNetherBrickBehavior;
 import org.allaymc.api.block.interfaces.BlockRedSandBehavior;
-import org.allaymc.api.block.interfaces.BlockRedShrubBehavior;
-import org.allaymc.api.block.interfaces.BlockRedstoneBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRedstoneLampBehavior;
-import org.allaymc.api.block.interfaces.BlockRedstoneWireBehavior;
-import org.allaymc.api.block.interfaces.BlockReedsBehavior;
-import org.allaymc.api.block.interfaces.BlockReinforcedDeepslateBehavior;
 import org.allaymc.api.block.interfaces.BlockRepeaterBehavior;
-import org.allaymc.api.block.interfaces.BlockRepeatingCommandBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockReserved6Behavior;
-import org.allaymc.api.block.interfaces.BlockResinBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockResinClumpBehavior;
 import org.allaymc.api.block.interfaces.BlockRespawnAnchorBehavior;
 import org.allaymc.api.block.interfaces.BlockSandBehavior;
-import org.allaymc.api.block.interfaces.BlockSandstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockSaplingBehavior;
 import org.allaymc.api.block.interfaces.BlockScaffoldingBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkCatalystBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkSensorBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkShriekerBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkVeinBehavior;
-import org.allaymc.api.block.interfaces.BlockSeaLanternBehavior;
-import org.allaymc.api.block.interfaces.BlockSeaPickleBehavior;
-import org.allaymc.api.block.interfaces.BlockSeagrassBehavior;
 import org.allaymc.api.block.interfaces.BlockShelfBehavior;
-import org.allaymc.api.block.interfaces.BlockShelfMushroomBehavior;
-import org.allaymc.api.block.interfaces.BlockShortDryGrassBehavior;
-import org.allaymc.api.block.interfaces.BlockShortGrassBehavior;
-import org.allaymc.api.block.interfaces.BlockShroomlightBehavior;
 import org.allaymc.api.block.interfaces.BlockShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.BlockSignBehavior;
 import org.allaymc.api.block.interfaces.BlockSlabBehavior;
-import org.allaymc.api.block.interfaces.BlockSlimeBehavior;
-import org.allaymc.api.block.interfaces.BlockSmallDripleafBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockSmallFlower;
-import org.allaymc.api.block.interfaces.BlockSmithingTableBehavior;
 import org.allaymc.api.block.interfaces.BlockSmokerBehavior;
-import org.allaymc.api.block.interfaces.BlockSmoothBasaltBehavior;
-import org.allaymc.api.block.interfaces.BlockSmoothQuartzBehavior;
-import org.allaymc.api.block.interfaces.BlockSmoothStoneBehavior;
-import org.allaymc.api.block.interfaces.BlockSnifferEggBehavior;
-import org.allaymc.api.block.interfaces.BlockSnowBehavior;
 import org.allaymc.api.block.interfaces.BlockSnowLayerBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulSandBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulSoilBehavior;
-import org.allaymc.api.block.interfaces.BlockSpongeBehavior;
-import org.allaymc.api.block.interfaces.BlockSporeBlossomBehavior;
 import org.allaymc.api.block.interfaces.BlockStairsBehavior;
 import org.allaymc.api.block.interfaces.BlockStandingBannerBehavior;
-import org.allaymc.api.block.interfaces.BlockStickyPistonArmCollisionBehavior;
-import org.allaymc.api.block.interfaces.BlockStickyPistonBehavior;
-import org.allaymc.api.block.interfaces.BlockStoneBehavior;
-import org.allaymc.api.block.interfaces.BlockStonecutterBehavior;
-import org.allaymc.api.block.interfaces.BlockStonecutterBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockStrawBedBehavior;
-import org.allaymc.api.block.interfaces.BlockStructureBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockStructureVoidBehavior;
-import org.allaymc.api.block.interfaces.BlockSulfurBehavior;
-import org.allaymc.api.block.interfaces.BlockSulfurSpikeBehavior;
 import org.allaymc.api.block.interfaces.BlockSuspiciousGravelBehavior;
 import org.allaymc.api.block.interfaces.BlockSuspiciousSandBehavior;
-import org.allaymc.api.block.interfaces.BlockSweetBerryBushBehavior;
-import org.allaymc.api.block.interfaces.BlockTallDryGrassBehavior;
-import org.allaymc.api.block.interfaces.BlockTallGrassBehavior;
 import org.allaymc.api.block.interfaces.BlockTargetBehavior;
 import org.allaymc.api.block.interfaces.BlockTerracottaBehavior;
 import org.allaymc.api.block.interfaces.BlockTntBehavior;
 import org.allaymc.api.block.interfaces.BlockTorchBehavior;
-import org.allaymc.api.block.interfaces.BlockTorchflowerCropBehavior;
 import org.allaymc.api.block.interfaces.BlockTrapdoorBehavior;
 import org.allaymc.api.block.interfaces.BlockTrappedChestBehavior;
-import org.allaymc.api.block.interfaces.BlockTrialSpawnerBehavior;
-import org.allaymc.api.block.interfaces.BlockTripWireBehavior;
-import org.allaymc.api.block.interfaces.BlockTripwireHookBehavior;
-import org.allaymc.api.block.interfaces.BlockTuffBehavior;
-import org.allaymc.api.block.interfaces.BlockTurtleEggBehavior;
-import org.allaymc.api.block.interfaces.BlockTwistingVinesBehavior;
-import org.allaymc.api.block.interfaces.BlockUnderwaterTntBehavior;
-import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
-import org.allaymc.api.block.interfaces.BlockVaultBehavior;
-import org.allaymc.api.block.interfaces.BlockVerdantFroglightBehavior;
-import org.allaymc.api.block.interfaces.BlockVineBehavior;
 import org.allaymc.api.block.interfaces.BlockWallBannerBehavior;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedFungusBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedNyliumBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedWartBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockWaterlilyBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedCopperChestBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedExposedCopperChestBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedOxidizedCopperChestBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedWeatheredCopperChestBehavior;
-import org.allaymc.api.block.interfaces.BlockWeatheredCopperChestBehavior;
-import org.allaymc.api.block.interfaces.BlockWebBehavior;
-import org.allaymc.api.block.interfaces.BlockWeepingVinesBehavior;
-import org.allaymc.api.block.interfaces.BlockWetSpongeBehavior;
-import org.allaymc.api.block.interfaces.BlockWheatBehavior;
 import org.allaymc.api.block.interfaces.BlockWoodBehavior;
-import org.allaymc.api.block.interfaces.BlockWoolBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 
 @MinecraftVersionSensitive
@@ -379,7 +90,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> ACACIA_BUTTON;
+    public static BlockType<BlockBehavior> ACACIA_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -387,7 +98,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> ACACIA_DOOR;
+    public static BlockType<BlockBehavior> ACACIA_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -400,7 +111,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> ACACIA_FENCE;
+    public static BlockType<BlockBehavior> ACACIA_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -428,17 +139,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> ACACIA_LOG;
 
-    public static BlockType<BlockPlanksBehavior> ACACIA_PLANKS;
+    public static BlockType<BlockBehavior> ACACIA_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> ACACIA_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> ACACIA_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> ACACIA_SAPLING;
+    public static BlockType<BlockBehavior> ACACIA_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -485,24 +196,24 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#RAIL_DATA_BIT}
      * {@link BlockPropertyTypes#RAIL_DIRECTION_6}
      */
-    public static BlockType<BlockActivatorRailBehavior> ACTIVATOR_RAIL;
+    public static BlockType<BlockBehavior> ACTIVATOR_RAIL;
 
-    public static BlockType<BlockAirBehavior> AIR;
+    public static BlockType<BlockBehavior> AIR;
 
     public static BlockType<BlockSmallFlower> ALLIUM;
 
-    public static BlockType<BlockAllowBehavior> ALLOW;
+    public static BlockType<BlockBehavior> ALLOW;
 
-    public static BlockType<BlockAmethystBlockBehavior> AMETHYST_BLOCK;
+    public static BlockType<BlockBehavior> AMETHYST_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_BLOCK_FACE}
      */
     public static BlockType<BlockAmethystClusterBehavior> AMETHYST_CLUSTER;
 
-    public static BlockType<BlockAncientDebrisBehavior> ANCIENT_DEBRIS;
+    public static BlockType<BlockBehavior> ANCIENT_DEBRIS;
 
-    public static BlockType<BlockAndesiteBehavior> ANDESITE;
+    public static BlockType<BlockBehavior> ANDESITE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -535,7 +246,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockAnvilBehavior> ANVIL;
 
-    public static BlockType<BlockAzaleaBehavior> AZALEA;
+    public static BlockType<BlockBehavior> AZALEA;
 
     /**
      * {@link BlockPropertyTypes#PERSISTENT_BIT}
@@ -556,7 +267,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BAMBOO_LEAF_SIZE}
      * {@link BlockPropertyTypes#BAMBOO_STALK_THICKNESS}
      */
-    public static BlockType<BlockBambooBehavior> BAMBOO;
+    public static BlockType<BlockBehavior> BAMBOO;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
@@ -567,7 +278,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> BAMBOO_BUTTON;
+    public static BlockType<BlockBehavior> BAMBOO_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -575,7 +286,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> BAMBOO_DOOR;
+    public static BlockType<BlockBehavior> BAMBOO_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -588,7 +299,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> BAMBOO_FENCE;
+    public static BlockType<BlockBehavior> BAMBOO_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -605,7 +316,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockHangingSignBehavior> BAMBOO_HANGING_SIGN;
 
-    public static BlockType<BlockBambooMosaicBehavior> BAMBOO_MOSAIC;
+    public static BlockType<BlockBehavior> BAMBOO_MOSAIC;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -624,17 +335,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> BAMBOO_MOSAIC_STAIRS;
 
-    public static BlockType<BlockPlanksBehavior> BAMBOO_PLANKS;
+    public static BlockType<BlockBehavior> BAMBOO_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> BAMBOO_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> BAMBOO_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> BAMBOO_SAPLING;
+    public static BlockType<BlockBehavior> BAMBOO_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -678,12 +389,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockBarrelBehavior> BARREL;
 
-    public static BlockType<BlockBarrierBehavior> BARRIER;
+    public static BlockType<BlockBehavior> BARRIER;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockBasaltBehavior> BASALT;
+    public static BlockType<BlockBehavior> BASALT;
 
     public static BlockType<BlockBeaconBehavior> BEACON;
 
@@ -697,44 +408,44 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#INFINIBURN_BIT}
      */
-    public static BlockType<BlockBedrockBehavior> BEDROCK;
+    public static BlockType<BlockBehavior> BEDROCK;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
      * {@link BlockPropertyTypes#HONEY_LEVEL}
      */
-    public static BlockType<BlockBeeNestBehavior> BEE_NEST;
+    public static BlockType<BlockBehavior> BEE_NEST;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
      * {@link BlockPropertyTypes#HONEY_LEVEL}
      */
-    public static BlockType<BlockBeehiveBehavior> BEEHIVE;
+    public static BlockType<BlockBehavior> BEEHIVE;
 
     /**
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockBeetrootBehavior> BEETROOT;
+    public static BlockType<BlockBehavior> BEETROOT;
 
     /**
      * {@link BlockPropertyTypes#ATTACHMENT}
      * {@link BlockPropertyTypes#DIRECTION_4}
      * {@link BlockPropertyTypes#TOGGLE_BIT}
      */
-    public static BlockType<BlockBellBehavior> BELL;
+    public static BlockType<BlockBehavior> BELL;
 
     /**
      * {@link BlockPropertyTypes#BIG_DRIPLEAF_HEAD}
      * {@link BlockPropertyTypes#BIG_DRIPLEAF_TILT}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockBigDripleafBehavior> BIG_DRIPLEAF;
+    public static BlockType<BlockBehavior> BIG_DRIPLEAF;
 
     /**
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> BIRCH_BUTTON;
+    public static BlockType<BlockBehavior> BIRCH_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -742,7 +453,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> BIRCH_DOOR;
+    public static BlockType<BlockBehavior> BIRCH_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -755,7 +466,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> BIRCH_FENCE;
+    public static BlockType<BlockBehavior> BIRCH_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -783,17 +494,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> BIRCH_LOG;
 
-    public static BlockType<BlockPlanksBehavior> BIRCH_PLANKS;
+    public static BlockType<BlockBehavior> BIRCH_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> BIRCH_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> BIRCH_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> BIRCH_SAPLING;
+    public static BlockType<BlockBehavior> BIRCH_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -849,7 +560,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> BLACK_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> BLACK_CONCRETE;
+    public static BlockType<BlockBehavior> BLACK_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -889,7 +600,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> BLACK_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> BLACK_WOOL;
+    public static BlockType<BlockBehavior> BLACK_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -908,7 +619,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> BLACK_WOOL_STAIRS;
 
-    public static BlockType<BlockBlackstoneBehavior> BLACKSTONE;
+    public static BlockType<BlockBehavior> BLACKSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -954,7 +665,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> BLUE_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> BLUE_CONCRETE;
+    public static BlockType<BlockBehavior> BLUE_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -980,7 +691,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockGlazedTerracottaBehavior> BLUE_GLAZED_TERRACOTTA;
 
-    public static BlockType<BlockIceBehavior> BLUE_ICE;
+    public static BlockType<BlockBehavior> BLUE_ICE;
 
     public static BlockType<BlockSmallFlower> BLUE_ORCHID;
 
@@ -998,7 +709,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> BLUE_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> BLUE_WOOL;
+    public static BlockType<BlockBehavior> BLUE_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1021,9 +732,9 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#DEPRECATED}
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockBoneBlockBehavior> BONE_BLOCK;
+    public static BlockType<BlockBehavior> BONE_BLOCK;
 
-    public static BlockType<BlockBookshelfBehavior> BOOKSHELF;
+    public static BlockType<BlockBehavior> BOOKSHELF;
 
     /**
      * {@link BlockPropertyTypes#WALL_CONNECTION_TYPE_EAST}
@@ -1032,21 +743,21 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#WALL_CONNECTION_TYPE_WEST}
      * {@link BlockPropertyTypes#WALL_POST_BIT}
      */
-    public static BlockType<BlockBorderBlockBehavior> BORDER_BLOCK;
+    public static BlockType<BlockBehavior> BORDER_BLOCK;
 
-    public static BlockType<BlockCoralBehavior> BRAIN_CORAL;
+    public static BlockType<BlockBehavior> BRAIN_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> BRAIN_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> BRAIN_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> BRAIN_CORAL_FAN;
+    public static BlockType<BlockBehavior> BRAIN_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> BRAIN_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> BRAIN_CORAL_WALL_FAN;
 
     /**
      * {@link BlockPropertyTypes#BREWING_STAND_SLOT_A_BIT}
@@ -1055,7 +766,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockBrewingStandBehavior> BREWING_STAND;
 
-    public static BlockType<BlockBrickBlockBehavior> BRICK_BLOCK;
+    public static BlockType<BlockBehavior> BRICK_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1096,7 +807,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> BROWN_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> BROWN_CONCRETE;
+    public static BlockType<BlockBehavior> BROWN_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1122,12 +833,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockGlazedTerracottaBehavior> BROWN_GLAZED_TERRACOTTA;
 
-    public static BlockType<BlockBrownMushroomBehavior> BROWN_MUSHROOM;
+    public static BlockType<BlockBehavior> BROWN_MUSHROOM;
 
     /**
      * {@link BlockPropertyTypes#HUGE_MUSHROOM_BITS}
      */
-    public static BlockType<BlockBrownMushroomBlockBehavior> BROWN_MUSHROOM_BLOCK;
+    public static BlockType<BlockBehavior> BROWN_MUSHROOM_BLOCK;
 
     public static BlockType<BlockShulkerBoxBehavior> BROWN_SHULKER_BOX;
 
@@ -1143,7 +854,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> BROWN_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> BROWN_WOOL;
+    public static BlockType<BlockBehavior> BROWN_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1165,53 +876,53 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#DRAG_DOWN}
      */
-    public static BlockType<BlockBubbleColumnBehavior> BUBBLE_COLUMN;
+    public static BlockType<BlockBehavior> BUBBLE_COLUMN;
 
-    public static BlockType<BlockCoralBehavior> BUBBLE_CORAL;
+    public static BlockType<BlockBehavior> BUBBLE_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> BUBBLE_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> BUBBLE_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> BUBBLE_CORAL_FAN;
+    public static BlockType<BlockBehavior> BUBBLE_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> BUBBLE_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> BUBBLE_CORAL_WALL_FAN;
 
-    public static BlockType<BlockBuddingAmethystBehavior> BUDDING_AMETHYST;
+    public static BlockType<BlockBehavior> BUDDING_AMETHYST;
 
-    public static BlockType<BlockBushBehavior> BUSH;
+    public static BlockType<BlockBehavior> BUSH;
 
     /**
      * {@link BlockPropertyTypes#AGE_16}
      */
-    public static BlockType<BlockCactusBehavior> CACTUS;
+    public static BlockType<BlockBehavior> CACTUS;
 
-    public static BlockType<BlockCactusFlowerBehavior> CACTUS_FLOWER;
+    public static BlockType<BlockBehavior> CACTUS_FLOWER;
 
     /**
      * {@link BlockPropertyTypes#BITE_COUNTER}
      */
-    public static BlockType<BlockCakeBehavior> CAKE;
+    public static BlockType<BlockBehavior> CAKE;
 
-    public static BlockType<BlockCalciteBehavior> CALCITE;
+    public static BlockType<BlockBehavior> CALCITE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      * {@link BlockPropertyTypes#SCULK_SENSOR_PHASE}
      */
-    public static BlockType<BlockCalibratedSculkSensorBehavior> CALIBRATED_SCULK_SENSOR;
+    public static BlockType<BlockBehavior> CALIBRATED_SCULK_SENSOR;
 
-    public static BlockType<BlockCameraBehavior> CAMERA;
+    public static BlockType<BlockBehavior> CAMERA;
 
     /**
      * {@link BlockPropertyTypes#EXTINGUISHED}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockCampfireBehavior> CAMPFIRE;
+    public static BlockType<BlockBehavior> CAMPFIRE;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -1227,14 +938,14 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockCarrotsBehavior> CARROTS;
+    public static BlockType<BlockBehavior> CARROTS;
 
-    public static BlockType<BlockCartographyTableBehavior> CARTOGRAPHY_TABLE;
+    public static BlockType<BlockBehavior> CARTOGRAPHY_TABLE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockCarvedPumpkinBehavior> CARVED_PUMPKIN;
+    public static BlockType<BlockBehavior> CARVED_PUMPKIN;
 
     /**
      * {@link BlockPropertyTypes#CAULDRON_LIQUID}
@@ -1245,36 +956,36 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#GROWING_PLANT_AGE}
      */
-    public static BlockType<BlockCaveVinesBehavior> CAVE_VINES;
+    public static BlockType<BlockBehavior> CAVE_VINES;
 
     /**
      * {@link BlockPropertyTypes#GROWING_PLANT_AGE}
      */
-    public static BlockType<BlockCaveVinesBodyWithBerriesBehavior> CAVE_VINES_BODY_WITH_BERRIES;
+    public static BlockType<BlockBehavior> CAVE_VINES_BODY_WITH_BERRIES;
 
     /**
      * {@link BlockPropertyTypes#GROWING_PLANT_AGE}
      */
-    public static BlockType<BlockCaveVinesHeadWithBerriesBehavior> CAVE_VINES_HEAD_WITH_BERRIES;
+    public static BlockType<BlockBehavior> CAVE_VINES_HEAD_WITH_BERRIES;
 
     /**
      * {@link BlockPropertyTypes#CONDITIONAL_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockChainCommandBlockBehavior> CHAIN_COMMAND_BLOCK;
+    public static BlockType<BlockBehavior> CHAIN_COMMAND_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_16}
      */
-    public static BlockType<BlockChalkboardBehavior> CHALKBOARD;
+    public static BlockType<BlockBehavior> CHALKBOARD;
 
-    public static BlockType<BlockChemicalHeatBehavior> CHEMICAL_HEAT;
+    public static BlockType<BlockBehavior> CHEMICAL_HEAT;
 
     /**
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> CHERRY_BUTTON;
+    public static BlockType<BlockBehavior> CHERRY_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -1282,7 +993,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> CHERRY_DOOR;
+    public static BlockType<BlockBehavior> CHERRY_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1295,7 +1006,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> CHERRY_FENCE;
+    public static BlockType<BlockBehavior> CHERRY_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -1323,17 +1034,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> CHERRY_LOG;
 
-    public static BlockType<BlockPlanksBehavior> CHERRY_PLANKS;
+    public static BlockType<BlockBehavior> CHERRY_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> CHERRY_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> CHERRY_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> CHERRY_SAPLING;
+    public static BlockType<BlockBehavior> CHERRY_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -1390,45 +1101,45 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BOOKS_STORED}
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockChiseledBookshelfBehavior> CHISELED_BOOKSHELF;
+    public static BlockType<BlockBehavior> CHISELED_BOOKSHELF;
 
-    public static BlockType<BlockChiseledCinnabarBehavior> CHISELED_CINNABAR;
+    public static BlockType<BlockBehavior> CHISELED_CINNABAR;
 
     public static BlockType<BlockCopperBehavior> CHISELED_COPPER;
 
-    public static BlockType<BlockChiseledDeepslateBehavior> CHISELED_DEEPSLATE;
+    public static BlockType<BlockBehavior> CHISELED_DEEPSLATE;
 
-    public static BlockType<BlockBricksBehavior> CHISELED_NETHER_BRICKS;
+    public static BlockType<BlockBehavior> CHISELED_NETHER_BRICKS;
 
-    public static BlockType<BlockChiseledPolishedBlackstoneBehavior> CHISELED_POLISHED_BLACKSTONE;
+    public static BlockType<BlockBehavior> CHISELED_POLISHED_BLACKSTONE;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockChiseledQuartzBlockBehavior> CHISELED_QUARTZ_BLOCK;
+    public static BlockType<BlockBehavior> CHISELED_QUARTZ_BLOCK;
 
-    public static BlockType<BlockSandstoneBehavior> CHISELED_RED_SANDSTONE;
+    public static BlockType<BlockBehavior> CHISELED_RED_SANDSTONE;
 
-    public static BlockType<BlockBricksBehavior> CHISELED_RESIN_BRICKS;
+    public static BlockType<BlockBehavior> CHISELED_RESIN_BRICKS;
 
-    public static BlockType<BlockSandstoneBehavior> CHISELED_SANDSTONE;
+    public static BlockType<BlockBehavior> CHISELED_SANDSTONE;
 
-    public static BlockType<BlockBricksBehavior> CHISELED_STONE_BRICKS;
+    public static BlockType<BlockBehavior> CHISELED_STONE_BRICKS;
 
-    public static BlockType<BlockChiseledSulfurBehavior> CHISELED_SULFUR;
+    public static BlockType<BlockBehavior> CHISELED_SULFUR;
 
-    public static BlockType<BlockChiseledTuffBehavior> CHISELED_TUFF;
+    public static BlockType<BlockBehavior> CHISELED_TUFF;
 
-    public static BlockType<BlockBricksBehavior> CHISELED_TUFF_BRICKS;
+    public static BlockType<BlockBehavior> CHISELED_TUFF_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#AGE_6}
      */
-    public static BlockType<BlockChorusFlowerBehavior> CHORUS_FLOWER;
+    public static BlockType<BlockBehavior> CHORUS_FLOWER;
 
-    public static BlockType<BlockChorusPlantBehavior> CHORUS_PLANT;
+    public static BlockType<BlockBehavior> CHORUS_PLANT;
 
-    public static BlockType<BlockCinnabarBehavior> CINNABAR;
+    public static BlockType<BlockBehavior> CINNABAR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1456,7 +1167,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> CINNABAR_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> CINNABAR_BRICKS;
+    public static BlockType<BlockBehavior> CINNABAR_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1484,19 +1195,19 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> CINNABAR_WALL;
 
-    public static BlockType<BlockClayBehavior> CLAY;
+    public static BlockType<BlockBehavior> CLAY;
 
-    public static BlockType<BlockClientRequestPlaceholderBlockBehavior> CLIENT_REQUEST_PLACEHOLDER_BLOCK;
+    public static BlockType<BlockBehavior> CLIENT_REQUEST_PLACEHOLDER_BLOCK;
 
     public static BlockType<BlockSmallFlower> CLOSED_EYEBLOSSOM;
 
-    public static BlockType<BlockCoalBlockBehavior> COAL_BLOCK;
+    public static BlockType<BlockBehavior> COAL_BLOCK;
 
     public static BlockType<BlockOreBehavior> COAL_ORE;
 
-    public static BlockType<BlockCoarseDirtBehavior> COARSE_DIRT;
+    public static BlockType<BlockBehavior> COARSE_DIRT;
 
-    public static BlockType<BlockCobbledDeepslateBehavior> COBBLED_DEEPSLATE;
+    public static BlockType<BlockBehavior> COBBLED_DEEPSLATE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1524,7 +1235,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> COBBLED_DEEPSLATE_WALL;
 
-    public static BlockType<BlockCobblestoneBehavior> COBBLESTONE;
+    public static BlockType<BlockBehavior> COBBLESTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1549,7 +1260,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#AGE_3}
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockCocoaBehavior> COCOA;
+    public static BlockType<BlockBehavior> COCOA;
 
     /**
      * {@link BlockPropertyTypes#TORCH_FACING_DIRECTION}
@@ -1575,19 +1286,19 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#CONDITIONAL_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockCommandBlockBehavior> COMMAND_BLOCK;
+    public static BlockType<BlockBehavior> COMMAND_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#COMPOSTER_FILL_LEVEL}
      */
-    public static BlockType<BlockComposterBehavior> COMPOSTER;
+    public static BlockType<BlockBehavior> COMPOSTER;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockCompoundCreatorBehavior> COMPOUND_CREATOR;
+    public static BlockType<BlockBehavior> COMPOUND_CREATOR;
 
-    public static BlockType<BlockConduitBehavior> CONDUIT;
+    public static BlockType<BlockBehavior> CONDUIT;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
@@ -1613,7 +1324,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockCopperChestBehavior> COPPER_CHEST;
+    public static BlockType<BlockBehavior> COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -1651,31 +1362,31 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmallFlower> CORNFLOWER;
 
-    public static BlockType<BlockBricksBehavior> CRACKED_DEEPSLATE_BRICKS;
+    public static BlockType<BlockBehavior> CRACKED_DEEPSLATE_BRICKS;
 
-    public static BlockType<BlockCrackedDeepslateTilesBehavior> CRACKED_DEEPSLATE_TILES;
+    public static BlockType<BlockBehavior> CRACKED_DEEPSLATE_TILES;
 
-    public static BlockType<BlockBricksBehavior> CRACKED_NETHER_BRICKS;
+    public static BlockType<BlockBehavior> CRACKED_NETHER_BRICKS;
 
-    public static BlockType<BlockBricksBehavior> CRACKED_POLISHED_BLACKSTONE_BRICKS;
+    public static BlockType<BlockBehavior> CRACKED_POLISHED_BLACKSTONE_BRICKS;
 
-    public static BlockType<BlockBricksBehavior> CRACKED_STONE_BRICKS;
+    public static BlockType<BlockBehavior> CRACKED_STONE_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#CRAFTING}
      * {@link BlockPropertyTypes#ORIENTATION}
      * {@link BlockPropertyTypes#TRIGGERED_BIT}
      */
-    public static BlockType<BlockCrafterBehavior> CRAFTER;
+    public static BlockType<BlockBehavior> CRAFTER;
 
-    public static BlockType<BlockCraftingTableBehavior> CRAFTING_TABLE;
+    public static BlockType<BlockBehavior> CRAFTING_TABLE;
 
     /**
      * {@link BlockPropertyTypes#CREAKING_HEART_STATE}
      * {@link BlockPropertyTypes#NATURAL}
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockCreakingHeartBehavior> CREAKING_HEART;
+    public static BlockType<BlockBehavior> CREAKING_HEART;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -1686,7 +1397,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> CRIMSON_BUTTON;
+    public static BlockType<BlockBehavior> CRIMSON_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -1694,7 +1405,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> CRIMSON_DOOR;
+    public static BlockType<BlockBehavior> CRIMSON_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1707,7 +1418,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> CRIMSON_FENCE;
+    public static BlockType<BlockBehavior> CRIMSON_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -1716,7 +1427,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockFenceGateBehavior> CRIMSON_FENCE_GATE;
 
-    public static BlockType<BlockCrimsonFungusBehavior> CRIMSON_FUNGUS;
+    public static BlockType<BlockBehavior> CRIMSON_FUNGUS;
 
     /**
      * {@link BlockPropertyTypes#ATTACHED_BIT}
@@ -1731,16 +1442,16 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> CRIMSON_HYPHAE;
 
-    public static BlockType<BlockCrimsonNyliumBehavior> CRIMSON_NYLIUM;
+    public static BlockType<BlockBehavior> CRIMSON_NYLIUM;
 
-    public static BlockType<BlockPlanksBehavior> CRIMSON_PLANKS;
+    public static BlockType<BlockBehavior> CRIMSON_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> CRIMSON_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> CRIMSON_PRESSURE_PLATE;
 
-    public static BlockType<BlockCrimsonRootsBehavior> CRIMSON_ROOTS;
+    public static BlockType<BlockBehavior> CRIMSON_ROOTS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -1783,7 +1494,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockSignBehavior> CRIMSON_WALL_SIGN;
 
-    public static BlockType<BlockCryingObsidianBehavior> CRYING_OBSIDIAN;
+    public static BlockType<BlockBehavior> CRYING_OBSIDIAN;
 
     public static BlockType<BlockCopperBehavior> CUT_COPPER;
 
@@ -1799,7 +1510,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperStairsBehavior> CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSandstoneBehavior> CUT_RED_SANDSTONE;
+    public static BlockType<BlockBehavior> CUT_RED_SANDSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1811,7 +1522,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_SLAB;
 
-    public static BlockType<BlockSandstoneBehavior> CUT_SANDSTONE;
+    public static BlockType<BlockBehavior> CUT_SANDSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1836,7 +1547,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> CYAN_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> CYAN_CONCRETE;
+    public static BlockType<BlockBehavior> CYAN_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1876,7 +1587,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> CYAN_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> CYAN_WOOL;
+    public static BlockType<BlockBehavior> CYAN_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1906,7 +1617,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> DARK_OAK_BUTTON;
+    public static BlockType<BlockBehavior> DARK_OAK_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -1914,7 +1625,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> DARK_OAK_DOOR;
+    public static BlockType<BlockBehavior> DARK_OAK_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1927,7 +1638,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> DARK_OAK_FENCE;
+    public static BlockType<BlockBehavior> DARK_OAK_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -1955,17 +1666,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> DARK_OAK_LOG;
 
-    public static BlockType<BlockPlanksBehavior> DARK_OAK_PLANKS;
+    public static BlockType<BlockBehavior> DARK_OAK_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> DARK_OAK_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> DARK_OAK_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> DARK_OAK_SAPLING;
+    public static BlockType<BlockBehavior> DARK_OAK_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -1998,7 +1709,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> DARK_OAK_WOOD;
 
-    public static BlockType<BlockDarkPrismarineBehavior> DARK_PRISMARINE;
+    public static BlockType<BlockBehavior> DARK_PRISMARINE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2037,77 +1748,77 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDaylightDetectorBehavior> DAYLIGHT_DETECTOR_INVERTED;
 
-    public static BlockType<BlockCoralBehavior> DEAD_BRAIN_CORAL;
+    public static BlockType<BlockBehavior> DEAD_BRAIN_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> DEAD_BRAIN_CORAL_BLOCK;
-
-    /**
-     * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
-     */
-    public static BlockType<BlockCoralFanBehavior> DEAD_BRAIN_CORAL_FAN;
-
-    /**
-     * {@link BlockPropertyTypes#CORAL_DIRECTION}
-     */
-    public static BlockType<BlockCoralWallFanBehavior> DEAD_BRAIN_CORAL_WALL_FAN;
-
-    public static BlockType<BlockCoralBehavior> DEAD_BUBBLE_CORAL;
-
-    public static BlockType<BlockCoralBlockBehavior> DEAD_BUBBLE_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> DEAD_BRAIN_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> DEAD_BUBBLE_CORAL_FAN;
+    public static BlockType<BlockBehavior> DEAD_BRAIN_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> DEAD_BUBBLE_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> DEAD_BRAIN_CORAL_WALL_FAN;
 
-    public static BlockType<BlockCoralBehavior> DEAD_FIRE_CORAL;
+    public static BlockType<BlockBehavior> DEAD_BUBBLE_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> DEAD_FIRE_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> DEAD_BUBBLE_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> DEAD_FIRE_CORAL_FAN;
+    public static BlockType<BlockBehavior> DEAD_BUBBLE_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> DEAD_FIRE_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> DEAD_BUBBLE_CORAL_WALL_FAN;
 
-    public static BlockType<BlockCoralBehavior> DEAD_HORN_CORAL;
+    public static BlockType<BlockBehavior> DEAD_FIRE_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> DEAD_HORN_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> DEAD_FIRE_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> DEAD_HORN_CORAL_FAN;
+    public static BlockType<BlockBehavior> DEAD_FIRE_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> DEAD_HORN_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> DEAD_FIRE_CORAL_WALL_FAN;
 
-    public static BlockType<BlockCoralBehavior> DEAD_TUBE_CORAL;
+    public static BlockType<BlockBehavior> DEAD_HORN_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> DEAD_TUBE_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> DEAD_HORN_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> DEAD_TUBE_CORAL_FAN;
+    public static BlockType<BlockBehavior> DEAD_HORN_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> DEAD_TUBE_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> DEAD_HORN_CORAL_WALL_FAN;
 
-    public static BlockType<BlockDeadbushBehavior> DEADBUSH;
+    public static BlockType<BlockBehavior> DEAD_TUBE_CORAL;
+
+    public static BlockType<BlockBehavior> DEAD_TUBE_CORAL_BLOCK;
+
+    /**
+     * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
+     */
+    public static BlockType<BlockBehavior> DEAD_TUBE_CORAL_FAN;
+
+    /**
+     * {@link BlockPropertyTypes#CORAL_DIRECTION}
+     */
+    public static BlockType<BlockBehavior> DEAD_TUBE_CORAL_WALL_FAN;
+
+    public static BlockType<BlockBehavior> DEADBUSH;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -2117,7 +1828,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockDeepslateBehavior> DEEPSLATE;
+    public static BlockType<BlockBehavior> DEEPSLATE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2145,7 +1856,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> DEEPSLATE_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> DEEPSLATE_BRICKS;
+    public static BlockType<BlockBehavior> DEEPSLATE_BRICKS;
 
     public static BlockType<BlockOreBehavior> DEEPSLATE_COAL_ORE;
 
@@ -2189,36 +1900,36 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> DEEPSLATE_TILE_WALL;
 
-    public static BlockType<BlockDeepslateTilesBehavior> DEEPSLATE_TILES;
+    public static BlockType<BlockBehavior> DEEPSLATE_TILES;
 
-    public static BlockType<BlockDenyBehavior> DENY;
+    public static BlockType<BlockBehavior> DENY;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockDeprecatedAnvilBehavior> DEPRECATED_ANVIL;
+    public static BlockType<BlockBehavior> DEPRECATED_ANVIL;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockDeprecatedPurpurBlock1Behavior> DEPRECATED_PURPUR_BLOCK_1;
+    public static BlockType<BlockBehavior> DEPRECATED_PURPUR_BLOCK_1;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockDeprecatedPurpurBlock2Behavior> DEPRECATED_PURPUR_BLOCK_2;
+    public static BlockType<BlockBehavior> DEPRECATED_PURPUR_BLOCK_2;
 
     /**
      * {@link BlockPropertyTypes#RAIL_DATA_BIT}
      * {@link BlockPropertyTypes#RAIL_DIRECTION_6}
      */
-    public static BlockType<BlockDetectorRailBehavior> DETECTOR_RAIL;
+    public static BlockType<BlockBehavior> DETECTOR_RAIL;
 
-    public static BlockType<BlockDiamondBlockBehavior> DIAMOND_BLOCK;
+    public static BlockType<BlockBehavior> DIAMOND_BLOCK;
 
     public static BlockType<BlockOreBehavior> DIAMOND_ORE;
 
-    public static BlockType<BlockDioriteBehavior> DIORITE;
+    public static BlockType<BlockBehavior> DIORITE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2246,15 +1957,15 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> DIORITE_WALL;
 
-    public static BlockType<BlockDirtBehavior> DIRT;
+    public static BlockType<BlockBehavior> DIRT;
 
-    public static BlockType<BlockDirtWithRootsBehavior> DIRT_WITH_ROOTS;
+    public static BlockType<BlockBehavior> DIRT_WITH_ROOTS;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      * {@link BlockPropertyTypes#TRIGGERED_BIT}
      */
-    public static BlockType<BlockDispenserBehavior> DISPENSER;
+    public static BlockType<BlockBehavior> DISPENSER;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2272,262 +1983,262 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      * {@link BlockPropertyTypes#REHYDRATION_LEVEL}
      */
-    public static BlockType<BlockDriedGhastBehavior> DRIED_GHAST;
+    public static BlockType<BlockBehavior> DRIED_GHAST;
 
-    public static BlockType<BlockDriedKelpBlockBehavior> DRIED_KELP_BLOCK;
+    public static BlockType<BlockBehavior> DRIED_KELP_BLOCK;
 
-    public static BlockType<BlockDripstoneBlockBehavior> DRIPSTONE_BLOCK;
+    public static BlockType<BlockBehavior> DRIPSTONE_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      * {@link BlockPropertyTypes#TRIGGERED_BIT}
      */
-    public static BlockType<BlockDropperBehavior> DROPPER;
+    public static BlockType<BlockBehavior> DROPPER;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_0;
+    public static BlockType<BlockBehavior> ELEMENT_0;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_1;
+    public static BlockType<BlockBehavior> ELEMENT_1;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_10;
+    public static BlockType<BlockBehavior> ELEMENT_10;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_100;
+    public static BlockType<BlockBehavior> ELEMENT_100;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_101;
+    public static BlockType<BlockBehavior> ELEMENT_101;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_102;
+    public static BlockType<BlockBehavior> ELEMENT_102;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_103;
+    public static BlockType<BlockBehavior> ELEMENT_103;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_104;
+    public static BlockType<BlockBehavior> ELEMENT_104;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_105;
+    public static BlockType<BlockBehavior> ELEMENT_105;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_106;
+    public static BlockType<BlockBehavior> ELEMENT_106;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_107;
+    public static BlockType<BlockBehavior> ELEMENT_107;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_108;
+    public static BlockType<BlockBehavior> ELEMENT_108;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_109;
+    public static BlockType<BlockBehavior> ELEMENT_109;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_11;
+    public static BlockType<BlockBehavior> ELEMENT_11;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_110;
+    public static BlockType<BlockBehavior> ELEMENT_110;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_111;
+    public static BlockType<BlockBehavior> ELEMENT_111;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_112;
+    public static BlockType<BlockBehavior> ELEMENT_112;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_113;
+    public static BlockType<BlockBehavior> ELEMENT_113;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_114;
+    public static BlockType<BlockBehavior> ELEMENT_114;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_115;
+    public static BlockType<BlockBehavior> ELEMENT_115;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_116;
+    public static BlockType<BlockBehavior> ELEMENT_116;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_117;
+    public static BlockType<BlockBehavior> ELEMENT_117;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_118;
+    public static BlockType<BlockBehavior> ELEMENT_118;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_12;
+    public static BlockType<BlockBehavior> ELEMENT_12;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_13;
+    public static BlockType<BlockBehavior> ELEMENT_13;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_14;
+    public static BlockType<BlockBehavior> ELEMENT_14;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_15;
+    public static BlockType<BlockBehavior> ELEMENT_15;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_16;
+    public static BlockType<BlockBehavior> ELEMENT_16;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_17;
+    public static BlockType<BlockBehavior> ELEMENT_17;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_18;
+    public static BlockType<BlockBehavior> ELEMENT_18;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_19;
+    public static BlockType<BlockBehavior> ELEMENT_19;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_2;
+    public static BlockType<BlockBehavior> ELEMENT_2;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_20;
+    public static BlockType<BlockBehavior> ELEMENT_20;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_21;
+    public static BlockType<BlockBehavior> ELEMENT_21;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_22;
+    public static BlockType<BlockBehavior> ELEMENT_22;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_23;
+    public static BlockType<BlockBehavior> ELEMENT_23;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_24;
+    public static BlockType<BlockBehavior> ELEMENT_24;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_25;
+    public static BlockType<BlockBehavior> ELEMENT_25;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_26;
+    public static BlockType<BlockBehavior> ELEMENT_26;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_27;
+    public static BlockType<BlockBehavior> ELEMENT_27;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_28;
+    public static BlockType<BlockBehavior> ELEMENT_28;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_29;
+    public static BlockType<BlockBehavior> ELEMENT_29;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_3;
+    public static BlockType<BlockBehavior> ELEMENT_3;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_30;
+    public static BlockType<BlockBehavior> ELEMENT_30;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_31;
+    public static BlockType<BlockBehavior> ELEMENT_31;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_32;
+    public static BlockType<BlockBehavior> ELEMENT_32;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_33;
+    public static BlockType<BlockBehavior> ELEMENT_33;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_34;
+    public static BlockType<BlockBehavior> ELEMENT_34;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_35;
+    public static BlockType<BlockBehavior> ELEMENT_35;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_36;
+    public static BlockType<BlockBehavior> ELEMENT_36;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_37;
+    public static BlockType<BlockBehavior> ELEMENT_37;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_38;
+    public static BlockType<BlockBehavior> ELEMENT_38;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_39;
+    public static BlockType<BlockBehavior> ELEMENT_39;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_4;
+    public static BlockType<BlockBehavior> ELEMENT_4;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_40;
+    public static BlockType<BlockBehavior> ELEMENT_40;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_41;
+    public static BlockType<BlockBehavior> ELEMENT_41;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_42;
+    public static BlockType<BlockBehavior> ELEMENT_42;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_43;
+    public static BlockType<BlockBehavior> ELEMENT_43;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_44;
+    public static BlockType<BlockBehavior> ELEMENT_44;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_45;
+    public static BlockType<BlockBehavior> ELEMENT_45;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_46;
+    public static BlockType<BlockBehavior> ELEMENT_46;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_47;
+    public static BlockType<BlockBehavior> ELEMENT_47;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_48;
+    public static BlockType<BlockBehavior> ELEMENT_48;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_49;
+    public static BlockType<BlockBehavior> ELEMENT_49;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_5;
+    public static BlockType<BlockBehavior> ELEMENT_5;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_50;
+    public static BlockType<BlockBehavior> ELEMENT_50;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_51;
+    public static BlockType<BlockBehavior> ELEMENT_51;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_52;
+    public static BlockType<BlockBehavior> ELEMENT_52;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_53;
+    public static BlockType<BlockBehavior> ELEMENT_53;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_54;
+    public static BlockType<BlockBehavior> ELEMENT_54;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_55;
+    public static BlockType<BlockBehavior> ELEMENT_55;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_56;
+    public static BlockType<BlockBehavior> ELEMENT_56;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_57;
+    public static BlockType<BlockBehavior> ELEMENT_57;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_58;
+    public static BlockType<BlockBehavior> ELEMENT_58;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_59;
+    public static BlockType<BlockBehavior> ELEMENT_59;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_6;
+    public static BlockType<BlockBehavior> ELEMENT_6;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_60;
+    public static BlockType<BlockBehavior> ELEMENT_60;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_61;
+    public static BlockType<BlockBehavior> ELEMENT_61;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_62;
+    public static BlockType<BlockBehavior> ELEMENT_62;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_63;
+    public static BlockType<BlockBehavior> ELEMENT_63;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_64;
+    public static BlockType<BlockBehavior> ELEMENT_64;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_65;
+    public static BlockType<BlockBehavior> ELEMENT_65;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_66;
+    public static BlockType<BlockBehavior> ELEMENT_66;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_67;
+    public static BlockType<BlockBehavior> ELEMENT_67;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_68;
+    public static BlockType<BlockBehavior> ELEMENT_68;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_69;
+    public static BlockType<BlockBehavior> ELEMENT_69;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_7;
+    public static BlockType<BlockBehavior> ELEMENT_7;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_70;
+    public static BlockType<BlockBehavior> ELEMENT_70;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_71;
+    public static BlockType<BlockBehavior> ELEMENT_71;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_72;
+    public static BlockType<BlockBehavior> ELEMENT_72;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_73;
+    public static BlockType<BlockBehavior> ELEMENT_73;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_74;
+    public static BlockType<BlockBehavior> ELEMENT_74;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_75;
+    public static BlockType<BlockBehavior> ELEMENT_75;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_76;
+    public static BlockType<BlockBehavior> ELEMENT_76;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_77;
+    public static BlockType<BlockBehavior> ELEMENT_77;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_78;
+    public static BlockType<BlockBehavior> ELEMENT_78;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_79;
+    public static BlockType<BlockBehavior> ELEMENT_79;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_8;
+    public static BlockType<BlockBehavior> ELEMENT_8;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_80;
+    public static BlockType<BlockBehavior> ELEMENT_80;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_81;
+    public static BlockType<BlockBehavior> ELEMENT_81;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_82;
+    public static BlockType<BlockBehavior> ELEMENT_82;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_83;
+    public static BlockType<BlockBehavior> ELEMENT_83;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_84;
+    public static BlockType<BlockBehavior> ELEMENT_84;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_85;
+    public static BlockType<BlockBehavior> ELEMENT_85;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_86;
+    public static BlockType<BlockBehavior> ELEMENT_86;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_87;
+    public static BlockType<BlockBehavior> ELEMENT_87;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_88;
+    public static BlockType<BlockBehavior> ELEMENT_88;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_89;
+    public static BlockType<BlockBehavior> ELEMENT_89;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_9;
+    public static BlockType<BlockBehavior> ELEMENT_9;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_90;
+    public static BlockType<BlockBehavior> ELEMENT_90;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_91;
+    public static BlockType<BlockBehavior> ELEMENT_91;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_92;
+    public static BlockType<BlockBehavior> ELEMENT_92;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_93;
+    public static BlockType<BlockBehavior> ELEMENT_93;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_94;
+    public static BlockType<BlockBehavior> ELEMENT_94;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_95;
+    public static BlockType<BlockBehavior> ELEMENT_95;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_96;
+    public static BlockType<BlockBehavior> ELEMENT_96;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_97;
+    public static BlockType<BlockBehavior> ELEMENT_97;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_98;
+    public static BlockType<BlockBehavior> ELEMENT_98;
 
-    public static BlockType<BlockElementBehavior> ELEMENT_99;
+    public static BlockType<BlockBehavior> ELEMENT_99;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockElementBehavior> ELEMENT_CONSTRUCTOR;
+    public static BlockType<BlockBehavior> ELEMENT_CONSTRUCTOR;
 
-    public static BlockType<BlockEmeraldBlockBehavior> EMERALD_BLOCK;
+    public static BlockType<BlockBehavior> EMERALD_BLOCK;
 
     public static BlockType<BlockOreBehavior> EMERALD_ORE;
 
@@ -2540,24 +2251,24 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> END_BRICK_STAIRS;
 
-    public static BlockType<BlockBricksBehavior> END_BRICKS;
+    public static BlockType<BlockBehavior> END_BRICKS;
 
-    public static BlockType<BlockEndGatewayBehavior> END_GATEWAY;
+    public static BlockType<BlockBehavior> END_GATEWAY;
 
-    public static BlockType<BlockEndPortalBehavior> END_PORTAL;
+    public static BlockType<BlockBehavior> END_PORTAL;
 
     /**
      * {@link BlockPropertyTypes#END_PORTAL_EYE_BIT}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockEndPortalFrameBehavior> END_PORTAL_FRAME;
+    public static BlockType<BlockBehavior> END_PORTAL_FRAME;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockEndRodBehavior> END_ROD;
+    public static BlockType<BlockBehavior> END_ROD;
 
-    public static BlockType<BlockEndStoneBehavior> END_STONE;
+    public static BlockType<BlockBehavior> END_STONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2609,7 +2320,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockExposedCopperChestBehavior> EXPOSED_COPPER_CHEST;
+    public static BlockType<BlockBehavior> EXPOSED_COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -2666,7 +2377,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MOISTURIZED_AMOUNT}
      */
-    public static BlockType<BlockFarmlandBehavior> FARMLAND;
+    public static BlockType<BlockBehavior> FARMLAND;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -2675,37 +2386,37 @@ public final class BlockTypes {
      */
     public static BlockType<BlockFenceGateBehavior> FENCE_GATE;
 
-    public static BlockType<BlockFernBehavior> FERN;
+    public static BlockType<BlockBehavior> FERN;
 
     /**
      * {@link BlockPropertyTypes#AGE_16}
      */
-    public static BlockType<BlockFireBehavior> FIRE;
+    public static BlockType<BlockBehavior> FIRE;
 
-    public static BlockType<BlockCoralBehavior> FIRE_CORAL;
+    public static BlockType<BlockBehavior> FIRE_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> FIRE_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> FIRE_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> FIRE_CORAL_FAN;
+    public static BlockType<BlockBehavior> FIRE_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> FIRE_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> FIRE_CORAL_WALL_FAN;
 
-    public static BlockType<BlockFireflyBushBehavior> FIREFLY_BUSH;
+    public static BlockType<BlockBehavior> FIREFLY_BUSH;
 
-    public static BlockType<BlockFletchingTableBehavior> FLETCHING_TABLE;
+    public static BlockType<BlockBehavior> FLETCHING_TABLE;
 
     /**
      * {@link BlockPropertyTypes#UPDATE_BIT}
      */
     public static BlockType<BlockFlowerPotBehavior> FLOWER_POT;
 
-    public static BlockType<BlockFloweringAzaleaBehavior> FLOWERING_AZALEA;
+    public static BlockType<BlockBehavior> FLOWERING_AZALEA;
 
     /**
      * {@link BlockPropertyTypes#LIQUID_DEPTH}
@@ -2722,21 +2433,21 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#ITEM_FRAME_MAP_BIT}
      * {@link BlockPropertyTypes#ITEM_FRAME_PHOTO_BIT}
      */
-    public static BlockType<BlockFrameBehavior> FRAME;
+    public static BlockType<BlockBehavior> FRAME;
 
-    public static BlockType<BlockFrogSpawnBehavior> FROG_SPAWN;
+    public static BlockType<BlockBehavior> FROG_SPAWN;
 
     /**
      * {@link BlockPropertyTypes#AGE_4}
      */
-    public static BlockType<BlockIceBehavior> FROSTED_ICE;
+    public static BlockType<BlockBehavior> FROSTED_ICE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
     public static BlockType<BlockFurnaceBehavior> FURNACE;
 
-    public static BlockType<BlockGildedBlackstoneBehavior> GILDED_BLACKSTONE;
+    public static BlockType<BlockBehavior> GILDED_BLACKSTONE;
 
     public static BlockType<BlockGlassBehavior> GLASS;
 
@@ -2753,18 +2464,18 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#ITEM_FRAME_MAP_BIT}
      * {@link BlockPropertyTypes#ITEM_FRAME_PHOTO_BIT}
      */
-    public static BlockType<BlockGlowFrameBehavior> GLOW_FRAME;
+    public static BlockType<BlockBehavior> GLOW_FRAME;
 
     /**
      * {@link BlockPropertyTypes#MULTI_FACE_DIRECTION_BITS}
      */
-    public static BlockType<BlockGlowLichenBehavior> GLOW_LICHEN;
+    public static BlockType<BlockBehavior> GLOW_LICHEN;
 
-    public static BlockType<BlockGlowingobsidianBehavior> GLOWINGOBSIDIAN;
+    public static BlockType<BlockBehavior> GLOWINGOBSIDIAN;
 
-    public static BlockType<BlockGlowstoneBehavior> GLOWSTONE;
+    public static BlockType<BlockBehavior> GLOWSTONE;
 
-    public static BlockType<BlockGoldBlockBehavior> GOLD_BLOCK;
+    public static BlockType<BlockBehavior> GOLD_BLOCK;
 
     public static BlockType<BlockOreBehavior> GOLD_ORE;
 
@@ -2774,9 +2485,9 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#RAIL_DATA_BIT}
      * {@link BlockPropertyTypes#RAIL_DIRECTION_6}
      */
-    public static BlockType<BlockGoldenRailBehavior> GOLDEN_RAIL;
+    public static BlockType<BlockBehavior> GOLDEN_RAIL;
 
-    public static BlockType<BlockGraniteBehavior> GRANITE;
+    public static BlockType<BlockBehavior> GRANITE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2804,9 +2515,9 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> GRANITE_WALL;
 
-    public static BlockType<BlockGrassBlockBehavior> GRASS_BLOCK;
+    public static BlockType<BlockBehavior> GRASS_BLOCK;
 
-    public static BlockType<BlockGrassPathBehavior> GRASS_PATH;
+    public static BlockType<BlockBehavior> GRASS_PATH;
 
     public static BlockType<BlockGravelBehavior> GRAVEL;
 
@@ -2823,7 +2534,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> GRAY_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> GRAY_CONCRETE;
+    public static BlockType<BlockBehavior> GRAY_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2863,7 +2574,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> GRAY_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> GRAY_WOOL;
+    public static BlockType<BlockBehavior> GRAY_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2895,7 +2606,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> GREEN_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> GREEN_CONCRETE;
+    public static BlockType<BlockBehavior> GREEN_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2935,7 +2646,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> GREEN_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> GREEN_WOOL;
+    public static BlockType<BlockBehavior> GREEN_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2958,9 +2669,9 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#ATTACHMENT}
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockGrindstoneBehavior> GRINDSTONE;
+    public static BlockType<BlockBehavior> GRINDSTONE;
 
-    public static BlockType<BlockHangingRootsBehavior> HANGING_ROOTS;
+    public static BlockType<BlockBehavior> HANGING_ROOTS;
 
     public static BlockType<BlockGlassBehavior> HARD_BLACK_STAINED_GLASS;
 
@@ -3132,46 +2843,46 @@ public final class BlockTypes {
      */
     public static BlockType<BlockGlassPaneBehavior> HARD_YELLOW_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardenedClayBehavior> HARDENED_CLAY;
+    public static BlockType<BlockBehavior> HARDENED_CLAY;
 
     /**
      * {@link BlockPropertyTypes#DEPRECATED}
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockHayBlockBehavior> HAY_BLOCK;
+    public static BlockType<BlockBehavior> HAY_BLOCK;
 
-    public static BlockType<BlockHeavyCoreBehavior> HEAVY_CORE;
+    public static BlockType<BlockBehavior> HEAVY_CORE;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> HEAVY_WEIGHTED_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> HEAVY_WEIGHTED_PRESSURE_PLATE;
 
-    public static BlockType<BlockHoneyBlockBehavior> HONEY_BLOCK;
+    public static BlockType<BlockBehavior> HONEY_BLOCK;
 
-    public static BlockType<BlockHoneycombBlockBehavior> HONEYCOMB_BLOCK;
+    public static BlockType<BlockBehavior> HONEYCOMB_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      * {@link BlockPropertyTypes#TOGGLE_BIT}
      */
-    public static BlockType<BlockHopperBehavior> HOPPER;
+    public static BlockType<BlockBehavior> HOPPER;
 
-    public static BlockType<BlockCoralBehavior> HORN_CORAL;
+    public static BlockType<BlockBehavior> HORN_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> HORN_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> HORN_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> HORN_CORAL_FAN;
+    public static BlockType<BlockBehavior> HORN_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> HORN_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> HORN_CORAL_WALL_FAN;
 
-    public static BlockType<BlockIceBehavior> ICE;
+    public static BlockType<BlockBehavior> ICE;
 
     public static BlockType<BlockInfestedBlockBehavior> INFESTED_CHISELED_STONE_BRICKS;
 
@@ -3190,11 +2901,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockInfestedBlockBehavior> INFESTED_STONE_BRICKS;
 
-    public static BlockType<BlockInfoUpdateBehavior> INFO_UPDATE;
+    public static BlockType<BlockBehavior> INFO_UPDATE;
 
-    public static BlockType<BlockInfoUpdate2Behavior> INFO_UPDATE2;
+    public static BlockType<BlockBehavior> INFO_UPDATE2;
 
-    public static BlockType<BlockInvisibleBedrockBehavior> INVISIBLE_BEDROCK;
+    public static BlockType<BlockBehavior> INVISIBLE_BEDROCK;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_EAST}
@@ -3204,12 +2915,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockIronBarsBehavior> IRON_BARS;
 
-    public static BlockType<BlockIronBlockBehavior> IRON_BLOCK;
+    public static BlockType<BlockBehavior> IRON_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockIronChainBehavior> IRON_CHAIN;
+    public static BlockType<BlockBehavior> IRON_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -3217,7 +2928,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockIronDoorBehavior> IRON_DOOR;
+    public static BlockType<BlockBehavior> IRON_DOOR;
 
     public static BlockType<BlockOreBehavior> IRON_ORE;
 
@@ -3226,13 +2937,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPSIDE_DOWN_BIT}
      */
-    public static BlockType<BlockIronTrapdoorBehavior> IRON_TRAPDOOR;
+    public static BlockType<BlockBehavior> IRON_TRAPDOOR;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      * {@link BlockPropertyTypes#ROTATION}
      */
-    public static BlockType<BlockJigsawBehavior> JIGSAW;
+    public static BlockType<BlockBehavior> JIGSAW;
 
     public static BlockType<BlockJukeboxBehavior> JUKEBOX;
 
@@ -3240,7 +2951,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> JUNGLE_BUTTON;
+    public static BlockType<BlockBehavior> JUNGLE_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -3248,7 +2959,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> JUNGLE_DOOR;
+    public static BlockType<BlockBehavior> JUNGLE_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3261,7 +2972,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> JUNGLE_FENCE;
+    public static BlockType<BlockBehavior> JUNGLE_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -3289,17 +3000,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> JUNGLE_LOG;
 
-    public static BlockType<BlockPlanksBehavior> JUNGLE_PLANKS;
+    public static BlockType<BlockBehavior> JUNGLE_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> JUNGLE_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> JUNGLE_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> JUNGLE_SAPLING;
+    public static BlockType<BlockBehavior> JUNGLE_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -3345,24 +3056,24 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#KELP_AGE}
      */
-    public static BlockType<BlockKelpBehavior> KELP;
+    public static BlockType<BlockBehavior> KELP;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockLabTableBehavior> LAB_TABLE;
+    public static BlockType<BlockBehavior> LAB_TABLE;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockLadderBehavior> LADDER;
+    public static BlockType<BlockBehavior> LADDER;
 
     /**
      * {@link BlockPropertyTypes#HANGING}
      */
     public static BlockType<BlockLanternBehavior> LANTERN;
 
-    public static BlockType<BlockLapisBlockBehavior> LAPIS_BLOCK;
+    public static BlockType<BlockBehavior> LAPIS_BLOCK;
 
     public static BlockType<BlockOreBehavior> LAPIS_ORE;
 
@@ -3374,7 +3085,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockLargeFernBehavior> LARGE_FERN;
+    public static BlockType<BlockBehavior> LARGE_FERN;
 
     /**
      * {@link BlockPropertyTypes#LIQUID_DEPTH}
@@ -3397,39 +3108,39 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#LEVER_DIRECTION}
      * {@link BlockPropertyTypes#OPEN_BIT}
      */
-    public static BlockType<BlockLeverBehavior> LEVER;
+    public static BlockType<BlockBehavior> LEVER;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_0;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_0;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_1;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_1;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_10;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_10;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_11;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_11;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_12;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_12;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_13;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_13;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_14;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_14;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_15;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_15;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_2;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_2;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_3;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_3;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_4;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_4;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_5;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_5;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_6;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_6;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_7;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_7;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_8;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_8;
 
-    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_9;
+    public static BlockType<BlockBehavior> LIGHT_BLOCK_9;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -3444,7 +3155,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> LIGHT_BLUE_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> LIGHT_BLUE_CONCRETE;
+    public static BlockType<BlockBehavior> LIGHT_BLUE_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3484,7 +3195,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> LIGHT_BLUE_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> LIGHT_BLUE_WOOL;
+    public static BlockType<BlockBehavior> LIGHT_BLUE_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3516,7 +3227,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> LIGHT_GRAY_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> LIGHT_GRAY_CONCRETE;
+    public static BlockType<BlockBehavior> LIGHT_GRAY_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3551,7 +3262,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> LIGHT_GRAY_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> LIGHT_GRAY_WOOL;
+    public static BlockType<BlockBehavior> LIGHT_GRAY_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3573,7 +3284,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> LIGHT_WEIGHTED_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> LIGHT_WEIGHTED_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -3601,7 +3312,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> LIME_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> LIME_CONCRETE;
+    public static BlockType<BlockBehavior> LIME_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3641,7 +3352,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> LIME_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> LIME_WOOL;
+    public static BlockType<BlockBehavior> LIME_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3675,7 +3386,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockLitPumpkinBehavior> LIT_PUMPKIN;
+    public static BlockType<BlockBehavior> LIT_PUMPKIN;
 
     public static BlockType<BlockRedstoneLampBehavior> LIT_REDSTONE_LAMP;
 
@@ -3686,12 +3397,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockSmokerBehavior> LIT_SMOKER;
 
-    public static BlockType<BlockLodestoneBehavior> LODESTONE;
+    public static BlockType<BlockBehavior> LODESTONE;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockLoomBehavior> LOOM;
+    public static BlockType<BlockBehavior> LOOM;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -3706,7 +3417,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> MAGENTA_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> MAGENTA_CONCRETE;
+    public static BlockType<BlockBehavior> MAGENTA_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3746,7 +3457,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> MAGENTA_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> MAGENTA_WOOL;
+    public static BlockType<BlockBehavior> MAGENTA_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3765,13 +3476,13 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> MAGENTA_WOOL_STAIRS;
 
-    public static BlockType<BlockMagmaBehavior> MAGMA;
+    public static BlockType<BlockBehavior> MAGMA;
 
     /**
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> MANGROVE_BUTTON;
+    public static BlockType<BlockBehavior> MANGROVE_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -3779,7 +3490,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> MANGROVE_DOOR;
+    public static BlockType<BlockBehavior> MANGROVE_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3792,7 +3503,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> MANGROVE_FENCE;
+    public static BlockType<BlockBehavior> MANGROVE_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -3820,20 +3531,20 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> MANGROVE_LOG;
 
-    public static BlockType<BlockPlanksBehavior> MANGROVE_PLANKS;
+    public static BlockType<BlockBehavior> MANGROVE_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> MANGROVE_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> MANGROVE_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#HANGING}
      * {@link BlockPropertyTypes#PROPAGULE_STAGE}
      */
-    public static BlockType<BlockMangrovePropaguleBehavior> MANGROVE_PROPAGULE;
+    public static BlockType<BlockBehavior> MANGROVE_PROPAGULE;
 
-    public static BlockType<BlockMangroveRootsBehavior> MANGROVE_ROOTS;
+    public static BlockType<BlockBehavior> MANGROVE_ROOTS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -3879,28 +3590,28 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
      */
-    public static BlockType<BlockMaterialReducerBehavior> MATERIAL_REDUCER;
+    public static BlockType<BlockBehavior> MATERIAL_REDUCER;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_BLOCK_FACE}
      */
     public static BlockType<BlockAmethystClusterBehavior> MEDIUM_AMETHYST_BUD;
 
-    public static BlockType<BlockMelonBlockBehavior> MELON_BLOCK;
+    public static BlockType<BlockBehavior> MELON_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockMelonStemBehavior> MELON_STEM;
+    public static BlockType<BlockBehavior> MELON_STEM;
 
-    public static BlockType<BlockMobSpawnerBehavior> MOB_SPAWNER;
+    public static BlockType<BlockBehavior> MOB_SPAWNER;
 
-    public static BlockType<BlockMossBlockBehavior> MOSS_BLOCK;
+    public static BlockType<BlockBehavior> MOSS_BLOCK;
 
     public static BlockType<BlockCarpetBehavior> MOSS_CARPET;
 
-    public static BlockType<BlockMossyCobblestoneBehavior> MOSSY_COBBLESTONE;
+    public static BlockType<BlockBehavior> MOSSY_COBBLESTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3954,11 +3665,11 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> MOSSY_STONE_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> MOSSY_STONE_BRICKS;
+    public static BlockType<BlockBehavior> MOSSY_STONE_BRICKS;
 
-    public static BlockType<BlockMovingBlockBehavior> MOVING_BLOCK;
+    public static BlockType<BlockBehavior> MOVING_BLOCK;
 
-    public static BlockType<BlockMudBehavior> MUD;
+    public static BlockType<BlockBehavior> MUD;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3986,21 +3697,21 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> MUD_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> MUD_BRICKS;
+    public static BlockType<BlockBehavior> MUD_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockMuddyMangroveRootsBehavior> MUDDY_MANGROVE_ROOTS;
+    public static BlockType<BlockBehavior> MUDDY_MANGROVE_ROOTS;
 
     /**
      * {@link BlockPropertyTypes#HUGE_MUSHROOM_BITS}
      */
-    public static BlockType<BlockMushroomStemBehavior> MUSHROOM_STEM;
+    public static BlockType<BlockBehavior> MUSHROOM_STEM;
 
-    public static BlockType<BlockMyceliumBehavior> MYCELIUM;
+    public static BlockType<BlockBehavior> MYCELIUM;
 
-    public static BlockType<BlockNetherBrickBehavior> NETHER_BRICK;
+    public static BlockType<BlockBehavior> NETHER_BRICK;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4013,7 +3724,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> NETHER_BRICK_FENCE;
+    public static BlockType<BlockBehavior> NETHER_BRICK_FENCE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4038,20 +3749,20 @@ public final class BlockTypes {
 
     public static BlockType<BlockOreBehavior> NETHER_GOLD_ORE;
 
-    public static BlockType<BlockNetherSproutsBehavior> NETHER_SPROUTS;
+    public static BlockType<BlockBehavior> NETHER_SPROUTS;
 
     /**
      * {@link BlockPropertyTypes#AGE_4}
      */
-    public static BlockType<BlockNetherWartBehavior> NETHER_WART;
+    public static BlockType<BlockBehavior> NETHER_WART;
 
-    public static BlockType<BlockNetherWartBlockBehavior> NETHER_WART_BLOCK;
+    public static BlockType<BlockBehavior> NETHER_WART_BLOCK;
 
-    public static BlockType<BlockNetheriteBlockBehavior> NETHERITE_BLOCK;
+    public static BlockType<BlockBehavior> NETHERITE_BLOCK;
 
-    public static BlockType<BlockNetherrackBehavior> NETHERRACK;
+    public static BlockType<BlockBehavior> NETHERRACK;
 
-    public static BlockType<BlockNetherreactorBehavior> NETHERREACTOR;
+    public static BlockType<BlockBehavior> NETHERREACTOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4083,7 +3794,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> OAK_FENCE;
+    public static BlockType<BlockBehavior> OAK_FENCE;
 
     /**
      * {@link BlockPropertyTypes#ATTACHED_BIT}
@@ -4104,12 +3815,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> OAK_LOG;
 
-    public static BlockType<BlockPlanksBehavior> OAK_PLANKS;
+    public static BlockType<BlockBehavior> OAK_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> OAK_SAPLING;
+    public static BlockType<BlockBehavior> OAK_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4139,14 +3850,14 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_FACING_DIRECTION}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
-    public static BlockType<BlockObserverBehavior> OBSERVER;
+    public static BlockType<BlockBehavior> OBSERVER;
 
-    public static BlockType<BlockObsidianBehavior> OBSIDIAN;
+    public static BlockType<BlockBehavior> OBSIDIAN;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockOchreFroglightBehavior> OCHRE_FROGLIGHT;
+    public static BlockType<BlockBehavior> OCHRE_FROGLIGHT;
 
     public static BlockType<BlockSmallFlower> OPEN_EYEBLOSSOM;
 
@@ -4163,7 +3874,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> ORANGE_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> ORANGE_CONCRETE;
+    public static BlockType<BlockBehavior> ORANGE_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4211,7 +3922,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmallFlower> ORANGE_TULIP;
 
-    public static BlockType<BlockWoolBehavior> ORANGE_WOOL;
+    public static BlockType<BlockBehavior> ORANGE_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4258,7 +3969,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockOxidizedCopperChestBehavior> OXIDIZED_COPPER_CHEST;
+    public static BlockType<BlockBehavior> OXIDIZED_COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -4312,16 +4023,16 @@ public final class BlockTypes {
      */
     public static BlockType<BlockLightningRodBehavior> OXIDIZED_LIGHTNING_ROD;
 
-    public static BlockType<BlockIceBehavior> PACKED_ICE;
+    public static BlockType<BlockBehavior> PACKED_ICE;
 
-    public static BlockType<BlockPackedMudBehavior> PACKED_MUD;
+    public static BlockType<BlockBehavior> PACKED_MUD;
 
     /**
      * {@link BlockPropertyTypes#TIP}
      */
-    public static BlockType<BlockPaleHangingMossBehavior> PALE_HANGING_MOSS;
+    public static BlockType<BlockBehavior> PALE_HANGING_MOSS;
 
-    public static BlockType<BlockPaleMossBlockBehavior> PALE_MOSS_BLOCK;
+    public static BlockType<BlockBehavior> PALE_MOSS_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#PALE_MOSS_CARPET_SIDE_EAST}
@@ -4336,7 +4047,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> PALE_OAK_BUTTON;
+    public static BlockType<BlockBehavior> PALE_OAK_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -4344,7 +4055,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> PALE_OAK_DOOR;
+    public static BlockType<BlockBehavior> PALE_OAK_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4357,7 +4068,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> PALE_OAK_FENCE;
+    public static BlockType<BlockBehavior> PALE_OAK_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -4385,17 +4096,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> PALE_OAK_LOG;
 
-    public static BlockType<BlockPlanksBehavior> PALE_OAK_PLANKS;
+    public static BlockType<BlockBehavior> PALE_OAK_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> PALE_OAK_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> PALE_OAK_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> PALE_OAK_SAPLING;
+    public static BlockType<BlockBehavior> PALE_OAK_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4441,7 +4152,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockPearlescentFroglightBehavior> PEARLESCENT_FROGLIGHT;
+    public static BlockType<BlockBehavior> PEARLESCENT_FROGLIGHT;
 
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
@@ -4476,7 +4187,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> PINK_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> PINK_CONCRETE;
+    public static BlockType<BlockBehavior> PINK_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4524,7 +4235,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmallFlower> PINK_TULIP;
 
-    public static BlockType<BlockWoolBehavior> PINK_WOOL;
+    public static BlockType<BlockBehavior> PINK_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4546,18 +4257,18 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockPistonBehavior> PISTON;
+    public static BlockType<BlockBehavior> PISTON;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockPistonArmCollisionBehavior> PISTON_ARM_COLLISION;
+    public static BlockType<BlockBehavior> PISTON_ARM_COLLISION;
 
     /**
      * {@link BlockPropertyTypes#GROWTH_8}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockPitcherCropBehavior> PITCHER_CROP;
+    public static BlockType<BlockBehavior> PITCHER_CROP;
 
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
@@ -4569,7 +4280,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockHeadBehavior> PLAYER_HEAD;
 
-    public static BlockType<BlockPodzolBehavior> PODZOL;
+    public static BlockType<BlockBehavior> PODZOL;
 
     /**
      * {@link BlockPropertyTypes#DRIPSTONE_THICKNESS}
@@ -4577,7 +4288,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockPointedDripstoneBehavior> POINTED_DRIPSTONE;
 
-    public static BlockType<BlockPolishedAndesiteBehavior> POLISHED_ANDESITE;
+    public static BlockType<BlockBehavior> POLISHED_ANDESITE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4599,9 +4310,9 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockPolishedBasaltBehavior> POLISHED_BASALT;
+    public static BlockType<BlockBehavior> POLISHED_BASALT;
 
-    public static BlockType<BlockPolishedBlackstoneBehavior> POLISHED_BLACKSTONE;
+    public static BlockType<BlockBehavior> POLISHED_BLACKSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4629,13 +4340,13 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> POLISHED_BLACKSTONE_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> POLISHED_BLACKSTONE_BRICKS;
+    public static BlockType<BlockBehavior> POLISHED_BLACKSTONE_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> POLISHED_BLACKSTONE_BUTTON;
+    public static BlockType<BlockBehavior> POLISHED_BLACKSTONE_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4645,7 +4356,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4668,7 +4379,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> POLISHED_BLACKSTONE_WALL;
 
-    public static BlockType<BlockPolishedCinnabarBehavior> POLISHED_CINNABAR;
+    public static BlockType<BlockBehavior> POLISHED_CINNABAR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4696,7 +4407,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> POLISHED_CINNABAR_WALL;
 
-    public static BlockType<BlockPolishedDeepslateBehavior> POLISHED_DEEPSLATE;
+    public static BlockType<BlockBehavior> POLISHED_DEEPSLATE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4724,7 +4435,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> POLISHED_DEEPSLATE_WALL;
 
-    public static BlockType<BlockPolishedDioriteBehavior> POLISHED_DIORITE;
+    public static BlockType<BlockBehavior> POLISHED_DIORITE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4743,7 +4454,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> POLISHED_DIORITE_STAIRS;
 
-    public static BlockType<BlockPolishedGraniteBehavior> POLISHED_GRANITE;
+    public static BlockType<BlockBehavior> POLISHED_GRANITE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4762,7 +4473,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> POLISHED_GRANITE_STAIRS;
 
-    public static BlockType<BlockPolishedSulfurBehavior> POLISHED_SULFUR;
+    public static BlockType<BlockBehavior> POLISHED_SULFUR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4790,7 +4501,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> POLISHED_SULFUR_WALL;
 
-    public static BlockType<BlockPolishedTuffBehavior> POLISHED_TUFF;
+    public static BlockType<BlockBehavior> POLISHED_TUFF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4822,7 +4533,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> POPLAR_BUTTON;
+    public static BlockType<BlockBehavior> POPLAR_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -4830,7 +4541,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> POPLAR_DOOR;
+    public static BlockType<BlockBehavior> POPLAR_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4843,7 +4554,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> POPLAR_FENCE;
+    public static BlockType<BlockBehavior> POPLAR_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -4865,17 +4576,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> POPLAR_LOG;
 
-    public static BlockType<BlockPlanksBehavior> POPLAR_PLANKS;
+    public static BlockType<BlockBehavior> POPLAR_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> POPLAR_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> POPLAR_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> POPLAR_SAPLING;
+    public static BlockType<BlockBehavior> POPLAR_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4923,19 +4634,19 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PORTAL_AXIS}
      */
-    public static BlockType<BlockPortalBehavior> PORTAL;
+    public static BlockType<BlockBehavior> PORTAL;
 
     /**
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockPotatoesBehavior> POTATOES;
+    public static BlockType<BlockBehavior> POTATOES;
 
     /**
      * {@link BlockPropertyTypes#POTENT_SULFUR_STATE}
      */
-    public static BlockType<BlockPotentSulfurBehavior> POTENT_SULFUR;
+    public static BlockType<BlockBehavior> POTENT_SULFUR;
 
-    public static BlockType<BlockPowderSnowBehavior> POWDER_SNOW;
+    public static BlockType<BlockBehavior> POWDER_SNOW;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4950,7 +4661,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockRepeaterBehavior> POWERED_REPEATER;
 
-    public static BlockType<BlockPrismarineBehavior> PRISMARINE;
+    public static BlockType<BlockBehavior> PRISMARINE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4962,7 +4673,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockSlabBehavior> PRISMARINE_BRICK_SLAB;
 
-    public static BlockType<BlockBricksBehavior> PRISMARINE_BRICKS;
+    public static BlockType<BlockBehavior> PRISMARINE_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CORNER}
@@ -5000,13 +4711,13 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockPumpkinBehavior> PUMPKIN;
+    public static BlockType<BlockBehavior> PUMPKIN;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockPumpkinStemBehavior> PUMPKIN_STEM;
+    public static BlockType<BlockBehavior> PUMPKIN_STEM;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -5021,7 +4732,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> PURPLE_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> PURPLE_CONCRETE;
+    public static BlockType<BlockBehavior> PURPLE_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5061,7 +4772,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> PURPLE_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> PURPLE_WOOL;
+    public static BlockType<BlockBehavior> PURPLE_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5083,7 +4794,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockPurpurBlockBehavior> PURPUR_BLOCK;
+    public static BlockType<BlockBehavior> PURPUR_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5093,7 +4804,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockPurpurPillarBehavior> PURPUR_PILLAR;
+    public static BlockType<BlockBehavior> PURPUR_PILLAR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5110,9 +4821,9 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockQuartzBlockBehavior> QUARTZ_BLOCK;
+    public static BlockType<BlockBehavior> QUARTZ_BLOCK;
 
-    public static BlockType<BlockBricksBehavior> QUARTZ_BRICKS;
+    public static BlockType<BlockBehavior> QUARTZ_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5124,7 +4835,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockQuartzPillarBehavior> QUARTZ_PILLAR;
+    public static BlockType<BlockBehavior> QUARTZ_PILLAR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5141,13 +4852,13 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#RAIL_DIRECTION_10}
      */
-    public static BlockType<BlockRailBehavior> RAIL;
+    public static BlockType<BlockBehavior> RAIL;
 
-    public static BlockType<BlockRawCopperBlockBehavior> RAW_COPPER_BLOCK;
+    public static BlockType<BlockBehavior> RAW_COPPER_BLOCK;
 
-    public static BlockType<BlockRawGoldBlockBehavior> RAW_GOLD_BLOCK;
+    public static BlockType<BlockBehavior> RAW_GOLD_BLOCK;
 
-    public static BlockType<BlockRawIronBlockBehavior> RAW_IRON_BLOCK;
+    public static BlockType<BlockBehavior> RAW_IRON_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -5162,7 +4873,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> RED_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> RED_CONCRETE;
+    public static BlockType<BlockBehavior> RED_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5188,14 +4899,14 @@ public final class BlockTypes {
      */
     public static BlockType<BlockGlazedTerracottaBehavior> RED_GLAZED_TERRACOTTA;
 
-    public static BlockType<BlockRedMushroomBehavior> RED_MUSHROOM;
+    public static BlockType<BlockBehavior> RED_MUSHROOM;
 
     /**
      * {@link BlockPropertyTypes#HUGE_MUSHROOM_BITS}
      */
-    public static BlockType<BlockRedMushroomBlockBehavior> RED_MUSHROOM_BLOCK;
+    public static BlockType<BlockBehavior> RED_MUSHROOM_BLOCK;
 
-    public static BlockType<BlockRedNetherBrickBehavior> RED_NETHER_BRICK;
+    public static BlockType<BlockBehavior> RED_NETHER_BRICK;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5231,7 +4942,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockRedSandBehavior> RED_SAND;
 
-    public static BlockType<BlockSandstoneBehavior> RED_SANDSTONE;
+    public static BlockType<BlockBehavior> RED_SANDSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5259,7 +4970,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> RED_SANDSTONE_WALL;
 
-    public static BlockType<BlockRedShrubBehavior> RED_SHRUB;
+    public static BlockType<BlockBehavior> RED_SHRUB;
 
     public static BlockType<BlockShulkerBoxBehavior> RED_SHULKER_BOX;
 
@@ -5277,7 +4988,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmallFlower> RED_TULIP;
 
-    public static BlockType<BlockWoolBehavior> RED_WOOL;
+    public static BlockType<BlockBehavior> RED_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5296,7 +5007,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> RED_WOOL_STAIRS;
 
-    public static BlockType<BlockRedstoneBlockBehavior> REDSTONE_BLOCK;
+    public static BlockType<BlockBehavior> REDSTONE_BLOCK;
 
     public static BlockType<BlockRedstoneLampBehavior> REDSTONE_LAMP;
 
@@ -5310,24 +5021,24 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockRedstoneWireBehavior> REDSTONE_WIRE;
+    public static BlockType<BlockBehavior> REDSTONE_WIRE;
 
     /**
      * {@link BlockPropertyTypes#AGE_16}
      */
-    public static BlockType<BlockReedsBehavior> REEDS;
+    public static BlockType<BlockBehavior> REEDS;
 
-    public static BlockType<BlockReinforcedDeepslateBehavior> REINFORCED_DEEPSLATE;
+    public static BlockType<BlockBehavior> REINFORCED_DEEPSLATE;
 
     /**
      * {@link BlockPropertyTypes#CONDITIONAL_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockRepeatingCommandBlockBehavior> REPEATING_COMMAND_BLOCK;
+    public static BlockType<BlockBehavior> REPEATING_COMMAND_BLOCK;
 
-    public static BlockType<BlockReserved6Behavior> RESERVED6;
+    public static BlockType<BlockBehavior> RESERVED6;
 
-    public static BlockType<BlockResinBlockBehavior> RESIN_BLOCK;
+    public static BlockType<BlockBehavior> RESIN_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5355,12 +5066,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> RESIN_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> RESIN_BRICKS;
+    public static BlockType<BlockBehavior> RESIN_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#MULTI_FACE_DIRECTION_BITS}
      */
-    public static BlockType<BlockResinClumpBehavior> RESIN_CLUMP;
+    public static BlockType<BlockBehavior> RESIN_CLUMP;
 
     /**
      * {@link BlockPropertyTypes#RESPAWN_ANCHOR_CHARGE}
@@ -5374,7 +5085,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandBehavior> SAND;
 
-    public static BlockType<BlockSandstoneBehavior> SANDSTONE;
+    public static BlockType<BlockBehavior> SANDSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5408,53 +5119,53 @@ public final class BlockTypes {
      */
     public static BlockType<BlockScaffoldingBehavior> SCAFFOLDING;
 
-    public static BlockType<BlockSculkBehavior> SCULK;
+    public static BlockType<BlockBehavior> SCULK;
 
     /**
      * {@link BlockPropertyTypes#BLOOM}
      */
-    public static BlockType<BlockSculkCatalystBehavior> SCULK_CATALYST;
+    public static BlockType<BlockBehavior> SCULK_CATALYST;
 
     /**
      * {@link BlockPropertyTypes#SCULK_SENSOR_PHASE}
      */
-    public static BlockType<BlockSculkSensorBehavior> SCULK_SENSOR;
+    public static BlockType<BlockBehavior> SCULK_SENSOR;
 
     /**
      * {@link BlockPropertyTypes#ACTIVE}
      * {@link BlockPropertyTypes#CAN_SUMMON}
      */
-    public static BlockType<BlockSculkShriekerBehavior> SCULK_SHRIEKER;
+    public static BlockType<BlockBehavior> SCULK_SHRIEKER;
 
     /**
      * {@link BlockPropertyTypes#MULTI_FACE_DIRECTION_BITS}
      */
-    public static BlockType<BlockSculkVeinBehavior> SCULK_VEIN;
+    public static BlockType<BlockBehavior> SCULK_VEIN;
 
-    public static BlockType<BlockSeaLanternBehavior> SEA_LANTERN;
+    public static BlockType<BlockBehavior> SEA_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#CLUSTER_COUNT}
      * {@link BlockPropertyTypes#DEAD_BIT}
      */
-    public static BlockType<BlockSeaPickleBehavior> SEA_PICKLE;
+    public static BlockType<BlockBehavior> SEA_PICKLE;
 
     /**
      * {@link BlockPropertyTypes#SEA_GRASS_TYPE}
      */
-    public static BlockType<BlockSeagrassBehavior> SEAGRASS;
+    public static BlockType<BlockBehavior> SEAGRASS;
 
     /**
      * {@link BlockPropertyTypes#GROWTH_2}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockShelfMushroomBehavior> SHELF_MUSHROOM;
+    public static BlockType<BlockBehavior> SHELF_MUSHROOM;
 
-    public static BlockType<BlockShortDryGrassBehavior> SHORT_DRY_GRASS;
+    public static BlockType<BlockBehavior> SHORT_DRY_GRASS;
 
-    public static BlockType<BlockShortGrassBehavior> SHORT_GRASS;
+    public static BlockType<BlockBehavior> SHORT_GRASS;
 
-    public static BlockType<BlockShroomlightBehavior> SHROOMLIGHT;
+    public static BlockType<BlockBehavior> SHROOMLIGHT;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -5466,7 +5177,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockHeadBehavior> SKELETON_SKULL;
 
-    public static BlockType<BlockSlimeBehavior> SLIME;
+    public static BlockType<BlockBehavior> SLIME;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_BLOCK_FACE}
@@ -5477,21 +5188,21 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockSmallDripleafBlockBehavior> SMALL_DRIPLEAF_BLOCK;
+    public static BlockType<BlockBehavior> SMALL_DRIPLEAF_BLOCK;
 
-    public static BlockType<BlockSmithingTableBehavior> SMITHING_TABLE;
+    public static BlockType<BlockBehavior> SMITHING_TABLE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
     public static BlockType<BlockSmokerBehavior> SMOKER;
 
-    public static BlockType<BlockSmoothBasaltBehavior> SMOOTH_BASALT;
+    public static BlockType<BlockBehavior> SMOOTH_BASALT;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockSmoothQuartzBehavior> SMOOTH_QUARTZ;
+    public static BlockType<BlockBehavior> SMOOTH_QUARTZ;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5510,7 +5221,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> SMOOTH_QUARTZ_STAIRS;
 
-    public static BlockType<BlockSandstoneBehavior> SMOOTH_RED_SANDSTONE;
+    public static BlockType<BlockBehavior> SMOOTH_RED_SANDSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5529,7 +5240,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> SMOOTH_RED_SANDSTONE_STAIRS;
 
-    public static BlockType<BlockSandstoneBehavior> SMOOTH_SANDSTONE;
+    public static BlockType<BlockBehavior> SMOOTH_SANDSTONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5548,7 +5259,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> SMOOTH_SANDSTONE_STAIRS;
 
-    public static BlockType<BlockSmoothStoneBehavior> SMOOTH_STONE;
+    public static BlockType<BlockBehavior> SMOOTH_STONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5563,9 +5274,9 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#CRACKED_STATE}
      */
-    public static BlockType<BlockSnifferEggBehavior> SNIFFER_EGG;
+    public static BlockType<BlockBehavior> SNIFFER_EGG;
 
-    public static BlockType<BlockSnowBehavior> SNOW;
+    public static BlockType<BlockBehavior> SNOW;
 
     /**
      * {@link BlockPropertyTypes#COVERED_BIT}
@@ -5577,36 +5288,36 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#EXTINGUISHED}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockCampfireBehavior> SOUL_CAMPFIRE;
+    public static BlockType<BlockBehavior> SOUL_CAMPFIRE;
 
     /**
      * {@link BlockPropertyTypes#AGE_16}
      */
-    public static BlockType<BlockFireBehavior> SOUL_FIRE;
+    public static BlockType<BlockBehavior> SOUL_FIRE;
 
     /**
      * {@link BlockPropertyTypes#HANGING}
      */
     public static BlockType<BlockLanternBehavior> SOUL_LANTERN;
 
-    public static BlockType<BlockSoulSandBehavior> SOUL_SAND;
+    public static BlockType<BlockBehavior> SOUL_SAND;
 
-    public static BlockType<BlockSoulSoilBehavior> SOUL_SOIL;
+    public static BlockType<BlockBehavior> SOUL_SOIL;
 
     /**
      * {@link BlockPropertyTypes#TORCH_FACING_DIRECTION}
      */
     public static BlockType<BlockTorchBehavior> SOUL_TORCH;
 
-    public static BlockType<BlockSpongeBehavior> SPONGE;
+    public static BlockType<BlockBehavior> SPONGE;
 
-    public static BlockType<BlockSporeBlossomBehavior> SPORE_BLOSSOM;
+    public static BlockType<BlockBehavior> SPORE_BLOSSOM;
 
     /**
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> SPRUCE_BUTTON;
+    public static BlockType<BlockBehavior> SPRUCE_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -5614,7 +5325,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> SPRUCE_DOOR;
+    public static BlockType<BlockBehavior> SPRUCE_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5627,7 +5338,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> SPRUCE_FENCE;
+    public static BlockType<BlockBehavior> SPRUCE_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -5655,17 +5366,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> SPRUCE_LOG;
 
-    public static BlockType<BlockPlanksBehavior> SPRUCE_PLANKS;
+    public static BlockType<BlockBehavior> SPRUCE_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> SPRUCE_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> SPRUCE_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
      */
-    public static BlockType<BlockSaplingBehavior> SPRUCE_SAPLING;
+    public static BlockType<BlockBehavior> SPRUCE_SAPLING;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -5721,14 +5432,14 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockStickyPistonBehavior> STICKY_PISTON;
+    public static BlockType<BlockBehavior> STICKY_PISTON;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockStickyPistonArmCollisionBehavior> STICKY_PISTON_ARM_COLLISION;
+    public static BlockType<BlockBehavior> STICKY_PISTON_ARM_COLLISION;
 
-    public static BlockType<BlockStoneBehavior> STONE;
+    public static BlockType<BlockBehavior> STONE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5756,18 +5467,18 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> STONE_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> STONE_BRICKS;
+    public static BlockType<BlockBehavior> STONE_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> STONE_BUTTON;
+    public static BlockType<BlockBehavior> STONE_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> STONE_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> STONE_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CORNER}
@@ -5776,19 +5487,19 @@ public final class BlockTypes {
      */
     public static BlockType<BlockStairsBehavior> STONE_STAIRS;
 
-    public static BlockType<BlockStonecutterBehavior> STONECUTTER;
+    public static BlockType<BlockBehavior> STONECUTTER;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockStonecutterBlockBehavior> STONECUTTER_BLOCK;
+    public static BlockType<BlockBehavior> STONECUTTER_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#HEAD_PIECE_BIT}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      * {@link BlockPropertyTypes#OCCUPIED_BIT}
      */
-    public static BlockType<BlockStrawBedBehavior> STRAW_BED;
+    public static BlockType<BlockBehavior> STRAW_BED;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
@@ -5918,11 +5629,11 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#STRUCTURE_BLOCK_TYPE}
      */
-    public static BlockType<BlockStructureBlockBehavior> STRUCTURE_BLOCK;
+    public static BlockType<BlockBehavior> STRUCTURE_BLOCK;
 
-    public static BlockType<BlockStructureVoidBehavior> STRUCTURE_VOID;
+    public static BlockType<BlockBehavior> STRUCTURE_VOID;
 
-    public static BlockType<BlockSulfurBehavior> SULFUR;
+    public static BlockType<BlockBehavior> SULFUR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5950,7 +5661,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> SULFUR_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> SULFUR_BRICKS;
+    public static BlockType<BlockBehavior> SULFUR_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -5966,7 +5677,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#DRIPSTONE_THICKNESS}
      * {@link BlockPropertyTypes#HANGING}
      */
-    public static BlockType<BlockSulfurSpikeBehavior> SULFUR_SPIKE;
+    public static BlockType<BlockBehavior> SULFUR_SPIKE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CORNER}
@@ -6004,14 +5715,14 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockSweetBerryBushBehavior> SWEET_BERRY_BUSH;
+    public static BlockType<BlockBehavior> SWEET_BERRY_BUSH;
 
-    public static BlockType<BlockTallDryGrassBehavior> TALL_DRY_GRASS;
+    public static BlockType<BlockBehavior> TALL_DRY_GRASS;
 
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockTallGrassBehavior> TALL_GRASS;
+    public static BlockType<BlockBehavior> TALL_GRASS;
 
     public static BlockType<BlockTargetBehavior> TARGET;
 
@@ -6032,7 +5743,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockTorchflowerCropBehavior> TORCHFLOWER_CROP;
+    public static BlockType<BlockBehavior> TORCHFLOWER_CROP;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -6050,7 +5761,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OMINOUS}
      * {@link BlockPropertyTypes#TRIAL_SPAWNER_STATE}
      */
-    public static BlockType<BlockTrialSpawnerBehavior> TRIAL_SPAWNER;
+    public static BlockType<BlockBehavior> TRIAL_SPAWNER;
 
     /**
      * {@link BlockPropertyTypes#ATTACHED_BIT}
@@ -6062,30 +5773,30 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#POWERED_BIT}
      * {@link BlockPropertyTypes#SUSPENDED_BIT}
      */
-    public static BlockType<BlockTripWireBehavior> TRIP_WIRE;
+    public static BlockType<BlockBehavior> TRIP_WIRE;
 
     /**
      * {@link BlockPropertyTypes#ATTACHED_BIT}
      * {@link BlockPropertyTypes#DIRECTION_4}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
-    public static BlockType<BlockTripwireHookBehavior> TRIPWIRE_HOOK;
+    public static BlockType<BlockBehavior> TRIPWIRE_HOOK;
 
-    public static BlockType<BlockCoralBehavior> TUBE_CORAL;
+    public static BlockType<BlockBehavior> TUBE_CORAL;
 
-    public static BlockType<BlockCoralBlockBehavior> TUBE_CORAL_BLOCK;
+    public static BlockType<BlockBehavior> TUBE_CORAL_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#CORAL_FAN_DIRECTION}
      */
-    public static BlockType<BlockCoralFanBehavior> TUBE_CORAL_FAN;
+    public static BlockType<BlockBehavior> TUBE_CORAL_FAN;
 
     /**
      * {@link BlockPropertyTypes#CORAL_DIRECTION}
      */
-    public static BlockType<BlockCoralWallFanBehavior> TUBE_CORAL_WALL_FAN;
+    public static BlockType<BlockBehavior> TUBE_CORAL_WALL_FAN;
 
-    public static BlockType<BlockTuffBehavior> TUFF;
+    public static BlockType<BlockBehavior> TUFF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -6113,7 +5824,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> TUFF_BRICK_WALL;
 
-    public static BlockType<BlockBricksBehavior> TUFF_BRICKS;
+    public static BlockType<BlockBehavior> TUFF_BRICKS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -6145,17 +5856,17 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#CRACKED_STATE}
      * {@link BlockPropertyTypes#TURTLE_EGG_COUNT}
      */
-    public static BlockType<BlockTurtleEggBehavior> TURTLE_EGG;
+    public static BlockType<BlockBehavior> TURTLE_EGG;
 
     /**
      * {@link BlockPropertyTypes#TWISTING_VINES_AGE}
      */
-    public static BlockType<BlockTwistingVinesBehavior> TWISTING_VINES;
+    public static BlockType<BlockBehavior> TWISTING_VINES;
 
     /**
      * {@link BlockPropertyTypes#EXPLODE_BIT}
      */
-    public static BlockType<BlockUnderwaterTntBehavior> UNDERWATER_TNT;
+    public static BlockType<BlockBehavior> UNDERWATER_TNT;
 
     /**
      * {@link BlockPropertyTypes#TORCH_FACING_DIRECTION}
@@ -6164,7 +5875,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockShulkerBoxBehavior> UNDYED_SHULKER_BOX;
 
-    public static BlockType<BlockUnknownBehavior> UNKNOWN;
+    public static BlockType<BlockBehavior> UNKNOWN;
 
     /**
      * {@link BlockPropertyTypes#TORCH_FACING_DIRECTION}
@@ -6189,17 +5900,17 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OMINOUS}
      * {@link BlockPropertyTypes#VAULT_STATE}
      */
-    public static BlockType<BlockVaultBehavior> VAULT;
+    public static BlockType<BlockBehavior> VAULT;
 
     /**
      * {@link BlockPropertyTypes#PILLAR_AXIS}
      */
-    public static BlockType<BlockVerdantFroglightBehavior> VERDANT_FROGLIGHT;
+    public static BlockType<BlockBehavior> VERDANT_FROGLIGHT;
 
     /**
      * {@link BlockPropertyTypes#VINE_DIRECTION_BITS}
      */
-    public static BlockType<BlockVineBehavior> VINE;
+    public static BlockType<BlockBehavior> VINE;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -6215,7 +5926,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> WARPED_BUTTON;
+    public static BlockType<BlockBehavior> WARPED_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -6223,7 +5934,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> WARPED_DOOR;
+    public static BlockType<BlockBehavior> WARPED_DOOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -6236,7 +5947,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_SOUTH}
      * {@link BlockPropertyTypes#MINECRAFT_CONNECTION_WEST}
      */
-    public static BlockType<BlockFenceBehavior> WARPED_FENCE;
+    public static BlockType<BlockBehavior> WARPED_FENCE;
 
     /**
      * {@link BlockPropertyTypes#IN_WALL_BIT}
@@ -6245,7 +5956,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockFenceGateBehavior> WARPED_FENCE_GATE;
 
-    public static BlockType<BlockWarpedFungusBehavior> WARPED_FUNGUS;
+    public static BlockType<BlockBehavior> WARPED_FUNGUS;
 
     /**
      * {@link BlockPropertyTypes#ATTACHED_BIT}
@@ -6260,16 +5971,16 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWoodBehavior> WARPED_HYPHAE;
 
-    public static BlockType<BlockWarpedNyliumBehavior> WARPED_NYLIUM;
+    public static BlockType<BlockBehavior> WARPED_NYLIUM;
 
-    public static BlockType<BlockPlanksBehavior> WARPED_PLANKS;
+    public static BlockType<BlockBehavior> WARPED_PLANKS;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> WARPED_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> WARPED_PRESSURE_PLATE;
 
-    public static BlockType<BlockWarpedRootsBehavior> WARPED_ROOTS;
+    public static BlockType<BlockBehavior> WARPED_ROOTS;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -6312,14 +6023,14 @@ public final class BlockTypes {
      */
     public static BlockType<BlockSignBehavior> WARPED_WALL_SIGN;
 
-    public static BlockType<BlockWarpedWartBlockBehavior> WARPED_WART_BLOCK;
+    public static BlockType<BlockBehavior> WARPED_WART_BLOCK;
 
     /**
      * {@link BlockPropertyTypes#LIQUID_DEPTH}
      */
     public static BlockType<BlockLiquidBehavior> WATER;
 
-    public static BlockType<BlockWaterlilyBehavior> WATERLILY;
+    public static BlockType<BlockBehavior> WATERLILY;
 
     public static BlockType<BlockCopperBehavior> WAXED_CHISELED_COPPER;
 
@@ -6347,7 +6058,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockWaxedCopperChestBehavior> WAXED_COPPER_CHEST;
+    public static BlockType<BlockBehavior> WAXED_COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -6421,7 +6132,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockWaxedExposedCopperChestBehavior> WAXED_EXPOSED_COPPER_CHEST;
+    public static BlockType<BlockBehavior> WAXED_EXPOSED_COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -6507,7 +6218,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockWaxedOxidizedCopperChestBehavior> WAXED_OXIDIZED_COPPER_CHEST;
+    public static BlockType<BlockBehavior> WAXED_OXIDIZED_COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -6587,7 +6298,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockWaxedWeatheredCopperChestBehavior> WAXED_WEATHERED_COPPER_CHEST;
+    public static BlockType<BlockBehavior> WAXED_WEATHERED_COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -6667,7 +6378,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockWeatheredCopperChestBehavior> WEATHERED_COPPER_CHEST;
+    public static BlockType<BlockBehavior> WEATHERED_COPPER_CHEST;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -6721,19 +6432,19 @@ public final class BlockTypes {
      */
     public static BlockType<BlockLightningRodBehavior> WEATHERED_LIGHTNING_ROD;
 
-    public static BlockType<BlockWebBehavior> WEB;
+    public static BlockType<BlockBehavior> WEB;
 
     /**
      * {@link BlockPropertyTypes#WEEPING_VINES_AGE}
      */
-    public static BlockType<BlockWeepingVinesBehavior> WEEPING_VINES;
+    public static BlockType<BlockBehavior> WEEPING_VINES;
 
-    public static BlockType<BlockWetSpongeBehavior> WET_SPONGE;
+    public static BlockType<BlockBehavior> WET_SPONGE;
 
     /**
      * {@link BlockPropertyTypes#GROWTH_8}
      */
-    public static BlockType<BlockWheatBehavior> WHEAT;
+    public static BlockType<BlockBehavior> WHEAT;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -6748,7 +6459,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> WHITE_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> WHITE_CONCRETE;
+    public static BlockType<BlockBehavior> WHITE_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -6790,7 +6501,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmallFlower> WHITE_TULIP;
 
-    public static BlockType<BlockWoolBehavior> WHITE_WOOL;
+    public static BlockType<BlockBehavior> WHITE_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -6826,7 +6537,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
-    public static BlockType<BlockButtonBehavior> WOODEN_BUTTON;
+    public static BlockType<BlockBehavior> WOODEN_BUTTON;
 
     /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
@@ -6834,12 +6545,12 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OPEN_BIT}
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockDoorBehavior> WOODEN_DOOR;
+    public static BlockType<BlockBehavior> WOODEN_DOOR;
 
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockPressurePlateBehavior> WOODEN_PRESSURE_PLATE;
+    public static BlockType<BlockBehavior> WOODEN_PRESSURE_PLATE;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -6854,7 +6565,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCarpetBehavior> YELLOW_CARPET;
 
-    public static BlockType<BlockConcreteBehavior> YELLOW_CONCRETE;
+    public static BlockType<BlockBehavior> YELLOW_CONCRETE;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -6900,7 +6611,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> YELLOW_TERRACOTTA;
 
-    public static BlockType<BlockWoolBehavior> YELLOW_WOOL;
+    public static BlockType<BlockBehavior> YELLOW_WOOL;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}

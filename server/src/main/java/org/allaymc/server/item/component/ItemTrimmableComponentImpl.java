@@ -5,7 +5,6 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.data.TrimMaterial;
 import org.allaymc.api.item.data.TrimPattern;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.item.component.event.CItemLoadExtraTagEvent;
 import org.allaymc.server.item.component.event.CItemSaveExtraTagEvent;
 import org.allaymc.server.registry.InternalRegistries;
@@ -21,12 +20,6 @@ import org.cloudburstmc.nbt.NbtMap;
  */
 @Getter
 public class ItemTrimmableComponentImpl implements ItemTrimmableComponent {
-    /**
-     * {@code IDENTIFIER} names this behavior provider in the item component system,
-     * allowing item type builders to select or replace this component by identifier.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_trimmable_component");
 
     /**
      * {@code pattern} holds the selected trim pattern or {@code null}. Saving requires

@@ -3,7 +3,6 @@ package org.allaymc.server.item.component.edible;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.ItemPotionComponent;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 
 /**
@@ -16,12 +15,6 @@ import org.allaymc.server.component.annotation.Dependency;
  */
 public class ItemPotionComponentImpl implements ItemPotionComponent {
 
-    /**
-     * {@code IDENTIFIER} names the potion component for provider lookup and
-     * dependency injection when item behavior is assembled.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:potion_component");
 
     /**
      * {@code baseComponent} holds the injected stack metadata owner. Potion

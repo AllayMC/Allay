@@ -704,7 +704,7 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
         EntityTypes.FIREBALL = AllayEntityType
-                .builder(EntityFireballImpl.class)
+                .builder()
                 .vanillaEntity(EntityId.FIREBALL)
                 .addComponent(EntityFireballBaseComponentImpl::new, EntityFireballBaseComponentImpl.class)
                 .addComponent(EntityFireballPhysicsComponentImpl::new, EntityFireballPhysicsComponentImpl.class)

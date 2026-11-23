@@ -2,23 +2,29 @@ package org.allaymc.server.entity.component.item;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPaintingBaseComponent;
 import org.allaymc.api.entity.data.PaintingType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3d;
+import org.joml.Vector3ic;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
+
+import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
 
 /**
  * {@code EntityPaintingBaseComponentImpl} represents a painting motive, its
@@ -136,5 +142,46 @@ public class EntityPaintingBaseComponentImpl extends EntityBaseComponentImpl imp
             dimension.dropItem(ItemTypes.PAINTING.createItemStack(), this.location);
         }
         remove();
+    }
+
+    /**
+     * Returns whether a painting footprint has empty space and solid backing.
+     * The caller supplies a horizontal {@code blockFace}; vertical faces fail
+     * when deriving the horizontal axis. When {@code checkOverlap} is
+     * {@code true}, existing paintings' physics margins are stripped before
+     * checking intersection so adjacent artwork can share a boundary.
+     *
+     * @throws IllegalStateException if {@code blockFace} is not horizontal
+     */
+    public static boolean canPlace(PaintingType paintingType, Dimension dimension, Vector3ic paintingPos, BlockFace blockFace, boolean checkOverlap) {
+        var horizontalStart = (int) (Math.ceil(paintingType.getWidth() / 2d) - 1);
+        var verticalStart = (int) (Math.ceil(paintingType.getHeight() / 2d) - 1);
+
+        var rotatedFace = blockFace.rotateYCCW();
+        var oppositeFace = blockFace.opposite();
+
+        var startPos = BlockFace.DOWN.offsetPos(rotatedFace.opposite().offsetPos(paintingPos, horizontalStart), verticalStart);
+
+        for (var w = 0; w < paintingType.getWidth(); w++) {
+            for (var h = 0; h < paintingType.getHeight(); h++) {
+                var pos = BlockFace.UP.offsetPos(rotatedFace.offsetPos(startPos, w), h);
+                if (dimension.getBlockState(pos).getBlockStateData().isSolid() ||
+                    !dimension.getBlockState(oppositeFace.offsetPos(pos)).getBlockStateData().isSolid()) {
+                    return false;
+                }
+            }
+        }
+
+        if (checkOverlap) {
+            var aabb = paintingType.getAABB(blockFace).translate(paintingPos.x(), paintingPos.y(), paintingPos.z(), new AABBd());
+            for (var entity : dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb)) {
+                if (entity.getEntityType() == EntityTypes.PAINTING &&
+                    entity.getOffsetAABB().expand(-FAT_AABB_MARGIN, new AABBd()).intersectsAABB(aabb)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

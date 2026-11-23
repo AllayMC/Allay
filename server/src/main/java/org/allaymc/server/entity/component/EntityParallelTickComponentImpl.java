@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component;
 
 import org.allaymc.api.entity.component.EntityParallelTickComponent;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CEntityParallelTickEvent;
@@ -17,12 +16,6 @@ import org.allaymc.server.entity.component.event.CEntityParallelTickEvent;
  */
 public class EntityParallelTickComponentImpl implements EntityParallelTickComponent {
 
-    /**
-     * {@code IDENTIFIER} names this component implementation for provider
-     * lookup and replacement when entity types assemble their component sets.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_parallel_tick_component");
 
     /**
      * Injected event manager for this entity's component handlers.

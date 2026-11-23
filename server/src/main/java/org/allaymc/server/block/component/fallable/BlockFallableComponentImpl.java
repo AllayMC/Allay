@@ -15,7 +15,6 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFallEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.server.block.component.event.CBlockAfterPlacedEvent;
@@ -44,12 +43,6 @@ import org.joml.Vector3ic;
 @AllArgsConstructor
 public class BlockFallableComponentImpl implements BlockFallableComponent {
 
-    /**
-     * {@code IDENTIFIER} names the generic falling-block implementation when
-     * providers and dependency injection identify its component capability.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_fallable_component");
 
     /**
      * Configured landing sound name.

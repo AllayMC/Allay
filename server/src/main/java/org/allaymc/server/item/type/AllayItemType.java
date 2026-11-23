@@ -4,11 +4,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import lombok.Getter;
 import lombok.ToString;
-import me.sunlan.fastreflection.FastConstructor;
-import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
+import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.data.ItemData;
 import org.allaymc.api.item.data.ItemTag;
@@ -16,13 +15,21 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.Allay;
+import org.allaymc.server.component.ComponentBlueprint;
 import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.server.item.data.ItemId;
+import org.allaymc.server.item.impl.ItemStackImpl;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.utils.BlockAndItemIdMapper;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,18 +37,15 @@ import static org.allaymc.server.component.ComponentProvider.toMap;
 
 /**
  * {@code AllayItemType} represents a registered item kind with shared gameplay
- * metadata and a component-backed stack factory. Its builder resolves the stack
- * class's public initialization constructor and captures a provider list once
- * for later stack construction. {@code createItemStack} sets the supplied
- * initialization object's owning type before invoking that factory.
+ * metadata and a precompiled {@link ComponentBlueprint} stack factory. Its
+ * builder validates component bindings and event handlers once during
+ * registration so {@code createItemStack} instantiates stacks with zero
+ * reflection scanning and zero per-stack event-bus allocation.
  *
  * <p>
- * The type retains its supplied item data, tag set, and optional custom client
- * definition rather than making deep snapshots. Block association resolves
- * lazily from the item identifier and memoizes the first result, including an
- * absent mapping. Builder registration happens only after factory preparation,
- * but automatic runtime-ID selection occurs earlier and is not rolled back
- * when a later build step fails.
+ * The type retains its supplied item data, tag set, compiled blueprint, and
+ * optional custom client definition. Block association resolves lazily from the
+ * item identifier and memoizes the first result, including an absent mapping.
  *
  * @param <T> stack interface produced by this registered item kind
  *
@@ -49,6 +53,11 @@ import static org.allaymc.server.component.ComponentProvider.toMap;
  */
 public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
+    /**
+     * Compiled component blueprint shared by all stacks of this item type.
+     */
+    @Getter
+    private final ComponentBlueprint<?> blueprint;
     /**
      * Prepared component-backed stack factory.
      */
@@ -65,15 +74,11 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final int runtimeId;
     /**
      * {@code itemTags} retains the builder's selected set without another copy.
-     * The generated getter exposes that same set; callers must respect the API's
-     * read-only usage contract even when the stored set is mutable.
      */
     @Getter
     private final Set<ItemTag> itemTags;
     /**
      * {@code itemData} retains shared gameplay properties supplied by the builder.
-     * The generated getter returns the same object, so this type does not create
-     * an independent data snapshot.
      */
     @Getter
     private final ItemData itemData;
@@ -84,25 +89,20 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final boolean customItem;
     /**
      * {@code customItemDefinition} holds optional client-definition parameters.
-     * The type retains the supplied record for protocol initialization;
-     * {@code null} means no custom definition was configured.
      */
     @Getter
     private final CustomItemDefinition customItemDefinition;
-
     /**
      * {@code blockType} memoizes identifier-based block lookup, including a
-     * {@code null} result. Later block registration does not cause a previously
-     * resolved mapping to be recomputed.
+     * {@code null} result.
      */
     private final Supplier<BlockType<?>> blockType;
 
     /**
-     * Creates item metadata and a stack factory while retaining the supplied values.
-     * The tag set, item data, and custom definition are not copied; the constructor
-     * prepares a memoized block lookup without resolving it immediately.
+     * Creates item metadata and retains the compiled blueprint and stack factory.
      */
     private AllayItemType(
+            ComponentBlueprint<?> blueprint,
             Function<ItemStackInitInfo, T> instanceCreator,
             Identifier identifier,
             int runtimeId,
@@ -111,6 +111,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             boolean customItem,
             CustomItemDefinition customItemDefinition
     ) {
+        this.blueprint = blueprint;
         this.instanceCreator = instanceCreator;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
@@ -122,10 +123,16 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     }
 
     /**
-     * Creates a builder targeting the supplied stack implementation class.
-     * Building later requires its public constructor accepting {@code ItemStackInitInfo}
-     * and {@code List}; this factory retains the class without validating that
-     * constructor immediately.
+     * Creates a builder targeting the default {@link ItemStackImpl} class for
+     * item types that do not require a specialized stack interface.
+     */
+    public static Builder builder() {
+        return new Builder(ItemStackImpl.class);
+    }
+
+    /**
+     * Creates a builder targeting the supplied stack implementation class or
+     * composed API interface.
      */
     public static <T extends ItemStack> Builder builder(Class<T> clazz) {
         return new Builder(clazz);
@@ -133,9 +140,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     /**
      * Creates a stack after assigning this item type to non-{@code null}
-     * initialization data. The prepared component constructor decides whether
-     * {@code null} is accepted; ordinary base components require data, while air
-     * uses predefined initialization.
+     * initialization data.
      */
     @Override
     public T createItemStack(ItemStackInitInfo info) {
@@ -147,8 +152,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     /**
      * Returns the first resolved block mapping for this item identifier.
-     * The supplier memoizes that result, including {@code null} when no block exists,
-     * so callers must wait for block registration before the initial lookup.
      */
     @Override
     public BlockType<?> getBlockType() {
@@ -156,30 +159,27 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     }
 
     /**
-     * {@code Builder} configures an item kind, prepares its stack factory, and
-     * registers the resulting type. Custom items start with default data and request
-     * an automatically allocated runtime ID unless the caller selects one.
+     * {@code Builder} configures an item kind, compiles its blueprint, and
+     * registers the resulting type.
      */
     @ToString
     public static class Builder {
 
         /**
-         * {@code CUSTOM_ITEM_RUNTIME_ID_COUNTER} supplies automatic runtime IDs beginning
-         * at {@code 10000}. Allocation is unsynchronized and unchecked for duplicates
-         * or overflow, so callers coordinate concurrent builds using this allocator.
+         * {@code CUSTOM_ITEM_RUNTIME_ID_COUNTER} supplies automatic runtime IDs
+         * beginning at {@code 10000}.
          */
         protected static int CUSTOM_ITEM_RUNTIME_ID_COUNTER = 10000;
 
         /**
-         * Target item-stack implementation class.
+         * Target item-stack implementation class or composed API interface.
          */
         protected Class<?> clazz;
         /**
-         * {@code componentProviders} indexes providers by component identifier.
-         * Setters copy map structure, additions replace matching keys, and building
-         * captures a separate list containing the same provider objects.
+         * {@code componentProviders} indexes providers by canonical contract class
+         * in deterministic insertion order.
          */
-        protected Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders = new HashMap<>();
+        protected Map<Class<?>, ComponentProvider<? extends ItemComponent>> componentProviders = new LinkedHashMap<>();
         /**
          * Selected namespaced item identifier.
          */
@@ -190,31 +190,26 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected boolean isCustomItem = true;
         /**
          * {@code runtimeId} uses {@code Integer.MAX_VALUE} to request automatic
-         * allocation. Building replaces that sentinel in this builder before preparing
-         * the reflective constructor.
+         * allocation during build.
          */
         protected int runtimeId = Integer.MAX_VALUE;
         /**
          * {@code itemTags} holds the selected tag set shared with built types.
-         * {@code setItemTags} replaces this reference with a copy of the caller's
-         * collection, while building passes the reference directly.
          */
         protected Set<ItemTag> itemTags = Set.of();
         /**
          * {@code itemData} holds gameplay properties selected for the next build.
-         * The initial value is shared {@code ItemData.DEFAULT}; setters and built types
-         * retain the supplied reference directly.
          */
         protected ItemData itemData = ItemData.DEFAULT;
         /**
-         * {@code customItemDefinition} holds optional client-definition parameters for
-         * custom items. A vanilla build rejects a non-{@code null} value after factory
-         * preparation.
+         * {@code customItemDefinition} holds optional client-definition parameters
+         * for custom items.
          */
         protected CustomItemDefinition customItemDefinition;
 
         /**
-         * Creates an item-type builder retaining the supplied stack implementation class.
+         * Creates an item-type builder targeting the supplied stack implementation
+         * class or composed API interface.
          */
         public Builder(Class<?> clazz) {
             this.clazz = clazz;
@@ -229,19 +224,16 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         /**
-         * Parses and selects the item's namespaced identifier, returning this builder.
-         * Identifier construction applies its namespace and path rules immediately;
-         * invalid text fails here before item factory preparation or registry updates.
+         * Parses and selects the item's namespaced identifier, returning this
+         * builder.
          */
         public Builder identifier(String identifier) {
             return identifier(new Identifier(identifier));
         }
 
         /**
-         * Selects vanilla identity, runtime ID, gameplay data, and any registered tags.
-         * Required gameplay data must exist in the internal registry; missing data
-         * throws after the builder has already changed its vanilla identity fields.
-         * Missing tag data leaves the previous selected tags intact.
+         * Selects vanilla identity, runtime ID, gameplay data, and any registered
+         * tags.
          *
          * @throws ItemTypeBuildException if no gameplay data exists for {@code itemId}
          */
@@ -265,8 +257,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         /**
          * Selects shared gameplay data and returns this builder without copying it.
-         * The value is retained directly, including {@code null}; callers provide usable
-         * data for later gameplay and protocol consumers of the built type.
          */
         public Builder itemData(ItemData itemData) {
             this.itemData = itemData;
@@ -274,11 +264,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         /**
-         * Selects non-{@code null} client-definition parameters and returns this builder.
-         * The record is retained directly; a later build rejects this selection when
-         * the builder is configured as a vanilla item.
-         *
-         * @throws NullPointerException if {@code customItemDefinition} is {@code null}
+         * Selects non-{@code null} client-definition parameters and returns this
+         * builder.
          */
         public Builder customItemDefinition(CustomItemDefinition customItemDefinition) {
             this.customItemDefinition = Objects.requireNonNull(customItemDefinition, "customItemDefinition");
@@ -287,8 +274,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         /**
          * Selects the runtime ID without validating range or uniqueness.
-         * {@code Integer.MAX_VALUE} requests allocation during building; any other value
-         * is retained, so callers maintain compatibility and avoid conflicting IDs.
          */
         public Builder runtimeId(int runtimeId) {
             this.runtimeId = runtimeId;
@@ -296,80 +281,78 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         /**
-         * Replaces component selection with providers indexed by their discovered IDs.
-         * The list-to-map conversion rejects duplicate component identifiers; provider
-         * objects are retained, and building later supplies a base provider when its
-         * identifier is absent.
+         * Replaces component selection with providers indexed by their contract
+         * keys, rejecting duplicate keys.
          */
         public Builder setComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
             return setComponents(toMap(componentProviders));
         }
 
         /**
-         * Replaces component selection with a shallow copy of the supplied map.
-         * Later structural changes to the caller's map do not affect this builder;
-         * the provider objects and their construction policies remain shared.
+         * Replaces component selection with an insertion-ordered copy of the
+         * supplied map.
          */
-        public Builder setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
-            this.componentProviders = new HashMap<>(componentProviders);
+        public Builder setComponents(Map<Class<?>, ComponentProvider<? extends ItemComponent>> componentProviders) {
+            Preconditions.checkNotNull(componentProviders, "componentProviders");
+            this.componentProviders = new LinkedHashMap<>(componentProviders);
             return this;
         }
 
         /**
-         * Adds supplied component mappings, replacing providers at matching identifiers.
-         * The map entries and provider objects are retained in the builder's own map;
-         * other previously selected component identifiers remain present.
+         * Adds supplied component mappings, replacing providers at matching
+         * contract keys.
          */
-        public Builder addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
+        public Builder addComponents(Map<Class<?>, ComponentProvider<? extends ItemComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
         /**
-         * Adds a component factory under the identifier discovered from its declared
-         * class. The factory receives stack initialization data later, and a matching
-         * existing component mapping is replaced without constructing a component now.
+         * Adds a component factory under the contract key resolved from
+         * {@code componentClass}.
          */
         public Builder addComponent(Function<ItemStackInitInfo, ? extends ItemComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.Simple<>(provider, componentClass);
-            this.componentProviders.put(p.findComponentIdentifier(), p);
+            this.componentProviders.put(p.getComponentKey(), p);
             return this;
         }
 
         /**
-         * Adds the supplied provider under its discovered component identifier.
-         * A matching existing provider is replaced, and the retained provider determines
-         * whether later stack construction creates fresh or shared component instances.
-         */
-        public Builder addComponent(ComponentProvider<? extends ItemComponent> p) {
-            this.componentProviders.put(p.findComponentIdentifier(), p);
-            return this;
-        }
-
-        /**
-         * Adds providers after converting the list to component-identifier mappings.
-         * Duplicate identifiers within the supplied list fail conversion; otherwise
-         * matching existing mappings are replaced while unrelated components remain
-         * selected.
-         */
-        public Builder addComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
-            return addComponents(toMap(componentProviders));
-        }
-
-        /**
-         * Adds a supplier-backed component factory that ignores stack initialization data.
-         * The supplier runs during component creation, and its policy determines
-         * whether instances are fresh or shared; the declared class supplies identifier
-         * lookup.
+         * Adds a supplier-backed component factory under the contract key resolved
+         * from {@code componentClass}.
          */
         public Builder addComponent(Supplier<? extends ItemComponent> supplier, Class<?> componentClass) {
             return addComponent($ -> supplier.get(), componentClass);
         }
 
         /**
-         * Replaces selected tags with a new set copied from the supplied collection.
-         * Later collection edits do not change this set; building passes the selected
-         * set directly to the item type without another wrapper.
+         * Adds a shared stateless component singleton under its resolved contract
+         * key. Blueprint compilation verifies that the singleton declares no
+         * instance-bound injections or lifecycle callbacks.
+         */
+        public Builder addComponent(ItemComponent singleton) {
+            return addComponent(ComponentProvider.singleton(singleton));
+        }
+
+        /**
+         * Adds the supplied provider under its contract key, replacing any
+         * existing provider at that slot.
+         */
+        public Builder addComponent(ComponentProvider<? extends ItemComponent> p) {
+            this.componentProviders.put(p.getComponentKey(), p);
+            return this;
+        }
+
+        /**
+         * Adds providers after converting the list to contract-key mappings,
+         * rejecting duplicate keys within {@code componentProviders}.
+         */
+        public Builder addComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
+            return addComponents(toMap(componentProviders));
+        }
+
+        /**
+         * Replaces selected tags with a new set copied from {@code itemTags}.
          */
         public Builder setItemTags(Collection<ItemTag> itemTags) {
             this.itemTags = new HashSet<>(itemTags);
@@ -378,51 +361,36 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         /**
          * Builds and registers the item type using the server's class loader.
-         * The full build path fills a missing base provider, assigns an automatic
-         * runtime ID when requested, and can replace an existing registry mapping.
          */
         public <T extends ItemStack> ItemType<T> build() {
             return build(Allay.class.getClassLoader());
         }
 
         /**
-         * Prepares a component-backed stack factory and registers a new item type.
-         * The identifier must be present, and {@code clazz} must expose a public
-         * constructor accepting {@code ItemStackInitInfo} and {@code List}. The chosen
-         * class loader prepares reflective invocation; component provider objects are
-         * captured in a separate list.
+         * Compiles the stack's {@link ComponentBlueprint}, validates all component
+         * bindings eagerly, and registers the resulting item type.
          *
-         * <p>
-         * The builder adds a missing base provider and replaces the automatic-ID sentinel
-         * before constructor lookup, so a later failure retains those builder changes
-         * and consumes any allocated ID. Stack-construction failures are wrapped when
-         * the saved factory runs. A vanilla/custom-definition conflict is rejected
-         * before registry registration; successful registration replaces any current
-         * mapping for this identifier and fails if the registry is frozen.
-         *
-         * @throws NullPointerException if {@code identifier} is unset
-         * @throws ItemTypeBuildException if factory preparation or definition validation fails
+         * @throws NullPointerException   if {@code identifier} is unset
+         * @throws ItemTypeBuildException if blueprint compilation or definition validation fails
          */
+        @SuppressWarnings("unchecked")
         public <T extends ItemStack> ItemType<T> build(ClassLoader classLoader) {
             Preconditions.checkNotNull(identifier, "identifier");
-            // A stack's delegated base operations require the base provider;
-            // preserve an explicitly selected replacement under that identifier.
-            if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER)) {
-                addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
-            }
-            // Resolve the sentinel before preparing the factory. This builder
-            // keeps the allocated ID even when a later build phase fails.
             if (runtimeId == Integer.MAX_VALUE) {
                 runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
             }
 
+            ComponentBlueprint<?> blueprint;
             Function<ItemStackInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(clazz.getConstructor(ItemStackInitInfo.class, List.class), new FastMemberLoader(classLoader), false);
-                var componentProviderList = new ArrayList<>(componentProviders.values());
+                var implClass = ComponentBlueprint.resolveImplClass(clazz, classLoader);
+                var defaultBase = new ComponentProvider.Simple<>(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
+                var orderedProviders = ComponentBlueprint.orderWithBaseFirst(componentProviders, ItemBaseComponent.class, defaultBase);
+                blueprint = ComponentBlueprint.compile(implClass, orderedProviders, ItemStackInitInfo.class);
+                var compiledBlueprint = blueprint;
                 instanceCreator = info -> {
                     try {
-                        return (T) constructor.invoke(info, componentProviderList);
+                        return (T) compiledBlueprint.newInstance(info);
                     } catch (Throwable t) {
                         throw new ItemTypeBuildException("Failed to create item stack instance!", t);
                     }
@@ -435,6 +403,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("Vanilla items cannot have a custom item definition");
             }
             var type = new AllayItemType<>(
+                    blueprint,
                     instanceCreator,
                     identifier,
                     runtimeId,

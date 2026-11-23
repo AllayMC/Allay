@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
+import org.allaymc.api.block.component.BlockStateDataComponent;
 import org.allaymc.api.block.data.BlockTag;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
@@ -24,6 +25,8 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.BlockBlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.data.BlockId;
+import org.allaymc.server.block.impl.BlockBehaviorImpl;
+import org.allaymc.server.component.ComponentBlueprint;
 import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.item.impl.ItemStackImpl;
 import org.allaymc.server.item.type.AllayItemType;
@@ -37,7 +40,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.allaymc.server.component.ComponentProvider.findComponentIdentifierInClass;
+import static org.allaymc.server.component.ComponentProvider.resolveComponentKey;
 
 /**
  * {@code AllayBlockType} represents a block family with shared behavior, property
@@ -207,9 +210,16 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     }
 
     /**
-     * Creates a builder for the supplied behavior implementation class. The class
-     * must expose the component-provider list constructor used by {@code build};
-     * this factory does not verify that constructor yet.
+     * Creates a builder targeting the default {@link BlockBehaviorImpl} class
+     * for blocks that do not require a specialized behavior interface.
+     */
+    public static Builder builder() {
+        return new Builder(BlockBehaviorImpl.class);
+    }
+
+    /**
+     * Creates a builder for the supplied behavior implementation class or
+     * composed API interface.
      */
     public static <T extends BlockBehavior> Builder builder(Class<T> clazz) {
         return new Builder(clazz);
@@ -323,11 +333,10 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
          */
         protected Class<?> clazz;
         /**
-         * {@code components} retains singleton component instances keyed by
-         * identifier. Build wraps those instances in providers, so the constructed
-         * behavior reuses the configured objects.
+         * {@code components} retains block component instances keyed by canonical
+         * contract class in deterministic insertion order.
          */
-        protected Map<Identifier, BlockComponent> components = new HashMap<>();
+        protected Map<Class<?>, BlockComponent> components = new LinkedHashMap<>();
         /**
          * {@code properties} holds the domains keyed by name. The constructed type
          * retains this map through an unmodifiable view, so subclasses must
@@ -440,7 +449,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             var dataMap = InternalRegistries.BLOCK_STATE_DATA.get(blockId);
             if (dataMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block data component for " + blockId + " from vanilla block data registry!");
-            components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
+            components.put(BlockStateDataComponent.class, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
 
             var tags = InternalRegistries.BLOCK_TAGS.get(blockId);
             if (tags != null) {
@@ -491,70 +500,61 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         /**
-         * Replaces component configuration with a shallow copy of the supplied map.
-         * A {@code null} map throws {@code BlockTypeBuildException}; the component
-         * instances remain shared and are reused when the behavior is built.
+         * Replaces component configuration with an insertion-ordered copy of the
+         * supplied map.
          */
-        public Builder setComponents(Map<Identifier, BlockComponent> components) {
+        public Builder setComponents(Map<Class<?>, BlockComponent> components) {
             if (components == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
-            this.components = new HashMap<>(components);
+            this.components = new LinkedHashMap<>(components);
             return this;
         }
 
         /**
-         * Adds the supplied component entries and returns this builder. Existing
-         * identifiers are replaced, and component instances remain shared rather
-         * than copied or recreated when the behavior is constructed.
+         * Adds the supplied component entries keyed by canonical contract class
+         * and returns this builder.
          */
-        public Builder addComponents(Map<Identifier, BlockComponent> components) {
+        public Builder addComponents(Map<Class<?>, BlockComponent> components) {
             this.components.putAll(components);
             return this;
         }
 
         /**
-         * Adds the component under its declared identifier and returns this
-         * builder. An existing entry with that identifier is replaced, and the
-         * supplied component instance is retained for later behavior construction.
+         * Adds the component under its resolved top-level contract class and
+         * returns this builder.
          */
         public Builder addComponent(BlockComponent component) {
-            this.components.put(findComponentIdentifierInClass(component.getClass()), component);
+            this.components.put(resolveComponentKey(component.getClass()), component);
             return this;
         }
 
         /**
-         * Replaces component configuration after indexing the supplied instances by
-         * their declared identifiers. Duplicate identifiers throw {@code
-         * IllegalArgumentException}; successfully indexed component objects remain
-         * shared with the later constructed behavior.
+         * Replaces component configuration after indexing the supplied instances
+         * by their resolved contract classes, rejecting duplicate keys.
          */
         public Builder setComponents(List<BlockComponent> components) {
             return setComponents(listComponentToMap(components));
         }
 
         /**
-         * Indexes the supplied components and adds them to existing configuration.
-         * Duplicate identifiers within the list throw {@code
-         * IllegalArgumentException}, while identifiers already present in the
-         * builder are replaced by the list entries.
+         * Indexes the supplied components by contract class and merges them into
+         * this builder, rejecting duplicate keys within {@code components}.
          */
         public Builder addComponents(List<BlockComponent> components) {
             return addComponents(listComponentToMap(components));
         }
 
         /**
-         * Indexes components by the identifiers discovered on their runtime
-         * classes. Duplicate identifiers throw {@code IllegalArgumentException}
-         * before the map is returned, preventing one list entry from silently
-         * replacing another.
+         * Indexes components by their resolved top-level contract classes in list
+         * order, rejecting duplicate keys.
          */
-        private Map<Identifier, BlockComponent> listComponentToMap(List<BlockComponent> components) {
-            var map = new HashMap<Identifier, BlockComponent>();
+        private Map<Class<?>, BlockComponent> listComponentToMap(List<BlockComponent> components) {
+            var map = new LinkedHashMap<Class<?>, BlockComponent>();
             components.forEach(component -> {
-                var id = findComponentIdentifierInClass(component.getClass());
-                if (map.containsKey(id))
-                    throw new IllegalArgumentException("Duplicate component: " + id);
-                map.put(id, component);
+                var key = resolveComponentKey(component.getClass());
+                if (map.containsKey(key))
+                    throw new IllegalArgumentException("Duplicate component key: " + key.getName());
+                map.put(key, component);
             });
             return map;
         }
@@ -679,22 +679,28 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             // Supply default metadata when no data component exists, allowing the
             // assembled behavior to answer state-data requests without a
             // specialized provider.
-            if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER)) {
-                components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofDefault());
+            if (!components.containsKey(BlockStateDataComponent.class)) {
+                components.put(BlockStateDataComponent.class, BlockStateDataComponentImpl.ofDefault());
             }
 
             // Construct states before the base component because its factory needs
             // the type; assemble behavior before resolving client definitions that
             // may inspect it.
             var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, isCustomBlock, defaultStateSupplier);
-            var listComponents = new ArrayList<>(components.values());
-            if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER)) {
-                listComponents.add(baseComponentSupplier.apply(type));
+            Map<Class<?>, ComponentProvider<? extends BlockComponent>> providerMap = new LinkedHashMap<>(components.size() + 1);
+            for (var entry : components.entrySet()) {
+                var instance = entry.getValue();
+                providerMap.put(entry.getKey(), ComponentProvider.of(entry.getKey(), $ -> instance, instance.getClass()));
             }
-
-            List<ComponentProvider<? extends Component>> componentProviderList = listComponents.stream().map(singleton -> ComponentProvider.of($ -> singleton, singleton.getClass())).collect(Collectors.toList());
+            var defaultBaseInstance = components.containsKey(BlockBaseComponent.class) ? null : baseComponentSupplier.apply(type);
+            var defaultBaseProvider = defaultBaseInstance == null
+                    ? null
+                    : ComponentProvider.of(BlockBaseComponent.class, $ -> defaultBaseInstance, defaultBaseInstance.getClass());
+            var orderedProviders = ComponentBlueprint.orderWithBaseFirst(providerMap, BlockBaseComponent.class, defaultBaseProvider);
             try {
-                type.blockBehavior = (T) clazz.getDeclaredConstructor(List.class).newInstance(componentProviderList);
+                var implClass = ComponentBlueprint.resolveImplClass(clazz, clazz.getClassLoader());
+                var blueprint = ComponentBlueprint.compile(implClass, orderedProviders, null);
+                type.blockBehavior = (T) blueprint.newInstance(BlockBehaviorImpl.EMPTY_INIT_INFO);
             } catch (Throwable t) {
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }

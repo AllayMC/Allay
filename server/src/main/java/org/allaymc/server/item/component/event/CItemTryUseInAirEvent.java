@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 
 /**
  * {@code CItemTryUseInAirEvent} asks item components whether a player can begin
@@ -17,6 +18,10 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @AllArgsConstructor
 public class CItemTryUseInAirEvent extends Event {
+    /**
+     * Owning item stack considered for timed use.
+     */
+    protected ItemStack itemStack;
     /**
      * Player attempting timed item use.
      */

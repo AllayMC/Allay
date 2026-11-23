@@ -3,93 +3,25 @@ package org.allaymc.server.block.type;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.server.block.data.BlockId;
-import org.allaymc.server.block.impl.BlockActivatorRailBehaviorImpl;
-import org.allaymc.server.block.impl.BlockAirBehaviorImpl;
-import org.allaymc.server.block.impl.BlockAllowBehaviorImpl;
-import org.allaymc.server.block.impl.BlockAmethystBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockAmethystClusterBehaviorImpl;
-import org.allaymc.server.block.impl.BlockAncientDebrisBehaviorImpl;
-import org.allaymc.server.block.impl.BlockAndesiteBehaviorImpl;
 import org.allaymc.server.block.impl.BlockAnvilBehaviorImpl;
-import org.allaymc.server.block.impl.BlockAzaleaBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBambooBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBambooMosaicBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBarrelBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBarrierBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBasaltBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBeaconBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBedBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBedrockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBeeNestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBeehiveBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBeetrootBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBellBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBigDripleafBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBigFlowerImpl;
-import org.allaymc.server.block.impl.BlockBlackstoneBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBlastFurnaceBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBoneBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBookshelfBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBorderBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBrewingStandBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBrickBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBricksBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBrownMushroomBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBrownMushroomBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBubbleColumnBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBuddingAmethystBehaviorImpl;
-import org.allaymc.server.block.impl.BlockBushBehaviorImpl;
-import org.allaymc.server.block.impl.BlockButtonBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCactusBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCactusFlowerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCakeBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCalciteBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCalibratedSculkSensorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCameraBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCampfireBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCandleBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCandleCakeBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCarrotsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCartographyTableBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCarvedPumpkinBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCauldronBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCaveVinesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCaveVinesBodyWithBerriesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCaveVinesHeadWithBerriesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChainCommandBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChalkboardBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChemicalHeatBehaviorImpl;
 import org.allaymc.server.block.impl.BlockChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChiseledBookshelfBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChiseledCinnabarBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChiseledDeepslateBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChiseledPolishedBlackstoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChiseledQuartzBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChiseledSulfurBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChiseledTuffBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChorusFlowerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockChorusPlantBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCinnabarBehaviorImpl;
-import org.allaymc.server.block.impl.BlockClayBehaviorImpl;
-import org.allaymc.server.block.impl.BlockClientRequestPlaceholderBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCoalBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCoarseDirtBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCobbledDeepslateBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCobblestoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCocoaBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCommandBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockComparatorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockComposterBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCompoundCreatorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockConcreteBehaviorImpl;
 import org.allaymc.server.block.impl.BlockConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.BlockConduitBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBarsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBulbBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperChainBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCopperChestBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperDoorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperGolemStatueBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperGrateBehaviorImpl;
@@ -97,295 +29,73 @@ import org.allaymc.server.block.impl.BlockCopperLanternBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperSlabBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperStairsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCoralBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCrackedDeepslateTilesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCrafterBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCraftingTableBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCreakingHeartBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCrimsonFungusBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCrimsonNyliumBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCrimsonRootsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockCryingObsidianBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDarkPrismarineBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDaylightDetectorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDeadbushBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDecoratedPotBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDeepslateBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDeepslateTilesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDenyBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDeprecatedAnvilBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDeprecatedPurpurBlock1BehaviorImpl;
-import org.allaymc.server.block.impl.BlockDeprecatedPurpurBlock2BehaviorImpl;
-import org.allaymc.server.block.impl.BlockDetectorRailBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDiamondBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDioriteBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDirtBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDirtWithRootsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDispenserBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDoorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDoubleCopperSlabBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDoubleSlabBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDragonEggBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDriedGhastBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDriedKelpBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDripstoneBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockDropperBehaviorImpl;
-import org.allaymc.server.block.impl.BlockElementBehaviorImpl;
-import org.allaymc.server.block.impl.BlockEmeraldBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockEnchantingTableBehaviorImpl;
-import org.allaymc.server.block.impl.BlockEndGatewayBehaviorImpl;
-import org.allaymc.server.block.impl.BlockEndPortalBehaviorImpl;
-import org.allaymc.server.block.impl.BlockEndPortalFrameBehaviorImpl;
-import org.allaymc.server.block.impl.BlockEndRodBehaviorImpl;
-import org.allaymc.server.block.impl.BlockEndStoneBehaviorImpl;
 import org.allaymc.server.block.impl.BlockEnderChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockExposedCopperChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFarmlandBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFenceBehaviorImpl;
 import org.allaymc.server.block.impl.BlockFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFernBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFireBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFireflyBushBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFletchingTableBehaviorImpl;
 import org.allaymc.server.block.impl.BlockFlowerPotBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFloweringAzaleaBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFrameBehaviorImpl;
-import org.allaymc.server.block.impl.BlockFrogSpawnBehaviorImpl;
 import org.allaymc.server.block.impl.BlockFurnaceBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGildedBlackstoneBehaviorImpl;
 import org.allaymc.server.block.impl.BlockGlassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockGlassPaneBehaviorImpl;
 import org.allaymc.server.block.impl.BlockGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGlowFrameBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGlowLichenBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGlowingobsidianBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGlowstoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGoldBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGoldenRailBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGraniteBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGrassBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGrassPathBehaviorImpl;
 import org.allaymc.server.block.impl.BlockGravelBehaviorImpl;
-import org.allaymc.server.block.impl.BlockGrindstoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockHangingRootsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHangingSignBehaviorImpl;
-import org.allaymc.server.block.impl.BlockHardenedClayBehaviorImpl;
-import org.allaymc.server.block.impl.BlockHayBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHeadBehaviorImpl;
-import org.allaymc.server.block.impl.BlockHeavyCoreBehaviorImpl;
-import org.allaymc.server.block.impl.BlockHoneyBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockHoneycombBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockHopperBehaviorImpl;
-import org.allaymc.server.block.impl.BlockIceBehaviorImpl;
 import org.allaymc.server.block.impl.BlockInfestedBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockInfoUpdate2BehaviorImpl;
-import org.allaymc.server.block.impl.BlockInfoUpdateBehaviorImpl;
-import org.allaymc.server.block.impl.BlockInvisibleBedrockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockIronBarsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockIronBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockIronChainBehaviorImpl;
-import org.allaymc.server.block.impl.BlockIronDoorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockIronTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockJigsawBehaviorImpl;
 import org.allaymc.server.block.impl.BlockJukeboxBehaviorImpl;
-import org.allaymc.server.block.impl.BlockKelpBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLabTableBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLadderBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLanternBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLapisBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLargeFernBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLeavesBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLecternBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLeverBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLightBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLightningRodBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLitPumpkinBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLodestoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockLoomBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMagmaBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMangrovePropaguleBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMangroveRootsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMaterialReducerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMelonBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMelonStemBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMobSpawnerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMossBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMossyCobblestoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMovingBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMudBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMuddyMangroveRootsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMushroomStemBehaviorImpl;
-import org.allaymc.server.block.impl.BlockMyceliumBehaviorImpl;
-import org.allaymc.server.block.impl.BlockNetherBrickBehaviorImpl;
-import org.allaymc.server.block.impl.BlockNetherSproutsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockNetherWartBehaviorImpl;
-import org.allaymc.server.block.impl.BlockNetherWartBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockNetheriteBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockNetherrackBehaviorImpl;
-import org.allaymc.server.block.impl.BlockNetherreactorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockNoteblockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockObserverBehaviorImpl;
-import org.allaymc.server.block.impl.BlockObsidianBehaviorImpl;
-import org.allaymc.server.block.impl.BlockOchreFroglightBehaviorImpl;
 import org.allaymc.server.block.impl.BlockOreBehaviorImpl;
-import org.allaymc.server.block.impl.BlockOxidizedCopperChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPackedMudBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPaleHangingMossBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPaleMossBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPearlescentFroglightBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPistonArmCollisionBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPistonBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPitcherCropBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPlanksBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPlantPileImpl;
-import org.allaymc.server.block.impl.BlockPodzolBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPointedDripstoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedAndesiteBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedBasaltBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedBlackstoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedCinnabarBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedDeepslateBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedDioriteBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedGraniteBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedSulfurBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPolishedTuffBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPortalBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPotatoesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPotentSulfurBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPowderSnowBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPressurePlateBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPrismarineBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPumpkinBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPumpkinStemBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPurpurBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockPurpurPillarBehaviorImpl;
-import org.allaymc.server.block.impl.BlockQuartzBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockQuartzPillarBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRailBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRawCopperBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRawGoldBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRawIronBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRedMushroomBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRedMushroomBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRedNetherBrickBehaviorImpl;
 import org.allaymc.server.block.impl.BlockRedSandBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRedShrubBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRedstoneBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockRedstoneLampBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRedstoneWireBehaviorImpl;
-import org.allaymc.server.block.impl.BlockReedsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockReinforcedDeepslateBehaviorImpl;
 import org.allaymc.server.block.impl.BlockRepeaterBehaviorImpl;
-import org.allaymc.server.block.impl.BlockRepeatingCommandBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockReserved6BehaviorImpl;
-import org.allaymc.server.block.impl.BlockResinBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockResinClumpBehaviorImpl;
 import org.allaymc.server.block.impl.BlockRespawnAnchorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSandBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSaplingBehaviorImpl;
 import org.allaymc.server.block.impl.BlockScaffoldingBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSculkBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSculkCatalystBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSculkSensorBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSculkShriekerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSculkVeinBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSeaLanternBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSeaPickleBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSeagrassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockShelfBehaviorImpl;
-import org.allaymc.server.block.impl.BlockShelfMushroomBehaviorImpl;
-import org.allaymc.server.block.impl.BlockShortDryGrassBehaviorImpl;
-import org.allaymc.server.block.impl.BlockShortGrassBehaviorImpl;
-import org.allaymc.server.block.impl.BlockShroomlightBehaviorImpl;
 import org.allaymc.server.block.impl.BlockShulkerBoxBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSignBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSlabBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSlimeBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSmallDripleafBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSmallFlowerImpl;
-import org.allaymc.server.block.impl.BlockSmithingTableBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSmokerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSmoothBasaltBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSmoothQuartzBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSmoothStoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSnifferEggBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSnowBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSnowLayerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSoulSandBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSoulSoilBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSpongeBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSporeBlossomBehaviorImpl;
 import org.allaymc.server.block.impl.BlockStairsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockStandingBannerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStickyPistonArmCollisionBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStickyPistonBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStoneBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStonecutterBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStonecutterBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStrawBedBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStructureBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockStructureVoidBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSulfurBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSulfurSpikeBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSuspiciousGravelBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSuspiciousSandBehaviorImpl;
-import org.allaymc.server.block.impl.BlockSweetBerryBushBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTallDryGrassBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTallGrassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTargetBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTerracottaBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTntBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTorchBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTorchflowerCropBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTrapdoorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTrappedChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTrialSpawnerBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTripWireBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTripwireHookBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTuffBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTurtleEggBehaviorImpl;
-import org.allaymc.server.block.impl.BlockTwistingVinesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockUnderwaterTntBehaviorImpl;
-import org.allaymc.server.block.impl.BlockUnknownBehaviorImpl;
-import org.allaymc.server.block.impl.BlockVaultBehaviorImpl;
-import org.allaymc.server.block.impl.BlockVerdantFroglightBehaviorImpl;
-import org.allaymc.server.block.impl.BlockVineBehaviorImpl;
 import org.allaymc.server.block.impl.BlockWallBannerBehaviorImpl;
 import org.allaymc.server.block.impl.BlockWallBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWarpedFungusBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWarpedNyliumBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWarpedRootsBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWarpedWartBlockBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWaterlilyBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWaxedCopperChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWaxedExposedCopperChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWaxedOxidizedCopperChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWaxedWeatheredCopperChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWeatheredCopperChestBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWebBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWeepingVinesBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWetSpongeBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWheatBehaviorImpl;
 import org.allaymc.server.block.impl.BlockWoodBehaviorImpl;
-import org.allaymc.server.block.impl.BlockWoolBehaviorImpl;
 
 public final class BlockTypeDefaultInitializer {
-    public static void init() {
+    private static void initPart0() {
         if (BlockTypes.ACACIA_BUTTON == null) {
             BlockTypes.ACACIA_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ACACIA_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.ACACIA_DOOR == null) {
             BlockTypes.ACACIA_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ACACIA_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -399,7 +109,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ACACIA_FENCE == null) {
             BlockTypes.ACACIA_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ACACIA_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -434,20 +144,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ACACIA_PLANKS == null) {
             BlockTypes.ACACIA_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ACACIA_PLANKS)
                             .build();
         }
         if (BlockTypes.ACACIA_PRESSURE_PLATE == null) {
             BlockTypes.ACACIA_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ACACIA_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.ACACIA_SAPLING == null) {
             BlockTypes.ACACIA_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ACACIA_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -503,14 +213,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ACTIVATOR_RAIL == null) {
             BlockTypes.ACTIVATOR_RAIL = AllayBlockType
-                            .builder(BlockActivatorRailBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ACTIVATOR_RAIL)
                             .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
                             .build();
         }
         if (BlockTypes.AIR == null) {
             BlockTypes.AIR = AllayBlockType
-                            .builder(BlockAirBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.AIR)
                             .build();
         }
@@ -522,13 +232,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ALLOW == null) {
             BlockTypes.ALLOW = AllayBlockType
-                            .builder(BlockAllowBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ALLOW)
                             .build();
         }
         if (BlockTypes.AMETHYST_BLOCK == null) {
             BlockTypes.AMETHYST_BLOCK = AllayBlockType
-                            .builder(BlockAmethystBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.AMETHYST_BLOCK)
                             .build();
         }
@@ -541,13 +251,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ANCIENT_DEBRIS == null) {
             BlockTypes.ANCIENT_DEBRIS = AllayBlockType
-                            .builder(BlockAncientDebrisBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ANCIENT_DEBRIS)
                             .build();
         }
         if (BlockTypes.ANDESITE == null) {
             BlockTypes.ANDESITE = AllayBlockType
-                            .builder(BlockAndesiteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ANDESITE)
                             .build();
         }
@@ -588,7 +298,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.AZALEA == null) {
             BlockTypes.AZALEA = AllayBlockType
-                            .builder(BlockAzaleaBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.AZALEA)
                             .build();
         }
@@ -614,7 +324,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO == null) {
             BlockTypes.BAMBOO = AllayBlockType
-                            .builder(BlockBambooBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO)
                             .setProperties(BlockPropertyTypes.AGE_BIT, BlockPropertyTypes.BAMBOO_LEAF_SIZE, BlockPropertyTypes.BAMBOO_STALK_THICKNESS)
                             .build();
@@ -628,14 +338,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO_BUTTON == null) {
             BlockTypes.BAMBOO_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.BAMBOO_DOOR == null) {
             BlockTypes.BAMBOO_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -649,7 +359,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO_FENCE == null) {
             BlockTypes.BAMBOO_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -670,7 +380,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO_MOSAIC == null) {
             BlockTypes.BAMBOO_MOSAIC = AllayBlockType
-                            .builder(BlockBambooMosaicBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO_MOSAIC)
                             .build();
         }
@@ -697,20 +407,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO_PLANKS == null) {
             BlockTypes.BAMBOO_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO_PLANKS)
                             .build();
         }
         if (BlockTypes.BAMBOO_PRESSURE_PLATE == null) {
             BlockTypes.BAMBOO_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.BAMBOO_SAPLING == null) {
             BlockTypes.BAMBOO_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BAMBOO_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -766,13 +476,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BARRIER == null) {
             BlockTypes.BARRIER = AllayBlockType
-                            .builder(BlockBarrierBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BARRIER)
                             .build();
         }
         if (BlockTypes.BASALT == null) {
             BlockTypes.BASALT = AllayBlockType
-                            .builder(BlockBasaltBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BASALT)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -792,56 +502,56 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BEDROCK == null) {
             BlockTypes.BEDROCK = AllayBlockType
-                            .builder(BlockBedrockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BEDROCK)
                             .setProperties(BlockPropertyTypes.INFINIBURN_BIT)
                             .build();
         }
         if (BlockTypes.BEE_NEST == null) {
             BlockTypes.BEE_NEST = AllayBlockType
-                            .builder(BlockBeeNestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BEE_NEST)
                             .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.HONEY_LEVEL)
                             .build();
         }
         if (BlockTypes.BEEHIVE == null) {
             BlockTypes.BEEHIVE = AllayBlockType
-                            .builder(BlockBeehiveBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BEEHIVE)
                             .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.HONEY_LEVEL)
                             .build();
         }
         if (BlockTypes.BEETROOT == null) {
             BlockTypes.BEETROOT = AllayBlockType
-                            .builder(BlockBeetrootBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BEETROOT)
                             .setProperties(BlockPropertyTypes.GROWTH_8)
                             .build();
         }
         if (BlockTypes.BELL == null) {
             BlockTypes.BELL = AllayBlockType
-                            .builder(BlockBellBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BELL)
                             .setProperties(BlockPropertyTypes.ATTACHMENT, BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.TOGGLE_BIT)
                             .build();
         }
         if (BlockTypes.BIG_DRIPLEAF == null) {
             BlockTypes.BIG_DRIPLEAF = AllayBlockType
-                            .builder(BlockBigDripleafBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BIG_DRIPLEAF)
                             .setProperties(BlockPropertyTypes.BIG_DRIPLEAF_HEAD, BlockPropertyTypes.BIG_DRIPLEAF_TILT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.BIRCH_BUTTON == null) {
             BlockTypes.BIRCH_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BIRCH_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.BIRCH_DOOR == null) {
             BlockTypes.BIRCH_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BIRCH_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -855,7 +565,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BIRCH_FENCE == null) {
             BlockTypes.BIRCH_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BIRCH_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -890,20 +600,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BIRCH_PLANKS == null) {
             BlockTypes.BIRCH_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BIRCH_PLANKS)
                             .build();
         }
         if (BlockTypes.BIRCH_PRESSURE_PLATE == null) {
             BlockTypes.BIRCH_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BIRCH_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.BIRCH_SAPLING == null) {
             BlockTypes.BIRCH_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BIRCH_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -979,7 +689,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLACK_CONCRETE == null) {
             BlockTypes.BLACK_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BLACK_CONCRETE)
                             .build();
         }
@@ -1044,7 +754,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLACK_WOOL == null) {
             BlockTypes.BLACK_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BLACK_WOOL)
                             .build();
         }
@@ -1071,7 +781,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLACKSTONE == null) {
             BlockTypes.BLACKSTONE = AllayBlockType
-                            .builder(BlockBlackstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BLACKSTONE)
                             .build();
         }
@@ -1132,7 +842,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLUE_CONCRETE == null) {
             BlockTypes.BLUE_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BLUE_CONCRETE)
                             .build();
         }
@@ -1172,7 +882,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLUE_ICE == null) {
             BlockTypes.BLUE_ICE = AllayBlockType
-                            .builder(BlockIceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BLUE_ICE)
                             .build();
         }
@@ -1209,7 +919,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLUE_WOOL == null) {
             BlockTypes.BLUE_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BLUE_WOOL)
                             .build();
         }
@@ -1236,46 +946,46 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BONE_BLOCK == null) {
             BlockTypes.BONE_BLOCK = AllayBlockType
-                            .builder(BlockBoneBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BONE_BLOCK)
                             .setProperties(BlockPropertyTypes.DEPRECATED, BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.BOOKSHELF == null) {
             BlockTypes.BOOKSHELF = AllayBlockType
-                            .builder(BlockBookshelfBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BOOKSHELF)
                             .build();
         }
         if (BlockTypes.BORDER_BLOCK == null) {
             BlockTypes.BORDER_BLOCK = AllayBlockType
-                            .builder(BlockBorderBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BORDER_BLOCK)
                             .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                             .build();
         }
         if (BlockTypes.BRAIN_CORAL == null) {
             BlockTypes.BRAIN_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BRAIN_CORAL)
                             .build();
         }
         if (BlockTypes.BRAIN_CORAL_BLOCK == null) {
             BlockTypes.BRAIN_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BRAIN_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.BRAIN_CORAL_FAN == null) {
             BlockTypes.BRAIN_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BRAIN_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.BRAIN_CORAL_WALL_FAN == null) {
             BlockTypes.BRAIN_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BRAIN_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
@@ -1289,7 +999,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BRICK_BLOCK == null) {
             BlockTypes.BRICK_BLOCK = AllayBlockType
-                            .builder(BlockBrickBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BRICK_BLOCK)
                             .build();
         }
@@ -1343,7 +1053,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BROWN_CONCRETE == null) {
             BlockTypes.BROWN_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BROWN_CONCRETE)
                             .build();
         }
@@ -1383,13 +1093,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BROWN_MUSHROOM == null) {
             BlockTypes.BROWN_MUSHROOM = AllayBlockType
-                            .builder(BlockBrownMushroomBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BROWN_MUSHROOM)
                             .build();
         }
         if (BlockTypes.BROWN_MUSHROOM_BLOCK == null) {
             BlockTypes.BROWN_MUSHROOM_BLOCK = AllayBlockType
-                            .builder(BlockBrownMushroomBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BROWN_MUSHROOM_BLOCK)
                             .setProperties(BlockPropertyTypes.HUGE_MUSHROOM_BITS)
                             .build();
@@ -1421,7 +1131,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BROWN_WOOL == null) {
             BlockTypes.BROWN_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BROWN_WOOL)
                             .build();
         }
@@ -1448,91 +1158,91 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BUBBLE_COLUMN == null) {
             BlockTypes.BUBBLE_COLUMN = AllayBlockType
-                            .builder(BlockBubbleColumnBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BUBBLE_COLUMN)
                             .setProperties(BlockPropertyTypes.DRAG_DOWN)
                             .build();
         }
         if (BlockTypes.BUBBLE_CORAL == null) {
             BlockTypes.BUBBLE_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BUBBLE_CORAL)
                             .build();
         }
         if (BlockTypes.BUBBLE_CORAL_BLOCK == null) {
             BlockTypes.BUBBLE_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BUBBLE_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.BUBBLE_CORAL_FAN == null) {
             BlockTypes.BUBBLE_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BUBBLE_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.BUBBLE_CORAL_WALL_FAN == null) {
             BlockTypes.BUBBLE_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BUBBLE_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.BUDDING_AMETHYST == null) {
             BlockTypes.BUDDING_AMETHYST = AllayBlockType
-                            .builder(BlockBuddingAmethystBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BUDDING_AMETHYST)
                             .build();
         }
         if (BlockTypes.BUSH == null) {
             BlockTypes.BUSH = AllayBlockType
-                            .builder(BlockBushBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.BUSH)
                             .build();
         }
         if (BlockTypes.CACTUS == null) {
             BlockTypes.CACTUS = AllayBlockType
-                            .builder(BlockCactusBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CACTUS)
                             .setProperties(BlockPropertyTypes.AGE_16)
                             .build();
         }
         if (BlockTypes.CACTUS_FLOWER == null) {
             BlockTypes.CACTUS_FLOWER = AllayBlockType
-                            .builder(BlockCactusFlowerBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CACTUS_FLOWER)
                             .build();
         }
         if (BlockTypes.CAKE == null) {
             BlockTypes.CAKE = AllayBlockType
-                            .builder(BlockCakeBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CAKE)
                             .setProperties(BlockPropertyTypes.BITE_COUNTER)
                             .build();
         }
         if (BlockTypes.CALCITE == null) {
             BlockTypes.CALCITE = AllayBlockType
-                            .builder(BlockCalciteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CALCITE)
                             .build();
         }
         if (BlockTypes.CALIBRATED_SCULK_SENSOR == null) {
             BlockTypes.CALIBRATED_SCULK_SENSOR = AllayBlockType
-                            .builder(BlockCalibratedSculkSensorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CALIBRATED_SCULK_SENSOR)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.SCULK_SENSOR_PHASE)
                             .build();
         }
         if (BlockTypes.CAMERA == null) {
             BlockTypes.CAMERA = AllayBlockType
-                            .builder(BlockCameraBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CAMERA)
                             .build();
         }
         if (BlockTypes.CAMPFIRE == null) {
             BlockTypes.CAMPFIRE = AllayBlockType
-                            .builder(BlockCampfireBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CAMPFIRE)
                             .setProperties(BlockPropertyTypes.EXTINGUISHED, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -1553,20 +1263,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CARROTS == null) {
             BlockTypes.CARROTS = AllayBlockType
-                            .builder(BlockCarrotsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CARROTS)
                             .setProperties(BlockPropertyTypes.GROWTH_8)
                             .build();
         }
         if (BlockTypes.CARTOGRAPHY_TABLE == null) {
             BlockTypes.CARTOGRAPHY_TABLE = AllayBlockType
-                            .builder(BlockCartographyTableBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CARTOGRAPHY_TABLE)
                             .build();
         }
         if (BlockTypes.CARVED_PUMPKIN == null) {
             BlockTypes.CARVED_PUMPKIN = AllayBlockType
-                            .builder(BlockCarvedPumpkinBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CARVED_PUMPKIN)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -1580,55 +1290,55 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CAVE_VINES == null) {
             BlockTypes.CAVE_VINES = AllayBlockType
-                            .builder(BlockCaveVinesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CAVE_VINES)
                             .setProperties(BlockPropertyTypes.GROWING_PLANT_AGE)
                             .build();
         }
         if (BlockTypes.CAVE_VINES_BODY_WITH_BERRIES == null) {
             BlockTypes.CAVE_VINES_BODY_WITH_BERRIES = AllayBlockType
-                            .builder(BlockCaveVinesBodyWithBerriesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CAVE_VINES_BODY_WITH_BERRIES)
                             .setProperties(BlockPropertyTypes.GROWING_PLANT_AGE)
                             .build();
         }
         if (BlockTypes.CAVE_VINES_HEAD_WITH_BERRIES == null) {
             BlockTypes.CAVE_VINES_HEAD_WITH_BERRIES = AllayBlockType
-                            .builder(BlockCaveVinesHeadWithBerriesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CAVE_VINES_HEAD_WITH_BERRIES)
                             .setProperties(BlockPropertyTypes.GROWING_PLANT_AGE)
                             .build();
         }
         if (BlockTypes.CHAIN_COMMAND_BLOCK == null) {
             BlockTypes.CHAIN_COMMAND_BLOCK = AllayBlockType
-                            .builder(BlockChainCommandBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHAIN_COMMAND_BLOCK)
                             .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.CHALKBOARD == null) {
             BlockTypes.CHALKBOARD = AllayBlockType
-                            .builder(BlockChalkboardBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHALKBOARD)
                             .setProperties(BlockPropertyTypes.DIRECTION_16)
                             .build();
         }
         if (BlockTypes.CHEMICAL_HEAT == null) {
             BlockTypes.CHEMICAL_HEAT = AllayBlockType
-                            .builder(BlockChemicalHeatBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHEMICAL_HEAT)
                             .build();
         }
         if (BlockTypes.CHERRY_BUTTON == null) {
             BlockTypes.CHERRY_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHERRY_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.CHERRY_DOOR == null) {
             BlockTypes.CHERRY_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHERRY_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -1642,7 +1352,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CHERRY_FENCE == null) {
             BlockTypes.CHERRY_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHERRY_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -1677,20 +1387,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CHERRY_PLANKS == null) {
             BlockTypes.CHERRY_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHERRY_PLANKS)
                             .build();
         }
         if (BlockTypes.CHERRY_PRESSURE_PLATE == null) {
             BlockTypes.CHERRY_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHERRY_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.CHERRY_SAPLING == null) {
             BlockTypes.CHERRY_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHERRY_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -1723,6 +1433,9 @@ public final class BlockTypeDefaultInitializer {
                             .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
                             .build();
         }
+    }
+
+    private static void initPart1() {
         if (BlockTypes.CHERRY_TRAPDOOR == null) {
             BlockTypes.CHERRY_TRAPDOOR = AllayBlockType
                             .builder(BlockTrapdoorBehaviorImpl.class)
@@ -1760,14 +1473,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CHISELED_BOOKSHELF == null) {
             BlockTypes.CHISELED_BOOKSHELF = AllayBlockType
-                            .builder(BlockChiseledBookshelfBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_BOOKSHELF)
                             .setProperties(BlockPropertyTypes.BOOKS_STORED, BlockPropertyTypes.DIRECTION_4)
                             .build();
         }
         if (BlockTypes.CHISELED_CINNABAR == null) {
             BlockTypes.CHISELED_CINNABAR = AllayBlockType
-                            .builder(BlockChiseledCinnabarBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_CINNABAR)
                             .build();
         }
@@ -1779,87 +1492,87 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CHISELED_DEEPSLATE == null) {
             BlockTypes.CHISELED_DEEPSLATE = AllayBlockType
-                            .builder(BlockChiseledDeepslateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_DEEPSLATE)
                             .build();
         }
         if (BlockTypes.CHISELED_NETHER_BRICKS == null) {
             BlockTypes.CHISELED_NETHER_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_NETHER_BRICKS)
                             .build();
         }
         if (BlockTypes.CHISELED_POLISHED_BLACKSTONE == null) {
             BlockTypes.CHISELED_POLISHED_BLACKSTONE = AllayBlockType
-                            .builder(BlockChiseledPolishedBlackstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_POLISHED_BLACKSTONE)
                             .build();
         }
         if (BlockTypes.CHISELED_QUARTZ_BLOCK == null) {
             BlockTypes.CHISELED_QUARTZ_BLOCK = AllayBlockType
-                            .builder(BlockChiseledQuartzBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_QUARTZ_BLOCK)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.CHISELED_RED_SANDSTONE == null) {
             BlockTypes.CHISELED_RED_SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_RED_SANDSTONE)
                             .build();
         }
         if (BlockTypes.CHISELED_RESIN_BRICKS == null) {
             BlockTypes.CHISELED_RESIN_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_RESIN_BRICKS)
                             .build();
         }
         if (BlockTypes.CHISELED_SANDSTONE == null) {
             BlockTypes.CHISELED_SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_SANDSTONE)
                             .build();
         }
         if (BlockTypes.CHISELED_STONE_BRICKS == null) {
             BlockTypes.CHISELED_STONE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_STONE_BRICKS)
                             .build();
         }
         if (BlockTypes.CHISELED_SULFUR == null) {
             BlockTypes.CHISELED_SULFUR = AllayBlockType
-                            .builder(BlockChiseledSulfurBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_SULFUR)
                             .build();
         }
         if (BlockTypes.CHISELED_TUFF == null) {
             BlockTypes.CHISELED_TUFF = AllayBlockType
-                            .builder(BlockChiseledTuffBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_TUFF)
                             .build();
         }
         if (BlockTypes.CHISELED_TUFF_BRICKS == null) {
             BlockTypes.CHISELED_TUFF_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHISELED_TUFF_BRICKS)
                             .build();
         }
         if (BlockTypes.CHORUS_FLOWER == null) {
             BlockTypes.CHORUS_FLOWER = AllayBlockType
-                            .builder(BlockChorusFlowerBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHORUS_FLOWER)
                             .setProperties(BlockPropertyTypes.AGE_6)
                             .build();
         }
         if (BlockTypes.CHORUS_PLANT == null) {
             BlockTypes.CHORUS_PLANT = AllayBlockType
-                            .builder(BlockChorusPlantBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CHORUS_PLANT)
                             .build();
         }
         if (BlockTypes.CINNABAR == null) {
             BlockTypes.CINNABAR = AllayBlockType
-                            .builder(BlockCinnabarBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CINNABAR)
                             .build();
         }
@@ -1893,7 +1606,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CINNABAR_BRICKS == null) {
             BlockTypes.CINNABAR_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CINNABAR_BRICKS)
                             .build();
         }
@@ -1927,13 +1640,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CLAY == null) {
             BlockTypes.CLAY = AllayBlockType
-                            .builder(BlockClayBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CLAY)
                             .build();
         }
         if (BlockTypes.CLIENT_REQUEST_PLACEHOLDER_BLOCK == null) {
             BlockTypes.CLIENT_REQUEST_PLACEHOLDER_BLOCK = AllayBlockType
-                            .builder(BlockClientRequestPlaceholderBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CLIENT_REQUEST_PLACEHOLDER_BLOCK)
                             .build();
         }
@@ -1945,7 +1658,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COAL_BLOCK == null) {
             BlockTypes.COAL_BLOCK = AllayBlockType
-                            .builder(BlockCoalBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COAL_BLOCK)
                             .build();
         }
@@ -1957,13 +1670,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COARSE_DIRT == null) {
             BlockTypes.COARSE_DIRT = AllayBlockType
-                            .builder(BlockCoarseDirtBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COARSE_DIRT)
                             .build();
         }
         if (BlockTypes.COBBLED_DEEPSLATE == null) {
             BlockTypes.COBBLED_DEEPSLATE = AllayBlockType
-                            .builder(BlockCobbledDeepslateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COBBLED_DEEPSLATE)
                             .build();
         }
@@ -1997,7 +1710,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COBBLESTONE == null) {
             BlockTypes.COBBLESTONE = AllayBlockType
-                            .builder(BlockCobblestoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COBBLESTONE)
                             .build();
         }
@@ -2024,7 +1737,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COCOA == null) {
             BlockTypes.COCOA = AllayBlockType
-                            .builder(BlockCocoaBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COCOA)
                             .setProperties(BlockPropertyTypes.AGE_3, BlockPropertyTypes.DIRECTION_4)
                             .build();
@@ -2059,28 +1772,28 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COMMAND_BLOCK == null) {
             BlockTypes.COMMAND_BLOCK = AllayBlockType
-                            .builder(BlockCommandBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COMMAND_BLOCK)
                             .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.COMPOSTER == null) {
             BlockTypes.COMPOSTER = AllayBlockType
-                            .builder(BlockComposterBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COMPOSTER)
                             .setProperties(BlockPropertyTypes.COMPOSTER_FILL_LEVEL)
                             .build();
         }
         if (BlockTypes.COMPOUND_CREATOR == null) {
             BlockTypes.COMPOUND_CREATOR = AllayBlockType
-                            .builder(BlockCompoundCreatorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COMPOUND_CREATOR)
                             .setProperties(BlockPropertyTypes.DIRECTION_4)
                             .build();
         }
         if (BlockTypes.CONDUIT == null) {
             BlockTypes.CONDUIT = AllayBlockType
-                            .builder(BlockConduitBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CONDUIT)
                             .build();
         }
@@ -2113,7 +1826,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COPPER_CHEST == null) {
             BlockTypes.COPPER_CHEST = AllayBlockType
-                            .builder(BlockCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -2173,50 +1886,50 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRACKED_DEEPSLATE_BRICKS == null) {
             BlockTypes.CRACKED_DEEPSLATE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRACKED_DEEPSLATE_BRICKS)
                             .build();
         }
         if (BlockTypes.CRACKED_DEEPSLATE_TILES == null) {
             BlockTypes.CRACKED_DEEPSLATE_TILES = AllayBlockType
-                            .builder(BlockCrackedDeepslateTilesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRACKED_DEEPSLATE_TILES)
                             .build();
         }
         if (BlockTypes.CRACKED_NETHER_BRICKS == null) {
             BlockTypes.CRACKED_NETHER_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRACKED_NETHER_BRICKS)
                             .build();
         }
         if (BlockTypes.CRACKED_POLISHED_BLACKSTONE_BRICKS == null) {
             BlockTypes.CRACKED_POLISHED_BLACKSTONE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRACKED_POLISHED_BLACKSTONE_BRICKS)
                             .build();
         }
         if (BlockTypes.CRACKED_STONE_BRICKS == null) {
             BlockTypes.CRACKED_STONE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRACKED_STONE_BRICKS)
                             .build();
         }
         if (BlockTypes.CRAFTER == null) {
             BlockTypes.CRAFTER = AllayBlockType
-                            .builder(BlockCrafterBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRAFTER)
                             .setProperties(BlockPropertyTypes.CRAFTING, BlockPropertyTypes.ORIENTATION, BlockPropertyTypes.TRIGGERED_BIT)
                             .build();
         }
         if (BlockTypes.CRAFTING_TABLE == null) {
             BlockTypes.CRAFTING_TABLE = AllayBlockType
-                            .builder(BlockCraftingTableBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRAFTING_TABLE)
                             .build();
         }
         if (BlockTypes.CREAKING_HEART == null) {
             BlockTypes.CREAKING_HEART = AllayBlockType
-                            .builder(BlockCreakingHeartBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CREAKING_HEART)
                             .setProperties(BlockPropertyTypes.CREAKING_HEART_STATE, BlockPropertyTypes.NATURAL, BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -2230,14 +1943,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRIMSON_BUTTON == null) {
             BlockTypes.CRIMSON_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.CRIMSON_DOOR == null) {
             BlockTypes.CRIMSON_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -2251,7 +1964,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRIMSON_FENCE == null) {
             BlockTypes.CRIMSON_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -2265,7 +1978,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRIMSON_FUNGUS == null) {
             BlockTypes.CRIMSON_FUNGUS = AllayBlockType
-                            .builder(BlockCrimsonFungusBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_FUNGUS)
                             .build();
         }
@@ -2285,26 +1998,26 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRIMSON_NYLIUM == null) {
             BlockTypes.CRIMSON_NYLIUM = AllayBlockType
-                            .builder(BlockCrimsonNyliumBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_NYLIUM)
                             .build();
         }
         if (BlockTypes.CRIMSON_PLANKS == null) {
             BlockTypes.CRIMSON_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_PLANKS)
                             .build();
         }
         if (BlockTypes.CRIMSON_PRESSURE_PLATE == null) {
             BlockTypes.CRIMSON_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.CRIMSON_ROOTS == null) {
             BlockTypes.CRIMSON_ROOTS = AllayBlockType
-                            .builder(BlockCrimsonRootsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRIMSON_ROOTS)
                             .build();
         }
@@ -2359,7 +2072,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRYING_OBSIDIAN == null) {
             BlockTypes.CRYING_OBSIDIAN = AllayBlockType
-                            .builder(BlockCryingObsidianBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CRYING_OBSIDIAN)
                             .build();
         }
@@ -2385,7 +2098,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_RED_SANDSTONE == null) {
             BlockTypes.CUT_RED_SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CUT_RED_SANDSTONE)
                             .build();
         }
@@ -2405,7 +2118,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_SANDSTONE == null) {
             BlockTypes.CUT_SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CUT_SANDSTONE)
                             .build();
         }
@@ -2445,7 +2158,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CYAN_CONCRETE == null) {
             BlockTypes.CYAN_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CYAN_CONCRETE)
                             .build();
         }
@@ -2510,7 +2223,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CYAN_WOOL == null) {
             BlockTypes.CYAN_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.CYAN_WOOL)
                             .build();
         }
@@ -2550,14 +2263,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DARK_OAK_BUTTON == null) {
             BlockTypes.DARK_OAK_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DARK_OAK_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.DARK_OAK_DOOR == null) {
             BlockTypes.DARK_OAK_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DARK_OAK_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -2571,7 +2284,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DARK_OAK_FENCE == null) {
             BlockTypes.DARK_OAK_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DARK_OAK_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -2606,20 +2319,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DARK_OAK_PLANKS == null) {
             BlockTypes.DARK_OAK_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DARK_OAK_PLANKS)
                             .build();
         }
         if (BlockTypes.DARK_OAK_PRESSURE_PLATE == null) {
             BlockTypes.DARK_OAK_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DARK_OAK_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.DARK_OAK_SAPLING == null) {
             BlockTypes.DARK_OAK_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DARK_OAK_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -2661,7 +2374,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DARK_PRISMARINE == null) {
             BlockTypes.DARK_PRISMARINE = AllayBlockType
-                            .builder(BlockDarkPrismarineBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DARK_PRISMARINE)
                             .build();
         }
@@ -2716,137 +2429,137 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEAD_BRAIN_CORAL == null) {
             BlockTypes.DEAD_BRAIN_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BRAIN_CORAL)
                             .build();
         }
         if (BlockTypes.DEAD_BRAIN_CORAL_BLOCK == null) {
             BlockTypes.DEAD_BRAIN_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BRAIN_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.DEAD_BRAIN_CORAL_FAN == null) {
             BlockTypes.DEAD_BRAIN_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BRAIN_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_BRAIN_CORAL_WALL_FAN == null) {
             BlockTypes.DEAD_BRAIN_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BRAIN_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_BUBBLE_CORAL == null) {
             BlockTypes.DEAD_BUBBLE_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL)
                             .build();
         }
         if (BlockTypes.DEAD_BUBBLE_CORAL_BLOCK == null) {
             BlockTypes.DEAD_BUBBLE_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.DEAD_BUBBLE_CORAL_FAN == null) {
             BlockTypes.DEAD_BUBBLE_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_BUBBLE_CORAL_WALL_FAN == null) {
             BlockTypes.DEAD_BUBBLE_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_FIRE_CORAL == null) {
             BlockTypes.DEAD_FIRE_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_FIRE_CORAL)
                             .build();
         }
         if (BlockTypes.DEAD_FIRE_CORAL_BLOCK == null) {
             BlockTypes.DEAD_FIRE_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_FIRE_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.DEAD_FIRE_CORAL_FAN == null) {
             BlockTypes.DEAD_FIRE_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_FIRE_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_FIRE_CORAL_WALL_FAN == null) {
             BlockTypes.DEAD_FIRE_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_FIRE_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_HORN_CORAL == null) {
             BlockTypes.DEAD_HORN_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_HORN_CORAL)
                             .build();
         }
         if (BlockTypes.DEAD_HORN_CORAL_BLOCK == null) {
             BlockTypes.DEAD_HORN_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_HORN_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.DEAD_HORN_CORAL_FAN == null) {
             BlockTypes.DEAD_HORN_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_HORN_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_HORN_CORAL_WALL_FAN == null) {
             BlockTypes.DEAD_HORN_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_HORN_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_TUBE_CORAL == null) {
             BlockTypes.DEAD_TUBE_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_TUBE_CORAL)
                             .build();
         }
         if (BlockTypes.DEAD_TUBE_CORAL_BLOCK == null) {
             BlockTypes.DEAD_TUBE_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_TUBE_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.DEAD_TUBE_CORAL_FAN == null) {
             BlockTypes.DEAD_TUBE_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_TUBE_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEAD_TUBE_CORAL_WALL_FAN == null) {
             BlockTypes.DEAD_TUBE_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEAD_TUBE_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEADBUSH == null) {
             BlockTypes.DEADBUSH = AllayBlockType
-                            .builder(BlockDeadbushBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEADBUSH)
                             .build();
         }
@@ -2859,7 +2572,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEEPSLATE == null) {
             BlockTypes.DEEPSLATE = AllayBlockType
-                            .builder(BlockDeepslateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEEPSLATE)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -2894,7 +2607,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEEPSLATE_BRICKS == null) {
             BlockTypes.DEEPSLATE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEEPSLATE_BRICKS)
                             .build();
         }
@@ -2976,47 +2689,47 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEEPSLATE_TILES == null) {
             BlockTypes.DEEPSLATE_TILES = AllayBlockType
-                            .builder(BlockDeepslateTilesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEEPSLATE_TILES)
                             .build();
         }
         if (BlockTypes.DENY == null) {
             BlockTypes.DENY = AllayBlockType
-                            .builder(BlockDenyBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DENY)
                             .build();
         }
         if (BlockTypes.DEPRECATED_ANVIL == null) {
             BlockTypes.DEPRECATED_ANVIL = AllayBlockType
-                            .builder(BlockDeprecatedAnvilBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEPRECATED_ANVIL)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.DEPRECATED_PURPUR_BLOCK_1 == null) {
             BlockTypes.DEPRECATED_PURPUR_BLOCK_1 = AllayBlockType
-                            .builder(BlockDeprecatedPurpurBlock1BehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEPRECATED_PURPUR_BLOCK_1)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.DEPRECATED_PURPUR_BLOCK_2 == null) {
             BlockTypes.DEPRECATED_PURPUR_BLOCK_2 = AllayBlockType
-                            .builder(BlockDeprecatedPurpurBlock2BehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DEPRECATED_PURPUR_BLOCK_2)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.DETECTOR_RAIL == null) {
             BlockTypes.DETECTOR_RAIL = AllayBlockType
-                            .builder(BlockDetectorRailBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DETECTOR_RAIL)
                             .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
                             .build();
         }
         if (BlockTypes.DIAMOND_BLOCK == null) {
             BlockTypes.DIAMOND_BLOCK = AllayBlockType
-                            .builder(BlockDiamondBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DIAMOND_BLOCK)
                             .build();
         }
@@ -3028,7 +2741,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DIORITE == null) {
             BlockTypes.DIORITE = AllayBlockType
-                            .builder(BlockDioriteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DIORITE)
                             .build();
         }
@@ -3046,6 +2759,9 @@ public final class BlockTypeDefaultInitializer {
                             .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                             .build();
         }
+    }
+
+    private static void initPart2() {
         if (BlockTypes.DIORITE_STAIRS == null) {
             BlockTypes.DIORITE_STAIRS = AllayBlockType
                             .builder(BlockStairsBehaviorImpl.class)
@@ -3062,19 +2778,19 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DIRT == null) {
             BlockTypes.DIRT = AllayBlockType
-                            .builder(BlockDirtBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DIRT)
                             .build();
         }
         if (BlockTypes.DIRT_WITH_ROOTS == null) {
             BlockTypes.DIRT_WITH_ROOTS = AllayBlockType
-                            .builder(BlockDirtWithRootsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DIRT_WITH_ROOTS)
                             .build();
         }
         if (BlockTypes.DISPENSER == null) {
             BlockTypes.DISPENSER = AllayBlockType
-                            .builder(BlockDispenserBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DISPENSER)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TRIGGERED_BIT)
                             .build();
@@ -3101,754 +2817,754 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DRIED_GHAST == null) {
             BlockTypes.DRIED_GHAST = AllayBlockType
-                            .builder(BlockDriedGhastBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DRIED_GHAST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REHYDRATION_LEVEL)
                             .build();
         }
         if (BlockTypes.DRIED_KELP_BLOCK == null) {
             BlockTypes.DRIED_KELP_BLOCK = AllayBlockType
-                            .builder(BlockDriedKelpBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DRIED_KELP_BLOCK)
                             .build();
         }
         if (BlockTypes.DRIPSTONE_BLOCK == null) {
             BlockTypes.DRIPSTONE_BLOCK = AllayBlockType
-                            .builder(BlockDripstoneBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DRIPSTONE_BLOCK)
                             .build();
         }
         if (BlockTypes.DROPPER == null) {
             BlockTypes.DROPPER = AllayBlockType
-                            .builder(BlockDropperBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.DROPPER)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TRIGGERED_BIT)
                             .build();
         }
         if (BlockTypes.ELEMENT_0 == null) {
             BlockTypes.ELEMENT_0 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_0)
                             .build();
         }
         if (BlockTypes.ELEMENT_1 == null) {
             BlockTypes.ELEMENT_1 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_1)
                             .build();
         }
         if (BlockTypes.ELEMENT_10 == null) {
             BlockTypes.ELEMENT_10 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_10)
                             .build();
         }
         if (BlockTypes.ELEMENT_100 == null) {
             BlockTypes.ELEMENT_100 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_100)
                             .build();
         }
         if (BlockTypes.ELEMENT_101 == null) {
             BlockTypes.ELEMENT_101 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_101)
                             .build();
         }
         if (BlockTypes.ELEMENT_102 == null) {
             BlockTypes.ELEMENT_102 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_102)
                             .build();
         }
         if (BlockTypes.ELEMENT_103 == null) {
             BlockTypes.ELEMENT_103 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_103)
                             .build();
         }
         if (BlockTypes.ELEMENT_104 == null) {
             BlockTypes.ELEMENT_104 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_104)
                             .build();
         }
         if (BlockTypes.ELEMENT_105 == null) {
             BlockTypes.ELEMENT_105 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_105)
                             .build();
         }
         if (BlockTypes.ELEMENT_106 == null) {
             BlockTypes.ELEMENT_106 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_106)
                             .build();
         }
         if (BlockTypes.ELEMENT_107 == null) {
             BlockTypes.ELEMENT_107 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_107)
                             .build();
         }
         if (BlockTypes.ELEMENT_108 == null) {
             BlockTypes.ELEMENT_108 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_108)
                             .build();
         }
         if (BlockTypes.ELEMENT_109 == null) {
             BlockTypes.ELEMENT_109 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_109)
                             .build();
         }
         if (BlockTypes.ELEMENT_11 == null) {
             BlockTypes.ELEMENT_11 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_11)
                             .build();
         }
         if (BlockTypes.ELEMENT_110 == null) {
             BlockTypes.ELEMENT_110 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_110)
                             .build();
         }
         if (BlockTypes.ELEMENT_111 == null) {
             BlockTypes.ELEMENT_111 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_111)
                             .build();
         }
         if (BlockTypes.ELEMENT_112 == null) {
             BlockTypes.ELEMENT_112 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_112)
                             .build();
         }
         if (BlockTypes.ELEMENT_113 == null) {
             BlockTypes.ELEMENT_113 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_113)
                             .build();
         }
         if (BlockTypes.ELEMENT_114 == null) {
             BlockTypes.ELEMENT_114 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_114)
                             .build();
         }
         if (BlockTypes.ELEMENT_115 == null) {
             BlockTypes.ELEMENT_115 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_115)
                             .build();
         }
         if (BlockTypes.ELEMENT_116 == null) {
             BlockTypes.ELEMENT_116 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_116)
                             .build();
         }
         if (BlockTypes.ELEMENT_117 == null) {
             BlockTypes.ELEMENT_117 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_117)
                             .build();
         }
         if (BlockTypes.ELEMENT_118 == null) {
             BlockTypes.ELEMENT_118 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_118)
                             .build();
         }
         if (BlockTypes.ELEMENT_12 == null) {
             BlockTypes.ELEMENT_12 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_12)
                             .build();
         }
         if (BlockTypes.ELEMENT_13 == null) {
             BlockTypes.ELEMENT_13 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_13)
                             .build();
         }
         if (BlockTypes.ELEMENT_14 == null) {
             BlockTypes.ELEMENT_14 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_14)
                             .build();
         }
         if (BlockTypes.ELEMENT_15 == null) {
             BlockTypes.ELEMENT_15 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_15)
                             .build();
         }
         if (BlockTypes.ELEMENT_16 == null) {
             BlockTypes.ELEMENT_16 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_16)
                             .build();
         }
         if (BlockTypes.ELEMENT_17 == null) {
             BlockTypes.ELEMENT_17 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_17)
                             .build();
         }
         if (BlockTypes.ELEMENT_18 == null) {
             BlockTypes.ELEMENT_18 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_18)
                             .build();
         }
         if (BlockTypes.ELEMENT_19 == null) {
             BlockTypes.ELEMENT_19 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_19)
                             .build();
         }
         if (BlockTypes.ELEMENT_2 == null) {
             BlockTypes.ELEMENT_2 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_2)
                             .build();
         }
         if (BlockTypes.ELEMENT_20 == null) {
             BlockTypes.ELEMENT_20 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_20)
                             .build();
         }
         if (BlockTypes.ELEMENT_21 == null) {
             BlockTypes.ELEMENT_21 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_21)
                             .build();
         }
         if (BlockTypes.ELEMENT_22 == null) {
             BlockTypes.ELEMENT_22 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_22)
                             .build();
         }
         if (BlockTypes.ELEMENT_23 == null) {
             BlockTypes.ELEMENT_23 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_23)
                             .build();
         }
         if (BlockTypes.ELEMENT_24 == null) {
             BlockTypes.ELEMENT_24 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_24)
                             .build();
         }
         if (BlockTypes.ELEMENT_25 == null) {
             BlockTypes.ELEMENT_25 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_25)
                             .build();
         }
         if (BlockTypes.ELEMENT_26 == null) {
             BlockTypes.ELEMENT_26 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_26)
                             .build();
         }
         if (BlockTypes.ELEMENT_27 == null) {
             BlockTypes.ELEMENT_27 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_27)
                             .build();
         }
         if (BlockTypes.ELEMENT_28 == null) {
             BlockTypes.ELEMENT_28 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_28)
                             .build();
         }
         if (BlockTypes.ELEMENT_29 == null) {
             BlockTypes.ELEMENT_29 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_29)
                             .build();
         }
         if (BlockTypes.ELEMENT_3 == null) {
             BlockTypes.ELEMENT_3 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_3)
                             .build();
         }
         if (BlockTypes.ELEMENT_30 == null) {
             BlockTypes.ELEMENT_30 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_30)
                             .build();
         }
         if (BlockTypes.ELEMENT_31 == null) {
             BlockTypes.ELEMENT_31 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_31)
                             .build();
         }
         if (BlockTypes.ELEMENT_32 == null) {
             BlockTypes.ELEMENT_32 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_32)
                             .build();
         }
         if (BlockTypes.ELEMENT_33 == null) {
             BlockTypes.ELEMENT_33 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_33)
                             .build();
         }
         if (BlockTypes.ELEMENT_34 == null) {
             BlockTypes.ELEMENT_34 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_34)
                             .build();
         }
         if (BlockTypes.ELEMENT_35 == null) {
             BlockTypes.ELEMENT_35 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_35)
                             .build();
         }
         if (BlockTypes.ELEMENT_36 == null) {
             BlockTypes.ELEMENT_36 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_36)
                             .build();
         }
         if (BlockTypes.ELEMENT_37 == null) {
             BlockTypes.ELEMENT_37 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_37)
                             .build();
         }
         if (BlockTypes.ELEMENT_38 == null) {
             BlockTypes.ELEMENT_38 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_38)
                             .build();
         }
         if (BlockTypes.ELEMENT_39 == null) {
             BlockTypes.ELEMENT_39 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_39)
                             .build();
         }
         if (BlockTypes.ELEMENT_4 == null) {
             BlockTypes.ELEMENT_4 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_4)
                             .build();
         }
         if (BlockTypes.ELEMENT_40 == null) {
             BlockTypes.ELEMENT_40 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_40)
                             .build();
         }
         if (BlockTypes.ELEMENT_41 == null) {
             BlockTypes.ELEMENT_41 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_41)
                             .build();
         }
         if (BlockTypes.ELEMENT_42 == null) {
             BlockTypes.ELEMENT_42 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_42)
                             .build();
         }
         if (BlockTypes.ELEMENT_43 == null) {
             BlockTypes.ELEMENT_43 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_43)
                             .build();
         }
         if (BlockTypes.ELEMENT_44 == null) {
             BlockTypes.ELEMENT_44 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_44)
                             .build();
         }
         if (BlockTypes.ELEMENT_45 == null) {
             BlockTypes.ELEMENT_45 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_45)
                             .build();
         }
         if (BlockTypes.ELEMENT_46 == null) {
             BlockTypes.ELEMENT_46 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_46)
                             .build();
         }
         if (BlockTypes.ELEMENT_47 == null) {
             BlockTypes.ELEMENT_47 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_47)
                             .build();
         }
         if (BlockTypes.ELEMENT_48 == null) {
             BlockTypes.ELEMENT_48 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_48)
                             .build();
         }
         if (BlockTypes.ELEMENT_49 == null) {
             BlockTypes.ELEMENT_49 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_49)
                             .build();
         }
         if (BlockTypes.ELEMENT_5 == null) {
             BlockTypes.ELEMENT_5 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_5)
                             .build();
         }
         if (BlockTypes.ELEMENT_50 == null) {
             BlockTypes.ELEMENT_50 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_50)
                             .build();
         }
         if (BlockTypes.ELEMENT_51 == null) {
             BlockTypes.ELEMENT_51 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_51)
                             .build();
         }
         if (BlockTypes.ELEMENT_52 == null) {
             BlockTypes.ELEMENT_52 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_52)
                             .build();
         }
         if (BlockTypes.ELEMENT_53 == null) {
             BlockTypes.ELEMENT_53 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_53)
                             .build();
         }
         if (BlockTypes.ELEMENT_54 == null) {
             BlockTypes.ELEMENT_54 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_54)
                             .build();
         }
         if (BlockTypes.ELEMENT_55 == null) {
             BlockTypes.ELEMENT_55 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_55)
                             .build();
         }
         if (BlockTypes.ELEMENT_56 == null) {
             BlockTypes.ELEMENT_56 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_56)
                             .build();
         }
         if (BlockTypes.ELEMENT_57 == null) {
             BlockTypes.ELEMENT_57 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_57)
                             .build();
         }
         if (BlockTypes.ELEMENT_58 == null) {
             BlockTypes.ELEMENT_58 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_58)
                             .build();
         }
         if (BlockTypes.ELEMENT_59 == null) {
             BlockTypes.ELEMENT_59 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_59)
                             .build();
         }
         if (BlockTypes.ELEMENT_6 == null) {
             BlockTypes.ELEMENT_6 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_6)
                             .build();
         }
         if (BlockTypes.ELEMENT_60 == null) {
             BlockTypes.ELEMENT_60 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_60)
                             .build();
         }
         if (BlockTypes.ELEMENT_61 == null) {
             BlockTypes.ELEMENT_61 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_61)
                             .build();
         }
         if (BlockTypes.ELEMENT_62 == null) {
             BlockTypes.ELEMENT_62 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_62)
                             .build();
         }
         if (BlockTypes.ELEMENT_63 == null) {
             BlockTypes.ELEMENT_63 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_63)
                             .build();
         }
         if (BlockTypes.ELEMENT_64 == null) {
             BlockTypes.ELEMENT_64 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_64)
                             .build();
         }
         if (BlockTypes.ELEMENT_65 == null) {
             BlockTypes.ELEMENT_65 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_65)
                             .build();
         }
         if (BlockTypes.ELEMENT_66 == null) {
             BlockTypes.ELEMENT_66 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_66)
                             .build();
         }
         if (BlockTypes.ELEMENT_67 == null) {
             BlockTypes.ELEMENT_67 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_67)
                             .build();
         }
         if (BlockTypes.ELEMENT_68 == null) {
             BlockTypes.ELEMENT_68 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_68)
                             .build();
         }
         if (BlockTypes.ELEMENT_69 == null) {
             BlockTypes.ELEMENT_69 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_69)
                             .build();
         }
         if (BlockTypes.ELEMENT_7 == null) {
             BlockTypes.ELEMENT_7 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_7)
                             .build();
         }
         if (BlockTypes.ELEMENT_70 == null) {
             BlockTypes.ELEMENT_70 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_70)
                             .build();
         }
         if (BlockTypes.ELEMENT_71 == null) {
             BlockTypes.ELEMENT_71 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_71)
                             .build();
         }
         if (BlockTypes.ELEMENT_72 == null) {
             BlockTypes.ELEMENT_72 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_72)
                             .build();
         }
         if (BlockTypes.ELEMENT_73 == null) {
             BlockTypes.ELEMENT_73 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_73)
                             .build();
         }
         if (BlockTypes.ELEMENT_74 == null) {
             BlockTypes.ELEMENT_74 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_74)
                             .build();
         }
         if (BlockTypes.ELEMENT_75 == null) {
             BlockTypes.ELEMENT_75 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_75)
                             .build();
         }
         if (BlockTypes.ELEMENT_76 == null) {
             BlockTypes.ELEMENT_76 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_76)
                             .build();
         }
         if (BlockTypes.ELEMENT_77 == null) {
             BlockTypes.ELEMENT_77 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_77)
                             .build();
         }
         if (BlockTypes.ELEMENT_78 == null) {
             BlockTypes.ELEMENT_78 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_78)
                             .build();
         }
         if (BlockTypes.ELEMENT_79 == null) {
             BlockTypes.ELEMENT_79 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_79)
                             .build();
         }
         if (BlockTypes.ELEMENT_8 == null) {
             BlockTypes.ELEMENT_8 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_8)
                             .build();
         }
         if (BlockTypes.ELEMENT_80 == null) {
             BlockTypes.ELEMENT_80 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_80)
                             .build();
         }
         if (BlockTypes.ELEMENT_81 == null) {
             BlockTypes.ELEMENT_81 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_81)
                             .build();
         }
         if (BlockTypes.ELEMENT_82 == null) {
             BlockTypes.ELEMENT_82 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_82)
                             .build();
         }
         if (BlockTypes.ELEMENT_83 == null) {
             BlockTypes.ELEMENT_83 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_83)
                             .build();
         }
         if (BlockTypes.ELEMENT_84 == null) {
             BlockTypes.ELEMENT_84 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_84)
                             .build();
         }
         if (BlockTypes.ELEMENT_85 == null) {
             BlockTypes.ELEMENT_85 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_85)
                             .build();
         }
         if (BlockTypes.ELEMENT_86 == null) {
             BlockTypes.ELEMENT_86 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_86)
                             .build();
         }
         if (BlockTypes.ELEMENT_87 == null) {
             BlockTypes.ELEMENT_87 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_87)
                             .build();
         }
         if (BlockTypes.ELEMENT_88 == null) {
             BlockTypes.ELEMENT_88 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_88)
                             .build();
         }
         if (BlockTypes.ELEMENT_89 == null) {
             BlockTypes.ELEMENT_89 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_89)
                             .build();
         }
         if (BlockTypes.ELEMENT_9 == null) {
             BlockTypes.ELEMENT_9 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_9)
                             .build();
         }
         if (BlockTypes.ELEMENT_90 == null) {
             BlockTypes.ELEMENT_90 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_90)
                             .build();
         }
         if (BlockTypes.ELEMENT_91 == null) {
             BlockTypes.ELEMENT_91 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_91)
                             .build();
         }
         if (BlockTypes.ELEMENT_92 == null) {
             BlockTypes.ELEMENT_92 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_92)
                             .build();
         }
         if (BlockTypes.ELEMENT_93 == null) {
             BlockTypes.ELEMENT_93 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_93)
                             .build();
         }
         if (BlockTypes.ELEMENT_94 == null) {
             BlockTypes.ELEMENT_94 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_94)
                             .build();
         }
         if (BlockTypes.ELEMENT_95 == null) {
             BlockTypes.ELEMENT_95 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_95)
                             .build();
         }
         if (BlockTypes.ELEMENT_96 == null) {
             BlockTypes.ELEMENT_96 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_96)
                             .build();
         }
         if (BlockTypes.ELEMENT_97 == null) {
             BlockTypes.ELEMENT_97 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_97)
                             .build();
         }
         if (BlockTypes.ELEMENT_98 == null) {
             BlockTypes.ELEMENT_98 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_98)
                             .build();
         }
         if (BlockTypes.ELEMENT_99 == null) {
             BlockTypes.ELEMENT_99 = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_99)
                             .build();
         }
         if (BlockTypes.ELEMENT_CONSTRUCTOR == null) {
             BlockTypes.ELEMENT_CONSTRUCTOR = AllayBlockType
-                            .builder(BlockElementBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ELEMENT_CONSTRUCTOR)
                             .setProperties(BlockPropertyTypes.DIRECTION_4)
                             .build();
         }
         if (BlockTypes.EMERALD_BLOCK == null) {
             BlockTypes.EMERALD_BLOCK = AllayBlockType
-                            .builder(BlockEmeraldBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.EMERALD_BLOCK)
                             .build();
         }
@@ -3873,39 +3589,39 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.END_BRICKS == null) {
             BlockTypes.END_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.END_BRICKS)
                             .build();
         }
         if (BlockTypes.END_GATEWAY == null) {
             BlockTypes.END_GATEWAY = AllayBlockType
-                            .builder(BlockEndGatewayBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.END_GATEWAY)
                             .build();
         }
         if (BlockTypes.END_PORTAL == null) {
             BlockTypes.END_PORTAL = AllayBlockType
-                            .builder(BlockEndPortalBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.END_PORTAL)
                             .build();
         }
         if (BlockTypes.END_PORTAL_FRAME == null) {
             BlockTypes.END_PORTAL_FRAME = AllayBlockType
-                            .builder(BlockEndPortalFrameBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.END_PORTAL_FRAME)
                             .setProperties(BlockPropertyTypes.END_PORTAL_EYE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.END_ROD == null) {
             BlockTypes.END_ROD = AllayBlockType
-                            .builder(BlockEndRodBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.END_ROD)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.END_STONE == null) {
             BlockTypes.END_STONE = AllayBlockType
-                            .builder(BlockEndStoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.END_STONE)
                             .build();
         }
@@ -3972,7 +3688,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_COPPER_CHEST == null) {
             BlockTypes.EXPOSED_COPPER_CHEST = AllayBlockType
-                            .builder(BlockExposedCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.EXPOSED_COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -4047,7 +3763,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.FARMLAND == null) {
             BlockTypes.FARMLAND = AllayBlockType
-                            .builder(BlockFarmlandBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FARMLAND)
                             .setProperties(BlockPropertyTypes.MOISTURIZED_AMOUNT)
                             .build();
@@ -4061,52 +3777,52 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.FERN == null) {
             BlockTypes.FERN = AllayBlockType
-                            .builder(BlockFernBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FERN)
                             .build();
         }
         if (BlockTypes.FIRE == null) {
             BlockTypes.FIRE = AllayBlockType
-                            .builder(BlockFireBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FIRE)
                             .setProperties(BlockPropertyTypes.AGE_16)
                             .build();
         }
         if (BlockTypes.FIRE_CORAL == null) {
             BlockTypes.FIRE_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FIRE_CORAL)
                             .build();
         }
         if (BlockTypes.FIRE_CORAL_BLOCK == null) {
             BlockTypes.FIRE_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FIRE_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.FIRE_CORAL_FAN == null) {
             BlockTypes.FIRE_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FIRE_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.FIRE_CORAL_WALL_FAN == null) {
             BlockTypes.FIRE_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FIRE_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.FIREFLY_BUSH == null) {
             BlockTypes.FIREFLY_BUSH = AllayBlockType
-                            .builder(BlockFireflyBushBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FIREFLY_BUSH)
                             .build();
         }
         if (BlockTypes.FLETCHING_TABLE == null) {
             BlockTypes.FLETCHING_TABLE = AllayBlockType
-                            .builder(BlockFletchingTableBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FLETCHING_TABLE)
                             .build();
         }
@@ -4119,7 +3835,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.FLOWERING_AZALEA == null) {
             BlockTypes.FLOWERING_AZALEA = AllayBlockType
-                            .builder(BlockFloweringAzaleaBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FLOWERING_AZALEA)
                             .build();
         }
@@ -4139,20 +3855,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.FRAME == null) {
             BlockTypes.FRAME = AllayBlockType
-                            .builder(BlockFrameBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FRAME)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ITEM_FRAME_MAP_BIT, BlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
                             .build();
         }
         if (BlockTypes.FROG_SPAWN == null) {
             BlockTypes.FROG_SPAWN = AllayBlockType
-                            .builder(BlockFrogSpawnBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FROG_SPAWN)
                             .build();
         }
         if (BlockTypes.FROSTED_ICE == null) {
             BlockTypes.FROSTED_ICE = AllayBlockType
-                            .builder(BlockIceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.FROSTED_ICE)
                             .setProperties(BlockPropertyTypes.AGE_4)
                             .build();
@@ -4166,7 +3882,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GILDED_BLACKSTONE == null) {
             BlockTypes.GILDED_BLACKSTONE = AllayBlockType
-                            .builder(BlockGildedBlackstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GILDED_BLACKSTONE)
                             .build();
         }
@@ -4185,33 +3901,33 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GLOW_FRAME == null) {
             BlockTypes.GLOW_FRAME = AllayBlockType
-                            .builder(BlockGlowFrameBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GLOW_FRAME)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ITEM_FRAME_MAP_BIT, BlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
                             .build();
         }
         if (BlockTypes.GLOW_LICHEN == null) {
             BlockTypes.GLOW_LICHEN = AllayBlockType
-                            .builder(BlockGlowLichenBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GLOW_LICHEN)
                             .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
                             .build();
         }
         if (BlockTypes.GLOWINGOBSIDIAN == null) {
             BlockTypes.GLOWINGOBSIDIAN = AllayBlockType
-                            .builder(BlockGlowingobsidianBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GLOWINGOBSIDIAN)
                             .build();
         }
         if (BlockTypes.GLOWSTONE == null) {
             BlockTypes.GLOWSTONE = AllayBlockType
-                            .builder(BlockGlowstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GLOWSTONE)
                             .build();
         }
         if (BlockTypes.GOLD_BLOCK == null) {
             BlockTypes.GOLD_BLOCK = AllayBlockType
-                            .builder(BlockGoldBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GOLD_BLOCK)
                             .build();
         }
@@ -4229,14 +3945,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GOLDEN_RAIL == null) {
             BlockTypes.GOLDEN_RAIL = AllayBlockType
-                            .builder(BlockGoldenRailBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GOLDEN_RAIL)
                             .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
                             .build();
         }
         if (BlockTypes.GRANITE == null) {
             BlockTypes.GRANITE = AllayBlockType
-                            .builder(BlockGraniteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GRANITE)
                             .build();
         }
@@ -4270,13 +3986,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GRASS_BLOCK == null) {
             BlockTypes.GRASS_BLOCK = AllayBlockType
-                            .builder(BlockGrassBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GRASS_BLOCK)
                             .build();
         }
         if (BlockTypes.GRASS_PATH == null) {
             BlockTypes.GRASS_PATH = AllayBlockType
-                            .builder(BlockGrassPathBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GRASS_PATH)
                             .build();
         }
@@ -4293,6 +4009,9 @@ public final class BlockTypeDefaultInitializer {
                             .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                             .build();
         }
+    }
+
+    private static void initPart3() {
         if (BlockTypes.GRAY_CANDLE_CAKE == null) {
             BlockTypes.GRAY_CANDLE_CAKE = AllayBlockType
                             .builder(BlockCandleCakeBehaviorImpl.class)
@@ -4308,7 +4027,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GRAY_CONCRETE == null) {
             BlockTypes.GRAY_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GRAY_CONCRETE)
                             .build();
         }
@@ -4373,7 +4092,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GRAY_WOOL == null) {
             BlockTypes.GRAY_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GRAY_WOOL)
                             .build();
         }
@@ -4420,7 +4139,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GREEN_CONCRETE == null) {
             BlockTypes.GREEN_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GREEN_CONCRETE)
                             .build();
         }
@@ -4485,7 +4204,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GREEN_WOOL == null) {
             BlockTypes.GREEN_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GREEN_WOOL)
                             .build();
         }
@@ -4512,14 +4231,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GRINDSTONE == null) {
             BlockTypes.GRINDSTONE = AllayBlockType
-                            .builder(BlockGrindstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.GRINDSTONE)
                             .setProperties(BlockPropertyTypes.ATTACHMENT, BlockPropertyTypes.DIRECTION_4)
                             .build();
         }
         if (BlockTypes.HANGING_ROOTS == null) {
             BlockTypes.HANGING_ROOTS = AllayBlockType
-                            .builder(BlockHangingRootsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HANGING_ROOTS)
                             .build();
         }
@@ -4746,78 +4465,78 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.HARDENED_CLAY == null) {
             BlockTypes.HARDENED_CLAY = AllayBlockType
-                            .builder(BlockHardenedClayBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HARDENED_CLAY)
                             .build();
         }
         if (BlockTypes.HAY_BLOCK == null) {
             BlockTypes.HAY_BLOCK = AllayBlockType
-                            .builder(BlockHayBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HAY_BLOCK)
                             .setProperties(BlockPropertyTypes.DEPRECATED, BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.HEAVY_CORE == null) {
             BlockTypes.HEAVY_CORE = AllayBlockType
-                            .builder(BlockHeavyCoreBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HEAVY_CORE)
                             .build();
         }
         if (BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE == null) {
             BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HEAVY_WEIGHTED_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.HONEY_BLOCK == null) {
             BlockTypes.HONEY_BLOCK = AllayBlockType
-                            .builder(BlockHoneyBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HONEY_BLOCK)
                             .build();
         }
         if (BlockTypes.HONEYCOMB_BLOCK == null) {
             BlockTypes.HONEYCOMB_BLOCK = AllayBlockType
-                            .builder(BlockHoneycombBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HONEYCOMB_BLOCK)
                             .build();
         }
         if (BlockTypes.HOPPER == null) {
             BlockTypes.HOPPER = AllayBlockType
-                            .builder(BlockHopperBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HOPPER)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TOGGLE_BIT)
                             .build();
         }
         if (BlockTypes.HORN_CORAL == null) {
             BlockTypes.HORN_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HORN_CORAL)
                             .build();
         }
         if (BlockTypes.HORN_CORAL_BLOCK == null) {
             BlockTypes.HORN_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HORN_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.HORN_CORAL_FAN == null) {
             BlockTypes.HORN_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HORN_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.HORN_CORAL_WALL_FAN == null) {
             BlockTypes.HORN_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.HORN_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.ICE == null) {
             BlockTypes.ICE = AllayBlockType
-                            .builder(BlockIceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ICE)
                             .build();
         }
@@ -4866,19 +4585,19 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.INFO_UPDATE == null) {
             BlockTypes.INFO_UPDATE = AllayBlockType
-                            .builder(BlockInfoUpdateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.INFO_UPDATE)
                             .build();
         }
         if (BlockTypes.INFO_UPDATE2 == null) {
             BlockTypes.INFO_UPDATE2 = AllayBlockType
-                            .builder(BlockInfoUpdate2BehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.INFO_UPDATE2)
                             .build();
         }
         if (BlockTypes.INVISIBLE_BEDROCK == null) {
             BlockTypes.INVISIBLE_BEDROCK = AllayBlockType
-                            .builder(BlockInvisibleBedrockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.INVISIBLE_BEDROCK)
                             .build();
         }
@@ -4891,20 +4610,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.IRON_BLOCK == null) {
             BlockTypes.IRON_BLOCK = AllayBlockType
-                            .builder(BlockIronBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.IRON_BLOCK)
                             .build();
         }
         if (BlockTypes.IRON_CHAIN == null) {
             BlockTypes.IRON_CHAIN = AllayBlockType
-                            .builder(BlockIronChainBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.IRON_CHAIN)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.IRON_DOOR == null) {
             BlockTypes.IRON_DOOR = AllayBlockType
-                            .builder(BlockIronDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.IRON_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -4917,14 +4636,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.IRON_TRAPDOOR == null) {
             BlockTypes.IRON_TRAPDOOR = AllayBlockType
-                            .builder(BlockIronTrapdoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.IRON_TRAPDOOR)
                             .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                             .build();
         }
         if (BlockTypes.JIGSAW == null) {
             BlockTypes.JIGSAW = AllayBlockType
-                            .builder(BlockJigsawBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.JIGSAW)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ROTATION)
                             .build();
@@ -4937,14 +4656,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.JUNGLE_BUTTON == null) {
             BlockTypes.JUNGLE_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.JUNGLE_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.JUNGLE_DOOR == null) {
             BlockTypes.JUNGLE_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.JUNGLE_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -4958,7 +4677,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.JUNGLE_FENCE == null) {
             BlockTypes.JUNGLE_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.JUNGLE_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -4993,20 +4712,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.JUNGLE_PLANKS == null) {
             BlockTypes.JUNGLE_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.JUNGLE_PLANKS)
                             .build();
         }
         if (BlockTypes.JUNGLE_PRESSURE_PLATE == null) {
             BlockTypes.JUNGLE_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.JUNGLE_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.JUNGLE_SAPLING == null) {
             BlockTypes.JUNGLE_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.JUNGLE_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -5062,21 +4781,21 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.KELP == null) {
             BlockTypes.KELP = AllayBlockType
-                            .builder(BlockKelpBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.KELP)
                             .setProperties(BlockPropertyTypes.KELP_AGE)
                             .build();
         }
         if (BlockTypes.LAB_TABLE == null) {
             BlockTypes.LAB_TABLE = AllayBlockType
-                            .builder(BlockLabTableBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LAB_TABLE)
                             .setProperties(BlockPropertyTypes.DIRECTION_4)
                             .build();
         }
         if (BlockTypes.LADDER == null) {
             BlockTypes.LADDER = AllayBlockType
-                            .builder(BlockLadderBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LADDER)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                             .build();
@@ -5090,7 +4809,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LAPIS_BLOCK == null) {
             BlockTypes.LAPIS_BLOCK = AllayBlockType
-                            .builder(BlockLapisBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LAPIS_BLOCK)
                             .build();
         }
@@ -5109,7 +4828,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LARGE_FERN == null) {
             BlockTypes.LARGE_FERN = AllayBlockType
-                            .builder(BlockLargeFernBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LARGE_FERN)
                             .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -5137,104 +4856,104 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LEVER == null) {
             BlockTypes.LEVER = AllayBlockType
-                            .builder(BlockLeverBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LEVER)
                             .setProperties(BlockPropertyTypes.LEVER_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_0 == null) {
             BlockTypes.LIGHT_BLOCK_0 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_0)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_1 == null) {
             BlockTypes.LIGHT_BLOCK_1 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_1)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_10 == null) {
             BlockTypes.LIGHT_BLOCK_10 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_10)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_11 == null) {
             BlockTypes.LIGHT_BLOCK_11 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_11)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_12 == null) {
             BlockTypes.LIGHT_BLOCK_12 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_12)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_13 == null) {
             BlockTypes.LIGHT_BLOCK_13 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_13)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_14 == null) {
             BlockTypes.LIGHT_BLOCK_14 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_14)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_15 == null) {
             BlockTypes.LIGHT_BLOCK_15 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_15)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_2 == null) {
             BlockTypes.LIGHT_BLOCK_2 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_2)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_3 == null) {
             BlockTypes.LIGHT_BLOCK_3 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_3)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_4 == null) {
             BlockTypes.LIGHT_BLOCK_4 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_4)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_5 == null) {
             BlockTypes.LIGHT_BLOCK_5 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_5)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_6 == null) {
             BlockTypes.LIGHT_BLOCK_6 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_6)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_7 == null) {
             BlockTypes.LIGHT_BLOCK_7 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_7)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_8 == null) {
             BlockTypes.LIGHT_BLOCK_8 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_8)
                             .build();
         }
         if (BlockTypes.LIGHT_BLOCK_9 == null) {
             BlockTypes.LIGHT_BLOCK_9 = AllayBlockType
-                            .builder(BlockLightBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLOCK_9)
                             .build();
         }
@@ -5260,7 +4979,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIGHT_BLUE_CONCRETE == null) {
             BlockTypes.LIGHT_BLUE_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLUE_CONCRETE)
                             .build();
         }
@@ -5325,7 +5044,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIGHT_BLUE_WOOL == null) {
             BlockTypes.LIGHT_BLUE_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_BLUE_WOOL)
                             .build();
         }
@@ -5372,7 +5091,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIGHT_GRAY_CONCRETE == null) {
             BlockTypes.LIGHT_GRAY_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_GRAY_CONCRETE)
                             .build();
         }
@@ -5430,7 +5149,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIGHT_GRAY_WOOL == null) {
             BlockTypes.LIGHT_GRAY_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_GRAY_WOOL)
                             .build();
         }
@@ -5457,7 +5176,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE == null) {
             BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIGHT_WEIGHTED_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
@@ -5504,7 +5223,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIME_CONCRETE == null) {
             BlockTypes.LIME_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIME_CONCRETE)
                             .build();
         }
@@ -5569,7 +5288,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIME_WOOL == null) {
             BlockTypes.LIME_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIME_WOOL)
                             .build();
         }
@@ -5601,6 +5320,9 @@ public final class BlockTypeDefaultInitializer {
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
+    }
+
+    private static void initPart4() {
         if (BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE == null) {
             BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = AllayBlockType
                             .builder(BlockOreBehaviorImpl.class)
@@ -5616,7 +5338,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIT_PUMPKIN == null) {
             BlockTypes.LIT_PUMPKIN = AllayBlockType
-                            .builder(BlockLitPumpkinBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LIT_PUMPKIN)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -5642,13 +5364,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LODESTONE == null) {
             BlockTypes.LODESTONE = AllayBlockType
-                            .builder(BlockLodestoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LODESTONE)
                             .build();
         }
         if (BlockTypes.LOOM == null) {
             BlockTypes.LOOM = AllayBlockType
-                            .builder(BlockLoomBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.LOOM)
                             .setProperties(BlockPropertyTypes.DIRECTION_4)
                             .build();
@@ -5675,7 +5397,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MAGENTA_CONCRETE == null) {
             BlockTypes.MAGENTA_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MAGENTA_CONCRETE)
                             .build();
         }
@@ -5740,7 +5462,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MAGENTA_WOOL == null) {
             BlockTypes.MAGENTA_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MAGENTA_WOOL)
                             .build();
         }
@@ -5767,20 +5489,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MAGMA == null) {
             BlockTypes.MAGMA = AllayBlockType
-                            .builder(BlockMagmaBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MAGMA)
                             .build();
         }
         if (BlockTypes.MANGROVE_BUTTON == null) {
             BlockTypes.MANGROVE_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MANGROVE_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.MANGROVE_DOOR == null) {
             BlockTypes.MANGROVE_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MANGROVE_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -5794,7 +5516,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MANGROVE_FENCE == null) {
             BlockTypes.MANGROVE_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MANGROVE_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -5829,27 +5551,27 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MANGROVE_PLANKS == null) {
             BlockTypes.MANGROVE_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MANGROVE_PLANKS)
                             .build();
         }
         if (BlockTypes.MANGROVE_PRESSURE_PLATE == null) {
             BlockTypes.MANGROVE_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MANGROVE_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.MANGROVE_PROPAGULE == null) {
             BlockTypes.MANGROVE_PROPAGULE = AllayBlockType
-                            .builder(BlockMangrovePropaguleBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MANGROVE_PROPAGULE)
                             .setProperties(BlockPropertyTypes.HANGING, BlockPropertyTypes.PROPAGULE_STAGE)
                             .build();
         }
         if (BlockTypes.MANGROVE_ROOTS == null) {
             BlockTypes.MANGROVE_ROOTS = AllayBlockType
-                            .builder(BlockMangroveRootsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MANGROVE_ROOTS)
                             .build();
         }
@@ -5904,7 +5626,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MATERIAL_REDUCER == null) {
             BlockTypes.MATERIAL_REDUCER = AllayBlockType
-                            .builder(BlockMaterialReducerBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MATERIAL_REDUCER)
                             .setProperties(BlockPropertyTypes.DIRECTION_4)
                             .build();
@@ -5918,26 +5640,26 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MELON_BLOCK == null) {
             BlockTypes.MELON_BLOCK = AllayBlockType
-                            .builder(BlockMelonBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MELON_BLOCK)
                             .build();
         }
         if (BlockTypes.MELON_STEM == null) {
             BlockTypes.MELON_STEM = AllayBlockType
-                            .builder(BlockMelonStemBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MELON_STEM)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH_8)
                             .build();
         }
         if (BlockTypes.MOB_SPAWNER == null) {
             BlockTypes.MOB_SPAWNER = AllayBlockType
-                            .builder(BlockMobSpawnerBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MOB_SPAWNER)
                             .build();
         }
         if (BlockTypes.MOSS_BLOCK == null) {
             BlockTypes.MOSS_BLOCK = AllayBlockType
-                            .builder(BlockMossBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MOSS_BLOCK)
                             .build();
         }
@@ -5949,7 +5671,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MOSSY_COBBLESTONE == null) {
             BlockTypes.MOSSY_COBBLESTONE = AllayBlockType
-                            .builder(BlockMossyCobblestoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MOSSY_COBBLESTONE)
                             .build();
         }
@@ -6011,19 +5733,19 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MOSSY_STONE_BRICKS == null) {
             BlockTypes.MOSSY_STONE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MOSSY_STONE_BRICKS)
                             .build();
         }
         if (BlockTypes.MOVING_BLOCK == null) {
             BlockTypes.MOVING_BLOCK = AllayBlockType
-                            .builder(BlockMovingBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MOVING_BLOCK)
                             .build();
         }
         if (BlockTypes.MUD == null) {
             BlockTypes.MUD = AllayBlockType
-                            .builder(BlockMudBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MUD)
                             .build();
         }
@@ -6057,33 +5779,33 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MUD_BRICKS == null) {
             BlockTypes.MUD_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MUD_BRICKS)
                             .build();
         }
         if (BlockTypes.MUDDY_MANGROVE_ROOTS == null) {
             BlockTypes.MUDDY_MANGROVE_ROOTS = AllayBlockType
-                            .builder(BlockMuddyMangroveRootsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MUDDY_MANGROVE_ROOTS)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.MUSHROOM_STEM == null) {
             BlockTypes.MUSHROOM_STEM = AllayBlockType
-                            .builder(BlockMushroomStemBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MUSHROOM_STEM)
                             .setProperties(BlockPropertyTypes.HUGE_MUSHROOM_BITS)
                             .build();
         }
         if (BlockTypes.MYCELIUM == null) {
             BlockTypes.MYCELIUM = AllayBlockType
-                            .builder(BlockMyceliumBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.MYCELIUM)
                             .build();
         }
         if (BlockTypes.NETHER_BRICK == null) {
             BlockTypes.NETHER_BRICK = AllayBlockType
-                            .builder(BlockNetherBrickBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHER_BRICK)
                             .build();
         }
@@ -6096,7 +5818,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.NETHER_BRICK_FENCE == null) {
             BlockTypes.NETHER_BRICK_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHER_BRICK_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -6130,38 +5852,38 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.NETHER_SPROUTS == null) {
             BlockTypes.NETHER_SPROUTS = AllayBlockType
-                            .builder(BlockNetherSproutsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHER_SPROUTS)
                             .build();
         }
         if (BlockTypes.NETHER_WART == null) {
             BlockTypes.NETHER_WART = AllayBlockType
-                            .builder(BlockNetherWartBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHER_WART)
                             .setProperties(BlockPropertyTypes.AGE_4)
                             .build();
         }
         if (BlockTypes.NETHER_WART_BLOCK == null) {
             BlockTypes.NETHER_WART_BLOCK = AllayBlockType
-                            .builder(BlockNetherWartBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHER_WART_BLOCK)
                             .build();
         }
         if (BlockTypes.NETHERITE_BLOCK == null) {
             BlockTypes.NETHERITE_BLOCK = AllayBlockType
-                            .builder(BlockNetheriteBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHERITE_BLOCK)
                             .build();
         }
         if (BlockTypes.NETHERRACK == null) {
             BlockTypes.NETHERRACK = AllayBlockType
-                            .builder(BlockNetherrackBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHERRACK)
                             .build();
         }
         if (BlockTypes.NETHERREACTOR == null) {
             BlockTypes.NETHERREACTOR = AllayBlockType
-                            .builder(BlockNetherreactorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.NETHERREACTOR)
                             .build();
         }
@@ -6201,7 +5923,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OAK_FENCE == null) {
             BlockTypes.OAK_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.OAK_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -6229,13 +5951,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OAK_PLANKS == null) {
             BlockTypes.OAK_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.OAK_PLANKS)
                             .build();
         }
         if (BlockTypes.OAK_SAPLING == null) {
             BlockTypes.OAK_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.OAK_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -6270,20 +5992,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OBSERVER == null) {
             BlockTypes.OBSERVER = AllayBlockType
-                            .builder(BlockObserverBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.OBSERVER)
                             .setProperties(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
                             .build();
         }
         if (BlockTypes.OBSIDIAN == null) {
             BlockTypes.OBSIDIAN = AllayBlockType
-                            .builder(BlockObsidianBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.OBSIDIAN)
                             .build();
         }
         if (BlockTypes.OCHRE_FROGLIGHT == null) {
             BlockTypes.OCHRE_FROGLIGHT = AllayBlockType
-                            .builder(BlockOchreFroglightBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.OCHRE_FROGLIGHT)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -6316,7 +6038,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ORANGE_CONCRETE == null) {
             BlockTypes.ORANGE_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ORANGE_CONCRETE)
                             .build();
         }
@@ -6394,7 +6116,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ORANGE_WOOL == null) {
             BlockTypes.ORANGE_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.ORANGE_WOOL)
                             .build();
         }
@@ -6460,7 +6182,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_COPPER_CHEST == null) {
             BlockTypes.OXIDIZED_COPPER_CHEST = AllayBlockType
-                            .builder(BlockOxidizedCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.OXIDIZED_COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -6535,26 +6257,26 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PACKED_ICE == null) {
             BlockTypes.PACKED_ICE = AllayBlockType
-                            .builder(BlockIceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PACKED_ICE)
                             .build();
         }
         if (BlockTypes.PACKED_MUD == null) {
             BlockTypes.PACKED_MUD = AllayBlockType
-                            .builder(BlockPackedMudBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PACKED_MUD)
                             .build();
         }
         if (BlockTypes.PALE_HANGING_MOSS == null) {
             BlockTypes.PALE_HANGING_MOSS = AllayBlockType
-                            .builder(BlockPaleHangingMossBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_HANGING_MOSS)
                             .setProperties(BlockPropertyTypes.TIP)
                             .build();
         }
         if (BlockTypes.PALE_MOSS_BLOCK == null) {
             BlockTypes.PALE_MOSS_BLOCK = AllayBlockType
-                            .builder(BlockPaleMossBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_MOSS_BLOCK)
                             .build();
         }
@@ -6567,14 +6289,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PALE_OAK_BUTTON == null) {
             BlockTypes.PALE_OAK_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_OAK_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.PALE_OAK_DOOR == null) {
             BlockTypes.PALE_OAK_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_OAK_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -6588,7 +6310,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PALE_OAK_FENCE == null) {
             BlockTypes.PALE_OAK_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_OAK_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -6623,20 +6345,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PALE_OAK_PLANKS == null) {
             BlockTypes.PALE_OAK_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_OAK_PLANKS)
                             .build();
         }
         if (BlockTypes.PALE_OAK_PRESSURE_PLATE == null) {
             BlockTypes.PALE_OAK_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_OAK_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.PALE_OAK_SAPLING == null) {
             BlockTypes.PALE_OAK_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PALE_OAK_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -6692,7 +6414,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PEARLESCENT_FROGLIGHT == null) {
             BlockTypes.PEARLESCENT_FROGLIGHT = AllayBlockType
-                            .builder(BlockPearlescentFroglightBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PEARLESCENT_FROGLIGHT)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -6747,7 +6469,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PINK_CONCRETE == null) {
             BlockTypes.PINK_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PINK_CONCRETE)
                             .build();
         }
@@ -6825,7 +6547,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PINK_WOOL == null) {
             BlockTypes.PINK_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PINK_WOOL)
                             .build();
         }
@@ -6852,21 +6574,21 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PISTON == null) {
             BlockTypes.PISTON = AllayBlockType
-                            .builder(BlockPistonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PISTON)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.PISTON_ARM_COLLISION == null) {
             BlockTypes.PISTON_ARM_COLLISION = AllayBlockType
-                            .builder(BlockPistonArmCollisionBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PISTON_ARM_COLLISION)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.PITCHER_CROP == null) {
             BlockTypes.PITCHER_CROP = AllayBlockType
-                            .builder(BlockPitcherCropBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PITCHER_CROP)
                             .setProperties(BlockPropertyTypes.GROWTH_8, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -6887,7 +6609,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PODZOL == null) {
             BlockTypes.PODZOL = AllayBlockType
-                            .builder(BlockPodzolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PODZOL)
                             .build();
         }
@@ -6900,7 +6622,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_ANDESITE == null) {
             BlockTypes.POLISHED_ANDESITE = AllayBlockType
-                            .builder(BlockPolishedAndesiteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_ANDESITE)
                             .build();
         }
@@ -6927,17 +6649,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_BASALT == null) {
             BlockTypes.POLISHED_BASALT = AllayBlockType
-                            .builder(BlockPolishedBasaltBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_BASALT)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.POLISHED_BLACKSTONE == null) {
             BlockTypes.POLISHED_BLACKSTONE = AllayBlockType
-                            .builder(BlockPolishedBlackstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_BLACKSTONE)
                             .build();
         }
+    }
+
+    private static void initPart5() {
         if (BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = AllayBlockType
                             .builder(BlockDoubleSlabBehaviorImpl.class)
@@ -6968,13 +6693,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_BLACKSTONE_BRICKS == null) {
             BlockTypes.POLISHED_BLACKSTONE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICKS)
                             .build();
         }
         if (BlockTypes.POLISHED_BLACKSTONE_BUTTON == null) {
             BlockTypes.POLISHED_BLACKSTONE_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
@@ -6988,7 +6713,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE == null) {
             BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
@@ -7016,7 +6741,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_CINNABAR == null) {
             BlockTypes.POLISHED_CINNABAR = AllayBlockType
-                            .builder(BlockPolishedCinnabarBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_CINNABAR)
                             .build();
         }
@@ -7050,7 +6775,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_DEEPSLATE == null) {
             BlockTypes.POLISHED_DEEPSLATE = AllayBlockType
-                            .builder(BlockPolishedDeepslateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_DEEPSLATE)
                             .build();
         }
@@ -7084,7 +6809,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_DIORITE == null) {
             BlockTypes.POLISHED_DIORITE = AllayBlockType
-                            .builder(BlockPolishedDioriteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_DIORITE)
                             .build();
         }
@@ -7111,7 +6836,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_GRANITE == null) {
             BlockTypes.POLISHED_GRANITE = AllayBlockType
-                            .builder(BlockPolishedGraniteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_GRANITE)
                             .build();
         }
@@ -7138,7 +6863,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_SULFUR == null) {
             BlockTypes.POLISHED_SULFUR = AllayBlockType
-                            .builder(BlockPolishedSulfurBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_SULFUR)
                             .build();
         }
@@ -7172,7 +6897,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_TUFF == null) {
             BlockTypes.POLISHED_TUFF = AllayBlockType
-                            .builder(BlockPolishedTuffBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POLISHED_TUFF)
                             .build();
         }
@@ -7206,14 +6931,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POPLAR_BUTTON == null) {
             BlockTypes.POPLAR_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POPLAR_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.POPLAR_DOOR == null) {
             BlockTypes.POPLAR_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POPLAR_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -7227,7 +6952,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POPLAR_FENCE == null) {
             BlockTypes.POPLAR_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POPLAR_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -7255,20 +6980,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POPLAR_PLANKS == null) {
             BlockTypes.POPLAR_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POPLAR_PLANKS)
                             .build();
         }
         if (BlockTypes.POPLAR_PRESSURE_PLATE == null) {
             BlockTypes.POPLAR_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POPLAR_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.POPLAR_SAPLING == null) {
             BlockTypes.POPLAR_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POPLAR_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -7330,28 +7055,28 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PORTAL == null) {
             BlockTypes.PORTAL = AllayBlockType
-                            .builder(BlockPortalBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PORTAL)
                             .setProperties(BlockPropertyTypes.PORTAL_AXIS)
                             .build();
         }
         if (BlockTypes.POTATOES == null) {
             BlockTypes.POTATOES = AllayBlockType
-                            .builder(BlockPotatoesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POTATOES)
                             .setProperties(BlockPropertyTypes.GROWTH_8)
                             .build();
         }
         if (BlockTypes.POTENT_SULFUR == null) {
             BlockTypes.POTENT_SULFUR = AllayBlockType
-                            .builder(BlockPotentSulfurBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POTENT_SULFUR)
                             .setProperties(BlockPropertyTypes.POTENT_SULFUR_STATE)
                             .build();
         }
         if (BlockTypes.POWDER_SNOW == null) {
             BlockTypes.POWDER_SNOW = AllayBlockType
-                            .builder(BlockPowderSnowBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.POWDER_SNOW)
                             .build();
         }
@@ -7371,7 +7096,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PRISMARINE == null) {
             BlockTypes.PRISMARINE = AllayBlockType
-                            .builder(BlockPrismarineBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PRISMARINE)
                             .build();
         }
@@ -7391,7 +7116,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PRISMARINE_BRICKS == null) {
             BlockTypes.PRISMARINE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PRISMARINE_BRICKS)
                             .build();
         }
@@ -7432,14 +7157,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PUMPKIN == null) {
             BlockTypes.PUMPKIN = AllayBlockType
-                            .builder(BlockPumpkinBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PUMPKIN)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.PUMPKIN_STEM == null) {
             BlockTypes.PUMPKIN_STEM = AllayBlockType
-                            .builder(BlockPumpkinStemBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PUMPKIN_STEM)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH_8)
                             .build();
@@ -7466,7 +7191,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PURPLE_CONCRETE == null) {
             BlockTypes.PURPLE_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PURPLE_CONCRETE)
                             .build();
         }
@@ -7531,7 +7256,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PURPLE_WOOL == null) {
             BlockTypes.PURPLE_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PURPLE_WOOL)
                             .build();
         }
@@ -7558,7 +7283,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PURPUR_BLOCK == null) {
             BlockTypes.PURPUR_BLOCK = AllayBlockType
-                            .builder(BlockPurpurBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PURPUR_BLOCK)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -7572,7 +7297,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PURPUR_PILLAR == null) {
             BlockTypes.PURPUR_PILLAR = AllayBlockType
-                            .builder(BlockPurpurPillarBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.PURPUR_PILLAR)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -7593,14 +7318,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.QUARTZ_BLOCK == null) {
             BlockTypes.QUARTZ_BLOCK = AllayBlockType
-                            .builder(BlockQuartzBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.QUARTZ_BLOCK)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.QUARTZ_BRICKS == null) {
             BlockTypes.QUARTZ_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.QUARTZ_BRICKS)
                             .build();
         }
@@ -7619,7 +7344,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.QUARTZ_PILLAR == null) {
             BlockTypes.QUARTZ_PILLAR = AllayBlockType
-                            .builder(BlockQuartzPillarBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.QUARTZ_PILLAR)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -7640,26 +7365,26 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RAIL == null) {
             BlockTypes.RAIL = AllayBlockType
-                            .builder(BlockRailBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RAIL)
                             .setProperties(BlockPropertyTypes.RAIL_DIRECTION_10)
                             .build();
         }
         if (BlockTypes.RAW_COPPER_BLOCK == null) {
             BlockTypes.RAW_COPPER_BLOCK = AllayBlockType
-                            .builder(BlockRawCopperBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RAW_COPPER_BLOCK)
                             .build();
         }
         if (BlockTypes.RAW_GOLD_BLOCK == null) {
             BlockTypes.RAW_GOLD_BLOCK = AllayBlockType
-                            .builder(BlockRawGoldBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RAW_GOLD_BLOCK)
                             .build();
         }
         if (BlockTypes.RAW_IRON_BLOCK == null) {
             BlockTypes.RAW_IRON_BLOCK = AllayBlockType
-                            .builder(BlockRawIronBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RAW_IRON_BLOCK)
                             .build();
         }
@@ -7685,7 +7410,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_CONCRETE == null) {
             BlockTypes.RED_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RED_CONCRETE)
                             .build();
         }
@@ -7725,20 +7450,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_MUSHROOM == null) {
             BlockTypes.RED_MUSHROOM = AllayBlockType
-                            .builder(BlockRedMushroomBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RED_MUSHROOM)
                             .build();
         }
         if (BlockTypes.RED_MUSHROOM_BLOCK == null) {
             BlockTypes.RED_MUSHROOM_BLOCK = AllayBlockType
-                            .builder(BlockRedMushroomBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RED_MUSHROOM_BLOCK)
                             .setProperties(BlockPropertyTypes.HUGE_MUSHROOM_BITS)
                             .build();
         }
         if (BlockTypes.RED_NETHER_BRICK == null) {
             BlockTypes.RED_NETHER_BRICK = AllayBlockType
-                            .builder(BlockRedNetherBrickBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RED_NETHER_BRICK)
                             .build();
         }
@@ -7785,7 +7510,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_SANDSTONE == null) {
             BlockTypes.RED_SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RED_SANDSTONE)
                             .build();
         }
@@ -7819,7 +7544,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_SHRUB == null) {
             BlockTypes.RED_SHRUB = AllayBlockType
-                            .builder(BlockRedShrubBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RED_SHRUB)
                             .build();
         }
@@ -7856,7 +7581,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_WOOL == null) {
             BlockTypes.RED_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RED_WOOL)
                             .build();
         }
@@ -7883,7 +7608,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.REDSTONE_BLOCK == null) {
             BlockTypes.REDSTONE_BLOCK = AllayBlockType
-                            .builder(BlockRedstoneBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.REDSTONE_BLOCK)
                             .build();
         }
@@ -7908,40 +7633,40 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.REDSTONE_WIRE == null) {
             BlockTypes.REDSTONE_WIRE = AllayBlockType
-                            .builder(BlockRedstoneWireBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.REDSTONE_WIRE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.REEDS == null) {
             BlockTypes.REEDS = AllayBlockType
-                            .builder(BlockReedsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.REEDS)
                             .setProperties(BlockPropertyTypes.AGE_16)
                             .build();
         }
         if (BlockTypes.REINFORCED_DEEPSLATE == null) {
             BlockTypes.REINFORCED_DEEPSLATE = AllayBlockType
-                            .builder(BlockReinforcedDeepslateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.REINFORCED_DEEPSLATE)
                             .build();
         }
         if (BlockTypes.REPEATING_COMMAND_BLOCK == null) {
             BlockTypes.REPEATING_COMMAND_BLOCK = AllayBlockType
-                            .builder(BlockRepeatingCommandBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.REPEATING_COMMAND_BLOCK)
                             .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.RESERVED6 == null) {
             BlockTypes.RESERVED6 = AllayBlockType
-                            .builder(BlockReserved6BehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RESERVED6)
                             .build();
         }
         if (BlockTypes.RESIN_BLOCK == null) {
             BlockTypes.RESIN_BLOCK = AllayBlockType
-                            .builder(BlockResinBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RESIN_BLOCK)
                             .build();
         }
@@ -7975,13 +7700,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RESIN_BRICKS == null) {
             BlockTypes.RESIN_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RESIN_BRICKS)
                             .build();
         }
         if (BlockTypes.RESIN_CLUMP == null) {
             BlockTypes.RESIN_CLUMP = AllayBlockType
-                            .builder(BlockResinClumpBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.RESIN_CLUMP)
                             .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
                             .build();
@@ -8008,7 +7733,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SANDSTONE == null) {
             BlockTypes.SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SANDSTONE)
                             .build();
         }
@@ -8049,80 +7774,80 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SCULK == null) {
             BlockTypes.SCULK = AllayBlockType
-                            .builder(BlockSculkBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SCULK)
                             .build();
         }
         if (BlockTypes.SCULK_CATALYST == null) {
             BlockTypes.SCULK_CATALYST = AllayBlockType
-                            .builder(BlockSculkCatalystBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SCULK_CATALYST)
                             .setProperties(BlockPropertyTypes.BLOOM)
                             .build();
         }
         if (BlockTypes.SCULK_SENSOR == null) {
             BlockTypes.SCULK_SENSOR = AllayBlockType
-                            .builder(BlockSculkSensorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SCULK_SENSOR)
                             .setProperties(BlockPropertyTypes.SCULK_SENSOR_PHASE)
                             .build();
         }
         if (BlockTypes.SCULK_SHRIEKER == null) {
             BlockTypes.SCULK_SHRIEKER = AllayBlockType
-                            .builder(BlockSculkShriekerBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SCULK_SHRIEKER)
                             .setProperties(BlockPropertyTypes.ACTIVE, BlockPropertyTypes.CAN_SUMMON)
                             .build();
         }
         if (BlockTypes.SCULK_VEIN == null) {
             BlockTypes.SCULK_VEIN = AllayBlockType
-                            .builder(BlockSculkVeinBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SCULK_VEIN)
                             .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
                             .build();
         }
         if (BlockTypes.SEA_LANTERN == null) {
             BlockTypes.SEA_LANTERN = AllayBlockType
-                            .builder(BlockSeaLanternBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SEA_LANTERN)
                             .build();
         }
         if (BlockTypes.SEA_PICKLE == null) {
             BlockTypes.SEA_PICKLE = AllayBlockType
-                            .builder(BlockSeaPickleBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SEA_PICKLE)
                             .setProperties(BlockPropertyTypes.CLUSTER_COUNT, BlockPropertyTypes.DEAD_BIT)
                             .build();
         }
         if (BlockTypes.SEAGRASS == null) {
             BlockTypes.SEAGRASS = AllayBlockType
-                            .builder(BlockSeagrassBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SEAGRASS)
                             .setProperties(BlockPropertyTypes.SEA_GRASS_TYPE)
                             .build();
         }
         if (BlockTypes.SHELF_MUSHROOM == null) {
             BlockTypes.SHELF_MUSHROOM = AllayBlockType
-                            .builder(BlockShelfMushroomBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SHELF_MUSHROOM)
                             .setProperties(BlockPropertyTypes.GROWTH_2, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.SHORT_DRY_GRASS == null) {
             BlockTypes.SHORT_DRY_GRASS = AllayBlockType
-                            .builder(BlockShortDryGrassBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SHORT_DRY_GRASS)
                             .build();
         }
         if (BlockTypes.SHORT_GRASS == null) {
             BlockTypes.SHORT_GRASS = AllayBlockType
-                            .builder(BlockShortGrassBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SHORT_GRASS)
                             .build();
         }
         if (BlockTypes.SHROOMLIGHT == null) {
             BlockTypes.SHROOMLIGHT = AllayBlockType
-                            .builder(BlockShroomlightBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SHROOMLIGHT)
                             .build();
         }
@@ -8142,7 +7867,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SLIME == null) {
             BlockTypes.SLIME = AllayBlockType
-                            .builder(BlockSlimeBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SLIME)
                             .build();
         }
@@ -8155,14 +7880,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMALL_DRIPLEAF_BLOCK == null) {
             BlockTypes.SMALL_DRIPLEAF_BLOCK = AllayBlockType
-                            .builder(BlockSmallDripleafBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SMALL_DRIPLEAF_BLOCK)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
         }
         if (BlockTypes.SMITHING_TABLE == null) {
             BlockTypes.SMITHING_TABLE = AllayBlockType
-                            .builder(BlockSmithingTableBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SMITHING_TABLE)
                             .build();
         }
@@ -8175,13 +7900,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_BASALT == null) {
             BlockTypes.SMOOTH_BASALT = AllayBlockType
-                            .builder(BlockSmoothBasaltBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SMOOTH_BASALT)
                             .build();
         }
         if (BlockTypes.SMOOTH_QUARTZ == null) {
             BlockTypes.SMOOTH_QUARTZ = AllayBlockType
-                            .builder(BlockSmoothQuartzBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SMOOTH_QUARTZ)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
@@ -8209,7 +7934,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_RED_SANDSTONE == null) {
             BlockTypes.SMOOTH_RED_SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE)
                             .build();
         }
@@ -8236,7 +7961,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_SANDSTONE == null) {
             BlockTypes.SMOOTH_SANDSTONE = AllayBlockType
-                            .builder(BlockSandstoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SMOOTH_SANDSTONE)
                             .build();
         }
@@ -8263,7 +7988,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_STONE == null) {
             BlockTypes.SMOOTH_STONE = AllayBlockType
-                            .builder(BlockSmoothStoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SMOOTH_STONE)
                             .build();
         }
@@ -8281,16 +8006,19 @@ public final class BlockTypeDefaultInitializer {
                             .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                             .build();
         }
+    }
+
+    private static void initPart6() {
         if (BlockTypes.SNIFFER_EGG == null) {
             BlockTypes.SNIFFER_EGG = AllayBlockType
-                            .builder(BlockSnifferEggBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SNIFFER_EGG)
                             .setProperties(BlockPropertyTypes.CRACKED_STATE)
                             .build();
         }
         if (BlockTypes.SNOW == null) {
             BlockTypes.SNOW = AllayBlockType
-                            .builder(BlockSnowBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SNOW)
                             .build();
         }
@@ -8303,14 +8031,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SOUL_CAMPFIRE == null) {
             BlockTypes.SOUL_CAMPFIRE = AllayBlockType
-                            .builder(BlockCampfireBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SOUL_CAMPFIRE)
                             .setProperties(BlockPropertyTypes.EXTINGUISHED, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.SOUL_FIRE == null) {
             BlockTypes.SOUL_FIRE = AllayBlockType
-                            .builder(BlockFireBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SOUL_FIRE)
                             .setProperties(BlockPropertyTypes.AGE_16)
                             .build();
@@ -8324,13 +8052,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SOUL_SAND == null) {
             BlockTypes.SOUL_SAND = AllayBlockType
-                            .builder(BlockSoulSandBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SOUL_SAND)
                             .build();
         }
         if (BlockTypes.SOUL_SOIL == null) {
             BlockTypes.SOUL_SOIL = AllayBlockType
-                            .builder(BlockSoulSoilBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SOUL_SOIL)
                             .build();
         }
@@ -8343,26 +8071,26 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SPONGE == null) {
             BlockTypes.SPONGE = AllayBlockType
-                            .builder(BlockSpongeBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPONGE)
                             .build();
         }
         if (BlockTypes.SPORE_BLOSSOM == null) {
             BlockTypes.SPORE_BLOSSOM = AllayBlockType
-                            .builder(BlockSporeBlossomBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPORE_BLOSSOM)
                             .build();
         }
         if (BlockTypes.SPRUCE_BUTTON == null) {
             BlockTypes.SPRUCE_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPRUCE_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.SPRUCE_DOOR == null) {
             BlockTypes.SPRUCE_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPRUCE_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -8376,7 +8104,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SPRUCE_FENCE == null) {
             BlockTypes.SPRUCE_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPRUCE_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -8411,20 +8139,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SPRUCE_PLANKS == null) {
             BlockTypes.SPRUCE_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPRUCE_PLANKS)
                             .build();
         }
         if (BlockTypes.SPRUCE_PRESSURE_PLATE == null) {
             BlockTypes.SPRUCE_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPRUCE_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.SPRUCE_SAPLING == null) {
             BlockTypes.SPRUCE_SAPLING = AllayBlockType
-                            .builder(BlockSaplingBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SPRUCE_SAPLING)
                             .setProperties(BlockPropertyTypes.AGE_BIT)
                             .build();
@@ -8494,21 +8222,21 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.STICKY_PISTON == null) {
             BlockTypes.STICKY_PISTON = AllayBlockType
-                            .builder(BlockStickyPistonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STICKY_PISTON)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.STICKY_PISTON_ARM_COLLISION == null) {
             BlockTypes.STICKY_PISTON_ARM_COLLISION = AllayBlockType
-                            .builder(BlockStickyPistonArmCollisionBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STICKY_PISTON_ARM_COLLISION)
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.STONE == null) {
             BlockTypes.STONE = AllayBlockType
-                            .builder(BlockStoneBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STONE)
                             .build();
         }
@@ -8542,20 +8270,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.STONE_BRICKS == null) {
             BlockTypes.STONE_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STONE_BRICKS)
                             .build();
         }
         if (BlockTypes.STONE_BUTTON == null) {
             BlockTypes.STONE_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STONE_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.STONE_PRESSURE_PLATE == null) {
             BlockTypes.STONE_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STONE_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
@@ -8569,20 +8297,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.STONECUTTER == null) {
             BlockTypes.STONECUTTER = AllayBlockType
-                            .builder(BlockStonecutterBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STONECUTTER)
                             .build();
         }
         if (BlockTypes.STONECUTTER_BLOCK == null) {
             BlockTypes.STONECUTTER_BLOCK = AllayBlockType
-                            .builder(BlockStonecutterBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STONECUTTER_BLOCK)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.STRAW_BED == null) {
             BlockTypes.STRAW_BED = AllayBlockType
-                            .builder(BlockStrawBedBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STRAW_BED)
                             .setProperties(BlockPropertyTypes.HEAD_PIECE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OCCUPIED_BIT)
                             .build();
@@ -8764,20 +8492,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.STRUCTURE_BLOCK == null) {
             BlockTypes.STRUCTURE_BLOCK = AllayBlockType
-                            .builder(BlockStructureBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STRUCTURE_BLOCK)
                             .setProperties(BlockPropertyTypes.STRUCTURE_BLOCK_TYPE)
                             .build();
         }
         if (BlockTypes.STRUCTURE_VOID == null) {
             BlockTypes.STRUCTURE_VOID = AllayBlockType
-                            .builder(BlockStructureVoidBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.STRUCTURE_VOID)
                             .build();
         }
         if (BlockTypes.SULFUR == null) {
             BlockTypes.SULFUR = AllayBlockType
-                            .builder(BlockSulfurBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SULFUR)
                             .build();
         }
@@ -8811,7 +8539,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SULFUR_BRICKS == null) {
             BlockTypes.SULFUR_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SULFUR_BRICKS)
                             .build();
         }
@@ -8831,7 +8559,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SULFUR_SPIKE == null) {
             BlockTypes.SULFUR_SPIKE = AllayBlockType
-                            .builder(BlockSulfurSpikeBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SULFUR_SPIKE)
                             .setProperties(BlockPropertyTypes.DRIPSTONE_THICKNESS, BlockPropertyTypes.HANGING)
                             .build();
@@ -8873,20 +8601,20 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SWEET_BERRY_BUSH == null) {
             BlockTypes.SWEET_BERRY_BUSH = AllayBlockType
-                            .builder(BlockSweetBerryBushBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.SWEET_BERRY_BUSH)
                             .setProperties(BlockPropertyTypes.GROWTH_8)
                             .build();
         }
         if (BlockTypes.TALL_DRY_GRASS == null) {
             BlockTypes.TALL_DRY_GRASS = AllayBlockType
-                            .builder(BlockTallDryGrassBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TALL_DRY_GRASS)
                             .build();
         }
         if (BlockTypes.TALL_GRASS == null) {
             BlockTypes.TALL_GRASS = AllayBlockType
-                            .builder(BlockTallGrassBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TALL_GRASS)
                             .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -8925,7 +8653,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TORCHFLOWER_CROP == null) {
             BlockTypes.TORCHFLOWER_CROP = AllayBlockType
-                            .builder(BlockTorchflowerCropBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TORCHFLOWER_CROP)
                             .setProperties(BlockPropertyTypes.GROWTH_8)
                             .build();
@@ -8946,54 +8674,54 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TRIAL_SPAWNER == null) {
             BlockTypes.TRIAL_SPAWNER = AllayBlockType
-                            .builder(BlockTrialSpawnerBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TRIAL_SPAWNER)
                             .setProperties(BlockPropertyTypes.OMINOUS, BlockPropertyTypes.TRIAL_SPAWNER_STATE)
                             .build();
         }
         if (BlockTypes.TRIP_WIRE == null) {
             BlockTypes.TRIP_WIRE = AllayBlockType
-                            .builder(BlockTripWireBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TRIP_WIRE)
                             .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.DISARMED_BIT, BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.SUSPENDED_BIT)
                             .build();
         }
         if (BlockTypes.TRIPWIRE_HOOK == null) {
             BlockTypes.TRIPWIRE_HOOK = AllayBlockType
-                            .builder(BlockTripwireHookBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TRIPWIRE_HOOK)
                             .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.POWERED_BIT)
                             .build();
         }
         if (BlockTypes.TUBE_CORAL == null) {
             BlockTypes.TUBE_CORAL = AllayBlockType
-                            .builder(BlockCoralBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TUBE_CORAL)
                             .build();
         }
         if (BlockTypes.TUBE_CORAL_BLOCK == null) {
             BlockTypes.TUBE_CORAL_BLOCK = AllayBlockType
-                            .builder(BlockCoralBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TUBE_CORAL_BLOCK)
                             .build();
         }
         if (BlockTypes.TUBE_CORAL_FAN == null) {
             BlockTypes.TUBE_CORAL_FAN = AllayBlockType
-                            .builder(BlockCoralFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TUBE_CORAL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                             .build();
         }
         if (BlockTypes.TUBE_CORAL_WALL_FAN == null) {
             BlockTypes.TUBE_CORAL_WALL_FAN = AllayBlockType
-                            .builder(BlockCoralWallFanBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TUBE_CORAL_WALL_FAN)
                             .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                             .build();
         }
         if (BlockTypes.TUFF == null) {
             BlockTypes.TUFF = AllayBlockType
-                            .builder(BlockTuffBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TUFF)
                             .build();
         }
@@ -9027,7 +8755,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TUFF_BRICKS == null) {
             BlockTypes.TUFF_BRICKS = AllayBlockType
-                            .builder(BlockBricksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TUFF_BRICKS)
                             .build();
         }
@@ -9061,21 +8789,21 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TURTLE_EGG == null) {
             BlockTypes.TURTLE_EGG = AllayBlockType
-                            .builder(BlockTurtleEggBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TURTLE_EGG)
                             .setProperties(BlockPropertyTypes.CRACKED_STATE, BlockPropertyTypes.TURTLE_EGG_COUNT)
                             .build();
         }
         if (BlockTypes.TWISTING_VINES == null) {
             BlockTypes.TWISTING_VINES = AllayBlockType
-                            .builder(BlockTwistingVinesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.TWISTING_VINES)
                             .setProperties(BlockPropertyTypes.TWISTING_VINES_AGE)
                             .build();
         }
         if (BlockTypes.UNDERWATER_TNT == null) {
             BlockTypes.UNDERWATER_TNT = AllayBlockType
-                            .builder(BlockUnderwaterTntBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.UNDERWATER_TNT)
                             .setProperties(BlockPropertyTypes.EXPLODE_BIT)
                             .build();
@@ -9095,7 +8823,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.UNKNOWN == null) {
             BlockTypes.UNKNOWN = AllayBlockType
-                            .builder(BlockUnknownBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.UNKNOWN)
                             .build();
         }
@@ -9122,21 +8850,21 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.VAULT == null) {
             BlockTypes.VAULT = AllayBlockType
-                            .builder(BlockVaultBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.VAULT)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OMINOUS, BlockPropertyTypes.VAULT_STATE)
                             .build();
         }
         if (BlockTypes.VERDANT_FROGLIGHT == null) {
             BlockTypes.VERDANT_FROGLIGHT = AllayBlockType
-                            .builder(BlockVerdantFroglightBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.VERDANT_FROGLIGHT)
                             .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                             .build();
         }
         if (BlockTypes.VINE == null) {
             BlockTypes.VINE = AllayBlockType
-                            .builder(BlockVineBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.VINE)
                             .setProperties(BlockPropertyTypes.VINE_DIRECTION_BITS)
                             .build();
@@ -9157,14 +8885,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WARPED_BUTTON == null) {
             BlockTypes.WARPED_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.WARPED_DOOR == null) {
             BlockTypes.WARPED_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
@@ -9178,7 +8906,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WARPED_FENCE == null) {
             BlockTypes.WARPED_FENCE = AllayBlockType
-                            .builder(BlockFenceBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_FENCE)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH, BlockPropertyTypes.MINECRAFT_CONNECTION_SOUTH, BlockPropertyTypes.MINECRAFT_CONNECTION_WEST)
                             .build();
@@ -9192,7 +8920,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WARPED_FUNGUS == null) {
             BlockTypes.WARPED_FUNGUS = AllayBlockType
-                            .builder(BlockWarpedFungusBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_FUNGUS)
                             .build();
         }
@@ -9212,26 +8940,26 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WARPED_NYLIUM == null) {
             BlockTypes.WARPED_NYLIUM = AllayBlockType
-                            .builder(BlockWarpedNyliumBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_NYLIUM)
                             .build();
         }
         if (BlockTypes.WARPED_PLANKS == null) {
             BlockTypes.WARPED_PLANKS = AllayBlockType
-                            .builder(BlockPlanksBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_PLANKS)
                             .build();
         }
         if (BlockTypes.WARPED_PRESSURE_PLATE == null) {
             BlockTypes.WARPED_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
         }
         if (BlockTypes.WARPED_ROOTS == null) {
             BlockTypes.WARPED_ROOTS = AllayBlockType
-                            .builder(BlockWarpedRootsBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_ROOTS)
                             .build();
         }
@@ -9286,7 +9014,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WARPED_WART_BLOCK == null) {
             BlockTypes.WARPED_WART_BLOCK = AllayBlockType
-                            .builder(BlockWarpedWartBlockBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WARPED_WART_BLOCK)
                             .build();
         }
@@ -9299,7 +9027,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WATERLILY == null) {
             BlockTypes.WATERLILY = AllayBlockType
-                            .builder(BlockWaterlilyBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WATERLILY)
                             .build();
         }
@@ -9338,7 +9066,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_COPPER_CHEST == null) {
             BlockTypes.WAXED_COPPER_CHEST = AllayBlockType
-                            .builder(BlockWaxedCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WAXED_COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -9439,7 +9167,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_CHEST == null) {
             BlockTypes.WAXED_EXPOSED_COPPER_CHEST = AllayBlockType
-                            .builder(BlockWaxedExposedCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -9554,7 +9282,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_CHEST == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_CHEST = AllayBlockType
-                            .builder(BlockWaxedOxidizedCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -9639,6 +9367,9 @@ public final class BlockTypeDefaultInitializer {
                             .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER)
                             .build();
         }
+    }
+
+    private static void initPart7() {
         if (BlockTypes.WAXED_WEATHERED_COPPER_BARS == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_BARS = AllayBlockType
                             .builder(BlockCopperBarsBehaviorImpl.class)
@@ -9662,7 +9393,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_CHEST == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_CHEST = AllayBlockType
-                            .builder(BlockWaxedWeatheredCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -9770,7 +9501,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_COPPER_CHEST == null) {
             BlockTypes.WEATHERED_COPPER_CHEST = AllayBlockType
-                            .builder(BlockWeatheredCopperChestBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WEATHERED_COPPER_CHEST)
                             .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                             .build();
@@ -9845,26 +9576,26 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEB == null) {
             BlockTypes.WEB = AllayBlockType
-                            .builder(BlockWebBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WEB)
                             .build();
         }
         if (BlockTypes.WEEPING_VINES == null) {
             BlockTypes.WEEPING_VINES = AllayBlockType
-                            .builder(BlockWeepingVinesBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WEEPING_VINES)
                             .setProperties(BlockPropertyTypes.WEEPING_VINES_AGE)
                             .build();
         }
         if (BlockTypes.WET_SPONGE == null) {
             BlockTypes.WET_SPONGE = AllayBlockType
-                            .builder(BlockWetSpongeBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WET_SPONGE)
                             .build();
         }
         if (BlockTypes.WHEAT == null) {
             BlockTypes.WHEAT = AllayBlockType
-                            .builder(BlockWheatBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WHEAT)
                             .setProperties(BlockPropertyTypes.GROWTH_8)
                             .build();
@@ -9891,7 +9622,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WHITE_CONCRETE == null) {
             BlockTypes.WHITE_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WHITE_CONCRETE)
                             .build();
         }
@@ -9962,7 +9693,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WHITE_WOOL == null) {
             BlockTypes.WHITE_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WHITE_WOOL)
                             .build();
         }
@@ -10009,21 +9740,21 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WOODEN_BUTTON == null) {
             BlockTypes.WOODEN_BUTTON = AllayBlockType
-                            .builder(BlockButtonBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WOODEN_BUTTON)
                             .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
         if (BlockTypes.WOODEN_DOOR == null) {
             BlockTypes.WOODEN_DOOR = AllayBlockType
-                            .builder(BlockDoorBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WOODEN_DOOR)
                             .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                             .build();
         }
         if (BlockTypes.WOODEN_PRESSURE_PLATE == null) {
             BlockTypes.WOODEN_PRESSURE_PLATE = AllayBlockType
-                            .builder(BlockPressurePlateBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.WOODEN_PRESSURE_PLATE)
                             .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                             .build();
@@ -10050,7 +9781,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.YELLOW_CONCRETE == null) {
             BlockTypes.YELLOW_CONCRETE = AllayBlockType
-                            .builder(BlockConcreteBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.YELLOW_CONCRETE)
                             .build();
         }
@@ -10122,7 +9853,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.YELLOW_WOOL == null) {
             BlockTypes.YELLOW_WOOL = AllayBlockType
-                            .builder(BlockWoolBehaviorImpl.class)
+                            .builder()
                             .vanillaBlock(BlockId.YELLOW_WOOL)
                             .build();
         }
@@ -10154,5 +9885,16 @@ public final class BlockTypeDefaultInitializer {
                             .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                             .build();
         }
+    }
+
+    public static void init() {
+        initPart0();
+        initPart1();
+        initPart2();
+        initPart3();
+        initPart4();
+        initPart5();
+        initPart6();
+        initPart7();
     }
 }

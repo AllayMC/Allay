@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 
 /**
  * {@code CItemAttackEntityEvent} carries the attacker and victim to an item's
@@ -18,6 +19,10 @@ import org.allaymc.api.eventbus.event.Event;
 @Setter
 @AllArgsConstructor
 public class CItemAttackEntityEvent extends Event {
+    /**
+     * Owning item stack used to attack the target.
+     */
+    protected ItemStack itemStack;
     /**
      * Entity performing the item attack.
      */

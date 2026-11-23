@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
-import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * {@code EntityProjectileComponentImpl} retains optional shooter attribution
@@ -16,12 +15,6 @@ import org.allaymc.api.utils.identifier.Identifier;
  */
 public class EntityProjectileComponentImpl implements EntityProjectileComponent {
 
-    /**
-     * {@code IDENTIFIER} selects this shooter-reference component during
-     * component registration and dependency lookup by identifier.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_projectile_component");
 
     /**
      * {@code shooter} retains the assigned launch source, or {@code null} when

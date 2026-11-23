@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 
 /**
  * {@code CItemUseInAirEvent} carries a completed timed-use attempt to item
@@ -18,6 +19,10 @@ import org.allaymc.api.eventbus.event.Event;
 @Setter
 @AllArgsConstructor
 public class CItemUseInAirEvent extends Event {
+    /**
+     * Owning item stack completing timed use.
+     */
+    protected ItemStack itemStack;
     /**
      * Player completing timed item use.
      */

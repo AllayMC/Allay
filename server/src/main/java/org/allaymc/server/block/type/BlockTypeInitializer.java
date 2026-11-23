@@ -129,7 +129,7 @@ public final class BlockTypeInitializer {
      */
     public static void initAmethyst() {
         BlockTypes.BUDDING_AMETHYST = AllayBlockType
-                .builder(BlockBuddingAmethystBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BUDDING_AMETHYST)
                 .setBaseComponentSupplier(BlockBuddingAmethystBaseComponentImpl::new)
                 .build();
@@ -312,7 +312,7 @@ public final class BlockTypeInitializer {
      */
     public static void initClay() {
         BlockTypes.CLAY = AllayBlockType
-                .builder(BlockClayBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CLAY)
                 .setBaseComponentSupplier(BlockClayBaseComponentImpl::new)
                 .build();
@@ -543,7 +543,7 @@ public final class BlockTypeInitializer {
      */
     public static void initGrassBlock() {
         BlockTypes.GRASS_BLOCK = AllayBlockType
-                .builder(BlockGrassBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.GRASS_BLOCK)
                 .setBaseComponentSupplier(BlockGrassBlockBaseComponentImpl::new)
                 .build();
@@ -557,7 +557,7 @@ public final class BlockTypeInitializer {
      */
     public static void initMossBlock() {
         BlockTypes.MOSS_BLOCK = AllayBlockType
-                .builder(BlockMossBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.MOSS_BLOCK)
                 .setBaseComponentSupplier(blockType -> new BlockMossBlockBaseComponentImpl(blockType, List.of(
                         new BlockMossBlockBaseComponentImpl.VegetationEntry(50, () -> BlockTypes.SHORT_GRASS, false),
@@ -576,7 +576,7 @@ public final class BlockTypeInitializer {
      */
     public static void initPaleMossBlock() {
         BlockTypes.PALE_MOSS_BLOCK = AllayBlockType
-                .builder(BlockPaleMossBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PALE_MOSS_BLOCK)
                 .setBaseComponentSupplier(type -> new BlockMossBlockBaseComponentImpl(type, List.of(
                         new BlockMossBlockBaseComponentImpl.VegetationEntry(25, () -> BlockTypes.SHORT_GRASS, false),
@@ -593,17 +593,17 @@ public final class BlockTypeInitializer {
      */
     public static void initShortGrass() {
         BlockTypes.SHORT_GRASS = AllayBlockType
-                .builder(BlockShortGrassBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SHORT_GRASS)
                 .setBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
         BlockTypes.SHORT_DRY_GRASS = AllayBlockType
-                .builder(BlockShortDryGrassBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SHORT_DRY_GRASS)
                 .setBaseComponentSupplier(BlockDryGrassBaseComponentImpl::new)
                 .build();
         BlockTypes.FERN = AllayBlockType
-                .builder(BlockFernBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.FERN)
                 .setBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
@@ -616,7 +616,7 @@ public final class BlockTypeInitializer {
      */
     public static void initTallGrass() {
         BlockTypes.TALL_GRASS = AllayBlockType
-                .builder(BlockTallGrassBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.TALL_GRASS)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.SHORT_GRASS))
@@ -624,12 +624,12 @@ public final class BlockTypeInitializer {
         // Tall dry grass uses the single-block dry-grass component; giving it
         // upper-block state would incorrectly create the two-part grass domain.
         BlockTypes.TALL_DRY_GRASS = AllayBlockType
-                .builder(BlockTallDryGrassBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.TALL_DRY_GRASS)
                 .setBaseComponentSupplier(BlockDryGrassBaseComponentImpl::new)
                 .build();
         BlockTypes.LARGE_FERN = AllayBlockType
-                .builder(BlockLargeFernBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.LARGE_FERN)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.FERN))
@@ -680,7 +680,7 @@ public final class BlockTypeInitializer {
      */
     public static void initHopper() {
         BlockTypes.HOPPER = AllayBlockType
-                .builder(BlockHopperBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.HOPPER)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TOGGLE_BIT)
                 .bindBlockEntity(BlockEntityTypes.HOPPER)
@@ -695,7 +695,7 @@ public final class BlockTypeInitializer {
      */
     public static void initDispenser() {
         BlockTypes.DISPENSER = AllayBlockType
-                .builder(BlockDispenserBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.DISPENSER)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TRIGGERED_BIT)
                 .bindBlockEntity(BlockEntityTypes.DISPENSER)
@@ -710,7 +710,7 @@ public final class BlockTypeInitializer {
      */
     public static void initDropper() {
         BlockTypes.DROPPER = AllayBlockType
-                .builder(BlockDropperBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.DROPPER)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TRIGGERED_BIT)
                 .bindBlockEntity(BlockEntityTypes.DROPPER)
@@ -725,7 +725,7 @@ public final class BlockTypeInitializer {
      */
     public static void initCraftingTable() {
         BlockTypes.CRAFTING_TABLE = AllayBlockType
-                .builder(BlockCraftingTableBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CRAFTING_TABLE)
                 .setBaseComponentSupplier(BlockCraftingTableBaseComponentImpl::new)
                 .build();
@@ -1400,7 +1400,7 @@ public final class BlockTypeInitializer {
         BlockTypes.PALE_OAK_DOOR = buildDoor(BlockId.PALE_OAK_DOOR);
         BlockTypes.POPLAR_DOOR = buildDoor(BlockId.POPLAR_DOOR);
 
-        BlockTypes.IRON_DOOR = doorBuilder(BlockIronDoorBehaviorImpl.class, BlockId.IRON_DOOR, BlockIronDoorBaseComponentImpl::new).build();
+        BlockTypes.IRON_DOOR = doorBuilder(BlockBehaviorImpl.class, BlockId.IRON_DOOR, BlockIronDoorBaseComponentImpl::new).build();
 
         // Read counterpart fields when oxidation requests a transition, after every
         // variant has been assigned, instead of capturing uninitialized startup
@@ -1427,7 +1427,7 @@ public final class BlockTypeInitializer {
      * before the type is published.
      */
     private static <T extends BlockBehavior> BlockType<T> buildDoor(BlockId blockId) {
-        return doorBuilder(BlockDoorBehaviorImpl.class, blockId, BlockDoorBaseComponentImpl::new).build();
+        return doorBuilder(BlockBehaviorImpl.class, blockId, BlockDoorBaseComponentImpl::new).build();
     }
 
     /**
@@ -1517,7 +1517,7 @@ public final class BlockTypeInitializer {
      */
     private static <T extends BlockBehavior> BlockType<T> buildButton(BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
         return AllayBlockType
-                .builder(BlockButtonBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(blockBaseComponentSupplier)
@@ -1640,7 +1640,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSlimeBlock() {
         BlockTypes.SLIME = AllayBlockType
-                .builder(BlockSlimeBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SLIME)
                 .setBaseComponentSupplier(BlockSlimeBaseComponentImpl::new)
                 .build();
@@ -1653,7 +1653,7 @@ public final class BlockTypeInitializer {
      */
     public static void initHayBlock() {
         BlockTypes.HAY_BLOCK = AllayBlockType
-                .builder(BlockHayBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.HAY_BLOCK)
                 .setProperties(BlockPropertyTypes.DEPRECATED, BlockPropertyTypes.PILLAR_AXIS)
                 .setBaseComponentSupplier(BlockHayBlockBaseComponentImpl::new)
@@ -1689,7 +1689,7 @@ public final class BlockTypeInitializer {
      */
     public static void initBubbleColumn() {
         BlockTypes.BUBBLE_COLUMN = AllayBlockType
-                .builder(BlockBubbleColumnBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BUBBLE_COLUMN)
                 .setProperties(BlockPropertyTypes.DRAG_DOWN)
                 .setBaseComponentSupplier(BlockBubbleColumnBaseComponentImpl::new)
@@ -1755,7 +1755,7 @@ public final class BlockTypeInitializer {
      */
     public static void initStone() {
         BlockTypes.STONE = AllayBlockType
-                .builder(BlockStoneBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.STONE)
                 .setBaseComponentSupplier(BlockStoneBaseComponentImpl::new)
                 .build();
@@ -1888,13 +1888,13 @@ public final class BlockTypeInitializer {
      */
     public static void initFire() {
         BlockTypes.FIRE = AllayBlockType
-                .builder(BlockFireBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.FIRE)
                 .setProperties(BlockPropertyTypes.AGE_16)
                 .setBaseComponentSupplier(BlockFireBaseComponentImpl::new)
                 .build();
         BlockTypes.SOUL_FIRE = AllayBlockType
-                .builder(BlockFireBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SOUL_FIRE)
                 .setProperties(BlockPropertyTypes.AGE_16)
                 .setBaseComponentSupplier(BlockSoulFireBaseComponentImpl::new)
@@ -1988,12 +1988,12 @@ public final class BlockTypeInitializer {
      */
     public static void initSponge() {
         BlockTypes.SPONGE = AllayBlockType
-                .builder(BlockSpongeBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SPONGE)
                 .setBaseComponentSupplier(BlockSpongeBaseComponentImpl::new)
                 .build();
         BlockTypes.WET_SPONGE = AllayBlockType
-                .builder(BlockWetSpongeBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.WET_SPONGE)
                 .setBaseComponentSupplier(BlockWetSpongeBaseComponentImpl::new)
                 .build();
@@ -2006,7 +2006,7 @@ public final class BlockTypeInitializer {
      */
     public static void initFarmLand() {
         BlockTypes.FARMLAND = AllayBlockType
-                .builder(BlockFarmlandBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.FARMLAND)
                 .setProperties(BlockPropertyTypes.MOISTURIZED_AMOUNT)
                 .setBaseComponentSupplier(BlockFarmLandBaseComponentImpl::new)
@@ -2020,49 +2020,49 @@ public final class BlockTypeInitializer {
      */
     public static void initCrops() {
         BlockTypes.WHEAT = AllayBlockType
-                .builder(BlockWheatBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.WHEAT)
                 .setProperties(BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(BlockWheatBaseComponentImpl::new)
                 .build();
         BlockTypes.POTATOES = AllayBlockType
-                .builder(BlockPotatoesBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.POTATOES)
                 .setProperties(BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(BlockPotatoesBaseComponentImpl::new)
                 .build();
         BlockTypes.CARROTS = AllayBlockType
-                .builder(BlockCarrotsBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CARROTS)
                 .setProperties(BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(BlockCarrotsBaseComponentImpl::new)
                 .build();
         BlockTypes.BEETROOT = AllayBlockType
-                .builder(BlockBeetrootBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BEETROOT)
                 .setProperties(BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(BlockBeetrootBaseComponentImpl::new)
                 .build();
         BlockTypes.MELON_STEM = AllayBlockType
-                .builder(BlockMelonStemBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.MELON_STEM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.MELON_BLOCK, ItemId.MELON_SEEDS))
                 .build();
         BlockTypes.PUMPKIN_STEM = AllayBlockType
-                .builder(BlockPumpkinBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PUMPKIN_STEM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.PUMPKIN, ItemId.PUMPKIN_SEEDS))
                 .build();
         BlockTypes.TORCHFLOWER_CROP = AllayBlockType
-                .builder(BlockTorchflowerCropBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.TORCHFLOWER_CROP)
                 .setProperties(BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(BlockTorchflowerCropBaseComponentImpl::new)
                 .build();
         BlockTypes.PITCHER_CROP = AllayBlockType
-                .builder(BlockPitcherCropBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PITCHER_CROP)
                 .setProperties(BlockPropertyTypes.GROWTH_8, BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBaseComponentSupplier(BlockPitcherCropBaseComponentImpl::new)
@@ -2076,12 +2076,12 @@ public final class BlockTypeInitializer {
      */
     public static void initMelonBlock() {
         BlockTypes.MELON_BLOCK = AllayBlockType
-                .builder(BlockMelonBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.MELON_BLOCK)
                 .setBaseComponentSupplier(BlockMelonBlockBaseComponentImpl::new)
                 .build();
         BlockTypes.PUMPKIN = AllayBlockType
-                .builder(BlockPumpkinBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PUMPKIN)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(BlockPumpkinBaseComponentImpl::new)
@@ -2152,7 +2152,7 @@ public final class BlockTypeInitializer {
      */
     public static void initReeds() {
         BlockTypes.REEDS = AllayBlockType
-                .builder(BlockReedsBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.REEDS)
                 .setProperties(BlockPropertyTypes.AGE_16)
                 .setBaseComponentSupplier(BlockReedsBaseComponentImpl::new)
@@ -2166,7 +2166,7 @@ public final class BlockTypeInitializer {
      */
     public static void initCactus() {
         BlockTypes.CACTUS = AllayBlockType
-                .builder(BlockCactusBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CACTUS)
                 .setProperties(BlockPropertyTypes.AGE_16)
                 .setBaseComponentSupplier(BlockCactusBaseComponentImpl::new)
@@ -2250,7 +2250,7 @@ public final class BlockTypeInitializer {
      */
     public static void initStonecutterBlock() {
         BlockTypes.STONECUTTER_BLOCK = AllayBlockType
-                .builder(BlockStonecutterBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.STONECUTTER_BLOCK)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(BlockStonecutterBlockBaseComponentImpl::new)
@@ -2265,7 +2265,7 @@ public final class BlockTypeInitializer {
      */
     public static void initGrindstone() {
         BlockTypes.GRINDSTONE = AllayBlockType
-                .builder(BlockGrindstoneBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.GRINDSTONE)
                 .setProperties(BlockPropertyTypes.ATTACHMENT, BlockPropertyTypes.DIRECTION_4)
                 .setBaseComponentSupplier(BlockGrindstoneBaseComponentImpl::new)
@@ -2279,7 +2279,7 @@ public final class BlockTypeInitializer {
      */
     public static void initLoom() {
         BlockTypes.LOOM = AllayBlockType
-                .builder(BlockLoomBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.LOOM)
                 .setProperties(BlockPropertyTypes.DIRECTION_4)
                 .setBaseComponentSupplier(BlockLoomBaseComponentImpl::new)
@@ -2322,7 +2322,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSmithingTable() {
         BlockTypes.SMITHING_TABLE = AllayBlockType
-                .builder(BlockSmithingTableBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SMITHING_TABLE)
                 .setBaseComponentSupplier(BlockSmithingTableBaseComponentImpl::new)
                 .build();
@@ -2388,7 +2388,7 @@ public final class BlockTypeInitializer {
      */
     public static void initGlowstone() {
         BlockTypes.GLOWSTONE = AllayBlockType
-                .builder(BlockGlowstoneBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.GLOWSTONE)
                 .setBaseComponentSupplier(BlockGlowstoneBaseComponentImpl::new)
                 .build();
@@ -2401,7 +2401,7 @@ public final class BlockTypeInitializer {
      */
     public static void initGildedBlackstone() {
         BlockTypes.GILDED_BLACKSTONE = AllayBlockType
-                .builder(BlockGildedBlackstoneBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.GILDED_BLACKSTONE)
                 .setBaseComponentSupplier(BlockGildedBlackstoneBaseComponentImpl::new)
                 .build();
@@ -2451,7 +2451,7 @@ public final class BlockTypeInitializer {
      */
     public static void initLadder() {
         BlockTypes.LADDER = AllayBlockType
-                .builder(BlockLadderBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.LADDER)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockLadderBaseComponentImpl::new)
@@ -2465,7 +2465,7 @@ public final class BlockTypeInitializer {
      */
     public static void initMagma() {
         BlockTypes.MAGMA = AllayBlockType
-                .builder(BlockMagmaBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.MAGMA)
                 .setBaseComponentSupplier(BlockMagmaBaseComponentImpl::new)
                 .build();
@@ -2478,7 +2478,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSoulSand() {
         BlockTypes.SOUL_SAND = AllayBlockType
-                .builder(BlockSoulSandBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SOUL_SAND)
                 .setBaseComponentSupplier(BlockSoulSandBaseComponentImpl::new)
                 .build();
@@ -2523,7 +2523,7 @@ public final class BlockTypeInitializer {
      */
     public static void initEndPortalFrame() {
         BlockTypes.END_PORTAL_FRAME = AllayBlockType
-                .builder(BlockEndPortalFrameBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.END_PORTAL_FRAME)
                 .setProperties(BlockPropertyTypes.END_PORTAL_EYE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(BlockEndPortalFrameBaseComponentImpl::new)
@@ -2537,7 +2537,7 @@ public final class BlockTypeInitializer {
      */
     public static void initPortal() {
         BlockTypes.PORTAL = AllayBlockType
-                .builder(BlockPortalBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PORTAL)
                 .setProperties(BlockPropertyTypes.PORTAL_AXIS)
                 .setBaseComponentSupplier(BlockPortalBaseComponentImpl::new)
@@ -2551,7 +2551,7 @@ public final class BlockTypeInitializer {
      */
     public static void initEndPortal() {
         BlockTypes.END_PORTAL = AllayBlockType
-                .builder(BlockEndPortalBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.END_PORTAL)
                 .setBaseComponentSupplier(BlockEndPortalBaseComponentImpl::new)
                 .build();
@@ -2564,17 +2564,17 @@ public final class BlockTypeInitializer {
      */
     public static void initIce() {
         BlockTypes.BLUE_ICE = AllayBlockType
-                .builder(BlockIceBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BLUE_ICE)
                 .setBaseComponentSupplier(BlockHardIceBaseComponentImpl::new)
                 .build();
         BlockTypes.ICE = AllayBlockType
-                .builder(BlockIceBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.ICE)
                 .setBaseComponentSupplier(BlockIceBaseComponentImpl::new)
                 .build();
         BlockTypes.PACKED_ICE = AllayBlockType
-                .builder(BlockIceBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PACKED_ICE)
                 .setBaseComponentSupplier(BlockHardIceBaseComponentImpl::new)
                 .build();
@@ -2588,7 +2588,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSnow() {
         BlockTypes.SNOW = AllayBlockType
-                .builder(BlockSnowBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SNOW)
                 .setBaseComponentSupplier(BlockSnowBaseComponentImpl::new)
                 .build();
@@ -2601,7 +2601,7 @@ public final class BlockTypeInitializer {
      */
     public static void initPowderSnow() {
         BlockTypes.POWDER_SNOW = AllayBlockType
-                .builder(BlockPowderSnowBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.POWDER_SNOW)
                 .setBaseComponentSupplier(BlockPowderSnowBaseComponentImpl::new)
                 .build();
@@ -2629,7 +2629,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSeaLantern() {
         BlockTypes.SEA_LANTERN = AllayBlockType
-                .builder(BlockSeaLanternBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SEA_LANTERN)
                 .setBaseComponentSupplier(BlockSeaLanternBaseComponentImpl::new)
                 .build();
@@ -2657,7 +2657,7 @@ public final class BlockTypeInitializer {
      */
     public static void initChorusFlower() {
         BlockTypes.CHORUS_FLOWER = AllayBlockType
-                .builder(BlockChorusFlowerBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CHORUS_FLOWER)
                 .setProperties(BlockPropertyTypes.AGE_6)
                 .setBaseComponentSupplier(BlockChorusFlowerBaseComponentImpl::new)
@@ -2671,7 +2671,7 @@ public final class BlockTypeInitializer {
      */
     public static void initChorusPlant() {
         BlockTypes.CHORUS_PLANT = AllayBlockType
-                .builder(BlockChorusPlantBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CHORUS_PLANT)
                 .setBaseComponentSupplier(BlockChorusPlantBaseComponentImpl::new)
                 .build();
@@ -2684,7 +2684,7 @@ public final class BlockTypeInitializer {
      */
     public static void initDeadBush() {
         BlockTypes.DEADBUSH = AllayBlockType
-                .builder(BlockDeadbushBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.DEADBUSH)
                 .setBaseComponentSupplier(BlockDeadbushBaseComponentImpl::new)
                 .build();
@@ -2788,19 +2788,19 @@ public final class BlockTypeInitializer {
         // vanilla default-state hashes include that property in their serialized
         // combinations.
         BlockTypes.QUARTZ_BLOCK = AllayBlockType
-                .builder(BlockQuartzBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.QUARTZ_BLOCK)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .setBaseComponentSupplier(BlockQuartzBlockBaseComponentImpl::new)
                 .build();
         BlockTypes.CHISELED_QUARTZ_BLOCK = AllayBlockType
-                .builder(BlockChiseledQuartzBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CHISELED_QUARTZ_BLOCK)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .setBaseComponentSupplier(BlockQuartzBlockBaseComponentImpl::new)
                 .build();
         BlockTypes.SMOOTH_QUARTZ = AllayBlockType
-                .builder(BlockSmoothQuartzBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SMOOTH_QUARTZ)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .setBaseComponentSupplier(BlockQuartzBlockBaseComponentImpl::new)
@@ -2818,7 +2818,7 @@ public final class BlockTypeInitializer {
         // vanilla default-state hashes include that property in their serialized
         // combinations.
         BlockTypes.PURPUR_BLOCK = AllayBlockType
-                .builder(BlockPurpurBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PURPUR_BLOCK)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .setBaseComponentSupplier(BlockPurpurBlockBaseComponentImpl::new)
@@ -2832,14 +2832,14 @@ public final class BlockTypeInitializer {
      */
     public static void initItemFrame() {
         BlockTypes.FRAME = AllayBlockType
-                .builder(BlockFrameBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.FRAME)
                 .bindBlockEntity(BlockEntityTypes.ITEM_FRAME)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ITEM_FRAME_MAP_BIT, BlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
                 .setBaseComponentSupplier(BlockFrameBaseComponentImpl::new)
                 .build();
         BlockTypes.GLOW_FRAME = AllayBlockType
-                .builder(BlockGlowFrameBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.GLOW_FRAME)
                 .bindBlockEntity(BlockEntityTypes.GLOW_ITEM_FRAME)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ITEM_FRAME_MAP_BIT, BlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
@@ -2899,7 +2899,7 @@ public final class BlockTypeInitializer {
      */
     public static void initRods() {
         BlockTypes.END_ROD = AllayBlockType
-                .builder(BlockEndRodBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.END_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockEndRodBaseComponentImpl::new)
@@ -3252,7 +3252,7 @@ public final class BlockTypeInitializer {
      */
     public static void initLever() {
         BlockTypes.LEVER = AllayBlockType
-                .builder(BlockLeverBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.LEVER)
                 .setProperties(BlockPropertyTypes.LEVER_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                 .setBaseComponentSupplier(BlockLeverBaseComponentImpl::new)
@@ -3267,7 +3267,7 @@ public final class BlockTypeInitializer {
      */
     public static void initRedstoneWire() {
         BlockTypes.REDSTONE_WIRE = AllayBlockType
-                .builder(BlockRedstoneWireBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.REDSTONE_WIRE)
                 .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                 .setBaseComponentSupplier(BlockRedstoneWireBaseComponentImpl::new)
@@ -3282,7 +3282,7 @@ public final class BlockTypeInitializer {
      */
     public static void initRedstoneBlock() {
         BlockTypes.REDSTONE_BLOCK = AllayBlockType
-                .builder(BlockRedstoneBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.REDSTONE_BLOCK)
                 .setBaseComponentSupplier(BlockRedstoneBlockBaseComponentImpl::new)
                 .build();
@@ -3324,7 +3324,7 @@ public final class BlockTypeInitializer {
      */
     private static <T extends BlockBehavior> BlockType<T> buildPressurePlate(BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
         return AllayBlockType
-                .builder(BlockPressurePlateBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                 .setBaseComponentSupplier(blockBaseComponentSupplier)
@@ -3339,13 +3339,13 @@ public final class BlockTypeInitializer {
      */
     public static void initTripwire() {
         BlockTypes.TRIPWIRE_HOOK = AllayBlockType
-                .builder(BlockTripwireHookBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.TRIPWIRE_HOOK)
                 .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.POWERED_BIT)
                 .setBaseComponentSupplier(BlockTripwireHookBaseComponentImpl::new)
                 .build();
         BlockTypes.TRIP_WIRE = AllayBlockType
-                .builder(BlockTripWireBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.TRIP_WIRE)
                 .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.DISARMED_BIT, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.SUSPENDED_BIT,
                         BlockPropertyTypes.MINECRAFT_CONNECTION_EAST, BlockPropertyTypes.MINECRAFT_CONNECTION_NORTH,
@@ -3361,7 +3361,7 @@ public final class BlockTypeInitializer {
      */
     public static void initObserver() {
         BlockTypes.OBSERVER = AllayBlockType
-                .builder(BlockObserverBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.OBSERVER)
                 .setProperties(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
                 .setBaseComponentSupplier(BlockObserverBaseComponentImpl::new)
@@ -3475,14 +3475,14 @@ public final class BlockTypeInitializer {
      */
     public static void initCampfire() {
         BlockTypes.CAMPFIRE = AllayBlockType
-                .builder(BlockCampfireBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CAMPFIRE)
                 .bindBlockEntity(BlockEntityTypes.CAMPFIRE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.EXTINGUISHED)
                 .setBaseComponentSupplier(BlockCampfireBaseComponentImpl::new)
                 .build();
         BlockTypes.SOUL_CAMPFIRE = AllayBlockType
-                .builder(BlockCampfireBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SOUL_CAMPFIRE)
                 .bindBlockEntity(BlockEntityTypes.SOUL_CAMPFIRE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.EXTINGUISHED)
@@ -3497,19 +3497,19 @@ public final class BlockTypeInitializer {
      */
     public static void initSaplings() {
         BlockTypes.OAK_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, StraightBlobTreeFeature.OAK_IDENTIFIER, FancyOakTreeFeature.IDENTIFIER, null))
                 .build();
         BlockTypes.BIRCH_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BIRCH_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, StraightBlobTreeFeature.BIRCH_IDENTIFIER, null, null))
                 .build();
         BlockTypes.SPRUCE_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SPRUCE_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(
@@ -3523,37 +3523,37 @@ public final class BlockTypeInitializer {
                 ))
                 .build();
         BlockTypes.JUNGLE_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.JUNGLE_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, StraightBlobTreeFeature.JUNGLE_IDENTIFIER, null, MegaJungleTreeFeature.IDENTIFIER))
                 .build();
         BlockTypes.ACACIA_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.ACACIA_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, AcaciaTreeFeature.IDENTIFIER, null, null))
                 .build();
         BlockTypes.DARK_OAK_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.DARK_OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, null, null, DoubleTrunkTreeFeature.DARK_OAK_IDENTIFIER))
                 .build();
         BlockTypes.CHERRY_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CHERRY_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, CherryTreeFeature.IDENTIFIER, null, null))
                 .build();
         BlockTypes.PALE_OAK_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PALE_OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, DoubleTrunkTreeFeature.PALE_OAK_IDENTIFIER, null, null))
                 .build();
         BlockTypes.MANGROVE_PROPAGULE = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.MANGROVE_PROPAGULE)
                 .setProperties(BlockPropertyTypes.HANGING, BlockPropertyTypes.PROPAGULE_STAGE)
                 .setBaseComponentSupplier(BlockMangrovePropaguleBaseComponentImpl::new)
@@ -3567,32 +3567,32 @@ public final class BlockTypeInitializer {
      */
     public static void initPiston() {
         BlockTypes.PISTON = AllayBlockType
-                .builder(BlockPistonBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PISTON)
                 .bindBlockEntity(BlockEntityTypes.PISTON_ARM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockPistonBaseComponentImpl::new)
                 .build();
         BlockTypes.STICKY_PISTON = AllayBlockType
-                .builder(BlockStickyPistonBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.STICKY_PISTON)
                 .bindBlockEntity(BlockEntityTypes.PISTON_ARM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockStickyPistonBaseComponentImpl::new)
                 .build();
         BlockTypes.MOVING_BLOCK = AllayBlockType
-                .builder(BlockMovingBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.MOVING_BLOCK)
                 .bindBlockEntity(BlockEntityTypes.MOVING_BLOCK)
                 .build();
         BlockTypes.PISTON_ARM_COLLISION = AllayBlockType
-                .builder(BlockPistonArmCollisionBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.PISTON_ARM_COLLISION)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockPistonArmCollisionBaseComponentImpl::new)
                 .build();
         BlockTypes.STICKY_PISTON_ARM_COLLISION = AllayBlockType
-                .builder(BlockStickyPistonArmCollisionBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.STICKY_PISTON_ARM_COLLISION)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockPistonArmCollisionBaseComponentImpl::new)
@@ -3607,7 +3607,7 @@ public final class BlockTypeInitializer {
      */
     public static void initCake() {
         BlockTypes.CAKE = AllayBlockType
-                .builder(BlockCakeBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CAKE)
                 .setProperties(BlockPropertyTypes.BITE_COUNTER)
                 .setBaseComponentSupplier(BlockCakeBaseComponentImpl::new)
@@ -3706,7 +3706,7 @@ public final class BlockTypeInitializer {
      */
     public static void initComposter() {
         BlockTypes.COMPOSTER = AllayBlockType
-                .builder(BlockComposterBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.COMPOSTER)
                 .setProperties(BlockPropertyTypes.COMPOSTER_FILL_LEVEL)
                 .setBaseComponentSupplier(BlockComposterBaseComponentImpl::new)
@@ -3720,7 +3720,7 @@ public final class BlockTypeInitializer {
      */
     public static void initBell() {
         BlockTypes.BELL = AllayBlockType
-                .builder(BlockBellBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BELL)
                 .setProperties(BlockPropertyTypes.ATTACHMENT, BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.TOGGLE_BIT)
                 .bindBlockEntity(BlockEntityTypes.BELL)
@@ -3750,21 +3750,21 @@ public final class BlockTypeInitializer {
      */
     public static void initCommandBlock() {
         BlockTypes.COMMAND_BLOCK = AllayBlockType
-                .builder(BlockCommandBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.COMMAND_BLOCK)
                 .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.COMMAND_BLOCK)
                 .setBaseComponentSupplier(BlockCommandBlockBaseComponentImpl::new)
                 .build();
         BlockTypes.CHAIN_COMMAND_BLOCK = AllayBlockType
-                .builder(BlockChainCommandBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CHAIN_COMMAND_BLOCK)
                 .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.COMMAND_BLOCK)
                 .setBaseComponentSupplier(BlockCommandBlockBaseComponentImpl::new)
                 .build();
         BlockTypes.REPEATING_COMMAND_BLOCK = AllayBlockType
-                .builder(BlockRepeatingCommandBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.REPEATING_COMMAND_BLOCK)
                 .setProperties(BlockPropertyTypes.CONDITIONAL_BIT, BlockPropertyTypes.FACING_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.COMMAND_BLOCK)
@@ -3794,13 +3794,13 @@ public final class BlockTypeInitializer {
      */
     public static void initNetherVines() {
         BlockTypes.TWISTING_VINES = AllayBlockType
-                .builder(BlockTwistingVinesBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.TWISTING_VINES)
                 .setProperties(BlockPropertyTypes.TWISTING_VINES_AGE)
                 .setBaseComponentSupplier(blockType -> new BlockNetherVinesBaseComponentImpl(blockType, BlockFace.UP, BlockFace.DOWN, BlockPropertyTypes.TWISTING_VINES_AGE))
                 .build();
         BlockTypes.WEEPING_VINES = AllayBlockType
-                .builder(BlockWeepingVinesBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.WEEPING_VINES)
                 .setProperties(BlockPropertyTypes.WEEPING_VINES_AGE)
                 .setBaseComponentSupplier(blockType -> new BlockNetherVinesBaseComponentImpl(blockType, BlockFace.DOWN, BlockFace.UP, BlockPropertyTypes.WEEPING_VINES_AGE))
@@ -3814,7 +3814,7 @@ public final class BlockTypeInitializer {
      */
     public static void initRail() {
         BlockTypes.RAIL = AllayBlockType
-                .builder(BlockRailBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.RAIL)
                 .setProperties(BlockPropertyTypes.RAIL_DIRECTION_10)
                 .setBaseComponentSupplier(BlockNormalRailBaseComponentImpl::new)
@@ -3828,7 +3828,7 @@ public final class BlockTypeInitializer {
      */
     public static void initGoldenRail() {
         BlockTypes.GOLDEN_RAIL = AllayBlockType
-                .builder(BlockGoldenRailBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.GOLDEN_RAIL)
                 .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
                 .setBaseComponentSupplier(BlockPoweredRailBaseComponentImpl::new)
@@ -3842,7 +3842,7 @@ public final class BlockTypeInitializer {
      */
     public static void initDetectorRail() {
         BlockTypes.DETECTOR_RAIL = AllayBlockType
-                .builder(BlockDetectorRailBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.DETECTOR_RAIL)
                 .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
                 .setBaseComponentSupplier(BlockDetectorRailBaseComponentImpl::new)
@@ -3856,7 +3856,7 @@ public final class BlockTypeInitializer {
      */
     public static void initActivatorRail() {
         BlockTypes.ACTIVATOR_RAIL = AllayBlockType
-                .builder(BlockActivatorRailBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.ACTIVATOR_RAIL)
                 .setProperties(BlockPropertyTypes.RAIL_DATA_BIT, BlockPropertyTypes.RAIL_DIRECTION_6)
                 .setBaseComponentSupplier(BlockPoweredRailBaseComponentImpl::new)
@@ -3870,7 +3870,7 @@ public final class BlockTypeInitializer {
      */
     public static void initNetherWart() {
         BlockTypes.NETHER_WART = AllayBlockType
-                .builder(BlockNetherWartBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.NETHER_WART)
                 .setProperties(BlockPropertyTypes.AGE_4)
                 .setBaseComponentSupplier(BlockNetherWartBaseComponentImpl::new)
@@ -3884,12 +3884,12 @@ public final class BlockTypeInitializer {
      */
     public static void initMushroom() {
         BlockTypes.BROWN_MUSHROOM = AllayBlockType
-                .builder(BlockBrownMushroomBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BROWN_MUSHROOM)
                 .setBaseComponentSupplier(bt -> new BlockMushroomBaseComponentImpl(bt, HugeBrownMushroomFeature.IDENTIFIER))
                 .build();
         BlockTypes.RED_MUSHROOM = AllayBlockType
-                .builder(BlockRedMushroomBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.RED_MUSHROOM)
                 .setBaseComponentSupplier(bt -> new BlockMushroomBaseComponentImpl(bt, HugeRedMushroomFeature.IDENTIFIER))
                 .build();
@@ -3902,12 +3902,12 @@ public final class BlockTypeInitializer {
      */
     public static void initAzalea() {
         BlockTypes.AZALEA = AllayBlockType
-                .builder(BlockAzaleaBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.AZALEA)
                 .setBaseComponentSupplier(bt -> new BlockAzaleaBaseComponentImpl(bt, AzaleaTreeFeature.IDENTIFIER))
                 .build();
         BlockTypes.FLOWERING_AZALEA = AllayBlockType
-                .builder(BlockFloweringAzaleaBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.FLOWERING_AZALEA)
                 .setBaseComponentSupplier(bt -> new BlockAzaleaBaseComponentImpl(bt, AzaleaTreeFeature.IDENTIFIER))
                 .build();
@@ -3920,12 +3920,12 @@ public final class BlockTypeInitializer {
      */
     public static void initFungus() {
         BlockTypes.CRIMSON_FUNGUS = AllayBlockType
-                .builder(BlockCrimsonFungusBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CRIMSON_FUNGUS)
                 .setBaseComponentSupplier(bt -> new BlockFungusBaseComponentImpl(bt, BlockId.CRIMSON_NYLIUM, HugeFungusFeature.CRIMSON_IDENTIFIER))
                 .build();
         BlockTypes.WARPED_FUNGUS = AllayBlockType
-                .builder(BlockWarpedFungusBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.WARPED_FUNGUS)
                 .setBaseComponentSupplier(bt -> new BlockFungusBaseComponentImpl(bt, BlockId.WARPED_NYLIUM, HugeFungusFeature.WARPED_IDENTIFIER))
                 .build();
@@ -3938,7 +3938,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSweetBerryBush() {
         BlockTypes.SWEET_BERRY_BUSH = AllayBlockType
-                .builder(BlockSweetBerryBushBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SWEET_BERRY_BUSH)
                 .setProperties(BlockPropertyTypes.GROWTH_8)
                 .setBaseComponentSupplier(BlockSweetBerryBushBaseComponentImpl::new)
@@ -3952,7 +3952,7 @@ public final class BlockTypeInitializer {
      */
     public static void initFireflyBush() {
         BlockTypes.FIREFLY_BUSH = AllayBlockType
-                .builder(BlockFireflyBushBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.FIREFLY_BUSH)
                 .setBaseComponentSupplier(BlockFireflyBushBaseComponentImpl::new)
                 .build();
@@ -3965,7 +3965,7 @@ public final class BlockTypeInitializer {
      */
     public static void initCocoa() {
         BlockTypes.COCOA = AllayBlockType
-                .builder(BlockCocoaBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.COCOA)
                 .setProperties(BlockPropertyTypes.AGE_3, BlockPropertyTypes.DIRECTION_4)
                 .setBaseComponentSupplier(BlockCocoaBaseComponentImpl::new)
@@ -3979,7 +3979,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSeaPickle() {
         BlockTypes.SEA_PICKLE = AllayBlockType
-                .builder(BlockSeaPickleBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SEA_PICKLE)
                 .setProperties(BlockPropertyTypes.CLUSTER_COUNT, BlockPropertyTypes.DEAD_BIT)
                 .setBaseComponentSupplier(BlockSeaPickleBaseComponentImpl::new)
@@ -3993,13 +3993,13 @@ public final class BlockTypeInitializer {
      */
     public static void initBamboo() {
         BlockTypes.BAMBOO_SAPLING = AllayBlockType
-                .builder(BlockSaplingBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BAMBOO_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .setBaseComponentSupplier(BlockBambooSaplingBaseComponentImpl::new)
                 .build();
         BlockTypes.BAMBOO = AllayBlockType
-                .builder(BlockBambooBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BAMBOO)
                 .setProperties(BlockPropertyTypes.AGE_BIT, BlockPropertyTypes.BAMBOO_LEAF_SIZE, BlockPropertyTypes.BAMBOO_STALK_THICKNESS)
                 .setBaseComponentSupplier(BlockBambooBaseComponentImpl::new)
@@ -4013,7 +4013,7 @@ public final class BlockTypeInitializer {
      */
     public static void initKelp() {
         BlockTypes.KELP = AllayBlockType
-                .builder(BlockKelpBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.KELP)
                 .setProperties(BlockPropertyTypes.KELP_AGE)
                 .setBaseComponentSupplier(BlockKelpBaseComponentImpl::new)
@@ -4027,7 +4027,7 @@ public final class BlockTypeInitializer {
      */
     public static void initVine() {
         BlockTypes.VINE = AllayBlockType
-                .builder(BlockVineBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.VINE)
                 .setProperties(BlockPropertyTypes.VINE_DIRECTION_BITS)
                 .setBaseComponentSupplier(BlockVineBaseComponentImpl::new)
@@ -4041,7 +4041,7 @@ public final class BlockTypeInitializer {
      */
     public static void initGlowLichen() {
         BlockTypes.GLOW_LICHEN = AllayBlockType
-                .builder(BlockGlowLichenBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.GLOW_LICHEN)
                 .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
                 .setBaseComponentSupplier(BlockMultiFaceBaseComponentImpl::new)
@@ -4055,7 +4055,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSculkVein() {
         BlockTypes.SCULK_VEIN = AllayBlockType
-                .builder(BlockSculkVeinBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SCULK_VEIN)
                 .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
                 .setBaseComponentSupplier(BlockMultiFaceBaseComponentImpl::new)
@@ -4069,7 +4069,7 @@ public final class BlockTypeInitializer {
      */
     public static void initResinClump() {
         BlockTypes.RESIN_CLUMP = AllayBlockType
-                .builder(BlockResinClumpBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.RESIN_CLUMP)
                 .setProperties(BlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
                 .setBaseComponentSupplier(BlockResinClumpBaseComponentImpl::new)
@@ -4083,7 +4083,7 @@ public final class BlockTypeInitializer {
      */
     public static void initWaterlily() {
         BlockTypes.WATERLILY = AllayBlockType
-                .builder(BlockWaterlilyBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.WATERLILY)
                 .setBaseComponentSupplier(BlockWaterlilyBaseComponentImpl::new)
                 .build();
@@ -4096,7 +4096,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSporeBlossom() {
         BlockTypes.SPORE_BLOSSOM = AllayBlockType
-                .builder(BlockSporeBlossomBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SPORE_BLOSSOM)
                 .setBaseComponentSupplier(BlockSporeBlossomBaseComponentImpl::new)
                 .build();
@@ -4109,7 +4109,7 @@ public final class BlockTypeInitializer {
      */
     public static void initSeagrass() {
         BlockTypes.SEAGRASS = AllayBlockType
-                .builder(BlockSeagrassBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SEAGRASS)
                 .setProperties(BlockPropertyTypes.SEA_GRASS_TYPE)
                 .setBaseComponentSupplier(BlockSeagrassBaseComponentImpl::new)
@@ -4123,19 +4123,19 @@ public final class BlockTypeInitializer {
      */
     public static void initCaveVines() {
         BlockTypes.CAVE_VINES = AllayBlockType
-                .builder(BlockCaveVinesBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CAVE_VINES)
                 .setProperties(BlockPropertyTypes.GROWING_PLANT_AGE)
                 .setBaseComponentSupplier(bt -> new BlockCaveVinesBaseComponentImpl(bt, false, true))
                 .build();
         BlockTypes.CAVE_VINES_BODY_WITH_BERRIES = AllayBlockType
-                .builder(BlockCaveVinesBodyWithBerriesBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CAVE_VINES_BODY_WITH_BERRIES)
                 .setProperties(BlockPropertyTypes.GROWING_PLANT_AGE)
                 .setBaseComponentSupplier(bt -> new BlockCaveVinesBaseComponentImpl(bt, true, false))
                 .build();
         BlockTypes.CAVE_VINES_HEAD_WITH_BERRIES = AllayBlockType
-                .builder(BlockCaveVinesHeadWithBerriesBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CAVE_VINES_HEAD_WITH_BERRIES)
                 .setProperties(BlockPropertyTypes.GROWING_PLANT_AGE)
                 .setBaseComponentSupplier(bt -> new BlockCaveVinesBaseComponentImpl(bt, true, true))
@@ -4149,14 +4149,14 @@ public final class BlockTypeInitializer {
      */
     public static void initDripleaf() {
         BlockTypes.SMALL_DRIPLEAF_BLOCK = AllayBlockType
-                .builder(BlockSmallDripleafBlockBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.SMALL_DRIPLEAF_BLOCK)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBaseComponentSupplier(BlockSmallDripleafBaseComponentImpl::new)
                 .build();
 
         BlockTypes.BIG_DRIPLEAF = AllayBlockType
-                .builder(BlockBigDripleafBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.BIG_DRIPLEAF)
                 .setProperties(BlockPropertyTypes.BIG_DRIPLEAF_HEAD, BlockPropertyTypes.BIG_DRIPLEAF_TILT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(BlockBigDripleafBaseComponentImpl::new)
@@ -4192,7 +4192,7 @@ public final class BlockTypeInitializer {
      */
     public static void initChiseledBookshelf() {
         BlockTypes.CHISELED_BOOKSHELF = AllayBlockType
-                .builder(BlockChiseledBookshelfBehaviorImpl.class)
+                .builder()
                 .vanillaBlock(BlockId.CHISELED_BOOKSHELF)
                 .bindBlockEntity(BlockEntityTypes.CHISELED_BOOKSHELF)
                 .setProperties(BlockPropertyTypes.BOOKS_STORED, BlockPropertyTypes.DIRECTION_4)

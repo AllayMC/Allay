@@ -10,7 +10,6 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
@@ -41,12 +40,6 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implements BlockBlockEntityHolderComponent<T> {
-    /**
-     * {@code IDENTIFIER} names the block entity holder implementation when providers
-     * and dependency injection identify this component.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_block_entity_holder_component");
 
     /**
      * Configured block entity creation type.

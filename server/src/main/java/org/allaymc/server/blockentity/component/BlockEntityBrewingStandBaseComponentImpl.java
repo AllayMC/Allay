@@ -19,7 +19,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.BrewingStandContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
@@ -121,7 +120,6 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
      * association depends on an order the block-type builder does not
      * guarantee.
      */
-    @OnInitFinish
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);

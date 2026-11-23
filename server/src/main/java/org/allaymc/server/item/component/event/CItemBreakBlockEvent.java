@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 
 /**
  * {@code CItemBreakBlockEvent} carries the broken block state and breaking entity
@@ -19,6 +20,10 @@ import org.allaymc.api.eventbus.event.Event;
 @Setter
 @AllArgsConstructor
 public class CItemBreakBlockEvent extends Event {
+    /**
+     * Owning item stack used to break the block.
+     */
+    protected ItemStack itemStack;
     /**
      * Block state associated with the break.
      */

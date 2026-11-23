@@ -25,14 +25,15 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.BlockPlaceSound;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.component.ComponentLifecycle;
 import org.allaymc.server.item.component.event.*;
+import org.allaymc.server.item.impl.ItemStackImpl;
+import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -65,14 +66,8 @@ import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB
  * @author daoge_cmd
  */
 @Slf4j
-public class ItemBaseComponentImpl implements ItemBaseComponent {
+public class ItemBaseComponentImpl implements ItemBaseComponent, ComponentLifecycle<ItemStackInitInfo> {
 
-    /**
-     * {@code IDENTIFIER} identifies the core item-state provider used by item type
-     * builders when no explicit base component replaces it.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
     /**
      * {@code TAG_COUNT} identifies the outer stack count byte. {@code TAG_META},
@@ -271,7 +266,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      * The manager and owning stack must already be injected because
      * {@code loadExtraTag} dispatches a component event before loading base fields.
      */
-    @OnInitFinish
+    @Override
     public void onInitFinish(ItemStackInitInfo initInfo) {
         loadExtraTag(initInfo.extraTag());
     }
@@ -419,7 +414,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      */
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        var event = new CItemUseOnBlockEvent(dimension, placeBlockPos, interactInfo, false);
+        var event = new CItemUseOnBlockEvent(thisItemStack, dimension, placeBlockPos, interactInfo, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
@@ -522,20 +517,46 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     /**
-     * Recreates this stack from count, metadata, and serialized extra component
-     * state. A {@code true} flag clears the requested ID before enabling automatic
-     * allocation; a {@code false} flag preserves the current ID and disables
-     * allocation, including when that ID is absent.
-     *
-     * <p>
-     * Using the item factory reconstructs the configured component composition
-     * rather than copying Java fields directly. Only state represented by that
-     * serialization path is restored, and retained nested values are not promised
-     * to be deep copies. An invalid explicitly retained ID can fail builder
-     * validation.
+     * Recreates this stack with matching count, metadata, and extra state.
+     * Ordinary stacks whose blueprint contains only the standard
+     * {@code ItemBaseComponentImpl} and no extra-tag sibling event handlers take
+     * a direct in-memory copy fast path without NBT serialization round-trips;
+     * specialized subclasses and stateful sibling components reconstruct through
+     * {@code saveExtraTag()}.
      */
     @Override
     public ItemStack copy(boolean newStackNetworkId) {
+        if (this.getClass() == ItemBaseComponentImpl.class
+                && itemType instanceof AllayItemType<?> allayItemType
+                && !allayItemType.getBlueprint().hasEventHandler(CItemSaveExtraTagEvent.class)
+                && !allayItemType.getBlueprint().hasEventHandler(CItemLoadExtraTagEvent.class)) {
+            var copy = itemType.createItemStack(
+                    ItemStackInitInfo
+                            .builder()
+                            .count(count)
+                            .meta(meta)
+                            .uniqueId(newStackNetworkId ? EMPTY_UNIQUE_ID : uniqueId)
+                            .assignUniqueId(newStackNetworkId)
+                            .build()
+            );
+            var targetBase = (ItemBaseComponentImpl) ((ItemStackImpl) copy).getBaseComponent();
+            targetBase.damage = this.damage;
+            targetBase.repairCost = this.repairCost;
+            targetBase.customName = this.customName;
+            if (!this.lore.isEmpty()) {
+                targetBase.lore = new ArrayList<>(this.lore);
+            }
+            if (!this.enchantments.isEmpty()) {
+                targetBase.enchantments = new HashMap<>(this.enchantments);
+            }
+            targetBase.lockMode = this.lockMode;
+            if (!this.persistentDataContainer.isEmpty()) {
+                targetBase.persistentDataContainer.putAll(this.persistentDataContainer.toNbt());
+            }
+            targetBase.blockEntityNBT = this.blockEntityNBT;
+            return copy;
+        }
+
         return itemType.createItemStack(
                 ItemStackInitInfo
                         .builder()
@@ -569,7 +590,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      */
     @Override
     public void rightClickItemInAir(EntityPlayer player) {
-        manager.callEvent(new CItemRightClickInAirEvent(player));
+        manager.callEvent(new CItemRightClickInAirEvent(thisItemStack, player));
     }
 
     /**
@@ -579,7 +600,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      */
     @Override
     public boolean interactEntity(Entity performer, Entity victim) {
-        var event = new CItemInteractEntityEvent(performer, victim, false);
+        var event = new CItemInteractEntityEvent(thisItemStack, performer, victim, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
@@ -591,7 +612,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      */
     @Override
     public boolean canUseItemInAir(EntityPlayer player) {
-        var event = new CItemTryUseInAirEvent(player, false);
+        var event = new CItemTryUseInAirEvent(thisItemStack, player, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
@@ -603,7 +624,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      */
     @Override
     public boolean useItemInAir(EntityPlayer player, long usingTime) {
-        var event = new CItemUseInAirEvent(player, usingTime, false);
+        var event = new CItemUseInAirEvent(thisItemStack, player, usingTime, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
@@ -805,7 +826,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      */
     @Override
     public void onBreakBlock(BlockState block, Entity breaker) {
-        manager.callEvent(new CItemBreakBlockEvent(block, breaker));
+        manager.callEvent(new CItemBreakBlockEvent(thisItemStack, block, breaker));
     }
 
     /**
@@ -813,7 +834,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
      */
     @Override
     public void onAttackEntity(Entity attacker, Entity victim) {
-        manager.callEvent(new CItemAttackEntityEvent(attacker, victim));
+        manager.callEvent(new CItemAttackEntityEvent(thisItemStack, attacker, victim));
     }
 
     /**

@@ -6,7 +6,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.utils.function.TriFunction;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.registry.InternalRegistries;
 import org.jctools.maps.NonBlockingHashMap;
@@ -27,12 +26,6 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 public class BlockStateDataComponentImpl implements BlockStateDataComponent {
-    /**
-     * {@code IDENTIFIER} names this component in block behavior assembly, allowing
-     * the builder to supply default metadata when no provider is configured.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_state_data_component");
 
     /**
      * {@code DEFAULT} is the shared component returning {@code

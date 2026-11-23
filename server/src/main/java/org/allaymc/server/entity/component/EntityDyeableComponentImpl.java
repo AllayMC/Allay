@@ -6,7 +6,6 @@ import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityDyeableComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.DyeColor;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
@@ -24,12 +23,6 @@ import java.util.function.Supplier;
  */
 public class EntityDyeableComponentImpl implements EntityDyeableComponent {
 
-    /**
-     * {@code IDENTIFIER} names this component implementation for provider
-     * lookup and replacement when entity types assemble their component sets.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_dyeable_component");
 
     /**
      * {@code TAG_COLOR} identifies the NBT byte used by load and save handlers

@@ -4,7 +4,6 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.BarrelContainerImpl;
 
 /**
@@ -37,7 +36,6 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
      * injected holder must contain a {@code BarrelContainerImpl}; later
      * replacement of its container does not move these registered callbacks.
      */
-    @OnInitFinish
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);

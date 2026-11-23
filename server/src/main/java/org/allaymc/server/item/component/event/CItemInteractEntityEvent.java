@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 
 /**
  * {@code CItemInteractEntityEvent} carries an entity interaction and its mutable
@@ -18,6 +19,10 @@ import org.allaymc.api.eventbus.event.Event;
 @Setter
 @AllArgsConstructor
 public class CItemInteractEntityEvent extends Event {
+    /**
+     * Owning item stack used to interact with the entity.
+     */
+    protected ItemStack itemStack;
     /**
      * Entity performing the item interaction.
      */

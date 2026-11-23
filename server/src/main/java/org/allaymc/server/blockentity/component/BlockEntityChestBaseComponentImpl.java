@@ -7,7 +7,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.OnInitFinish;
 
 /**
  * {@code BlockEntityChestBaseComponentImpl} emits chest opening and closing
@@ -48,7 +47,6 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
      * pairing configuration, but its viewer callbacks require a resolvable
      * partner.
      */
-    @OnInitFinish
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);

@@ -11,14 +11,13 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveCleanNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.component.ComponentLifecycle;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -44,15 +43,8 @@ import java.util.Objects;
  *
  * @author daoge_cmd
  */
-public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
+public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent, ComponentLifecycle<BlockEntityInitInfo> {
 
-    /**
-     * {@code IDENTIFIER} identifies the default base provider. Type builders
-     * supply that provider when no component with this identifier has been
-     * explicitly configured.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
     // These tags encode base identity, coordinates, naming, and plugin data;
     // base saving writes them after component hooks according to field
@@ -144,7 +136,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
      * dependencies; failures may leave earlier fields or components partially
      * initialized.
      */
-    @OnInitFinish
+    @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         loadNBT(initInfo.nbt());
     }

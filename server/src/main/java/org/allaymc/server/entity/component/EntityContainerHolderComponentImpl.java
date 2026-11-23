@@ -5,7 +5,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.BaseContainerHolder;
@@ -21,12 +20,6 @@ import org.allaymc.server.entity.component.event.CEntityGetDropEvent;
  */
 public class EntityContainerHolderComponentImpl extends BaseContainerHolder implements EntityContainerHolderComponent {
 
-    /**
-     * {@code IDENTIFIER} names this component implementation for provider
-     * lookup and replacement when entity types assemble their component sets.
-     */
-    @Identifier.Component
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_container_holder_component");
 
     /**
      * {@code thisEntity} is the injected entity used for game-rule lookup.

@@ -4,7 +4,6 @@ import org.allaymc.api.entity.component.EntityAnimalComponent;
 import org.allaymc.api.entity.interfaces.EntityAnimal;
 import org.allaymc.api.item.ItemStack;
 
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 
 import java.util.function.Predicate;
@@ -19,13 +18,6 @@ import java.util.function.Predicate;
  */
 public class EntityAnimalComponentImpl implements EntityAnimalComponent {
 
-    /**
-     * {@code IDENTIFIER} selects the predicate-backed breeding-item component
-     * when an entity type composes the animal's behavior from named component
-     * implementations.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_animal_component");
 
     /**
      * Animal owning the breeding-item predicate component.

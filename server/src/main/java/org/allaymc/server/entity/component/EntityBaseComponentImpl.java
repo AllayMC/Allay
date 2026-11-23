@@ -34,7 +34,6 @@ import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -42,7 +41,7 @@ import org.allaymc.server.block.NetherPortalHelper;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.component.ComponentLifecycle;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -81,15 +80,8 @@ import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB
  * @author daoge_cmd
  */
 @Slf4j
-public class EntityBaseComponentImpl implements EntityBaseComponent {
+public class EntityBaseComponentImpl implements EntityBaseComponent, ComponentLifecycle<EntityInitInfo> {
 
-    /**
-     * {@code IDENTIFIER} names the common entity base component, allowing
-     * entity type builders to detect and supply or replace the provider for
-     * core entity behavior.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     // TAG_POS, TAG_IDENTIFIER, TAG_ROTATION, TAG_TAGS, TAG_UNIQUE_ID, TAG_PDC,
     // TAG_PORTAL_COOLDOWN, and TAG_PROPERTIES identify the common entity state
@@ -341,7 +333,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
      * precedence over defaults, while this phase does not validate that their
      * runtime types or ranges match the property definition.
      */
-    @OnInitFinish
+    @Override
     public void onInitFinish(EntityInitInfo initInfo) {
         loadNBT(initInfo.nbt());
         for (var propType : this.entityType.getProperties().values()) {

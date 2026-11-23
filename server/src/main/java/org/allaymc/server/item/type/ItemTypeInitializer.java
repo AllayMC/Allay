@@ -81,7 +81,7 @@ public final class ItemTypeInitializer {
      */
     public static void initHoneycomb() {
         ItemTypes.HONEYCOMB = AllayItemType
-                .builder(ItemHoneycombStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.HONEYCOMB)
                 .addComponent(ItemHoneycombBaseComponentImpl::new, ItemHoneycombBaseComponentImpl.class)
                 .build();
@@ -140,291 +140,201 @@ public final class ItemTypeInitializer {
         ItemTypes.TROPICAL_FISH = AllayItemType
                 .builder(ItemTropicalFishStackImpl.class)
                 .vanillaItem(ItemId.TROPICAL_FISH)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(1, 0.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(1, 0.2f))
                 .build();
         ItemTypes.SWEET_BERRIES = AllayItemType
                 .builder(ItemSweetBerriesStackImpl.class)
                 .vanillaItem(ItemId.SWEET_BERRIES)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(2, 1.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(2, 1.2f))
                 .addComponent(ItemSweetBerriesBaseComponentImpl::new, ItemSweetBerriesBaseComponentImpl.class)
                 .build();
         ItemTypes.COOKED_BEEF = AllayItemType
                 .builder(ItemCookedBeefStackImpl.class)
                 .vanillaItem(ItemId.COOKED_BEEF)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(8, 12.8f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(8, 12.8f))
                 .build();
         ItemTypes.SALMON = AllayItemType
                 .builder(ItemSalmonStackImpl.class)
                 .vanillaItem(ItemId.SALMON)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(2, 0.4f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(2, 0.4f))
                 .build();
         ItemTypes.RABBIT = AllayItemType
                 .builder(ItemRabbitStackImpl.class)
                 .vanillaItem(ItemId.RABBIT)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(3, 1.8f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(3, 1.8f))
                 .build();
         ItemTypes.PORKCHOP = AllayItemType
                 .builder(ItemPorkchopStackImpl.class)
                 .vanillaItem(ItemId.PORKCHOP)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(3, 1.8f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(3, 1.8f))
                 .build();
         ItemTypes.MUTTON = AllayItemType
                 .builder(ItemMuttonStackImpl.class)
                 .vanillaItem(ItemId.MUTTON)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(2, 1.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(2, 1.2f))
                 .build();
         ItemTypes.COD = AllayItemType
                 .builder(ItemCodStackImpl.class)
                 .vanillaItem(ItemId.COD)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(2, 0.4f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(2, 0.4f))
                 .build();
         ItemTypes.BEEF = AllayItemType
                 .builder(ItemBeefStackImpl.class)
                 .vanillaItem(ItemId.BEEF)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(3, 1.8f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(3, 1.8f))
                 .build();
         ItemTypes.RABBIT_STEW = AllayItemType
                 .builder(ItemRabbitStewStackImpl.class)
                 .vanillaItem(ItemId.RABBIT_STEW)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(10, 12f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(10, 12f))
                 .build();
         ItemTypes.PUMPKIN_PIE = AllayItemType
                 .builder(ItemPumpkinPieStackImpl.class)
                 .vanillaItem(ItemId.PUMPKIN_PIE)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(8, 4.8f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(8, 4.8f))
                 .build();
         ItemTypes.POTATO = AllayItemType
                 .builder(ItemPotatoStackImpl.class)
                 .vanillaItem(ItemId.POTATO)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(1, 0.6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(1, 0.6f))
                 .addComponent(ItemPotatoBaseComponentImpl::new, ItemPotatoBaseComponentImpl.class)
                 .build();
         ItemTypes.MUSHROOM_STEW = AllayItemType
                 .builder(ItemMushroomStewStackImpl.class)
                 .vanillaItem(ItemId.MUSHROOM_STEW)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(6, 7.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(6, 7.2f))
                 .build();
         ItemTypes.MELON_SLICE = AllayItemType
                 .builder(ItemMelonSliceStackImpl.class)
                 .vanillaItem(ItemId.MELON_SLICE)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(2, 1.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(2, 1.2f))
                 .build();
         ItemTypes.GOLDEN_CARROT = AllayItemType
                 .builder(ItemGoldenCarrotStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_CARROT)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(6, 14.4f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(6, 14.4f))
                 .build();
         ItemTypes.GLOW_BERRIES = AllayItemType
                 .builder(ItemGlowBerriesStackImpl.class)
                 .vanillaItem(ItemId.GLOW_BERRIES)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(2, 0.4f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(2, 0.4f))
                 .addComponent(ItemGlowBerriesBaseComponentImpl::new, ItemGlowBerriesBaseComponentImpl.class)
                 .build();
         ItemTypes.COOKIE = AllayItemType
                 .builder(ItemCookieStackImpl.class)
                 .vanillaItem(ItemId.COOKIE)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(2, 0.4f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(2, 0.4f))
                 .build();
         ItemTypes.DRIED_KELP = AllayItemType
                 .builder(ItemDriedKelpStackImpl.class)
                 .vanillaItem(ItemId.DRIED_KELP)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(1, 0.2f, 16),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(1, 0.2f, 16))
                 .build();
         ItemTypes.COOKED_SALMON = AllayItemType
                 .builder(ItemCookedSalmonStackImpl.class)
                 .vanillaItem(ItemId.COOKED_SALMON)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(6, 9.6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(6, 9.6f))
                 .build();
         ItemTypes.COOKED_RABBIT = AllayItemType
                 .builder(ItemCookedRabbitStackImpl.class)
                 .vanillaItem(ItemId.COOKED_RABBIT)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(5, 6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(5, 6f))
                 .build();
         ItemTypes.COOKED_PORKCHOP = AllayItemType
                 .builder(ItemCookedPorkchopStackImpl.class)
                 .vanillaItem(ItemId.COOKED_PORKCHOP)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(8, 12.8f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(8, 12.8f))
                 .build();
         ItemTypes.COOKED_MUTTON = AllayItemType
                 .builder(ItemCookedMuttonStackImpl.class)
                 .vanillaItem(ItemId.COOKED_MUTTON)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(6, 9.6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(6, 9.6f))
                 .build();
         ItemTypes.COOKED_COD = AllayItemType
                 .builder(ItemCookedCodStackImpl.class)
                 .vanillaItem(ItemId.COOKED_COD)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(5, 6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(5, 6f))
                 .build();
         ItemTypes.COOKED_CHICKEN = AllayItemType
                 .builder(ItemCookedChickenStackImpl.class)
                 .vanillaItem(ItemId.COOKED_CHICKEN)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(6, 7.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(6, 7.2f))
                 .build();
         ItemTypes.CARROT = AllayItemType
                 .builder(ItemCarrotStackImpl.class)
                 .vanillaItem(ItemId.CARROT)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(3, 3.6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(3, 3.6f))
                 .addComponent(ItemCarrotBaseComponentImpl::new, ItemCarrotBaseComponentImpl.class)
                 .build();
         ItemTypes.BREAD = AllayItemType
                 .builder(ItemBreadStackImpl.class)
                 .vanillaItem(ItemId.BREAD)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(5, 6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(5, 6f))
                 .build();
         ItemTypes.BEETROOT_SOUP = AllayItemType
                 .builder(ItemBeetrootSoupStackImpl.class)
                 .vanillaItem(ItemId.BEETROOT_SOUP)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(6, 7.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(6, 7.2f))
                 .build();
         ItemTypes.BEETROOT = AllayItemType
                 .builder(ItemBeetrootStackImpl.class)
                 .vanillaItem(ItemId.BEETROOT)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(1, 1.2f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(1, 1.2f))
                 .build();
         ItemTypes.BAKED_POTATO = AllayItemType
                 .builder(ItemBakedPotatoStackImpl.class)
                 .vanillaItem(ItemId.BAKED_POTATO)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(5, 6f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(5, 6f))
                 .build();
         ItemTypes.POISONOUS_POTATO = AllayItemType
                 .builder(ItemPoisonousPotatoStackImpl.class)
                 .vanillaItem(ItemId.POISONOUS_POTATO)
-                .addComponent(ItemPoisonousPotatoEdibleComponentImpl::new, ItemPoisonousPotatoEdibleComponentImpl.class)
+                .addComponent(new ItemPoisonousPotatoEdibleComponentImpl())
                 .build();
         ItemTypes.SPIDER_EYE = AllayItemType
                 .builder(ItemSpiderEyeStackImpl.class)
                 .vanillaItem(ItemId.SPIDER_EYE)
-                .addComponent(ItemSpiderEyeEdibleComponentImpl::new, ItemSpiderEyeEdibleComponentImpl.class)
+                .addComponent(new ItemSpiderEyeEdibleComponentImpl())
                 .build();
         ItemTypes.ROTTEN_FLESH = AllayItemType
                 .builder(ItemRottenFleshStackImpl.class)
                 .vanillaItem(ItemId.ROTTEN_FLESH)
-                .addComponent(ItemRottenFleshEdibleComponentImpl::new, ItemRottenFleshEdibleComponentImpl.class)
+                .addComponent(new ItemRottenFleshEdibleComponentImpl())
                 .build();
         ItemTypes.CHICKEN = AllayItemType
                 .builder(ItemChickenStackImpl.class)
                 .vanillaItem(ItemId.CHICKEN)
-                .addComponent(ItemChickenEdibleComponentImpl::new, ItemChickenEdibleComponentImpl.class)
+                .addComponent(new ItemChickenEdibleComponentImpl())
                 .build();
         ItemTypes.PUFFERFISH = AllayItemType
                 .builder(ItemPufferfishStackImpl.class)
                 .vanillaItem(ItemId.PUFFERFISH)
-                .addComponent(ItemPufferfishEdibleComponentImpl::new, ItemPufferfishEdibleComponentImpl.class)
+                .addComponent(new ItemPufferfishEdibleComponentImpl())
                 .build();
         ItemTypes.HONEY_BOTTLE = AllayItemType
                 .builder(ItemHoneyBottleStackImpl.class)
                 .vanillaItem(ItemId.HONEY_BOTTLE)
-                .addComponent(ItemHoneyBottleEdibleComponentImpl::new, ItemHoneyBottleEdibleComponentImpl.class)
+                .addComponent(new ItemHoneyBottleEdibleComponentImpl())
                 .build();
         ItemTypes.APPLE = AllayItemType
                 .builder(ItemAppleStackImpl.class)
                 .vanillaItem(ItemId.APPLE)
-                .addComponent(
-                        $ -> new ItemEdibleComponentImpl(4, 2.4f),
-                        ItemEdibleComponentImpl.class
-                )
+                .addComponent(new ItemEdibleComponentImpl(4, 2.4f))
                 .build();
         ItemTypes.GOLDEN_APPLE = AllayItemType
                 .builder(ItemGoldenAppleStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_APPLE)
-                .addComponent(ItemGoldenAppleEdibleComponentImpl::new, ItemGoldenAppleEdibleComponentImpl.class)
+                .addComponent(new ItemGoldenAppleEdibleComponentImpl())
                 .build();
         ItemTypes.ENCHANTED_GOLDEN_APPLE = AllayItemType
                 .builder(ItemEnchantedGoldenAppleStackImpl.class)
                 .vanillaItem(ItemId.ENCHANTED_GOLDEN_APPLE)
-                .addComponent(ItemEnchantedGoldenAppleEdibleComponentImpl::new, ItemEnchantedGoldenAppleEdibleComponentImpl.class)
+                .addComponent(new ItemEnchantedGoldenAppleEdibleComponentImpl())
                 .build();
         ItemTypes.CHORUS_FRUIT = AllayItemType
                 .builder(ItemChorusFruitStackImpl.class)
                 .vanillaItem(ItemId.CHORUS_FRUIT)
-                .addComponent(ItemChorusFruitEdibleComponentImpl::new, ItemChorusFruitEdibleComponentImpl.class)
+                .addComponent(new ItemChorusFruitEdibleComponentImpl())
                 .build();
     }
 
@@ -524,6 +434,14 @@ public final class ItemTypeInitializer {
         ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_PIGMAN_SPAWN_EGG, EntityId.ZOMBIE_PIGMAN);
         ItemTypes.ZOMBIE_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_SPAWN_EGG, EntityId.ZOMBIE);
         ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG, EntityId.ZOMBIE_VILLAGER);
+        ItemTypes.SPAWN_EGG = AllayItemType
+                .builder(ItemSpawnEggStackImpl.class)
+                .vanillaItem(ItemId.SPAWN_EGG)
+                .addComponent(
+                        initInfo -> new ItemSpawnEggBaseComponentImpl(initInfo, () -> null),
+                        ItemSpawnEggBaseComponentImpl.class
+                )
+                .build();
     }
 
     /**
@@ -567,8 +485,8 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemSwordStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemSwordToolComponentImpl::new, ItemSwordToolComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .addComponent(ItemSwordToolComponentImpl.INSTANCE)
+                .addComponent(new ItemRepairableComponentImpl(repairItemId))
                 .build();
     }
 
@@ -596,8 +514,8 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .addComponent(ItemToolComponentImpl.INSTANCE)
+                .addComponent(new ItemRepairableComponentImpl(repairItemId))
                 .build();
     }
 
@@ -626,8 +544,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemAxeStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(ItemAxeBaseComponentImpl::new, ItemAxeBaseComponentImpl.class)
-                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .addComponent(ItemToolComponentImpl.INSTANCE)
+                .addComponent(new ItemRepairableComponentImpl(repairItemId))
                 .build();
     }
 
@@ -655,8 +573,8 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemShovelStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .addComponent(ItemToolComponentImpl.INSTANCE)
+                .addComponent(new ItemRepairableComponentImpl(repairItemId))
                 .build();
     }
 
@@ -684,8 +602,8 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemHoeStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemHoeToolComponentImpl::new, ItemHoeToolComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .addComponent(ItemHoeToolComponentImpl.INSTANCE)
+                .addComponent(new ItemRepairableComponentImpl(repairItemId))
                 .build();
     }
 
@@ -759,8 +677,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemTurtleHelmetStackImpl.class)
                 .vanillaItem(ItemId.TURTLE_HELMET)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
-                .addComponent(() -> new ItemWearableComponentImpl(ArmorType.HELMET), ItemWearableComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.TURTLE_SCUTE), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemWearableComponentImpl(ArmorType.HELMET))
+                .addComponent(new ItemRepairableComponentImpl(ItemId.TURTLE_SCUTE))
                 .build();
     }
 
@@ -781,8 +699,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemElytraStackImpl.class)
                 .vanillaItem(ItemId.ELYTRA)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
-                .addComponent(() -> new ItemWearableComponentImpl(ArmorType.CHESTPLATE), ItemWearableComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.PHANTOM_MEMBRANE), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemWearableComponentImpl(ArmorType.CHESTPLATE))
+                .addComponent(new ItemRepairableComponentImpl(ItemId.PHANTOM_MEMBRANE))
                 .build();
     }
 
@@ -828,9 +746,9 @@ public final class ItemTypeInitializer {
                 .builder((Class<T>) stackClass)
                 .vanillaItem(itemId)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
-                .addComponent(() -> new ItemWearableComponentImpl(armorType), ItemWearableComponentImpl.class)
+                .addComponent(new ItemWearableComponentImpl(armorType))
                 .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemRepairableComponentImpl(repairItemId))
                 .build();
     }
 
@@ -845,9 +763,9 @@ public final class ItemTypeInitializer {
                 .builder((Class<T>) stackClass)
                 .vanillaItem(itemId)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
-                .addComponent(() -> new ItemWearableComponentImpl(armorType), ItemWearableComponentImpl.class)
+                .addComponent(new ItemWearableComponentImpl(armorType))
                 .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.LEATHER), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemRepairableComponentImpl(ItemId.LEATHER))
                 .addComponent(ItemDyeableComponentImpl::new, ItemDyeableComponentImpl.class)
                 .build();
     }
@@ -933,7 +851,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemBucketStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(() -> new ItemBucketComponentImpl(liquidBlockId, entityId), ItemBucketComponentImpl.class)
+                .addComponent(new ItemBucketComponentImpl(liquidBlockId, entityId))
                 .build();
     }
 
@@ -946,7 +864,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemMilkBucketStackImpl.class)
                 .vanillaItem(ItemId.MILK_BUCKET)
-                .addComponent(ItemMilkBucketEdibleComponentImpl::new, ItemMilkBucketEdibleComponentImpl.class)
+                .addComponent(new ItemMilkBucketEdibleComponentImpl())
                 .build();
     }
 
@@ -957,7 +875,7 @@ public final class ItemTypeInitializer {
      */
     public static void initFlintAndSteel() {
         ItemTypes.FLINT_AND_STEEL = AllayItemType
-                .builder(ItemFlintAndSteelStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.FLINT_AND_STEEL)
                 .addComponent(ItemFlintAndSteelBaseComponentImpl::new, ItemFlintAndSteelBaseComponentImpl.class)
                 .build();
@@ -970,7 +888,7 @@ public final class ItemTypeInitializer {
      */
     public static void initEndCrystal() {
         ItemTypes.END_CRYSTAL = AllayItemType
-                .builder(ItemEndCrystalStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.END_CRYSTAL)
                 .addComponent(ItemEndCrystalBaseComponentImpl::new, ItemEndCrystalBaseComponentImpl.class)
                 .build();
@@ -983,32 +901,32 @@ public final class ItemTypeInitializer {
      */
     public static void initSeeds() {
         ItemTypes.WHEAT_SEEDS = AllayItemType
-                .builder(ItemWheatSeedsStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.WHEAT_SEEDS)
                 .addComponent(ItemWheatSeedsBaseComponentImpl::new, ItemWheatSeedsBaseComponentImpl.class)
                 .build();
         ItemTypes.BEETROOT_SEEDS = AllayItemType
-                .builder(ItemBeetrootSeedsStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.BEETROOT_SEEDS)
                 .addComponent(ItemBeetrootSeedsBaseComponentImpl::new, ItemBeetrootSeedsBaseComponentImpl.class)
                 .build();
         ItemTypes.MELON_SEEDS = AllayItemType
-                .builder(ItemMelonSeedsStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.MELON_SEEDS)
                 .addComponent(ItemMelonSeedsBaseComponentImpl::new, ItemMelonSeedsBaseComponentImpl.class)
                 .build();
         ItemTypes.PUMPKIN_SEEDS = AllayItemType
-                .builder(ItemPumpkinSeedsStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.PUMPKIN_SEEDS)
                 .addComponent(ItemPumpkinSeedsBaseComponentImpl::new, ItemPumpkinSeedsBaseComponentImpl.class)
                 .build();
         ItemTypes.TORCHFLOWER_SEEDS = AllayItemType
-                .builder(ItemTorchflowerSeedsStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.TORCHFLOWER_SEEDS)
                 .addComponent(ItemTorchflowerSeedsBaseComponentImpl::new, ItemTorchflowerSeedsBaseComponentImpl.class)
                 .build();
         ItemTypes.PITCHER_POD = AllayItemType
-                .builder(ItemPitcherPodStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.PITCHER_POD)
                 .addComponent(ItemPitcherPodBaseComponentImpl::new, ItemPitcherPodBaseComponentImpl.class)
                 .build();
@@ -1021,7 +939,7 @@ public final class ItemTypeInitializer {
      */
     public static void initBook() {
         ItemTypes.BOOK = AllayItemType
-                .builder(ItemBookStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.BOOK)
                 .addComponent(ItemBookBaseComponentImpl::new, ItemBookBaseComponentImpl.class)
                 .build();
@@ -1049,7 +967,7 @@ public final class ItemTypeInitializer {
                 .addComponent(ItemFilledMapBaseComponentImpl::new, ItemFilledMapBaseComponentImpl.class)
                 .build();
         ItemTypes.EMPTY_MAP = AllayItemType
-                .builder(ItemEmptyMapStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.EMPTY_MAP)
                 .addComponent(ItemEmptyMapBaseComponentImpl::new, ItemEmptyMapBaseComponentImpl.class)
                 .build();
@@ -1206,7 +1124,7 @@ public final class ItemTypeInitializer {
                 .builder(ItemBowStackImpl.class)
                 .vanillaItem(ItemId.BOW)
                 .addComponent(ItemBowBaseComponentImpl::new, ItemBowBaseComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemRepairableComponentImpl(ItemId.STRING))
                 .build();
     }
 
@@ -1233,7 +1151,7 @@ public final class ItemTypeInitializer {
                 .builder(ItemCrossbowStackImpl.class)
                 .vanillaItem(ItemId.CROSSBOW)
                 .addComponent(ItemCrossbowBaseComponentImpl::new, ItemCrossbowBaseComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemRepairableComponentImpl(ItemId.STRING))
                 .build();
     }
 
@@ -1244,7 +1162,7 @@ public final class ItemTypeInitializer {
      */
     public static void initBed() {
         ItemTypes.BED = AllayItemType
-                .builder(ItemBedStackImpl.class)
+                .builder()
                 .addComponent(ItemBedBaseComponentImpl::new, ItemBedBaseComponentImpl.class)
                 .vanillaItem(ItemId.BED)
                 .build();
@@ -1257,7 +1175,7 @@ public final class ItemTypeInitializer {
      */
     public static void initPainting() {
         ItemTypes.PAINTING = AllayItemType
-                .builder(ItemPaintingStackImpl.class)
+                .builder()
                 .addComponent(ItemPaintingBaseComponentImpl::new, ItemPaintingBaseComponentImpl.class)
                 .vanillaItem(ItemId.PAINTING)
                 .build();
@@ -1339,7 +1257,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemDyeStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(() -> new ItemDyeComponentImpl(dyeColor), ItemDyeComponentImpl.class)
+                .addComponent(new ItemDyeComponentImpl(dyeColor))
                 .build();
     }
 
@@ -1369,7 +1287,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemSpearStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemRepairableComponentImpl(repairItemId))
                 .build();
     }
 
@@ -1380,7 +1298,7 @@ public final class ItemTypeInitializer {
      */
     public static void initRedstoneWire() {
         ItemTypes.REDSTONE = AllayItemType
-                .builder(ItemRedstoneStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.REDSTONE)
                 .addComponent(ItemRedstoneBaseComponentImpl::new, ItemRedstoneBaseComponentImpl.class)
                 .build();
@@ -1393,7 +1311,7 @@ public final class ItemTypeInitializer {
      */
     public static void initString() {
         ItemTypes.STRING = AllayItemType
-                .builder(ItemStringStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.STRING)
                 .addComponent(ItemStringBaseComponentImpl::new, ItemStringBaseComponentImpl.class)
                 .build();
@@ -1406,7 +1324,7 @@ public final class ItemTypeInitializer {
      */
     public static void initRepeater() {
         ItemTypes.REPEATER = AllayItemType
-                .builder(ItemRepeaterStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.REPEATER)
                 .addComponent(ItemRepeaterBaseComponentImpl::new, ItemRepeaterBaseComponentImpl.class)
                 .build();
@@ -1419,7 +1337,7 @@ public final class ItemTypeInitializer {
      */
     public static void initComparator() {
         ItemTypes.COMPARATOR = AllayItemType
-                .builder(ItemComparatorStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.COMPARATOR)
                 .addComponent(ItemComparatorBaseComponentImpl::new, ItemComparatorBaseComponentImpl.class)
                 .build();
@@ -1435,8 +1353,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemMaceStackImpl.class)
                 .vanillaItem(ItemId.MACE)
                 .addComponent(ItemMaceBaseComponentImpl::new, ItemMaceBaseComponentImpl.class)
-                .addComponent(ItemSwordToolComponentImpl::new, ItemSwordToolComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.BREEZE_ROD), ItemRepairableComponentImpl.class)
+                .addComponent(ItemSwordToolComponentImpl.INSTANCE)
+                .addComponent(new ItemRepairableComponentImpl(ItemId.BREEZE_ROD))
                 .build();
     }
 
@@ -1450,7 +1368,7 @@ public final class ItemTypeInitializer {
                 .builder(ItemShieldStackImpl.class)
                 .vanillaItem(ItemId.SHIELD)
                 .addComponent(ItemShieldBaseComponentImpl::new, ItemShieldBaseComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.PLANKS), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemRepairableComponentImpl(ItemId.PLANKS))
                 .build();
     }
 
@@ -1477,7 +1395,7 @@ public final class ItemTypeInitializer {
                 .builder(ItemFishingRodStackImpl.class)
                 .vanillaItem(ItemId.FISHING_ROD)
                 .addComponent(ItemFishingRodBaseComponentImpl::new, ItemFishingRodBaseComponentImpl.class)
-                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
+                .addComponent(new ItemRepairableComponentImpl(ItemId.STRING))
                 .build();
     }
 
@@ -1489,7 +1407,7 @@ public final class ItemTypeInitializer {
      */
     public static void initArmorStand() {
         ItemTypes.ARMOR_STAND = AllayItemType
-                .builder(ItemArmorStandStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.ARMOR_STAND)
                 .addComponent(ItemArmorStandBaseComponentImpl::new, ItemArmorStandBaseComponentImpl.class)
                 .build();
@@ -1503,7 +1421,7 @@ public final class ItemTypeInitializer {
      */
     public static void initNetherWart() {
         ItemTypes.ITEM_NETHER_WART = AllayItemType
-                .builder(ItemItemNetherWartStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.ITEM_NETHER_WART)
                 .addComponent(ItemNetherWartBaseComponentImpl::new, ItemNetherWartBaseComponentImpl.class)
                 .build();
@@ -1516,7 +1434,7 @@ public final class ItemTypeInitializer {
      */
     public static void initCocoaBeans() {
         ItemTypes.COCOA_BEANS = AllayItemType
-                .builder(ItemCocoaBeansStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.COCOA_BEANS)
                 .addComponent(ItemCocoaBeansBaseComponentImpl::new, ItemCocoaBeansBaseComponentImpl.class)
                 .build();
@@ -1529,7 +1447,7 @@ public final class ItemTypeInitializer {
      */
     public static void initKelp() {
         ItemTypes.KELP = AllayItemType
-                .builder(ItemKelpStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.KELP)
                 .addComponent(ItemKelpBaseComponentImpl::new, ItemKelpBaseComponentImpl.class)
                 .build();
@@ -1542,7 +1460,7 @@ public final class ItemTypeInitializer {
      */
     public static void initWaterlily() {
         ItemTypes.WATERLILY = AllayItemType
-                .builder(ItemWaterlilyStackImpl.class)
+                .builder()
                 .vanillaItem(ItemId.WATERLILY)
                 .addComponent(ItemWaterlilyBaseComponentImpl::new, ItemWaterlilyBaseComponentImpl.class)
                 .build();
@@ -1558,7 +1476,7 @@ public final class ItemTypeInitializer {
         ItemTypes.CARVED_PUMPKIN = AllayItemType
                 .builder(ItemCarvedPumpkinStackImpl.class)
                 .vanillaItem(ItemId.CARVED_PUMPKIN)
-                .addComponent(() -> new ItemWearableComponentImpl(ArmorType.HELMET), ItemWearableComponentImpl.class)
+                .addComponent(new ItemWearableComponentImpl(ArmorType.HELMET))
                 .build();
     }
 
@@ -1587,7 +1505,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemHeadStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(() -> new ItemWearableComponentImpl(ArmorType.HELMET, false), ItemWearableComponentImpl.class)
+                .addComponent(new ItemWearableComponentImpl(ArmorType.HELMET, false))
                 .build();
     }
 }

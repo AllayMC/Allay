@@ -7,6 +7,7 @@ import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
@@ -23,6 +24,10 @@ import org.joml.Vector3ic;
 @AllArgsConstructor
 @CallerThread(ThreadType.WORLD)
 public class CItemUseOnBlockEvent extends Event {
+    /**
+     * Owning item stack used on the target block.
+     */
+    protected ItemStack itemStack;
     /**
      * Dimension containing the interaction target.
      */

@@ -18,6 +18,12 @@ import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
  */
 public class ItemHoeToolComponentImpl extends ItemToolComponentImpl {
     /**
+     * {@code INSTANCE} is the shared stateless singleton for hoe tilling and tool
+     * durability handling.
+     */
+    public static final ItemHoeToolComponentImpl INSTANCE = new ItemHoeToolComponentImpl();
+
+    /**
      * Turns the clicked grass-tagged block into dry farmland when its upper
      * neighbor is air. The event requires player interaction data; a successful
      * conversion plays the use sound and marks the event usable even if the held

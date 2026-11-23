@@ -6,11 +6,8 @@ import lombok.experimental.Accessors;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEatEvent;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemEdibleComponent;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
 import org.allaymc.server.item.component.event.CItemUseInAirEvent;
 
@@ -26,12 +23,6 @@ import org.allaymc.server.item.component.event.CItemUseInAirEvent;
 @Getter
 @RequiredArgsConstructor
 public class ItemEdibleComponentImpl implements ItemEdibleComponent {
-    /**
-     * {@code IDENTIFIER} names the shared edible component for provider lookup
-     * and dependency injection during item behavior assembly.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_food_component");
     /**
      * {@code DEFAULT_EATING_TIME} defines the thirty-one game ticks used by
      * constructors that do not specify a separate eating duration.
@@ -61,14 +52,6 @@ public class ItemEdibleComponentImpl implements ItemEdibleComponent {
      */
     @Accessors(fluent = true)
     private final boolean canBeAlwaysEaten;
-
-    /**
-     * {@code thisItemStack} holds the injected owning stack. {@code onItemUse}
-     * passes that instance to {@code PlayerEatEvent} before invoking the
-     * consumption callback.
-     */
-    @ComponentObject
-    protected ItemStack thisItemStack;
 
     /**
      * Creates ordinary food behavior with the supplied nutrition values. This
@@ -136,7 +119,7 @@ public class ItemEdibleComponentImpl implements ItemEdibleComponent {
         }
 
         var player = event.getPlayer();
-        var playerEatFoodEvent = new PlayerEatEvent(player, thisItemStack);
+        var playerEatFoodEvent = new PlayerEatEvent(player, event.getItemStack());
         if (!playerEatFoodEvent.call()) {
             event.setCanBeUsed(false);
             return;

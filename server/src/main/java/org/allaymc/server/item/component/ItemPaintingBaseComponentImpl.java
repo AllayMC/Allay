@@ -9,7 +9,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.entity.impl.EntityPaintingImpl;
+import org.allaymc.server.entity.component.item.EntityPaintingBaseComponentImpl;
 import org.joml.Vector3ic;
 
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
                 continue;
             }
 
-            if (EntityPaintingImpl.canPlace(type, dimension, placeBlockPos, face, true)) {
+            if (EntityPaintingBaseComponentImpl.canPlace(type, dimension, placeBlockPos, face, true)) {
                 if (currentTotalDimension > totalDimension) {
                     totalDimension = currentTotalDimension;
                     // A larger summed dimension supersedes smaller candidates;

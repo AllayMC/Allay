@@ -16,6 +16,8 @@ application {
 
 dependencies {
     api(project(":api"))
+    annotationProcessor(project(":processor"))
+    testAnnotationProcessor(project(":processor"))
     api(libs.bundles.logging)
     api(libs.bundles.leveldb)
     api(libs.bundles.rng)
@@ -71,20 +73,7 @@ jacoco {
     reportsDirectory = layout.buildDirectory.dir("${rootProject.projectDir}/.jacoco")
 }
 
-// The generated type-registration initializers compile into single init() methods that exceed
-// JaCoCo's ASM method-size limit, crashing the test JVM ("Method too large"). Exclude them from
-// instrumentation entirely; they contain no logic worth measuring.
-val jacocoExcludes = listOf(
-    "**/ItemTypeDefaultInitializer",
-    "**/BlockTypeDefaultInitializer",
-)
-
 tasks {
-    test {
-        extensions.configure<JacocoTaskExtension>("jacoco") {
-            excludes?.addAll(jacocoExcludes)
-        }
-    }
     processResources {
         dependsOn("generateGitProperties")
         // input directory

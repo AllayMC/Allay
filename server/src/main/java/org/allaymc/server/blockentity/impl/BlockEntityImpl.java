@@ -33,6 +33,14 @@ public class BlockEntityImpl extends ComponentClass implements BlockEntity {
     private BlockEntityBaseComponent baseComponent;
 
     /**
+     * Creates an uninitialized block entity to be wired immediately by
+     * {@link org.allaymc.server.component.ComponentBlueprint}.
+     */
+    protected BlockEntityImpl() {
+        super();
+    }
+
+    /**
      * Constructs and wires components using the supplied initialization
      * information. Providers run before dependency injection and completion
      * hooks; failures abort construction without undoing earlier provider or

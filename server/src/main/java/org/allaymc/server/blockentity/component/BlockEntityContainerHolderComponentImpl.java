@@ -10,13 +10,12 @@ import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.component.ComponentLifecycle;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;
 
@@ -42,14 +41,7 @@ import java.util.function.Supplier;
  *
  * @author daoge_cmd
  */
-public class BlockEntityContainerHolderComponentImpl implements BlockEntityContainerHolderComponent {
-    /**
-     * {@code IDENTIFIER} selects the standard block-entity inventory-holder
-     * component when component providers resolve dependencies by their
-     * registered identifiers.
-     */
-    @Identifier.Component
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_inventory_holder_component");
+public class BlockEntityContainerHolderComponentImpl implements BlockEntityContainerHolderComponent, ComponentLifecycle<BlockEntityInitInfo> {
 
     /**
      * {@code baseComponent} supplies the current position for interaction and
@@ -112,7 +104,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
      * callbacks resolve its live position rather than retaining the position
      * from initialization.
      */
-    @OnInitFinish
+    @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         comparatorUpdateListener = itemStack -> {
             var pos = baseComponent.getPosition();

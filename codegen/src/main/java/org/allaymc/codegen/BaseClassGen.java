@@ -1,101 +1,65 @@
 package org.allaymc.codegen;
 
-import com.palantir.javapoet.*;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Set;
+import java.util.List;
 
 /**
- * {@code BaseClassGen} builds the initial interface and implementation
- * skeletons used by type generators. Subclasses decide when an existing
- * handwritten extension must be preserved; these output helpers themselves
- * replace their target files. Cleanup removes obsolete names while retaining
- * files explicitly reserved by the calling generator.
+ * {@code BaseClassGen} provides shared code-generation helpers for Allay's
+ * type catalogs and default type initializers. Interface and implementation
+ * delegation classes are no longer pre-generated as empty skeletons; instead,
+ * specialized interfaces live explicitly in {@code api} and their corresponding
+ * server {@code *Impl} classes are generated at compile time by the
+ * {@code :processor} annotation processor.
  *
  * @author daoge_cmd | IWareQ
  */
 public abstract class BaseClassGen {
-    /**
-     * Writes an empty public interface extending the supplied parent type. The
-     * target is replaced directly with JavaPoet output, so callers must check
-     * whether an existing interface contains handwritten additions before
-     * invoking this helper.
-     *
-     * @throws IOException if the output cannot be written
-     */
-    protected static void generateInterface(ClassName superClassName, ClassName className, Path path) throws IOException {
-        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
-                .addSuperinterface(superClassName)
-                .addModifiers(Modifier.PUBLIC);
-        var javaFile = JavaFile.builder(className.packageName(), codeBuilder.build())
-                .indent(CodeGenConstants.INDENT)
-                .skipJavaLangImports(true)
-                .build();
-        System.out.println("Generating " + className + ".java ...");
-        Utils.writeFileWithCRLF(path, javaFile.toString());
-    }
 
     /**
-     * Writes a public implementation whose constructor forwards initialization
-     * information and component providers to its superclass. The output
-     * contains no handwritten component delegation; callers must preserve
-     * existing customized classes before selecting this direct replacement
-     * operation.
-     *
-     * @throws IOException if the output cannot be written
+     * {@code DEFAULT_INIT_CHUNK_SIZE} limits how many guarded default
+     * registrations appear in one generated helper method so neither the JVM
+     * bytecode limit nor JaCoCo instrumentation hits oversized methods.
      */
-    protected static void generateImpl(ClassName superClassName, ClassName superInterfaceName, ClassName className, ClassName initInfoClass, Path path) throws IOException {
-        TypeSpec.Builder codeBuilder = TypeSpec.classBuilder(className)
-                .superclass(superClassName)
-                .addSuperinterface(superInterfaceName)
-                .addModifiers(Modifier.PUBLIC);
-        codeBuilder.addMethod(
-                MethodSpec
-                        .constructorBuilder()
-                        .addModifiers(Modifier.PUBLIC)
-                        .addParameter(initInfoClass, "initInfo")
-                        .addParameter(ParameterizedTypeName.get(TypeNames.LIST, ParameterizedTypeName.get(TypeNames.COMPONENT_PROVIDER, WildcardTypeName.subtypeOf(TypeNames.COMPONENT))), "componentProviders")
-                        .addStatement("super(initInfo, componentProviders)")
-                        .build()
-        );
-        var javaFile = JavaFile.builder(className.packageName(), codeBuilder.build())
-                .indent(CodeGenConstants.INDENT)
-                .skipJavaLangImports(true)
-                .build();
-        System.out.println("Generating " + className + ".java ...");
-        Utils.writeFileWithCRLF(path, javaFile.toString());
-    }
+    protected static final int DEFAULT_INIT_CHUNK_SIZE = 200;
 
     /**
-     * Removes regular files whose basenames are absent from both supplied sets.
-     * A missing directory requires no cleanup, and subdirectories are retained.
-     * Individual deletion failures are printed before processing continues;
-     * failure to open the directory is wrapped in a runtime exception. Cleanup
-     * is nonrecursive and does not restrict candidates to Java files.
+     * Emits a public static {@code init()} entry point and chunked private helper
+     * methods executing {@code statements} in order. When {@code statements} fits
+     * within {@code chunkSize}, all statements are emitted directly in
+     * {@code init()}.
+     *
+     * @param classBuilder target initializer type builder
+     * @param statements   guarded registration blocks in deterministic order
+     * @param chunkSize    maximum number of blocks per generated helper method
      */
-    protected static void deleteOldFiles(Path dir, Set<String> generatedFiles, Set<String> ignoredFiles) {
-        if (!Files.exists(dir)) {
+    protected static void addChunkedInitMethods(TypeSpec.Builder classBuilder, List<CodeBlock> statements, int chunkSize) {
+        var initMethod = MethodSpec.methodBuilder("init")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+        if (statements.size() <= chunkSize) {
+            for (var statement : statements) {
+                initMethod.addCode(statement);
+            }
+            classBuilder.addMethod(initMethod.build());
             return;
         }
 
-        try (var files = Files.list(dir)) {
-            files.filter(path -> Files.isRegularFile(path) && !ignoredFiles.contains(path.getFileName().toString())).forEach(file -> {
-                try {
-                    if (!generatedFiles.contains(file.getFileName().toString())) {
-                        System.out.println("Deleting unused file: " + file.getFileName());
-                        Files.delete(file);
-                    }
-                } catch (IOException e) {
-                    // Keep processing the remaining obsolete files after one deletion
-                    // fails; the printed error leaves that individual cleanup failure visible.
-                    e.printStackTrace();
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        int partIndex = 0;
+        for (int start = 0; start < statements.size(); start += chunkSize) {
+            int end = Math.min(start + chunkSize, statements.size());
+            var partName = "initPart" + partIndex++;
+            initMethod.addStatement("$N()", partName);
+
+            var partMethod = MethodSpec.methodBuilder(partName)
+                    .addModifiers(Modifier.PRIVATE, Modifier.STATIC);
+            for (int i = start; i < end; i++) {
+                partMethod.addCode(statements.get(i));
+            }
+            classBuilder.addMethod(partMethod.build());
         }
+        classBuilder.addMethod(initMethod.build());
     }
 }

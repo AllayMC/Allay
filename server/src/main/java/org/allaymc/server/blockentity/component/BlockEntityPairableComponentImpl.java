@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveCleanNBTEvent;
@@ -32,13 +31,6 @@ import org.allaymc.server.component.annotation.Dependency;
  */
 public class BlockEntityPairableComponentImpl implements BlockEntityPairableComponent {
 
-    /**
-     * {@code IDENTIFIER} selects the pairable component provider during
-     * component assembly, keeping its metadata and event hooks available to
-     * paired block entities.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_pairable_component");
 
     /**
      * {@code TAG_PAIR_LEAD} names the retained lead flag. The pairing tag

@@ -3,7 +3,6 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.component.EntityHeadYawComponent;
-import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * {@code EntityHeadYawComponentImpl} stores head yaw independently of the
@@ -15,12 +14,6 @@ import org.allaymc.api.utils.identifier.Identifier;
  */
 public class EntityHeadYawComponentImpl implements EntityHeadYawComponent {
 
-    /**
-     * {@code IDENTIFIER} names this component implementation for provider
-     * lookup and replacement when entity types assemble their component sets.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_head_yaw_component");
 
     /**
      * Independent head yaw measured in degrees.

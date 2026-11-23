@@ -11,7 +11,7 @@ import org.allaymc.api.item.ItemStack;
  *
  * @author daoge_cmd
  */
-public interface EntityFishingHookBaseComponent extends EntityComponent {
+public interface EntityFishingHookBaseComponent extends EntityBaseComponent {
     /**
      * {@code FishingState} identifies the current phase of a cast fishing
      * hook.

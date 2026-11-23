@@ -1,7 +1,6 @@
 package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.ShelfContainerImpl;
 
 /**
@@ -31,7 +30,7 @@ public class BlockEntityShelfContainerHolderComponentImpl extends BlockEntityCon
      * and requires a loaded chunk; later container replacement does not migrate
      * listeners.
      */
-    @OnInitFinish
+    @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         for (int slot = 0; slot < container.getItemStackArray().length; slot++) {

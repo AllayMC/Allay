@@ -18,7 +18,6 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.AllayNBTUtils;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.ComponentManager;
@@ -60,13 +59,6 @@ import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB
  */
 public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
-    /**
-     * {@code IDENTIFIER} selects the common physics provider during entity
-     * type assembly, allowing specialized physics components to replace it
-     * under the same component identity.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_physics_component");
 
     // TAG_MOTION, TAG_ON_GROUND, and TAG_KNOCKBACK_RESISTANCE identify the
     // physical state shared by the entity load and save event handlers.

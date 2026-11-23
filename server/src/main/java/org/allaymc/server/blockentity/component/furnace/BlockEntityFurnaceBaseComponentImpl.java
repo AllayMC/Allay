@@ -24,7 +24,6 @@ import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.FurnaceContainerImpl;
 import org.allaymc.server.item.recipe.FurnaceRecipeMatcher;
 import org.cloudburstmc.nbt.NbtMap;
@@ -162,7 +161,6 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
      * stack triggers the stored-experience drop path, regardless of who cleared
      * the result.
      */
-    @OnInitFinish
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);

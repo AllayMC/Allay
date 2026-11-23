@@ -31,6 +31,14 @@ public class ItemStackImpl extends ComponentClass implements ItemStack {
     private ItemBaseComponent baseComponent;
 
     /**
+     * Creates an uninitialized item stack to be wired immediately by
+     * {@link org.allaymc.server.component.ComponentBlueprint}.
+     */
+    protected ItemStackImpl() {
+        super();
+    }
+
+    /**
      * Creates the item stack using {@code initInfo} and
      * {@code componentProviders}. {@code componentProviders} must produce
      * exactly one assignable implementation for each component-typed field,

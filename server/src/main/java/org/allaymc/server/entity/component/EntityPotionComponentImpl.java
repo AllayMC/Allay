@@ -5,7 +5,6 @@ import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPotionComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
@@ -20,12 +19,6 @@ import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
  */
 public class EntityPotionComponentImpl implements EntityPotionComponent {
 
-    /**
-     * {@code IDENTIFIER} selects this potion-content component during
-     * component registration and dependency lookup by identifier.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_potion_component");
 
     /**
      * {@code TAG_POTION_ID} names the short-valued potion identifier exchanged

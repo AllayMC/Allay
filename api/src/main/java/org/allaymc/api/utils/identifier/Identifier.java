@@ -2,10 +2,6 @@ package org.allaymc.api.utils.identifier;
 
 import org.allaymc.api.plugin.Plugin;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.Objects;
 
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
@@ -118,14 +114,5 @@ public record Identifier(String namespace, String path) implements Cloneable {
     @Override
     public Identifier clone() {
         return new Identifier(namespace, path);
-    }
-
-    /**
-     * {@code Component} marks the runtime-visible identifier field used to identify a component
-     * implementation during component assembly.
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.FIELD)
-    public @interface Component {
     }
 }

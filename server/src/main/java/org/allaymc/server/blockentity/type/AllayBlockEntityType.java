@@ -2,51 +2,41 @@ package org.allaymc.server.blockentity.type;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
-import me.sunlan.fastreflection.FastConstructor;
-import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.impl.BlockEntityImpl;
+import org.allaymc.server.component.ComponentBlueprint;
 import org.allaymc.server.component.ComponentProvider;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static org.allaymc.server.component.ComponentProvider.toMap;
+
 /**
- * {@code AllayBlockEntityType} represents a block-entity factory backed by a
- * captured constructor and component-provider configuration. Its
- * {@code createBlockEntity} operation writes this type into the supplied
- * initialization object before invoking the constructor, so providers can read
- * the selected type while constructing their per-instance state. Callers must
- * not share that initialization object between concurrent creations that mutate
- * its type reference.
+ * {@code AllayBlockEntityType} represents a registered block-entity factory
+ * backed by a precompiled {@link ComponentBlueprint} and persistence name.
+ * {@code Builder.build} validates all component bindings eagerly during
+ * registration and orders the base component ahead of sibling components in
+ * deterministic insertion order.
  *
- * <p>
- * {@code Builder.build} snapshots the provider map's values into a list while
- * retaining the provider objects themselves. Later builder map changes do not
- * alter that captured list, but {@code HashMap} iteration provides no stable
- * component ordering. The builder adds a default base provider only when its
- * identifier is absent. Successful constructor setup precedes registry
- * publication, which can replace an existing same-name mapping without changing
- * older type references.
+ * @param <T> block-entity interface produced by this type
  *
  * @author daoge_cmd
  */
 public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityType<T> {
 
     /**
-     * {@code instanceCreator} holds the constructor adapter and captured
-     * provider list. Providers remain shared between creations and determine
-     * whether their component results are fresh.
+     * {@code instanceCreator} invokes this type's compiled blueprint factory.
      */
     protected final Function<BlockEntityInitInfo, T> instanceCreator;
     /**
@@ -56,7 +46,7 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
     protected String name;
 
     /**
-     * Stores the constructor adapter and persistence name for this type.
+     * Stores the compiled instance factory and persistence name for this type.
      */
     protected AllayBlockEntityType(Function<BlockEntityInitInfo, T> instanceCreator, String name) {
         this.instanceCreator = instanceCreator;
@@ -64,18 +54,24 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
     }
 
     /**
-     * Creates an empty type builder targeting the supplied block-entity
-     * implementation.
+     * Creates a type builder targeting the default {@link BlockEntityImpl}
+     * implementation for block entities without a specialized API interface.
+     */
+    public static Builder builder() {
+        return new Builder(BlockEntityImpl.class);
+    }
+
+    /**
+     * Creates a type builder targeting the supplied block-entity implementation
+     * class or composed API interface.
      */
     public static <T extends BlockEntity> Builder builder(Class<T> clazz) {
         return new Builder(clazz);
     }
 
     /**
-     * Assigns this type into the supplied initialization object and constructs
-     * an instance. Callers must not share {@code info} between concurrent
-     * creations; the assignment remains even if construction fails, and no
-     * chunk attachment is performed.
+     * Assigns this type into {@code info} and constructs an instance through the
+     * compiled blueprint without attaching it to a chunk.
      */
     @Override
     public T createBlockEntity(BlockEntityInitInfo info) {
@@ -84,35 +80,34 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
     }
 
     /**
-     * {@code Builder} collects a constructor target, persistence name, and
-     * identifier-keyed component providers for a block-entity factory.
+     * {@code Builder} collects a target class, persistence name, and
+     * insertion-ordered component providers keyed by contract class.
      */
     public static class Builder {
         /**
-         * Reflective constructor target class.
+         * Target block-entity implementation class or composed API interface.
          */
         protected Class<?> clazz;
         /**
-         * {@code componentProviders} indexes providers by identifier. Additions
-         * replace equal keys, and {@code build} captures the values in
-         * unspecified map iteration order.
+         * {@code componentProviders} indexes providers by canonical contract class
+         * in deterministic insertion order.
          */
-        protected Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders = new HashMap<>();
+        protected Map<Class<?>, ComponentProvider<? extends BlockEntityComponent>> componentProviders = new LinkedHashMap<>();
         /**
          * Proposed persistence type name.
          */
         protected String name;
 
         /**
-         * Creates a provider-free builder targeting the supplied reflective
-         * constructor class.
+         * Creates a builder targeting the supplied block-entity implementation
+         * class or composed API interface.
          */
         public Builder(Class<?> clazz) {
             this.clazz = clazz;
         }
 
         /**
-         * Selects the persistence registry name and returns this same builder.
+         * Selects the persistence registry name and returns this builder.
          */
         public Builder name(String name) {
             this.name = name;
@@ -120,102 +115,98 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         }
 
         /**
-         * Replaces configured providers with a shallow copy of the supplied
-         * map. The map must be non-{@code null}; provider objects remain
-         * shared, and later changes to the caller's map do not alter this
-         * builder.
+         * Replaces configured providers with an insertion-ordered copy of the
+         * supplied map.
          */
-        public Builder setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> providers) {
+        public Builder setComponents(Map<Class<?>, ComponentProvider<? extends BlockEntityComponent>> providers) {
             Preconditions.checkNotNull(providers, "providers");
-            this.componentProviders = new HashMap<>(providers);
+            this.componentProviders = new LinkedHashMap<>(providers);
             return this;
         }
 
         /**
-         * Merges supplied identifier-provider entries and returns this same
-         * builder. Equal keys replace existing providers, while other entries
-         * remain; provider objects are retained directly without copying their
-         * internal state.
+         * Replaces configured providers using contract keys derived from the
+         * supplied list, rejecting duplicate keys.
          */
-        public Builder addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> providers) {
+        public Builder setComponents(List<ComponentProvider<? extends BlockEntityComponent>> providers) {
+            return setComponents(toMap(providers));
+        }
+
+        /**
+         * Merges supplied contract-keyed provider entries and returns this
+         * builder.
+         */
+        public Builder addComponents(Map<Class<?>, ComponentProvider<? extends BlockEntityComponent>> providers) {
             this.componentProviders.putAll(providers);
             return this;
         }
 
         /**
-         * Wraps an initialization-aware provider and indexes it by component
-         * identifier. The supplied class determines identifier discovery and
-         * injection metadata; an existing provider under that identifier is
-         * replaced without invoking either.
+         * Adds providers indexed by their contract keys, rejecting duplicate keys
+         * within {@code providers}.
+         */
+        public Builder addComponents(List<ComponentProvider<? extends BlockEntityComponent>> providers) {
+            return addComponents(toMap(providers));
+        }
+
+        /**
+         * Registers an initialization-aware provider under the contract key
+         * resolved from {@code componentClass}.
          */
         public Builder addComponent(Function<BlockEntityInitInfo, ? extends BlockEntityComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.Simple<>(provider, componentClass);
-            this.componentProviders.put(p.findComponentIdentifier(), p);
+            this.componentProviders.put(p.getComponentKey(), p);
             return this;
         }
 
         /**
-         * Registers a supplier that ignores each creation's initialization
-         * information. The component class determines its identifier, and
-         * registration replaces an equal-key provider without invoking the
-         * supplier until component construction.
+         * Registers a supplier-backed provider under the contract key resolved
+         * from {@code componentClass}.
          */
         public Builder addComponent(Supplier<? extends BlockEntityComponent> supplier, Class<?> componentClass) {
             return addComponent($ -> supplier.get(), componentClass);
         }
 
         /**
-         * Registers the supplied provider under its discovered component
-         * identifier. Existing equal-key entries are replaced; the provider
-         * remains shared with the caller and may be reused by multiple built
-         * types.
+         * Registers a shared stateless component singleton under its resolved
+         * contract key.
+         */
+        public Builder addComponent(BlockEntityComponent singleton) {
+            return addComponent(ComponentProvider.singleton(singleton));
+        }
+
+        /**
+         * Registers the supplied provider under its contract key and returns this
+         * builder.
          */
         public Builder addComponent(ComponentProvider<? extends BlockEntityComponent> provider) {
-            this.componentProviders.put(provider.findComponentIdentifier(), provider);
+            this.componentProviders.put(provider.getComponentKey(), provider);
             return this;
         }
 
         /**
-         * Builds and registers a type using Allay's class loader for
-         * reflection. This delegates the same default-base insertion and
-         * provider snapshot rules as the explicit-loader overload, and can
-         * replace a same-name mapping.
+         * Builds and registers a type using Allay's class loader.
          */
         public <T extends BlockEntity> BlockEntityType<T> build() {
             return build(Allay.class.getClassLoader());
         }
 
         /**
-         * Prepares a constructor adapter and publishes the type under its name.
-         * The target class must expose a public constructor accepting
-         * {@code BlockEntityInitInfo} and {@code List}, and {@code name} must
-         * be non-{@code null}. When the base identifier is missing, this
-         * builder gains the default base provider before reflection begins;
-         * that mutation survives later failure. Provider references are
-         * captured in a separate list, isolating future map edits but
-         * preserving shared provider state. Reflection setup failures become
-         * {@code BlockEntityTypeBuildException}; registry rejection propagates
-         * separately after setup and does not undo the builder mutation.
+         * Compiles the type's {@link ComponentBlueprint}, validates all component
+         * bindings eagerly, and publishes the block-entity type under {@code name}.
          */
+        @SuppressWarnings("unchecked")
         public <T extends BlockEntity> BlockEntityType<T> build(ClassLoader classLoader) {
             Preconditions.checkNotNull(name, "name");
-            if (!componentProviders.containsKey(BlockEntityBaseComponentImpl.IDENTIFIER)) {
-                // Every ordinary instance needs base behavior, but an explicit
-                // provider under the base identifier wins even if it supplies a
-                // custom implementation.
-                addComponent(BlockEntityBaseComponentImpl::new, BlockEntityBaseComponentImpl.class);
-            }
-
             Function<BlockEntityInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(clazz.getConstructor(BlockEntityInitInfo.class, List.class), new FastMemberLoader(classLoader), false);
-                // Capture membership now so subsequent builder map edits do not
-                // change existing types; provider objects themselves remain
-                // shared across creations.
-                var componentProviderList = new ArrayList<>(componentProviders.values());
+                var implClass = ComponentBlueprint.resolveImplClass(clazz, classLoader);
+                var defaultBase = new ComponentProvider.Simple<>(BlockEntityBaseComponentImpl::new, BlockEntityBaseComponentImpl.class);
+                var orderedProviders = ComponentBlueprint.orderWithBaseFirst(componentProviders, BlockEntityBaseComponent.class, defaultBase);
+                var blueprint = ComponentBlueprint.compile(implClass, orderedProviders, BlockEntityInitInfo.class);
                 instanceCreator = info -> {
                     try {
-                        return (T) constructor.invoke(info, componentProviderList);
+                        return (T) blueprint.newInstance(info);
                     } catch (Throwable t) {
                         throw new BlockEntityTypeBuildException("Failed to create block entity instance!", t);
                     }

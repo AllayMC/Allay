@@ -52,10 +52,11 @@ subprojects {
         testAnnotationProcessor(rootProject.libs.lombok)
     }
 
-    if (project.name in listOf("api", "server")) {
+    if (project.name in listOf("api", "server", "processor")) {
         apply(plugin = "com.vanniktech.maven.publish")
 
-        project.version = rootProject.property(project.name + ".version").toString() +
+        val versionPropertyName = if (project.name == "processor") "server.version" else project.name + ".version"
+        project.version = rootProject.property(versionPropertyName).toString() +
                 if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
 
         java {

@@ -2,19 +2,63 @@ package org.allaymc.server.entity.type;
 
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.data.EntityId;
-import org.allaymc.server.entity.impl.*;
+import org.allaymc.server.entity.impl.EntityAreaEffectCloudImpl;
+import org.allaymc.server.entity.impl.EntityArmorStandImpl;
+import org.allaymc.server.entity.impl.EntityArrowImpl;
+import org.allaymc.server.entity.impl.EntityBoggedImpl;
+import org.allaymc.server.entity.impl.EntityBreezeWindChargeProjectileImpl;
+import org.allaymc.server.entity.impl.EntityChickenImpl;
+import org.allaymc.server.entity.impl.EntityCowImpl;
+import org.allaymc.server.entity.impl.EntityDrownedImpl;
+import org.allaymc.server.entity.impl.EntityEggImpl;
+import org.allaymc.server.entity.impl.EntityEnderCrystalImpl;
+import org.allaymc.server.entity.impl.EntityEnderDragonImpl;
+import org.allaymc.server.entity.impl.EntityEnderPearlImpl;
+import org.allaymc.server.entity.impl.EntityFallingBlockImpl;
+import org.allaymc.server.entity.impl.EntityFireworksRocketImpl;
+import org.allaymc.server.entity.impl.EntityFishingHookImpl;
+import org.allaymc.server.entity.impl.EntityHuskImpl;
+import org.allaymc.server.entity.impl.EntityItemImpl;
+import org.allaymc.server.entity.impl.EntityLightningBoltImpl;
+import org.allaymc.server.entity.impl.EntityLingeringPotionImpl;
+import org.allaymc.server.entity.impl.EntityPaintingImpl;
+import org.allaymc.server.entity.impl.EntityPhantomImpl;
+import org.allaymc.server.entity.impl.EntityPigImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.entity.impl.EntitySheepImpl;
+import org.allaymc.server.entity.impl.EntitySkeletonHorseImpl;
+import org.allaymc.server.entity.impl.EntitySkeletonImpl;
+import org.allaymc.server.entity.impl.EntitySmallFireballImpl;
+import org.allaymc.server.entity.impl.EntitySnowballImpl;
+import org.allaymc.server.entity.impl.EntitySplashPotionImpl;
+import org.allaymc.server.entity.impl.EntityStrayImpl;
+import org.allaymc.server.entity.impl.EntityThrownTridentImpl;
+import org.allaymc.server.entity.impl.EntityTntImpl;
+import org.allaymc.server.entity.impl.EntityVillagerV2Impl;
+import org.allaymc.server.entity.impl.EntityWardenImpl;
+import org.allaymc.server.entity.impl.EntityWindChargeProjectileImpl;
+import org.allaymc.server.entity.impl.EntityWitherImpl;
+import org.allaymc.server.entity.impl.EntityWitherSkeletonImpl;
+import org.allaymc.server.entity.impl.EntityXpBottleImpl;
+import org.allaymc.server.entity.impl.EntityXpOrbImpl;
+import org.allaymc.server.entity.impl.EntityZoglinImpl;
+import org.allaymc.server.entity.impl.EntityZombieHorseImpl;
+import org.allaymc.server.entity.impl.EntityZombieImpl;
+import org.allaymc.server.entity.impl.EntityZombiePigmanImpl;
+import org.allaymc.server.entity.impl.EntityZombieVillagerImpl;
+import org.allaymc.server.entity.impl.EntityZombieVillagerV2Impl;
 
 public final class EntityTypeDefaultInitializer {
     public static void init() {
         if (EntityTypes.AGENT == null) {
             EntityTypes.AGENT = AllayEntityType
-                            .builder(EntityAgentImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.AGENT)
                             .build();
         }
         if (EntityTypes.ALLAY == null) {
             EntityTypes.ALLAY = AllayEntityType
-                            .builder(EntityAllayImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ALLAY)
                             .build();
         }
@@ -26,7 +70,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.ARMADILLO == null) {
             EntityTypes.ARMADILLO = AllayEntityType
-                            .builder(EntityArmadilloImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ARMADILLO)
                             .build();
         }
@@ -44,37 +88,37 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.AXOLOTL == null) {
             EntityTypes.AXOLOTL = AllayEntityType
-                            .builder(EntityAxolotlImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.AXOLOTL)
                             .build();
         }
         if (EntityTypes.BALLOON == null) {
             EntityTypes.BALLOON = AllayEntityType
-                            .builder(EntityBalloonImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.BALLOON)
                             .build();
         }
         if (EntityTypes.BAT == null) {
             EntityTypes.BAT = AllayEntityType
-                            .builder(EntityBatImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.BAT)
                             .build();
         }
         if (EntityTypes.BEE == null) {
             EntityTypes.BEE = AllayEntityType
-                            .builder(EntityBeeImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.BEE)
                             .build();
         }
         if (EntityTypes.BLAZE == null) {
             EntityTypes.BLAZE = AllayEntityType
-                            .builder(EntityBlazeImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.BLAZE)
                             .build();
         }
         if (EntityTypes.BOAT == null) {
             EntityTypes.BOAT = AllayEntityType
-                            .builder(EntityBoatImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.BOAT)
                             .build();
         }
@@ -86,7 +130,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.BREEZE == null) {
             EntityTypes.BREEZE = AllayEntityType
-                            .builder(EntityBreezeImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.BREEZE)
                             .build();
         }
@@ -98,37 +142,37 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.CAMEL == null) {
             EntityTypes.CAMEL = AllayEntityType
-                            .builder(EntityCamelImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CAMEL)
                             .build();
         }
         if (EntityTypes.CAMEL_HUSK == null) {
             EntityTypes.CAMEL_HUSK = AllayEntityType
-                            .builder(EntityCamelHuskImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CAMEL_HUSK)
                             .build();
         }
         if (EntityTypes.CAT == null) {
             EntityTypes.CAT = AllayEntityType
-                            .builder(EntityCatImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CAT)
                             .build();
         }
         if (EntityTypes.CAVE_SPIDER == null) {
             EntityTypes.CAVE_SPIDER = AllayEntityType
-                            .builder(EntityCaveSpiderImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CAVE_SPIDER)
                             .build();
         }
         if (EntityTypes.CHEST_BOAT == null) {
             EntityTypes.CHEST_BOAT = AllayEntityType
-                            .builder(EntityChestBoatImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CHEST_BOAT)
                             .build();
         }
         if (EntityTypes.CHEST_MINECART == null) {
             EntityTypes.CHEST_MINECART = AllayEntityType
-                            .builder(EntityChestMinecartImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CHEST_MINECART)
                             .build();
         }
@@ -140,19 +184,19 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.COD == null) {
             EntityTypes.COD = AllayEntityType
-                            .builder(EntityCodImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.COD)
                             .build();
         }
         if (EntityTypes.COMMAND_BLOCK_MINECART == null) {
             EntityTypes.COMMAND_BLOCK_MINECART = AllayEntityType
-                            .builder(EntityCommandBlockMinecartImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.COMMAND_BLOCK_MINECART)
                             .build();
         }
         if (EntityTypes.COPPER_GOLEM == null) {
             EntityTypes.COPPER_GOLEM = AllayEntityType
-                            .builder(EntityCopperGolemImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.COPPER_GOLEM)
                             .build();
         }
@@ -164,31 +208,31 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.CREAKING == null) {
             EntityTypes.CREAKING = AllayEntityType
-                            .builder(EntityCreakingImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CREAKING)
                             .build();
         }
         if (EntityTypes.CREEPER == null) {
             EntityTypes.CREEPER = AllayEntityType
-                            .builder(EntityCreeperImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.CREEPER)
                             .build();
         }
         if (EntityTypes.DOLPHIN == null) {
             EntityTypes.DOLPHIN = AllayEntityType
-                            .builder(EntityDolphinImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.DOLPHIN)
                             .build();
         }
         if (EntityTypes.DONKEY == null) {
             EntityTypes.DONKEY = AllayEntityType
-                            .builder(EntityDonkeyImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.DONKEY)
                             .build();
         }
         if (EntityTypes.DRAGON_FIREBALL == null) {
             EntityTypes.DRAGON_FIREBALL = AllayEntityType
-                            .builder(EntityDragonFireballImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.DRAGON_FIREBALL)
                             .build();
         }
@@ -206,13 +250,13 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.ELDER_GUARDIAN == null) {
             EntityTypes.ELDER_GUARDIAN = AllayEntityType
-                            .builder(EntityElderGuardianImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ELDER_GUARDIAN)
                             .build();
         }
         if (EntityTypes.ELDER_GUARDIAN_GHOST == null) {
             EntityTypes.ELDER_GUARDIAN_GHOST = AllayEntityType
-                            .builder(EntityElderGuardianGhostImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ELDER_GUARDIAN_GHOST)
                             .build();
         }
@@ -236,31 +280,31 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.ENDERMAN == null) {
             EntityTypes.ENDERMAN = AllayEntityType
-                            .builder(EntityEndermanImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ENDERMAN)
                             .build();
         }
         if (EntityTypes.ENDERMITE == null) {
             EntityTypes.ENDERMITE = AllayEntityType
-                            .builder(EntityEndermiteImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ENDERMITE)
                             .build();
         }
         if (EntityTypes.EVOCATION_FANG == null) {
             EntityTypes.EVOCATION_FANG = AllayEntityType
-                            .builder(EntityEvocationFangImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.EVOCATION_FANG)
                             .build();
         }
         if (EntityTypes.EVOCATION_ILLAGER == null) {
             EntityTypes.EVOCATION_ILLAGER = AllayEntityType
-                            .builder(EntityEvocationIllagerImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.EVOCATION_ILLAGER)
                             .build();
         }
         if (EntityTypes.EYE_OF_ENDER_SIGNAL == null) {
             EntityTypes.EYE_OF_ENDER_SIGNAL = AllayEntityType
-                            .builder(EntityEyeOfEnderSignalImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.EYE_OF_ENDER_SIGNAL)
                             .build();
         }
@@ -272,7 +316,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.FIREBALL == null) {
             EntityTypes.FIREBALL = AllayEntityType
-                            .builder(EntityFireballImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.FIREBALL)
                             .build();
         }
@@ -290,61 +334,61 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.FOX == null) {
             EntityTypes.FOX = AllayEntityType
-                            .builder(EntityFoxImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.FOX)
                             .build();
         }
         if (EntityTypes.FROG == null) {
             EntityTypes.FROG = AllayEntityType
-                            .builder(EntityFrogImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.FROG)
                             .build();
         }
         if (EntityTypes.GHAST == null) {
             EntityTypes.GHAST = AllayEntityType
-                            .builder(EntityGhastImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.GHAST)
                             .build();
         }
         if (EntityTypes.GLOW_SQUID == null) {
             EntityTypes.GLOW_SQUID = AllayEntityType
-                            .builder(EntityGlowSquidImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.GLOW_SQUID)
                             .build();
         }
         if (EntityTypes.GOAT == null) {
             EntityTypes.GOAT = AllayEntityType
-                            .builder(EntityGoatImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.GOAT)
                             .build();
         }
         if (EntityTypes.GUARDIAN == null) {
             EntityTypes.GUARDIAN = AllayEntityType
-                            .builder(EntityGuardianImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.GUARDIAN)
                             .build();
         }
         if (EntityTypes.HAPPY_GHAST == null) {
             EntityTypes.HAPPY_GHAST = AllayEntityType
-                            .builder(EntityHappyGhastImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.HAPPY_GHAST)
                             .build();
         }
         if (EntityTypes.HOGLIN == null) {
             EntityTypes.HOGLIN = AllayEntityType
-                            .builder(EntityHoglinImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.HOGLIN)
                             .build();
         }
         if (EntityTypes.HOPPER_MINECART == null) {
             EntityTypes.HOPPER_MINECART = AllayEntityType
-                            .builder(EntityHopperMinecartImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.HOPPER_MINECART)
                             .build();
         }
         if (EntityTypes.HORSE == null) {
             EntityTypes.HORSE = AllayEntityType
-                            .builder(EntityHorseImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.HORSE)
                             .build();
         }
@@ -356,13 +400,13 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.ICE_BOMB == null) {
             EntityTypes.ICE_BOMB = AllayEntityType
-                            .builder(EntityIceBombImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ICE_BOMB)
                             .build();
         }
         if (EntityTypes.IRON_GOLEM == null) {
             EntityTypes.IRON_GOLEM = AllayEntityType
-                            .builder(EntityIronGolemImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.IRON_GOLEM)
                             .build();
         }
@@ -374,7 +418,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.LEASH_KNOT == null) {
             EntityTypes.LEASH_KNOT = AllayEntityType
-                            .builder(EntityLeashKnotImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.LEASH_KNOT)
                             .build();
         }
@@ -392,61 +436,61 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.LLAMA == null) {
             EntityTypes.LLAMA = AllayEntityType
-                            .builder(EntityLlamaImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.LLAMA)
                             .build();
         }
         if (EntityTypes.LLAMA_SPIT == null) {
             EntityTypes.LLAMA_SPIT = AllayEntityType
-                            .builder(EntityLlamaSpitImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.LLAMA_SPIT)
                             .build();
         }
         if (EntityTypes.MAGMA_CUBE == null) {
             EntityTypes.MAGMA_CUBE = AllayEntityType
-                            .builder(EntityMagmaCubeImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.MAGMA_CUBE)
                             .build();
         }
         if (EntityTypes.MINECART == null) {
             EntityTypes.MINECART = AllayEntityType
-                            .builder(EntityMinecartImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.MINECART)
                             .build();
         }
         if (EntityTypes.MOOSHROOM == null) {
             EntityTypes.MOOSHROOM = AllayEntityType
-                            .builder(EntityMooshroomImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.MOOSHROOM)
                             .build();
         }
         if (EntityTypes.MULE == null) {
             EntityTypes.MULE = AllayEntityType
-                            .builder(EntityMuleImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.MULE)
                             .build();
         }
         if (EntityTypes.NAUTILUS == null) {
             EntityTypes.NAUTILUS = AllayEntityType
-                            .builder(EntityNautilusImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.NAUTILUS)
                             .build();
         }
         if (EntityTypes.NPC == null) {
             EntityTypes.NPC = AllayEntityType
-                            .builder(EntityNpcImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.NPC)
                             .build();
         }
         if (EntityTypes.OCELOT == null) {
             EntityTypes.OCELOT = AllayEntityType
-                            .builder(EntityOcelotImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.OCELOT)
                             .build();
         }
         if (EntityTypes.OMINOUS_ITEM_SPAWNER == null) {
             EntityTypes.OMINOUS_ITEM_SPAWNER = AllayEntityType
-                            .builder(EntityOminousItemSpawnerImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.OMINOUS_ITEM_SPAWNER)
                             .build();
         }
@@ -458,19 +502,19 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.PANDA == null) {
             EntityTypes.PANDA = AllayEntityType
-                            .builder(EntityPandaImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.PANDA)
                             .build();
         }
         if (EntityTypes.PARCHED == null) {
             EntityTypes.PARCHED = AllayEntityType
-                            .builder(EntityParchedImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.PARCHED)
                             .build();
         }
         if (EntityTypes.PARROT == null) {
             EntityTypes.PARROT = AllayEntityType
-                            .builder(EntityParrotImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.PARROT)
                             .build();
         }
@@ -488,19 +532,19 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.PIGLIN == null) {
             EntityTypes.PIGLIN = AllayEntityType
-                            .builder(EntityPiglinImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.PIGLIN)
                             .build();
         }
         if (EntityTypes.PIGLIN_BRUTE == null) {
             EntityTypes.PIGLIN_BRUTE = AllayEntityType
-                            .builder(EntityPiglinBruteImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.PIGLIN_BRUTE)
                             .build();
         }
         if (EntityTypes.PILLAGER == null) {
             EntityTypes.PILLAGER = AllayEntityType
-                            .builder(EntityPillagerImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.PILLAGER)
                             .build();
         }
@@ -512,31 +556,31 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.POLAR_BEAR == null) {
             EntityTypes.POLAR_BEAR = AllayEntityType
-                            .builder(EntityPolarBearImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.POLAR_BEAR)
                             .build();
         }
         if (EntityTypes.PUFFERFISH == null) {
             EntityTypes.PUFFERFISH = AllayEntityType
-                            .builder(EntityPufferfishImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.PUFFERFISH)
                             .build();
         }
         if (EntityTypes.RABBIT == null) {
             EntityTypes.RABBIT = AllayEntityType
-                            .builder(EntityRabbitImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.RABBIT)
                             .build();
         }
         if (EntityTypes.RAVAGER == null) {
             EntityTypes.RAVAGER = AllayEntityType
-                            .builder(EntityRavagerImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.RAVAGER)
                             .build();
         }
         if (EntityTypes.SALMON == null) {
             EntityTypes.SALMON = AllayEntityType
-                            .builder(EntitySalmonImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SALMON)
                             .build();
         }
@@ -548,19 +592,19 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.SHULKER == null) {
             EntityTypes.SHULKER = AllayEntityType
-                            .builder(EntityShulkerImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SHULKER)
                             .build();
         }
         if (EntityTypes.SHULKER_BULLET == null) {
             EntityTypes.SHULKER_BULLET = AllayEntityType
-                            .builder(EntityShulkerBulletImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SHULKER_BULLET)
                             .build();
         }
         if (EntityTypes.SILVERFISH == null) {
             EntityTypes.SILVERFISH = AllayEntityType
-                            .builder(EntitySilverfishImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SILVERFISH)
                             .build();
         }
@@ -578,7 +622,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.SLIME == null) {
             EntityTypes.SLIME = AllayEntityType
-                            .builder(EntitySlimeImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SLIME)
                             .build();
         }
@@ -590,13 +634,13 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.SNIFFER == null) {
             EntityTypes.SNIFFER = AllayEntityType
-                            .builder(EntitySnifferImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SNIFFER)
                             .build();
         }
         if (EntityTypes.SNOW_GOLEM == null) {
             EntityTypes.SNOW_GOLEM = AllayEntityType
-                            .builder(EntitySnowGolemImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SNOW_GOLEM)
                             .build();
         }
@@ -608,7 +652,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.SPIDER == null) {
             EntityTypes.SPIDER = AllayEntityType
-                            .builder(EntitySpiderImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SPIDER)
                             .build();
         }
@@ -620,7 +664,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.SQUID == null) {
             EntityTypes.SQUID = AllayEntityType
-                            .builder(EntitySquidImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SQUID)
                             .build();
         }
@@ -632,19 +676,19 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.STRIDER == null) {
             EntityTypes.STRIDER = AllayEntityType
-                            .builder(EntityStriderImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.STRIDER)
                             .build();
         }
         if (EntityTypes.SULFUR_CUBE == null) {
             EntityTypes.SULFUR_CUBE = AllayEntityType
-                            .builder(EntitySulfurCubeImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.SULFUR_CUBE)
                             .build();
         }
         if (EntityTypes.TADPOLE == null) {
             EntityTypes.TADPOLE = AllayEntityType
-                            .builder(EntityTadpoleImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.TADPOLE)
                             .build();
         }
@@ -662,43 +706,43 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.TNT_MINECART == null) {
             EntityTypes.TNT_MINECART = AllayEntityType
-                            .builder(EntityTntMinecartImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.TNT_MINECART)
                             .build();
         }
         if (EntityTypes.TRADER_LLAMA == null) {
             EntityTypes.TRADER_LLAMA = AllayEntityType
-                            .builder(EntityTraderLlamaImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.TRADER_LLAMA)
                             .build();
         }
         if (EntityTypes.TRIPOD_CAMERA == null) {
             EntityTypes.TRIPOD_CAMERA = AllayEntityType
-                            .builder(EntityTripodCameraImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.TRIPOD_CAMERA)
                             .build();
         }
         if (EntityTypes.TROPICALFISH == null) {
             EntityTypes.TROPICALFISH = AllayEntityType
-                            .builder(EntityTropicalfishImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.TROPICALFISH)
                             .build();
         }
         if (EntityTypes.TURTLE == null) {
             EntityTypes.TURTLE = AllayEntityType
-                            .builder(EntityTurtleImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.TURTLE)
                             .build();
         }
         if (EntityTypes.VEX == null) {
             EntityTypes.VEX = AllayEntityType
-                            .builder(EntityVexImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.VEX)
                             .build();
         }
         if (EntityTypes.VILLAGER == null) {
             EntityTypes.VILLAGER = AllayEntityType
-                            .builder(EntityVillagerImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.VILLAGER)
                             .build();
         }
@@ -710,13 +754,13 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.VINDICATOR == null) {
             EntityTypes.VINDICATOR = AllayEntityType
-                            .builder(EntityVindicatorImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.VINDICATOR)
                             .build();
         }
         if (EntityTypes.WANDERING_TRADER == null) {
             EntityTypes.WANDERING_TRADER = AllayEntityType
-                            .builder(EntityWanderingTraderImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.WANDERING_TRADER)
                             .build();
         }
@@ -734,7 +778,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.WITCH == null) {
             EntityTypes.WITCH = AllayEntityType
-                            .builder(EntityWitchImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.WITCH)
                             .build();
         }
@@ -752,19 +796,19 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.WITHER_SKULL == null) {
             EntityTypes.WITHER_SKULL = AllayEntityType
-                            .builder(EntityWitherSkullImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.WITHER_SKULL)
                             .build();
         }
         if (EntityTypes.WITHER_SKULL_DANGEROUS == null) {
             EntityTypes.WITHER_SKULL_DANGEROUS = AllayEntityType
-                            .builder(EntityWitherSkullDangerousImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.WITHER_SKULL_DANGEROUS)
                             .build();
         }
         if (EntityTypes.WOLF == null) {
             EntityTypes.WOLF = AllayEntityType
-                            .builder(EntityWolfImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.WOLF)
                             .build();
         }
@@ -800,7 +844,7 @@ public final class EntityTypeDefaultInitializer {
         }
         if (EntityTypes.ZOMBIE_NAUTILUS == null) {
             EntityTypes.ZOMBIE_NAUTILUS = AllayEntityType
-                            .builder(EntityZombieNautilusImpl.class)
+                            .builder()
                             .vanillaEntity(EntityId.ZOMBIE_NAUTILUS)
                             .build();
         }

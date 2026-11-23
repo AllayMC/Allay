@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
@@ -21,12 +20,6 @@ import org.allaymc.server.entity.component.event.CEntityTickEvent;
  */
 public class EntityAgeComponentImpl implements EntityAgeComponent {
 
-    /**
-     * {@code IDENTIFIER} supplies the lookup key that {@code ComponentProvider} uses
-     * to identify this lifetime component when entity types assemble their components.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_age_component");
     /**
      * {@code DEFAULT_MAX_AGE} supplies the default expiry threshold in entity
      * ticks when an entity type constructs this component without a custom

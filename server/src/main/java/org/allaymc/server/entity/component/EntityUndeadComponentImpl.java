@@ -8,7 +8,6 @@ import org.allaymc.api.entity.component.EntityUndeadComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
@@ -21,12 +20,6 @@ import org.allaymc.server.entity.component.event.CEntityTickEvent;
  */
 public class EntityUndeadComponentImpl implements EntityUndeadComponent {
 
-    /**
-     * {@code IDENTIFIER} names this component implementation for provider
-     * lookup and replacement when entity types assemble their component sets.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_undead_component");
 
     /**
      * {@code SUNLIGHT_IGNITE_TICKS} gives accepted sunlight ignition twenty

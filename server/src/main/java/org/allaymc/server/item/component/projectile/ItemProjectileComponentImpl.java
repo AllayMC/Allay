@@ -14,7 +14,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3d;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.data.EntityId;
@@ -34,13 +33,6 @@ import java.util.function.Supplier;
  */
 @Slf4j
 public class ItemProjectileComponentImpl implements ItemProjectileComponent {
-    /**
-     * {@code IDENTIFIER} identifies the projectile-launching component during
-     * component-provider registration and lookup. Its value distinguishes this
-     * behavior from the stack's other item components.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_projectile_component");
 
     /**
      * {@code projectileEntityType} resolves the entity type for each lookup.

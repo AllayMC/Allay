@@ -2,21 +2,26 @@ package org.allaymc.server.entity.type;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
-import me.sunlan.fastreflection.FastConstructor;
-import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
+import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.entity.property.type.EntityPropertyType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.Allay;
+import org.allaymc.server.component.ComponentBlueprint;
 import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.data.EntityId;
+import org.allaymc.server.entity.impl.EntityImpl;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -24,27 +29,21 @@ import java.util.stream.Collectors;
 import static org.allaymc.server.component.ComponentProvider.toMap;
 
 /**
- * {@code AllayEntityType} represents a registered entity definition with an
- * identifier, component-backed instance factory, and named property
- * definitions. {@code Builder.build} prepares the entity constructor and
- * registers the resulting type; {@code createEntity} assigns this type to its
- * initialization information before invoking that factory.
+ * {@code AllayEntityType} represents a registered entity definition backed by a
+ * precompiled {@link ComponentBlueprint}, registry identifier, and named property
+ * definitions. {@code Builder.build} validates all component bindings and event
+ * handlers eagerly during registration before publishing the type;
+ * {@code createEntity} assigns this type to the initialization payload and
+ * instantiates the entity through the compiled blueprint without per-instance
+ * reflection or event-bus allocation.
  *
- * <p> The factory captures a snapshot of the configured component-provider
- * values, so later provider-map edits do not alter that type's construction
- * list. The property map instead remains behind an unmodifiable view,
- * preserving the backing map's identity rather than copying its entries.
- * Entity construction can fail after initialization information has been
- * updated, and registration or component initialization does not provide
- * rollback of preceding side effects.
+ * @param <T> entity interface produced by this type
  *
  * @author daoge_cmd
  */
 public class AllayEntityType<T extends Entity> implements EntityType<T> {
     /**
-     * {@code instanceCreator} invokes the prepared entity constructor with its
-     * captured component-provider list. Constructor failures are wrapped as
-     * {@code EntityTypeBuildException} by the builder-created factory.
+     * {@code instanceCreator} invokes this type's compiled blueprint factory.
      */
     protected final Function<EntityInitInfo, T> instanceCreator;
     /**
@@ -54,16 +53,14 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     protected Identifier identifier;
     /**
      * {@code properties} exposes an unmodifiable view of the supplied backing
-     * map. The constructor does not copy entries, and the property definitions
-     * retain their own value-list mutability.
+     * map.
      */
     @Getter
     protected Map<String, EntityPropertyType<?>> properties;
 
     /**
-     * Creates a type retaining the supplied constructor function and
-     * identifier. The property map is wrapped without copying, so its existing
-     * backing map remains shared with the code that supplied it.
+     * Creates a type retaining the compiled instance factory, identifier, and
+     * property definitions.
      */
     protected AllayEntityType(Function<EntityInitInfo, T> instanceCreator, Identifier identifier, Map<String, EntityPropertyType<?>> properties) {
         this.instanceCreator = instanceCreator;
@@ -72,18 +69,24 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     }
 
     /**
-     * Returns a builder targeting the supplied component-backed entity
-     * implementation class.
+     * Returns a builder targeting the default {@link EntityImpl} implementation
+     * for entity types that do not require a specialized API interface.
+     */
+    public static Builder builder() {
+        return new Builder(EntityImpl.class);
+    }
+
+    /**
+     * Returns a builder targeting the supplied entity implementation class or
+     * composed API interface.
      */
     public static <T extends Entity> Builder builder(Class<T> clazz) {
         return new Builder(clazz);
     }
 
     /**
-     * Assigns this entity type to {@code info} and invokes the captured
-     * factory. The result remains unspawned, and a construction failure leaves
-     * the initialization information's type assignment in place rather than
-     * restoring its previous value.
+     * Assigns this entity type to {@code info} and invokes the compiled factory.
+     * The returned instance remains unspawned until added to a dimension.
      */
     @Override
     public T createEntity(EntityInitInfo info) {
@@ -92,42 +95,40 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     }
 
     /**
-     * {@code Builder} collects entity identity, component providers, and
-     * property definitions for registration.
+     * {@code Builder} collects entity identity, insertion-ordered component
+     * providers keyed by contract class, and property definitions for
+     * registration.
      */
     public static class Builder {
         /**
-         * Entity implementation class used for public constructor lookup.
+         * Target entity implementation class or composed API interface.
          */
         protected Class<?> clazz;
         /**
-         * {@code componentProviders} holds the current provider for each
-         * component identifier. Build captures its values in a list, and later
-         * map replacements do not alter an already built factory.
+         * {@code componentProviders} holds configured providers keyed by canonical
+         * component contract class in deterministic insertion order.
          */
-        protected Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders = new HashMap<>();
+        protected Map<Class<?>, ComponentProvider<? extends EntityComponent>> componentProviders = new LinkedHashMap<>();
         /**
          * Identifier selected for the type's eventual registry entry.
          */
         protected Identifier identifier;
         /**
-         * {@code properties} holds the current name-indexed definitions. Build
-         * shares this map through an unmodifiable view; the property setters
-         * replace the map rather than mutating that existing backing map.
+         * {@code properties} holds name-indexed entity property definitions in
+         * declaration order.
          */
         protected Map<String, EntityPropertyType<?>> properties = new LinkedHashMap<>();
 
         /**
-         * Creates a builder targeting the supplied entity implementation
-         * class.
+         * Creates a builder targeting the supplied entity implementation class or
+         * composed API interface.
          */
         public Builder(Class<?> clazz) {
             this.clazz = clazz;
         }
 
         /**
-         * Selects the registry identifier and returns this entity type
-         * builder.
+         * Selects the registry identifier and returns this entity type builder.
          */
         public Builder identifier(Identifier identifier) {
             this.identifier = identifier;
@@ -143,8 +144,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         /**
-         * Selects the supplied vanilla entity's identifier for this type
-         * builder.
+         * Selects the supplied vanilla entity's identifier for this type builder.
          */
         public Builder vanillaEntity(EntityId entityId) {
             this.identifier = entityId.getIdentifier();
@@ -152,153 +152,127 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         /**
-         * Replaces all configured providers with a shallow copy of the
-         * supplied map. Provider objects remain shared, while later mutations
-         * to the caller's map do not change this builder's component entries.
+         * Replaces all configured providers with an insertion-ordered copy of the
+         * supplied map.
          */
-        public Builder setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> providers) {
+        public Builder setComponents(Map<Class<?>, ComponentProvider<? extends EntityComponent>> providers) {
             Preconditions.checkNotNull(providers, "providers");
-            this.componentProviders = new HashMap<>(providers);
+            this.componentProviders = new LinkedHashMap<>(providers);
             return this;
         }
 
         /**
-         * Adds or replaces component providers by their map keys and returns
-         * this builder. The map entries are copied into the existing
-         * configuration, while each provider object remains shared with the
-         * caller.
+         * Adds or replaces component providers by their contract-class keys and
+         * returns this builder.
          */
-        public Builder addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> providers) {
+        public Builder addComponents(Map<Class<?>, ComponentProvider<? extends EntityComponent>> providers) {
             this.componentProviders.putAll(providers);
             return this;
         }
 
         /**
-         * Registers an initialization-aware provider under the component
-         * identifier discovered from {@code componentClass}. An existing
-         * provider for that identifier is replaced; the function is retained
-         * for later entity construction rather than invoked here.
+         * Registers an initialization-aware provider under the contract key
+         * resolved from {@code componentClass}.
          */
         public Builder addComponent(Function<EntityInitInfo, ? extends EntityComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.Simple<>(provider, componentClass);
-            this.componentProviders.put(p.findComponentIdentifier(), p);
+            this.componentProviders.put(p.getComponentKey(), p);
             return this;
         }
 
         /**
-         * Registers the supplied provider using its discovered component
-         * identifier and returns this builder. The provider is retained
-         * directly, and an existing provider under the same identifier is
-         * replaced.
-         */
-        public Builder addComponent(ComponentProvider<? extends EntityComponent> provider) {
-            this.componentProviders.put(provider.findComponentIdentifier(), provider);
-            return this;
-        }
-
-        /**
-         * Replaces the configured providers using component identifiers
-         * derived from the supplied list. The list is converted to a map
-         * before configuration; duplicate identifiers are rejected by that
-         * conversion rather than merged in list order.
-         */
-        public Builder setComponents(List<ComponentProvider<? extends EntityComponent>> providers) {
-            return setComponents(toMap(providers));
-        }
-
-        /**
-         * Adds the configured providers using component identifiers derived
-         * from the supplied list. The list is converted to a map before
-         * configuration; duplicate identifiers are rejected by that conversion
-         * rather than merged in list order.
-         */
-        public Builder addComponents(List<ComponentProvider<? extends EntityComponent>> providers) {
-            return addComponents(toMap(providers));
-        }
-
-        /**
-         * Registers a supplier-backed component provider that ignores entity
-         * initialization information. The supplier runs for each entity
-         * construction, so callers must return an instance suitable for that
-         * entity rather than unintentionally sharing mutable component state.
+         * Registers a supplier-backed provider under the contract key resolved
+         * from {@code componentClass}.
          */
         public Builder addComponent(Supplier<? extends EntityComponent> supplier, Class<?> componentClass) {
             return addComponent($ -> supplier.get(), componentClass);
         }
 
         /**
+         * Registers a shared stateless component singleton under its resolved
+         * contract key. Blueprint compilation verifies that the singleton declares
+         * no instance-bound injections or lifecycle callbacks.
+         */
+        public Builder addComponent(EntityComponent singleton) {
+            return addComponent(ComponentProvider.singleton(singleton));
+        }
+
+        /**
+         * Registers the supplied provider under its contract key and returns this
+         * builder.
+         */
+        public Builder addComponent(ComponentProvider<? extends EntityComponent> provider) {
+            this.componentProviders.put(provider.getComponentKey(), provider);
+            return this;
+        }
+
+        /**
+         * Replaces configured providers using contract keys derived from the
+         * supplied list, rejecting duplicate keys.
+         */
+        public Builder setComponents(List<ComponentProvider<? extends EntityComponent>> providers) {
+            return setComponents(toMap(providers));
+        }
+
+        /**
+         * Adds configured providers using contract keys derived from the supplied
+         * list, rejecting duplicates within that list.
+         */
+        public Builder addComponents(List<ComponentProvider<? extends EntityComponent>> providers) {
+            return addComponents(toMap(providers));
+        }
+
+        /**
          * Replaces the property map with definitions indexed by their names.
-         * Duplicate names fail during collection, property objects are
-         * retained directly, and a previously built type keeps the prior map
-         * when this setter replaces it.
          */
         public Builder setProperties(List<EntityPropertyType<?>> properties) {
-            this.properties = properties.stream().collect(Collectors.toMap(EntityPropertyType::getName, Function.identity()));
+            this.properties = properties.stream().collect(Collectors.toMap(
+                    EntityPropertyType::getName,
+                    Function.identity(),
+                    (a, b) -> {
+                        throw new IllegalStateException("Duplicate property: " + a.getName());
+                    },
+                    LinkedHashMap::new
+            ));
             return this;
         }
 
         /**
          * Replaces the property map with definitions indexed by their names.
-         * Duplicate names fail during collection, property objects are
-         * retained directly, and a previously built type keeps the prior map
-         * when this setter replaces it.
          */
         public Builder setProperties(EntityPropertyType<?>... properties) {
-            this.properties = Arrays.stream(properties).collect(Collectors.toMap(EntityPropertyType::getName, Function.identity()));
-            return this;
+            return setProperties(Arrays.asList(properties));
         }
 
         /**
          * Builds and registers the configured entity type using Allay's class
-         * loader. This operation delegates constructor lookup and provider
-         * preparation to {@code build(ClassLoader)} and can fail before any
-         * usable type is returned.
+         * loader.
          */
         public <T extends Entity> EntityType<T> build() {
             return build(Allay.class.getClassLoader());
         }
 
         /**
-         * Builds and registers a component-backed type with the selected class
-         * loader. The identifier must be set, and the target class must expose
-         * a public constructor accepting {@code EntityInitInfo} and
-         * {@code List}. Missing base behavior is added to this builder before
-         * constructor preparation.
-         *
-         * <p> The factory captures a list of current provider objects, while
-         * the type retains a view of the current property map.
-         * Constructor-setup exceptions caught as {@code Exception} become
-         * {@code EntityTypeBuildException}; setup errors outside that catch
-         * propagate directly. Later constructor invocation catches
-         * {@code Throwable} and wraps it when the factory runs. Registry
-         * failure does not undo the builder's added base component, and entity
-         * construction remains deferred until {@code createEntity}.
+         * Compiles the type's {@link ComponentBlueprint}, validates all component
+         * bindings eagerly, and registers the resulting entity type.
          */
         @SuppressWarnings("unchecked")
         public <T extends Entity> EntityType<T> build(ClassLoader classLoader) {
             Preconditions.checkNotNull(identifier, "identifier");
-            // Supply common entity behavior only when the configured providers
-            // do not already replace its identifier with a specialized component.
-            if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
-                addComponent(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
-            }
-
             Function<EntityInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(clazz.getConstructor(EntityInitInfo.class, List.class), new FastMemberLoader(classLoader), false);
-                var componentProviderList = new ArrayList<>(componentProviders.values());
+                var implClass = ComponentBlueprint.resolveImplClass(clazz, classLoader);
+                var defaultBase = new ComponentProvider.Simple<>(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
+                var orderedProviders = ComponentBlueprint.orderWithBaseFirst(componentProviders, EntityBaseComponent.class, defaultBase);
+                var blueprint = ComponentBlueprint.compile(implClass, orderedProviders, EntityInitInfo.class);
                 instanceCreator = info -> {
                     try {
-                        return (T) constructor.invoke(info, componentProviderList);
+                        return (T) blueprint.newInstance(info);
                     } catch (Throwable t) {
-                        // Preserve constructor failures as the cause while exposing
-                        // the same entity-type failure category to factory callers.
                         throw new EntityTypeBuildException("Failed to create entity instance!", t);
                     }
                 };
             } catch (Exception e) {
-                // Constructor discovery and access setup fail before a type exists;
-                // retain the original cause for diagnostics at the builder boundary.
                 throw new EntityTypeBuildException("Failed to create entity type!", e);
             }
 

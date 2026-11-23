@@ -27,7 +27,7 @@ public class BlockBehaviorImpl extends ComponentClass implements BlockBehavior {
      * {@code EMPTY_INIT_INFO} supplies the shared empty initialization payload used
      * when component providers construct block behavior components.
      */
-    private static final ComponentInitInfo EMPTY_INIT_INFO = new ComponentInitInfo() {
+    public static final ComponentInitInfo EMPTY_INIT_INFO = new ComponentInitInfo() {
     };
 
     /**
@@ -46,6 +46,14 @@ public class BlockBehaviorImpl extends ComponentClass implements BlockBehavior {
     @Getter
     @Delegate
     private BlockStateDataComponent stateDataComponent;
+
+    /**
+     * Creates an uninitialized block behavior to be wired immediately by
+     * {@link org.allaymc.server.component.ComponentBlueprint}.
+     */
+    protected BlockBehaviorImpl() {
+        super();
+    }
 
     /**
      * Creates block behavior by constructing and injecting the supplied component

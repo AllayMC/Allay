@@ -7,7 +7,6 @@ import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
 import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
@@ -58,7 +57,6 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
      * the current dimension. The initialization context must already provide
      * the location used for that sound through the base component.
      */
-    @OnInitFinish
     @Override
     public void onInitFinish(EntityInitInfo initInfo) {
         super.onInitFinish(initInfo);

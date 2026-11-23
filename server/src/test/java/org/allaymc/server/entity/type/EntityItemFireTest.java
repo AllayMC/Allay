@@ -17,12 +17,14 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.testutils.AllayTestExtension;
+import org.joml.Vector3dc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -62,6 +64,7 @@ class EntityItemFireTest {
         dimension = mock(Dimension.class);
         when(dimension.getWorld()).thenReturn(world);
         when(dimension.getDimensionType()).thenReturn(dimensionType);
+        when(dimension.getBlockState(any(Vector3dc.class))).thenReturn(BlockTypes.AIR.getDefaultState());
 
         fire = new Block(
                 BlockTypes.FIRE.getDefaultState(),

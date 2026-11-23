@@ -8,7 +8,6 @@ import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntitySleepableComponent;
 import org.allaymc.api.eventbus.event.entity.EntitySleepEvent;
 import org.allaymc.api.eventbus.event.entity.EntityWakeEvent;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -29,12 +28,6 @@ import org.joml.Vector3ic;
  */
 public class EntitySleepableComponentImpl implements EntitySleepableComponent {
 
-    /**
-     * {@code IDENTIFIER} names this component implementation for provider
-     * lookup and replacement when entity types assemble their component sets.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_sleepable_component");
 
     /**
      * Injected entity whose sleeping state and bed are updated.

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.item.ItemStack;
 
 /**
  * {@code CItemRightClickInAirEvent} notifies item components that a player
@@ -16,6 +17,10 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @AllArgsConstructor
 public class CItemRightClickInAirEvent extends Event {
+    /**
+     * Owning item stack activated in air.
+     */
+    protected ItemStack itemStack;
     /**
      * Player activating the item in air.
      */

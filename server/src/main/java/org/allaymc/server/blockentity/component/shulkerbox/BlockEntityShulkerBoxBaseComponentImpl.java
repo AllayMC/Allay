@@ -10,7 +10,6 @@ import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.ShulkerBoxContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -60,7 +59,6 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
      * instance.
      */
     @Override
-    @OnInitFinish
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         ShulkerBoxContainerImpl container = containerHolderComponent.getContainer();

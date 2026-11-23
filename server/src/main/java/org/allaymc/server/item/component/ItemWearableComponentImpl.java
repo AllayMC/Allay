@@ -10,9 +10,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemDyeableComponent;
 import org.allaymc.api.item.component.ItemWearableComponent;
 import org.allaymc.api.item.data.ArmorType;
-import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.EquipItemSound;
-import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemRightClickInAirEvent;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 
@@ -30,12 +28,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.FILL_LEVEL;
  */
 public class ItemWearableComponentImpl implements ItemWearableComponent {
 
-    /**
-     * {@code IDENTIFIER} names this behavior provider in the item component system,
-     * allowing item type builders to select or replace this component by identifier.
-     */
-    @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_wearable_component");
 
     /**
      * Configured armor equipment slot type.
@@ -50,15 +42,9 @@ public class ItemWearableComponentImpl implements ItemWearableComponent {
     protected final boolean wearWhenInteract;
 
     /**
-     * Injected component-owning item stack.
-     */
-    @ComponentObject
-    protected ItemStack thisItemStack;
-
-    /**
      * Creates a wearable component with interaction-based equipment enabled.
      * The supplied armor type selects the armor-container slot used by later
-     * equipment attempts, while the owning stack is injected separately.
+     * equipment attempts; this component holds no mutable per-stack state.
      */
     public ItemWearableComponentImpl(ArmorType armorType) {
         this(armorType, true);
@@ -88,9 +74,10 @@ public class ItemWearableComponentImpl implements ItemWearableComponent {
             return;
         }
 
+        var itemStack = event.getItemStack();
         // A filled water cauldron handles dyeable-item color changes through
         // block interaction, so leave this event unhandled for that path.
-        if (thisItemStack instanceof ItemDyeableComponent) {
+        if (itemStack instanceof ItemDyeableComponent) {
             var clickedBlock = dimension.getBlockState(interactInfo.clickedBlockPos());
             if (clickedBlock.getBlockType() == BlockTypes.CAULDRON) {
                 var fillLevel = clickedBlock.getPropertyValue(FILL_LEVEL);
@@ -101,7 +88,7 @@ public class ItemWearableComponentImpl implements ItemWearableComponent {
             }
         }
 
-        equipArmor(interactInfo.player(), thisItemStack);
+        equipArmor(interactInfo.player(), itemStack);
         event.setCanBeUsed(true);
     }
 
@@ -110,7 +97,7 @@ public class ItemWearableComponentImpl implements ItemWearableComponent {
      */
     @EventHandler
     protected void onRightClickItemInAir(CItemRightClickInAirEvent event) {
-        equipArmor(event.getPlayer(), thisItemStack);
+        equipArmor(event.getPlayer(), event.getItemStack());
     }
 
     /**
