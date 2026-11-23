@@ -26,6 +26,9 @@ import org.allaymc.api.world.biome.BiomeTag;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.data.EntityId;
+import org.allaymc.server.item.data.ItemId;
+import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.world.biome.CustomBiomeIdAllocator;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -251,6 +254,23 @@ public final class NetworkHelper {
     }
 
     /**
+     * Returns whether network item data of the given item type carries its block. Like BDS, a vanilla item does so only
+     * when it is a block item: doors, hanging signs, cauldrons and the like place a block, but the client draws them
+     * from their item texture and expects no block. Custom items keep their block.
+     *
+     * @param itemType the item type
+     * @return {@code true} if the block is sent with the item
+     */
+    static boolean hasNetworkBlock(ItemType<?> itemType) {
+        if (!(itemType instanceof AllayItemType<?> allayItemType) || allayItemType.isCustomItem()) {
+            return true;
+        }
+        var itemId = ItemId.fromIdentifier(itemType.getIdentifier());
+        var definition = itemId == null ? null : InternalRegistries.VANILLA_ITEM_DEFINITIONS.get(itemId);
+        return definition != null && definition.isBlockItem();
+    }
+
+    /**
      * Encodes an item stack using definitions from the target protocol.
      * Air uses the protocol air payload with the target item definition.
      * Other stacks retain count, metadata, extra data, and network identity;
@@ -275,7 +295,7 @@ public final class NetworkHelper {
                     .build();
         }
 
-        var blockState = itemStack.toBlockState();
+        var blockState = hasNetworkBlock(itemType) ? itemStack.toBlockState() : null;
         var blockDefinition = blockState == null ? null : blockDefinitions.getDefinition(blockState.blockStateHash());
         if (blockState != null && blockDefinition == null) {
             throw new IllegalStateException("Missing block definition for state " + blockState.blockStateHash());

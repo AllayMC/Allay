@@ -16,4 +16,14 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemVersion;
  * @author daoge_cmd
  */
 public record VanillaItemDefinitionData(boolean componentBased, NbtMap components, ItemVersion version) {
+
+    /**
+     * Whether this is the block item of a block, i.e. its definition carries a {@code minecraft:block} component.
+     * Items such as doors, hanging signs and cauldrons place a block too, but are not block items.
+     *
+     * @return {@code true} if this is a block item
+     */
+    public boolean isBlockItem() {
+        return components.getCompound("components").containsKey("minecraft:block");
+    }
 }
