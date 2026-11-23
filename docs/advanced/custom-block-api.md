@@ -64,7 +64,7 @@ var lampDefinition = CustomBlockStateDefinition.builder()
     .displayName("tile.myplugin.lamp.name")
     .build();
 
-AllayBlockType.builder(MyLampImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:lamp")
     .customBlockDefinition(lampDefinition)
     .build();
@@ -77,7 +77,7 @@ Use the function overload only when appearance changes with a block property:
 ```java linenums="1"
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 
-AllayBlockType.builder(MyDoorImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:brass_door")
     .setProperties(BlockPropertyTypes.OPEN_BIT)
     .customBlockDefinition(state -> {
@@ -219,7 +219,7 @@ An omitted or zero scale axis uses `1.0`.
 State-dependent transformations can rotate one geometry without duplicating resource-pack models:
 
 ```java linenums="1"
-AllayBlockType.builder(MyDirectionalBlockImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:directional_console")
     .setProperties(BlockPropertyTypes.DIRECTION_4)
     .customBlockDefinition(state -> {
@@ -238,7 +238,7 @@ AllayBlockType.builder(MyDirectionalBlockImpl.class)
 Placement rotation belongs to the block type, not an individual state:
 
 ```java
-AllayBlockType.builder(MyMachineImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:machine")
     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
     .customBlockDefinition(machineDefinition)
@@ -263,7 +263,7 @@ This keeps rendering metadata aligned with server behavior. Blocks tagged `REPLA
 the matching client components automatically. Every block tag is included in the state components.
 
 ```java linenums="1"
-AllayBlockType.builder(MyFlowerImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:moon_flower")
     .setBlockTags(Set.of(BlockTags.POTTABLE_PLANT, BlockTags.REPLACEABLE))
     .customBlockDefinition(CustomBlockStateDefinition.builder()
@@ -287,7 +287,7 @@ var stateDefinition = CustomBlockStateDefinition.builder()
         "minecraft:random_offset", NbtMap.builder().putString("type", "xyz").build()))
     .build();
 
-AllayBlockType.builder(MySignalLampImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:signal_lamp")
     .customBlockDefinition(stateDefinition)
     .customBlockRawComponent("myplugin:global_marker", NbtMap.EMPTY)
@@ -303,7 +303,7 @@ components take precedence over state-level raw entries with the same name.
 ### Growth Stage Crop
 
 ```java linenums="1"
-AllayBlockType.builder(MyCropImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:moon_crop")
     .setProperties(BlockPropertyTypes.AGE_16)
     .customBlockDefinition(state -> {
@@ -331,7 +331,7 @@ enum MachineMode { OFF, IDLE, RUNNING }
 var POWERED = BooleanPropertyType.of("myplugin:powered", false);
 var MODE = EnumPropertyType.of("myplugin:mode", MachineMode.class, MachineMode.OFF);
 
-AllayBlockType.builder(MyMachineImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:processing_machine")
     .setProperties(POWERED, MODE)
     .customBlockDefinition(state -> {
@@ -354,7 +354,7 @@ AllayBlockType.builder(MyMachineImpl.class)
 ### Rotatable Reinforced Block with a Raw Component
 
 ```java linenums="1"
-AllayBlockType.builder(MyReinforcedBlockImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:reinforced_block")
     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
     .customBlockDefinition(CustomBlockStateDefinition.builder()

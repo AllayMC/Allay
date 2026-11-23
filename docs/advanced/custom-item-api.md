@@ -157,7 +157,7 @@ CustomItemDefinition.builder()
 Off-hand support is a gameplay tag, not a client-definition flag. Add `ItemTags.ALLOW_OFFHAND` to the item type:
 
 ```java linenums="1"
-AllayItemType.builder(MyCharmItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:charm")
     .setItemTags(Set.of(ItemTags.ALLOW_OFFHAND))
     .customItemDefinition(CustomItemDefinition.builder()
@@ -241,7 +241,7 @@ versions; the plugin is responsible for compatibility.
 ### Custom Gem
 
 ```java linenums="1"
-AllayItemType.builder(MyGemItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:moonstone")
     .customItemDefinition(CustomItemDefinition.builder()
         .texture("moonstone")
@@ -255,7 +255,7 @@ AllayItemType.builder(MyGemItemStack.class)
 ### Large Tool
 
 ```java linenums="1"
-AllayItemType.builder(MyHammerItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:war_hammer")
     .itemData(ItemData.builder()
         .maxStackSize(1)
@@ -275,7 +275,7 @@ AllayItemType.builder(MyHammerItemStack.class)
 ### Food with a Cooldown
 
 ```java linenums="1"
-AllayItemType.builder(MyFruitItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:star_fruit")
     .customItemDefinition(CustomItemDefinition.builder()
         .texture("star_fruit")
@@ -292,7 +292,7 @@ explicit client options.
 ### Throwable Item
 
 ```java linenums="1"
-AllayItemType.builder(MyOrbItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:magic_orb")
     .itemData(ItemData.builder().maxStackSize(16).build())
     .setItemTags(Set.of(ItemTags.ALLOW_OFFHAND))
@@ -323,7 +323,7 @@ var shieldOffsets = CustomItemDefinition.RenderOffsets.builder()
         .build())
     .build();
 
-AllayItemType.builder(MyShieldItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:magic_shield")
     .itemData(ItemData.builder()
         .maxStackSize(1)
@@ -344,7 +344,7 @@ AllayItemType.builder(MyShieldItemStack.class)
 Tags remain part of `ItemType` configuration and are copied into the client definition automatically:
 
 ```java linenums="1"
-AllayItemType.builder(MySwordItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:ruby_sword")
     .setItemTags(Set.of(ItemTags.IS_SWORD, ItemTags.IS_TOOL))
     .customItemDefinition(CustomItemDefinition.builder()

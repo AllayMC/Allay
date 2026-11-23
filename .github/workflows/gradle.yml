@@ -8,7 +8,9 @@ on:
       - gradle/libs.versions.toml
       - gradle.properties
       - build.gradle.kts
+      - settings.gradle.kts
       - api/**
+      - processor/**
       - server/**
       - data/**
   pull_request:
@@ -17,7 +19,9 @@ on:
       - gradle/libs.versions.toml
       - gradle.properties
       - build.gradle.kts
+      - settings.gradle.kts
       - api/**
+      - processor/**
       - server/**
       - data/**
 
@@ -80,6 +84,7 @@ jobs:
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         run: |
           ./gradlew api:publishToMavenCentral
+          ./gradlew processor:publishToMavenCentral
           ./gradlew server:publishToMavenCentral
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}

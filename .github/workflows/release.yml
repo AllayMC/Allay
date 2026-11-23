@@ -188,6 +188,7 @@ jobs:
         if: github.repository == 'AllayMC/Allay'
         run: |
           ./gradlew -Pallay.is-dev-build=false api:publishToMavenCentral
+          ./gradlew -Pallay.is-dev-build=false processor:publishToMavenCentral
           ./gradlew -Pallay.is-dev-build=false server:publishToMavenCentral
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
