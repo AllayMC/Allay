@@ -16,6 +16,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added `FormViewer.updateForm(Form)`, which redraws a form the viewer has open by sending it again with its
   form id.
+- (API) Added `@GenerateImpl` and the `processor` annotation-processor module to generate composed `*Impl` delegation
+  classes at compile time.
 - (API) Added the new vanilla block and item types, biome constants, stair corner and horizontal connection properties.
   Split `BlockPropertyTypes.GROWTH` into `GROWTH_2` and `GROWTH_8`; existing crop code uses `GROWTH_8`.
 - Added support for MCBE 1.26.40 and its 1.26.44 protocol hotfix.
@@ -23,6 +25,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Added support for NetEase protocol v860 (Minecraft 1.21.124).
 - Updated the vanilla feature baseline to MCBE 1.26.50.
 - Introduced new multi version architecture (mvv2).
+
+### Changed
+
+- (API) Removed unreferenced empty block, item, and entity subinterfaces (using `BlockBehavior`, `ItemStack`, and
+  `Entity` directly for types without specialized capabilities), removed `Identifier.Component`, and fixed
+  `EntityFishingHookBaseComponent` to extend `EntityBaseComponent`.
+- Simplified the component system with type-level `ComponentBlueprint` compilation, contract-class keying,
+  `ComponentLifecycle`, shared stateless item components, and a faster `ItemStack.copy()` path.
 
 ### Fixed
 

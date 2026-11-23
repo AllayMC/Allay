@@ -37,11 +37,14 @@ or called while packets are sent.
 
 ### Simple Textured Block
 
+Blocks that do not expose extra Java interface methods can use the parameterless `AllayBlockType.builder()` (which
+uses `BlockBehaviorImpl` automatically):
+
 ```java linenums="1"
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.block.type.CustomBlockStateDefinition;
 
-AllayBlockType.builder(MyBlockImpl.class)
+AllayBlockType.builder()
     .identifier("myplugin:ruby_block")
     .customBlockDefinition(CustomBlockStateDefinition.ofTexture("ruby_block"))
     .build();

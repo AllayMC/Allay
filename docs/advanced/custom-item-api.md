@@ -24,13 +24,15 @@ Read the [Item API tutorial](../tutorials/item-api.md) first if you have not cre
 
 ## Quick Start
 
-Pass the definition object directly to the item builder:
+Pass the definition object directly to the item builder. Items that do not expose extra Java interface methods can use
+the parameterless `AllayItemType.builder()` (which uses `ItemStackImpl` automatically); items with custom composed
+interfaces can annotate their interface with `@GenerateImpl` and pass it directly to `builder(MyItem.class)`:
 
 ```java linenums="1"
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.item.type.CustomItemDefinition;
 
-AllayItemType.builder(MyRubyItemStack.class)
+AllayItemType.builder()
     .identifier("myplugin:ruby")
     .customItemDefinition(CustomItemDefinition.builder()
         .texture("ruby")
